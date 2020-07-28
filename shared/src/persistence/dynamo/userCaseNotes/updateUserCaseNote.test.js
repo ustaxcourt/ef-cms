@@ -2,34 +2,35 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const { updateUserCaseNote } = require('./updateUserCaseNote');
+jest.mock('../cases/getCaseIdFromDocketNumber');
+const {
+  getCaseIdFromDocketNumber,
+} = require('../cases/getCaseIdFromDocketNumber');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('updateUserCaseNote', () => {
-  let putStub;
   beforeEach(() => {
-    putStub = jest.fn().mockReturnValue({
-      promise: async () => null,
-    });
+    getCaseIdFromDocketNumber.mockReturnValue(MOCK_CASE.caseId);
   });
 
   it('invokes the persistence layer with pk of user-case-note|{caseId}, sk of {userId} and other expected params', async () => {
-    applicationContext.getDocumentClient.mockReturnValue({
-      put: putStub,
-    });
     await updateUserCaseNote({
       applicationContext,
       caseNoteToUpdate: {
-        caseId: '456',
+        docketNumber: '123-45',
         notes: 'something!!!',
         userId: '123',
       },
     });
-    expect(putStub.mock.calls[0][0]).toMatchObject({
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         notes: 'something!!!',
-        pk: 'user-case-note|456',
+        pk: `user-case-note|${MOCK_CASE.caseId}`,
         sk: 'user|123',
       },
-      applicationContext: { environment: { stage: 'local' } },
     });
   });
 });

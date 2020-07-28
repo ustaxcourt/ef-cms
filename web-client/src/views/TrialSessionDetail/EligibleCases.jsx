@@ -77,8 +77,8 @@ export const EligibleCases = connect(
                           item.qcCompleteForTrial[trialSessionId] === true
                         }
                         className="usa-checkbox__input"
-                        id={`${item.caseId}-complete`}
-                        name={`${item.caseId}Complete`}
+                        id={`${item.docketNumber}-complete`}
+                        name={`${item.docketNumber}Complete`}
                         type="checkbox"
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
@@ -91,7 +91,7 @@ export const EligibleCases = connect(
                       />
                       <label
                         className="usa-checkbox__label inline-block"
-                        htmlFor={`${item.caseId}-complete`}
+                        htmlFor={`${item.docketNumber}-complete`}
                       ></label>
                     </div>
                   </td>

@@ -10,13 +10,13 @@ export const updateUserCaseNoteAction = async ({
   applicationContext,
   props,
 }) => {
-  const { caseId, notes } = props;
+  const { docketNumber, notes } = props;
 
   const userNote = await applicationContext
     .getUseCases()
     .updateUserCaseNoteInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       notes,
     });
 
