@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  */
 export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
   const { contentHtml, documentTitle, signatureText } = props;
-  const caseDetail = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const {
     url,
@@ -18,8 +18,8 @@ export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
-      caseId: caseDetail.caseId,
       contentHtml,
+      docketNumber,
       documentTitle,
       signatureText,
     });
