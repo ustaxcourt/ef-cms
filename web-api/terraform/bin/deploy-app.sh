@@ -2,7 +2,7 @@
 
 ENVIRONMENT=$1
 
-BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
