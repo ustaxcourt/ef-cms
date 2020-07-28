@@ -13,7 +13,7 @@ resource "aws_s3_bucket_object" "api_object" {
   bucket = aws_s3_bucket.api_lambdas_bucket.id
   key    = "${var.environment}_api.js.zip"
   source = data.archive_file.zip_api.output_path
-  etag   = data.archive_file.lambda_zip.output_base64sha256
+  etag   = data.archive_file.zip_api.output_base64sha256
 }
 
 data "archive_file" "zip_api" {
