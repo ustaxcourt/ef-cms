@@ -1,30 +1,37 @@
 import { state } from 'cerebral';
+const queryString = require('query-string');
 
 /**
  *
- * changes the route to view the create order page for the props.docketNumber, props.documentId, props.documentType, props.documentTitle and parentMessageId
+ * changes the route to view the create order page for the state.caseDetail.docketNumber, state.modal).documentId, state.modal).documentType, state.modal).documentTitle and state.modal.parentMessageId
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.router the riot.router object that is used for changing the route
- * @param {object} providers.props the cerebral props that contain the props.caseId
  * @returns {Promise} async action
  */
-export const navigateToCreateOrderAction = async ({ get, props, router }) => {
-  const parentMessageId = get(state.modal.parentMessageId);
-  const { documentId, documentTitle, documentType, eventCode } = props;
+export const navigateToCreateOrderAction = async ({ get, router }) => {
+  const docketNumber = get(state.caseDetail.docketNumber);
 
-  const queryParams = `?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`;
+  const {
+    documentId,
+    documentTitle,
+    documentType,
+    eventCode,
+    parentMessageId,
+  } = get(state.modal);
 
-  let route;
-
+  let urlString;
   if (parentMessageId) {
-    route =
-      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}` +
-      queryParams;
+    urlString = `/case-detail/${docketNumber}/create-order/${parentMessageId}`;
   } else {
-    route = `/case-detail/${props.docketNumber}/create-order` + queryParams;
+    urlString = `/case-detail/${docketNumber}/create-order`;
   }
 
-  await router.openInNewTab(route);
+  const url = queryString.stringifyUrl({
+    query: { documentId, documentTitle, documentType, eventCode },
+    url: urlString,
+  });
+
+  await router.openInNewTab(url);
 };
