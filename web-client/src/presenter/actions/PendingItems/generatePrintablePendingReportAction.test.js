@@ -40,7 +40,7 @@ describe('generatePrintablePendingReportAction', () => {
       modules: {
         presenter,
       },
-      props: { caseIdFilter: '123acb' },
+      props: { docketNumberFilter: '123-20' },
       state: {},
     });
 
