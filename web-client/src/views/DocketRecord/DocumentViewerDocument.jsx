@@ -124,7 +124,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showSignStipulatedDecisionButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign}`}
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign`}
                   icon="pencil-alt"
                 >
                   Sign Stipulated Decision
