@@ -84,6 +84,8 @@ describe('saveSignedDocumentInteractor', () => {
     );
 
     expect(signedDocumentEntity.isPaper).toEqual(false);
+    expect(signedDocumentEntity.documentId).toEqual(mockSignedDocumentId);
+    expect(signedDocumentEntity.isDraft).toEqual(true);
     expect(signedDocumentEntity.signedJudgeName).toEqual('Guy Fieri');
     expect(signedDocumentEntity.documentType).toEqual('Stipulated Decision');
   });
