@@ -1,23 +1,4 @@
-const {
-  DOCKET_NUMBER_MATCHER,
-} = require('../../shared/src/business/entities/EntityConstants');
 const { upGenerator } = require('./utilities');
-
-const getDocketNumber = async ({ caseId, documentClient, tableName }) => {
-  const caseRecord = await documentClient
-    .get({
-      Key: {
-        pk: `case|${caseId}`,
-        sk: `case|${caseId}`,
-      },
-      TableName: tableName,
-    })
-    .promise();
-
-  if (caseRecord && caseRecord.Item) {
-    return caseRecord.Item.docketNumber;
-  }
-};
 
 const updateCaseRecords = async ({
   caseId,
@@ -117,38 +98,29 @@ const updateCaseCatalogRecord = async ({
 };
 
 const mutateRecord = async (item, documentClient, tableName) => {
-  if (item.pk.startsWith('case|')) {
-    const caseId = item.pk.split('|')[1];
+  if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+    const { caseId, docketNumber } = item;
 
-    if (caseId && !caseId.match(DOCKET_NUMBER_MATCHER)) {
-      const docketNumber = await getDocketNumber({
+    if (caseId && docketNumber) {
+      console.log('Migrating case with docket number', docketNumber);
+      await updateCaseRecords({
         caseId,
+        docketNumber,
         documentClient,
         tableName,
       });
-
-      if (docketNumber) {
-        await Promise.all([
-          updateCaseRecords({
-            caseId,
-            docketNumber,
-            documentClient,
-            tableName,
-          }),
-          updateUserCaseRecords({
-            caseId,
-            docketNumber,
-            documentClient,
-            tableName,
-          }),
-          updateCaseCatalogRecord({
-            caseId,
-            docketNumber,
-            documentClient,
-            tableName,
-          }),
-        ]);
-      }
+      await updateUserCaseRecords({
+        caseId,
+        docketNumber,
+        documentClient,
+        tableName,
+      });
+      await updateCaseCatalogRecord({
+        caseId,
+        docketNumber,
+        documentClient,
+        tableName,
+      });
     }
   }
 };
