@@ -12,7 +12,6 @@ exports.deleteCounselFromCaseLambda = event =>
       .getUseCases()
       .deleteCounselFromCaseInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
-        userIdToDelete: event.pathParameters.userId,
+        ...event.pathParameters,
       });
   });

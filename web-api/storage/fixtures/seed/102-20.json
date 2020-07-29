@@ -46,8 +46,8 @@
     "updatedAt": "2020-01-21T16:41:39.482Z"
   },
   {
-    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "gsi1pk": "user-case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|102-20",
+    "gsi1pk": "user-case|102-20",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "createdAt": "2020-01-21T16:41:39.474Z",
     "caseCaption": "Eve Brewer, Petitioner",
@@ -57,17 +57,17 @@
     "entityName": "UserCase"
   },
   {
-    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|102-20",
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "pk": "catalog"
   },
   {
-    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|102-20",
     "pk": "case-by-docket-number|102-20"
   },
   {
-    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "gsi1pk": "user-case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|102-20",
+    "gsi1pk": "user-case|102-20",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-01-21T16:41:39.474Z",
     "caseCaption": "Eve Brewer, Petitioner",
@@ -152,7 +152,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Eve Brewer, Petitioner",
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|102-20",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -165,7 +165,7 @@
     "preferredTrialCity": "Nashville, Tennessee",
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|102-20",
     "docketNumber": "102-20",
     "docketNumberWithSuffix": "102-20S",
     "status": "New"
@@ -179,7 +179,7 @@
     "filingDate": "2020-01-21T16:41:39.481Z",
     "filedBy": "Petr. Eve Brewer",
     "docketRecordId": "48f4a2be-6395-4fc0-9439-f99e365c38ff",
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|102-20",
     "sk": "docket-record|48f4a2be-6395-4fc0-9439-f99e365c38ff"
   },
   {
@@ -188,16 +188,16 @@
     "index": 2,
     "filingDate": "2020-01-21T16:41:39.474Z",
     "docketRecordId": "f15a6532-9805-479b-ae45-e8f112153d2a",
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|102-20",
     "sk": "docket-record|f15a6532-9805-479b-ae45-e8f112153d2a"
   },
   {
     "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
+    "pk": "case|102-20"
   },
   {
-    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "gsi1pk": "user-case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "sk": "case|102-20",
+    "gsi1pk": "user-case|102-20",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-01-21T16:41:39.474Z",
     "caseCaption": "Eve Brewer, Petitioner",
@@ -223,7 +223,7 @@
     "name": "Test IRS Practitioner",
     "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
     "section": "irsPractitioner",
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|102-20",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irsPractitioner@example.com"
   },
@@ -245,7 +245,7 @@
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "section": "privatePractitioner",
     "representingPrimary": true,
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "case|102-20",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "email": "privatePractitioner1@example.com"
   },
@@ -269,7 +269,7 @@
     "isFileAttached": true,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "numberOfPages": 1,
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
+    "pk": "case|102-20"
   },
   {
     "documentType": "Petition",
@@ -335,6 +335,6 @@
     "isFileAttached": true,
     "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "numberOfPages": 1,
-    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
+    "pk": "case|102-20"
   }
 ]

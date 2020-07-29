@@ -39,7 +39,7 @@ exports.blockCaseFromTrialInteractor = async ({
     .getPersistenceGateway()
     .deleteCaseTrialSortMappingRecords({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
     });
 
   const updatedCase = await applicationContext

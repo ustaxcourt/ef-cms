@@ -1,6 +1,3 @@
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
@@ -26,11 +23,6 @@ exports.saveWorkItemForDocketEntryInProgress = async ({
     applicationContext,
   });
 
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber: workItem.docketNumber,
-  });
-
   return Promise.all([
     createSectionInboxRecord({
       applicationContext,
@@ -44,7 +36,7 @@ exports.saveWorkItemForDocketEntryInProgress = async ({
     }),
     put({
       Item: {
-        pk: `case|${caseId}`,
+        pk: `case|${workItem.docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
       },
       applicationContext,

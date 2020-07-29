@@ -10,7 +10,7 @@ export const updateCalendaredCaseUserNoteAction = ({ get, props, store }) => {
   const calendaredCases = get(state.trialSession.calendaredCases);
   const { userNote } = props;
   const caseToUpdate = calendaredCases.find(
-    aCase => aCase.caseId === userNote.caseId,
+    aCase => aCase.docketNumber === userNote.docketNumber,
   );
   caseToUpdate.notes = userNote;
 
@@ -20,6 +20,6 @@ export const updateCalendaredCaseUserNoteAction = ({ get, props, store }) => {
   }
   store.set(
     state.trialSessionWorkingCopy.userNotes,
-    makeMap(userNotes, 'caseId'),
+    makeMap(userNotes, 'docketNumber'),
   );
 };

@@ -460,7 +460,7 @@ app.post(
   lambdaWrapper(fileExternalDocumentToCaseLambda),
 );
 app.post(
-  '/case-documents/consolidated/:leadCaseId/external-document',
+  '/case-documents/consolidated/:leadDocketNumber/external-document',
   lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
 );
 app.post(
@@ -576,13 +576,16 @@ app.get(
   '/case-notes/batch-cases/:docketNumbers/user-notes',
   lambdaWrapper(getUserCaseNoteForCasesLambda),
 );
-app.get('/case-notes/:caseId/user-notes', lambdaWrapper(getUserCaseNoteLambda));
+app.get(
+  '/case-notes/:docketNumber/user-notes',
+  lambdaWrapper(getUserCaseNoteLambda),
+);
 app.put(
-  '/case-notes/:caseId/user-notes',
+  '/case-notes/:docketNumber/user-notes',
   lambdaWrapper(updateUserCaseNoteLambda),
 );
 app.delete(
-  '/case-notes/:caseId/user-notes',
+  '/case-notes/:docketNumber/user-notes',
   lambdaWrapper(deleteUserCaseNoteLambda),
 );
 app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
@@ -592,11 +595,11 @@ app.put('/case-notes/:docketNumber', lambdaWrapper(saveCaseNoteLambda));
  * case-parties
  */
 app.put(
-  '/case-parties/:caseId/contact-primary',
+  '/case-parties/:docketNumber/contact-primary',
   lambdaWrapper(updatePrimaryContactLambda),
 );
 app.put(
-  '/case-parties/:caseId/contact-secondary',
+  '/case-parties/:docketNumber/contact-secondary',
   lambdaWrapper(updateSecondaryContactLambda),
 );
 app.post(
@@ -608,19 +611,19 @@ app.post(
   lambdaWrapper(associateIrsPractitionerWithCaseLambda),
 );
 app.put(
-  '/case-parties/:caseId/counsel/:userId',
+  '/case-parties/:docketNumber/counsel/:userId',
   lambdaWrapper(updateCounselOnCaseLambda),
 );
 app.delete(
-  '/case-parties/:caseId/counsel/:userId',
+  '/case-parties/:docketNumber/counsel/:userId',
   lambdaWrapper(deleteCounselFromCaseLambda),
 );
 app.put(
-  '/case-parties/:caseId/petition-details',
+  '/case-parties/:docketNumber/petition-details',
   lambdaWrapper(updatePetitionDetailsLambda),
 );
 app.put(
-  '/case-parties/:caseId/petitioner-info',
+  '/case-parties/:docketNumber/petitioner-info',
   lambdaWrapper(updatePetitionerInformationLambda),
 );
 
@@ -632,18 +635,21 @@ app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
 app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
 app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
 app.delete(
-  '/cases/:caseId/remove-pending/:documentId',
+  '/cases/:docketNumber/remove-pending/:documentId',
   lambdaWrapper(removeCasePendingItemLambda),
 );
 app.get(
-  '/cases/:caseId/consolidated-cases',
+  '/cases/:docketNumber/consolidated-cases',
   lambdaWrapper(getConsolidatedCasesByCaseLambda),
 );
 app.post(
   '/cases/:docketNumber/serve-to-irs',
   lambdaWrapper(serveCaseToIrsLambda),
 );
-app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
+app.put(
+  '/cases/:docketNumber',
+  lambdaWrapper(saveCaseDetailInternalEditLambda),
+);
 app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
 app.post('/cases', lambdaWrapper(createCaseLambda));
 
@@ -826,7 +832,7 @@ app.put(
   lambdaWrapper(removeCaseFromTrialLambda),
 );
 app.post(
-  '/trial-sessions/:trialSessionId/cases/:caseId',
+  '/trial-sessions/:trialSessionId/cases/:docketNumber',
   lambdaWrapper(addCaseToTrialSessionLambda),
 );
 app.get(

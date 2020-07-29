@@ -165,7 +165,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       .getPersistenceGateway()
       .deleteCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
       });
 
     if (caseEntity.trialSessionId) {

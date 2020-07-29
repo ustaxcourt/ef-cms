@@ -1,11 +1,11 @@
 [
   {
-    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "case|103-20",
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
     "pk": "catalog"
   },
   {
-    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "case|103-20",
     "pk": "case-by-docket-number|103-20"
   },
   {
@@ -85,7 +85,7 @@
     "freeText": "Hello draft",
     "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "documentTitle": "First draft",
     "relationship": "primaryDocument",
     "docketNumber": "103-20"
@@ -149,11 +149,11 @@
   },
   {
     "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
+    "pk": "case|103-20"
   },
   {
     "sk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
+    "pk": "case|103-20"
   },
   {
     "docketNumberSuffix": "L",
@@ -261,8 +261,8 @@
     "updatedAt": "2020-01-23T21:44:54.044Z"
   },
   {
-    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
-    "gsi1pk": "user-case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "case|103-20",
+    "gsi1pk": "user-case|103-20",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseCaption": "Reuben Blair, Petitioner",
     "createdAt": "2020-01-23T21:45:34.520Z",
@@ -306,7 +306,7 @@
     "trialTime": "10:00",
     "caseCaption": "Reuben Blair, Petitioner",
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
-    "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "sk": "case|103-20",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -321,7 +321,7 @@
     "preferredTrialCity": "Houston, Texas",
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "docketNumber": "103-20",
     "docketNumberWithSuffix": "103-20L",
     "status": "Calendared"
@@ -335,7 +335,7 @@
     "filingDate": "2020-01-23T21:44:54.043Z",
     "filedBy": "Petr. Reuben Blair",
     "docketRecordId": "6083daae-a943-4987-a658-1d28b2f2f029",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "sk": "docket-record|6083daae-a943-4987-a658-1d28b2f2f029"
   },
   {
@@ -344,7 +344,7 @@
     "index": 2,
     "filingDate": "2020-01-23T21:44:54.034Z",
     "docketRecordId": "2a3825e3-9144-446c-96c1-3c2b2f4b7b1c",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "sk": "docket-record|2a3825e3-9144-446c-96c1-3c2b2f4b7b1c"
   },
   {
@@ -356,7 +356,7 @@
     "filingDate": "2020-01-23T21:45:14.136Z",
     "filedBy": "Test Docketclerk",
     "docketRecordId": "f9ee32b9-f2b5-4f45-9b08-0d34263b456f",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "sk": "docket-record|f9ee32b9-f2b5-4f45-9b08-0d34263b456f"
   },
   {
@@ -367,7 +367,7 @@
     "numberOfPages": 1,
     "filingDate": "2020-01-23T21:45:34.520Z",
     "docketRecordId": "f4e8b2a1-71d3-4225-b904-1e87dbddd854",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "sk": "docket-record|f4e8b2a1-71d3-4225-b904-1e87dbddd854"
   },
   {
@@ -459,7 +459,7 @@
     "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
     "numberOfPages": 1,
     "servedAt": "2020-01-23T21:45:34.521Z",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "docketNumber": "103-20",
     "status": "served"
   },
@@ -488,7 +488,7 @@
     "numberOfPages": 1,
     "servedAt": "2020-01-23T21:45:14.148Z",
     "signedAt": "2020-01-23T21:45:14.136Z",
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "pk": "case|103-20",
     "documentTitle": "Notice of Trial on 11/27/2020 at Houston, Texas",
     "status": "served"
   },
@@ -556,7 +556,7 @@
     "partySecondary": false,
     "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
     "numberOfPages": 1,
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
+    "pk": "case|103-20"
   },
   {
     "documentType": "Statement of Taxpayer Identification",
@@ -578,6 +578,6 @@
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "numberOfPages": 1,
-    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
+    "pk": "case|103-20"
   }
 ]

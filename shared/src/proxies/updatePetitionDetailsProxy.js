@@ -5,13 +5,13 @@ const { put } = require('./requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update
+ * @param {string} providers.docketNumber the docket number of the case to update
  * @param {string} providers.petitionDetails the petition details to update for the case
  * @returns {Promise<*>} the promise of the api call
  */
 exports.updatePetitionDetailsInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   petitionDetails,
 }) => {
   return put({
@@ -19,6 +19,6 @@ exports.updatePetitionDetailsInteractor = ({
     body: {
       petitionDetails,
     },
-    endpoint: `/case-parties/${caseId}/petition-details`,
+    endpoint: `/case-parties/${docketNumber}/petition-details`,
   });
 };

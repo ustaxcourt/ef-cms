@@ -6,7 +6,7 @@
     "contactSecondary": {},
     "isPaper": false,
     "initialCaption": "Brian Earl Spilner, Petitioner",
-    "gsi1pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "gsi1pk": "case|111-19",
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "receivedAt": "2019-12-11T15:25:55.006Z",
@@ -28,7 +28,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Brian Earl Spilner, Petitioner",
     "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
-    "sk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "sk": "case|112-19",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -40,8 +40,8 @@
     "preferredTrialCity": "Birmingham, Alabama",
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
-    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "leadDocketNumber": "111-19",
+    "pk": "case|112-19",
     "docketNumber": "112-19",
     "docketNumberWithSuffix": "112-19L",
     "status": "Submitted"
@@ -55,7 +55,7 @@
     "eventCode": "P",
     "filedBy": "Petr. Brian Earl Spilner",
     "docketRecordId": "4335db5e-b56a-4bd8-ab55-df641944b810",
-    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "pk": "case|112-19",
     "sk": "docket-record|4335db5e-b56a-4bd8-ab55-df641944b810"
   },
   {
@@ -64,20 +64,20 @@
     "index": 2,
     "filingDate": "2019-12-11T15:25:55.006Z",
     "docketRecordId": "6f109a09-056a-43ee-8bcd-d2280cab1484",
-    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "pk": "case|112-19",
     "sk": "docket-record|6f109a09-056a-43ee-8bcd-d2280cab1484"
   },
   {
-    "sk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "sk": "case|112-19",
     "pk": "case-by-docket-number|112-19"
   },
   {
-    "sk": "case|459925e4-db20-46e0-8348-47a98537edeb",
-    "gsi1pk": "user-case|459925e4-db20-46e0-8348-47a98537edeb",
+    "sk": "case|112-19",
+    "gsi1pk": "user-case|112-19",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-12-11T15:25:55.006Z",
     "caseCaption": "Brian Earl Spilner, Petitioner",
-    "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "leadDocketNumber": "111-19",
     "docketNumber": "112-19",
     "docketNumberWithSuffix": "112-19L",
     "status": "Submitted",
@@ -102,7 +102,7 @@
     "partySecondary": false,
     "documentId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
     "numberOfPages": 1,
-    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb"
+    "pk": "case|112-19"
   },
   {
     "documentType": "Petition",
@@ -167,6 +167,6 @@
     "partySecondary": false,
     "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
     "numberOfPages": 1,
-    "pk": "case|459925e4-db20-46e0-8348-47a98537edeb"
+    "pk": "case|112-19"
   }
 ]

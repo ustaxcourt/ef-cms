@@ -13,7 +13,7 @@ describe('updatePetitionDetailsAction', () => {
     applicationContext
       .getUseCases()
       .updatePetitionDetailsInteractor.mockReturnValue({
-        docketNumber: '123-45',
+        docketNumber: '123-20',
       });
   });
 
@@ -23,7 +23,7 @@ describe('updatePetitionDetailsAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123' },
+        caseDetail: { docketNumber: '123-20' },
         form: {
           paymentDateWaivedDay: '01',
           paymentDateWaivedMonth: '01',
@@ -49,8 +49,8 @@ describe('updatePetitionDetailsAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-45' },
-      caseId: '123-45',
+      caseDetail: { docketNumber: '123-20' },
+      docketNumber: '123-20',
       tab: 'caseInfo',
     });
   });
@@ -61,7 +61,7 @@ describe('updatePetitionDetailsAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123' },
+        caseDetail: { docketNumber: '123-20' },
         form: {
           paymentDateDay: '01',
           paymentDateMonth: '01',
@@ -87,8 +87,8 @@ describe('updatePetitionDetailsAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-45' },
-      caseId: '123-45',
+      caseDetail: { docketNumber: '123-20' },
+      docketNumber: '123-20',
       tab: 'caseInfo',
     });
   });
@@ -99,7 +99,7 @@ describe('updatePetitionDetailsAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123' },
+        caseDetail: { docketNumber: '123-20' },
         form: {
           irsDay: '01',
           irsMonth: '01',
@@ -123,8 +123,8 @@ describe('updatePetitionDetailsAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { docketNumber: '123-45' },
-      caseId: '123-45',
+      caseDetail: { docketNumber: '123-20' },
+      docketNumber: '123-20',
       tab: 'caseInfo',
     });
   });
@@ -135,7 +135,7 @@ describe('updatePetitionDetailsAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123' },
+        caseDetail: { docketNumber: '123-20' },
         form: {},
       },
     });
@@ -159,7 +159,7 @@ describe('updatePetitionDetailsAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123' },
+        caseDetail: { docketNumber: '123-20' },
         form: { preferredTrialCity: 'Fresno, California' },
       },
     });

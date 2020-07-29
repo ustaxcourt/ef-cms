@@ -23,11 +23,7 @@ describe('hasOrderTypeSelectedAction', () => {
       },
       props: {
         docketNumber: '123-19',
-      },
-      state: {
-        modal: {
-          eventCode: 'ABC',
-        },
+        eventCode: 'ABC',
       },
     });
 

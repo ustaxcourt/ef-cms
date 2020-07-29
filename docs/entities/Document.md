@@ -1251,6 +1251,7 @@
       type: "boolean"
       flags: 
         presence: "optional"
+        description: "Has an associated PDF in S3."
     isLegacySealed: 
       type: "boolean"
       flags: 
@@ -1530,7 +1531,7 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
-        description: "A secondary date associated with the document, typically related to time-restricted availability."
+        description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
     secondaryDocument: 
       type: "object"
       flags: 
@@ -2364,7 +2365,7 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
-        description: "Certificate of service date."
+        description: "Used by certificate of service documents to construct the document title."
       rules: 
         - 
           name: "max"

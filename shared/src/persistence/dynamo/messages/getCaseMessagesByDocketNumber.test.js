@@ -5,7 +5,6 @@ const {
   getCaseMessagesByDocketNumber,
 } = require('./getCaseMessagesByDocketNumber');
 
-const CASE_ID = 'b0b46186-b715-4338-b5c3-c25e06f3fce8';
 const mockCaseMessage = {
   createdAt: '2019-03-01T21:40:46.415Z',
   docketNumber: '123-20',
@@ -23,22 +22,9 @@ const mockCaseMessage = {
 describe('getCaseMessagesByDocketNumber', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
-    applicationContext
-      .getDocumentClient()
-      .query.mockReturnValueOnce({
-        promise: () =>
-          Promise.resolve({
-            Items: [
-              {
-                pk: `case|${CASE_ID}`,
-                sk: `case|${CASE_ID}`,
-              },
-            ],
-          }),
-      })
-      .mockReturnValueOnce({
-        promise: () => Promise.resolve({ Items: [mockCaseMessage] }),
-      });
+    applicationContext.getDocumentClient().query.mockReturnValueOnce({
+      promise: () => Promise.resolve({ Items: [mockCaseMessage] }),
+    });
   });
 
   it('retrieves the case message from persistence', async () => {

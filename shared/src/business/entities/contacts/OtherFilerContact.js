@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const { ContactFactory } = require('./ContactFactory');
 const { OTHER_FILER_TYPES } = require('../EntityConstants');
 
