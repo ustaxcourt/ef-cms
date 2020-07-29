@@ -16,7 +16,6 @@ const { MOCK_CASE } = require('../../../test/mockCase.js');
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {
     caseCaption: 'Caption',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',

@@ -20,7 +20,7 @@ const {
 } = require('../workitems/updateWorkItemTrialDate');
 const { Case } = require('../../../business/entities/cases/Case');
 const { differenceWith, isEqual } = require('lodash');
-const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit } = require('lodash');
 
 /**
@@ -32,9 +32,9 @@ const { omit } = require('lodash');
  * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const oldCase = await getCaseByCaseId({
+  const oldCase = await getCaseByDocketNumber({
     applicationContext,
-    caseId: caseToUpdate.caseId,
+    docketNumber: caseToUpdate.docketNumber,
   });
 
   const requests = [];
@@ -49,7 +49,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     requests.push(
       client.put({
         Item: {
-          pk: `case|${caseToUpdate.caseId}`,
+          pk: `case|${caseToUpdate.docketNumber}`,
           sk: `docket-record|${docketEntry.docketRecordId}`,
           ...docketEntry,
         },
@@ -68,7 +68,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     requests.push(
       client.put({
         Item: {
-          pk: `case|${caseToUpdate.caseId}`,
+          pk: `case|${caseToUpdate.docketNumber}`,
           sk: `document|${document.documentId}`,
           ...document,
         },
@@ -91,7 +91,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       client.delete({
         applicationContext,
         key: {
-          pk: `case|${caseToUpdate.caseId}`,
+          pk: `case|${caseToUpdate.docketNumber}`,
           sk: `irsPractitioner|${practitioner.userId}`,
         },
       }),
@@ -103,7 +103,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       requests.push(
         client.put({
           Item: {
-            pk: `case|${caseToUpdate.caseId}`,
+            pk: `case|${caseToUpdate.docketNumber}`,
             sk: `irsPractitioner|${practitioner.userId}`,
             ...practitioner,
           },
@@ -132,7 +132,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       client.delete({
         applicationContext,
         key: {
-          pk: `case|${caseToUpdate.caseId}`,
+          pk: `case|${caseToUpdate.docketNumber}`,
           sk: `privatePractitioner|${practitioner.userId}`,
         },
       }),
@@ -144,7 +144,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       requests.push(
         client.put({
           Item: {
-            pk: `case|${caseToUpdate.caseId}`,
+            pk: `case|${caseToUpdate.docketNumber}`,
             sk: `privatePractitioner|${practitioner.userId}`,
             ...practitioner,
           },
@@ -168,7 +168,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         '#sk': 'sk',
       },
       ExpressionAttributeValues: {
-        ':pk': `case|${caseToUpdate.caseId}`,
+        ':pk': `case|${caseToUpdate.docketNumber}`,
         ':prefix': 'work-item',
       },
       KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
@@ -239,14 +239,14 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.leadCaseId !== caseToUpdate.leadCaseId
+    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber
   ) {
     const userCaseMappings = await client.query({
       ExpressionAttributeNames: {
         '#gsi1pk': 'gsi1pk',
       },
       ExpressionAttributeValues: {
-        ':gsi1pk': `user-case|${caseToUpdate.caseId}`,
+        ':gsi1pk': `user-case|${caseToUpdate.docketNumber}`,
       },
       IndexName: 'gsi1',
       KeyConditionExpression: '#gsi1pk = :gsi1pk',
@@ -261,8 +261,8 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
             caseCaption: caseToUpdate.caseCaption,
             docketNumberSuffix: caseToUpdate.docketNumberSuffix,
             docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-            gsi1pk: `user-case|${caseToUpdate.caseId}`,
-            leadCaseId: caseToUpdate.leadCaseId,
+            gsi1pk: `user-case|${caseToUpdate.docketNumber}`,
+            leadDocketNumber: caseToUpdate.leadDocketNumber,
             status: caseToUpdate.status,
           },
           applicationContext,
@@ -271,15 +271,15 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     }
   }
 
-  let setLeadCase = caseToUpdate.leadCaseId
-    ? { gsi1pk: `case|${caseToUpdate.leadCaseId}` }
+  const setLeadCase = caseToUpdate.leadDocketNumber
+    ? { gsi1pk: `case|${caseToUpdate.leadDocketNumber}` }
     : {};
 
   await Promise.all([
     client.put({
       Item: {
-        pk: `case|${caseToUpdate.caseId}`,
-        sk: `case|${caseToUpdate.caseId}`,
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `case|${caseToUpdate.docketNumber}`,
         ...setLeadCase,
         ...omit(caseToUpdate, [
           'documents',

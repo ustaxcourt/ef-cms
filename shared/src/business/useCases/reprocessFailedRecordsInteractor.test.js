@@ -17,12 +17,12 @@ describe('reprocessFailedRecordsInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue({
-        caseId: 'case|123',
+      .getCaseByDocketNumber.mockResolvedValue({
+        docketNumber: 'case|123',
       });
 
     applicationContext.getPersistenceGateway().getRecord.mockResolvedValue({
-      caseId: '123',
+      docketNumber: '123',
       pk: 'abc|123',
       sk: 'abc',
     });
@@ -152,7 +152,7 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext.getPersistenceGateway().indexRecord.mock.calls[0][0]
         .fullRecord,
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123',
       pk: 'abc|123',
       sk: 'abc',
     });
@@ -187,16 +187,16 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext.getPersistenceGateway().indexRecord.mock.calls[0][0]
         .fullRecord,
     ).toMatchObject({
-      caseId: 'case|123',
+      docketNumber: 'case|123',
     });
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId.mock
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123',
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -214,7 +214,7 @@ describe('reprocessFailedRecordsInteractor', () => {
   it('calls index function for a record, attempts to get a case by case id, but does not index if it does not return a full case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue({
+      .getCaseByDocketNumber.mockResolvedValue({
         documents: [],
       });
 
@@ -235,16 +235,16 @@ describe('reprocessFailedRecordsInteractor', () => {
       applicationContext.getPersistenceGateway().indexRecord.mock.calls[0][0]
         .fullRecord,
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123',
     });
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId.mock
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123',
     });
     expect(
       applicationContext.getPersistenceGateway()

@@ -76,7 +76,6 @@ describe('getClosedCasesInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: MOCK_CASE.caseCaption,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
       },

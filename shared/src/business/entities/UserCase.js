@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -19,7 +19,7 @@ function UserCase(rawUserCase) {
   this.createdAt = rawUserCase.createdAt;
   this.docketNumber = rawUserCase.docketNumber;
   this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
-  this.leadCaseId = rawUserCase.leadCaseId;
+  this.leadDocketNumber = rawUserCase.leadDocketNumber;
   this.status = rawUserCase.status;
 }
 
@@ -29,7 +29,7 @@ joiValidationDecorator(
     caseCaption: Case.VALIDATION_RULES.caseCaption,
     docketNumber: Case.VALIDATION_RULES.docketNumber,
     docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
-    leadCaseId: Case.VALIDATION_RULES.leadCaseId,
+    leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
     status: Case.VALIDATION_RULES.status,
   }),
   Case.VALIDATION_ERROR_MESSAGES,

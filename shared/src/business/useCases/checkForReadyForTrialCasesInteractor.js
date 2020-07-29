@@ -29,20 +29,20 @@ exports.checkForReadyForTrialCasesInteractor = async ({
       .getPersistenceGateway()
       .createCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.caseId,
         caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
       });
   };
 
   const updatedCases = [];
 
   for (let caseRecord of caseCatalog) {
-    const { caseId } = caseRecord;
+    const { docketNumber } = caseRecord;
     const caseToCheck = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
 
     if (caseToCheck) {

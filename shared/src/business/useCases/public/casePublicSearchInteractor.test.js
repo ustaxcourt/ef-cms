@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
 const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {
@@ -25,18 +26,21 @@ describe('casePublicSearchInteractor', () => {
       .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
+          contactPrimary: MOCK_CASE.contactPrimary,
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2019-03-01T21:40:46.415Z',
         },
         {
           caseCaption: 'Test Case Caption Two',
+          contactPrimary: MOCK_CASE.contactPrimary,
           docketNumber: '456-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2019-03-01T21:40:46.415Z',
         },
         {
           caseCaption: 'Sealed Case Caption Three',
+          contactPrimary: MOCK_CASE.contactPrimary,
           docketNumber: '222-20',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2020-03-01T21:40:46.415Z',
@@ -52,7 +56,10 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        contactPrimary: undefined,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '123-19',
@@ -65,7 +72,10 @@ describe('casePublicSearchInteractor', () => {
       },
       {
         caseCaption: 'Test Case Caption Two',
-        contactPrimary: undefined,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '456-19',
@@ -85,6 +95,7 @@ describe('casePublicSearchInteractor', () => {
       .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
+          contactPrimary: MOCK_CASE.contactPrimary,
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2019-03-01T21:40:46.415Z',
@@ -102,7 +113,10 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        contactPrimary: undefined,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '123-19',
@@ -122,6 +136,7 @@ describe('casePublicSearchInteractor', () => {
       .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
+          contactPrimary: MOCK_CASE.contactPrimary,
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           internalFieldA: 'should be filtered out',
@@ -139,7 +154,10 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        contactPrimary: undefined,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '123-19',

@@ -8,10 +8,10 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getEligibleCasesForTrialSession', () => {
-  let getCaseByCaseIdSpy;
+  let getCaseByDocketNumberSpy;
 
   beforeEach(() => {
-    getCaseByCaseIdSpy = jest.fn().mockResolvedValue({
+    getCaseByDocketNumberSpy = jest.fn().mockResolvedValue({
       ...MOCK_CASE,
       irsPractitioners: [{ userId: 'abc-123' }],
       privatePractitioners: [{ userId: 'abc-123' }],
@@ -19,31 +19,30 @@ describe('getEligibleCasesForTrialSession', () => {
 
     client.query = jest.fn().mockReturnValue([
       {
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: MOCK_CASE.docketNumber,
         pk: 'eligible-for-trial-case-catalog',
-        sk:
-          'WashingtonDistrictofColumbia-R-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        sk: 'WashingtonDistrictofColumbia-R-A-20181212000000-101-18',
       },
     ]);
 
     client.batchGet = jest
       .fn()
-      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
+      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.docketNumber }]);
   });
 
   it('should get the cases for a trial session', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(getCaseByCaseIdSpy);
+      .getCaseByDocketNumber.mockImplementation(getCaseByDocketNumberSpy);
     const result = await getEligibleCasesForTrialSession({
       applicationContext,
     });
-    expect(getCaseByCaseIdSpy).toHaveBeenCalled();
+    expect(getCaseByDocketNumberSpy).toHaveBeenCalled();
     expect(result).toEqual([
       {
         ...MOCK_CASE,
         irsPractitioners: [{ userId: 'abc-123' }],
-        pk: MOCK_CASE.caseId,
+        pk: MOCK_CASE.docketNumber,
         privatePractitioners: [{ userId: 'abc-123' }],
       },
     ]);

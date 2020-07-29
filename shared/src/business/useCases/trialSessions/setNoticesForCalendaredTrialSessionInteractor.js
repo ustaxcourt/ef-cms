@@ -22,12 +22,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {string} providers.trialSessionId the trial session id
- * @param {string} providers.caseId optional caseId to explicitly set the notice on the ONE specified case
+ * @param {string} providers.docketNumber optional docketNumber to explicitly set the notice on the ONE specified case
  * @returns {Promise} the promises for the updateCase calls
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   trialSessionId,
 }) => {
   let shouldSetNoticesIssued = true;
@@ -48,12 +48,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
   // opting to pull from the set of calendared cases rather than load the
   // case individually to add an additional layer of validation
-  if (caseId) {
+  if (docketNumber) {
     // Do not set when sending notices for a single case
     shouldSetNoticesIssued = false;
 
     const singleCase = calendaredCases.find(
-      caseRecord => caseRecord.caseId === caseId,
+      caseRecord => caseRecord.docketNumber === docketNumber,
     );
 
     calendaredCases = [singleCase];
@@ -120,7 +120,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocument = new Document(
       {
-        caseId: caseEntity.caseId,
         documentId: newNoticeOfTrialIssuedDocumentId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
@@ -176,7 +175,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocument = new Document(
       {
-        caseId: caseEntity.caseId,
         documentId: newStandingPretrialDocumentId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,

@@ -43,8 +43,8 @@ exports.updateCaseTrialSortTagsInteractor = async ({
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.validate().toRawObject().caseId,
         caseSortTags,
+        docketNumber: caseEntity.validate().toRawObject().docketNumber,
       });
   }
 };

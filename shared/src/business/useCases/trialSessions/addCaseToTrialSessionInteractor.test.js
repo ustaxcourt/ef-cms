@@ -37,7 +37,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(() => mockCase);
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -49,7 +49,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor({
         applicationContext,
-        caseId: '8675309b-18d0-43ec-bafb-654e83405411',
+        docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -64,7 +64,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor({
         applicationContext,
-        caseId: '8675309b-18d0-43ec-bafb-654e83405411',
+        docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('The case is already calendared');
@@ -80,7 +80,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('The case is already part of this trial session.');
@@ -98,7 +98,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     const latestCase = await addCaseToTrialSessionInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
     });
 
@@ -121,7 +121,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     await addCaseToTrialSessionInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
     });
 

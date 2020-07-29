@@ -9,14 +9,14 @@ describe('setupContactPrimaryFormAction', () => {
     ({ PARTY_TYPES } = applicationContext.getConstants());
   });
 
-  it('should set contactPrimary, caseId, and partyType from props.caseDetail on form', async () => {
+  it('should set contactPrimary, docketNumber, and partyType from props.caseDetail on form', async () => {
     const result = await runAction(setupContactPrimaryFormAction, {
       props: {
         caseDetail: {
-          caseId: '7fcedcaa-0314-4a43-98b9-fcff9fd2b7d9',
           contactPrimary: {
             name: 'Rachael Ray',
           },
+          docketNumber: '101-20',
           partyType: PARTY_TYPES.petitioner,
         },
       },
@@ -26,10 +26,10 @@ describe('setupContactPrimaryFormAction', () => {
     });
 
     expect(result.state.form).toEqual({
-      caseId: '7fcedcaa-0314-4a43-98b9-fcff9fd2b7d9',
       contactPrimary: {
         name: 'Rachael Ray',
       },
+      docketNumber: '101-20',
       partyType: PARTY_TYPES.petitioner,
     });
   });

@@ -8,17 +8,17 @@ describe('extractUserNotesFromCalendaredCasesAction', () => {
         trialSession: {
           calendaredCases: [
             {
-              caseId: '5e5af622-2d19-4c08-9e00-96a8253f634d',
+              docketNumber: '123-45',
               notes: {
-                caseId: '5e5af622-2d19-4c08-9e00-96a8253f634d',
+                docketNumber: '123-45',
                 notes: 'this is a note added',
                 userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
               },
             },
             {
-              caseId: '5e5af622-4c08-2d19-9e00-96a8253f634d',
+              docketNumber: '678-90',
               notes: {
-                caseId: '5e5af622-4c08-2d19-9e00-96a8253f634d',
+                docketNumber: '678-90',
                 notes: 'this is a note added',
                 userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
               },
@@ -29,13 +29,13 @@ describe('extractUserNotesFromCalendaredCasesAction', () => {
     });
 
     expect(result.state.trialSessionWorkingCopy.userNotes).toMatchObject({
-      '5e5af622-2d19-4c08-9e00-96a8253f634d': {
-        caseId: '5e5af622-2d19-4c08-9e00-96a8253f634d',
+      '123-45': {
+        docketNumber: '123-45',
         notes: 'this is a note added',
         userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
       },
-      '5e5af622-4c08-2d19-9e00-96a8253f634d': {
-        caseId: '5e5af622-4c08-2d19-9e00-96a8253f634d',
+      '678-90': {
+        docketNumber: '678-90',
         notes: 'this is a note added',
         userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
       },

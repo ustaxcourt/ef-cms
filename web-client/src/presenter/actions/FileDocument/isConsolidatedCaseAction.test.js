@@ -16,14 +16,14 @@ describe('isConsolidatedCaseAction', () => {
     };
   });
 
-  it('should select yes when lead case id exists', async () => {
+  it('should select yes when lead docket number exists', async () => {
     await runAction(isConsolidatedCaseAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          leadCaseId: '123',
+          leadDocketNumber: '123',
         },
       },
     });
@@ -31,7 +31,7 @@ describe('isConsolidatedCaseAction', () => {
     expect(yesStub).toHaveBeenCalled();
   });
 
-  it('should call no path when no lead case id exists', async () => {
+  it('should call no path when no lead docket number exists', async () => {
     await runAction(isConsolidatedCaseAction, {
       modules: {
         presenter,

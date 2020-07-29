@@ -1,6 +1,3 @@
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 const { getRecordsViaMapping } = require('../helpers/getRecordsViaMapping');
 
 /**
@@ -15,16 +12,9 @@ exports.getCaseDeadlinesByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {
-  const caseId = await getCaseIdFromDocketNumber({
+  return await getRecordsViaMapping({
     applicationContext,
-    docketNumber,
+    pk: `case|${docketNumber}`,
+    prefix: 'case-deadline',
   });
-
-  if (caseId) {
-    return await getRecordsViaMapping({
-      applicationContext,
-      pk: `case|${caseId}`,
-      prefix: 'case-deadline',
-    });
-  }
 };
