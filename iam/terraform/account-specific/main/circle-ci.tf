@@ -187,6 +187,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "iam:ListPolicyVersions",
         "iam:ListInstanceProfilesForRole",
         "iam:AddRoleToInstanceProfile",
+        "iam:CreateServiceLinkedRole",
         "iam:ListAttachedRolePolicies"
       ],
       "Resource": [
