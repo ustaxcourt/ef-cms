@@ -32,6 +32,7 @@ export const DraftDocuments = connect(
             stipulatedDecisionEventCode && (
             <ArchiveDraftDocumentModal
               message="Return to the Proposed Stipulated Decision to re-sign."
+              showDocumentTitle={false}
               title="Are You Sure You Want to Delete the Stipulated Decision?"
             />
           )}
