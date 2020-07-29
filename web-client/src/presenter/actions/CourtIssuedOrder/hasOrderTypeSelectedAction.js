@@ -7,10 +7,10 @@
  * @returns {object} the path to execute
  */
 export const hasOrderTypeSelectedAction = ({ path, props }) => {
-  const { docketNumber: caseId, eventCode } = props;
+  const { docketNumber, eventCode } = props;
   if (eventCode) {
     return path['proceed']();
   } else {
-    return path['no']({ caseId });
+    return path['no']({ docketNumber });
   }
 };

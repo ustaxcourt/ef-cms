@@ -23,7 +23,7 @@ describe('setDocumentToEditAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',
@@ -45,7 +45,7 @@ describe('setDocumentToEditAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',

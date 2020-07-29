@@ -12,17 +12,19 @@ describe('navigateToCaseDetailCaseInformationAction', () => {
     };
   });
 
-  it('should call the router to navigate to the case detail page for the given props.caseId', async () => {
+  it('should call the router to navigate to the case detail page for the given props.docketNumber', async () => {
     await runAction(navigateToCaseDetailCaseInformationAction, {
       modules: {
         presenter,
       },
       props: {
-        caseId: '123',
+        docketNumber: '123-45',
       },
     });
 
-    expect(routeMock).toHaveBeenCalledWith('/case-detail/123/case-information');
+    expect(routeMock).toHaveBeenCalledWith(
+      '/case-detail/123-45/case-information',
+    );
   });
 
   it('should call the router to navigate to the case detail page for the given props.caseDetail.caaseId', async () => {
@@ -32,12 +34,14 @@ describe('navigateToCaseDetailCaseInformationAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
         },
       },
     });
 
-    expect(routeMock).toHaveBeenCalledWith('/case-detail/123/case-information');
+    expect(routeMock).toHaveBeenCalledWith(
+      '/case-detail/123-45/case-information',
+    );
   });
 
   it('should call the router to navigate to the case detail page for the given state.caseDetail.docketNumber', async () => {

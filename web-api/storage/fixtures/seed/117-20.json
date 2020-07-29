@@ -27,7 +27,6 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Bart Simpson, Petitioner",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
     "sk": "case|117-20",
     "filingType": "Myself",
     "orderForOds": false,
@@ -131,7 +130,6 @@
         "createdAt": "2020-06-25T20:40:13.685Z",
         "assigneeName": null,
         "entityName": "WorkItem",
-        "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
         "docketNumberWithSuffix": "117-20L",
         "messages": [
           {
@@ -171,7 +169,6 @@
   },
   {
     "sk": "case|117-20",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
     "pk": "catalog"
   },
   {
@@ -217,7 +214,6 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Bart Simpson, Petitioner",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
     "sk": "case|117-20",
     "filingType": "Myself",
     "orderForOds": false,

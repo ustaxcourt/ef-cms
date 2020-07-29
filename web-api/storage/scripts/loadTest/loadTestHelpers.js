@@ -146,7 +146,7 @@ const createCase = async ({
       .getPersistenceGateway()
       .updateDocumentProcessingStatus({
         applicationContext,
-        caseId: caseDetail.caseId,
+        docketNumber: caseDetail.docketNumber,
         documentId: document.documentId,
       });
   }

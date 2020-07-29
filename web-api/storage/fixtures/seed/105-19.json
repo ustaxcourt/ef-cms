@@ -23,7 +23,6 @@
     "createdAt": "2019-03-27T21:53:00.297Z",
     "receivedAt": "2019-03-27T21:53:00.297Z",
     "noticeOfAttachments": false,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseCaption": "Caryn Wall, Petitioner",
     "initialCaption": "Caryn Wall, Petitioner",
     "sk": "case|105-19",
@@ -109,7 +108,6 @@
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-27T21:53:00.297Z",
     "assigneeName": null,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "messages": [
       {
         "createdAt": "2019-03-27T21:53:00.297Z",
@@ -150,7 +148,6 @@
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-27T21:53:00.297Z",
     "assigneeName": null,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "messages": [
       {
         "createdAt": "2019-03-27T21:53:00.297Z",
@@ -165,7 +162,6 @@
   },
   {
     "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "pk": "catalog"
   },
   {
@@ -219,7 +215,6 @@
         "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-03-27T21:53:00.297Z",
         "assigneeName": null,
-        "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
         "messages": [
           {
             "createdAt": "2019-03-27T21:53:00.297Z",
@@ -240,7 +235,6 @@
     "processingStatus": "complete",
     "filedBy": "Test Practitioner",
     "isFileAttached": true,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "numberOfPages": 1,
@@ -259,7 +253,6 @@
     "processingStatus": "complete",
     "filedBy": "Test Practitioner",
     "isFileAttached": true,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "numberOfPages": 1,

@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setDeleteCaseNoteModalStateAction = ({ get, store }) => {
-  const { caseId } = get(state.caseDetail);
-  store.set(state.modal.caseId, caseId);
+  const { docketNumber } = get(state.caseDetail);
+  store.set(state.modal.docketNumber, docketNumber);
 };

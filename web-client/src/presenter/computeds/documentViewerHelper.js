@@ -4,6 +4,8 @@ import { state } from 'cerebral';
 export const documentViewerHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_DOCUMENT_TYPES,
+    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
@@ -61,6 +63,13 @@ export const documentViewerHelper = (get, applicationContext) => {
     formattedDocumentToDisplay.document.isPetition &&
     permissions.SERVE_PETITION;
 
+  const showSignStipulatedDecisionButton =
+    formattedDocumentToDisplay.document.eventCode ===
+      PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
+    !formattedCaseDetail.documents.find(
+      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE,
+    );
+
   return {
     description: formattedDocumentToDisplay.record.description,
     filedLabel,
@@ -70,5 +79,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
+    showSignStipulatedDecisionButton,
   };
 };

@@ -15,7 +15,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
       });
     presenter.providers.applicationContext = applicationContext;
     form = {
-      caseId: 't3-5t-c4-53-1d',
+      docketNumber: '123-45',
       documents: [
         {
           documentId: 'test-apw-id',
