@@ -27,7 +27,6 @@
     "createdAt": "2019-12-11T15:25:55.006Z",
     "noticeOfAttachments": false,
     "caseCaption": "Brian Earl Spilner, Petitioner",
-    "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
     "sk": "case|112-19",
     "filingType": "Myself",
     "orderForOds": false,
@@ -96,7 +95,6 @@
     "createdAt": "2019-12-11T15:25:55.008Z",
     "processingStatus": "complete",
     "filedBy": "Petr. Brian Earl Spilner",
-    "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
     "isFileAttached": true,
     "sk": "document|1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
     "partySecondary": false,
@@ -140,7 +138,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-12-11T15:25:55.008Z",
         "assigneeName": null,
-        "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
         "messages": [
           {
             "createdAt": "2019-12-11T15:25:55.008Z",
@@ -161,7 +158,6 @@
     "createdAt": "2019-12-11T15:25:55.007Z",
     "processingStatus": "complete",
     "filedBy": "Petr. Brian Earl Spilner",
-    "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
     "isFileAttached": true,
     "sk": "document|337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
     "partySecondary": false,

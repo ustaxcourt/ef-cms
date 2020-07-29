@@ -40,7 +40,6 @@
         "createdAt": "2020-06-25T20:58:55.415Z",
         "assigneeName": null,
         "entityName": "WorkItem",
-        "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
         "docketNumberWithSuffix": "120-20SL",
         "messages": [
           {
@@ -163,7 +162,6 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Sean Connery, Petitioner",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
     "sk": "case|120-20",
     "filingType": "Myself",
     "orderForOds": false,
@@ -188,7 +186,6 @@
   },
   {
     "sk": "case|120-20",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
     "pk": "catalog"
   },
   {
@@ -224,7 +221,6 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Sean Connery, Petitioner",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
     "sk": "case|120-20",
     "filingType": "Myself",
     "orderForOds": false,

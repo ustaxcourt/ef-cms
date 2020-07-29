@@ -1162,4 +1162,114 @@ describe('messageDocumentHelper', () => {
       expect(result.editUrl).toEqual('');
     });
   });
+
+  describe('showSignStipulatedDecisionButton', () => {
+    it('should be true if the user is an internal user, the eventCode is PSDE, and the SDEC eventCode is not in the documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be false if the user is an internal user, the document code is PSDE, and the SDEC eventCode is in the documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+              {
+                documentId: '234',
+                documentType: 'Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'SDEC',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+
+    it('should be false if the user is an external user, the eventCode is PSDE, and the SDEC event code is not in the documents', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+
+    it('should be false if the user is an internal user and the eventCode is not PSDE', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+  });
 });

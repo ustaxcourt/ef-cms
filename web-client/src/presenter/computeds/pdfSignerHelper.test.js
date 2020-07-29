@@ -1,15 +1,36 @@
-import { pdfSignerHelper } from './pdfSignerHelper';
+import { applicationContext } from '../../applicationContext';
+import { pdfSignerHelper as pdfSignerHelperComputed } from './pdfSignerHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../../src/withAppContext';
+
+const pdfSignerHelper = withAppContextDecorator(
+  pdfSignerHelperComputed,
+  applicationContext,
+);
+let mockState;
+
+beforeAll(() => {
+  mockState = {
+    caseDetail: {
+      documents: [
+        {
+          documentId: '123',
+          eventCode: 'PSDE',
+        },
+      ],
+    },
+    documentId: '123',
+    form: {},
+    pdfForSigning: {
+      signatureData: true,
+    },
+  };
+});
 
 describe('pdfSignerHelper', () => {
   it('should set disableSaveAndSendButton to true when the message inputs are not defined and pdf data is defined', () => {
     const { disableSaveAndSendButton } = runCompute(pdfSignerHelper, {
-      state: {
-        form: {},
-        pdfForSigning: {
-          signatureData: true,
-        },
-      },
+      state: mockState,
     });
     expect(disableSaveAndSendButton).toBeTruthy();
   });
@@ -17,7 +38,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveAndSendButton to true when the pdf data is not defined', () => {
     const { disableSaveAndSendButton } = runCompute(pdfSignerHelper, {
       state: {
-        form: {},
+        ...mockState,
         pdfForSigning: {
           signatureData: null,
         },
@@ -29,6 +50,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveAndSendButton to false when section is defined', () => {
     const { disableSaveAndSendButton } = runCompute(pdfSignerHelper, {
       state: {
+        ...mockState,
         form: {
           section: 'a',
         },
@@ -43,6 +65,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveAndSendButton to false when message is defined', () => {
     const { disableSaveAndSendButton } = runCompute(pdfSignerHelper, {
       state: {
+        ...mockState,
         form: {
           message: 'a',
         },
@@ -57,6 +80,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveAndSendButton to false when assigneeId is defined', () => {
     const { disableSaveAndSendButton } = runCompute(pdfSignerHelper, {
       state: {
+        ...mockState,
         form: {
           assigneeId: 'a',
         },
@@ -71,7 +95,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveButton to true when the pdf data is not defined', () => {
     const { disableSaveButton } = runCompute(pdfSignerHelper, {
       state: {
-        form: {},
+        ...mockState,
         pdfForSigning: {
           signatureData: null,
         },
@@ -83,7 +107,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveButton to true when the pdf data is defined', () => {
     const { disableSaveButton } = runCompute(pdfSignerHelper, {
       state: {
-        form: {},
+        ...mockState,
         pdfForSigning: {
           signatureData: true,
         },
@@ -95,6 +119,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveButton to true when section is defined', () => {
     const { disableSaveButton } = runCompute(pdfSignerHelper, {
       state: {
+        ...mockState,
         form: {
           section: true,
         },
@@ -109,6 +134,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveButton to true when assigneeId is defined', () => {
     const { disableSaveButton } = runCompute(pdfSignerHelper, {
       state: {
+        ...mockState,
         form: {
           assigneeId: 'a',
         },
@@ -123,6 +149,7 @@ describe('pdfSignerHelper', () => {
   it('should set disableSaveButton to true when message is defined', () => {
     const { disableSaveButton } = runCompute(pdfSignerHelper, {
       state: {
+        ...mockState,
         form: {
           message: 'a',
         },
@@ -132,5 +159,93 @@ describe('pdfSignerHelper', () => {
       },
     });
     expect(disableSaveButton).toBeTruthy();
+  });
+
+  describe('showSkipSignatureButton', () => {
+    it('should be false when the document eventCode is PSDE and there is no signature data and the PDF is not already signed', () => {
+      const { showSkipSignatureButton } = runCompute(pdfSignerHelper, {
+        state: {
+          ...mockState,
+          form: {
+            message: 'a',
+          },
+          pdfForSigning: {
+            eventCode: 'PSDE',
+            isPdfAlreadySigned: false,
+            signatureData: false,
+          },
+        },
+      });
+
+      expect(showSkipSignatureButton).toBeFalsy();
+    });
+
+    it('should be true when the document eventCode is not PSDE and there is no signature data and the PDF is already signed', () => {
+      const { showSkipSignatureButton } = runCompute(pdfSignerHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: '123',
+                eventCode: 'O',
+              },
+            ],
+          },
+          documentId: '123',
+          form: {
+            message: 'a',
+          },
+          pdfForSigning: {
+            eventCode: 'O',
+            isPdfAlreadySigned: false,
+            signatureData: false,
+          },
+        },
+      });
+
+      expect(showSkipSignatureButton).toBeTruthy();
+    });
+
+    it('should be true when the document eventCode is not PSDE and a signature has not been previously placed on the document', () => {
+      const { showSkipSignatureButton } = runCompute(pdfSignerHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: '123',
+                eventCode: 'O',
+              },
+            ],
+          },
+          documentId: '123',
+          form: {
+            message: 'a',
+          },
+          pdfForSigning: {
+            eventCode: 'O',
+            signatureData: false,
+          },
+        },
+      });
+
+      expect(showSkipSignatureButton).toBeTruthy();
+    });
+
+    it('should be false when the document eventCode is PSDE', () => {
+      const { showSkipSignatureButton } = runCompute(pdfSignerHelper, {
+        state: {
+          ...mockState,
+          form: {
+            message: 'a',
+          },
+          pdfForSigning: {
+            eventCode: 'PSDE',
+            signatureData: false,
+          },
+        },
+      });
+
+      expect(showSkipSignatureButton).toBeFalsy();
+    });
   });
 });
