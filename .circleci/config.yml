@@ -234,9 +234,7 @@ jobs:
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: medium+
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -270,7 +268,6 @@ jobs:
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
-            SLS_DEPLOYMENT_BUCKET: noop
           command: |
             npm run build:all
             npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server.txt &
@@ -282,20 +279,8 @@ jobs:
             npm run test:pa11y:3 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public
-          environment:
-            SKIP_CACHE_INVALIDATION: true
-            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-            S3_ENDPOINT: http://localhost:9000
-            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-            AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER
-            SLS_DEPLOYMENT_BUCKET: noop
           command: |
-            npx run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
-            sleep 5
+            npx run-p start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             npm run test:pa11y:public --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
@@ -341,14 +326,21 @@ jobs:
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER          
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-
-            SKIP_CACHE_INVALIDATION=true TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
@@ -397,14 +389,21 @@ jobs:
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER          
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-
-            SKIP_CACHE_INVALIDATION=true TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
