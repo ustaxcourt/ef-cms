@@ -517,57 +517,57 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      # - build-shared:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-api:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-client-unit:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-client-integration:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - e2e-pa11y:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - e2e-cypress:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - e2e-cypress-public:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-client-coverage:
-      #     requires:
-      #       - build-shared
-      #       - build-api
-      #       - build-client-unit
-      #       - build-client-integration
-      #       - e2e-pa11y
-      #       - e2e-cypress
-      #       - e2e-cypress-public
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
+      - build-shared:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-api:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-client-unit:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-client-integration:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-pa11y:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-cypress:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-cypress-public:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-client-coverage:
+          requires:
+            - build-shared
+            - build-api
+            - build-client-unit
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-cypress
+            - e2e-cypress-public
+          filters:
+            branches:
+              ignore:
+                - develop
       - deploy:
-          # requires:
-          #   - build-client-coverage
+          requires:
+            - build-client-coverage
           filters:
             branches:
               only:
