@@ -175,6 +175,16 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showSignStipulatedDecisionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign/${parentMessageId}`}
+                  icon="pencil-alt"
+                >
+                  Sign Stipulated Decision
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
