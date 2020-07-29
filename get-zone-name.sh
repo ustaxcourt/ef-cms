@@ -28,6 +28,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo "${ZONE_NAME_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "${ZONE_NAME_PROD}"
+elif [[ $BRANCH == 'dawson' ]] ; then
+  echo "${ZONE_NAME_DAWSON}"
 else
   exit 1;
 fi
