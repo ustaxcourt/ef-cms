@@ -3,7 +3,6 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { createCaseMessage } = require('./createCaseMessage');
 
-const CASE_ID = '5c1bbac9-4474-4ba3-ab5b-1a0a92d58dd8';
 const mockCaseMessage = {
   createdAt: '2019-03-01T21:40:46.415Z',
   docketNumber: '123-20',
@@ -25,18 +24,6 @@ describe('createCaseMessage', () => {
     applicationContext.getDocumentClient().put.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
-
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              pk: `case|${CASE_ID}`,
-              sk: `case|${CASE_ID}`,
-            },
-          ],
-        }),
-    });
   });
 
   it('attempts to persist the case message record', async () => {
@@ -52,7 +39,7 @@ describe('createCaseMessage', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
       gsi1pk: `message|${mockCaseMessage.parentMessageId}`,
-      pk: `case|${CASE_ID}`,
+      pk: 'case|123-20',
       sk: `message|${mockCaseMessage.messageId}`,
       ...mockCaseMessage,
     });

@@ -90,7 +90,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(cases).toMatchObject([
-      expect.objectContaining({ caseId: MOCK_CASE.caseId }),
+      expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
   });
 

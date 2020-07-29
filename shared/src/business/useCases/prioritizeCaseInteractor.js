@@ -47,8 +47,8 @@ exports.prioritizeCaseInteractor = async ({
     .getPersistenceGateway()
     .updateHighPriorityCaseTrialSortMappingRecords({
       applicationContext,
-      caseId: caseEntity.caseId,
       caseSortTags: caseEntity.generateTrialSortTags(),
+      docketNumber: caseEntity.docketNumber,
     });
 
   const updatedCase = await applicationContext

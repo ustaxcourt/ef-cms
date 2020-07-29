@@ -23,7 +23,9 @@ export const petitionsClerk1CreatesNoticeFromMessageDetail = test => {
 
     await test.runSequence('gotoCreateOrderSequence', {
       docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+      documentTitle: test.getState('modal.documentTitle'),
+      documentType: test.getState('modal.documentType'),
+      eventCode: test.getState('modal.eventCode'),
       redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 

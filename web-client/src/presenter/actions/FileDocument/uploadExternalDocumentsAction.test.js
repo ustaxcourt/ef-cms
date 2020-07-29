@@ -54,7 +54,6 @@ describe('uploadExternalDocumentsAction', () => {
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
@@ -111,7 +110,6 @@ describe('uploadExternalDocumentsAction', () => {
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
@@ -171,7 +169,6 @@ describe('uploadExternalDocumentsAction', () => {
       },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,

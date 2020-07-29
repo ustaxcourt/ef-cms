@@ -1,6 +1,3 @@
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
 const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 const { put } = require('../../dynamodbClientService');
@@ -37,14 +34,9 @@ exports.saveWorkItemForDocketClerkFilingExternalDocument = async ({
     workItem,
   });
 
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber: workItem.docketNumber,
-  });
-
   await put({
     Item: {
-      pk: `case|${caseId}`,
+      pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
     },
     applicationContext,
