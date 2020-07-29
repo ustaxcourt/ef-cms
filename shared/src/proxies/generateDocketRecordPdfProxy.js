@@ -11,13 +11,13 @@ const { post } = require('./requests');
  */
 exports.generateDocketRecordPdfInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   docketRecordSort,
 }) => {
   return post({
     applicationContext,
     body: {
-      caseId,
+      docketNumber,
       docketRecordSort,
     },
     endpoint: '/api/docket-record-pdf',
