@@ -17,7 +17,6 @@
   },
   {
     "sk": "case|107-19",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "catalog"
   },
   {
@@ -72,7 +71,6 @@
     "isQC": true,
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "2019-08-16T17:29:10.133Z",
     "messages": [
       {
@@ -119,7 +117,6 @@
     "isQC": true,
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "2019-08-16T17:29:10.133Z",
     "messages": [
       {
@@ -192,7 +189,6 @@
     "receivedAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
     "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "case|107-19",
     "filingType": "A business",
     "orderForOds": false,
@@ -274,7 +270,6 @@
     "isQC": true,
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "messages": [
       {
@@ -379,7 +374,6 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "isFileAttached": true,
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
@@ -421,7 +415,6 @@
         "sentBySection": "petitions",
         "createdAt": "2019-08-16T17:29:10.133Z",
         "assigneeName": "IRS Holding Queue",
-        "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
         "messages": [
           {
             "createdAt": "2019-08-16T17:29:10.133Z",
@@ -444,7 +437,6 @@
     "createdAt": "2019-08-16T17:29:10.132Z",
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "isFileAttached": true,
     "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
@@ -471,7 +463,6 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "isFileAttached": true,
     "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
