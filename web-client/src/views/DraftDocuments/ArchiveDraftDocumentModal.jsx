@@ -13,6 +13,8 @@ export const ArchiveDraftDocumentModal = connect(
     archiveDraftDocument,
     cancelSequence,
     confirmSequence,
+    message = 'Once deleted, it can’t be restored.',
+    title = 'Are You Sure You Want to Delete This Document?',
   }) {
     return (
       <ModalDialog
@@ -21,8 +23,8 @@ export const ArchiveDraftDocumentModal = connect(
         className=""
         confirmLabel="Yes, Delete"
         confirmSequence={confirmSequence}
-        message="Once deleted, it can’t be restored."
-        title="Are You Sure You Want to Delete This Document?"
+        message={message}
+        title={title}
       >
         <div className="margin-bottom-2 semi-bold">
           {archiveDraftDocument.documentTitle}
