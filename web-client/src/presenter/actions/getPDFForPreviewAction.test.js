@@ -26,7 +26,7 @@ describe('getPDFForPreviewAction', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('returns results from loadPDFForPreviewInteractor if provided a caseId and documentId', async () => {
+  it('returns results from loadPDFForPreviewInteractor if provided a docketNumber and documentId', async () => {
     const props = { file: { docketNumber: '123-20', documentId: '456' } };
     await runAction(getPDFForPreviewAction, {
       modules: {
