@@ -50,7 +50,6 @@ describe('saveDocketEntryAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       documentId: 'document-id-123',
       overridePaperServiceAddress: true,
@@ -93,7 +92,6 @@ describe('saveDocketEntryAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       documentId: 'document-id-123',
       overridePaperServiceAddress: true,
@@ -133,7 +131,6 @@ describe('saveDocketEntryAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       documentId: expect.anything(), // uuidv4
       overridePaperServiceAddress: true,
@@ -177,7 +174,6 @@ describe('saveDocketEntryAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       documentId: 'document-id-123',
       overridePaperServiceAddress: true,
@@ -219,7 +215,6 @@ describe('saveDocketEntryAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       documentId: 'document-id-123',
       overridePaperServiceAddress: true,
@@ -268,7 +263,6 @@ describe('saveDocketEntryAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       documentId: 'document-id-123',
       overridePaperServiceAddress: true,

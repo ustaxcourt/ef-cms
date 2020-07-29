@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * sets state.sessionMetadata.docketRecordSort to its default value if the current caseId
- * is different than the state.sessionMetadata.caseId (last case the user was viewing
+ * sets state.sessionMetadata.docketRecordSort to its default value if the current docketNumber
+ * is different than the state.sessionMetadata.docketNumber (last case the user was viewing
  * when they changed the default sort option)
  *
  * @param {object} providers the providers object

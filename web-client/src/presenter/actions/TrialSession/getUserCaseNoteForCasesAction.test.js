@@ -13,12 +13,12 @@ describe('getUserCaseNoteForCasesAction', () => {
       .getUseCases()
       .getUserCaseNoteForCasesInteractor.mockResolvedValue([
         {
-          caseId: 'case-id-123',
+          docketNumber: '123-45',
           note: 'welcome to flavortown',
           userId: 'user-id-123',
         },
         {
-          caseId: 'case-id-234',
+          docketNumber: '678-90',
           note: 'hi there face here',
           userId: 'user-id-234',
         },
