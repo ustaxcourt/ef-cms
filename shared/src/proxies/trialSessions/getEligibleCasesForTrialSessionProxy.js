@@ -17,7 +17,6 @@ exports.getEligibleCasesForTrialSessionInteractor = ({
     endpoint: `/trial-sessions/${trialSessionId}/eligible-cases`,
     params: {
       fields: [
-        'caseId',
         'isManuallyAdded',
         'caseCaption',
         'privatePractitioners',
