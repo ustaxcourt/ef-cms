@@ -29,7 +29,7 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
-          caseId: '123',
+          docketNumber: '123-45',
           irsNoticeDate: '2009-10-13',
         },
       },
@@ -39,7 +39,7 @@ describe('validateCaseDetail', () => {
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
         .calls[0][0].caseDetail,
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123-45',
       irsNoticeDate: '2009-10-13',
     });
     expect(successStub.mock.calls.length).toEqual(1);
@@ -56,7 +56,7 @@ describe('validateCaseDetail', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
         },
         form: {
           irsDay: '13',
