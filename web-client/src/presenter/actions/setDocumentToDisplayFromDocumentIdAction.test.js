@@ -7,14 +7,13 @@ presenter.providers.applicationContext = applicationContext;
 
 describe('setDocumentToDisplayFromDocumentIdAction', () => {
   let caseDetail;
-  const caseId = '123';
+  const docketNumber = '123-45';
   const documentId = '456';
   const url = 'www.example.com';
 
   beforeAll(() => {
     caseDetail = {
-      caseId,
-      docketNumber: '123-45',
+      docketNumber,
       documents: [],
     };
 

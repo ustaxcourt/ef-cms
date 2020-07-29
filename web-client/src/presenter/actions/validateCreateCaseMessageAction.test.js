@@ -31,7 +31,7 @@ describe('validateCreateCaseMessageAction', () => {
       state: {
         modal: {
           form: {
-            caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
+            docketNumber: '123-45',
             from: 'yup',
             fromSection: 'yup',
             fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
@@ -48,7 +48,7 @@ describe('validateCreateCaseMessageAction', () => {
       applicationContext.getUseCases().validateCreateCaseMessageInteractor.mock
         .calls[0][0].message,
     ).toMatchObject({
-      caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
+      docketNumber: '123-45',
       from: 'yup',
       fromSection: 'yup',
       fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
@@ -73,7 +73,7 @@ describe('validateCreateCaseMessageAction', () => {
       state: {
         modal: {
           form: {
-            caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
+            docketNumber: '123-45',
             from: 'yup',
             fromSection: 'yup',
             fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
