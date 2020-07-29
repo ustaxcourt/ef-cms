@@ -400,7 +400,7 @@ Case.VALIDATION_RULES = {
     .array()
     .items(joi.object().meta({ entityName: 'DocketRecord' }))
     .required()
-    .unique((a, b) => a.index === b.index)
+    //.unique((a, b) => a.index === b.index) TODO: Do we need this?
     .description('List of DocketRecord Entities for the case.'),
   documents: joi
     .array()
@@ -1015,13 +1015,13 @@ Case.prototype.setRequestForTrialDocketRecord = function (
  * @returns {Case} the updated case entity
  */
 Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  const nextIndex =
-    this.docketRecord.reduce(
-      (maxIndex, docketRecord, currentIndex) =>
-        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
-      0,
-    ) + 1;
-  docketRecordEntity.index = docketRecordEntity.index || nextIndex;
+  // const nextIndex =
+  //   this.docketRecord.reduce(
+  //     (maxIndex, docketRecord, currentIndex) =>
+  //       Math.max(docketRecord.index || 0, currentIndex, maxIndex),
+  //     0,
+  //   ) + 1;
+  // docketRecordEntity.index = docketRecordEntity.index || nextIndex;
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
@@ -1055,14 +1055,15 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 
 /**
  *
- * @param {number} docketRecordIndex the index of the docket record to update
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
+ * * @param {number} docketRecordId the index of the docket record to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function (
-  docketRecordIndex,
-  docketRecordEntity,
-) {
+Case.prototype.updateDocketRecord = function (docketRecordEntity) {
+  const docketRecordIndex = this.docketRecord.findIndex(
+    entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
+  );
+
   this.docketRecord[docketRecordIndex] = docketRecordEntity;
   return this;
 };

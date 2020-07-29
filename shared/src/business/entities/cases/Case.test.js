@@ -1185,7 +1185,10 @@ describe('Case entity', () => {
         ),
       );
 
-      expect(caseRecord.docketRecord[4].index).toEqual(6);
+      expect(caseRecord.docketRecord[4].index).toBeUndefined();
+      expect(caseRecord.docketRecord[4].description).toEqual(
+        'some description',
+      );
     });
     it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -1204,7 +1207,7 @@ describe('Case entity', () => {
     });
   });
   describe('updateDocketRecord', () => {
-    it('updates the docket record entity at the provided docketRecordIndex', () => {
+    it('updates the docket record entity with the provided docketRecordId', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -1218,8 +1221,7 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
-      caseRecord.updateDocketRecord(1, updatedDocketEntry);
-
+      caseRecord.updateDocketRecord(updatedDocketEntry);
       expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
       expect(caseRecord.docketRecord[1].description).toEqual(
         'second record now updated',
@@ -3260,42 +3262,6 @@ describe('Case entity', () => {
       });
 
       expect(isAssociated).toBeFalsy();
-    });
-  });
-
-  describe('DocketRecord indices must be unique', () => {
-    it('identifies duplicate values in docket record indices', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          docketRecord: [
-            {
-              description: 'first record',
-              documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-              eventCode: 'P',
-              filingDate: '2018-03-01T00:01:00.000Z',
-              index: 1,
-            },
-            {
-              description: 'second record',
-              documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-              filingDate: '2018-03-01T00:02:00.000Z',
-              index: 1,
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(caseEntity.getFormattedValidationErrors()).toEqual({
-        'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
-      });
     });
   });
 
