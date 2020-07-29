@@ -1,4 +1,4 @@
-import { getFormattedMyInbox, viewDocumentDetailMessage } from '../helpers';
+import { getFormattedMyInbox } from '../helpers';
 
 export const adcViewsStipulatedDecisionForSigning = test => {
   describe('ADC views inbox and selects a Stipulated Decision for signing', () => {
@@ -14,18 +14,9 @@ export const adcViewsStipulatedDecisionForSigning = test => {
     it('selects the stipulated decision from inbox and signs it', async () => {
       const { stipDecision } = test;
 
-      await viewDocumentDetailMessage({
+      await test.runSequence('gotoSignOrderSequence', {
         docketNumber: stipDecision.docketNumber,
         documentId: stipDecision.document.documentId,
-        messageId: stipDecision.currentMessage.messageId,
-        test,
-        workItemIdToMarkAsRead: stipDecision.workItemId,
-      });
-
-      await test.runSequence('gotoSignPDFDocumentSequence', {
-        docketNumber: stipDecision.docketNumber,
-        documentId: stipDecision.document.documentId,
-        pageNumber: 1,
       });
 
       // set signature data
@@ -37,16 +28,8 @@ export const adcViewsStipulatedDecisionForSigning = test => {
         },
       });
 
-      // set message
-      test.setState('form', {
-        assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        message:
-          'Donna, this is not ready to serve. I need to follow up on something first',
-        section: 'docket',
-      });
-
       // complete signing
-      await test.runSequence('completeDocumentSigningSequence');
+      await test.runSequence('saveDocumentSigningSequence');
       const newSignatureData = test.getState('pdfForSigning.signatureData');
       expect(newSignatureData).toBeUndefined();
     });

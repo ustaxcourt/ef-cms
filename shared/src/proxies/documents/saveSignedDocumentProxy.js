@@ -16,12 +16,14 @@ exports.saveSignedDocumentInteractor = ({
   docketNumber,
   nameForSigning,
   originalDocumentId,
+  parentMessageId,
   signedDocumentId,
 }) => {
   return post({
     applicationContext,
     body: {
       nameForSigning,
+      parentMessageId,
       signedDocumentId,
     },
     endpoint: `/case-documents/${docketNumber}/${originalDocumentId}/sign`,
