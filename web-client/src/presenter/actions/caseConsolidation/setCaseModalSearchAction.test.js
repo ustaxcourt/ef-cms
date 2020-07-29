@@ -8,11 +8,12 @@ describe('setCaseModalSearchAction', () => {
       modules: {
         presenter,
       },
-      props: { caseDetail: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' } },
+      props: { caseDetail: { docketNumber: '123-45' } },
       state: { modal: { confirmSelection: true, error: 'asasdasd' } },
     });
+
     expect(result.state.modal.caseDetail).toEqual({
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '123-45',
     });
     expect(result.state.modal.error).toBeUndefined();
     expect(result.state.modal.confirmSelection).toBeUndefined();

@@ -8,7 +8,13 @@ presenter.providers.applicationContext = applicationContext;
 applicationContext
   .getUseCases()
   .getBlockedCasesInteractor.mockImplementation(async () => {
-    return [{ blocked: true, caseId: '1', preferredTrialCity: 'Boise, Idaho' }];
+    return [
+      {
+        blocked: true,
+        docketNumber: '123-45',
+        preferredTrialCity: 'Boise, Idaho',
+      },
+    ];
   });
 
 describe('getBlockedCasesByTrialLocationAction', () => {
@@ -48,7 +54,11 @@ describe('getBlockedCasesByTrialLocationAction', () => {
     ).toEqual('Boise, Idaho');
     expect(result.output).toEqual({
       blockedCases: [
-        { blocked: true, caseId: '1', preferredTrialCity: 'Boise, Idaho' },
+        {
+          blocked: true,
+          docketNumber: '123-45',
+          preferredTrialCity: 'Boise, Idaho',
+        },
       ],
     });
   });
