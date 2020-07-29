@@ -13,7 +13,7 @@ describe('updateCourtIssuedDocketEntryAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
         },
         documentId: 'abc',
         form: {

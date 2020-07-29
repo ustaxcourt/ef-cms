@@ -26,7 +26,6 @@
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
     "caseCaption": "Letti Toretto, Petitioner",
-    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "sk": "case|113-19",
     "filingType": "Myself",
     "orderForOds": false,
@@ -96,7 +95,6 @@
     "createdAt": "2019-12-11T16:02:31.176Z",
     "processingStatus": "complete",
     "filedBy": "Petr. Letti Toretto",
-    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "isFileAttached": true,
     "sk": "document|3cf1f474-1dcd-47aa-8455-8f9a93d80183",
     "partySecondary": false,
@@ -139,7 +137,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-12-11T16:02:31.175Z",
         "assigneeName": null,
-        "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
         "messages": [
           {
             "createdAt": "2019-12-11T16:02:31.176Z",
@@ -160,7 +157,6 @@
     "createdAt": "2019-12-11T16:02:31.174Z",
     "processingStatus": "complete",
     "filedBy": "Petr. Letti Toretto",
-    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "isFileAttached": true,
     "sk": "document|6d83425c-8ef3-4c66-b776-6c7957c53f4d",
     "partySecondary": false,

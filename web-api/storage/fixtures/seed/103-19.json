@@ -23,7 +23,6 @@
     "receivedAt": "2019-03-01T22:53:50.097Z",
     "noticeOfAttachments": false,
     "caseCaption": "Samson Workman, Petitioner",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "case|103-19",
     "filingType": "Myself",
     "orderForOds": false,
@@ -80,7 +79,7 @@
     "index": 4,
     "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
     "numberOfPages": 1,
-    "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
+    "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "filingDate": "2001-10-10T23:54:05.993Z",
     "docketRecordId": "63b1503d-26cc-448c-a4a4-670b846518c4",
     "pk": "case|103-19",
@@ -139,7 +138,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "caseTitle": "Samson Workman",
     "messages": [
       {
@@ -179,7 +177,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "caseTitle": "Samson Workman",
     "messages": [
       {
@@ -200,7 +197,6 @@
     "document": {
       "hasSupportingDocuments": false,
       "attachments": false,
-      "documentType": "Answer",
       "filingDate": "2019-03-01T21:40:46.415Z",
       "partyPrimary": true,
       "pending": false,
@@ -215,7 +211,6 @@
       "certificateOfService": false,
       "certificateOfServiceDate": null,
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
-      "documentTitle": "Answer by Test Respondent",
       "relationship": "primaryDocument",
       "docketNumber": "103-19"
     },
@@ -229,7 +224,6 @@
     "highPriority": false,
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "docketNumberSuffix": "103-19S",
     "messages": [
@@ -271,7 +265,6 @@
     "sentBy": "respondent",
     "createdAt": "2019-03-01T22:54:06.000Z",
     "assigneeName": null,
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "caseTitle": "Samson Workman",
     "messages": [
       {
@@ -312,7 +305,6 @@
     "isQC": false,
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
     "messages": [
@@ -353,7 +345,6 @@
     "isQC": false,
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "2019-08-08T14:33:24.183Z",
     "caseTitle": "Samson Workman",
     "messages": [
@@ -395,7 +386,6 @@
     "isQC": false,
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "messages": [
       {
@@ -436,7 +426,6 @@
     "createdAt": "2019-08-08T14:33:24.183Z",
     "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "messages": [
       {
@@ -477,7 +466,6 @@
     "createdAt": "2019-08-08T14:33:24.183Z",
     "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "2019-08-08T14:33:24.183Z",
     "messages": [
       {
@@ -497,7 +485,6 @@
   },
   {
     "sk": "case-491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "pk": "catalog"
   },
   {
@@ -533,7 +520,6 @@
     "createdAt": "2019-03-05T17:34:13.491Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "isFileAttached": true,
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
@@ -569,7 +555,6 @@
         "sentBy": "petitioner",
         "createdAt": "2019-03-01T22:53:50.098Z",
         "assigneeName": null,
-        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "messages": [
           {
             "createdAt": "2019-03-01T22:53:50.098Z",
@@ -589,7 +574,6 @@
     "createdAt": "2019-03-01T22:53:50.098Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "isFileAttached": true,
     "sk": "document|c611ee2e-a270-4dcd-a7bd-b8b9062db630",
     "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
@@ -609,9 +593,7 @@
     "createdAt": "2019-08-14T20:35:52.858Z",
     "scenario": "Standard",
     "filedBy": "Resp. & Petr. Samson Workman",
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "additionalInfo": "abc",
-    "isFileAttached": true,
     "sk": "document|dc2664a1-f552-418f-bcc7-8a67f4246568",
     "documentTitle": "Simultaneous Answering Brief",
     "relationship": "primaryDocument",
@@ -634,7 +616,6 @@
           "createdAt": "2019-08-14T20:35:52.858Z",
           "scenario": "Standard",
           "filedBy": "Resp. & Petr. Samson Workman",
-          "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
           "additionalInfo": "abc",
           "documentTitle": "Simultaneous Answering Brief",
           "relationship": "primaryDocument",
@@ -662,7 +643,6 @@
         "sentBySection": "docket",
         "createdAt": "2019-08-14T20:35:52.915Z",
         "assigneeName": "Test Docketclerk",
-        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "messages": [
           {
             "createdAt": "2019-08-14T20:35:52.915Z",
@@ -717,7 +697,6 @@
         "sentBy": "respondent",
         "createdAt": "2019-03-01T22:54:06.000Z",
         "assigneeName": null,
-        "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
         "messages": [
           {
             "createdAt": "2019-03-01T22:54:06.000Z",
@@ -738,7 +717,6 @@
     "processingStatus": "complete",
     "filedBy": "Test Respondent",
     "isFileAttached": true,
-    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "document|f1aa4aa2-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
     "numberOfPages": 1,

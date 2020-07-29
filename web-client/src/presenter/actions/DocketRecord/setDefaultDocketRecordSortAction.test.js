@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { setDefaultDocketRecordSortAction } from './setDefaultDocketRecordSortAction';
 
 describe('setDefaultDocketRecordSortAction', () => {
-  it('should not default docketRecordSort if current caseId matches sessionMetadata caseId', async () => {
+  it('should not default docketRecordSort if current docketNumber matches sessionMetadata docketNumber', async () => {
     const result = await runAction(setDefaultDocketRecordSortAction, {
       state: {
         caseDetail: { docketNumber: '123-45' },
@@ -15,15 +15,15 @@ describe('setDefaultDocketRecordSortAction', () => {
     );
   });
 
-  it('should default docketRecordSort if current caseId does not match sessionMetadata caseId', async () => {
+  it('should default docketRecordSort if current docketNumber does not match sessionMetadata docketNumber', async () => {
     const result = await runAction(setDefaultDocketRecordSortAction, {
       state: {
-        caseDetail: { docketNumber: '987' },
+        caseDetail: { docketNumber: '987-65' },
         sessionMetadata: {},
       },
     });
 
-    expect(result.state.sessionMetadata.docketRecordSort['987']).toEqual(
+    expect(result.state.sessionMetadata.docketRecordSort['987-65']).toEqual(
       'byDate',
     );
   });

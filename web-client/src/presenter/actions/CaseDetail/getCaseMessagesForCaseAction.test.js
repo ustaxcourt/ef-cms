@@ -25,7 +25,7 @@ describe('getCaseMessagesForCaseAction', () => {
       .getCaseMessagesForCaseInteractor.mockReturnValue([mockCaseMessage]);
   });
 
-  it('calls the use case with caseId', async () => {
+  it('calls the use case with docketNumber', async () => {
     const result = await runAction(getCaseMessagesForCaseAction, {
       modules: {
         presenter,

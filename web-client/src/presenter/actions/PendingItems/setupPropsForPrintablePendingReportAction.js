@@ -5,11 +5,11 @@
  * @returns {object} the new props
  */
 export const setupPropsForPrintablePendingReportAction = ({ props }) => {
-  const { caseDetail, caseIdFilter } = props;
+  const { caseDetail, docketNumberFilter } = props;
   const returnProps = {};
 
-  if (caseIdFilter) {
-    returnProps.caseIdFilter = caseDetail.caseId;
+  if (docketNumberFilter) {
+    returnProps.docketNumberFilter = caseDetail.docketNumber;
   }
 
   return returnProps;

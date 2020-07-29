@@ -33,7 +33,6 @@
     },
     "createdAt": "2019-03-01T21:42:29.073Z",
     "receivedAt": "2019-03-01T21:42:29.073Z",
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "case|102-19",
     "filingType": "Myself and my spouse",
     "petitioners": [
@@ -116,7 +115,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "caseTitle": "Selma Horn & Cairo Harris",
     "messages": [
@@ -157,7 +155,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "gsi1pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "caseTitle": "Selma Horn & Cairo Harris",
     "messages": [
@@ -197,7 +194,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "caseTitle": "Selma Horn & Cairo Harris",
     "messages": [
       {
@@ -213,7 +209,6 @@
   },
   {
     "sk": "case|102-19",
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "pk": "catalog"
   },
   {
@@ -245,7 +240,6 @@
         "sentBy": "petitioner",
         "createdAt": "2019-03-01T21:42:29.073Z",
         "assigneeName": null,
-        "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
         "messages": [
           {
             "createdAt": "2019-03-01T21:42:29.073Z",
@@ -265,7 +259,6 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|89c781f6-71ba-4ead-93d8-c681c2183a73",
     "numberOfPages": 1,
     "isFileAttached": true,
@@ -285,7 +278,6 @@
     "filedBy": "Test Petitioner",
     "numberOfPages": 1,
     "isFileAttached": true,
-    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|102-19"

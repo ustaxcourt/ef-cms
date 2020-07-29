@@ -13,7 +13,7 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
         modules: { presenter },
         state: {
           caseDetail: {
-            caseId: '456',
+            docketNumber: '456-78',
           },
           form: { index: 1, something: '123' },
         },
@@ -21,7 +21,7 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
     );
 
     expect(result.output).toEqual({
-      caseId: '456',
+      docketNumber: '456-78',
       docketRecordEntry: { index: 1, something: '123' },
       docketRecordIndex: 1,
     });
@@ -34,7 +34,7 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
         modules: { presenter },
         state: {
           caseDetail: {
-            caseId: '456',
+            docketNumber: '456-78',
           },
           form: {
             index: 1,
@@ -49,7 +49,7 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
     );
 
     expect(result.output).toEqual({
-      caseId: '456',
+      docketNumber: '456-78',
       docketRecordEntry: { index: 1, someObj: {}, something: '123' },
       docketRecordIndex: 1,
     });

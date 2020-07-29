@@ -31,7 +31,6 @@ describe('Petitions clerk case journey', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
     test.documentId = caseDetail.documents[0].documentId;
-    test.caseId = caseDetail.caseId;
   });
 
   loginAs(test, 'petitionsclerk@example.com');
@@ -44,7 +43,6 @@ describe('Petitions clerk case journey', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
     test.documentId = caseDetail.documents[0].documentId;
-    test.caseId = caseDetail.caseId;
   });
 
   loginAs(test, 'petitionsclerk@example.com');
