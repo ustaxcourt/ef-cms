@@ -185,7 +185,7 @@ export const SignOrder = connect(
                   </Button>
                 </>
               )}
-              {!pdfSignerHelper.isPlaced && (
+              {pdfSignerHelper.showSkipSignatureButton && (
                 <Button
                   className="margin-right-0"
                   id="skip-signature-button"
