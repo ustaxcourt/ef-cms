@@ -7,6 +7,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
     EVENT_CODES_REQUIRING_SIGNATURE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
+    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
@@ -99,6 +101,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showServePetitionButton =
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
+  const showSignStipulatedDecisionButton =
+    isInternalUser &&
+    caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
+    !documents.find(d => d.eventCode === STIPULATED_DECISION_EVENT_CODE);
+
   return {
     editUrl,
     showAddDocketEntryButton:
@@ -125,5 +132,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
+    showSignStipulatedDecisionButton,
   };
 };
