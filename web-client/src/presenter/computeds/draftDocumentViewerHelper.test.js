@@ -593,7 +593,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
-  it('return showEditButtonNotSigned true and showEditButtonSigned false for a Stipulated Decision document', () => {
+  it('return showEditButtonNotSigned false and showEditButtonSigned false for a Stipulated Decision document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -619,6 +619,7 @@ describe('draftDocumentViewerHelper', () => {
       },
     });
 
+    expect(result.showEditButtonNotSigned).toEqual(false);
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
