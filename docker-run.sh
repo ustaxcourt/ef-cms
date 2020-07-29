@@ -1,5 +1,5 @@
 #!/bin/bash -e
-docker build -t efcms -f Dockerfile .
+docker build -t efcms -f Dockerfile-local .
 docker run -it \
   -e AWS_ACCESS_KEY_ID=S3RVER \
   -e AWS_SECRET_ACCESS_KEY=S3RVER \
