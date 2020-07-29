@@ -18,7 +18,7 @@ exports.fileDocketEntryInteractor = ({
   isSavingForLater,
   primaryDocumentFileId,
 }) => {
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   return post({
     applicationContext,
     body: {
@@ -26,6 +26,6 @@ exports.fileDocketEntryInteractor = ({
       isSavingForLater,
       primaryDocumentFileId,
     },
-    endpoint: `/case-documents/${caseId}/docket-entry`,
+    endpoint: `/case-documents/${docketNumber}/docket-entry`,
   });
 };
