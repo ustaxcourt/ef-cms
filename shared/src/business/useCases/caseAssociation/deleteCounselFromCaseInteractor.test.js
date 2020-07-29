@@ -62,9 +62,9 @@ describe('deleteCounselFromCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ caseId }) => ({
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
         ...MOCK_CASE,
-        caseId,
+        docketNumber,
         irsPractitioners: mockIrsPractitioners,
         privatePractitioners: mockPrivatePractitioners,
       }));

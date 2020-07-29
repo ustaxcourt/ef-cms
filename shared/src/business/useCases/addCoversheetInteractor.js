@@ -225,7 +225,7 @@ exports.addCoversheetInteractor = async ({
 
   await applicationContext.getPersistenceGateway().updateDocument({
     applicationContext,
-    caseId: caseEntity.caseId,
+    docketNumber: caseEntity.docketNumber,
     document: documentEntity.validate().toRawObject(),
     documentId,
   });
@@ -235,7 +235,7 @@ exports.addCoversheetInteractor = async ({
 
     await applicationContext.getPersistenceGateway().updateDocketRecord({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
       docketRecord: docketRecordEntity.validate().toRawObject(),
       docketRecordId: docketRecordEntity.docketRecordId,
     });

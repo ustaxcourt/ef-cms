@@ -123,7 +123,7 @@
     "trialTime": "10:00",
     "caseCaption": "Bill Burr, Petitioner",
     "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
-    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "case|101-20",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -137,21 +137,21 @@
     "preferredTrialCity": "Houston, Texas",
     "hasPendingItems": false,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case|101-20",
     "docketNumber": "101-20",
     "docketNumberWithSuffix": "101-20S",
     "status": "Calendared"
   },
   {
-    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "case|101-20",
     "pk": "case-by-docket-number|101-20"
   },
   {
-    "sk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "sk": "case|101-20",
     "pk": "case-by-docket-number|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case|101-20",
     "sk": "docket-record|2bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "docketRecordId": "2bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "description": "Petition",
@@ -163,7 +163,7 @@
     "filedBy": "Petr. Bill Burr"
   },
   {
-    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
+    "pk": "case|101-20",
     "sk": "docket-record|3bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "docketRecordId": "3bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "eventCode": "RQT",
@@ -191,7 +191,7 @@
     "isFileAttached": true,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "numberOfPages": 1,
-    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
+    "pk": "case|101-20"
   },
   {
     "documentType": "Petition",
@@ -257,6 +257,6 @@
     "isFileAttached": true,
     "numberOfPages": 1,
     "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
-    "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
+    "pk": "case|101-20"
   }
 ]

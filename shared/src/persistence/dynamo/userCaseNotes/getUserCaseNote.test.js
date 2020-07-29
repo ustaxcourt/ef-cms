@@ -3,30 +3,30 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const { getUserCaseNote } = require('./getUserCaseNote');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getUserCaseNote', () => {
   beforeEach(() => {
     client.get = jest.fn().mockReturnValue({
-      caseId: '123',
       notes: 'something',
-      pk: 'user-case-note|123',
-      sk: '456',
-      userId: '456',
+      pk: `user-case-note|${MOCK_CASE.docketNumber}`,
+      sk: `user|${MOCK_CASE.userId}`,
+      userId: MOCK_CASE.userId,
     });
   });
 
   it('should get the case notes by case id and user id', async () => {
     const result = await getUserCaseNote({
       applicationContext,
-      caseId: '123',
-      userId: '456',
+      docketNumber: MOCK_CASE.docketNumber,
+      userId: MOCK_CASE.userId,
     });
+
     expect(result).toEqual({
-      caseId: '123',
       notes: 'something',
-      pk: 'user-case-note|123',
-      sk: '456',
-      userId: '456',
+      pk: `user-case-note|${MOCK_CASE.docketNumber}`,
+      sk: `user|${MOCK_CASE.userId}`,
+      userId: MOCK_CASE.userId,
     });
   });
 });

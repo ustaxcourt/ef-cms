@@ -11,7 +11,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseDeadlineId the id of the case deadline to delete
- * @param {string} providers.caseId the id of the case the case deadline is attached to
+ * @param {string} providers.docketNumber the docket number of the case the case deadline is attached to
  * @returns {Promise} the promise of the delete call
  */
 exports.deleteCaseDeadlineInteractor = async ({

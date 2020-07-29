@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 
 /**
  * updateUserCaseNote
@@ -15,14 +12,9 @@ exports.updateUserCaseNote = async ({
   applicationContext,
   caseNoteToUpdate,
 }) => {
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber: caseNoteToUpdate.docketNumber,
-  });
-
   return await client.put({
     Item: {
-      pk: `user-case-note|${caseId}`,
+      pk: `user-case-note|${caseNoteToUpdate.docketNumber}`,
       sk: `user|${caseNoteToUpdate.userId}`,
       ...caseNoteToUpdate,
     },

@@ -27,7 +27,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     caseRecords = [
       {
         caseCaption: 'Guy Fieri, Petitioner',
-        caseId: '00000000-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -53,7 +52,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       },
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
-        caseId: '11111111-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -79,7 +77,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       },
       {
         caseCaption: 'George Foreman, Petitioner',
-        caseId: '22222222-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',

@@ -81,8 +81,8 @@ exports.deleteTrialSessionInteractor = async ({
       .getPersistenceGateway()
       .createCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.caseId,
         caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
       });
 
     await applicationContext.getPersistenceGateway().updateCase({

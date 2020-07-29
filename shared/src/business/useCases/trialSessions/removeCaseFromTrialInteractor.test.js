@@ -64,14 +64,14 @@ describe('remove case from trial session', () => {
     await expect(
       removeCaseFromTrialInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
         disposition: 'because',
+        docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow();
   });
 
-  it('calls getTrialSessionById, updateTrialSession, getCaseByCaseId, and updateCase persistence methods with correct parameters for a calendared session', async () => {
+  it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a calendared session', async () => {
     mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
 
     await removeCaseFromTrialInteractor({
@@ -118,15 +118,15 @@ describe('remove case from trial session', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
@@ -173,15 +173,15 @@ describe('remove case from trial session', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
@@ -193,8 +193,8 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
       disposition: 'because',
+      docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
     });
 

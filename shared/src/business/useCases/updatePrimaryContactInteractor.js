@@ -101,7 +101,7 @@ exports.updatePrimaryContactInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
         documentId: newDocumentId,
         documentTitle: documentType.title,
         documentType: documentType.title,

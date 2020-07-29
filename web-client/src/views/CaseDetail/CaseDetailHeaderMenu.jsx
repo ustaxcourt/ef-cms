@@ -44,7 +44,6 @@ export const CaseDetailHeaderMenu = connect(
     openCreateCaseDeadlineModalSequence,
     openCreateCaseMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
-    openUpdateCaseModalSequence,
     resetCaseMenuSequence,
     showModal,
     toggleMenuSequence,
@@ -116,8 +115,9 @@ export const CaseDetailHeaderMenu = connect(
                   >
                     New Tab
                   </Button>
+                  <hr></hr>
                 </li>
-                <hr></hr>
+
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="envelope"
@@ -129,8 +129,8 @@ export const CaseDetailHeaderMenu = connect(
                   >
                     Message
                   </Button>
+                  <hr></hr>
                 </li>
-                <hr></hr>
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="calendar-alt"
@@ -142,8 +142,9 @@ export const CaseDetailHeaderMenu = connect(
                   >
                     Deadline
                   </Button>
+                  <hr></hr>
                 </li>
-                <hr></hr>
+
                 {caseDetailHeaderHelper.showCreateOrderButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -156,9 +157,9 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       Order or Notice
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
                 {caseDetailHeaderHelper.showAddDocketEntryButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -169,9 +170,10 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       Paper Filing
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
+
                 {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -184,9 +186,9 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       PDF Upload
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
 
                 {caseDetailHeaderHelper.showAddCorrespondenceButton && (
                   <li className="usa-nav__submenu-item">
@@ -200,24 +202,9 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       Correspondence
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
-                {caseDetailHeaderHelper.showEditCaseButton && (
-                  <li className="usa-nav__submenu-item">
-                    <Button
-                      icon="edit"
-                      id="menu-edit-case-context-button"
-                      onClick={() => {
-                        resetCaseMenuSequence();
-                        openUpdateCaseModalSequence();
-                      }}
-                    >
-                      Edit Case Status/Caption
-                    </Button>
-                  </li>
-                )}
-                <hr></hr>
 
                 <li className="usa-nav__submenu-item">
                   <Button
@@ -228,7 +215,7 @@ export const CaseDetailHeaderMenu = connect(
                       openAddEditCaseNoteModalSequence();
                     }}
                   >
-                    Add Case Note
+                    Case Note
                   </Button>
                 </li>
               </ul>
