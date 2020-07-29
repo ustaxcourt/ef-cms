@@ -456,6 +456,35 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
+  it('returns showRemoveSignatureButton false for SDEC document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Stipulated Decision',
+              documentType: 'Stipulated Decision',
+              eventCode: 'SDEC',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'SDEC',
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
   it('return showEditButtonSigned true for an internal user and a document that is signed', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
@@ -561,6 +590,35 @@ describe('draftDocumentViewerHelper', () => {
     });
 
     expect(result.showEditButtonNotSigned).toEqual(true);
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
+  it('return showEditButtonNotSigned true and showEditButtonSigned false for a Stipulated Decision document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Stipulated Decision',
+              documentType: 'Stipulated Decision',
+              eventCode: 'SDEC',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'SDEC',
+        },
+      },
+    });
+
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
