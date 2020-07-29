@@ -79,17 +79,6 @@ exports.saveSignedDocumentInteractor = async ({
     document => document.documentId === originalDocumentId,
   );
 
-  const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
-    applicationContext,
-    originalDocumentId,
-  });
-
-  await replaceOriginalWithSignedDocument({
-    applicationContext,
-    originalDocumentId,
-    signedDocumentId,
-  });
-
   let signedDocumentEntity;
   if (originalDocumentEntity.documentType === 'Proposed Stipulated Decision') {
     signedDocumentEntity = new Document(
@@ -102,6 +91,7 @@ exports.saveSignedDocumentInteractor = async ({
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         eventCode: SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
         filedBy: originalDocumentEntity.filedBy,
+        isDraft: true,
         isPaper: false,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
@@ -113,6 +103,17 @@ exports.saveSignedDocumentInteractor = async ({
 
     caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
   } else {
+    const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
+      applicationContext,
+      originalDocumentId,
+    });
+
+    await replaceOriginalWithSignedDocument({
+      applicationContext,
+      originalDocumentId,
+      signedDocumentId,
+    });
+
     signedDocumentEntity = new Document(
       {
         ...originalDocumentEntity,
