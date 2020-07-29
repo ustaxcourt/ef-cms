@@ -10,11 +10,13 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
 
   beforeAll(() => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      caseCaption: 'Dr. Leo Marvin, Petitioner',
-      caseId: '123',
-      docketNumberWithSuffix: '123-45W',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        docketNumber: '123-45',
+        docketNumberWithSuffix: '123-45W',
+      });
 
     applicationContext
       .getUseCaseHelpers()
@@ -46,7 +48,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       applicationContext,
     });
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
   });
 

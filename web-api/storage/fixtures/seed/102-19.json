@@ -34,7 +34,7 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "receivedAt": "2019-03-01T21:42:29.073Z",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "case|102-19",
     "filingType": "Myself and my spouse",
     "petitioners": [
       {
@@ -52,7 +52,7 @@
     "initialCaption": "Selma Horn & Cairo Harris, Petitioners",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "preferredTrialCity": "Boise, Idaho",
-    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "case|102-19",
     "docketNumber": "102-19",
     "docketNumberWithSuffix": "102-19P",
     "status": "New",
@@ -67,7 +67,7 @@
     "index": 1,
     "docketRecordId": "8ac50e8e-3a86-4340-8383-ae76eaa02f8b",
     "numberOfPages": 2,
-    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "case|102-19",
     "sk": "docket-record|8ac50e8e-3a86-4340-8383-ae76eaa02f8b"
   },
   {
@@ -76,16 +76,16 @@
     "eventCode": "RQT",
     "index": 2,
     "docketRecordId": "654441a9-e6d3-414e-b0dd-60b2898c298e",
-    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "case|102-19",
     "sk": "docket-record|654441a9-e6d3-414e-b0dd-60b2898c298e"
   },
   {
-    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "case|102-19",
     "pk": "case-by-docket-number|102-19"
   },
   {
-    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "gsi1pk": "user-case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "case|102-19",
+    "gsi1pk": "user-case|102-19",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumberWithSuffix": "102-19P",
     "docketNumber": "102-19",
@@ -212,7 +212,7 @@
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
   {
-    "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "sk": "case|102-19",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "pk": "catalog"
   },
@@ -270,7 +270,7 @@
     "numberOfPages": 1,
     "isFileAttached": true,
     "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
-    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6"
+    "pk": "case|102-19"
   },
   {
     "documentType": "Statement of Taxpayer Identification",
@@ -288,6 +288,6 @@
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
-    "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6"
+    "pk": "case|102-19"
   }
 ]

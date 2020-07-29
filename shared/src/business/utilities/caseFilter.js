@@ -4,7 +4,6 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { isAssociatedUser } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
-  'caseId',
   'docketNumber',
   'docketNumberSuffix',
   'sealedDate',

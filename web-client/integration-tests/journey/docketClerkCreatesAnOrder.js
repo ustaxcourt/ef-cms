@@ -32,6 +32,8 @@ export const docketClerkCreatesAnOrder = (test, data) => {
 
     await test.runSequence('submitCreateOrderModalSequence');
 
+    expect(test.getState('currentPage')).toBe('CreateOrder');
+
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: 'Some order content',

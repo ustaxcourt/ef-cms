@@ -22,8 +22,8 @@ describe('formattedMessageDetail', () => {
             attachments: [
               { documentId: '98065bac-b35c-423c-b649-122a09bb65b9' },
             ],
-            caseId: '78fb798f-66c3-42fa-bb5a-c14fac735b61',
             createdAt: '2019-03-01T21:40:46.415Z',
+            docketNumber: '101-20',
             messageId: '60e129bf-b8ec-4e0c-93c7-9633ab69f5df',
           },
           {
@@ -31,8 +31,8 @@ describe('formattedMessageDetail', () => {
               { documentId: '98065bac-b35c-423c-b649-122a09bb65b9' },
               { documentId: 'fee3958e-c738-4794-b0a1-bad711506685' },
             ],
-            caseId: '78fb798f-66c3-42fa-bb5a-c14fac735b61',
             createdAt: '2019-04-01T21:40:46.415Z',
+            docketNumber: '101-20',
             messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
           },
         ],
@@ -68,8 +68,8 @@ describe('formattedMessageDetail', () => {
             attachments: [
               { documentId: '98065bac-b35c-423c-b649-122a09bb65b9' },
             ],
-            caseId: '78fb798f-66c3-42fa-bb5a-c14fac735b61',
             createdAt: '2019-03-01T21:40:46.415Z',
+            docketNumber: '101-20',
             messageId: '60e129bf-b8ec-4e0c-93c7-9633ab69f5df',
           },
           {
@@ -77,12 +77,12 @@ describe('formattedMessageDetail', () => {
               { documentId: '98065bac-b35c-423c-b649-122a09bb65b9' },
               { documentId: 'fee3958e-c738-4794-b0a1-bad711506685' },
             ],
-            caseId: '78fb798f-66c3-42fa-bb5a-c14fac735b61',
             completedAt: '2019-05-01T21:40:46.415Z',
             completedBy: 'Test Petitioner',
             completedBySection: 'petitions',
             completedByUserId: '23869007-384d-464f-b079-cb1fcfb21e03',
             createdAt: '2019-04-01T21:40:46.415Z',
+            docketNumber: '101-20',
             isCompleted: true,
             messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
           },

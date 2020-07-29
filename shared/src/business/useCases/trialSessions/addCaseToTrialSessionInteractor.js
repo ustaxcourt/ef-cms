@@ -64,13 +64,13 @@ exports.addCaseToTrialSessionInteractor = async ({
     .getPersistenceGateway()
     .deleteCaseTrialSortMappingRecords({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
     });
 
   if (trialSessionEntity.isCalendared) {
     await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
       highPriority: true,
       trialDate: caseEntity.trialDate,
     });

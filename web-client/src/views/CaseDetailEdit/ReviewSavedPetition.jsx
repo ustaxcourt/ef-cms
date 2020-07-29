@@ -73,7 +73,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit parties"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc?tab=partyInfo`}
+                        href={`/case-detail/${form.docketNumber}/petition-qc?tab=partyInfo`}
                         icon="edit"
                       >
                         Edit
@@ -128,7 +128,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit case information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc?tab=caseInfo`}
+                        href={`/case-detail/${form.docketNumber}/petition-qc?tab=caseInfo`}
                         icon="edit"
                       >
                         Edit
@@ -213,7 +213,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit IRS notice information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc?tab=irsNotice`}
+                        href={`/case-detail/${form.docketNumber}/petition-qc?tab=irsNotice`}
                         icon="edit"
                       >
                         Edit

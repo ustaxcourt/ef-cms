@@ -561,9 +561,9 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        caseId: 'abdc-1234-5678-xyz',
         contactPrimary: {},
         correspondence: [],
+        docketNumber: '123-45',
         docketRecord: [
           {
             description: 'Petition',
@@ -657,7 +657,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.caseId]: 'byDateDesc' },
+            docketRecordSort: { [caseDetail.docketNumber]: 'byDateDesc' },
           },
           validationErrors: {},
         },
@@ -691,7 +691,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.caseId]: 'byIndex' },
+            docketRecordSort: { [caseDetail.docketNumber]: 'byIndex' },
           },
           validationErrors: {},
         },
@@ -724,7 +724,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.caseId]: 'byIndexDesc' },
+            docketRecordSort: { [caseDetail.docketNumber]: 'byIndexDesc' },
           },
           validationErrors: {},
         },

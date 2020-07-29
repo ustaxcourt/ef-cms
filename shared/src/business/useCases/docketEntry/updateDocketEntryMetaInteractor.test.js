@@ -104,7 +104,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     await expect(
       updateDocketEntryMetaInteractor({
         applicationContext,
-        caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
+        docketNumber: '999-99',
       }),
     ).rejects.toThrow(NotFoundError);
   });

@@ -32,7 +32,7 @@ describe('completeDocumentTypeSectionHelper', () => {
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
         caseDetail: {
-          caseId: 'case-id-123',
+          docketNumber: '101-20',
         },
         form: {
           category,
@@ -56,7 +56,7 @@ describe('completeDocumentTypeSectionHelper', () => {
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
         caseDetail: {
-          caseId: 'case-id-123',
+          docketNumber: '101-20',
         },
         form: {
           category,

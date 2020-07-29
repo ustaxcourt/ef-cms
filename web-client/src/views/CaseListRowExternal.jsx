@@ -9,7 +9,7 @@ const getCaseRow = ({
   onlyText,
 }) => {
   return (
-    <React.Fragment key={formattedCase.caseId}>
+    <React.Fragment key={formattedCase.docketNumber}>
       <tr>
         <td>
           {formattedCase.isLeadCase && (
