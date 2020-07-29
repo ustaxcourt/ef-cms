@@ -12,9 +12,9 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
     applicationContextForClient
       .getUseCases()
       .casePublicSearchInteractor.mockResolvedValue([
-        { caseId: 'case-id-123' },
-        { caseId: 'case-id-234' },
-        { caseId: 'case-id-345' },
+        { docketNumber: '123-45' },
+        { docketNumber: '678-90' },
+        { docketNumber: '000-00' },
       ]);
 
     const result = await runAction(submitPublicCaseAdvancedSearchAction, {
@@ -30,9 +30,9 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
 
     expect(result.output).toMatchObject({
       searchResults: [
-        { caseId: 'case-id-123' },
-        { caseId: 'case-id-234' },
-        { caseId: 'case-id-345' },
+        { docketNumber: '123-45' },
+        { docketNumber: '678-90' },
+        { docketNumber: '000-00' },
       ],
     });
     expect(

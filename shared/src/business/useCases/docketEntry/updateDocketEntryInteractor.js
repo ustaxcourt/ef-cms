@@ -135,7 +135,6 @@ exports.updateDocketEntryInteractor = async ({
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
-        caseId: caseEntity.caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketNumber: caseToUpdate.docketNumber,
@@ -187,7 +186,6 @@ exports.updateDocketEntryInteractor = async ({
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
-        caseId: caseEntity.caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketNumber: caseToUpdate.docketNumber,
@@ -231,7 +229,6 @@ exports.updateDocketEntryInteractor = async ({
     Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,
-      caseId: caseEntity.caseId,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,

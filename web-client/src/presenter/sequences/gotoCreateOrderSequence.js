@@ -6,7 +6,6 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
@@ -34,7 +33,6 @@ export const gotoCreateOrderSequence = [
           setCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           clearFormAction,
-          setCasePropFromStateAction,
           setCreateOrderModalDataOnFormAction,
           convertHtml2PdfSequence,
           setIsCreatingOrderAction,

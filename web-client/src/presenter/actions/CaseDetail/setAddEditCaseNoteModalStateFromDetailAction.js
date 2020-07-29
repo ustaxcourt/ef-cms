@@ -13,13 +13,9 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
   get,
   store,
 }) => {
-  const {
-    caseCaption,
-    caseId,
-    caseNote,
-    docketNumber,
-    docketNumberSuffix,
-  } = get(state.caseDetail);
+  const { caseCaption, caseNote, docketNumber, docketNumberSuffix } = get(
+    state.caseDetail,
+  );
 
   const caseTitle = applicationContext.getCaseTitle(caseCaption || '');
 
@@ -28,6 +24,5 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
     `${docketNumber}${docketNumberSuffix ? docketNumberSuffix : ''}`,
   );
   store.set(state.modal.caseTitle, caseTitle);
-  store.set(state.modal.caseId, caseId);
   store.set(state.modal.notes, caseNote);
 };

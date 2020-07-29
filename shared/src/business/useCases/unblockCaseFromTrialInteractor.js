@@ -38,8 +38,8 @@ exports.unblockCaseFromTrialInteractor = async ({
     .getPersistenceGateway()
     .createCaseTrialSortMappingRecords({
       applicationContext,
-      caseId: caseEntity.caseId,
       caseSortTags: caseEntity.generateTrialSortTags(),
+      docketNumber: caseEntity.docketNumber,
     });
 
   const updatedCase = await applicationContext

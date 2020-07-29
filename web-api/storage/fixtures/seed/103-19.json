@@ -24,7 +24,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Samson Workman, Petitioner",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "sk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "case|103-19",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -35,7 +35,7 @@
     "orderToShowCause": false,
     "preferredTrialCity": "Mobile, Alabama",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "docketNumber": "103-19",
     "docketNumberWithSuffix": "103-19S",
     "status": "New",
@@ -49,7 +49,7 @@
     "filedBy": "Test Petitioner",
     "numberOfPages": 2,
     "docketRecordId": "9aff1148-8a28-4a9d-82ea-100d3cde192d",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "sk": "docket-record|9aff1148-8a28-4a9d-82ea-100d3cde192d"
   },
   {
@@ -58,7 +58,7 @@
     "filingDate": "2019-03-01T22:53:50.097Z",
     "index": 2,
     "docketRecordId": "89ddfd4e-1def-4cfb-984b-42d06655a180",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "sk": "docket-record|89ddfd4e-1def-4cfb-984b-42d06655a180"
   },
   {
@@ -72,7 +72,7 @@
     "index": 3,
     "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
     "filedBy": "Test Respondent",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50"
+    "pk": "case|103-19"
   },
   {
     "description": "Simultaneous Answering Brief",
@@ -83,12 +83,12 @@
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "filingDate": "2001-10-10T23:54:05.993Z",
     "docketRecordId": "63b1503d-26cc-448c-a4a4-670b846518c4",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "sk": "docket-record|63b1503d-26cc-448c-a4a4-670b846518c4"
   },
   {
-    "sk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "gsi1pk": "user-case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "case|103-19",
+    "gsi1pk": "user-case|103-19",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-01T22:53:50.097Z",
     "caseCaption": "Samson Workman, Petitioner",
@@ -98,12 +98,12 @@
     "entityName": "UserCase"
   },
   {
-    "sk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "case|103-19",
     "pk": "case-by-docket-number|103-19"
   },
   {
-    "sk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "gsi1pk": "user-case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "sk": "case|103-19",
+    "gsi1pk": "user-case|103-19",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-01T22:53:50.097Z",
     "caseCaption": "Samson Workman, Petitioner",
@@ -288,7 +288,7 @@
   },
   {
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50"
+    "pk": "case|103-19"
   },
   {
     "docketNumberSuffix": "S",
@@ -516,7 +516,7 @@
     },
     "name": "Test IRS Practitioner",
     "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irsPractitioner@example.com",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
@@ -538,7 +538,7 @@
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "numberOfPages": 1,
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50"
+    "pk": "case|103-19"
   },
   {
     "documentType": "Petition",
@@ -594,7 +594,7 @@
     "sk": "document|c611ee2e-a270-4dcd-a7bd-b8b9062db630",
     "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
     "numberOfPages": 1,
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50"
+    "pk": "case|103-19"
   },
   {
     "isPaper": true,
@@ -686,7 +686,7 @@
     "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
     "numberOfPages": 1,
     "partyIrsPractitioner": true,
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "docketNumber": "103-19"
   },
   {
@@ -742,7 +742,7 @@
     "sk": "document|f1aa4aa2-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
     "numberOfPages": 1,
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50"
+    "pk": "case|103-19"
   },
   {
     "filingDate": "2019-08-14T20:35:52.915Z",
@@ -750,7 +750,7 @@
     "sk": "correspondence|f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "numberOfPages": 1,
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "case|103-19",
     "documentTitle": "Internal Memo",
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416"
   }

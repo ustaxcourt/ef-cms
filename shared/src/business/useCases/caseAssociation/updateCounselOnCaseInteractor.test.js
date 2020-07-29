@@ -70,7 +70,6 @@ describe('updateCounselOnCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
         caseCaption: 'Caption',
-        caseId: '583c3f7d-f754-40ac-9f81-c4ce372876b3',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',

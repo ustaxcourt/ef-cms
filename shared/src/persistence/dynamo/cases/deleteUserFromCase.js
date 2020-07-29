@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { getCaseIdFromDocketNumber } = require('./getCaseIdFromDocketNumber');
 
 /**
  * deleteUserFromCase
@@ -15,16 +14,11 @@ exports.deleteUserFromCase = async ({
   docketNumber,
   userId,
 }) => {
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber,
-  });
-
   return client.delete({
     applicationContext,
     key: {
       pk: `user|${userId}`,
-      sk: `case|${caseId}`,
+      sk: `case|${docketNumber}`,
     },
   });
 };

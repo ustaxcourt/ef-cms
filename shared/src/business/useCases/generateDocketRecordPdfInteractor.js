@@ -6,7 +6,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id for the docket record to be generated
+ * @param {string} providers.docketNumber the docket number for the docket record to be generated
  * @returns {Uint8Array} docket record pdf
  */
 exports.generateDocketRecordPdfInteractor = async ({

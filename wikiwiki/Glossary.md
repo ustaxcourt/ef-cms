@@ -37,8 +37,6 @@ Court's Glossary of USTC Terminology: https://www.ustaxcourt.gov/taxpayer_info_g
 
 * **Case Detail Page** - Central summary page for an individual case and all case activity.
 
-* **CaseID** - Unique case ID only used by the system.
-
 * **Case Information Tab** - One of the tab options on the Case Detail page, displaying petition details such as Petition Details, Trial Information, and all Party Information
 
 * **Case Inventory Report** - a list of all cases within the system, filterable by judge and with the ability to print

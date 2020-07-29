@@ -53,21 +53,27 @@ describe('awsDynamoPersistence', function () {
     });
 
     it('removes the workItems if not authorized', async () => {
-      let caseRecord = { caseId: 1, workItems: [{ workItemId: 1 }] };
+      let caseRecord = {
+        docketNumber: '101-20',
+        workItems: [{ workItemId: 1 }],
+      };
       stripWorkItems(caseRecord, false);
       expect(caseRecord.workItems).toBeUndefined();
     });
 
     it('does not remove the workItems if authorized', async () => {
-      let caseRecord = { caseId: 1, workItems: [{ workItemId: 1 }] };
+      let caseRecord = {
+        docketNumber: '101-20',
+        workItems: [{ workItemId: 1 }],
+      };
       stripWorkItems(caseRecord, true);
       expect(caseRecord.workItems).toBeDefined();
     });
 
     it('removes the workItems on a collection if not authorized', async () => {
       let caseRecord = [
-        { caseId: 1, workItems: [{ workItemId: 1 }] },
-        { caseId: 2, workItems: [{ workItemId: 2 }] },
+        { docketNumber: '101-20', workItems: [{ workItemId: 1 }] },
+        { docketNumber: '201-20', workItems: [{ workItemId: 2 }] },
       ];
       stripWorkItems(caseRecord, false);
       expect(caseRecord[0].workItems).toBeUndefined();
@@ -76,8 +82,8 @@ describe('awsDynamoPersistence', function () {
 
     it('does not remove the workItems on a collection if authorized', async () => {
       let caseRecord = [
-        { caseId: 1, workItems: [{ workItemId: 1 }] },
-        { caseId: 2, workItems: [{ workItemId: 2 }] },
+        { docketNumber: '101-20', workItems: [{ workItemId: 1 }] },
+        { docketNumber: '201-20', workItems: [{ workItemId: 2 }] },
       ];
       stripWorkItems(caseRecord, true);
       expect(caseRecord[0].workItems).toBeDefined();
