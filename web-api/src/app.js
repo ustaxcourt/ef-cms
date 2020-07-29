@@ -464,7 +464,7 @@ app.post(
   lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
 );
 app.post(
-  '/case-documents/:caseId/docket-entry',
+  '/case-documents/:docketNumber/docket-entry',
   lambdaWrapper(fileDocketEntryToCaseLambda),
 );
 app.put(

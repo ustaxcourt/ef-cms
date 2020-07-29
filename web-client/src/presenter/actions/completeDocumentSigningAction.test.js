@@ -52,7 +52,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -88,7 +88,7 @@ describe('completeDocumentSigningAction', () => {
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(1);
     expect(saveSignedDocumentInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
-      caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '123-45',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       tab: 'docketRecord',
     });
@@ -101,7 +101,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -132,7 +132,7 @@ describe('completeDocumentSigningAction', () => {
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(0);
     expect(saveSignedDocumentInteractor.mock.calls.length).toBe(0);
     expect(result.output).toMatchObject({
-      caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '123-45',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       tab: 'docketRecord',
     });

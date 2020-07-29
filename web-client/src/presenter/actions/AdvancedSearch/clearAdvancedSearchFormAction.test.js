@@ -26,7 +26,7 @@ describe('clearAdvancedSearchFormAction', () => {
             practitionerName: 'Ricky',
           },
         },
-        searchResults: [{ caseId: '1' }, { caseId: '2' }],
+        searchResults: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
       },
     });
 
@@ -61,7 +61,7 @@ describe('clearAdvancedSearchFormAction', () => {
             practitionerName: 'Ricky',
           },
         },
-        searchResults: [{ caseId: '1' }, { caseId: '2' }],
+        searchResults: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
       },
     });
 
