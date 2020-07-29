@@ -28,10 +28,10 @@ describe('getOpenConsolidatedCasesInteractor', () => {
       .getUseCaseHelpers()
       .processUserAssociatedCases.mockReturnValue({
         casesAssociatedWithUserOrLeadCaseMap: {
-          'c54ba5a9-b37b-479d-9201-067ec6e335bb': MOCK_CASE,
+          '101-18': MOCK_CASE,
         },
-        leadCaseIdsAssociatedWithUser: [MOCK_CASE.caseId],
-        userAssociatedCaseIdsMap: {},
+        leadDocketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
+        userAssociatedDocketNumbersMap: {},
       });
     applicationContext
       .getUseCaseHelpers()
@@ -87,7 +87,6 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: MOCK_CASE.caseCaption,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
       },
@@ -97,21 +96,21 @@ describe('getOpenConsolidatedCasesInteractor', () => {
   it('should return a list of open cases when the user is associated with a consolidated case that is not the lead case', async () => {
     const consolidatedCaseThatIsNotTheLeadCase = {
       ...MOCK_CASE,
-      caseId: applicationContext.getUniqueId(),
+      docketNumber: '999-20',
       isLeadCase: false,
     };
-    const mockUserAssociatedCaseIdsMap = {};
-    mockUserAssociatedCaseIdsMap[
-      consolidatedCaseThatIsNotTheLeadCase.caseId
+    const mockUserAssociatedDocketNumbersMap = {};
+    mockUserAssociatedDocketNumbersMap[
+      consolidatedCaseThatIsNotTheLeadCase.docketNumber
     ] = true;
     applicationContext
       .getUseCaseHelpers()
       .processUserAssociatedCases.mockReturnValue({
         casesAssociatedWithUserOrLeadCaseMap: {},
-        leadCaseIdsAssociatedWithUser: [
-          consolidatedCaseThatIsNotTheLeadCase.caseId,
+        leadDocketNumbersAssociatedWithUser: [
+          consolidatedCaseThatIsNotTheLeadCase.docketNumber,
         ],
-        userAssociatedCaseIdsMap: mockUserAssociatedCaseIdsMap,
+        userAssociatedDocketNumbersMap: mockUserAssociatedDocketNumbersMap,
       });
     applicationContext
       .getUseCaseHelpers()

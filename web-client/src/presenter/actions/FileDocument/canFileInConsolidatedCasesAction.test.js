@@ -16,14 +16,14 @@ describe('canFileInConsolidatedCasesAction', () => {
     };
   });
 
-  it('should select yes when lead case id exists and the user has the FILE_IN_CONSOLIDATED permission', async () => {
+  it('should select yes when lead docket number exists and the user has the FILE_IN_CONSOLIDATED permission', async () => {
     await runAction(canFileInConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          leadCaseId: '123',
+          leadDocketNumber: '123-20',
         },
         permissions: {
           FILE_IN_CONSOLIDATED: true,
@@ -34,7 +34,7 @@ describe('canFileInConsolidatedCasesAction', () => {
     expect(yesStub).toHaveBeenCalled();
   });
 
-  it('should call no path when no lead case id exists', async () => {
+  it('should call no path when no lead docket number exists', async () => {
     await runAction(canFileInConsolidatedCasesAction, {
       modules: {
         presenter,
@@ -57,7 +57,7 @@ describe('canFileInConsolidatedCasesAction', () => {
       },
       state: {
         caseDetail: {
-          leadCaseId: '123',
+          leadDocketNumber: '123-20',
         },
         permissions: {
           FILE_IN_CONSOLIDATED: false,

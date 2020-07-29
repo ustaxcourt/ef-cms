@@ -13,21 +13,21 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then
-  echo 'ustc-case-mgmt.flexion.us'
+  echo "${ZONE_NAME_DEV}"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo 'ustc-case-mgmt.flexion.us'
-# elif [[ $BRANCH == 'experimental2' ]] ; then
-#   echo 'exp2'
-# elif [[ $BRANCH == 'irs' ]] ; then
-#   echo 'irs'
-# elif [[ $BRANCH == 'test' ]] ; then
-#   echo 'test'
-# elif [[ $BRANCH == 'migration' ]] ; then
-#   echo 'mig'
-# elif [[ $BRANCH == 'staging' ]] ; then
-#   echo 'stg'
+  echo "${ZONE_NAME_EXP1}"
+elif [[ $BRANCH == 'experimental2' ]] ; then
+  echo "${ZONE_NAME_EXP2}"
+elif [[ $BRANCH == 'irs' ]] ; then
+  echo "${ZONE_NAME_IRS}"
+elif [[ $BRANCH == 'test' ]] ; then
+  echo "${ZONE_NAME_TEST}"
+elif [[ $BRANCH == 'migration' ]] ; then
+  echo "${ZONE_NAME_MIG}"
+elif [[ $BRANCH == 'staging' ]] ; then
+  echo "${ZONE_NAME_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'dawson.flexion.us'
+  echo "${ZONE_NAME_PROD}"
 else
   exit 1;
 fi
