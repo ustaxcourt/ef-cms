@@ -276,11 +276,6 @@
       flags: 
         presence: "required"
         description: "List of DocketRecord Entities for the case."
-      rules: 
-        - 
-          name: "unique"
-          args: 
-            comparator: [object Function]
       items: 
         - 
           type: "object"
