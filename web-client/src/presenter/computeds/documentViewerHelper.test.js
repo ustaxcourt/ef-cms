@@ -655,7 +655,7 @@ describe('documentViewerHelper', () => {
   });
 
   describe('showSignStipulatedDecisionButton', () => {
-    it('should be true if the user is an internal user, the eventCode is PSDE, and the SDEC eventCode is not in the documents', () => {
+    it('should be true if the eventCode is PSDE and the SDEC eventCode is not in the documents', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
@@ -684,7 +684,7 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be false if the user is an internal user, the document code is PSDE, and the SDEC eventCode is in the documents', () => {
+    it('should be false if the document code is PSDE and the SDEC eventCode is in the documents', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
@@ -719,7 +719,7 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(false);
     });
 
-    it('should be false if the user is an internal user and the eventCode is not PDSE', () => {
+    it('should be false if the eventCode is not PSDE', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
