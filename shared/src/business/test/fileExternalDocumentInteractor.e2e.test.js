@@ -32,7 +32,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId, docketNumber } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -130,7 +130,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     expect(caseAfterDocument).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
-      caseId,
       caseType: CASE_TYPES_MAP.innocentSpouse,
       contactPrimary: {
         address1: '19 First Freeway',
