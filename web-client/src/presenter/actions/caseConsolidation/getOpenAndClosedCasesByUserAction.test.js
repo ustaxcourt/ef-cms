@@ -9,30 +9,30 @@ describe('getOpenAndClosedCasesByUserAction', () => {
       .getUseCases()
       .getOpenConsolidatedCasesInteractor.mockReturnValue([
         {
-          caseId: 'case-id-234',
           createdAt: '2019-07-20T20:20:15.680Z',
+          docketNumber: '123-45',
         },
         {
-          caseId: 'case-id-123',
           createdAt: '2019-07-19T20:20:15.680Z',
+          docketNumber: '678-90',
         },
         {
-          caseId: 'case-id-345',
           createdAt: '2019-07-21T20:20:15.680Z',
+          docketNumber: '000-00',
         },
       ]);
     applicationContext.getUseCases().getClosedCasesInteractor.mockReturnValue([
       {
-        caseId: 'case-id-234',
         createdAt: '2019-07-20T20:20:15.680Z',
+        docketNumber: '123-45',
       },
       {
-        caseId: 'case-id-123',
         createdAt: '2019-07-19T20:20:15.680Z',
+        docketNumber: '678-90',
       },
       {
-        caseId: 'case-id-345',
         createdAt: '2019-07-21T20:20:15.680Z',
+        docketNumber: '000-00',
       },
     ]);
     applicationContext.getCurrentUser.mockReturnValue({
@@ -56,14 +56,14 @@ describe('getOpenAndClosedCasesByUserAction', () => {
 
     expect(output).toMatchObject({
       closedCaseList: [
-        { caseId: 'case-id-345', createdAt: '2019-07-21T20:20:15.680Z' },
-        { caseId: 'case-id-234', createdAt: '2019-07-20T20:20:15.680Z' },
-        { caseId: 'case-id-123', createdAt: '2019-07-19T20:20:15.680Z' },
+        { createdAt: '2019-07-21T20:20:15.680Z', docketNumber: '000-00' },
+        { createdAt: '2019-07-20T20:20:15.680Z', docketNumber: '123-45' },
+        { createdAt: '2019-07-19T20:20:15.680Z', docketNumber: '678-90' },
       ],
       openCaseList: [
-        { caseId: 'case-id-345', createdAt: '2019-07-21T20:20:15.680Z' },
-        { caseId: 'case-id-234', createdAt: '2019-07-20T20:20:15.680Z' },
-        { caseId: 'case-id-123', createdAt: '2019-07-19T20:20:15.680Z' },
+        { createdAt: '2019-07-21T20:20:15.680Z', docketNumber: '000-00' },
+        { createdAt: '2019-07-20T20:20:15.680Z', docketNumber: '123-45' },
+        { createdAt: '2019-07-19T20:20:15.680Z', docketNumber: '678-90' },
       ],
     });
   });

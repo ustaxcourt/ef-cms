@@ -6,17 +6,17 @@ describe('setCaseOnFormUsingStateAction', () => {
     const result = await runAction(setCaseOnFormUsingStateAction, {
       state: {
         caseDetail: {
-          caseId: '1234',
+          docketNumber: '123-45',
         },
       },
     });
 
     expect(result.state.form).toEqual({
-      caseId: '1234',
+      docketNumber: '123-45',
     });
     expect(result.output).toEqual({
       caseDetail: {
-        caseId: '1234',
+        docketNumber: '123-45',
       },
     });
   });

@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 
 describe('navigateToMessageDetailAction', () => {
   let routeStub;
-  const CASE_ID = 'fc1b424c-885f-450d-baee-b1965fd67149';
+  const DOCKET_NUMBER = '123-45';
   const PARENT_MESSAGE_ID = '14ccdbd2-896a-4a28-a603-b8b3030c84f7';
 
   beforeAll(() => {
@@ -21,13 +21,13 @@ describe('navigateToMessageDetailAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: CASE_ID },
+        caseDetail: { docketNumber: DOCKET_NUMBER },
         parentMessageId: PARENT_MESSAGE_ID,
       },
     });
 
     expect(routeStub).toHaveBeenCalledWith(
-      `/case-messages/${CASE_ID}/message-detail/${PARENT_MESSAGE_ID}`,
+      `/case-messages/${DOCKET_NUMBER}/message-detail/${PARENT_MESSAGE_ID}`,
     );
   });
 });
