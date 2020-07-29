@@ -26,7 +26,6 @@
     "createdAt": "2019-12-11T15:25:09.284Z",
     "noticeOfAttachments": false,
     "caseCaption": "Guy Fieri, Petitioner",
-    "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "sk": "case|111-19",
     "filingType": "Myself",
     "orderForOds": false,
@@ -95,7 +94,6 @@
     "createdAt": "2019-12-11T15:25:09.286Z",
     "processingStatus": "complete",
     "filedBy": "Petr. Guy Fieri",
-    "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "isFileAttached": true,
     "sk": "document|59ccf18f-5bac-48b0-a8e0-9c9e1d995b62",
     "partySecondary": false,
@@ -139,7 +137,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-12-11T15:25:09.285Z",
         "assigneeName": null,
-        "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
         "messages": [
           {
             "createdAt": "2019-12-11T15:25:09.286Z",
@@ -160,7 +157,6 @@
     "createdAt": "2019-12-11T15:25:09.285Z",
     "processingStatus": "complete",
     "filedBy": "Petr. Guy Fieri",
-    "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "isFileAttached": true,
     "sk": "document|9de27a7d-7c6b-434b-803b-7655f82d5e07",
     "partySecondary": false,

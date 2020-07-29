@@ -28,7 +28,6 @@
     "isQC": true,
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "messages": [
       {
@@ -126,7 +125,6 @@
     "noticeOfAttachments": false,
     "trialTime": "10:00",
     "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "sk": "case|108-19",
     "filingType": "Other",
     "orderForOds": false,
@@ -169,7 +167,6 @@
   },
   {
     "sk": "case-46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "pk": "catalog"
   },
   {
@@ -202,7 +199,6 @@
     "isQC": true,
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "sk": "2019-08-16T19:21:46.147Z",
     "messages": [
       {
@@ -249,7 +245,6 @@
     "isQC": true,
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "sk": "2019-08-16T19:21:46.147Z",
     "messages": [
       {
@@ -297,7 +292,6 @@
     "createdAt": "2019-08-16T19:21:46.147Z",
     "processingStatus": "complete",
     "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "isFileAttached": true,
     "sk": "document|3adb712b-d0c5-40e8-98c1-d2f38757e27a",
     "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
@@ -339,7 +333,6 @@
         "sentBySection": "petitions",
         "createdAt": "2019-08-16T19:21:46.147Z",
         "assigneeName": "IRS Holding Queue",
-        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
         "messages": [
           {
             "createdAt": "2019-08-16T19:21:46.147Z",
@@ -362,7 +355,6 @@
     "createdAt": "2019-08-16T19:21:46.146Z",
     "processingStatus": "complete",
     "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "isFileAttached": true,
     "sk": "document|3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
     "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
