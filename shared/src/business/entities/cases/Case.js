@@ -167,7 +167,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
@@ -356,9 +355,6 @@ Case.VALIDATION_RULES = {
     .meta({ tags: ['Restricted'] }),
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
-  ),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'Unique case ID only used by the system.',
   ),
   caseNote: joi
     .string()
@@ -836,7 +832,6 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function (document, { applicationContext }) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -859,7 +854,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
