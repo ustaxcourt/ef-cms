@@ -1247,7 +1247,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(false);
     });
 
-    it('should be false if the user is an internal user and the eventCode is not PDSE', () => {
+    it('should be false if the user is an internal user and the eventCode is not PSDE', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
