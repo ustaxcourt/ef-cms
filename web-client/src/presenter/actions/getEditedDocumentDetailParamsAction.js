@@ -17,7 +17,6 @@ export const getEditedDocumentDetailParamsAction = async ({ get, props }) => {
 
   return {
     docketNumber: caseDetail.docketNumber,
-    docketNumber: caseDetail.docketNumber,
     documentId,
   };
 };
