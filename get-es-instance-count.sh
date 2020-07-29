@@ -28,6 +28,8 @@ elif [[ $BRANCH == 'migration' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "2"
+elif [[ $BRANCH == 'dawson' ]] ; then
+  echo "1"
 else
   exit 1;
 fi
