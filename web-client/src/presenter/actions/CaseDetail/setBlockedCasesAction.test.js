@@ -6,14 +6,22 @@ describe('setBlockedCasesAction', () => {
     const result = await runAction(setBlockedCasesAction, {
       props: {
         blockedCases: [
-          { blocked: true, caseId: '1', preferredTrialCity: 'Boise, Idaho' },
+          {
+            blocked: true,
+            docketNumber: '123-45',
+            preferredTrialCity: 'Boise, Idaho',
+          },
         ],
       },
       state: {},
     });
 
     expect(result.state.blockedCases).toEqual([
-      { blocked: true, caseId: '1', preferredTrialCity: 'Boise, Idaho' },
+      {
+        blocked: true,
+        docketNumber: '123-45',
+        preferredTrialCity: 'Boise, Idaho',
+      },
     ]);
   });
 });
