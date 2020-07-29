@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral store
- * @returns {object} alertSuccess, caseId, tab
+ * @returns {object} alertSuccess, docketNumber
  */
 export const updateSecondaryContactAction = async ({
   applicationContext,

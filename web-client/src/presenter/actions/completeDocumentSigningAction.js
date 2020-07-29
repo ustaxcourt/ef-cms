@@ -13,7 +13,7 @@ export const completeDocumentSigningAction = async ({
   get,
 }) => {
   const originalDocumentId = get(state.pdfForSigning.documentId);
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const { docketNumber } = get(state.caseDetail);
   let documentIdToReturn = originalDocumentId;
 
   if (get(state.pdfForSigning.signatureData.x)) {
@@ -67,7 +67,7 @@ export const completeDocumentSigningAction = async ({
   }
 
   return {
-    caseId,
+    docketNumber,
     documentId: documentIdToReturn,
     tab: 'docketRecord',
   };
