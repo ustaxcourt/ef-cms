@@ -38,15 +38,25 @@ exports.deleteDraftDocumentInteractor = async ({
     item => item.documentId !== documentId,
   );
 
-  const validatedRawCase = caseEntity.validate().toRawObject();
-
   await applicationContext.getPersistenceGateway().deleteDocument({
+    applicationContext,
+    docketNumber: caseEntity.docketNumber,
+    documentId,
+  });
+
+  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
     applicationContext,
     key: documentId,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: validatedRawCase,
-  });
+  const validatedRawCase = caseEntity.validate().toRawObject();
+
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: validatedRawCase,
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

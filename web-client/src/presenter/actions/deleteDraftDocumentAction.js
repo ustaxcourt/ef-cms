@@ -17,11 +17,13 @@ export const deleteDraftDocumentAction = async ({
   const { documentId, redirectToCaseDetail } = get(state.archiveDraftDocument);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  await applicationContext.getUseCases().deleteDraftDocumentInteractor({
-    applicationContext,
-    docketNumber,
-    documentId,
-  });
+  const updatedCase = await applicationContext
+    .getUseCases()
+    .deleteDraftDocumentInteractor({
+      applicationContext,
+      docketNumber,
+      documentId,
+    });
 
   store.set(state.alertSuccess, {
     message: 'Document deleted.',
@@ -31,7 +33,12 @@ export const deleteDraftDocumentAction = async ({
     store.set(state.saveAlertsForNavigation, true);
 
     return {
+      caseDetail: updatedCase,
       docketNumber,
     };
   }
+
+  return {
+    caseDetail: updatedCase,
+  };
 };
