@@ -162,5 +162,5 @@ exports.saveSignedDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  return caseEntity;
+  return { caseEntity, signedDocumentId: signedDocumentEntity.documentId };
 };
