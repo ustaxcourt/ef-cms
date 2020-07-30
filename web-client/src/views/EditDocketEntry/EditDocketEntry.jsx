@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
-import { DocumentDetailHeader } from '../DocumentDetail/DocumentDetailHeader';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -40,7 +39,27 @@ export const EditDocketEntry = connect(
               service
             </Hint>
           )}
-          <DocumentDetailHeader />
+          <h2 className="heading-1">
+            {editDocketEntryHelper.formattedDocument.documentTitle ||
+              editDocketEntryHelper.formattedDocument.documentType}
+          </h2>
+          <div className="filed-by">
+            <div className="padding-bottom-1">
+              Filed {editDocketEntryHelper.formattedDocument.createdAtFormatted}
+              {editDocketEntryHelper.formattedDocument.filedBy &&
+                ` by ${editDocketEntryHelper.formattedDocument.filedBy}`}
+            </div>
+            {editDocketEntryHelper.formattedDocument.showServedAt && (
+              <div>
+                Served{' '}
+                {editDocketEntryHelper.formattedDocument.servedAtFormatted}
+              </div>
+            )}
+            {editDocketEntryHelper.formattedDocument.showLegacySealed && (
+              <div>Sealed in Blackstone</div>
+            )}
+          </div>
+
           <SuccessNotification />
           <ErrorNotification />
 
