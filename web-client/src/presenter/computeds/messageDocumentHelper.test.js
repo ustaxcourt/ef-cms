@@ -290,6 +290,35 @@ describe('messageDocumentHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an internal user and an SDEC document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'SDEC',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showApplySignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
   it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
@@ -551,6 +580,34 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showEditButtonSigned).toEqual(true);
+  });
+
+  it('return showEditButtonSigned false for an internal user and an SDEC document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'SDEC',
+              isDraft: true,
+              signedAt: '123',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
   });
 
   it('return showEditButtonNotSigned true for an internal user and a document that is not on the docket record and is not signed', () => {
