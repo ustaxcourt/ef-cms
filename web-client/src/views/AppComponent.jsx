@@ -62,7 +62,6 @@ import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
-import { SignStipDecision } from './SignStipDecision';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
@@ -140,7 +139,6 @@ const pages = {
   SecondaryContactEdit,
   SelectDocumentType,
   SignOrder,
-  SignStipDecision,
   SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
