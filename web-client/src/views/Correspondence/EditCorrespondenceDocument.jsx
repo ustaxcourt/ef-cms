@@ -17,12 +17,12 @@ export const EditCorrespondenceDocument = connect(
   {
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
     constants: state.constants,
-    documentDetailHelper: state.documentDetailHelper,
     editCorrespondenceDocumentSequence:
       sequences.editCorrespondenceDocumentSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    formattedDocument: state.formattedDocument,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -33,10 +33,10 @@ export const EditCorrespondenceDocument = connect(
   function EditCorrespondenceDocument({
     clearExistingDocumentSequence,
     constants,
-    documentDetailHelper,
     editCorrespondenceDocumentSequence,
     fileDocumentHelper,
     form,
+    formattedDocument,
     formCancelToggleCancelSequence,
     screenMetadata,
     showModal,
@@ -61,7 +61,7 @@ export const EditCorrespondenceDocument = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
                 <h2 className="heading-1" id="edit-correspondence-header">
-                  Edit {documentDetailHelper.formattedDocument.documentTitle}
+                  Edit {formattedDocument.documentTitle}
                 </h2>
               </div>
             </div>
