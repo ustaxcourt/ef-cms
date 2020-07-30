@@ -13,11 +13,11 @@ describe('unblockCaseFromTrialInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(Promise.resolve(MOCK_CASE));
+      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
 
     const result = await unblockCaseFromTrialInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
 
@@ -31,8 +31,8 @@ describe('unblockCaseFromTrialInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw an unauthorized error if the user has no access to unblock the case', async () => {
@@ -41,7 +41,7 @@ describe('unblockCaseFromTrialInteractor', () => {
     await expect(
       unblockCaseFromTrialInteractor({
         applicationContext,
-        caseId: '123',
+        docketNumber: '123-45',
       }),
     ).rejects.toThrow('Unauthorized');
   });

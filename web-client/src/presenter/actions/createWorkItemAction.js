@@ -13,13 +13,13 @@ export const createWorkItemAction = async ({
     ({ assigneeId, message } = get(state.form));
   }
 
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const documentId = get(state.documentId);
 
   await applicationContext.getUseCases().createWorkItemInteractor({
     applicationContext,
     assigneeId,
-    caseId,
+    docketNumber,
     documentId,
     message,
   });

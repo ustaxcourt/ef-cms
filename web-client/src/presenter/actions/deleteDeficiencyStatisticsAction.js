@@ -14,13 +14,13 @@ export const deleteDeficiencyStatisticsAction = async ({
   get,
   path,
 }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const { lastDateOfPeriod, statisticId, year, yearOrPeriod } = get(state.form);
 
   try {
     await applicationContext.getUseCases().deleteDeficiencyStatisticInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       statisticId,
     });
 

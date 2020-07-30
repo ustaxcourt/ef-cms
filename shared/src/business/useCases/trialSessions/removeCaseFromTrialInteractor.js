@@ -11,15 +11,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to remove from trial
+ * @param {string} providers.docketNumber the docket number of the case to remove from trial
  * @param {string} providers.disposition the reason the case is being removed from trial
  * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
  * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
  */
 exports.removeCaseFromTrialInteractor = async ({
   applicationContext,
-  caseId,
   disposition,
+  docketNumber,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -39,9 +39,9 @@ exports.removeCaseFromTrialInteractor = async ({
   });
 
   if (trialSessionEntity.isCalendared) {
-    trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+    trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
   } else {
-    trialSessionEntity.deleteCaseFromCalendar({ caseId });
+    trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -51,9 +51,9 @@ exports.removeCaseFromTrialInteractor = async ({
 
   const myCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(myCase, { applicationContext });
@@ -62,7 +62,7 @@ exports.removeCaseFromTrialInteractor = async ({
 
   await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
     applicationContext,
-    caseId,
+    docketNumber: caseEntity.docketNumber,
     highPriority: false,
   });
 
@@ -70,8 +70,8 @@ exports.removeCaseFromTrialInteractor = async ({
     .getPersistenceGateway()
     .createCaseTrialSortMappingRecords({
       applicationContext,
-      caseId: caseEntity.caseId,
       caseSortTags: caseEntity.generateTrialSortTags(),
+      docketNumber: caseEntity.docketNumber,
     });
 
   const updatedCase = await applicationContext

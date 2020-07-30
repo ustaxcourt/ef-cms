@@ -2,15 +2,15 @@ import { runAction } from 'cerebral/test';
 import { setupPropsForPrintablePendingReportAction } from './setupPropsForPrintablePendingReportAction';
 
 describe('setupPropsForPrintablePendingReportAction', () => {
-  it('should update the props with caseId if caseIdFilter is true', async () => {
+  it('should update the props with docketNumber if docketNumberFilter is true', async () => {
     const result = await runAction(setupPropsForPrintablePendingReportAction, {
       props: {
-        caseDetail: { caseId: '123' },
-        caseIdFilter: true,
+        caseDetail: { docketNumber: '123-45' },
+        docketNumberFilter: true,
       },
       state: {},
     });
 
-    expect(result.output.caseIdFilter).toEqual('123');
+    expect(result.output.docketNumberFilter).toEqual('123-45');
   });
 });

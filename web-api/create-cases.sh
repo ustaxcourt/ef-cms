@@ -129,9 +129,8 @@ EOF
     --compressed \
     -d "${caseJson}")
 
-  caseId=$(echo "${case}" | jq -r ".caseId")
   docketNumber=$(echo "${case}" | jq -r ".docketNumber")
-  echo "${docketNumber} ${caseId}" >> cases.txt
+  echo "${docketNumber}" >> cases.txt
 
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${petitionFileId}"
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
@@ -154,14 +153,14 @@ EOF
 
     associateBodyJson=$(cat <<EOF
 {
-  "caseId": "${caseId}",
+  "docketNumber": "${docketNumber}",
   "representingPrimary": true,
   "userId": "${practitionerId}"
 }
 EOF
 )
 
-    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-private-practitioner" \
+    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${docketNumber}/associate-private-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -187,13 +186,13 @@ EOF
 
     associateBodyJson=$(cat <<EOF
 {
-  "caseId": "${caseId}",
+  "docketNumber": "${docketNumber}",
   "userId": "${respondentId}"
 }
 EOF
 )
 
-    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-irs-practitioner" \
+    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${docketNumber}/associate-irs-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -201,7 +200,7 @@ EOF
       --compressed
   fi
 
-  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/serve-to-irs" \
+  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/${docketNumber}/serve-to-irs" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
@@ -215,7 +214,7 @@ EOF
 EOF
 )
 
-  curl -X PUT "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-meta/${caseId}/case-context" \
+  curl -X PUT "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-meta/${docketNumber}/case-context" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${docketclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \

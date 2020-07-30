@@ -18,11 +18,11 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   store,
 }) => {
   const currentCase = get(state.caseDetail);
-  const { caseId, docketNumber, leadCaseId } = currentCase;
+  const { docketNumber, leadDocketNumber } = currentCase;
   const form = get(state.form);
   const { selectedCases } = form;
 
-  const documentMetadata = { ...form, caseId, docketNumber };
+  const documentMetadata = { ...form, docketNumber };
 
   const documentFiles = {
     primary: form.primaryDocumentFile,
@@ -56,7 +56,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
         docketNumbersForFiling: selectedCases,
         documentFiles,
         documentMetadata,
-        leadCaseId,
+        leadDocketNumber,
         progressFunctions,
       });
   } catch (err) {
@@ -77,7 +77,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: document.caseId,
+      docketNumber,
       documentId: document.documentId,
     });
   };
@@ -86,7 +86,6 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
 
   return path.success({
     caseDetail: currentCase,
-    caseId,
     consolidatedCases: cases,
     docketNumber,
     documentsFiled: documentMetadata,

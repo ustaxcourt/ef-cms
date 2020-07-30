@@ -4,8 +4,8 @@ const {
 const { createCaseMessage } = require('./createCaseMessage');
 
 const mockCaseMessage = {
-  caseId: 'b3f09a45-b27c-4383-acc1-2ab1f99e6725',
   createdAt: '2019-03-01T21:40:46.415Z',
+  docketNumber: '123-20',
   from: 'Test Petitionsclerk',
   fromSection: 'petitions',
   fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
@@ -39,7 +39,7 @@ describe('createCaseMessage', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
       gsi1pk: `message|${mockCaseMessage.parentMessageId}`,
-      pk: `case|${mockCaseMessage.caseId}`,
+      pk: 'case|123-20',
       sk: `message|${mockCaseMessage.messageId}`,
       ...mockCaseMessage,
     });

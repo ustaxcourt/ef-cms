@@ -36,17 +36,6 @@
           name: "max"
           args: 
             limit: 100
-    caseId: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
     caseIsInProgress: 
       type: "boolean"
       flags: 

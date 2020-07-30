@@ -42,9 +42,9 @@ exports.assignWorkItemsInteractor = async ({
 
   const caseObject = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId: fullWorkItem.caseId,
+      docketNumber: fullWorkItem.docketNumber,
     });
 
   const caseToUpdate = new Case(caseObject, { applicationContext });

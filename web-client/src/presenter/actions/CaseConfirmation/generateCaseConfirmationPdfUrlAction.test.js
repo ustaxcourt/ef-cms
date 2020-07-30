@@ -21,7 +21,6 @@ describe('generateCaseConfirmationPdfUrlAction', () => {
       state: {
         baseUrl: 'http://www.example.com',
         caseDetail: {
-          caseId: 'ca123',
           docketNumber: '123-45',
         },
         token: 'abcdefg',

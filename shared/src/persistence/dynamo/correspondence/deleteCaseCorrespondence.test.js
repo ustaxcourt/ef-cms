@@ -11,7 +11,7 @@ describe('deleteCaseCorrespondence', () => {
   it('should delete the specified correspondence record', async () => {
     await deleteCaseCorrespondence({
       applicationContext,
-      caseId: '234',
+      docketNumber: '101-20',
       documentId: '123',
     });
 
@@ -19,7 +19,7 @@ describe('deleteCaseCorrespondence', () => {
       applicationContext.getDocumentClient().delete.mock.calls[0][0],
     ).toMatchObject({
       Key: {
-        pk: 'case|234',
+        pk: 'case|101-20',
         sk: 'correspondence|123',
       },
       TableName: 'efcms-dev',

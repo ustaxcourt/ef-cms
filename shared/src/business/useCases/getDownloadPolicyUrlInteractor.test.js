@@ -10,7 +10,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue('localhost');
@@ -25,7 +25,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     await expect(
       getDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -43,7 +43,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     await expect(
       getDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -73,12 +73,12 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(duplicatedMockCase);
+      .getCaseByDocketNumber.mockReturnValue(duplicatedMockCase);
 
     await expect(
       getDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
         documentId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       }),
     ).rejects.toThrow('Unauthorized to view document at this time');
@@ -95,7 +95,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
@@ -110,22 +110,24 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...MOCK_CASE,
-      documents: [
-        {
-          ...MOCK_CASE.documents.filter(
-            d => d.documentId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          )[0],
-          documentType: 'Order that case is assigned',
-          servedAt: new Date().toISOString(),
-        },
-      ],
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        documents: [
+          {
+            ...MOCK_CASE.documents.filter(
+              d => d.documentId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Order that case is assigned',
+            servedAt: new Date().toISOString(),
+          },
+        ],
+      });
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
@@ -142,7 +144,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'case-101-18-confirmation.pdf',
     });
     expect(url).toEqual('localhost');
@@ -160,7 +162,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     await expect(
       getDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId, //docket number is 101-18
+        docketNumber: MOCK_CASE.docketNumber, //docket number is 101-18
         documentId: 'case-101-20-confirmation.pdf',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -177,7 +179,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
@@ -196,12 +198,12 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ];
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await expect(
       getDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized to view case documents at this time');
@@ -221,11 +223,11 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ];
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');

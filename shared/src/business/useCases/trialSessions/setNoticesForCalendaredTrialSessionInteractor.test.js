@@ -46,7 +46,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     const case0 = {
       // should get electronic service
       ...MOCK_CASE,
-      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000',
       contactPrimary: {
         ...MOCK_CASE.contactPrimary,
         email: 'petitioner@example.com',
@@ -58,7 +57,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     const case1 = {
       // should get paper service
       ...MOCK_CASE,
-      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
       contactPrimary: {
         ...MOCK_CASE.contactPrimary,
       },
@@ -114,7 +112,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) => {
         calendaredCases.some((caseRecord, index) => {
-          if (caseRecord.caseId === caseToUpdate.caseId) {
+          if (caseRecord.docketNumber === caseToUpdate.docketNumber) {
             calendaredCases[index] = caseToUpdate;
             return true;
           }
@@ -303,13 +301,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('Should NOT overwrite the noticeIssuedDate on the trial session NOR call updateTrialSession if a caseId is set', async () => {
+  it('Should NOT overwrite the noticeIssuedDate on the trial session NOR call updateTrialSession if a docketNumber is set', async () => {
     const oldDate = '2019-12-01T00:00:00.000Z';
     trialSession.noticeIssuedDate = oldDate;
 
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      docketNumber: '102-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -319,10 +317,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('Should only generate a Notice of Trial for a single case if a caseId is set', async () => {
+  it('Should only generate a Notice of Trial for a single case if a docketNumber is set', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -337,10 +335,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
 
-  it('Should only set the notice for a single case if a caseId is set', async () => {
+  it('Should only set the notice for a single case if a docketNumber is set', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000',
+      docketNumber: '102-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -348,10 +346,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(calendaredCases[1]).not.toHaveProperty('noticeOfTrialDate');
   });
 
-  it('Should only create a docket entry for a single case if a caseId is set', async () => {
+  it('Should only create a docket entry for a single case if a docketNumber is set', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -365,10 +363,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
   });
 
-  it('Should set the status of the Notice of Trial as served for a single case if a caseId is set', async () => {
+  it('Should set the status of the Notice of Trial as served for a single case if a docketNumber is set', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -386,7 +384,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000', // MOCK_CASE with procedureType: 'Regular'
+      docketNumber: '102-20', // MOCK_CASE with procedureType: 'Regular'
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -398,7 +396,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
-      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111', // MOCK_CASE with procedureType: 'Small'
+      docketNumber: '103-20', // MOCK_CASE with procedureType: 'Small'
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

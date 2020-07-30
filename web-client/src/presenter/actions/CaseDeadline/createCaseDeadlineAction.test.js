@@ -28,7 +28,7 @@ describe('createCaseDeadlineAction', () => {
         computedDate: '2019-07-04',
       },
       state: {
-        caseDetail: { caseId: 'abc' },
+        caseDetail: { docketNumber: '123-20' },
         form: {
           description: 'sdsdfslkdj',
         },

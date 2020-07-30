@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * invokes the path in the sequences depending on if the user has selected an order type
  *
@@ -8,12 +6,11 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
  * @returns {object} the path to execute
  */
-export const hasOrderTypeSelectedAction = ({ get, path, props }) => {
-  const eventCode = get(state.modal.eventCode);
-  const caseId = props.docketNumber;
+export const hasOrderTypeSelectedAction = ({ path, props }) => {
+  const { docketNumber, eventCode } = props;
   if (eventCode) {
     return path['proceed']();
   } else {
-    return path['no']({ caseId });
+    return path['no']({ docketNumber });
   }
 };

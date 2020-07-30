@@ -12,15 +12,15 @@ export const removeCaseFromTrialAction = async ({
   applicationContext,
   get,
 }) => {
-  const { caseId, trialSessionId } = get(state.caseDetail);
+  const { docketNumber, trialSessionId } = get(state.caseDetail);
   const { disposition } = get(state.modal);
 
   const caseDetail = await applicationContext
     .getUseCases()
     .removeCaseFromTrialInteractor({
       applicationContext,
-      caseId,
       disposition,
+      docketNumber,
       trialSessionId,
     });
 

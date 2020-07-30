@@ -10,9 +10,10 @@ describe('updatePrimaryContactAction', () => {
     applicationContext
       .getUseCases()
       .updatePrimaryContactInteractor.mockReturnValue({
-        docketNumber: 'ayy',
+        docketNumber: '101-20',
       });
   });
+
   it('updates primary contact for the current case', async () => {
     const result = await runAction(updatePrimaryContactAction, {
       modules: {
@@ -21,7 +22,7 @@ describe('updatePrimaryContactAction', () => {
       state: {
         form: {
           contactPrimary: {
-            caseId: '0880564b-b978-4450-a34a-08430808f931',
+            docketNumber: '101-20',
             name: 'Rachael Ray',
           },
         },
@@ -35,7 +36,7 @@ describe('updatePrimaryContactAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseId: 'ayy',
+      docketNumber: '101-20',
     });
   });
 });

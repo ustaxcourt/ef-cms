@@ -11,7 +11,6 @@ describe('CaseMessage', () => {
     it('creates a valid CaseMessage without messageId (defaults to new uuid)', () => {
       const message = new CaseMessage(
         {
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
@@ -34,7 +33,6 @@ describe('CaseMessage', () => {
     it('creates an invalid CaseMessage with no message', () => {
       const message = new CaseMessage(
         {
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           from: 'gg',
           fromSection: 'petitions',
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -48,7 +46,6 @@ describe('CaseMessage', () => {
     it('creates an invalid CaseMessage with isCompleted true and without completedBy fields', () => {
       const message = new CaseMessage(
         {
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
@@ -86,7 +83,6 @@ describe('CaseMessage', () => {
               eventCode: 'P',
             },
           ],
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
@@ -121,7 +117,6 @@ describe('CaseMessage', () => {
               eventCode: 'P',
             },
           ],
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
@@ -146,7 +141,6 @@ describe('CaseMessage', () => {
     it('should mark the message as completed with a message and user', () => {
       const message = new CaseMessage(
         {
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
@@ -189,7 +183,6 @@ describe('CaseMessage', () => {
     it('should add the passed in attachment to the attachments array', () => {
       const message = new CaseMessage(
         {
-          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',

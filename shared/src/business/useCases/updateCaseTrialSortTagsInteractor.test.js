@@ -25,13 +25,13 @@ describe('Update case trial sort tags', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(Promise.resolve(mockCase));
+      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(mockCase));
   });
 
   it('does not call persistence if case status is not ready for trial', async () => {
     await updateCaseTrialSortTagsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -45,7 +45,7 @@ describe('Update case trial sort tags', () => {
 
     await updateCaseTrialSortTagsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -60,31 +60,29 @@ describe('Update case trial sort tags', () => {
     await expect(
       updateCaseTrialSortTagsInteractor({
         applicationContext,
-        caseId: mockCase.caseId,
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case');
   });
 
-  it('case not found if caseId does not exist', async () => {
+  it('case not found if docketNumber does not exist', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
       updateCaseTrialSortTagsInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        docketNumber: '123-45',
       }),
-    ).rejects.toThrow(
-      'Case c54ba5a9-b37b-479d-9201-067ec6e335ba was not found',
-    );
+    ).rejects.toThrow('Case 123-45');
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     mockCase.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(omit(mockCase, 'docketNumber'));
+      .getCaseByDocketNumber.mockReturnValue(omit(mockCase, 'docketNumber'));
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(
@@ -94,7 +92,7 @@ describe('Update case trial sort tags', () => {
     await expect(
       updateCaseTrialSortTagsInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: MOCK_CASE.docketNumber,
         userId: 'petitionsclerk',
       }),
     ).rejects.toThrow('The Case entity was invalid');

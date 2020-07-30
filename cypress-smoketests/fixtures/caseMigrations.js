@@ -11,7 +11,6 @@ exports.BASE_CASE = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'A Migrated Casee',
-  caseId: undefined,
   preferredTrialCity: 'Washington, District of Columbia',
   status: CASE_STATUS_TYPES.calendared,
 };

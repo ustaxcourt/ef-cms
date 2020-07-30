@@ -10,10 +10,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update
+ * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<object>} the updated case data
  */
-exports.sealCaseInteractor = async ({ applicationContext, caseId }) => {
+exports.sealCaseInteractor = async ({ applicationContext, docketNumber }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SEAL_CASE)) {
@@ -22,7 +22,7 @@ exports.sealCaseInteractor = async ({ applicationContext, caseId }) => {
 
   const oldCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId });
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const newCase = new Case(oldCase, { applicationContext });
 

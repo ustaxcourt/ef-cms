@@ -23,7 +23,6 @@ applicationContext.getCurrentUser = () =>
   MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
 const mockCaseDetailBase = {
-  caseId: '123-456-abc-def',
   correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
@@ -523,10 +522,10 @@ describe('formatCase', () => {
     });
   });
 
-  it('should set isLeadCase true on the case if it has a leadCaseId that matches its caseId', () => {
+  it('should set isLeadCase true on the case if it has a leadDocketNumber that matches its docketNumber', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      leadCaseId: mockCaseDetail.caseId,
+      leadDocketNumber: mockCaseDetail.docketNumber,
     });
 
     expect(result).toMatchObject({
@@ -534,10 +533,10 @@ describe('formatCase', () => {
     });
   });
 
-  it('should set isLeadCase false on the case if it has a leadCaseId that matches its caseId', () => {
+  it('should set isLeadCase false on the case if it has a leadDocketNumber that matches its docketNumber', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      leadCaseId: 'notthecaseid',
+      leadDocketNumber: 'notthedocketNumber',
     });
 
     expect(result).toMatchObject({

@@ -61,7 +61,6 @@ export const DocumentDetailHeader = connect(
                     icon="edit"
                     onClick={() => {
                       openConfirmEditModalSequence({
-                        caseId: formattedCaseDetail.caseId,
                         docketNumber: formattedCaseDetail.docketNumber,
                         documentIdToEdit:
                           documentDetailHelper.formattedDocument.documentId,
@@ -87,7 +86,7 @@ export const DocumentDetailHeader = connect(
                   icon="trash"
                   onClick={() => {
                     archiveDraftDocumentModalSequence({
-                      caseId: caseDetail.caseId,
+                      docketNumber: caseDetail.docketNumber,
                       documentId:
                         documentDetailHelper.formattedDocument.documentId,
                       documentTitle:

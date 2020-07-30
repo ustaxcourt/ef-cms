@@ -1,9 +1,11 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   CASE_TYPES,
+  FILING_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
+  ROLES,
 } = require('../EntityConstants');
 const {
   JoiValidationConstants,
@@ -132,6 +134,15 @@ const paperRequirements = joi
       .string()
       .valid(...CASE_TYPES)
       .required(),
+    contactPrimary: joi.object().required(),
+    contactSecondary: joi.object().optional().allow(null),
+    filingType: joi
+      .string()
+      .valid(
+        ...FILING_TYPES[ROLES.petitioner],
+        ...FILING_TYPES[ROLES.privatePractitioner],
+      )
+      .optional(),
     hasVerifiedIrsNotice: joi.boolean().required(),
     irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),

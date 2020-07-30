@@ -29,7 +29,7 @@ describe('completeWorkItemInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId, docketNumber } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -76,7 +76,7 @@ describe('completeWorkItemInteractor integration test', () => {
     const workItem = await createWorkItemInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      caseId,
+      docketNumber,
       documentId: document.documentId,
       message: 'this is a test',
     });

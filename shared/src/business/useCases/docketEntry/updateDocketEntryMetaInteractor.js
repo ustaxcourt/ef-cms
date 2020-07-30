@@ -12,15 +12,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseId the caseId of the case to be updated
+ * @param {object} providers.docketNumber the docket number of the case to be updated
  * @param {object} providers.docketRecordIndex the index of the docket record entry to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
 exports.updateDocketEntryMetaInteractor = async ({
   applicationContext,
-  caseId,
   docketEntryMeta,
+  docketNumber,
   docketRecordIndex,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -31,13 +31,13 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -134,7 +134,7 @@ exports.updateDocketEntryMetaInteractor = async ({
       // servedAt or filingDate has changed, generate a new coversheet
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        caseId,
+        docketNumber: caseEntity.docketNumber,
         documentId: originalDocument.documentId,
       });
     }

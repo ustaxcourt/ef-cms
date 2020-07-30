@@ -8,16 +8,16 @@ export const docketClerkUnconsolidatesCase = test => {
       showModal: 'UnconsolidateCasesModal',
     });
     expect(test.getState('modal.showModal')).toEqual('UnconsolidateCasesModal');
-    const currentCaseId = test.getState('caseDetail.caseId');
+    const currentDocketNumber = test.getState('caseDetail.docketNumber');
 
     await test.runSequence('updateModalValueSequence', {
-      key: `casesToRemove.${currentCaseId}`,
+      key: `casesToRemove.${currentDocketNumber}`,
       value: true,
     });
 
     await test.runSequence('submitRemoveConsolidatedCasesSequence');
 
-    expect(test.getState('caseDetail.leadCaseId')).toBeUndefined();
+    expect(test.getState('caseDetail.leadDocketNumber')).toBeUndefined();
     expect(test.getState('caseDetail.consolidatedCases').length).toEqual(0);
   });
 };

@@ -12,7 +12,7 @@ describe('archiveDraftDocumentInteractor', () => {
     await expect(
       archiveDraftDocumentInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-20',
         documentId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -24,11 +24,11 @@ describe('archiveDraftDocumentInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await archiveDraftDocumentInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '101-20',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
 

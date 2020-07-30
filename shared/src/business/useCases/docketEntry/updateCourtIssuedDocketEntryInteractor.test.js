@@ -18,7 +18,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   beforeAll(() => {
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -80,7 +79,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
             {
               assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: CASE_STATUS_TYPES.new,
               caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
@@ -104,7 +102,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
             {
               assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
-              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-18',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
@@ -132,7 +129,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -142,7 +139,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -162,7 +159,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
           eventCode: 'O',
@@ -184,7 +181,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',
@@ -216,8 +213,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
-        caseId: caseRecord.caseId,
         date: '2019-03-01T21:40:46.415Z',
+        docketNumber: caseRecord.docketNumber,
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
@@ -248,7 +245,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',

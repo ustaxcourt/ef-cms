@@ -31,7 +31,6 @@ describe('Trial Session Eligible Cases Journey', () => {
     sessionType: 'Small',
     trialLocation,
   };
-  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
@@ -52,7 +51,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
@@ -74,7 +72,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
@@ -96,7 +93,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
@@ -118,7 +114,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       it('Create case #4', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
@@ -140,7 +135,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       it('Create case #5', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
@@ -165,10 +159,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       const eligibleCases = test.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // cases with index 3 and 4 should be first because they are CDP/Passport cases
-      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
-      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
-      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[0]);
-      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[1]);
+      expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
+      expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
+      expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[0]);
+      expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[1]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -203,12 +197,12 @@ describe('Trial Session Eligible Cases Journey', () => {
       const eligibleCases = test.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's high priority
-      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[1]);
+      expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[1]);
       // this case should be second because it's a CDP case
-      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[3]);
+      expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[3]);
       // this case should be third because it's a Passport case
-      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[4]);
-      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[0]);
+      expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[4]);
+      expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[0]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -236,11 +230,11 @@ describe('Trial Session Eligible Cases Journey', () => {
       const eligibleCases = test.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's a CDP case
-      expect(eligibleCases[0].caseId).toEqual(createdCaseIds[3]);
+      expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
       // this case should be second because it's a Passport case
-      expect(eligibleCases[1].caseId).toEqual(createdCaseIds[4]);
-      expect(eligibleCases[2].caseId).toEqual(createdCaseIds[0]);
-      expect(eligibleCases[3].caseId).toEqual(createdCaseIds[1]);
+      expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
+      expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[0]);
+      expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[1]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -248,10 +242,10 @@ describe('Trial Session Eligible Cases Journey', () => {
   describe('Calendar clerk marks all eligible cases as QCed', () => {
     loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
-      createdCaseIds[0],
-      createdCaseIds[1],
-      createdCaseIds[3],
-      createdCaseIds[4],
+      createdDocketNumbers[0],
+      createdDocketNumbers[1],
+      createdDocketNumbers[3],
+      createdDocketNumbers[4],
     ]);
   });
 
@@ -270,16 +264,16 @@ describe('Trial Session Eligible Cases Journey', () => {
 
       expect(test.getState('trialSession.calendaredCases').length).toEqual(3);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
-      expect(test.getState('trialSession.calendaredCases.0.caseId')).toEqual(
-        createdCaseIds[3],
-      );
-      expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
-        createdCaseIds[4],
-      );
+      expect(
+        test.getState('trialSession.calendaredCases.0.docketNumber'),
+      ).toEqual(createdDocketNumbers[3]);
+      expect(
+        test.getState('trialSession.calendaredCases.1.docketNumber'),
+      ).toEqual(createdDocketNumbers[4]);
       // this could be either case 0 or 1 depending on which was marked eligible first
-      expect(test.getState('trialSession.calendaredCases.2.caseId')).toEqual(
-        createdCaseIds[0],
-      );
+      expect(
+        test.getState('trialSession.calendaredCases.2.docketNumber'),
+      ).toEqual(createdDocketNumbers[0]);
     });
 
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
