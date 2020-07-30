@@ -9,13 +9,5 @@ export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC = test => {
 
     test.documentId = documentId;
     test.messageId = messageId;
-
-    await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.docketNumber,
-      documentId,
-      messageId,
-    });
-
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
   });
 };
