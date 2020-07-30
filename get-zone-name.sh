@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the environment associated with each branch
+# Returns the zone name associated with each branch
 
 # Usage
-#   ./get-env.sh develop
+#   ./get-zone-name.sh develop
 
 # Arguments
 #   - $1 - the branch to check

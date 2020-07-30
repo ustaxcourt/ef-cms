@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the environment associated with each branch
+# Returns the domain url associated with each branch
 
 # Usage
-#   ./get-env.sh develop
+#   ./get-efcms-domain.sh develop
 
 # Arguments
 #   - $1 - the branch to check
