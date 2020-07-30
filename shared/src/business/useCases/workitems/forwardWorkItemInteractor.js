@@ -4,7 +4,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -21,7 +20,6 @@ const { WorkItem } = require('../../entities/WorkItem');
 exports.forwardWorkItemInteractor = async ({
   applicationContext,
   assigneeId,
-  message,
   workItemId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -47,18 +45,6 @@ exports.forwardWorkItemInteractor = async ({
       workItemId: workItemId,
     });
 
-  const newMessage = new Message(
-    {
-      createdAt: createISODateString(),
-      from: user.name,
-      fromUserId: user.userId,
-      message,
-      to: userToForwardTo.name,
-      toUserId: userToForwardTo.userId,
-    },
-    { applicationContext },
-  );
-
   const workItemToForward = new WorkItem(fullWorkItem, { applicationContext })
     .setAsInternal()
     .assignToUser({
@@ -68,8 +54,7 @@ exports.forwardWorkItemInteractor = async ({
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,
-    })
-    .addMessage(newMessage);
+    });
 
   const caseObject = await applicationContext
     .getPersistenceGateway()
@@ -101,7 +86,6 @@ exports.forwardWorkItemInteractor = async ({
 
   await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
     applicationContext,
-    messageId: newMessage.messageId,
     workItem: workItemToForward.validate().toRawObject(),
   });
 

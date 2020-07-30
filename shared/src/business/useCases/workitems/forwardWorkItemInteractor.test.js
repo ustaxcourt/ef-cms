@@ -46,15 +46,6 @@ const mockCase = {
           gsi1pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           isInitializeCase: true,
           isQC: true,
-          messages: [
-            {
-              createdAt: '2019-07-12T17:09:41.027Z',
-              from: 'Test Petitioner',
-              fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-              message: 'Petition filed by Denise Gould is ready for review.',
-              messageId: '818bb44d-1512-4a82-b524-a179ed5f7589',
-            },
-          ],
           pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           section: 'petitions',
           sentBy: 'Test Petitioner',
@@ -83,15 +74,6 @@ const mockCase = {
           gsi1pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           isInitializeCase: true,
           isQC: true,
-          messages: [
-            {
-              createdAt: '2019-07-12T17:09:41.027Z',
-              from: 'Test Petitioner',
-              fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-              message: 'Petition filed by Denise Gould is ready for review.',
-              messageId: '818bb44d-1512-4a82-b524-a179ed5f7589',
-            },
-          ],
           pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           section: 'petitions',
           sentBy: 'Test Petitioner',
@@ -114,7 +96,6 @@ describe('forwardWorkItemInteractor', () => {
       sentBy: 'petitioner',
     },
     isQC: true,
-    messages: [],
     sentBy: 'docketclerk',
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
@@ -166,15 +147,6 @@ describe('forwardWorkItemInteractor', () => {
       isInitializeCase: undefined,
       isQC: false,
       isRead: undefined,
-      messages: [
-        {
-          from: 'Petitionsclerk',
-          fromUserId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-          message: 'success',
-          to: 'Docketclerk',
-          toUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-      ],
       section: 'docket',
       sentBy: 'Petitionsclerk',
       sentBySection: 'petitions',

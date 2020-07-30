@@ -275,7 +275,6 @@
       type: "array"
       flags: 
         presence: "required"
-        description: "List of DocketRecord Entities for the case."
       rules: 
         - 
           name: "unique"
@@ -284,6 +283,8 @@
       items: 
         - 
           type: "object"
+          flags: 
+            description: "List of DocketRecord Entities for the case."
           metas: 
             - 
               entityName: "DocketRecord"

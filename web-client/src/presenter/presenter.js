@@ -104,7 +104,6 @@ import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketE
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
-import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoEditCorrespondenceDocumentSequence } from './sequences/gotoEditCorrespondenceDocumentSequence';
 import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCourtIssuedDocketEntrySequence';
 import { gotoEditDeficiencyStatisticSequence } from './sequences/gotoEditDeficiencyStatisticSequence';
@@ -544,7 +543,6 @@ export const presenter = {
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
     gotoDashboardSequence,
-    gotoDocumentDetailSequence,
     gotoEditCorrespondenceDocumentSequence,
     gotoEditCourtIssuedDocketEntrySequence,
     gotoEditDeficiencyStatisticSequence,

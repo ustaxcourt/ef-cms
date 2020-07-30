@@ -46,14 +46,6 @@ describe('formatted work queue computed', () => {
     assigneeName: 'Unassigned',
     caseStatus: STATUS_TYPES.generalDocket,
     createdAtFormatted: '12/27/18',
-    currentMessage: {
-      createdAtFormatted: '12/27/18',
-      from: 'Test Respondent',
-      fromUserId: 'respondent',
-      message: 'Answer filed by respondent is ready for review',
-      messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      to: 'Unassigned',
-    },
     docketNumber: '101-18',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '101-18S',
@@ -62,35 +54,7 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
-    historyMessages: [
-      {
-        createdAtFormatted: '12/27/18',
-        from: 'Test Docketclerk',
-        fromUserId: 'docketclerk',
-        message: 'a message',
-        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-        to: 'Unassigned',
-      },
-    ],
     isCourtIssuedDocument: false,
-    messages: [
-      {
-        createdAtFormatted: '12/27/18',
-        from: 'Test Respondent',
-        fromUserId: 'respondent',
-        message: 'Answer filed by respondent is ready for review',
-        messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-        to: 'Unassigned',
-      },
-      {
-        createdAtFormatted: '12/27/18',
-        from: 'Test Docketclerk',
-        fromUserId: 'docketclerk',
-        message: 'a message',
-        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-        to: 'Unassigned',
-      },
-    ],
     section: 'petitions',
     selected: true,
     sentBy: 'respondent',
@@ -131,22 +95,6 @@ describe('formatted work queue computed', () => {
       documentType: 'Answer',
     },
     isQC: false, // not in QC state - should not show in QC boxes
-    messages: [
-      {
-        createdAt: '2018-12-27T18:05:54.164Z',
-        from: 'Test Respondent',
-        fromUserId: 'respondent',
-        message: 'Answer filed by respondent is ready for review',
-        messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      },
-      {
-        createdAt: '2018-12-27T18:05:54.164Z',
-        from: 'Test Docketclerk',
-        fromUserId: 'docketclerk',
-        message: 'a message',
-        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      },
-    ],
     section: 'petitions',
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
@@ -209,45 +157,6 @@ describe('formatted work queue computed', () => {
     });
 
     expect(result2[0].isCourtIssuedDocument).toEqual(true);
-  });
-
-  it('adds a currentMessage', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [workItem],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-
-    expect(result[0].currentMessage.messageId).toEqual(
-      '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-    );
-  });
-
-  it('adds a historyMessages array without the current message', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [workItem],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-
-    expect(result[0].historyMessages.length).toEqual(1);
-    expect(result[0].historyMessages[0].messageId).toEqual(
-      '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-    );
   });
 
   it('sets showSendTo and showComplete to false when isInitializeCase is true', () => {
@@ -761,13 +670,6 @@ describe('formatted work queue computed', () => {
       receivedAt: '2019-12-16T16:48:02.888Z',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
-    const baseMessage = {
-      createdAt: '2019-12-16T16:48:02.889Z',
-      from: 'Test Petitioner',
-      fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      message: 'Petition filed by Ori Petersen is ready for review.',
-      messageId: '9ad0fceb-41be-4902-8294-9f505fb7a353',
-    };
     const baseWorkItemEditLink =
       '/case-detail/114-19/documents/6db35185-2445-4952-9449-5479a5cadab0';
     const documentViewLink =
@@ -789,7 +691,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: true,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'petitions',
         },
         workQueueToDisplay: {
@@ -817,7 +718,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'petitions',
         },
         workQueueToDisplay: {
@@ -845,7 +745,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -881,7 +780,6 @@ describe('formatted work queue computed', () => {
           inProgress: true,
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -920,7 +818,6 @@ describe('formatted work queue computed', () => {
           isInitializeCase: false,
           isQC: true,
           isRead: true,
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -960,7 +857,6 @@ describe('formatted work queue computed', () => {
           isInitializeCase: false,
           isQC: true,
           isRead: true,
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -997,7 +893,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -1030,7 +925,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -1040,74 +934,6 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
-    });
-
-    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk and viewing a messages box (workQueueIsInternal=true)", () => {
-      const { permissions } = getBaseState(petitionsClerkUser);
-
-      const result = getWorkItemDocumentLink({
-        applicationContext,
-        permissions,
-        workItem: {
-          ...baseWorkItem,
-          document: {
-            ...baseDocument,
-            category: 'Miscellaneous',
-            documentTitle: 'Administrative Record',
-            documentType: 'Administrative Record',
-            eventCode: 'ADMR',
-            pending: false,
-            receivedAt: '2018-01-01',
-            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-            scenario: 'Standard',
-          },
-          isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
-          section: 'docket',
-        },
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'section',
-          workQueueIsInternal: true,
-        },
-      });
-      expect(result).toEqual('/messages/9ad0fceb-41be-4902-8294-9f505fb7a353');
-    });
-
-    it('should return editLink with message id to mark as read if the box is my inbox and user is petitionsClerk viewing a messages box (workQueueIsInternal=true)', () => {
-      const { permissions } = getBaseState(petitionsClerkUser);
-
-      const result = getWorkItemDocumentLink({
-        applicationContext,
-        permissions,
-        workItem: {
-          ...baseWorkItem,
-          document: {
-            ...baseDocument,
-            category: 'Miscellaneous',
-            documentTitle: 'Administrative Record',
-            documentType: 'Administrative Record',
-            eventCode: 'ADMR',
-            pending: false,
-            receivedAt: '2018-01-01',
-            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-            scenario: 'Standard',
-          },
-          isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
-          section: 'docket',
-        },
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      });
-      expect(result).toEqual(
-        '/messages/9ad0fceb-41be-4902-8294-9f505fb7a353/mark/36f228c6-0ae5-4adf-aa44-35905b7fc8bd',
-      );
     });
 
     it('should return editLink as /edit if the box is my inbox and user is docketClerk', () => {
@@ -1131,7 +957,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -1163,7 +988,6 @@ describe('formatted work queue computed', () => {
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
-          messages: [baseMessage],
           section: 'petitions',
         },
         workQueueToDisplay: {
@@ -1369,34 +1193,6 @@ describe('formatted work queue computed', () => {
       expect(result.selected).toEqual(true);
     });
 
-    it('should set the first of messages array as currentMessage', () => {
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-      };
-
-      const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.currentMessage.messageId).toEqual(
-        FORMATTED_WORK_ITEM.messages[0].messageId,
-      );
-    });
-
-    it('should return currentMessage.createdAt for receivedAt when workQueueIsInternal is true', () => {
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-      };
-
-      workItem.messages[0].createdAt = '2018-12-25T18:05:54.166Z';
-      workItem.messages[1].createdAt = '2018-12-26T18:05:54.166Z';
-
-      const result = formatWorkItem({
-        applicationContext,
-        workItem,
-        workQueueIsInternal: true,
-      });
-
-      expect(result.receivedAt).toEqual('2018-12-26T18:05:54.166Z');
-    });
-
     it('should return document.createdAt for receivedAt when workQueueIsInternal is false', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
@@ -1406,9 +1202,6 @@ describe('formatted work queue computed', () => {
           receivedAt: '2018-12-27T18:05:54.166Z',
         },
       };
-
-      workItem.messages[0].createdAt = '2018-12-24T18:05:54.166Z';
-      workItem.messages[1].createdAt = '2018-12-25T18:05:54.166Z';
 
       const result = formatWorkItem({
         applicationContext,
@@ -1429,9 +1222,6 @@ describe('formatted work queue computed', () => {
         },
       };
 
-      workItem.messages[0].createdAt = '2018-12-24T18:05:54.166Z';
-      workItem.messages[1].createdAt = '2018-12-25T18:05:54.166Z';
-
       const result = formatWorkItem({
         applicationContext,
         workItem,
@@ -1450,27 +1240,12 @@ describe('formatted work queue computed', () => {
         },
       };
 
-      workItem.messages[0].createdAt = '2018-12-24T18:05:54.166Z';
-      workItem.messages[1].createdAt = '2018-12-25T18:05:54.166Z';
-
       const result = formatWorkItem({
         applicationContext,
         workItem,
         workQueueIsInternal: false,
       });
       expect(result.received).toEqual('12/27/18');
-    });
-
-    it('should set historyMessages as all messages except the latest message', () => {
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        historyMessages: [],
-      };
-
-      const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.historyMessages[0].messageId).toEqual(
-        result.messages[1].messageId,
-      );
     });
 
     it('should return isCourtIssuedDocument as true when the documentType is a court issued document type', () => {

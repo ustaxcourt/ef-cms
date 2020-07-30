@@ -117,15 +117,6 @@
     "assigneeName": null,
     "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "caseTitle": "Selma Horn & Cairo Harris",
-    "messages": [
-      {
-        "createdAt": "2019-03-01T21:42:29.073Z",
-        "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-        "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
@@ -157,15 +148,6 @@
     "assigneeName": null,
     "gsi1pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "caseTitle": "Selma Horn & Cairo Harris",
-    "messages": [
-      {
-        "createdAt": "2019-03-01T21:42:29.073Z",
-        "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-        "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
@@ -195,15 +177,6 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseTitle": "Selma Horn & Cairo Harris",
-    "messages": [
-      {
-        "createdAt": "2019-03-01T21:42:29.073Z",
-        "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-        "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
@@ -240,15 +213,6 @@
         "sentBy": "petitioner",
         "createdAt": "2019-03-01T21:42:29.073Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-03-01T21:42:29.073Z",
-            "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "102-19",
         "updatedAt": "2019-03-01T21:42:29.073Z"
       }
