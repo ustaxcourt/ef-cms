@@ -15,7 +15,7 @@ import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
-const goToMessages = [
+const goToWorkQueue = [
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   set(state.selectedWorkItems, []),
@@ -53,13 +53,13 @@ const goToMessages = [
     ],
     chooseWorkQueueSequence,
   ]),
-  setCurrentPageAction('Messages'),
+  setCurrentPageAction('WorkQueue'),
 ];
 
-export const gotoMessagesSequence = [
+export const gotoWorkQueueSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: goToMessages,
+    isLoggedIn: goToWorkQueue,
     unauthorized: [redirectToCognitoAction],
   },
 ];

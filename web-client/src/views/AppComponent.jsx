@@ -46,7 +46,6 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
-import { Messages } from './Messages/Messages';
 import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -75,6 +74,7 @@ import { UploadCorrespondenceDocument } from './Correspondence/UploadCorresponde
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
+import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -123,7 +123,6 @@ const pages = {
   Loading,
   LogIn,
   MessageDetail,
-  Messages,
   OtherFilerInformation,
   PendingReport,
   PetitionQc,
@@ -150,6 +149,7 @@ const pages = {
   UploadCorrespondenceDocument,
   UploadCourtIssuedDocument,
   UserContactEdit,
+  WorkQueue,
 };
 
 /**
