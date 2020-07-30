@@ -94,13 +94,9 @@ export const documentDetailHelper = (get, applicationContext) => {
     document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
   const isMiscellaneous = document.documentType === MISCELLANEOUS_DOCUMENT_TYPE;
 
-  formattedDocument.signUrl = isStipDecision
-    ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
-    : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}/sign`;
+  formattedDocument.signUrl = `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}/sign`;
 
-  formattedDocument.editUrl = isStipDecision
-    ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
-    : isMiscellaneous
+  formattedDocument.editUrl = isMiscellaneous
     ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${formattedDocument.documentId}`
     : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}`;
 
