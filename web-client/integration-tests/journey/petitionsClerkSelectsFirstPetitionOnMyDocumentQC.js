@@ -5,9 +5,7 @@ export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC = test => {
       .find(workItem => workItem.docketNumber === test.docketNumber);
 
     const { documentId } = workItem.document;
-    const { messageId } = workItem.messages[0];
 
     test.documentId = documentId;
-    test.messageId = messageId;
   });
 };
