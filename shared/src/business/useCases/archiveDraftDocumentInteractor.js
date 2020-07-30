@@ -36,8 +36,6 @@ exports.archiveDraftDocumentInteractor = async ({
 
   const documentToArchive = caseEntity.getDocumentById({ documentId });
 
-  console.log('hi im here! ************');
-
   documentToArchive.archive();
 
   await applicationContext.getPersistenceGateway().updateCase({

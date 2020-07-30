@@ -90,7 +90,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should add the signed Stipulated Decision to the case given a Proposed Stipulated Decision', async () => {
-    const caseEntity = await saveSignedDocumentInteractor({
+    const { caseEntity } = await saveSignedDocumentInteractor({
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: 'Guy Fieri',
@@ -114,7 +114,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it("should set the document's processing status to complete", async () => {
-    const caseEntity = await saveSignedDocumentInteractor({
+    const { caseEntity } = await saveSignedDocumentInteractor({
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
@@ -131,7 +131,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should set the documentIdBeforeSignature', async () => {
-    const caseEntity = await saveSignedDocumentInteractor({
+    const { caseEntity } = await saveSignedDocumentInteractor({
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,

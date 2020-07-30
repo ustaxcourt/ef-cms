@@ -16,7 +16,7 @@ exports.getUserInteractor = async ({ applicationContext }) => {
 
   if (!user) {
     throw new NotFoundError(
-      `User id ${authorizedUser.userId}" not found in persistence.`,
+      `User id "${authorizedUser.userId}" not found in persistence.`,
     );
   }
 
