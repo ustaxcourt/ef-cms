@@ -13,12 +13,12 @@ export const updateCourtIssuedDocketEntryAction = async ({
   get,
 }) => {
   const documentId = get(state.documentId);
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
 
   const documentMeta = {
     ...form,
-    caseId,
+    docketNumber,
     documentId,
   };
 

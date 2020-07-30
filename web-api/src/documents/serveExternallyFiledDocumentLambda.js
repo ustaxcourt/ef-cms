@@ -10,16 +10,11 @@ exports.serveExternallyFiledDocumentLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const {
-        pathParameters: { caseId, documentId },
-      } = event;
-
       return await applicationContext
         .getUseCases()
         .serveExternallyFiledDocumentInteractor({
           applicationContext,
-          caseId,
-          documentId,
+          ...event.pathParameters,
         });
     },
     {

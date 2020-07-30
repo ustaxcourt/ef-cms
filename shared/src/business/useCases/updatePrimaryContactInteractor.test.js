@@ -13,7 +13,7 @@ describe('update primary contact on a case', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext
       .getUseCases()
@@ -56,7 +56,6 @@ describe('update primary contact on a case', () => {
   it('should update contactPrimary editable fields', async () => {
     const caseDetail = await updatePrimaryContactInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
@@ -67,6 +66,7 @@ describe('update primary contact on a case', () => {
         postalCode: '99999',
         state: 'PA',
       },
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
@@ -99,23 +99,21 @@ describe('update primary contact on a case', () => {
   it('throws an error if the case was not found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(null);
+      .getCaseByDocketNumber.mockResolvedValue(null);
 
     await expect(
       updatePrimaryContactInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
+        docketNumber: MOCK_CASE.docketNumber,
       }),
-    ).rejects.toThrow(
-      'Case a805d1ab-18d0-43ec-bafb-654e83405416 was not found.',
-    );
+    ).rejects.toThrow('Case 101-18 was not found.');
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue({
+      .getCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         userId: '123',
       });
@@ -125,8 +123,8 @@ describe('update primary contact on a case', () => {
     await expect(
       updatePrimaryContactInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case contact');
   });
@@ -138,7 +136,6 @@ describe('update primary contact on a case', () => {
 
     await updatePrimaryContactInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
         // Matches current contact info
         address1: '123 Main St',
@@ -151,6 +148,7 @@ describe('update primary contact on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -173,7 +171,6 @@ describe('update primary contact on a case', () => {
 
     const caseDetail = await updatePrimaryContactInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
         address1: 'nothing',
         city: 'Somewhere',
@@ -184,6 +181,7 @@ describe('update primary contact on a case', () => {
         postalCode: '12345',
         state: 'TN',
       },
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(caseDetail.contactPrimary.name).not.toBe(

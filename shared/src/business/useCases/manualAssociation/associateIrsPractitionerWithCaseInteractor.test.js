@@ -16,7 +16,6 @@ const { MOCK_CASE } = require('../../../test/mockCase.js');
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {
     caseCaption: 'Caption',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
@@ -49,7 +48,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(() => caseRecord);
+      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -58,7 +57,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     await expect(
       associateIrsPractitionerWithCaseInteractor({
         applicationContext,
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -82,7 +81,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
 
     await associateIrsPractitionerWithCaseInteractor({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

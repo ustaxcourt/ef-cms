@@ -89,7 +89,7 @@ export const DraftDocumentViewerDocument = connect(
                 icon="trash"
                 onClick={() =>
                   archiveDraftDocumentModalSequence({
-                    caseId: caseDetail.caseId,
+                    docketNumber: caseDetail.docketNumber,
                     documentId: viewerDraftDocumentToDisplay.documentId,
                     documentTitle: viewerDraftDocumentToDisplay.documentTitle,
                     redirectToCaseDetail: true,
@@ -140,7 +140,7 @@ export const DraftDocumentViewerDocument = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
-                    caseId: caseDetail.caseId,
+                    docketNumber: caseDetail.docketNumber,
                     documentId: viewerDraftDocumentToDisplay.documentId,
                   })
                 }

@@ -31,7 +31,6 @@ const {
 
 const seedData = {
   caseCaption: 'Hanan Al Hroub, Petitioner',
-  caseId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   contactPrimary: {
     address1: '123 Teachers Way',
     city: 'Haifa',

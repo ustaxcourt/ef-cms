@@ -6,7 +6,7 @@ import { setAddEditSessionNoteModalStateAction } from './setAddEditSessionNoteMo
 describe('setAddEditSessionNoteModalStateAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set the modal caseId state', async () => {
+  it('should set the modal state', async () => {
     const result = await runAction(setAddEditSessionNoteModalStateAction, {
       modules: {
         presenter,

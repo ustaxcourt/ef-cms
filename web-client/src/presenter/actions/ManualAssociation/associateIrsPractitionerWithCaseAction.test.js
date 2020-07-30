@@ -19,7 +19,7 @@ describe('associateIrsPractitionerWithCaseAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: 'sdsdfsd' },
+        caseDetail: { docketNumber: '123-20' },
         modal: {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           user: {

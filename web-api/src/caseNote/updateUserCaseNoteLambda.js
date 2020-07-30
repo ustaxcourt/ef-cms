@@ -8,12 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.updateUserCaseNoteLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId } = event.pathParameters || {};
-    const { notes } = JSON.parse(event.body);
+    const lambdaArguments = {
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
+    };
 
     return await applicationContext.getUseCases().updateUserCaseNoteInteractor({
       applicationContext,
-      caseId,
-      notes,
+      ...lambdaArguments,
     });
   });

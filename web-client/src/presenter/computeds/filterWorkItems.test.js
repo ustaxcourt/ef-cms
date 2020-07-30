@@ -109,7 +109,6 @@ const generateWorkItem = (data, document) => {
   const baseWorkItem = {
     assigneeId: null,
     assigneeName: null,
-    caseId: '123',
     caseStatus: CASE_STATUS_TYPES.new,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '100-01',

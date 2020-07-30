@@ -57,7 +57,9 @@ exports.setTrialSessionCalendarInteractor = async ({
     ) {
       manuallyAddedQcCompleteCases.push(manualCase);
     } else {
-      trialSessionEntity.deleteCaseFromCalendar({ caseId: manualCase.caseId });
+      trialSessionEntity.deleteCaseFromCalendar({
+        docketNumber: manualCase.docketNumber,
+      });
     }
   });
 
@@ -95,7 +97,7 @@ exports.setTrialSessionCalendarInteractor = async ({
     return Promise.all([
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
         applicationContext,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
         highPriority: true,
         trialDate: caseEntity.trialDate,
       }),
@@ -113,7 +115,6 @@ exports.setTrialSessionCalendarInteractor = async ({
    * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
    */
   const setTrialSessionCalendarForEligibleCase = caseRecord => {
-    const { caseId } = caseRecord;
     const caseEntity = new Case(caseRecord, { applicationContext });
 
     caseEntity.setAsCalendared(trialSessionEntity);
@@ -122,7 +123,7 @@ exports.setTrialSessionCalendarInteractor = async ({
     return Promise.all([
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
         applicationContext,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
         highPriority: true,
         trialDate: caseEntity.trialDate,
       }),
@@ -134,7 +135,7 @@ exports.setTrialSessionCalendarInteractor = async ({
         .getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords({
           applicationContext,
-          caseId,
+          docketNumber: caseEntity.docketNumber,
         }),
     ]);
   };

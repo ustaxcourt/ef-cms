@@ -331,7 +331,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          leadCaseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          leadDocketNumber: '101-20',
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -354,7 +354,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          leadCaseId: '',
+          leadDocketNumber: '',
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -482,5 +482,37 @@ describe('caseDetailHeaderHelper', () => {
     });
 
     expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
+  });
+
+  it('should set showNewTabLink to true if user is an internal user ', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [] },
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+    expect(result.showNewTabLink).toBe(true);
+  });
+
+  it('should set showNewTabLink to false if user is an external user', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [] },
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+    expect(result.showNewTabLink).toBe(false);
   });
 });

@@ -1,9 +1,13 @@
-const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
+const joi = require('joi').extend(require('@hapi/joi-date'));
+const {
+  DOCKET_NUMBER_MATCHER,
+  MAX_FILE_SIZE_BYTES,
+} = require('../business/entities/EntityConstants');
 const { FORMATS } = require('../business/utilities/DateHandler');
-const { MAX_FILE_SIZE_BYTES } = require('../business/entities/EntityConstants');
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 exports.JoiValidationConstants = {
   CASE_CAPTION: joi.string().max(4700),
+  DOCKET_NUMBER: joi.string().regex(DOCKET_NUMBER_MATCHER),
   DOCUMENT_TITLE: joi.string().max(3000),
   EMAIL: joi.string().email({ tlds: false }).max(100),
   // eslint-disable-next-line spellcheck/spell-checker

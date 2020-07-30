@@ -19,7 +19,7 @@ describe('getJudgesCaseNoteForCaseAction', () => {
       modules: {
         presenter,
       },
-      state: { caseDetail: { caseId: '123' } },
+      state: { caseDetail: { docketNumber: '123' } },
     });
     expect(
       applicationContext.getUseCases().getUserCaseNoteInteractor.mock.calls
@@ -27,7 +27,7 @@ describe('getJudgesCaseNoteForCaseAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().getUserCaseNoteInteractor.mock
-        .calls[0][0].caseId,
+        .calls[0][0].docketNumber,
     ).toEqual('123');
   });
 });

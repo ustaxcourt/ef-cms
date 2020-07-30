@@ -11,23 +11,23 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update the case trial sort tags
+ * @param {string} providers.docketNumber the docket number of the case to update the case trial sort tags
  */
 exports.updateCaseTrialSortTagsInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   const user = applicationContext.getCurrentUser();
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -43,8 +43,8 @@ exports.updateCaseTrialSortTagsInteractor = async ({
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.validate().toRawObject().caseId,
         caseSortTags,
+        docketNumber: caseEntity.validate().toRawObject().docketNumber,
       });
   }
 };

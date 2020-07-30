@@ -6,7 +6,7 @@ const {
   updateCaseTrialSortMappingRecords,
 } = require('./updateCaseTrialSortMappingRecords');
 
-const caseId = 'abc';
+const docketNumber = '123-20';
 const caseSortTags = {
   hybrid: 'abc',
   nonHybrid: '123',
@@ -23,8 +23,8 @@ describe('updateCaseTrialSortMappingRecords', () => {
 
     await updateCaseTrialSortMappingRecords({
       applicationContext,
-      caseId,
       caseSortTags,
+      docketNumber,
     });
     expect(client.put).not.toBeCalled();
   });
@@ -34,8 +34,8 @@ describe('updateCaseTrialSortMappingRecords', () => {
 
     await updateCaseTrialSortMappingRecords({
       applicationContext,
-      caseId,
       caseSortTags,
+      docketNumber,
     });
     expect(client.put).not.toBeCalled();
   });
@@ -45,18 +45,18 @@ describe('updateCaseTrialSortMappingRecords', () => {
 
     await updateCaseTrialSortMappingRecords({
       applicationContext,
-      caseId,
       caseSortTags: { hybrid: 'efg', nonHybrid: '456' },
+      docketNumber,
     });
     expect(client.put.mock.calls[0][0].Item).toMatchObject({
-      caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog|abc',
+      docketNumber,
+      gsi1pk: 'eligible-for-trial-case-catalog|123-20',
       pk: 'eligible-for-trial-case-catalog',
       sk: '456',
     });
     expect(client.put.mock.calls[1][0].Item).toMatchObject({
-      caseId,
-      gsi1pk: 'eligible-for-trial-case-catalog|abc',
+      docketNumber,
+      gsi1pk: 'eligible-for-trial-case-catalog|123-20',
       pk: 'eligible-for-trial-case-catalog',
       sk: 'efg',
     });

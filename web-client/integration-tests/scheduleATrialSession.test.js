@@ -32,7 +32,6 @@ describe('Schedule A Trial Session', () => {
 
   test.casesReadyForTrial = [];
 
-  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
@@ -40,7 +39,6 @@ describe('Schedule A Trial Session', () => {
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
-      createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;
     });
@@ -79,7 +77,7 @@ describe('Schedule A Trial Session', () => {
 
   // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
-    return [createdCaseIds[0], createdCaseIds[1]];
+    return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
 
   petitionsClerkSetsATrialSessionsSchedule(test);

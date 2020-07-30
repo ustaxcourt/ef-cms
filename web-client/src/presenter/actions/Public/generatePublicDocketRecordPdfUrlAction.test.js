@@ -20,7 +20,7 @@ describe('generatePublicDocketRecordPdfUrlAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'case-id-123',
+          docketNumber: '123-45',
         },
       },
     });

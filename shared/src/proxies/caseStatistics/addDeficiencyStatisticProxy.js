@@ -5,7 +5,7 @@ const { post } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update statistics
+ * @param {string} providers.docketNumber the docket number of the case to update statistics
  * @param {number} providers.determinationDeficiencyAmount deficiency amount determined by the court
  * @param {number} providers.determinationTotalPenalties total penalties amount determined by the court
  * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
@@ -17,9 +17,9 @@ const { post } = require('../requests');
  */
 exports.addDeficiencyStatisticInteractor = ({
   applicationContext,
-  caseId,
   determinationDeficiencyAmount,
   determinationTotalPenalties,
+  docketNumber,
   irsDeficiencyAmount,
   irsTotalPenalties,
   lastDateOfPeriod,
@@ -37,6 +37,6 @@ exports.addDeficiencyStatisticInteractor = ({
       year,
       yearOrPeriod,
     },
-    endpoint: `/case-meta/${caseId}/statistics`,
+    endpoint: `/case-meta/${docketNumber}/statistics`,
   });
 };

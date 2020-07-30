@@ -5,8 +5,8 @@ const { createWorkItem } = require('./createWorkItem');
 
 const mockWorkItem = {
   assigneeId: '123',
-  caseId: '123',
   createdAt: '100',
+  docketNumber: '123-20',
   section: 'docket',
   sentByUserId: 'a_user',
   workItemId: 'a_id',
@@ -39,7 +39,6 @@ describe('createWorkItem', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        caseId: '123',
         pk: 'work-item|a_id',
         sk: 'work-item|a_id',
         workItemId: 'a_id',
@@ -58,7 +57,7 @@ describe('createWorkItem', () => {
       applicationContext.getDocumentClient().put.mock.calls[1][0],
     ).toMatchObject({
       Item: {
-        pk: 'case|123',
+        pk: 'case|123-20',
         sk: 'work-item|a_id',
       },
       TableName: 'efcms-dev',

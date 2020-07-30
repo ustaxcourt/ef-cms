@@ -8,14 +8,14 @@ describe('addConsolidatedCaseAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call addConsolidatedCaseInteractor and return caseId and caseToConsolidateId', async () => {
+  it('should call addConsolidatedCaseInteractor and return docketNumber and caseToConsolidate docketNumber', async () => {
     const result = await runAction(addConsolidatedCaseAction, {
       modules: {
         presenter,
       },
       props: {
-        caseDetail: { caseId: '123' },
-        caseToConsolidate: { caseId: '456' },
+        caseDetail: { docketNumber: '123-20' },
+        caseToConsolidate: { docketNumber: '456-20' },
       },
     });
 
@@ -24,8 +24,8 @@ describe('addConsolidatedCaseAction', () => {
         .length,
     ).toEqual(1);
     expect(result.output).toEqual({
-      caseId: '123',
-      caseToConsolidateId: '456',
+      caseToConsolidateDocketNumber: '456-20',
+      docketNumber: '123-20',
     });
   });
 });

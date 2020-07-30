@@ -28,7 +28,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '45678-18',
       document: {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -47,7 +46,6 @@ describe('completeDocketEntryQCInteractor', () => {
 
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -123,7 +121,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
     applicationContext.getUniqueId.mockReturnValue(
       'b6f835aa-bf95-4996-b858-c8e94566db47',
     );
@@ -164,8 +162,8 @@ describe('completeDocketEntryQCInteractor', () => {
       completeDocketEntryQCInteractor({
         applicationContext,
         entryMetadata: {
-          caseId: caseRecord.caseId,
           description: 'Memorandum in Support',
+          docketNumber: caseRecord.docketNumber,
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
@@ -176,7 +174,7 @@ describe('completeDocketEntryQCInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -203,8 +201,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
@@ -214,7 +212,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -234,8 +232,8 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         additionalInfo: '123',
         additionalInfo2: 'abc',
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
@@ -261,8 +259,8 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
@@ -287,7 +285,7 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info 2',
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Answer',
         documentType: 'Answer',
@@ -316,8 +314,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
@@ -327,7 +325,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -356,8 +354,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
@@ -367,7 +365,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -395,8 +393,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
@@ -406,7 +404,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -424,8 +422,8 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        caseId: caseRecord.caseId,
         description: 'Memorandum in Support',
+        docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'My Edited Document',
         documentType: 'Notice of Change of Address',

@@ -35,13 +35,13 @@ export const UnconsolidateCasesModal = connect(
                     aria-describedby="representing-legend"
                     checked={
                       (modal.casesToRemove &&
-                        modal.casesToRemove[consolidatedCase.caseId] ===
+                        modal.casesToRemove[consolidatedCase.docketNumber] ===
                           true) ||
                       false
                     }
                     className="usa-checkbox__input"
-                    id={`case-${consolidatedCase.caseId}`}
-                    name={`casesToRemove.${consolidatedCase.caseId}`}
+                    id={`case-${consolidatedCase.docketNumber}`}
+                    name={`casesToRemove.${consolidatedCase.docketNumber}`}
                     type="checkbox"
                     onChange={e => {
                       updateModalValueSequence({
@@ -52,7 +52,7 @@ export const UnconsolidateCasesModal = connect(
                   />
                   <label
                     className="usa-checkbox__label inline-block"
-                    htmlFor={`case-${consolidatedCase.caseId}`}
+                    htmlFor={`case-${consolidatedCase.docketNumber}`}
                   >
                     <div className="display-inline margin-right-1">
                       {consolidatedCase.docketNumberWithSuffix}

@@ -1,7 +1,6 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   CASE_STATUS_TYPES,
-  DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
 } = require('./EntityConstants');
 const {
@@ -33,7 +32,6 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
   this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
-  this.caseId = rawWorkItem.caseId;
   this.caseIsInProgress = rawWorkItem.caseIsInProgress;
   this.caseStatus = rawWorkItem.caseStatus;
   this.caseTitle = rawWorkItem.caseTitle;
@@ -73,7 +71,6 @@ joiValidationDecorator(
     assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
     assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
     associatedJudge: joi.string().max(100).required(),
-    caseId: JoiValidationConstants.UUID.required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi
       .string()
@@ -85,11 +82,9 @@ joiValidationDecorator(
     completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    docketNumber: joi
-      .string()
-      .regex(DOCKET_NUMBER_MATCHER)
-      .required()
-      .description('Unique case identifier in XXXXX-YY format.'),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+      'Unique case identifier in XXXXX-YY format.',
+    ),
     docketNumberSuffix: joi
       .string()
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))

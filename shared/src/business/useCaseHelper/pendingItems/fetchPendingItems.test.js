@@ -16,7 +16,7 @@ describe('fetchPendingItems', () => {
 
   beforeEach(() => {
     const mockDataOne = {
-      caseId: '1',
+      caseCaption: 'Test Petitioner, Petitioner',
       documents: [
         {
           documentId: 'def',
@@ -29,7 +29,7 @@ describe('fetchPendingItems', () => {
       ],
     };
     const mockDataTwo = {
-      caseId: '2',
+      caseCaption: 'Another Test Petitioner, Petitioner',
       documents: [
         {
           documentId: 'abc',
@@ -47,7 +47,7 @@ describe('fetchPendingItems', () => {
       .fetchPendingItems.mockReturnValue([mockDataOne, mockDataTwo]);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue([mockDataOne, mockDataTwo]);
+      .getCaseByDocketNumber.mockReturnValue([mockDataOne, mockDataTwo]);
   });
 
   it('calls search function with correct params when provided a judge and returns records', async () => {
@@ -61,8 +61,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { caseId: '1', documentId: 'def', pending: true },
-      { caseId: '2', documentId: 'abc', pending: true },
+      { documentId: 'def', pending: true },
+      { documentId: 'abc', pending: true },
     ]);
   });
 
@@ -71,7 +71,6 @@ describe('fetchPendingItems', () => {
       .getPersistenceGateway()
       .fetchPendingItems.mockReturnValue([
         {
-          caseId: '1',
           documents: undefined,
         },
       ]);
@@ -96,8 +95,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { caseId: '1', documentId: 'def', pending: true },
-      { caseId: '2', documentId: 'abc', pending: true },
+      { documentId: 'def', pending: true },
+      { documentId: 'abc', pending: true },
     ]);
   });
 
@@ -114,18 +113,18 @@ describe('fetchPendingItems', () => {
     expect(results).toMatchObject([]);
   });
 
-  it('uses caseId filter and calls getCaseByCaseId and returns the pending items for that case', async () => {
+  it('uses docketNumber filter and calls getCaseByDocketNumber and returns the pending items for that case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     const results = await fetchPendingItems({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([

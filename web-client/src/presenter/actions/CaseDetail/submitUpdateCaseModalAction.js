@@ -37,8 +37,8 @@ export const submitUpdateCaseModalAction = async ({
         applicationContext,
         associatedJudge: selectedAssociatedJudge,
         caseCaption,
-        caseId: caseToUpdate.caseId,
         caseStatus,
+        docketNumber: caseToUpdate.docketNumber,
       });
   }
 

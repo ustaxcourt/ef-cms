@@ -10,7 +10,7 @@ export const CaseMessagesRowAttachments = connect(
   },
   function CaseMessagesRowAttachments({
     attachments,
-    caseId,
+    docketNumber,
     openCaseDocumentDownloadUrlSequence,
   }) {
     return (
@@ -25,7 +25,7 @@ export const CaseMessagesRowAttachments = connect(
                   iconColor="blue"
                   onClick={() => {
                     openCaseDocumentDownloadUrlSequence({
-                      caseId,
+                      docketNumber,
                       documentId: attachment.documentId,
                     });
                   }}

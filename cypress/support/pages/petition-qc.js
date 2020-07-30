@@ -1,9 +1,9 @@
-exports.navigateTo = (username, caseId) => {
-  cy.login(username, `/case-detail/${caseId}/petition-qc`);
+exports.navigateTo = (username, docketNumber) => {
+  cy.login(username, `/case-detail/${docketNumber}/petition-qc`);
 };
 
-exports.navigateToCase = (username, caseId) => {
-  cy.login(username, `/case-detail/${caseId}`);
+exports.navigateToCase = (username, docketNumber) => {
+  cy.login(username, `/case-detail/${docketNumber}`);
 };
 
 exports.getCaseInfoTab = () => {

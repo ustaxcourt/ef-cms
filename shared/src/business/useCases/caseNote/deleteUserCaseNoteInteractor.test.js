@@ -12,18 +12,13 @@ describe('deleteUserCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
-    let error;
-    try {
-      await deleteUserCaseNoteInteractor({
+    await expect(
+      deleteUserCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: '123-45',
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
-    expect(error).toBeInstanceOf(UnauthorizedError);
+      }),
+    ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
   it('deletes a case note', async () => {
@@ -32,10 +27,8 @@ describe('deleteUserCaseNoteInteractor', () => {
       role: ROLES.judge,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
-
     applicationContext.getUseCases.mockReturnValue({
       getJudgeForUserChambersInteractor: () => ({
         role: ROLES.judge,
@@ -43,19 +36,11 @@ describe('deleteUserCaseNoteInteractor', () => {
       }),
     });
 
-    let error;
-    let caseNote;
+    const caseNote = await deleteUserCaseNoteInteractor({
+      applicationContext,
+      docketNumber: '123-45',
+    });
 
-    try {
-      caseNote = await deleteUserCaseNoteInteractor({
-        applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(caseNote).toBeDefined();
   });
 });

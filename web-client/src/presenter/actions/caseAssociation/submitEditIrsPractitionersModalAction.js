@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
- * @param {object} providers.get the cerebral get function used for getting state.modal and state.caseDetail.caseId
+ * @param {object} providers.get the cerebral get function used for getting state.modal and state.caseDetail.docketNumber
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success path
  */
@@ -15,7 +15,7 @@ export const submitEditIrsPractitionersModalAction = async ({
   path,
 }) => {
   const form = get(state.modal);
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const { irsPractitioners } = form;
 
@@ -23,15 +23,15 @@ export const submitEditIrsPractitionersModalAction = async ({
     if (respondent.removeFromCase) {
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,
-        caseId,
-        userIdToDelete: respondent.userId,
+        docketNumber,
+        userId: respondent.userId,
       });
     } else {
       await applicationContext.getUseCases().updateCounselOnCaseInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         userData: respondent,
-        userIdToUpdate: respondent.userId,
+        userId: respondent.userId,
       });
     }
   }

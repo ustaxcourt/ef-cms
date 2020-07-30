@@ -53,7 +53,6 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItem8Days = {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test petitionsclerk1',
-      caseId: 'd481929a-fb22-4800-900e-50b15ac55934',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
