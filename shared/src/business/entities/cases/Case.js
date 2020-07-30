@@ -1010,18 +1010,31 @@ Case.prototype.setRequestForTrialDocketRecord = function (
 };
 
 /**
+ * gets the next possible (unused) index for the docket record
+ *
+ * @returns {number} the next docket record index
+ */
+Case.prototype.generateNextDocketRecordIndex = function () {
+  const nextIndex =
+    this.docketRecord.reduce(
+      (maxIndex, docketRecord, currentIndex) =>
+        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
+      0,
+    ) + 1;
+  return nextIndex;
+};
+
+/**
  *
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
+ * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  // const nextIndex =
-  //   this.docketRecord.reduce(
-  //     (maxIndex, docketRecord, currentIndex) =>
-  //       Math.max(docketRecord.index || 0, currentIndex, maxIndex),
-  //     0,
-  //   ) + 1;
-  // docketRecordEntity.index = docketRecordEntity.index || nextIndex;
+Case.prototype.addDocketRecord = function (docketRecordEntity, updateIndex) {
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
@@ -1029,12 +1042,21 @@ Case.prototype.addDocketRecord = function (docketRecordEntity) {
 /**
  *
  * @param {DocketRecord} updatedDocketEntry the update docket entry data
+ * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
+Case.prototype.updateDocketRecordEntry = function (
+  updatedDocketEntry,
+  updateIndex,
+) {
   const foundEntry = this.docketRecord.find(
     entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
+
+  if (updateIndex) {
+    updatedDocketEntry.index = this.generateNextDocketRecordIndex();
+  }
+
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
 };
@@ -1056,13 +1078,17 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 /**
  *
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
- * * @param {number} docketRecordId the index of the docket record to update
+ * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function (docketRecordEntity) {
+Case.prototype.updateDocketRecord = function (docketRecordEntity, updateIndex) {
   const docketRecordIndex = this.docketRecord.findIndex(
     entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
   );
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
 
   this.docketRecord[docketRecordIndex] = docketRecordEntity;
   return this;
