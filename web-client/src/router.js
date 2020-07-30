@@ -305,29 +305,6 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/sign',
-      ifHasAccess((docketNumber, documentId) => {
-        return app.getSequence('gotoSignPDFDocumentSequence')({
-          docketNumber,
-          documentId,
-          pageNumber: 1,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/messages/*/sign',
-      ifHasAccess((docketNumber, documentId, messageId) => {
-        return app.getSequence('gotoSignPDFDocumentSequence')({
-          docketNumber,
-          documentId,
-          messageId,
-          pageNumber: 1,
-        });
-      }),
-    );
-
-    registerRoute(
       '/case-detail/*/before-you-file-a-document',
       ifHasAccess(docketNumber => {
         setPageTitle(

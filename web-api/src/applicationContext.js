@@ -191,12 +191,6 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
-  createWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/createWorkItem');
-const {
-  createWorkItemInteractor,
-} = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
-const {
   deleteCaseCorrespondence,
 } = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
 const {
@@ -1224,7 +1218,6 @@ module.exports = appContextUser => {
         createTrialSessionWorkingCopy,
         createUser,
         createUserInboxRecord,
-        createWorkItem,
         deleteCaseCorrespondence,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
@@ -1430,7 +1423,6 @@ module.exports = appContextUser => {
         createPractitionerUserInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
-        createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCorrespondenceDocumentInteractor,

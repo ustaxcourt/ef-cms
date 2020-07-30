@@ -1470,6 +1470,7 @@ describe('document detail helper', () => {
           state: {
             ...getBaseState(user),
             caseDetail: {
+              docketNumber: '123-20',
               docketRecord: [],
               documents: [
                 {
@@ -1485,7 +1486,7 @@ describe('document detail helper', () => {
 
         expect(result.isDraftDocument).toEqual(true);
         expect(result.formattedDocument.editUrl).toContain(
-          '/documents/abc/sign',
+          '/case-detail/123-20/edit-order/abc',
         );
       });
 
