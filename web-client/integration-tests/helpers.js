@@ -142,23 +142,6 @@ export const getFormattedDocumentQCSectionOutbox = async test => {
   });
 };
 
-export const signProposedStipulatedDecision = async (test, stipDecision) => {
-  await test.runSequence('gotoSignOrderSequence', {
-    docketNumber: stipDecision.docketNumber,
-    documentId: stipDecision.document.documentId,
-  });
-
-  await test.runSequence('setPDFSignatureDataSequence', {
-    signatureData: {
-      scale: 1,
-      x: 100,
-      y: 100,
-    },
-  });
-
-  await test.runSequence('saveDocumentSigningSequence');
-};
-
 export const serveDocument = async ({ docketNumber, documentId, test }) => {
   await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
     docketNumber,
@@ -314,7 +297,6 @@ export const uploadProposedStipulatedDecision = async test => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
-    serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
 };
