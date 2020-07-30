@@ -30,6 +30,8 @@ elif [[ $BRANCH == 'master' ]] ; then
   echo 'prod'
 elif [[ $BRANCH == 'dawson' ]] ; then
   echo 'daw'
+elif [[ $BRANCH == 'prod' ]] ; then
+  echo 'prod'
 else
   exit 1;
 fi

@@ -23,7 +23,6 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "receivedAt": "2019-03-05T17:34:13.490Z",
     "noticeOfAttachments": true,
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "case|104-19",
     "filingType": "A business",
     "orderForOds": true,
@@ -130,7 +129,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "caseTitle": "Mufutau Wade",
     "messages": [
       {
@@ -171,7 +169,6 @@
     "sentBy": "petitioner",
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "caseTitle": "Mufutau Wade",
     "messages": [
       {
@@ -223,7 +220,6 @@
   },
   {
     "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "pk": "catalog"
   },
   {
@@ -238,7 +234,6 @@
     "createdAt": "2019-03-05T17:34:13.491Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "isFileAttached": true,
     "sk": "document|add36745-8e77-450b-a8dd-6f34272fe1d5",
     "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
@@ -257,7 +252,6 @@
     "createdAt": "2019-03-05T17:34:13.491Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "isFileAttached": true,
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
@@ -293,7 +287,6 @@
         "sentBy": "petitioner",
         "createdAt": "2019-03-05T17:34:13.490Z",
         "assigneeName": null,
-        "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
         "messages": [
           {
             "createdAt": "2019-03-05T17:34:13.490Z",
@@ -313,7 +306,6 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
-    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "isFileAttached": true,
     "sk": "document|c63be3f2-2240-451e-b6bd-8206d52a070b",
     "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",

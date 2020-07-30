@@ -23,6 +23,8 @@ elif [[ $BRANCH == 'irs' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_IRS}"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_PROD}"
+elif [[ $BRANCH == 'prod' ]] ; then
+  echo "${DYNAMSOFT_PRODUCT_KEYS_PROD}"
 elif [[ $BRANCH == 'staging' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_STG}"
 elif [[ $BRANCH == 'test' ]] ; then

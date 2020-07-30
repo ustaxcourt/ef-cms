@@ -4,7 +4,7 @@
 rm -rf node_modules dist .elasticsearch .dynamodb
 npm ci
 
-docker build -t efcms -f Dockerfile .
+docker build -t efcms -f Dockerfile-local .
 
 docker run --rm efcms /bin/sh -c 'npm run lint'
 

@@ -290,6 +290,35 @@ describe('messageDocumentHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an internal user and an SDEC document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'SDEC',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showApplySignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
   it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
@@ -551,6 +580,34 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showEditButtonSigned).toEqual(true);
+  });
+
+  it('return showEditButtonSigned false for an internal user and an SDEC document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'SDEC',
+              isDraft: true,
+              signedAt: '123',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
   });
 
   it('return showEditButtonNotSigned true for an internal user and a document that is not on the docket record and is not signed', () => {
@@ -1160,6 +1217,116 @@ describe('messageDocumentHelper', () => {
       });
 
       expect(result.editUrl).toEqual('');
+    });
+  });
+
+  describe('showSignStipulatedDecisionButton', () => {
+    it('should be true if the user is an internal user, the eventCode is PSDE, and the SDEC eventCode is not in the documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be false if the user is an internal user, the document code is PSDE, and the SDEC eventCode is in the documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+              {
+                documentId: '234',
+                documentType: 'Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'SDEC',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+
+    it('should be false if the user is an external user, the eventCode is PSDE, and the SDEC event code is not in the documents', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+
+    it('should be false if the user is an internal user and the eventCode is not PSDE', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
     });
   });
 });
