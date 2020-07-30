@@ -657,10 +657,6 @@ app.post('/cases', lambdaWrapper(createCaseLambda));
  * documents
  */
 app.post('/documents/:documentId/validate', lambdaWrapper(validatePdfLambda));
-app.post(
-  '/clamav/documents/:documentId/virus-scan',
-  lambdaWrapper(virusScanPdfLambda),
-);
 app.get(
   '/documents/:documentId/upload-policy',
   lambdaWrapper(getUploadPolicyLambda),
