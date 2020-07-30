@@ -61,7 +61,7 @@ const replaceOriginalWithSignedDocument = async ({
  * @param {string} providers.originalDocumentId the id of the original (unsigned) document
  * @param {string} providers.parentMessageId the id of the parent message to add the signed document to
  * @param {string} providers.signedDocumentId the id of the signed document
- * @returns {object} the updated case
+ * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
 exports.saveSignedDocumentInteractor = async ({
   applicationContext,
