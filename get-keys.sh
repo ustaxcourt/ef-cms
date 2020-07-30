@@ -30,7 +30,7 @@ elif [[ $BRANCH == 'test' ]] ; then
 elif [[ $BRANCH == 'migration' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_MIG}"
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
+  echo "${DYNAMSOFT_PRODUCT_KEYS_DAWSON}"
 else
   exit 1;
 fi
