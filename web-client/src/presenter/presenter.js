@@ -48,7 +48,6 @@ import { completeCaseMessageSequence } from './sequences/completeCaseMessageSequ
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
-import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
@@ -59,7 +58,6 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createCaseMessageSequence } from './sequences/createCaseMessageSequence';
-import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
 import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
@@ -136,7 +134,6 @@ import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
-import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
@@ -151,7 +148,6 @@ import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterS
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
-import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
@@ -459,7 +455,6 @@ export const presenter = {
     blockCaseFromTrialSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
-    removeDraftDocumentSequence,
     cancelAddDraftDocumentSequence,
     cancelAddStatisticSequence,
     cancelAndNavigateToCorrespondenceSequence,
@@ -488,7 +483,6 @@ export const presenter = {
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     completeDocumentSelectSequence,
-    completeDocumentSigningSequence,
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
@@ -499,7 +493,6 @@ export const presenter = {
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
     createCaseMessageSequence,
-    createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
     deleteCorrespondenceDocumentSequence,
@@ -576,7 +569,6 @@ export const presenter = {
     gotoReviewSavedPetitionSequence,
     gotoSecondaryContactEditSequence,
     gotoSignOrderSequence,
-    gotoSignPDFDocumentSequence,
     gotoStartCaseWizardSequence,
     gotoStyleGuideSequence,
     gotoTrialSessionDetailSequence,
@@ -591,7 +583,6 @@ export const presenter = {
     loadDefaultDocketViewerDocumentToDisplaySequence,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     loadDefaultViewerCorrespondenceSequence,
-    loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
@@ -670,6 +661,7 @@ export const presenter = {
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
+    removeDraftDocumentSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
     removeSignatureFromOrderSequence,

@@ -296,16 +296,6 @@ export const uploadProposedStipulatedDecision = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
-export const createMessage = async ({ assigneeId, message, test }) => {
-  test.setState('form', {
-    assigneeId,
-    message,
-    section: 'docket',
-  });
-
-  await test.runSequence('createWorkItemSequence');
-};
-
 export const forwardWorkItem = async (test, to, workItemId, message) => {
   let assigneeId;
   if (to === 'docketclerk1') {
