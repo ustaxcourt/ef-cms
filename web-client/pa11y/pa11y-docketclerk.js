@@ -47,8 +47,6 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-document-info to be visible',
-      'click element #tab-document-info',
       'wait for #has-other-filing-party to be visible',
       'click element label#has-other-filing-party-label',
       'wait for input#other-filing-party to be visible',
