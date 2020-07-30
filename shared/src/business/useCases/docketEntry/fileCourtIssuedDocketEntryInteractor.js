@@ -156,6 +156,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       },
       { applicationContext },
     ),
+    true, // should update the index
   );
 
   caseEntity = await applicationContext

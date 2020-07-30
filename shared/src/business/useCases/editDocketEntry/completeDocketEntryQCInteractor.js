@@ -185,6 +185,7 @@ exports.completeDocketEntryQCInteractor = async ({
       filingDate: updatedDocument.receivedAt,
     },
     { applicationContext },
+    true, // should update the index
   );
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));

@@ -257,4 +257,52 @@ describe('fileDocketEntryInteractor', () => {
         .deleteCaseTrialSortMappingRecords,
     ).toBeCalled();
   });
+
+  it('adds a docket record entry without an index if saving for later', async () => {
+    await fileDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0];
+
+    const updatedCase = updateCaseCall[0].caseToUpdate;
+
+    expect(updatedCase.docketRecord[0].index).toBeUndefined();
+  });
+
+  it('adds a docket record entry with an index if not saving for later', async () => {
+    await fileDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0];
+
+    const updatedCase = updateCaseCall[0].caseToUpdate;
+
+    expect(updatedCase.docketRecord[0].index).toEqual(1);
+  });
 });
