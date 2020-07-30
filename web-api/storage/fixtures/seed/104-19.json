@@ -130,15 +130,6 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseTitle": "Mufutau Wade",
-    "messages": [
-      {
-        "createdAt": "2019-03-05T17:34:13.490Z",
-        "messageId": "7092457a-33b0-4d0f-a4ba-07b2701196fc",
-        "message": "Petition filed by Mufutau Wade is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "104-19",
     "updatedAt": "2019-03-05T17:34:13.490Z"
   },
@@ -170,15 +161,6 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseTitle": "Mufutau Wade",
-    "messages": [
-      {
-        "createdAt": "2019-03-05T17:34:13.490Z",
-        "messageId": "7092457a-33b0-4d0f-a4ba-07b2701196fc",
-        "message": "Petition filed by Mufutau Wade is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "104-19",
     "updatedAt": "2019-03-05T17:34:13.490Z"
   },
@@ -287,15 +269,6 @@
         "sentBy": "petitioner",
         "createdAt": "2019-03-05T17:34:13.490Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-03-05T17:34:13.490Z",
-            "messageId": "7092457a-33b0-4d0f-a4ba-07b2701196fc",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Mufutau Wade is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "104-19",
         "updatedAt": "2019-03-05T17:34:13.490Z"
       }

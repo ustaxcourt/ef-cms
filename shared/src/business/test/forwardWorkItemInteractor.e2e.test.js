@@ -97,20 +97,6 @@ describe('forwardWorkItemInteractor integration test', () => {
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Rick Petitioner is ready for review.',
-          },
-          {
-            from: 'Test Petitionsclerk',
-            fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'yolo',
-            to: 'Test Docketclerk',
-            toUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
@@ -142,20 +128,6 @@ describe('forwardWorkItemInteractor integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Rick Petitioner is ready for review.',
-          },
-          {
-            from: 'Test Petitionsclerk',
-            fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'yolo',
-            to: 'Test Docketclerk',
-            toUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
@@ -179,20 +151,6 @@ describe('forwardWorkItemInteractor integration test', () => {
             documentType: 'Petition',
             filedBy: 'Petr. Rick Petitioner',
           },
-          messages: [
-            {
-              from: 'Alex Petitionsclerk',
-              fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-              message: 'Petition filed by Rick Petitioner is ready for review.',
-            },
-            {
-              from: 'Test Petitionsclerk',
-              fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-              message: 'yolo',
-              to: 'Test Docketclerk',
-              toUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
         },
       ],
     });

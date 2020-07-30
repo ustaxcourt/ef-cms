@@ -74,16 +74,6 @@
         "assigneeName": "Test Petitionsclerk",
         "entityName": "WorkItem",
         "hideFromPendingMessages": true,
-        "messages": [
-          {
-            "createdAt": "2020-04-29T15:52:15.628Z",
-            "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
-            "from": "Test Petitionsclerk",
-            "message": "Order filed by Petitionsclerk is ready for review.",
-            "entityName": "Message",
-            "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "105-20",
         "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
         "completedBy": "Test Petitionsclerk",
@@ -221,16 +211,6 @@
               "assigneeName": "Test Docketclerk1",
               "entityName": "WorkItem",
               "hideFromPendingMessages": true,
-              "messages": [
-                {
-                  "createdAt": "2020-05-13T14:50:45.763Z",
-                  "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
-                  "from": "Test Docketclerk1",
-                  "message": "T.C. Opinion filed by Docketclerk is ready for review.",
-                  "entityName": "Message",
-                  "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
-                }
-              ],
               "docketNumber": "105-20",
               "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
               "updatedAt": "2020-05-13T14:50:45.763Z"
@@ -259,16 +239,6 @@
         "assigneeName": "Test Docketclerk1",
         "entityName": "WorkItem",
         "hideFromPendingMessages": true,
-        "messages": [
-          {
-            "createdAt": "2020-05-13T14:50:45.763Z",
-            "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
-            "from": "Test Docketclerk1",
-            "message": "T.C. Opinion filed by Docketclerk is ready for review.",
-            "entityName": "Message",
-            "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "105-20",
         "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
         "completedBy": "Test Docketclerk1",
@@ -333,16 +303,6 @@
         "createdAt": "2020-04-29T15:50:41.698Z",
         "assigneeName": null,
         "entityName": "WorkItem",
-        "messages": [
-          {
-            "createdAt": "2020-04-29T15:50:41.699Z",
-            "messageId": "48b750d1-7243-4420-8e03-2a592c07d5bc",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Astra Santiago is ready for review.",
-            "entityName": "Message",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "105-20",
         "completedBy": "Test Petitionsclerk",
         "updatedAt": "2020-04-29T15:50:41.699Z"
@@ -404,16 +364,6 @@
     "isInitializeCase": true,
     "assigneeId": null,
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "messages": [
-      {
-        "createdAt": "2020-04-29T15:50:41.699Z",
-        "messageId": "48b750d1-7243-4420-8e03-2a592c07d5bc",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Astra Santiago is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
     "completedBy": "Test Petitionsclerk"
@@ -492,16 +442,6 @@
           "assigneeName": "Test Petitionsclerk",
           "entityName": "WorkItem",
           "hideFromPendingMessages": true,
-          "messages": [
-            {
-              "createdAt": "2020-04-29T15:52:15.628Z",
-              "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
-              "from": "Test Petitionsclerk",
-              "message": "Order filed by Petitionsclerk is ready for review.",
-              "entityName": "Message",
-              "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
-            }
-          ],
           "docketNumber": "105-20",
           "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
           "updatedAt": "2020-04-29T15:52:15.628Z"
@@ -538,16 +478,6 @@
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBySection": "petitions",
     "hideFromPendingMessages": true,
-    "messages": [
-      {
-        "createdAt": "2020-04-29T15:52:15.628Z",
-        "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
-        "from": "Test Petitionsclerk",
-        "message": "Order filed by Petitionsclerk is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -822,16 +752,6 @@
           "assigneeName": "Test Petitionsclerk",
           "entityName": "WorkItem",
           "hideFromPendingMessages": true,
-          "messages": [
-            {
-              "createdAt": "2020-04-29T15:52:15.628Z",
-              "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
-              "from": "Test Petitionsclerk",
-              "message": "Order filed by Petitionsclerk is ready for review.",
-              "entityName": "Message",
-              "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
-            }
-          ],
           "docketNumber": "105-20",
           "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
           "updatedAt": "2020-04-29T15:52:15.628Z"
@@ -868,16 +788,6 @@
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBySection": "petitions",
     "hideFromPendingMessages": true,
-    "messages": [
-      {
-        "createdAt": "2020-04-29T15:52:15.628Z",
-        "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
-        "from": "Test Petitionsclerk",
-        "message": "Order filed by Petitionsclerk is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -919,16 +829,6 @@
     "assigneeName": null,
     "entityName": "WorkItem",
     "sk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
-    "messages": [
-      {
-        "createdAt": "2020-04-29T15:50:41.699Z",
-        "messageId": "48b750d1-7243-4420-8e03-2a592c07d5bc",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Astra Santiago is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
     "docketNumber": "105-20",
     "completedBy": "Test Petitionsclerk",
@@ -1012,16 +912,6 @@
           "assigneeName": "Test Docketclerk1",
           "entityName": "WorkItem",
           "hideFromPendingMessages": true,
-          "messages": [
-            {
-              "createdAt": "2020-05-13T14:50:45.763Z",
-              "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
-              "from": "Test Docketclerk1",
-              "message": "T.C. Opinion filed by Docketclerk is ready for review.",
-              "entityName": "Message",
-              "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
-            }
-          ],
           "docketNumber": "105-20",
           "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
           "updatedAt": "2020-05-13T14:50:45.763Z"
@@ -1055,16 +945,6 @@
     "completedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBySection": "docket",
     "hideFromPendingMessages": true,
-    "messages": [
-      {
-        "createdAt": "2020-05-13T14:50:45.763Z",
-        "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
-        "from": "Test Docketclerk1",
-        "message": "T.C. Opinion filed by Docketclerk is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|2805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
     "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -1148,16 +1028,6 @@
           "assigneeName": "Test Docketclerk1",
           "entityName": "WorkItem",
           "hideFromPendingMessages": true,
-          "messages": [
-            {
-              "createdAt": "2020-05-13T14:50:45.763Z",
-              "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
-              "from": "Test Docketclerk1",
-              "message": "T.C. Opinion filed by Docketclerk is ready for review.",
-              "entityName": "Message",
-              "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
-            }
-          ],
           "docketNumber": "105-20",
           "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
           "updatedAt": "2020-05-13T14:50:45.763Z"
@@ -1191,16 +1061,6 @@
     "completedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBySection": "docket",
     "hideFromPendingMessages": true,
-    "messages": [
-      {
-        "createdAt": "2020-05-13T14:50:45.763Z",
-        "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
-        "from": "Test Docketclerk1",
-        "message": "T.C. Opinion filed by Docketclerk is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|docket",
     "docketNumber": "105-20",
     "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -1244,16 +1104,6 @@
     "isInitializeCase": true,
     "assigneeId": null,
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "messages": [
-      {
-        "createdAt": "2020-04-29T15:50:41.699Z",
-        "messageId": "48b750d1-7243-4420-8e03-2a592c07d5bc",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Astra Santiago is ready for review.",
-        "entityName": "Message",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|petitions",
     "docketNumber": "105-20",
     "completedBy": "Test Petitionsclerk"

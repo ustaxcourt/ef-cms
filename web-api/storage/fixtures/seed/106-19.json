@@ -26,15 +26,6 @@
     "createdAt": "2019-07-12T17:09:41.027Z",
     "assigneeName": null,
     "sk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:09:41.027Z",
-        "messageId": "818bb44d-1512-4a82-b524-a179ed5f7589",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Denise Gould is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "docketNumber": "106-19",
     "updatedAt": "2019-07-12T17:09:41.027Z"
@@ -77,17 +68,6 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:47.010Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-        "from": "Test Docketclerk",
-        "to": "Test ADC",
-        "message": "sign this please",
-        "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user|6805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -114,17 +94,6 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:47.010Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-        "from": "Test Docketclerk",
-        "to": "Test ADC",
-        "message": "sign this please",
-        "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|adc",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -170,15 +139,6 @@
     "createdAt": "2019-07-12T17:11:27.244Z",
     "assigneeName": "Test Docketclerk",
     "sk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:27.244Z",
-        "messageId": "a2573475-ed2e-4404-b3af-cd5ad6a862f4",
-        "from": "Test Docketclerk",
-        "message": "Proposed Stipulated Decision filed by Docketclerk is ready for review.",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -225,15 +185,6 @@
     "createdAt": "2019-07-12T17:11:27.244Z",
     "assigneeName": "Test Docketclerk",
     "sk": "2019-07-12T17:11:27.244Z",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:27.244Z",
-        "messageId": "a2573475-ed2e-4404-b3af-cd5ad6a862f4",
-        "from": "Test Docketclerk",
-        "message": "Proposed Stipulated Decision filed by Docketclerk is ready for review.",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -261,17 +212,6 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "sk": "2019-07-12T17:11:47.010Z",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:47.010Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-        "from": "Test Docketclerk",
-        "to": "Test ADC",
-        "message": "sign this please",
-        "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -304,15 +244,6 @@
     "createdAt": "2019-07-12T17:09:41.027Z",
     "assigneeName": null,
     "sk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:09:41.027Z",
-        "messageId": "818bb44d-1512-4a82-b524-a179ed5f7589",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Denise Gould is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|petitions",
     "docketNumber": "106-19",
     "updatedAt": "2019-07-12T17:09:41.027Z"
@@ -357,15 +288,6 @@
     "createdAt": "2019-07-12T17:11:27.244Z",
     "assigneeName": "Test Docketclerk",
     "sk": "2019-07-12T17:11:27.244Z",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:27.244Z",
-        "messageId": "a2573475-ed2e-4404-b3af-cd5ad6a862f4",
-        "from": "Test Docketclerk",
-        "message": "Proposed Stipulated Decision filed by Docketclerk is ready for review.",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -393,17 +315,6 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "sk": "2019-07-12T17:11:47.010Z",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:47.010Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-        "from": "Test Docketclerk",
-        "to": "Test ADC",
-        "message": "sign this please",
-        "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -430,17 +341,6 @@
     "createdAt": "2019-07-12T17:11:47.010Z",
     "assigneeName": "Test ADC",
     "sk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
-    "messages": [
-      {
-        "createdAt": "2019-07-12T17:11:47.010Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-        "from": "Test Docketclerk",
-        "to": "Test ADC",
-        "message": "sign this please",
-        "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -469,17 +369,6 @@
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T14:23:51.565Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "74d5d508-937f-4ddd-880d-e2ce369fa9e6",
-        "from": "Test Docketclerk",
-        "to": "Judge Armen",
-        "message": "What do you think, Judge Armen?",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -598,17 +487,6 @@
     "assigneeName": "Judge Armen",
     "caseTitle": "Denise Gould",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T14:23:51.565Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "74d5d508-937f-4ddd-880d-e2ce369fa9e6",
-        "from": "Test Docketclerk",
-        "to": "Judge Armen",
-        "message": "What do you think, Judge Armen?",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|armensChambers",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -637,17 +515,6 @@
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "sk": "2019-08-08T14:23:51.565Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T14:23:51.565Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "74d5d508-937f-4ddd-880d-e2ce369fa9e6",
-        "from": "Test Docketclerk",
-        "to": "Judge Armen",
-        "message": "What do you think, Judge Armen?",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -676,17 +543,6 @@
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T14:23:51.565Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "74d5d508-937f-4ddd-880d-e2ce369fa9e6",
-        "from": "Test Docketclerk",
-        "to": "Judge Armen",
-        "message": "What do you think, Judge Armen?",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -719,17 +575,6 @@
     "assigneeName": "Judge Armen",
     "caseTitle": "Denise Gould",
     "sk": "2019-08-08T14:23:51.565Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T14:23:51.565Z",
-        "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "74d5d508-937f-4ddd-880d-e2ce369fa9e6",
-        "from": "Test Docketclerk",
-        "to": "Judge Armen",
-        "message": "What do you think, Judge Armen?",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -803,15 +648,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-07-12T17:09:41.027Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-07-12T17:09:41.027Z",
-            "messageId": "818bb44d-1512-4a82-b524-a179ed5f7589",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Denise Gould is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "106-19",
         "updatedAt": "2019-07-12T17:09:41.027Z"
       }
@@ -875,15 +711,6 @@
         "sentBySection": "docket",
         "createdAt": "2019-07-12T17:11:27.244Z",
         "assigneeName": "Test Docketclerk",
-        "messages": [
-          {
-            "createdAt": "2019-07-12T17:11:27.244Z",
-            "messageId": "a2573475-ed2e-4404-b3af-cd5ad6a862f4",
-            "from": "Test Docketclerk",
-            "message": "Proposed Stipulated Decision filed by Docketclerk is ready for review.",
-            "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "106-19",
         "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "completedBy": "Test Docketclerk",
@@ -909,17 +736,6 @@
         "sentBySection": "docket",
         "createdAt": "2019-07-12T17:11:47.010Z",
         "assigneeName": "Test ADC",
-        "messages": [
-          {
-            "createdAt": "2019-07-12T17:11:47.010Z",
-            "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-            "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
-            "from": "Test Docketclerk",
-            "to": "Test ADC",
-            "message": "sign this please",
-            "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "106-19",
         "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "updatedAt": "2019-07-12T17:11:47.010Z"
