@@ -6,10 +6,10 @@ exports.deleteDocument = async ({
   documentId,
 }) => {
   await client.delete({
-    Item: {
+    applicationContext,
+    key: {
       pk: `case|${docketNumber}`,
       sk: `document|${documentId}`,
     },
-    applicationContext,
   });
 };
