@@ -9,6 +9,7 @@ describe('use docketNumber instead of caseId for case records', () => {
   let getStub;
   let queryStub;
   let mockItems = [];
+  MOCK_CASE.caseId = 'f9b77e8a-3515-469d-83b0-a62f07dd9cf1';
 
   const mockCaseRecord = {
     ...MOCK_CASE,

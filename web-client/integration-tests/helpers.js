@@ -143,18 +143,9 @@ export const getFormattedDocumentQCSectionOutbox = async test => {
 };
 
 export const signProposedStipulatedDecision = async (test, stipDecision) => {
-  await viewDocumentDetailMessage({
+  await test.runSequence('gotoSignOrderSequence', {
     docketNumber: stipDecision.docketNumber,
     documentId: stipDecision.document.documentId,
-    messageId: stipDecision.currentMessage.messageId,
-    test,
-    workItemIdToMarkAsRead: stipDecision.workItemId,
-  });
-
-  await test.runSequence('gotoSignPDFDocumentSequence', {
-    docketNumber: stipDecision.docketNumber,
-    documentId: stipDecision.document.documentId,
-    pageNumber: 1,
   });
 
   await test.runSequence('setPDFSignatureDataSequence', {
@@ -165,13 +156,7 @@ export const signProposedStipulatedDecision = async (test, stipDecision) => {
     },
   });
 
-  test.setState('form', {
-    assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    message: 'serve this please!',
-    section: 'docket',
-  });
-
-  await test.runSequence('completeDocumentSigningSequence');
+  await test.runSequence('saveDocumentSigningSequence');
 };
 
 export const serveDocument = async ({ docketNumber, documentId, test }) => {

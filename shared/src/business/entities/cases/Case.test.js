@@ -2151,7 +2151,7 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
-    it('does not remove a practitioner from associated case privatePractitioners array', () => {
+    it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {
       const caseToVerify = new Case(
         {
           privatePractitioners: [
@@ -2986,30 +2986,24 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3018,38 +3012,30 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3060,39 +3046,33 @@ describe('Case entity', () => {
       it('Should return the case with the lowest docket number for cases filed in the same year', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('100-19');
       });
 
       it('Should return the case with the lowest docket number for cases filed in different years', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('110-18');
       });
     });
   });

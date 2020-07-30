@@ -485,6 +485,21 @@ jobs:
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
+
+build-and-deploy-defaults: &build-and-deploy-defaults
+  filters:
+    branches:
+      ignore:
+        - develop # run hourly below
+        - prod    # run with context workflow below
+
+build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - prod
+
 workflows:
   version: 2
   hourly:
@@ -518,41 +533,21 @@ workflows:
   build-and-deploy:
     jobs:
       - build-shared:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-api:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-unit:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-integration:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-pa11y:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-cypress-public:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-coverage:
+          <<: *build-and-deploy-defaults
           requires:
             - build-shared
             - build-api
@@ -561,10 +556,6 @@ workflows:
             - e2e-pa11y
             - e2e-cypress
             - e2e-cypress-public
-          filters:
-            branches:
-              ignore:
-                - develop
       - deploy:
           requires:
             - build-client-coverage
@@ -579,3 +570,34 @@ workflows:
                 - experimental1
                 - experimental2
                 - dawson
+
+  build-and-deploy-with-context:
+    jobs:
+      - build-shared:
+          <<: *build-and-deploy-with-context-defaults
+      - build-api:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-unit:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-coverage:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-shared
+            - build-api
+            - build-client-unit
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-cypress
+            - e2e-cypress-public
+      - deploy:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-client-coverage
