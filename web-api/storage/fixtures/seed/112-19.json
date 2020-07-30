@@ -138,15 +138,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-12-11T15:25:55.008Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-12-11T15:25:55.008Z",
-            "messageId": "23277794-7935-4740-a9a8-f1e1da95171c",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Brian Earl Spilner is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "112-19",
         "updatedAt": "2019-12-11T15:25:55.008Z"
       }

@@ -72,15 +72,6 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
     "sk": "2019-08-16T17:29:10.133Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-16T17:29:10.133Z",
-        "messageId": "16d60c0c-6a71-4b5d-82ec-82303cf441bf",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|petitions",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -118,15 +109,6 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
     "sk": "2019-08-16T17:29:10.133Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-16T17:29:10.133Z",
-        "messageId": "16d60c0c-6a71-4b5d-82ec-82303cf441bf",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -271,15 +253,6 @@
     "createdAt": "2019-08-16T17:29:10.133Z",
     "assigneeName": "IRS Holding Queue",
     "sk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
-    "messages": [
-      {
-        "createdAt": "2019-08-16T17:29:10.133Z",
-        "messageId": "16d60c0c-6a71-4b5d-82ec-82303cf441bf",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
     "docketNumber": "107-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -415,15 +388,6 @@
         "sentBySection": "petitions",
         "createdAt": "2019-08-16T17:29:10.133Z",
         "assigneeName": "IRS Holding Queue",
-        "messages": [
-          {
-            "createdAt": "2019-08-16T17:29:10.133Z",
-            "messageId": "16d60c0c-6a71-4b5d-82ec-82303cf441bf",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Tatum Craig, Wayne Obrien, Partnership Representative is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "107-19",
         "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
         "completedBy": "Test Petitionsclerk",
