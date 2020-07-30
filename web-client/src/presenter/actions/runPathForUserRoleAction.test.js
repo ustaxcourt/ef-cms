@@ -35,6 +35,20 @@ describe('runPathForUserRoleAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
+  it('should throw an exception for unrecognized roles', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: 'bananas',
+    });
+    await expect(
+      runAction(runPathForUserRoleAction, {
+        modules: {
+          presenter,
+        },
+        state: {},
+      }),
+    ).rejects.toThrow();
+  });
+
   it('should return the petitioner path for user role petitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,

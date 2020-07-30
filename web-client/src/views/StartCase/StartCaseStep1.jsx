@@ -80,7 +80,7 @@ export const StartCaseStep1 = connect(
                 Download Statement of Taxpayer Identification Number (T.C. Form
                 4)
               </Button>
-              <p className="margin-top-0">if you haven‘t already done so</p>
+              <p className="margin-top-0">if you haven’t already done so</p>
             </div>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"

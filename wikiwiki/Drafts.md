@@ -28,10 +28,14 @@ on click of "Save" on Edit Order screen, app navigates to Apply Signature screen
 * On click of "Skip Signature", app navigates back to Draft Document View with success message displayed:"[Order/Notice title] updated."
 * On click of "Save Signature", app navigates back to Draft Document View with success message displayed: "[Order/Notice title] updated."
 
-**Edit Signature**
-* Action displays. if the document has been signed
-* Displays the Editing Signature modal, on Yes, Continue- navigates to Apply Signature screen
-* when user completes action (Saves, or Skips signature), navigate back to Draft Document View with success message displayed: "[Order/Notice title] updated."
+**Remove Signature**
+* Action displays if the document has been signed
+* On click of Remove Signature, display Remove Signature warning modal
+* on click of "Yes, Remove" button on modal:
+  * Signature is removed from PDF
+  * "Apply Signature" link is displayed in PDF actions toolbar
+  * "Remove Signature link is hidden in PDF actions toolbar
+
 
 **View Full PDF**
 * On click, selected PDF displays in new tab

@@ -9,5 +9,9 @@
 export const runPathForUserRoleAction = ({ applicationContext, path }) => {
   const user = applicationContext.getCurrentUser();
 
+  if (typeof path[user.role] !== 'function') {
+    throw new Error(`No path available for ${JSON.stringify(user)}`);
+  }
+
   return path[user.role]();
 };

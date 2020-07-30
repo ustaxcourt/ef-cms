@@ -387,7 +387,7 @@ export const ReviewSavedPetition = connect(
         </section>
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDocumentQCSequence" />
+          <FormCancelModalDialog onCancelSequence="closeModalAndNavigateSequence" />
         )}
       </>
     );

@@ -83,6 +83,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
 
   if (!isEmpty(fullCase.contactPrimary)) {
     fullCase.contactPrimary = ContactFactory.createContacts({
+      applicationContext,
       contactInfo: { primary: fullCase.contactPrimary },
       partyType: fullCase.partyType,
     }).primary.toRawObject();
@@ -90,6 +91,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
 
   if (!isEmpty(fullCase.contactSecondary)) {
     fullCase.contactSecondary = ContactFactory.createContacts({
+      applicationContext,
       contactInfo: { secondary: fullCase.contactSecondary },
       partyType: fullCase.partyType,
     }).secondary.toRawObject();

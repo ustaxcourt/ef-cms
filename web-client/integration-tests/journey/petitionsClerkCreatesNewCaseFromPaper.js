@@ -263,5 +263,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       caseCaption: updatedCaseCaption,
       isPaper: true,
     });
+
+    test.docketNumber = test.getState('caseDetail.docketNumber');
   });
 };

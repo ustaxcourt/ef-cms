@@ -1,7 +1,10 @@
 import { state } from 'cerebral';
 
 export const draftDocumentViewerHelper = (get, applicationContext) => {
-  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
+  const {
+    EVENT_CODES_REQUIRING_SIGNATURE,
+    NOTICE_EVENT_CODES,
+  } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
@@ -20,6 +23,10 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     EVENT_CODES_REQUIRING_SIGNATURE.includes(
       viewerDraftDocumentToDisplay.eventCode,
     );
+
+  const isNotice =
+    viewerDraftDocumentToDisplay &&
+    NOTICE_EVENT_CODES.includes(viewerDraftDocumentToDisplay.eventCode);
 
   const formattedDocumentToDisplay =
     viewerDraftDocumentToDisplay &&
@@ -49,15 +56,16 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
-  const showApplyEditSignatureButtonForRole = isInternalUser;
+  const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
     documentIsSigned ||
     !EVENT_CODES_REQUIRING_SIGNATURE.includes(
       formattedDocumentToDisplay.eventCode,
     );
+
   const showApplySignatureButtonForDocument = !documentIsSigned;
-  const showEditSignatureButtonForDocument = documentIsSigned;
+  const showRemoveSignatureButtonForDocument = documentIsSigned && !isNotice;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
@@ -68,12 +76,15 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
-      showApplyEditSignatureButtonForRole &&
+      showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
-    showEditButtonNotSigned: showEditButtonForRole && !documentIsSigned,
-    showEditButtonSigned: showEditButtonForRole && documentIsSigned,
-    showEditSignatureButton:
-      showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
+    showEditButtonNotSigned:
+      showEditButtonForRole && (!documentIsSigned || isNotice),
+    showEditButtonSigned:
+      showEditButtonForRole && documentIsSigned && !isNotice,
+    showRemoveSignatureButton:
+      showApplyRemoveSignatureButtonForRole &&
+      showRemoveSignatureButtonForDocument,
   };
 };

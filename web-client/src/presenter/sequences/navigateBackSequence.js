@@ -1,15 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getHasAlternateBackLocationAction } from '../actions/getHasAlternateBackLocationAction';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { navigateBackAction } from '../actions/navigateBackAction';
-import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const navigateBackSequence = [
   clearAlertsAction,
   stopShowValidationAction,
-  getHasAlternateBackLocationAction,
+  followRedirectAction,
   {
-    false: [navigateBackAction],
-    true: [navigateToPathAction],
+    default: [navigateBackAction],
+    success: [],
   },
 ];

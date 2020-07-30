@@ -750,6 +750,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeSignatureFromDocumentInteractor,
+} = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
+const {
   replyToCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToCaseMessageInteractor');
 const {
@@ -812,6 +815,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  serveExternallyFiledDocumentInteractor,
+} = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1520,6 +1526,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removeSignatureFromDocumentInteractor,
         replyToCaseMessageInteractor,
         reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
@@ -1529,6 +1536,7 @@ module.exports = appContextUser => {
         sealCaseInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
+        serveExternallyFiledDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

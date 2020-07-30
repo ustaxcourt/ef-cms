@@ -101,6 +101,36 @@ describe('getDownloadPolicyUrlInteractor', () => {
     expect(url).toEqual('localhost');
   });
 
+  it('returns the expected policy url for a petitioner who is NOT associated with the case and viewing a court issued document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+
+    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+      ...MOCK_CASE,
+      documents: [
+        {
+          ...MOCK_CASE.documents.filter(
+            d => d.documentId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          )[0],
+          documentType: 'Order that case is assigned',
+          servedAt: new Date().toISOString(),
+        },
+      ],
+    });
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+    expect(url).toEqual('localhost');
+  });
+
   it('returns the expected policy url for a petitioner who is associated with the case and viewing a case confirmation pdf', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,

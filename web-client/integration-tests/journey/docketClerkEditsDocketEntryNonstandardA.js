@@ -62,7 +62,9 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: '2050',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
@@ -94,7 +96,9 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: true,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({
       otherFilingParty: 'Enter other filing party name.',
@@ -105,7 +109,9 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: 'Brianna Noble',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({});
 

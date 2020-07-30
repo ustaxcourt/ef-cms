@@ -14,7 +14,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternalIncomplete(rawCase) {
+function CaseExternalIncomplete(rawCase, { applicationContext }) {
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
@@ -27,6 +27,7 @@ function CaseExternalIncomplete(rawCase) {
   this.procedureType = rawCase.procedureType;
 
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,

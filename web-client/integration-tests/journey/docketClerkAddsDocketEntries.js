@@ -19,7 +19,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -75,7 +75,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -120,13 +120,12 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: true,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother: true,
     });
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added. Continue adding docket entries below.',
+      'Your entry has been added to docket record.',
     );
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
