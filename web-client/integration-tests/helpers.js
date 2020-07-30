@@ -157,11 +157,6 @@ export const createCourtIssuedDocketEntry = async ({
   documentId,
   test,
 }) => {
-  await test.runSequence('gotoDocumentDetailSequence', {
-    docketNumber,
-    documentId,
-  });
-
   await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketNumber,
     documentId,
@@ -569,21 +564,6 @@ export const gotoRoute = (routes, routeToGoTo) => {
 export const viewCaseDetail = async ({ docketNumber, test }) => {
   await test.runSequence('gotoCaseDetailSequence', {
     docketNumber,
-  });
-};
-
-export const viewDocumentDetailMessage = async ({
-  docketNumber,
-  documentId,
-  messageId,
-  test,
-  workItemIdToMarkAsRead,
-}) => {
-  await test.runSequence('gotoDocumentDetailSequence', {
-    docketNumber,
-    documentId,
-    messageId,
-    workItemIdToMarkAsRead,
   });
 };
 

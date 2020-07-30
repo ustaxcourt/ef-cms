@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -23,7 +22,6 @@ exports.createWorkItemInteractor = async ({
   assigneeId,
   docketNumber,
   documentId,
-  message,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -55,17 +53,6 @@ exports.createWorkItemInteractor = async ({
     documentId,
   });
 
-  const newMessage = new Message(
-    {
-      from: user.name,
-      fromUserId: user.userId,
-      message,
-      to: userToAssignTo.name,
-      toUserId: userToAssignTo.userId,
-    },
-    { applicationContext },
-  );
-
   const newWorkItem = new WorkItem(
     {
       associatedJudge: theCase.associatedJudge,
@@ -84,16 +71,14 @@ exports.createWorkItemInteractor = async ({
       isQC: false,
     },
     { applicationContext },
-  )
-    .assignToUser({
-      assigneeId,
-      assigneeName: userToAssignTo.name,
-      section: userToAssignTo.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    })
-    .addMessage(newMessage);
+  ).assignToUser({
+    assigneeId,
+    assigneeName: userToAssignTo.name,
+    section: userToAssignTo.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   document.addWorkItem(newWorkItem);
 

@@ -240,19 +240,6 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*',
-      ifHasAccess((docketNumber, documentId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-        );
-        return app.getSequence('gotoDocumentDetailSequence')({
-          docketNumber,
-          documentId,
-        });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
-    );
-
-    registerRoute(
       '/case-detail/*/documents/*/review',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
@@ -338,51 +325,6 @@ const router = {
           pageNumber: 1,
         });
       }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/mark/*',
-      ifHasAccess((docketNumber, documentId, workItemIdToMarkAsRead) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-        );
-        return app.getSequence('gotoDocumentDetailSequence')({
-          docketNumber,
-          documentId,
-          workItemIdToMarkAsRead,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/messages/*',
-      ifHasAccess((docketNumber, documentId, messageId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-        );
-        return app.getSequence('gotoDocumentDetailSequence')({
-          docketNumber,
-          documentId,
-          messageId,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/messages/*/mark/*',
-      ifHasAccess(
-        (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
-          setPageTitle(
-            `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-          );
-          return app.getSequence('gotoDocumentDetailSequence')({
-            docketNumber,
-            documentId,
-            messageId,
-            workItemIdToMarkAsRead,
-          });
-        },
-      ),
     );
 
     registerRoute(

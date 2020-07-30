@@ -12,7 +12,6 @@ import {
   setupTest,
   uploadExternalDecisionDocument,
   uploadPetition,
-  viewDocumentDetailMessage,
 } from './helpers';
 
 const test = setupTest();
@@ -119,31 +118,6 @@ describe('Create a work item', () => {
     expect(notifications).toMatchObject({
       myInboxUnreadCount: notificationsBefore.myInboxUnreadCount,
       qcUnreadCount: notificationsBefore.qcUnreadCount + 3,
-    });
-  });
-
-  it('the unread counts should decrease by one after a docketclerk reads one of those messages', async () => {
-    await viewDocumentDetailMessage({
-      docketNumber: caseDetail.docketNumber,
-      documentId: decisionWorkItem.document.documentId,
-      messageId: decisionWorkItem.currentMessage.messageId,
-      test,
-      workItemIdToMarkAsRead: decisionWorkItem.workItemId,
-    });
-    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
-    decisionWorkItem = documentQCMyInbox.find(
-      workItem => workItem.workItemId === decisionWorkItem.workItemId,
-    );
-    expect(decisionWorkItem).toMatchObject({
-      showUnreadIndicators: false,
-      showUnreadStatusIcon: false,
-    });
-    const qcMyInboxCountAfter = getInboxCount(test);
-    expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 2);
-    const notifications = getNotifications(test);
-    expect(notifications).toMatchObject({
-      myInboxUnreadCount: notificationsBefore.myInboxUnreadCount,
-      qcUnreadCount: notificationsBefore.qcUnreadCount + 2,
     });
   });
 

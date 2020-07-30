@@ -31,15 +31,6 @@
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "messages": [
-      {
-        "createdAt": "2020-01-21T16:41:39.482Z",
-        "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Eve Brewer is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
@@ -106,15 +97,6 @@
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "messages": [
-      {
-        "createdAt": "2020-01-21T16:41:39.482Z",
-        "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Eve Brewer is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|petitions",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
@@ -303,15 +285,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2020-01-21T16:41:39.482Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2020-01-21T16:41:39.482Z",
-            "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Eve Brewer is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "102-20",
         "updatedAt": "2020-01-21T16:41:39.482Z"
       }
