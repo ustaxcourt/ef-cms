@@ -65,17 +65,6 @@ export const formatWorkItem = ({
     .formatDateString(result.createdAt, 'MMDDYY');
 
   result.highPriority = !!result.highPriority;
-  result.messages = orderBy(result.messages, 'createdAt', 'desc');
-  result.messages.forEach(message => {
-    message.createdAtFormatted = formatDateIfToday(
-      message.createdAt,
-      applicationContext,
-    );
-    message.to = message.to || 'Unassigned';
-    message.createdAtTimeFormattedTZ = applicationContext
-      .getUtilities()
-      .formatDateString(message.createdAt, 'DATE_TIME_TZ');
-  });
   result.sentBySection = capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
     .getUtilities()
@@ -103,20 +92,17 @@ export const formatWorkItem = ({
     selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
   );
 
-  result.currentMessage = result.messages[0];
-
   result.receivedAt = workQueueIsInternal
-    ? result.currentMessage.createdAt
+    ? result.createdAt
     : isDateToday(result.document.receivedAt, applicationContext)
     ? result.document.createdAt
     : result.document.receivedAt;
   result.received = formatDateIfToday(result.receivedAt, applicationContext);
 
   result.sentDateFormatted = formatDateIfToday(
-    result.currentMessage.createdAt,
+    result.createdAt,
     applicationContext,
   );
-  result.historyMessages = result.messages.slice(1);
 
   result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
     result.document.documentType,
@@ -165,7 +151,7 @@ export const getWorkItemDocumentLink = ({
   workItem,
   workQueueToDisplay = {},
 }) => {
-  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
+  const { workQueueIsInternal } = workQueueToDisplay;
   const result = cloneDeep(workItem);
 
   const formattedDocument = applicationContext
@@ -215,23 +201,6 @@ export const getWorkItemDocumentLink = ({
       }
     } else {
       editLink = documentViewLink;
-    }
-  }
-
-  if (editLink === documentDetailLink) {
-    const messageId = result.messages[0] && result.messages[0].messageId;
-
-    const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
-
-    const markReadPath =
-      workItemIdToMarkAsRead && box === 'inbox' && queue === 'my'
-        ? `/mark/${workItemIdToMarkAsRead}`
-        : '';
-
-    if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
-      editLink = `/messages/${messageId}${markReadPath}`;
-    } else if (markReadPath) {
-      editLink = `${markReadPath}`;
     }
   }
 

@@ -16,8 +16,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
-const { Message } = require('./Message');
-const { omit, orderBy } = require('lodash');
+const { omit } = require('lodash');
 
 /**
  * constructor
@@ -57,10 +56,6 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
-
-  this.messages = (rawWorkItem.messages || []).map(
-    message => new Message(message, { applicationContext }),
-  );
 }
 
 WorkItem.validationName = 'WorkItem';
@@ -98,7 +93,6 @@ joiValidationDecorator(
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object().instance(Message)).required(),
     section: joi
       .string()
       .valid(
@@ -124,28 +118,9 @@ joiValidationDecorator(
   }),
 );
 
-/**
- *
- * @param {Message} message the message to add to the work item
- * @returns {WorkItem} the updated work item
- */
-WorkItem.prototype.addMessage = function (message) {
-  this.messages = [...this.messages, message];
-  return this;
-};
-
 WorkItem.prototype.setAsInternal = function () {
   this.isQC = false;
   return this;
-};
-
-/**
- * get the latest message (by createdAt)
- *
- * @returns {Message} the latest message entity by date
- */
-WorkItem.prototype.getLatestMessageEntity = function () {
-  return orderBy(this.messages, 'createdAt', 'desc')[0];
 };
 
 /**

@@ -41,15 +41,6 @@
     "highPriority": true,
     "assigneeName": null,
     "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
-    "messages": [
-      {
-        "createdAt": "2020-01-23T21:44:54.044Z",
-        "messageId": "53b69a65-cf55-442d-a698-1c19de032283",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Reuben Blair is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|petitions",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:44:54.044Z"
@@ -129,15 +120,6 @@
     "highPriority": true,
     "assigneeName": null,
     "sk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
-    "messages": [
-      {
-        "createdAt": "2020-01-23T21:45:34.521Z",
-        "messageId": "fb6ddc24-6ee8-4f4d-b360-992f2983e12c",
-        "from": "Test Petitioner",
-        "message": "Administrative Record filed by Petitioner is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:45:34.520Z"
@@ -192,15 +174,6 @@
     "highPriority": true,
     "assigneeName": null,
     "sk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
-    "messages": [
-      {
-        "createdAt": "2020-01-23T21:45:34.521Z",
-        "messageId": "fb6ddc24-6ee8-4f4d-b360-992f2983e12c",
-        "from": "Test Petitioner",
-        "message": "Administrative Record filed by Petitioner is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|docket",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:45:34.520Z"
@@ -239,15 +212,6 @@
     "highPriority": true,
     "assigneeName": null,
     "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
-    "messages": [
-      {
-        "createdAt": "2020-01-23T21:44:54.044Z",
-        "messageId": "53b69a65-cf55-442d-a698-1c19de032283",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Reuben Blair is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
     "docketNumber": "103-20",
     "updatedAt": "2020-01-23T21:44:54.044Z"
@@ -427,15 +391,6 @@
         "createdAt": "2020-01-23T21:45:34.520Z",
         "highPriority": true,
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2020-01-23T21:45:34.521Z",
-            "messageId": "fb6ddc24-6ee8-4f4d-b360-992f2983e12c",
-            "from": "Test Petitioner",
-            "message": "Administrative Record filed by Petitioner is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "103-20",
         "updatedAt": "2020-01-23T21:45:34.520Z"
       }
@@ -516,15 +471,6 @@
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2020-01-23T21:44:54.043Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2020-01-23T21:44:54.044Z",
-            "messageId": "53b69a65-cf55-442d-a698-1c19de032283",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Reuben Blair is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "103-20",
         "updatedAt": "2020-01-23T21:44:54.044Z"
       }

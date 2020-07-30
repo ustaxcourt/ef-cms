@@ -105,15 +105,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
                 filedBy: 'Petr. Bob Jones',
               },
               isInitializeCase: true,
-              messages: [
-                {
-                  createdAt: RECEIVED_DATE,
-                  from: 'Alex Petitionsclerk',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Petr. Bob Jones is ready for review.',
-                },
-              ],
               section: 'petitions',
               sentBy: 'Alex Petitionsclerk',
               sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -159,13 +150,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Petr. Bob Jones is ready for review.',
-          },
-        ],
         section: 'petitions',
         sentBy: 'Alex Petitionsclerk',
       },
@@ -188,13 +172,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Petr. Bob Jones is ready for review.',
-          },
-        ],
         section: 'petitions',
         sentBy: 'Alex Petitionsclerk',
       },

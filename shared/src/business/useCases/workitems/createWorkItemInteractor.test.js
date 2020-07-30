@@ -76,15 +76,6 @@ describe('createWorkItem', () => {
         documentType: 'Answer',
       },
       isInitializeCase: false,
-      messages: [
-        {
-          from: 'Docketclerk',
-          fromUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-          message: 'testing',
-          to: 'Docketclerk1',
-          toUserId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-      ],
       section: 'docket',
       sentBy: 'Docketclerk',
       sentByUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
@@ -122,15 +113,6 @@ describe('createWorkItem', () => {
         documentType: 'Answer',
       },
       isInitializeCase: false,
-      messages: [
-        {
-          from: 'Docketclerk',
-          fromUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-          message: 'testing',
-          to: 'Docketclerk1',
-          toUserId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-      ],
       section: 'docket',
       sentBy: 'Docketclerk',
       sentByUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
