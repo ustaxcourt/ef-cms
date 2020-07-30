@@ -10,13 +10,12 @@ const {
   ROLES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
-const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { clone } = require('lodash');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { Message } = require('../../entities/Message');
 const { WorkItem } = require('../../entities/WorkItem');
 
 exports.generateChangeOfAddress = async ({
@@ -174,18 +173,6 @@ exports.generateChangeOfAddress = async ({
         { applicationContext },
       );
 
-      const message = new Message(
-        {
-          from: name,
-          fromUserId: user.userId,
-          message: `${
-            changeOfAddressDocument.documentType
-          } filed by ${capitalize(user.role)} is ready for review.`,
-        },
-        { applicationContext },
-      );
-
-      workItem.addMessage(message);
       changeOfAddressDocument.addWorkItem(workItem);
 
       caseEntity.addDocument(changeOfAddressDocument, { applicationContext });

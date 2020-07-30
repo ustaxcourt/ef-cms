@@ -41,16 +41,6 @@
         "assigneeName": null,
         "entityName": "WorkItem",
         "docketNumberWithSuffix": "120-20SL",
-        "messages": [
-          {
-            "createdAt": "2020-06-25T20:58:55.416Z",
-            "messageId": "cacac3a5-b446-4125-a728-fc850fba6b18",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Sean Connery is ready for review.",
-            "entityName": "Message",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "120-20",
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "updatedAt": "2020-06-25T20:58:55.415Z"

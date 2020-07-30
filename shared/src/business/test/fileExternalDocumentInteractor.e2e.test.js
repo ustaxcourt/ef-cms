@@ -192,14 +192,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
               isInitializeCase: true,
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Test Petitioner is ready for review.',
-                },
-              ],
               section: 'petitions',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -249,14 +241,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 supportingDocument: 'Brief in Support',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Motion for Leave to File filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
             },
@@ -292,14 +276,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Brief in Support filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -332,14 +308,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Brief in Support filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -378,14 +346,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Brief in Support filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -448,14 +408,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           supportingDocument: 'Brief in Support',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Motion for Leave to File filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
       },
@@ -477,14 +429,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Brief in Support filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
@@ -505,14 +449,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Brief in Support filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
@@ -536,14 +472,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Brief in Support filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
       },

@@ -9,7 +9,6 @@ const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
-const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/EntityConstants');
 const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -43,22 +42,6 @@ const addPetitionDocumentToCase = ({
       sentByUserId: user.userId,
     },
     { applicationContext },
-  );
-
-  let message;
-
-  const caseTitle = Case.getCaseTitle(caseToAdd.caseCaption);
-  message = `${documentEntity.documentType} filed by ${caseTitle} is ready for review.`;
-
-  workItemEntity.addMessage(
-    new Message(
-      {
-        from: user.name,
-        fromUserId: user.userId,
-        message,
-      },
-      { applicationContext },
-    ),
   );
 
   documentEntity.addWorkItem(workItemEntity);
