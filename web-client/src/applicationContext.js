@@ -168,6 +168,7 @@ import { removeCasePendingItemInteractor } from '../../shared/src/proxies/remove
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replyToCaseMessageInteractor } from '../../shared/src/proxies/messages/replyToCaseMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
@@ -176,6 +177,7 @@ import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
+import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
@@ -378,6 +380,7 @@ const allUseCases = {
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
+  removeSignatureFromDocumentInteractor,
   replyToCaseMessageInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCaseDetailInternalEditInteractor,
@@ -386,6 +389,7 @@ const allUseCases = {
   sealCaseInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
+  serveExternallyFiledDocumentInteractor,
   setItemInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionAsSwingSessionInteractor,

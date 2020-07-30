@@ -50,13 +50,10 @@ export const formatWorkItem = ({
   workQueueIsInternal,
 }) => {
   const {
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_DOCUMENT_TYPES,
     ORDER_TYPES_MAP,
   } = applicationContext.getConstants();
 
-  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedDoc => courtIssuedDoc.documentType,
-  );
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderDoc => orderDoc.documentType,
   );
@@ -121,7 +118,7 @@ export const formatWorkItem = ({
   );
   result.historyMessages = result.messages.slice(1);
 
-  result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+  result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
     result.document.documentType,
   );
   result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
@@ -188,9 +185,14 @@ export const getWorkItemDocumentLink = ({
     formattedDocument &&
     permissions.UPDATE_CASE &&
     (!formattedDocument.isInProgress ||
-      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
+      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress) ||
+      (permissions.QC_PETITION &&
+        formattedDocument.isPetition &&
+        formattedDocument.isInProgress));
 
   const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
+  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
+
   let editLink = documentDetailLink;
   if (showDocumentEditLink && !workQueueIsInternal) {
     if (permissions.DOCKET_ENTRY) {
@@ -203,7 +205,7 @@ export const getWorkItemDocumentLink = ({
       if (editLinkExtension) {
         editLink += editLinkExtension;
       } else {
-        editLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
+        editLink = documentViewLink;
       }
     } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
       if (result.caseIsInProgress) {
@@ -211,8 +213,11 @@ export const getWorkItemDocumentLink = ({
       } else {
         editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
       }
+    } else {
+      editLink = documentViewLink;
     }
   }
+
   if (editLink === documentDetailLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
 

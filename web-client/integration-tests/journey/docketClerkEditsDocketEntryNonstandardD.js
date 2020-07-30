@@ -43,7 +43,9 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: 'CS',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
@@ -68,7 +70,9 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: petitionDocument.documentId,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({});
 

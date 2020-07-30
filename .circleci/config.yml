@@ -6,6 +6,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -54,7 +55,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: small
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -96,7 +97,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: small
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -174,6 +175,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
     steps:
       - attach_workspace:
           at: ~/
@@ -217,7 +219,7 @@ jobs:
         environment:
           discovery.type: single-node
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx4096m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
     steps:
       - restore_cache:
@@ -362,7 +364,7 @@ jobs:
   deploy:
     machine:
       docker_layer_caching: true
-    resource_class: medium
+    resource_class: small
     steps:
       - checkout
       - run:
@@ -450,23 +452,22 @@ jobs:
             else
               echo "skipping…"
             fi
-      # Disabled temporarily until we find a better approach for smoke testing
-      # - run:
-      #     name: 'Deploy - Cypress Smoke Tests'
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-      #         docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run cypress:smoketests"
-      #       else
-      #         echo "skipping…"
-      #       fi
-      # - run:
-      #     name: 'Deploy - Pa11y Smoke Tests'
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-      #         docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
-      #       else
-      #         echo "skipping…"
-      #       fi
+      - run:
+          name: 'Deploy - Cypress Smoke Tests'
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run cypress:smoketests"
+            else
+              echo "skipping…"
+            fi
+      - run:
+          name: 'Deploy - Pa11y Smoke Tests'
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
+            else
+              echo "skipping…"
+            fi
       - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
@@ -481,6 +482,21 @@ jobs:
             docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
+
+
+build-and-deploy-defaults: &build-and-deploy-defaults
+  filters:
+    branches:
+      ignore:
+        - develop # run hourly below
+        - prod    # run with context workflow below
+
+build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - prod
 
 workflows:
   version: 2
@@ -515,41 +531,21 @@ workflows:
   build-and-deploy:
     jobs:
       - build-shared:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-api:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-unit:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-integration:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-pa11y:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-cypress-public:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-coverage:
+          <<: *build-and-deploy-defaults
           requires:
             - build-shared
             - build-api
@@ -558,10 +554,6 @@ workflows:
             - e2e-pa11y
             - e2e-cypress
             - e2e-cypress-public
-          filters:
-            branches:
-              ignore:
-                - develop
       - deploy:
           requires:
             - build-client-coverage
@@ -575,3 +567,34 @@ workflows:
                 - master
                 - experimental1
                 - experimental2
+
+  build-and-deploy-with-context:
+    jobs:
+      - build-shared:
+          <<: *build-and-deploy-with-context-defaults
+      - build-api:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-unit:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-coverage:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-shared
+            - build-api
+            - build-client-unit
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-cypress
+            - e2e-cypress-public
+      - deploy:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-client-coverage

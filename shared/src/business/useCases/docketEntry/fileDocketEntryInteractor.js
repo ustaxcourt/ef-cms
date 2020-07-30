@@ -39,16 +39,16 @@ exports.fileDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -91,7 +91,7 @@ exports.fileDocketEntryInteractor = async ({
           assigneeId: null,
           assigneeName: null,
           associatedJudge: caseToUpdate.associatedJudge,
-          caseId: caseId,
+          caseId: caseEntity.caseId,
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
@@ -128,7 +128,7 @@ exports.fileDocketEntryInteractor = async ({
       if (metadata.isFileAttached && !isSavingForLater) {
         const servedParties = aggregatePartiesForService(caseEntity);
         documentEntity.setAsServed(servedParties.all);
-      } else if (isSavingForLater) {
+      } else if (metadata.isFileAttached && isSavingForLater) {
         documentEntity.numberOfPages = await applicationContext
           .getUseCaseHelpers()
           .countPagesInDocument({
@@ -142,6 +142,14 @@ exports.fileDocketEntryInteractor = async ({
           workItem.setAsCompleted({
             message: 'completed',
             user,
+          });
+
+          const servedParties = aggregatePartiesForService(caseEntity);
+          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+            applicationContext,
+            caseEntity,
+            documentEntity,
+            servedParties,
           });
         }
 

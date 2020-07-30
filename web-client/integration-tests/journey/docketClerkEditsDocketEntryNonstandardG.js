@@ -38,7 +38,9 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'REQA',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({
       ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
@@ -49,7 +51,9 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'First',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({});
 
