@@ -353,7 +353,6 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createUserLambda } = require('./users/createUserLambda');
-const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { forwardWorkItemLambda } = require('./workitems/forwardWorkItemLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
@@ -422,10 +421,6 @@ app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
 app.post(
   '/case-documents/:docketNumber/:documentId/serve-court-issued',
   lambdaWrapper(serveCourtIssuedDocumentLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/:documentId/work-items',
-  lambdaWrapper(createWorkItemLambda),
 );
 app.post(
   '/case-documents/:docketNumber/:documentId/coversheet',
