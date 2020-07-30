@@ -2,8 +2,8 @@ import { archiveDraftDocumentAction } from '../actions/archiveDraftDocumentActio
 import { clearModalAction } from '../actions/clearModalAction';
 import { deleteDraftDocumentAction } from '../actions/deleteDraftDocumentAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { shouldDeleteOrArchiveDocumentAction } from '../actions/shouldDeleteOrArchiveDocumentAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
@@ -14,7 +14,7 @@ export const removeDraftDocumentSequence = showProgressSequenceDecorator([
     archive: [archiveDraftDocumentAction],
     delete: [deleteDraftDocumentAction],
   },
-  refreshCaseAction,
+  setCaseAction,
   resetArchiveDraftDocumentAction,
   navigateToCaseDetailAction,
 ]);
