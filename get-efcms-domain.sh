@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the environment associated with each branch
+# Returns the domain url associated with each branch
 
 # Usage
-#   ./get-env.sh develop
+#   ./get-efcms-domain.sh develop
 
 # Arguments
 #   - $1 - the branch to check
@@ -13,25 +13,23 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then
-  echo 'dev'
+  echo "${EFCMS_DOMAIN_DEV}"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo 'exp1'
+  echo "${EFCMS_DOMAIN_EXP1}"
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo 'exp2'
+  echo "${EFCMS_DOMAIN_EXP2}"
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo 'irs'
+  echo "${EFCMS_DOMAIN_IRS}"
 elif [[ $BRANCH == 'test' ]] ; then
-  echo 'test'
+  echo "${EFCMS_DOMAIN_TEST}"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'mig'
+  echo "${EFCMS_DOMAIN_MIG}"
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'stg'
+  echo "${EFCMS_DOMAIN_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'prod'
+  echo "${EFCMS_DOMAIN_PROD}"
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo 'daw'
-elif [[ $BRANCH == 'prod' ]] ; then
-  echo 'prod'
+  echo "${EFCMS_DOMAIN_DAWSON}"
 else
   exit 1;
 fi

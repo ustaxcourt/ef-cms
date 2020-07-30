@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the environment associated with each branch
+# Returns the zone name associated with each branch
 
 # Usage
-#   ./get-env.sh develop
+#   ./get-zone-name.sh develop
 
 # Arguments
 #   - $1 - the branch to check
@@ -13,25 +13,23 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then
-  echo 'dev'
+  echo "${ZONE_NAME_DEV}"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo 'exp1'
+  echo "${ZONE_NAME_EXP1}"
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo 'exp2'
+  echo "${ZONE_NAME_EXP2}"
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo 'irs'
+  echo "${ZONE_NAME_IRS}"
 elif [[ $BRANCH == 'test' ]] ; then
-  echo 'test'
+  echo "${ZONE_NAME_TEST}"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'mig'
+  echo "${ZONE_NAME_MIG}"
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'stg'
+  echo "${ZONE_NAME_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'prod'
+  echo "${ZONE_NAME_PROD}"
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo 'daw'
-elif [[ $BRANCH == 'prod' ]] ; then
-  echo 'prod'
+  echo "${ZONE_NAME_DAWSON}"
 else
   exit 1;
 fi
