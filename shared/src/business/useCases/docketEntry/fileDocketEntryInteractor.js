@@ -179,6 +179,7 @@ exports.fileDocketEntryInteractor = async ({
           },
           { applicationContext },
         ),
+        !isSavingForLater, // should update the index
       );
     }
   }

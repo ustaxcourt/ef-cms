@@ -113,7 +113,10 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
+  caseEntity.updateDocketRecordEntry(
+    omit(docketRecordEntry, 'index'),
+    !isSavingForLater, // should update the index
+  );
 
   if (editableFields.isFileAttached) {
     const workItem = documentEntity.getQCWorkItem();

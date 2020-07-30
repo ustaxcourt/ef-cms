@@ -63,7 +63,6 @@ describe('updateDocketEntryInteractor', () => {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         eventCode: 'P',
         filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
       },
     ],
     documents,
@@ -313,5 +312,57 @@ describe('updateDocketEntryInteractor', () => {
         .saveWorkItemForDocketEntryInProgress,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('adds a docket record entry without an index if saving for later', async () => {
+    await updateDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Edited Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        freeText: 'Some text about this document',
+        hasOtherFilingParty: true,
+        isPaper: true,
+        otherFilingParty: 'Bert Brooks',
+        partyPrimary: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0];
+
+    const updatedCase = updateCaseCall[0].caseToUpdate;
+
+    expect(updatedCase.docketRecord[0].index).toBeUndefined();
+  });
+
+  it('adds a docket record entry with an index if not saving for later', async () => {
+    await updateDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Edited Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        freeText: 'Some text about this document',
+        hasOtherFilingParty: true,
+        isPaper: true,
+        otherFilingParty: 'Bert Brooks',
+        partyPrimary: true,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0];
+
+    const updatedCase = updateCaseCall[0].caseToUpdate;
+
+    expect(updatedCase.docketRecord[0].index).toEqual(1);
   });
 });
