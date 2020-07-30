@@ -80,7 +80,7 @@ describe('serveCaseToIrsInteractor', () => {
     await expect(
       serveCaseToIrsInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -100,11 +100,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -127,11 +127,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -154,11 +154,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -186,11 +186,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -213,11 +213,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(result).toBeUndefined();
@@ -238,11 +238,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(result).toBeDefined();
@@ -290,11 +290,11 @@ describe('serveCaseToIrsInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await serveCaseToIrsInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     const documentWithServedParties = applicationContext

@@ -15,7 +15,7 @@ describe('deleteCaseNoteInteractor', () => {
     try {
       await deleteCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
       });
     } catch (err) {
       error = err;
@@ -35,7 +35,7 @@ describe('deleteCaseNoteInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue({
+      .getCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         caseNote: 'My Procedural Note',
       });
@@ -53,7 +53,7 @@ describe('deleteCaseNoteInteractor', () => {
     try {
       result = await deleteCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
       });
     } catch (e) {
       error = e;
@@ -62,7 +62,7 @@ describe('deleteCaseNoteInteractor', () => {
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,

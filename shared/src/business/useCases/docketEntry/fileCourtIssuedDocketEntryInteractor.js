@@ -80,6 +80,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
       freeText: documentMeta.freeText,
+      isDraft: false,
       isFileAttached: true,
       judge: documentMeta.judge,
       numberOfPages,

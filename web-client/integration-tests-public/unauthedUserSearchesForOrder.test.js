@@ -6,7 +6,6 @@ import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSe
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import {
-  fakeFile,
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
@@ -18,20 +17,13 @@ import { unauthedUserSearchesForOrderByKeyword } from './journey/unauthedUserSea
 import { unauthedUserSearchesForSealedCaseOrderByKeyword } from './journey/unauthedUserSearchesForSealedCaseOrderByKeyword';
 
 const test = setupTest();
-const testClient = setupTestClient({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const testClient = setupTestClient();
 testClient.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitioner creates case', () => {
   beforeAll(() => {
     jest.setTimeout(10000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(testClient, 'petitioner@example.com');

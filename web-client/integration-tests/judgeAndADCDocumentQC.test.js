@@ -42,7 +42,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   loginAs(test, 'petitioner@example.com');
   for (let index = 0; index <= 2; index++) {
     it(`Create case ${index}`, async () => {
-      let caseDetail = await uploadPetition(test);
+      const caseDetail = await uploadPetition(test);
       expect(caseDetail.docketNumber).toBeDefined();
       test.createdCases.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;

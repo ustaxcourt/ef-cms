@@ -40,7 +40,9 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
       value: 'OBJ',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({
       freeText: VALIDATION_ERROR_MESSAGES.freeText,
@@ -56,7 +58,9 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
       value: true,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({});
 
