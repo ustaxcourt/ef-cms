@@ -1,9 +1,9 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { deleteDocument } = require('./deleteDocument');
+const { deleteDocumentFromS3 } = require('./deleteDocumentFromS3');
 
-describe('deleteDocument', () => {
+describe('deleteDocumentFromS3', () => {
   beforeAll(() => {
     applicationContext.environment.documentsBucketName = 'aBucket';
     applicationContext.getStorageClient().deleteObject.mockReturnValue({
@@ -14,7 +14,7 @@ describe('deleteDocument', () => {
   });
 
   it('deletes the document', async () => {
-    await deleteDocument({
+    await deleteDocumentFromS3({
       applicationContext,
       key: 'deleteThisDocument',
     });
