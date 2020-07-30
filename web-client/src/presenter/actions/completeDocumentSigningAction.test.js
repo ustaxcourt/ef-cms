@@ -89,7 +89,6 @@ describe('completeDocumentSigningAction', () => {
     expect(saveSignedDocumentInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       docketNumber: '123-45',
-      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       tab: 'docketRecord',
     });
   });
@@ -133,7 +132,6 @@ describe('completeDocumentSigningAction', () => {
     expect(saveSignedDocumentInteractor.mock.calls.length).toBe(0);
     expect(result.output).toMatchObject({
       docketNumber: '123-45',
-      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       tab: 'docketRecord',
     });
   });
