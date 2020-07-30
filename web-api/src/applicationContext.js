@@ -684,6 +684,9 @@ const {
   markCaseMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markCaseMessageThreadRepliedTo');
 const {
+  migrateCaseDeadlineInteractor,
+} = require('../../shared/src/business/useCases/migrateCaseDeadlineInteractor');
+const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
@@ -1166,6 +1169,7 @@ module.exports = appContextUser => {
     },
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
+      migrateCaseDeadlineInteractor,
       migrateCaseInteractor,
     }),
     getNodeSass: () => {
