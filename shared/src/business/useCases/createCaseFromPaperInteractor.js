@@ -57,7 +57,10 @@ const addPetitionDocumentWithWorkItemToCase = ({
   workItemEntity.addMessage(newMessage);
 
   documentEntity.addWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity, { applicationContext });
+  caseToAdd.addDocument(documentEntity, {
+    applicationContext,
+    updateIndex: true,
+  });
 
   return {
     workItem: workItemEntity,
@@ -197,6 +200,7 @@ exports.createCaseFromPaperInteractor = async ({
 
     caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity, {
       applicationContext,
+      updateIndex: true,
     });
   }
 
@@ -235,6 +239,7 @@ exports.createCaseFromPaperInteractor = async ({
 
     caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity, {
       applicationContext,
+      updateIndex: true,
     });
   }
 
@@ -289,7 +294,10 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+      updateIndex: true,
+    });
   }
 
   await Promise.all([

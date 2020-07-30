@@ -62,7 +62,10 @@ const addPetitionDocumentToCase = ({
   );
 
   documentEntity.addWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity, { applicationContext });
+  caseToAdd.addDocument(documentEntity, {
+    applicationContext,
+    updateIndex: true,
+  });
 
   return workItemEntity;
 };
@@ -183,6 +186,7 @@ exports.createCaseInteractor = async ({
         filingDate: caseToAdd.createdAt,
       },
       { applicationContext },
+      true,
     ),
   );
 
@@ -227,7 +231,10 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+      updateIndex: true,
+    });
   }
 
   await applicationContext.getPersistenceGateway().createCase({

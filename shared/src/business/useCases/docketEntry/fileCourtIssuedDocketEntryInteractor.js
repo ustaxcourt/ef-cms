@@ -156,7 +156,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       },
       { applicationContext },
     ),
-    true, // should update the index
+    isUnservable, // should update the index
   );
 
   caseEntity = await applicationContext

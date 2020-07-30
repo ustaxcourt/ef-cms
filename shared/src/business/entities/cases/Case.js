@@ -831,7 +831,10 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function (document, { applicationContext }) {
+Case.prototype.addDocument = function (
+  document,
+  { applicationContext, updateIndex },
+) {
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -846,6 +849,7 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
       },
       { applicationContext },
     ),
+    updateIndex,
   );
 };
 
@@ -1015,12 +1019,10 @@ Case.prototype.setRequestForTrialDocketRecord = function (
  * @returns {number} the next docket record index
  */
 Case.prototype.generateNextDocketRecordIndex = function () {
-  const nextIndex =
-    this.docketRecord.reduce(
-      (maxIndex, docketRecord, currentIndex) =>
-        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
-      0,
-    ) + 1;
+  const recordsWithIndex = [...this.docketRecord]
+    .filter(record => record.index !== undefined)
+    .sort((a, b) => a.index - b.index);
+  const nextIndex = recordsWithIndex.length + 1;
   return nextIndex;
 };
 
