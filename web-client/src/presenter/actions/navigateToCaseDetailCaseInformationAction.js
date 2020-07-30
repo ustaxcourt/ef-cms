@@ -16,7 +16,6 @@ export const navigateToCaseDetailCaseInformationAction = async ({
 }) => {
   const docketNumber =
     props.docketNumber ||
-    props.docketNumber ||
     (props.caseDetail
       ? props.caseDetail.docketNumber
       : get(state.caseDetail.docketNumber));
