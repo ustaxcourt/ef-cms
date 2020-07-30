@@ -1,6 +1,7 @@
 # EF-CMS Migration Documentation
 
 * Cases can be added by POSTing JSON to `/migrate/case`
+* Cases Deadlines can be added by POSTing JSON to `/migrate/case-deadline`
 * PDF files can be added directly to the PDF S3 bucket, with UUIDV4s referenced as `documentId` in the Case objects.
 * Authentication is handled by AWS Cognito. An account with the admin role is required.
 * Values are validated using Hapi Joi schema definitions in the [Case](entities/Case.md), [Document](entities/Document.md) and [DocketRecord](entities/DocketRecord.md) entities.
