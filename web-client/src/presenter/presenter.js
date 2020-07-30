@@ -49,7 +49,6 @@ import { completeCaseMessageSequence } from './sequences/completeCaseMessageSequ
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
-import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
@@ -60,7 +59,6 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createCaseMessageSequence } from './sequences/createCaseMessageSequence';
-import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
 import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
@@ -488,7 +486,6 @@ export const presenter = {
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     completeDocumentSelectSequence,
-    completeDocumentSigningSequence,
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
@@ -499,7 +496,6 @@ export const presenter = {
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
     createCaseMessageSequence,
-    createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
     deleteCorrespondenceDocumentSequence,
