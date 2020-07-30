@@ -24,5 +24,9 @@ export const editDocketEntryHelper = (get, applicationContext) => {
     }
   }
 
-  return { showPaperServiceWarning };
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, currentDocument);
+
+  return { formattedDocument, showPaperServiceWarning };
 };
