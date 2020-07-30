@@ -258,7 +258,7 @@ describe('fileDocketEntryInteractor', () => {
     ).toBeCalled();
   });
 
-  it('adds a docket record entry without an index if saving for later', async () => {
+  it('adds a docket record entry without an index if saving for later for servable documents', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
@@ -282,7 +282,7 @@ describe('fileDocketEntryInteractor', () => {
     expect(updatedCase.docketRecord[0].index).toBeUndefined();
   });
 
-  it('adds a docket record entry with an index if not saving for later', async () => {
+  it('adds a docket record entry with an index if not saving for later for servable documents', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
@@ -296,6 +296,54 @@ describe('fileDocketEntryInteractor', () => {
       },
       isSavingForLater: false,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0];
+
+    const updatedCase = updateCaseCall[0].caseToUpdate;
+
+    expect(updatedCase.docketRecord[0].index).toEqual(1);
+  });
+
+  it('adds a docket record entry with an index if the document is unservable and does not already have an index', async () => {
+    await fileDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Record on Appeal',
+        documentType: 'Record on Appeal',
+        eventCode: 'ROA',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls[0];
+
+    const updatedCase = updateCaseCall[0].caseToUpdate;
+
+    expect(updatedCase.docketRecord[0].index).toEqual(1);
+  });
+
+  it('adds a docket record entry with an index if the document is an initial document type and does not already have an index', async () => {
+    await fileDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Petition',
+        documentType: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     const updateCaseCall = applicationContext.getPersistenceGateway().updateCase

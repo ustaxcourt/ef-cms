@@ -3,7 +3,9 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   DOCUMENT_RELATIONSHIPS,
+  INITIAL_DOCUMENT_TYPES,
   ROLES,
+  UNSERVABLE_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -168,6 +170,16 @@ exports.fileDocketEntryInteractor = async ({
       const docketRecordEditState =
         documentEntity.isFileAttached === false ? documentMetadata : {};
 
+      const isUnservable = UNSERVABLE_EVENT_CODES.includes(
+        documentEntity.eventCode,
+      );
+      const isInitialDocumentType = Object.keys(INITIAL_DOCUMENT_TYPES)
+        .map(docType => INITIAL_DOCUMENT_TYPES[docType].eventCode)
+        .includes(documentEntity.eventCode);
+
+      const updateIndex =
+        isUnservable || isInitialDocumentType ? true : !isSavingForLater;
+
       caseEntity.addDocketRecord(
         new DocketRecord(
           {
@@ -179,7 +191,7 @@ exports.fileDocketEntryInteractor = async ({
           },
           { applicationContext },
         ),
-        !isSavingForLater, // should update the index
+        updateIndex,
       );
     }
   }
