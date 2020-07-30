@@ -396,12 +396,12 @@ Case.VALIDATION_RULES = {
     .string()
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: joi
-    .array()
-    .items(joi.object().meta({ entityName: 'DocketRecord' }))
-    .required()
-    .unique((a, b) => a.index === b.index)
-    .description('List of DocketRecord Entities for the case.'),
+  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
+    joi
+      .object()
+      .meta({ entityName: 'DocketRecord' })
+      .description('List of DocketRecord Entities for the case.'),
+  ).required(),
   documents: joi
     .array()
     .items(joi.object().meta({ entityName: 'Document' }))
