@@ -1,23 +1,5 @@
-import { adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete } from './journey/adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete';
-import { adcViewsDocumentDetail } from './journey/adcViewsDocumentDetail';
-import { adcViewsMessages } from './journey/adcViewsMessages';
-import { adcViewsMessagesAfterComplete } from './journey/adcViewsMessagesAfterComplete';
-import { docketClerkAddsDocketEntries } from './journey/docketClerkAddsDocketEntries';
-import { docketClerkAssignWorkItems } from './journey/docketClerkAssignWorkItems';
-import { docketClerkDocketDashboard } from './journey/docketClerkDocketDashboard';
-import { docketClerkForwardWorkItem } from './journey/docketClerkForwardWorkItem';
-import { docketClerkSelectsAssignee } from './journey/docketClerkSelectsAssignee';
-import { docketClerkSelectsWorkItems } from './journey/docketClerkSelectsWorkItems';
-import { docketClerkStartsNewMessageThreadOnAnswer } from './journey/docketClerkStartsNewMessageThreadOnAnswer';
-import { docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC } from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC';
 import { docketClerkUpdatesCaseCaption } from './journey/docketClerkUpdatesCaseCaption';
 import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail';
-import { docketClerkViewsDecisionDocument } from './journey/docketClerkViewsDecisionDocument';
-import { docketClerkViewsDocument } from './journey/docketClerkViewsDocument';
-import { docketClerkViewsMessages } from './journey/docketClerkViewsMessages';
-import { docketClerkViewsMessagesAfterForward } from './journey/docketClerkViewsMessagesAfterForward';
-import { docketClerkViewsMessagesWithoutWorkItem } from './journey/docketClerkViewsMessagesWithoutWorkItem';
-import { docketClerkViewsOutboxAfterForward } from './journey/docketClerkViewsOutboxAfterForward';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
@@ -78,29 +60,6 @@ describe('Case journey', () => {
   respondentAddsMotion(test, fakeFile);
 
   loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsMessagesWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
   docketClerkUpdatesCaseCaption(test);
-  docketClerkViewsDecisionDocument(test);
-  docketClerkStartsNewMessageThreadOnAnswer(test);
-  docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);
-
-  loginAs(test, 'docketclerk1@example.com');
-  docketClerkDocketDashboard(test);
-  docketClerkSelectsAssignee(test);
-  docketClerkSelectsWorkItems(test);
-  docketClerkAssignWorkItems(test);
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsMessages(test);
-  docketClerkViewsDocument(test);
-  docketClerkForwardWorkItem(test);
-  docketClerkViewsMessagesAfterForward(test);
-  docketClerkViewsOutboxAfterForward(test);
-  docketClerkAddsDocketEntries(test, fakeFile);
-
-  loginAs(test, 'adc@example.com');
-  adcViewsMessages(test);
-  adcViewsDocumentDetail(test);
-  adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete(test);
-  adcViewsMessagesAfterComplete(test);
 });
