@@ -8,8 +8,10 @@ import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocume
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setSuccessFromDocumentTitleAction } from '../actions/setSuccessFromDocumentTitleAction';
+import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const saveDocumentSigningSequence = showProgressSequenceDecorator([
@@ -17,6 +19,7 @@ export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   setSaveAlertsForNavigationAction,
   setSuccessFromDocumentTitleAction,
   completeDocumentSigningAction,
+  setRedirectUrlAction,
   completeWorkItemForDocumentSigningAction,
   setDocumentDetailTabAction,
   clearPDFSignatureDataAction,
