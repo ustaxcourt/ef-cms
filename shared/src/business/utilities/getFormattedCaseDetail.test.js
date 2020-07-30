@@ -729,8 +729,8 @@ describe('getFormattedCaseDetail', () => {
         signedAtFormatted: undefined,
       },
       {
-        editUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
-        signUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
+        editUrl: '/case-detail/123-45/edit-order/d-2-3-4',
+        signUrl: '/case-detail/123-45/edit-order/d-2-3-4/sign',
         signedAtFormatted: undefined,
       },
       {
