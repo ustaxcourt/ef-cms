@@ -15,7 +15,7 @@ exports.deleteCorrespondenceDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext.getPersistenceGateway().deleteDocument({
+  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
     applicationContext,
     key: documentId,
   });
