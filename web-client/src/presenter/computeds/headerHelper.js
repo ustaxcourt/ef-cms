@@ -5,7 +5,6 @@ export const headerHelper = (get, applicationContext) => {
   const userRole = user && user.role;
   const isLoggedIn = !!user;
   const currentPage = get(state.currentPage) || '';
-  const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
   const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
@@ -51,7 +50,6 @@ export const headerHelper = (get, applicationContext) => {
     showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: applicationContext.getUtilities().isInternalUser(userRole),
-    showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases:
       applicationContext.getUtilities().isExternalUser(userRole) &&
       user &&

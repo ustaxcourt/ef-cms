@@ -119,7 +119,6 @@ import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuc
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
-import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -145,6 +144,7 @@ import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUpload
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
+import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
@@ -295,7 +295,6 @@ import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDock
 import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseInventoryReportModalSequence';
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
-import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
@@ -554,7 +553,6 @@ export const presenter = {
     gotoIdleLogoutSequence,
     gotoLoginSequence,
     gotoMessageDetailSequence,
-    gotoMessagesSequence,
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
     gotoPetitionQcSequence,
@@ -580,6 +578,7 @@ export const presenter = {
     gotoUploadCourtIssuedDocumentSequence,
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
+    gotoWorkQueueSequence,
     leaveCaseForLaterServiceSequence,
     loadDefaultDocketViewerDocumentToDisplaySequence,
     loadDefaultDraftViewerDocumentToDisplaySequence,
@@ -728,7 +727,6 @@ export const presenter = {
     submitCaseInventoryReportModalSequence,
     submitCaseSearchForConsolidationSequence,
     submitCaseSearchSequence,
-    submitCompleteSequence,
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,

@@ -1,7 +1,7 @@
 export const docketClerkViewsQCInProgress = (test, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
-    await test.runSequence('gotoMessagesSequence');
-    expect(test.getState('currentPage')).toEqual('Messages');
+    await test.runSequence('gotoWorkQueueSequence');
+    expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'my',

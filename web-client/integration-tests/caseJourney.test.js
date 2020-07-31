@@ -13,8 +13,8 @@ import { petitionsClerkCaseSearch } from './journey/petitionsClerkCaseSearch';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkUpdatesCaseDetail } from './journey/petitionsClerkUpdatesCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { petitionsClerkViewsMessages } from './journey/petitionsClerkViewsMessages';
-import { petitionsClerkViewsMessagesAfterReassign } from './journey/petitionsClerkViewsMessagesAfterReassign';
+import { petitionsClerkViewsWorkQueue } from './journey/petitionsClerkViewsWorkQueue';
+import { petitionsClerkViewsWorkQueueAfterReassign } from './journey/petitionsClerkViewsWorkQueueAfterReassign';
 import { respondentAddsAnswer } from './journey/respondentAddsAnswer';
 import { respondentAddsMotion } from './journey/respondentAddsMotion';
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
@@ -44,11 +44,11 @@ describe('Case journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCaseSearch(test);
-  petitionsClerkViewsMessages(test);
+  petitionsClerkViewsWorkQueue(test);
   petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkAssignsWorkItemToOther(test);
   loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkViewsMessagesAfterReassign(test);
+  petitionsClerkViewsWorkQueueAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
