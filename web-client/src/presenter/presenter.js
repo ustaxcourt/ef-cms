@@ -10,7 +10,6 @@ import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequen
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
-import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { associateIrsPractitionerWithCaseSequence } from './sequences/caseAssociation/associateIrsPractitionerWithCaseSequence';
 import { associatePrivatePractitionerWithCaseSequence } from './sequences/caseAssociation/associatePrivatePractitionerWithCaseSequence';
@@ -227,6 +226,7 @@ import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
+import { removeDraftDocumentSequence } from './sequences/removeDraftDocumentSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
 import { removeSignatureFromOrderSequence } from './sequences/removeSignatureFromOrderSequence';
@@ -308,7 +308,6 @@ import { submitEditPrivatePractitionersModalSequence } from './sequences/submitE
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
-import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
@@ -444,7 +443,6 @@ export const presenter = {
     addSupportingDocumentToFormSequence,
     advancedSearchTabChangeSequence,
     archiveDraftDocumentModalSequence,
-    archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
     associateIrsPractitionerWithCaseSequence,
     associatePrivatePractitionerWithCaseSequence,
@@ -661,6 +659,7 @@ export const presenter = {
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
+    removeDraftDocumentSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
     removeSignatureFromOrderSequence,
@@ -740,7 +739,6 @@ export const presenter = {
     submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
-    submitForwardSequence,
     submitLoginSequence,
     submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,

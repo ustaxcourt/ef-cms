@@ -585,7 +585,7 @@ Document.prototype.setAsProcessingStatusAsCompleted = function () {
 };
 
 Document.prototype.getQCWorkItem = function () {
-  return this.workItems.find(workItem => workItem.isQC === true);
+  return this.workItems[0];
 };
 
 Document.prototype.isAutoServed = function () {

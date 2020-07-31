@@ -1551,7 +1551,6 @@ describe('Case entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -1567,7 +1566,6 @@ describe('Case entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
           sentBy: 'bob',
         },
       ]);

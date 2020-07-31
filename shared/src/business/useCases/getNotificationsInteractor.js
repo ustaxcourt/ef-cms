@@ -6,13 +6,6 @@
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
 exports.getNotificationsInteractor = async ({ applicationContext }) => {
-  const messagesInbox = await applicationContext
-    .getPersistenceGateway()
-    .getInboxMessagesForUser({
-      applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
-    });
-
   const documentQCInbox = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCInboxForUser({
@@ -21,7 +14,6 @@ exports.getNotificationsInteractor = async ({ applicationContext }) => {
     });
 
   return {
-    myInboxUnreadCount: messagesInbox.filter(item => !item.isRead).length,
     qcUnreadCount: documentQCInbox.filter(item => !item.isRead).length,
   };
 };

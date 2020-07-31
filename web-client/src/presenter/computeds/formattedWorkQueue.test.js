@@ -93,7 +93,6 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
-    isQC: false, // not in QC state - should not show in QC boxes
     section: 'petitions',
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
@@ -101,7 +100,6 @@ describe('formatted work queue computed', () => {
   };
   const qcWorkItem = {
     ...workItem,
-    isQC: true, // in QC state - should show in QC boxes
     section: 'docket',
   };
 
@@ -586,7 +584,6 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: true,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'petitions',
         },
         workQueueToDisplay: {
@@ -612,7 +609,6 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'petitions',
         },
         workQueueToDisplay: {
@@ -638,7 +634,6 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -672,7 +667,6 @@ describe('formatted work queue computed', () => {
           },
           inProgress: true,
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -708,7 +702,6 @@ describe('formatted work queue computed', () => {
           },
           inProgress: false,
           isInitializeCase: false,
-          isQC: true,
           isRead: true,
           section: 'docket',
         },
@@ -746,7 +739,6 @@ describe('formatted work queue computed', () => {
           },
           inProgress: true,
           isInitializeCase: false,
-          isQC: true,
           isRead: true,
           section: 'docket',
         },
@@ -782,7 +774,6 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -793,7 +784,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual(baseWorkItemEditLink);
     });
 
-    it("should return /edit if document is an external doc that has not been qc'd (isQC is true) and user is docketclerk", () => {
+    it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {
       const { permissions } = getBaseState(docketClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -813,7 +804,6 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -844,7 +834,6 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'docket',
         },
         workQueueToDisplay: {
@@ -874,7 +863,6 @@ describe('formatted work queue computed', () => {
             servedAt: null,
           },
           isInitializeCase: false,
-          isQC: true, // in QC state - should show in QC boxes
           section: 'petitions',
         },
         workQueueToDisplay: {
