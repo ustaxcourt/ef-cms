@@ -604,7 +604,7 @@ Case.VALIDATION_RULES = {
     ),
   statistics: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Statistic' }))
+    .items(Statistic.VALIDATION_RULES)
     .when('hasVerifiedIrsNotice', {
       is: true,
       otherwise: joi.optional(),
