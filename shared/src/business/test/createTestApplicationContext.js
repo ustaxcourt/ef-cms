@@ -32,9 +32,6 @@ const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
-  createWorkItem: createWorkItemPersistence,
-} = require('../../persistence/dynamo/workitems/createWorkItem');
-const {
   deleteSectionOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
@@ -311,7 +308,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(createSectionInboxRecord),
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
-    createWorkItem: createWorkItemPersistence,
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteSectionOutboxRecord,

@@ -9,13 +9,10 @@ const { genericHandler } = require('../genericHandler');
 exports.virusScanPdfLambda = event =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
-      const { documentId } = event.pathParameters || event.path || {};
-
-      return await applicationContext.getUseCases().virusScanPdfInteractor({
-        applicationContext,
-        documentId,
-      });
+    async () => {
+      return {
+        message: 'skipping clamav virus scan',
+      };
     },
     {
       logEvent: true,

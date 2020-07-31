@@ -96,19 +96,9 @@
         "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
         "isInitializeCase": true,
         "assigneeId": null,
-        "isQC": true,
         "sentBy": "petitioner",
         "createdAt": "2019-03-01T21:40:46.415Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-03-01T21:40:46.415Z",
-            "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Brett Osborne is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "110-19",
         "updatedAt": "2019-03-01T21:40:46.415Z"
       }

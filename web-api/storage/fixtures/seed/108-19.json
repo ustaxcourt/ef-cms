@@ -25,19 +25,9 @@
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
-    "isQC": true,
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
     "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "messages": [
-      {
-        "createdAt": "2019-08-16T19:21:46.147Z",
-        "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -196,19 +186,9 @@
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
-    "isQC": true,
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
     "sk": "2019-08-16T19:21:46.147Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-16T19:21:46.147Z",
-        "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section-outbox|petitions",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -242,19 +222,9 @@
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
-    "isQC": true,
     "createdAt": "2019-08-16T19:21:46.147Z",
     "assigneeName": "IRS Holding Queue",
     "sk": "2019-08-16T19:21:46.147Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-16T19:21:46.147Z",
-        "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "108-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -327,21 +297,11 @@
         "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
         "isInitializeCase": true,
         "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-        "isQC": true,
         "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
         "sentBy": "Test Petitionsclerk",
         "sentBySection": "petitions",
         "createdAt": "2019-08-16T19:21:46.147Z",
         "assigneeName": "IRS Holding Queue",
-        "messages": [
-          {
-            "createdAt": "2019-08-16T19:21:46.147Z",
-            "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "108-19",
         "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
         "completedBy": "Test Petitionsclerk",

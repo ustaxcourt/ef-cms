@@ -132,20 +132,10 @@
         "workItemId": "f1f8459d-771d-4d60-b97c-9f05c7f79b94",
         "isInitializeCase": true,
         "assigneeId": null,
-        "isQC": true,
         "sentBy": "Test Petitioner",
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-12-11T16:02:31.175Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-12-11T16:02:31.176Z",
-            "messageId": "3a6fda20-0ec9-47b9-8856-7c7d6bb2b743",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Letti Toretto is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "113-19",
         "updatedAt": "2019-12-11T16:02:31.175Z"
       }

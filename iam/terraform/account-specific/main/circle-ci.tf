@@ -1,5 +1,13 @@
 data "aws_caller_identity" "current" {}
 
+resource "aws_iam_user" "circle_ci" {
+  name = "CircleCI"
+}
+
+resource "aws_iam_user_policy_attachment" "circle_ci_policy_attachment" {
+  user = "${aws_iam_user.circle_ci.name}"
+  policy_arn = "${aws_iam_policy.circle_ci_policy.arn}"
+}
 
 resource "aws_iam_policy" "circle_ci_policy" {
   name = "circle_ci_policy"
@@ -179,6 +187,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "iam:ListPolicyVersions",
         "iam:ListInstanceProfilesForRole",
         "iam:AddRoleToInstanceProfile",
+        "iam:CreateServiceLinkedRole",
         "iam:ListAttachedRolePolicies"
       ],
       "Resource": [

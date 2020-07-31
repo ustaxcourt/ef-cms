@@ -76,7 +76,7 @@ Web API Terraform stderr:  	* aws_cognito_user_pool_domain.main: InvalidParamete
 Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
 ```
 
-If this error is seen during environment destruction, run `terraform state rm aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
+If this error is seen during environment destruction, run `terraform state rm module.ef-cms_apis.aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
 
 
 ### Terraform Deploy: Provided certificate does not exist
@@ -93,9 +93,18 @@ Error: Error applying plan:
 
 When this happens, re-run the deploy.
 
-
 ### aws-xray-sdk version 3.1.0
 
 We have locked aws-xray-sdk to version 2.5.0 because when upgrading to 3.1.0, an error is thrown during the web-api terraform deploy:
 
 `Error: error archiving file: could not archive missing file`
+
+### Create Cognito Users (CI deploy)
+
+When updating the environment variables, `ZONE_NAME` and `EFCMS_DOMAIN`, we ran into this error:
+
+```An error occurred (UsernameExistsException) when calling the SignUp operation: An account with the given email already exists.
+An error occurred (NotAuthorizedException) when calling the AdminConfirmSignUp operation: User cannot be confirmed. Current status is CONFIRMED
+curl: (3) URL using bad/illegal format or missing URL```
+
+This happened when duplicate API gateways (i.e., `gateway_api_$ENV`) were created due to a Terraform state sync problem.
