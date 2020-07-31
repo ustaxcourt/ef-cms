@@ -19,7 +19,7 @@ function Correspondence(rawProps) {
   this.filingDate = rawProps.filingDate || createISODateString();
 }
 
-Correspondence.schema = {
+Correspondence.VALIDATION_RULES = {
   documentId: JoiValidationConstants.UUID.required(),
   documentTitle: joi.string().max(500).required(),
   filedBy: joi.string().max(500).allow('').optional(),
@@ -29,6 +29,6 @@ Correspondence.schema = {
   userId: JoiValidationConstants.UUID.required(),
 };
 
-joiValidationDecorator(Correspondence, Correspondence.schema, {});
+joiValidationDecorator(Correspondence, Correspondence.VALIDATION_RULES, {});
 
 module.exports = { Correspondence };

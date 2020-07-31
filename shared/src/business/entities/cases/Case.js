@@ -374,7 +374,8 @@ Case.VALIDATION_RULES = {
   contactSecondary: joi.object().optional().allow(null),
   correspondence: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
     .description('List of Correspondence documents for the case.'),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the paper or electronic case was added to the system. This value cannot be edited.',
