@@ -32,7 +32,6 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
             eventCode: 'A',
             processingStatus: 'pending',
             userId: 'petitioner',
-            workItems: [],
           },
         ],
       },

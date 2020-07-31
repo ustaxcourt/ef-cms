@@ -22,7 +22,7 @@ describe('updateWorkItemInCase', () => {
         documents: [
           {
             documentId: '321',
-            workItems: [{ workItemId: '456' }, { workItemId: '654' }],
+            workItem: { workItemId: '456' },
           },
         ],
       },
@@ -42,7 +42,7 @@ describe('updateWorkItemInCase', () => {
         pk: 'case|123-20',
         sk: 'document|321',
       },
-      UpdateExpression: 'SET #workItems[0] = :workItem',
+      UpdateExpression: 'SET #workItem = :workItem',
       applicationContext: { environment: { stage: 'local' } },
     });
   });

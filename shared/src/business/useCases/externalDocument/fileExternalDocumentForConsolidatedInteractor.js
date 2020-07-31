@@ -191,7 +191,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               { applicationContext },
             );
 
-            documentEntity.addWorkItem(workItem);
+            documentEntity.setWorkItem(workItem);
 
             if (metadata.isPaper) {
               workItem.setAsCompleted({

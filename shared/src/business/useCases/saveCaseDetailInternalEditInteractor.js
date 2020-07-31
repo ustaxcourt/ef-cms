@@ -105,9 +105,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   if (!caseEntity.isPaper) {
     const petitionDocument = caseEntity.getPetitionDocument();
 
-    const initializeCaseWorkItem = petitionDocument.workItems.find(
-      workItem => workItem.isInitializeCase,
-    );
+    const initializeCaseWorkItem = petitionDocument.workItem;
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,

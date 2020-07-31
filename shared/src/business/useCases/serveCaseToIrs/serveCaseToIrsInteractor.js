@@ -152,9 +152,7 @@ exports.serveCaseToIrsInteractor = async ({
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 
-  const initializeCaseWorkItem = petitionDocument.workItems.find(
-    workItem => workItem.isInitializeCase,
-  );
+  const initializeCaseWorkItem = petitionDocument.workItem;
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);

@@ -24,7 +24,7 @@ export const completeDocketEntryQCAction = async ({
     {
       ...get(state.form),
     },
-    ['workitems', 'dateReceivedMonth', 'dateReceivedDay', 'dateReceivedYear'],
+    ['workitem', 'dateReceivedMonth', 'dateReceivedDay', 'dateReceivedYear'],
   );
 
   entryMetadata = {
