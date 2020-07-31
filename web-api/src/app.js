@@ -185,12 +185,6 @@ const {
   getInboxCaseMessagesForUserLambda,
 } = require('./messages/getInboxCaseMessagesForUserLambda');
 const {
-  getInboxMessagesForSectionLambda,
-} = require('./workitems/getInboxMessagesForSectionLambda');
-const {
-  getInboxMessagesForUserLambda,
-} = require('./workitems/getInboxMessagesForUserLambda');
-const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
@@ -211,12 +205,6 @@ const {
 const {
   getPrivatePractitionersBySearchKeyLambda,
 } = require('./users/getPrivatePractitionersBySearchKeyLambda');
-const {
-  getSentMessagesForSectionLambda,
-} = require('./workitems/getSentMessagesForSectionLambda');
-const {
-  getSentMessagesForUserLambda,
-} = require('./workitems/getSentMessagesForUserLambda');
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
@@ -774,14 +762,6 @@ app.post(
  * sections
  */
 app.get(
-  '/sections/:section/messages/inbox',
-  lambdaWrapper(getInboxMessagesForSectionLambda),
-);
-app.get(
-  '/sections/:section/messages/sent',
-  lambdaWrapper(getSentMessagesForSectionLambda),
-);
-app.get(
   '/sections/:section/document-qc/served',
   lambdaWrapper(getDocumentQCServedForSectionLambda),
 );
@@ -862,14 +842,6 @@ app.get(
 app.put(
   '/users/:userId/case/:docketNumber/pending',
   lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
-);
-app.get(
-  '/users/:userId/messages/inbox',
-  lambdaWrapper(getInboxMessagesForUserLambda),
-);
-app.get(
-  '/users/:userId/messages/sent',
-  lambdaWrapper(getSentMessagesForUserLambda),
 );
 app.get(
   '/users/:userId/document-qc/inbox',
