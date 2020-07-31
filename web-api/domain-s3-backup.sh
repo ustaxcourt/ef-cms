@@ -17,7 +17,7 @@ aws s3 sync "s3://${ZONE_NAME}-temp-documents-${ENV}-us-east-1" "s3://backup-${E
 aws s3 sync "s3://${ZONE_NAME}-temp-documents-${ENV}-us-west-1" "s3://backup-${EFCMS_DOMAIN}-temp-documents-${ENV}-us-west-1" 
 
 echo "Old buckets are now backed up. You must first empty and then delete the following buckets:"
-echo "=> s3://${ZONE_NAME}-documents-${ENV}-us-east-1"
-echo "=> s3://${ZONE_NAME}-documents-${ENV}-us-west-1"
-echo "=> s3://${ZONE_NAME}-temp-documents-${ENV}-us-east-1"
-echo "=> s3://${ZONE_NAME}-temp-documents-${ENV}-us-west-1"
+echo "=> ${ZONE_NAME}-documents-${ENV}-us-east-1"
+echo "=> ${ZONE_NAME}-documents-${ENV}-us-west-1"
+echo "=> ${ZONE_NAME}-temp-documents-${ENV}-us-east-1"
+echo "=> ${ZONE_NAME}-temp-documents-${ENV}-us-west-1"
