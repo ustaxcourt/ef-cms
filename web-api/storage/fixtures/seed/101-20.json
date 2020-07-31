@@ -223,20 +223,10 @@
         "workItemId": "c4b34a7e-2b0a-4b6b-a406-b53b19d08cc4",
         "isInitializeCase": true,
         "assigneeId": null,
-        "isQC": true,
         "sentBy": "Test Petitioner",
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2020-01-02T16:05:45.979Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2020-01-02T16:05:45.980Z",
-            "messageId": "3947f4e4-9c7b-4d3d-a19b-bf8d89065be9",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Bill Burr is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "101-20",
         "updatedAt": "2020-01-02T16:05:45.979Z"
       }

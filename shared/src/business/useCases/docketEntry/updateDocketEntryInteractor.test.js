@@ -22,7 +22,6 @@ describe('updateDocketEntryInteractor', () => {
       eventCode: 'A',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },
-    isQC: true,
     section: 'docket',
     sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     updatedAt: new Date().toISOString(),

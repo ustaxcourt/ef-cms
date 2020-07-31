@@ -11,7 +11,6 @@ import { petitionsClerkRemovesSignatureFromDraftDocument } from './journey/petit
 import { petitionsClerkSavesSignatureForDraftDocument } from './journey/petitionsClerkSavesSignatureForDraftDocument';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
-import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViewsDocumentDetail';
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsClerkViewsSignDraftDocument } from './journey/petitionsClerkViewsSignDraftDocument';
 
@@ -34,7 +33,6 @@ describe('Petitions Clerk Create Order Journey', () => {
   petitionsClerkAddsOrderToCase(test);
   petitionsClerkViewsCaseDetailAfterAddingOrder(test);
   petitionsClerkViewsDraftDocuments(test, 1);
-  petitionsClerkViewsDocumentDetail(test);
   petitionsClerkViewsSignDraftDocument(test);
   petitionsClerkAppliesSignatureToDraftDocument(test);
   petitionsClerkClearsSignatureFromDraftDocument(test);
@@ -43,7 +41,6 @@ describe('Petitions Clerk Create Order Journey', () => {
     test,
     'Order of Dismissal and Decision updated.',
   );
-  petitionsClerkViewsDocumentDetail(test);
   petitionsClerkNavigatesBackAfterViewSignDraftDocument(test);
   petitionsClerkRemovesSignatureFromDraftDocument(test);
 });

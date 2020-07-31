@@ -421,22 +421,6 @@ module.exports = [
   /* review petition */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b/review',
 
-  /* document detail */
-  {
-    actions: [
-      'wait for #tab-pending-messages to be visible',
-      'wait for .progress-indicator to be hidden',
-      'click element #tab-pending-messages',
-      'wait for #create-message-button to be visible',
-      'wait for .progress-indicator to be hidden',
-      'click element #create-message-button',
-      'wait for .modal-dialog to be visible',
-    ],
-    notes: 'checks a11y of create message dialog',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/documents/89c781f6-71ba-4ead-93d8-c681c2183a73&info=create-message-dialog',
-  },
-
   /* trial sessions */
   {
     actions: ['wait for #trial-sessions-tabs to be visible'],

@@ -9,12 +9,11 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { Message } = require('../../entities/Message');
+const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -154,7 +153,6 @@ exports.fileExternalDocumentInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           highPriority: highPriorityWorkItem,
-          isQC: true,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,
@@ -163,18 +161,6 @@ exports.fileExternalDocumentInteractor = async ({
         { applicationContext },
       );
 
-      const message = new Message(
-        {
-          from: user.name,
-          fromUserId: user.userId,
-          message: `${documentEntity.documentType} filed by ${capitalize(
-            user.role,
-          )} is ready for review.`,
-        },
-        { applicationContext },
-      );
-
-      workItem.addMessage(message);
       documentEntity.addWorkItem(workItem);
 
       workItems.push(workItem);

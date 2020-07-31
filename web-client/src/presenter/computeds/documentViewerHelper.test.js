@@ -541,7 +541,6 @@ describe('documentViewerHelper', () => {
                 documentTitle: 'Some Stuff',
                 documentType: 'Answer',
                 eventCode: 'A',
-                servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
           },

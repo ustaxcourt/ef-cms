@@ -12,7 +12,7 @@ export const editDocketEntryHelper = (get, applicationContext) => {
   let showPaperServiceWarning = false;
 
   if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument.documentType)) {
-    const qcWorkItems = (currentDocument.workItems || []).filter(wi => wi.isQC);
+    const qcWorkItems = currentDocument.workItems || [];
     const qcWorkItemsUntouched =
       !!qcWorkItems.length &&
       qcWorkItems.reduce((acc, wi) => {
@@ -24,5 +24,9 @@ export const editDocketEntryHelper = (get, applicationContext) => {
     }
   }
 
-  return { showPaperServiceWarning };
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, currentDocument);
+
+  return { formattedDocument, showPaperServiceWarning };
 };

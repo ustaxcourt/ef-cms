@@ -191,12 +191,6 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
-  createWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/createWorkItem');
-const {
-  createWorkItemInteractor,
-} = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
-const {
   deleteCaseCorrespondence,
 } = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
 const {
@@ -684,6 +678,9 @@ const {
   markCaseMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markCaseMessageThreadRepliedTo');
 const {
+  migrateCaseDeadlineInteractor,
+} = require('../../shared/src/business/useCases/migrateCaseDeadlineInteractor');
+const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
@@ -1166,6 +1163,7 @@ module.exports = appContextUser => {
     },
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
+      migrateCaseDeadlineInteractor,
       migrateCaseInteractor,
     }),
     getNodeSass: () => {
@@ -1220,7 +1218,6 @@ module.exports = appContextUser => {
         createTrialSessionWorkingCopy,
         createUser,
         createUserInboxRecord,
-        createWorkItem,
         deleteCaseCorrespondence,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
@@ -1426,7 +1423,6 @@ module.exports = appContextUser => {
         createPractitionerUserInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
-        createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCorrespondenceDocumentInteractor,

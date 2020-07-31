@@ -98,7 +98,6 @@
     },
     "section": "petitions",
     "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
     "sentBy": "petitioner",
@@ -106,15 +105,6 @@
     "assigneeName": null,
     "gsi1pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "caseTitle": "Brett Osborne",
-    "messages": [
-      {
-        "createdAt": "2019-03-01T21:40:46.415Z",
-        "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-        "message": "Petition filed by Brett Osborne is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "101-19",
     "updatedAt": "2019-03-01T21:40:46.415Z"
   },
@@ -138,7 +128,6 @@
     },
     "section": "petitions",
     "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
     "sentBy": "petitioner",
@@ -146,15 +135,6 @@
     "assigneeName": null,
     "gsi1pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "caseTitle": "Brett Osborne",
-    "messages": [
-      {
-        "createdAt": "2019-03-01T21:40:46.415Z",
-        "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-        "message": "Petition filed by Brett Osborne is ready for review.",
-        "from": "Test Petitioner",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "101-19",
     "updatedAt": "2019-03-01T21:40:46.415Z"
   },
@@ -187,19 +167,9 @@
         "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
         "isInitializeCase": true,
         "assigneeId": null,
-        "isQC": true,
         "sentBy": "petitioner",
         "createdAt": "2019-03-01T21:40:46.415Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-03-01T21:40:46.415Z",
-            "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Brett Osborne is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "101-19",
         "updatedAt": "2019-03-01T21:40:46.415Z"
       }

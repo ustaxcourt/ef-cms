@@ -101,22 +101,12 @@
     },
     "section": "petitions",
     "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-    "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
     "sentBy": "Test Private Practitioner",
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-27T21:53:00.297Z",
     "assigneeName": null,
-    "messages": [
-      {
-        "createdAt": "2019-03-27T21:53:00.297Z",
-        "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-        "from": "Test Practitioner",
-        "message": "Petition filed by Caryn Wall is ready for review.",
-        "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "105-19",
     "updatedAt": "2019-03-27T21:53:00.297Z"
   },
@@ -141,22 +131,12 @@
     },
     "section": "petitions",
     "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-    "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
     "sentBy": "Test Private Practitioner",
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-27T21:53:00.297Z",
     "assigneeName": null,
-    "messages": [
-      {
-        "createdAt": "2019-03-27T21:53:00.297Z",
-        "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-        "from": "Test Practitioner",
-        "message": "Petition filed by Caryn Wall is ready for review.",
-        "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "105-19",
     "updatedAt": "2019-03-27T21:53:00.297Z"
   },
@@ -210,20 +190,10 @@
         "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
         "isInitializeCase": true,
         "assigneeId": null,
-        "isQC": true,
         "sentBy": "Test Private Practitioner",
         "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-03-27T21:53:00.297Z",
         "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2019-03-27T21:53:00.297Z",
-            "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-            "from": "Test Practitioner",
-            "message": "Petition filed by Caryn Wall is ready for review.",
-            "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "105-19",
         "updatedAt": "2019-03-27T21:53:00.297Z"
       }

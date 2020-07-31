@@ -65,7 +65,7 @@ export const SectionWorkQueueInbox = connect(
             <tr>
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket No.</th>
-              <th>{workQueueHelper.inboxFiledColumnLabel}</th>
+              <th>Filed</th>
               <th>Case Title</th>
               {!workQueueHelper.hideIconColumn && (
                 <th aria-label="Status Icon" className="padding-right-0" />
@@ -73,11 +73,7 @@ export const SectionWorkQueueInbox = connect(
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
-              {workQueueHelper.showAssignedToColumn && (
-                <th>{workQueueHelper.assigneeColumnTitle}</th>
-              )}
-              {!workQueueHelper.hideFromColumn && <th>From</th>}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+              {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
@@ -165,14 +161,6 @@ export const SectionWorkQueueInbox = connect(
                       {item.document.descriptionDisplay}
                     </a>
                   </div>
-                  {workQueueHelper.showMessageContent && (
-                    <div
-                      className="message-document-detail"
-                      id={`detail-${item.workItemId}`}
-                    >
-                      {item.currentMessage.message}
-                    </div>
-                  )}
                 </td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
@@ -181,21 +169,11 @@ export const SectionWorkQueueInbox = connect(
                 {workQueueHelper.showAssignedToColumn && (
                   <td className="to message-queue-row">{item.assigneeName}</td>
                 )}
-                {!workQueueHelper.hideFromColumn && (
-                  <td className="message-queue-row">
-                    {item.currentMessage.from}
-                  </td>
-                )}
-                {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row">{item.sentBySection}</td>
-                )}
               </tr>
             </tbody>
           ))}
         </table>
-        {formattedWorkQueue.length === 0 && (
-          <p>{workQueueHelper.queueEmptyMessage}</p>
-        )}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },
