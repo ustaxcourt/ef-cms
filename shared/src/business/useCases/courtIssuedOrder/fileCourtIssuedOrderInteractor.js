@@ -3,9 +3,9 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Message } = require('../../entities/Message');
 const { Document } = require('../../entities/Document');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
+const { Message } = require('../../entities/Message');
 const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
