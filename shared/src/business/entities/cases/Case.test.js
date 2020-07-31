@@ -34,7 +34,6 @@ const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
   it('should throw an error if app context is not passed in', () => {
@@ -1555,50 +1554,6 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(3);
-    });
-  });
-
-  describe('getWorkItems', () => {
-    it('should get all the work items associated with the documents in the case', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      myCase.addDocument(
-        {
-          documentId: '123',
-          documentType: 'Answer',
-          userId: 'irsPractitioner',
-        },
-        { applicationContext },
-      );
-      const workItem = new WorkItem(
-        {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketNumber: '101-18',
-          document: {},
-          isQC: true,
-          sentBy: 'bob',
-        },
-        { applicationContext },
-      );
-      myCase.documents[0].addWorkItem(workItem);
-      const workItems = myCase.getWorkItems();
-      expect(workItems.length).toEqual(1);
-      expect(workItems).toMatchObject([
-        {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketNumber: '101-18',
-          document: {},
-          isQC: true,
-          sentBy: 'bob',
-        },
-      ]);
     });
   });
 

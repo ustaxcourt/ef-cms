@@ -73,9 +73,9 @@ describe('assignWorkItemsInteractor integration test', () => {
       docketNumber,
     });
 
-    const workItem = createdCase.documents.find(
+    const { workItem } = createdCase.documents.find(
       d => d.documentType === 'Petition',
-    ).workItems[0];
+    );
 
     let inbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,
@@ -106,20 +106,6 @@ describe('assignWorkItemsInteractor integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Rick Petitioner is ready for review.',
-          },
-          {
-            from: 'Test Petitionsclerk',
-            fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Rick Petitioner is ready for review.',
-            to: 'Test Petitionsclerk',
-            toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
         section: 'petitions',
         sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
@@ -136,31 +122,14 @@ describe('assignWorkItemsInteractor integration test', () => {
       caseAfterAssign.documents.find(d => d.documentType === 'Petition'),
     ).toMatchObject({
       documentType: 'Petition',
-      workItems: [
-        {
-          assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          assigneeName: 'Test Petitionsclerk',
-          document: {
-            documentType: 'Petition',
-            filedBy: 'Petr. Rick Petitioner',
-          },
-          messages: [
-            {
-              createdAt: '2019-03-01T22:54:06.000Z',
-              from: 'Alex Petitionsclerk',
-              fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-              message: 'Petition filed by Rick Petitioner is ready for review.',
-            },
-            {
-              from: 'Test Petitionsclerk',
-              fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-              message: 'Petition filed by Rick Petitioner is ready for review.',
-              to: 'Test Petitionsclerk',
-              toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
+      workItem: {
+        assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+        assigneeName: 'Test Petitionsclerk',
+        document: {
+          documentType: 'Petition',
+          filedBy: 'Petr. Rick Petitioner',
         },
-      ],
+      },
     });
   });
 });
