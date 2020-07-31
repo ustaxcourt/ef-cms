@@ -1,4 +1,4 @@
-# NewCaseMessage
+# NewMessage
  ```
 ---
   type: "object"
@@ -9,7 +9,7 @@
         only: true
         presence: "required"
       allow: 
-        - "NewCaseMessage"
+        - "NewMessage"
     message: 
       type: "string"
       flags: 
