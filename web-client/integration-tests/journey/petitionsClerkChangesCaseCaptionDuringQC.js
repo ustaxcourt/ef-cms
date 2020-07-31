@@ -50,12 +50,16 @@ export const petitionsClerkChangesCaseCaptionDuringQC = test => {
 
     const docketRecord = test.getState('caseDetail.docketRecord');
 
+    const caseAmended = docketRecord.find(entry =>
+      entry.description.startsWith('Caption of case is amended'),
+    );
+
+    const docketNumberAmended = docketRecord.find(entry =>
+      entry.description.startsWith('Docket Number is amended'),
+    );
+
     //case type was changed in an earlier test
-    expect(docketRecord.pop().description).toContain(
-      'Docket Number is amended',
-    );
-    expect(docketRecord.pop().description).toContain(
-      'Caption of case is amended',
-    );
+    expect(caseAmended).toBeTruthy();
+    expect(docketNumberAmended).toBeTruthy();
   });
 };

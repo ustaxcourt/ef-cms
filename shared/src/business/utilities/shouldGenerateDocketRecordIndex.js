@@ -13,6 +13,10 @@ const {
  * @returns {Promise} the template with the brackets replaced with replacement values
  */
 const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
+  if (!docketRecordEntry) {
+    return false;
+  }
+
   let isInitialFilingType = false;
   const INITIAL_DOCUMENT_EVENT_CODES = Object.keys(INITIAL_DOCUMENT_TYPES).map(
     key => INITIAL_DOCUMENT_TYPES[key].eventCode,
@@ -21,11 +25,19 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
     isInitialFilingType = true;
   }
 
+  const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
+    key => MINUTE_ENTRIES_MAP[key].eventCode,
+  );
+
+  const isMinuteEntry = MINUTE_ENTRIES_EVENT_CODES.includes(
+    docketRecordEntry.eventCode,
+  );
+
   if (docketRecordEntry.index) {
     return false;
   }
 
-  if (!isInitialFilingType && !docketRecordEntry.documentId) {
+  if (!isInitialFilingType && !isMinuteEntry && !docketRecordEntry.documentId) {
     return false;
   }
 
@@ -65,11 +77,7 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
     return true;
   }
 
-  const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
-    key => MINUTE_ENTRIES_MAP[key].eventCode,
-  );
-
-  if (MINUTE_ENTRIES_EVENT_CODES.includes(docketRecordEntry.eventCode)) {
+  if (isMinuteEntry) {
     return true;
   }
 

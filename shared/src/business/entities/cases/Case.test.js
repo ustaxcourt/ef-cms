@@ -1215,49 +1215,6 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[3].index).toEqual(5);
     });
 
-    it('does not implicitly set a docket record index if the updateIndex param is not true', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-
-      caseRecord.addDocketRecord(
-        new DocketRecord(
-          {
-            description: 'some description',
-            filingDate: new Date().toISOString(),
-          },
-          { applicationContext },
-        ), // updateIndex undefined / falsy
-      );
-
-      expect(caseRecord.docketRecord[3].index).toBeUndefined();
-      expect(caseRecord.docketRecord[3].description).toEqual(
-        'some description',
-      );
-    });
-
-    it('sets a docket record index if the updateIndex param is true', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-
-      caseRecord.addDocketRecord(
-        new DocketRecord(
-          {
-            description: 'some description',
-            filingDate: new Date().toISOString(),
-          },
-          { applicationContext },
-        ),
-        true, // updateIndex param
-      );
-
-      expect(caseRecord.docketRecord[3].index).toEqual(4);
-      expect(caseRecord.docketRecord[3].description).toEqual(
-        'some description',
-      );
-    });
-
     it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
@@ -1295,70 +1252,6 @@ describe('Case entity', () => {
         'second record now updated',
       );
       expect(caseRecord.docketRecord[1].index).toEqual(7);
-    });
-
-    it('does not implicitly set a docket record index if the updateIndex param is not true', () => {
-      const docketRecord = [
-        {
-          description: 'entry without index',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-      ];
-      const caseRecord = new Case(
-        { ...MOCK_CASE, docketRecord },
-        {
-          applicationContext,
-        },
-      );
-      const updatedDocketEntry = new DocketRecord(
-        {
-          description: 'entry without index updated',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-        { applicationContext },
-      );
-      caseRecord.updateDocketRecord(updatedDocketEntry); // updateIndex undefined / falsy
-
-      expect(caseRecord.docketRecord[0].index).toBeUndefined();
-      expect(caseRecord.docketRecord[0].description).toEqual(
-        'entry without index updated',
-      );
-    });
-
-    it('sets a docket record index if the updateIndex param is true', () => {
-      const docketRecord = [
-        {
-          description: 'entry without index',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-      ];
-      const caseRecord = new Case(
-        { ...MOCK_CASE, docketRecord },
-        {
-          applicationContext,
-        },
-      );
-      const updatedDocketEntry = new DocketRecord(
-        {
-          description: 'entry without index updated',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-        { applicationContext },
-      );
-      caseRecord.updateDocketRecord(updatedDocketEntry, true); // updateIndex param is true
-
-      expect(caseRecord.docketRecord[0].index).toEqual(1);
-      expect(caseRecord.docketRecord[0].description).toEqual(
-        'entry without index updated',
-      );
     });
   });
 
@@ -1400,70 +1293,6 @@ describe('Case entity', () => {
         error = err;
       }
       expect(error).toBeTruthy();
-    });
-
-    it('does not implicitly set a docket record index if the updateIndex param is not true', () => {
-      const docketRecord = [
-        {
-          description: 'entry without index',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-      ];
-      const caseRecord = new Case(
-        { ...MOCK_CASE, docketRecord },
-        {
-          applicationContext,
-        },
-      );
-      const updatedDocketEntry = new DocketRecord(
-        {
-          description: 'entry without index updated',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-        { applicationContext },
-      );
-      caseRecord.updateDocketRecordEntry(updatedDocketEntry); // updateIndex undefined / falsy
-
-      expect(caseRecord.docketRecord[0].index).toBeUndefined();
-      expect(caseRecord.docketRecord[0].description).toEqual(
-        'entry without index updated',
-      );
-    });
-
-    it('sets a docket record index if the updateIndex param is true', () => {
-      const docketRecord = [
-        {
-          description: 'entry without index',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-      ];
-      const caseRecord = new Case(
-        { ...MOCK_CASE, docketRecord },
-        {
-          applicationContext,
-        },
-      );
-      const updatedDocketEntry = new DocketRecord(
-        {
-          description: 'entry without index updated',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-        },
-        { applicationContext },
-      );
-      caseRecord.updateDocketRecordEntry(updatedDocketEntry, true); // updateIndex param is true
-
-      expect(caseRecord.docketRecord[0].index).toEqual(1);
-      expect(caseRecord.docketRecord[0].description).toEqual(
-        'entry without index updated',
-      );
     });
   });
 

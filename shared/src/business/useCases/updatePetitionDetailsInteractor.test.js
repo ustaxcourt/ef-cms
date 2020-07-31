@@ -133,19 +133,11 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    expect(result.docketRecord).toContainEqual({
-      description: 'Filing Fee Waived',
-      docketRecordId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
-      documentId: undefined,
-      editState: undefined,
-      entityName: 'DocketRecord',
-      eventCode: 'FEEW',
-      filedBy: undefined,
-      filingDate: '2019-11-30T09:10:11.000Z',
-      index: 4,
-      signatory: undefined,
-      status: undefined,
-    });
+    const wavedDocument = result.docketRecord.find(
+      entry => entry.description === 'Filing Fee Waived',
+    );
+
+    expect(wavedDocument).toBeTruthy();
   });
 
   it('should create a docket entry when moved from unpaid to paid', async () => {
@@ -167,18 +159,10 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    expect(result.docketRecord).toContainEqual({
-      description: 'Filing Fee Paid',
-      docketRecordId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
-      documentId: undefined,
-      editState: undefined,
-      entityName: 'DocketRecord',
-      eventCode: 'FEE',
-      filedBy: undefined,
-      filingDate: '2019-11-30T09:10:11.000Z',
-      index: 4,
-      signatory: undefined,
-      status: undefined,
-    });
+    const wavedDocument = result.docketRecord.find(
+      entry => entry.description === 'Filing Fee Paid',
+    );
+
+    expect(wavedDocument).toBeTruthy();
   });
 });

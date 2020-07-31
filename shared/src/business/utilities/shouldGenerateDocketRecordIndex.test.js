@@ -20,8 +20,8 @@ describe('shouldGenerateDocketRecordIndex', () => {
     // are there exceptions to this? entries without a document
     const caseDetail = { documents: [] };
     const docketRecordEntry = {
-      documentType: 'Filing Fee Paid',
-      eventCode: 'FEE',
+      documentType: 'Answer',
+      eventCode: 'A',
     };
 
     const result = shouldGenerateDocketRecordIndex({
