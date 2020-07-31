@@ -216,7 +216,13 @@ const {
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
   deleteDocument,
-} = require('../../shared/src/persistence/s3/deleteDocument');
+} = require('../../shared/src/persistence/dynamo/documents/deleteDocument');
+const {
+  deleteDocumentFromS3,
+} = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
+const {
+  deleteDraftDocumentInteractor,
+} = require('../../shared/src/business/useCases/deleteDraftDocumentInteractor');
 const {
   deleteElasticsearchReindexRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
@@ -1195,6 +1201,7 @@ module.exports = appContextUser => {
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
+        deleteDocumentFromS3,
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
@@ -1397,6 +1404,7 @@ module.exports = appContextUser => {
         deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
+        deleteDraftDocumentInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
