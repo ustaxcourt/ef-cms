@@ -68,9 +68,17 @@ export const completeDocumentSigningAction = async ({
     }));
   }
 
+  let redirectUrl;
+
+  if (parentMessageId) {
+    redirectUrl = `/case-messages/${docketNumber}/message-detail/${parentMessageId}`;
+  } else {
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`;
+  }
+
   return {
     docketNumber,
-    redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`,
+    redirectUrl,
     tab: 'docketRecord',
   };
 };
