@@ -85,10 +85,10 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-user');
   });
 
-  it('returns efcms-message for CaseMessage records', () => {
+  it('returns efcms-message for Message records', () => {
     const record = {
       entityName: {
-        S: 'CaseMessage',
+        S: 'Message',
       },
     };
 

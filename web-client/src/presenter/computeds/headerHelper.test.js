@@ -147,7 +147,7 @@ describe('headerHelper', () => {
     const result = runCompute(headerHelper, {
       state: {
         ...getBaseState({ role: ROLES.petitionsClerk }),
-        currentPage: 'CaseMessages',
+        currentPage: 'Messages',
         workQueueToDisplay: {},
       },
     });

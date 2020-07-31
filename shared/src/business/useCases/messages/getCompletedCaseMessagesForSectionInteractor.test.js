@@ -36,7 +36,7 @@ describe('getCompletedCaseMessagesForSectionInteractor', () => {
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
-      entityName: 'CaseMessage',
+      entityName: 'Message',
       from: 'Test Petitionsclerk2',
       fromSection: 'petitions',
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',

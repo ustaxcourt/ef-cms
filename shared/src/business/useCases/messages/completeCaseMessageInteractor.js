@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { CaseMessage } = require('../../entities/CaseMessage');
+const { Message } = require('../../entities/Message');
 const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -46,7 +46,7 @@ exports.completeCaseMessageInteractor = async ({
 
   const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-  const updatedCaseMessage = new CaseMessage(mostRecentMessage, {
+  const updatedCaseMessage = new Message(mostRecentMessage, {
     applicationContext,
   }).validate();
 
@@ -59,7 +59,7 @@ exports.completeCaseMessageInteractor = async ({
       caseMessage: updatedCaseMessage.validate().toRawObject(),
     });
 
-  return new CaseMessage(updatedMessage, { applicationContext })
+  return new Message(updatedMessage, { applicationContext })
     .validate()
     .toRawObject();
 };
