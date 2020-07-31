@@ -7,11 +7,20 @@ describe('completeDocumentSigningAction', () => {
   const {
     generateSignedDocumentInteractor,
     getInboxMessagesForUserInteractor,
-    saveSignedDocumentInteractor,
   } = applicationContext.getUseCases();
   const {
     uploadDocumentFromClient,
   } = applicationContext.getPersistenceGateway();
+
+  const docketNumber = '123';
+
+  const mockDocumentId = applicationContext.getUniqueId();
+
+  applicationContext
+    .getUseCases()
+    .saveSignedDocumentInteractor.mockReturnValue({
+      signedDocumentId: mockDocumentId,
+    });
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -52,7 +61,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
+          docketNumber,
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -86,9 +95,13 @@ describe('completeDocumentSigningAction', () => {
 
     expect(uploadDocumentFromClient.mock.calls.length).toBe(1);
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(1);
-    expect(saveSignedDocumentInteractor.mock.calls.length).toBe(1);
+    expect(
+      applicationContext.getUseCases().saveSignedDocumentInteractor.mock.calls
+        .length,
+    ).toBe(1);
     expect(result.output).toMatchObject({
-      docketNumber: '123-45',
+      docketNumber,
+      redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${mockDocumentId}`,
       tab: 'docketRecord',
     });
   });
@@ -100,7 +113,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
+          docketNumber,
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -129,9 +142,12 @@ describe('completeDocumentSigningAction', () => {
 
     expect(uploadDocumentFromClient.mock.calls.length).toBe(0);
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(0);
-    expect(saveSignedDocumentInteractor.mock.calls.length).toBe(0);
+    expect(
+      applicationContext.getUseCases().saveSignedDocumentInteractor.mock.calls
+        .length,
+    ).toBe(0);
     expect(result.output).toMatchObject({
-      docketNumber: '123-45',
+      docketNumber,
       tab: 'docketRecord',
     });
   });

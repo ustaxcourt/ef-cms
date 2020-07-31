@@ -1,15 +1,15 @@
 import { state } from 'cerebral';
 
 /**
- * calls the proxy/interactor to archive a document on the backend
+ * calls the proxy/interactor to delete a document on the backend
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
- * @param {object} providers.props props passed through via cerebral
+ * @param {object} providers.applicationContext contains the delete deleteDraftDocumentInteractor we will need from the getUseCases method
+ * @param {object} providers.get the cerebral get helper function
  * @param {object} providers.store the cerebral store object
  * @returns {Promise} async action
  */
-export const archiveDraftDocumentAction = async ({
+export const deleteDraftDocumentAction = async ({
   applicationContext,
   get,
   store,
@@ -19,7 +19,7 @@ export const archiveDraftDocumentAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .archiveDraftDocumentInteractor({
+    .deleteDraftDocumentInteractor({
       applicationContext,
       docketNumber,
       documentId,
@@ -38,5 +38,7 @@ export const archiveDraftDocumentAction = async ({
     };
   }
 
-  return { caseDetail: updatedCase };
+  return {
+    caseDetail: updatedCase,
+  };
 };
