@@ -28,10 +28,9 @@ export const petitionsClerkChangesCaseCaptionDuringQC = test => {
 
     await test.runSequence('serveCaseToIrsSequence');
 
-    await test.runSequence('gotoMessagesSequence', {
+    await test.runSequence('gotoWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
-      workQueueIsInternal: false,
     });
 
     const workItems = test.getState('workQueue');

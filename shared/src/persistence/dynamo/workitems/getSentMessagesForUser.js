@@ -26,7 +26,6 @@ exports.getSentMessagesForUser = async ({ applicationContext, userId }) => {
   return workItems.filter(
     workItem =>
       !workItem.completedAt &&
-      !workItem.isQC &&
       workItem.sentByUserId &&
       workItem.sentByUserId === userId,
   );

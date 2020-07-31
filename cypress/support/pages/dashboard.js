@@ -6,14 +6,6 @@ exports.viewMyOutbox = () => {
   cy.get('button#individual-sent-tab').click();
 };
 
-exports.viewMyInbox = () => {
-  cy.visit('/messages/my/inbox');
-};
-
-exports.viewSectionInbox = () => {
-  cy.visit('/messages/section/inbox');
-};
-
 exports.viewSectionOutbox = () => {
   cy.get('button.button-switch-box').click();
   cy.get('button#section-sent-tab').click();

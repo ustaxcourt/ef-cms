@@ -7,13 +7,8 @@ export const IndividualWorkQueueOutbox = connect(
   {
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
-    workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  function IndividualWorkQueueOutbox({
-    formattedWorkQueue,
-    workQueueHelper,
-    workQueueSectionHelper,
-  }) {
+  function IndividualWorkQueueOutbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
         <table
@@ -26,10 +21,6 @@ export const IndividualWorkQueueOutbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
-              {workQueueHelper.showReceivedColumn && <th>Received</th>}
-              {workQueueHelper.showSentColumn && (
-                <th className="small">Sent</th>
-              )}
               <th>Case Title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && (
@@ -37,14 +28,9 @@ export const IndividualWorkQueueOutbox = connect(
               )}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
               {workQueueHelper.showAssignedToColumn && (
-                <th className="max-width-7">
-                  {workQueueHelper.assigneeColumnTitle}
-                </th>
+                <th className="max-width-7">Assigned To</th>
               )}
               <th>Processed By</th>
-              {!workQueueHelper.hideSectionColumn && (
-                <th className="small">Section</th>
-              )}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
           </thead>
@@ -55,16 +41,6 @@ export const IndividualWorkQueueOutbox = connect(
                 <td className="message-queue-row small">
                   <CaseLink formattedCase={item} />
                 </td>
-                {workQueueHelper.showReceivedColumn && (
-                  <td className="message-queue-row">
-                    <span className="no-wrap">{item.received}</span>
-                  </td>
-                )}
-                {workQueueHelper.showSentColumn && (
-                  <td className="message-queue-row small">
-                    <span className="no-wrap">{item.sentDateFormatted}</span>
-                  </td>
-                )}
                 <td className="message-queue-row message-queue-case-title">
                   {item.caseTitle}
                 </td>
@@ -81,14 +57,6 @@ export const IndividualWorkQueueOutbox = connect(
                         item.document.documentType}
                     </a>
                   </div>
-                  {workQueueHelper.showMessageContent && (
-                    <div
-                      className="message-document-detail"
-                      id={`detail-${item.workItemId}`}
-                    >
-                      {item.completedMessage || item.currentMessage.message}
-                    </div>
-                  )}
                 </td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
@@ -102,11 +70,6 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 <td className="message-queue-row">{item.completedBy}</td>
-                {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row small">
-                    {workQueueSectionHelper.sectionDisplay(item.section)}
-                  </td>
-                )}
                 {workQueueHelper.showServedColumn && (
                   <td className="message-queue-row">
                     {item.completedAtFormatted}
@@ -116,9 +79,7 @@ export const IndividualWorkQueueOutbox = connect(
             </tbody>
           ))}
         </table>
-        {formattedWorkQueue.length === 0 && (
-          <p>{workQueueHelper.queueEmptyMessage}</p>
-        )}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },
