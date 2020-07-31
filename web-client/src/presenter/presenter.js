@@ -308,7 +308,6 @@ import { submitEditPrivatePractitionersModalSequence } from './sequences/submitE
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
-import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
@@ -740,7 +739,6 @@ export const presenter = {
     submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
-    submitForwardSequence,
     submitLoginSequence,
     submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
