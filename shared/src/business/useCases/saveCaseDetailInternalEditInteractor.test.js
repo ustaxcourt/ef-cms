@@ -28,6 +28,17 @@ describe('updateCase', () => {
     },
     createdAt: new Date().toISOString(),
     docketNumber: '56789-18',
+    docketRecord: [
+      {
+        description: 'Petition',
+        docketRecordId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        eventCode: 'P',
+        filedBy: 'Test User',
+        filingDate: '2019-01-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
     documents: [
       {
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
