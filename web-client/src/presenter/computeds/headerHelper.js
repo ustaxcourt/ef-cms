@@ -16,7 +16,7 @@ export const headerHelper = (get, applicationContext) => {
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
   const isWorkQueue = currentPage.startsWith('WorkQueue');
-  const isCaseMessages = currentPage.startsWith('CaseMessages');
+  const isCaseMessages = currentPage.startsWith('Messages');
 
   const pageIsHome =
     isDashboard ||
