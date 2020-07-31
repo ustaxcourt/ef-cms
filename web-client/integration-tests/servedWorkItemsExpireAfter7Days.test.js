@@ -75,17 +75,17 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     workItem7Days = {
       ...workItem8Days,
+      completedAt: CREATED_7_DAYS_AGO.toISOString(),
       createdAt: CREATED_7_DAYS_AGO.toISOString(),
       workItemId: `${workItemId7}`,
     };
-    workItem7Days.messages[0].createdAt = CREATED_7_DAYS_AGO.toISOString();
 
     workItem6Days = {
       ...workItem8Days,
+      completedAt: CREATED_6_DAYS_AGO.toISOString(),
       createdAt: CREATED_6_DAYS_AGO.toISOString(),
       workItemId: `${workItemId6}`,
     };
-    workItem7Days.messages[0].createdAt = CREATED_6_DAYS_AGO.toISOString();
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
