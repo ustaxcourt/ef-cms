@@ -133,7 +133,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     caseEntity.addDocument(noticeOfTrialDocument, {
       applicationContext,
-      updateIndex: true,
     });
     caseEntity.setNoticeOfTrialDate();
 
@@ -190,7 +189,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     caseEntity.addDocument(standingPretrialDocument, {
       applicationContext,
-      updateIndex: true,
     });
 
     // Serve notice

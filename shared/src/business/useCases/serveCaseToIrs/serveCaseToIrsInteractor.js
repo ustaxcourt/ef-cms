@@ -30,7 +30,6 @@ exports.addDocketEntryForPaymentStatus = ({
         },
         { applicationContext },
       ),
-      true,
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     caseEntity.addDocketRecord(
@@ -42,7 +41,6 @@ exports.addDocketEntryForPaymentStatus = ({
         },
         { applicationContext },
       ),
-      true,
     );
   }
 };

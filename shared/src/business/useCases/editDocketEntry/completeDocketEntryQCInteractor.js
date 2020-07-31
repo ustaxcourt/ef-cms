@@ -188,7 +188,7 @@ exports.completeDocketEntryQCInteractor = async ({
     true, // should update the index
   );
 
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'), true);
+  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(updatedDocument);
 
   const workItemToUpdate = updatedDocument.getQCWorkItem();
@@ -320,7 +320,6 @@ exports.completeDocketEntryQCInteractor = async ({
 
     caseEntity.addDocument(noticeUpdatedDocument, {
       applicationContext,
-      updateIndex: true,
     });
 
     const { Body: pdfData } = await applicationContext

@@ -72,7 +72,6 @@ exports.updatePetitionDetailsInteractor = async ({
           },
           { applicationContext },
         ),
-        true, // add docket record index
       );
     } else if (isWaived) {
       newCase.addDocketRecord(
@@ -84,7 +83,6 @@ exports.updatePetitionDetailsInteractor = async ({
           },
           { applicationContext },
         ),
-        true, // add docket record index
       );
     }
   }

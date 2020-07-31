@@ -64,7 +64,6 @@ const addPetitionDocumentToCase = ({
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity, {
     applicationContext,
-    updateIndex: true,
   });
 
   return workItemEntity;
@@ -186,7 +185,6 @@ exports.createCaseInteractor = async ({
         filingDate: caseToAdd.createdAt,
       },
       { applicationContext },
-      true,
     ),
   );
 
@@ -233,7 +231,6 @@ exports.createCaseInteractor = async ({
 
     caseToAdd.addDocument(odsDocumentEntity, {
       applicationContext,
-      updateIndex: true,
     });
   }
 

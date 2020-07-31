@@ -4,8 +4,6 @@ const {
 const {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-  INITIAL_DOCUMENT_TYPES,
-  UNSERVABLE_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -115,22 +113,7 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  const isUnservable = UNSERVABLE_EVENT_CODES.includes(
-    documentEntity.eventCode,
-  );
-  const isInitialDocumentType = Object.keys(INITIAL_DOCUMENT_TYPES)
-    .map(docType => INITIAL_DOCUMENT_TYPES[docType].eventCode)
-    .includes(documentEntity.eventCode);
-
-  const updateIndex =
-    isUnservable || isInitialDocumentType
-      ? !docketRecordEntry.index
-      : !isSavingForLater;
-
-  caseEntity.updateDocketRecordEntry(
-    omit(docketRecordEntry, 'index'),
-    updateIndex,
-  );
+  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
 
   if (editableFields.isFileAttached) {
     const workItem = documentEntity.getQCWorkItem();
