@@ -73,15 +73,6 @@ const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
 const {
-  getInboxMessagesForSection,
-} = require('../../persistence/dynamo/workitems/getInboxMessagesForSection');
-const {
-  getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getInboxMessagesForUser');
-const {
-  getSentMessagesForUser: getSentMessagesForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getSentMessagesForUser');
-const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
 const {
@@ -330,17 +321,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
-    getInboxMessagesForSection: jest
-      .fn()
-      .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: jest
-      .fn()
-      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getRecord: jest.fn(),
-    getSentMessagesForUser: jest
-      .fn()
-      .mockImplementation(getSentMessagesForUserPersistence),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
