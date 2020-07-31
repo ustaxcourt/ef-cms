@@ -167,10 +167,6 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    isQC: 
-      type: "boolean"
-      flags: 
-        presence: "required"
     isRead: 
       type: "boolean"
       flags: 
