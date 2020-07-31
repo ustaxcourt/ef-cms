@@ -397,14 +397,11 @@ Case.VALIDATION_RULES = {
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
   docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    joi
-      .object()
-      .meta({ entityName: 'DocketRecord' })
-      .description('List of DocketRecord Entities for the case.'),
+    DocketRecord.VALIDATION_RULES,
   ).required(),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Document' }))
+    .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   entityName: joi.string().valid('Case').required(),
