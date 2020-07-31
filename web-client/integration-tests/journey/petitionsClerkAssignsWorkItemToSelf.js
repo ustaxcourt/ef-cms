@@ -1,6 +1,5 @@
 export const petitionsClerkAssignsWorkItemToSelf = test => {
   return it('Petitions clerk assigns work item to self', async () => {
-    test.setState('workQueueToDisplay.workQueueIsInternal', false);
     // find the work item that is part of an Petition upload
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -65,6 +64,5 @@ export const petitionsClerkAssignsWorkItemToSelf = test => {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
-    test.setState('workQueueToDisplay.workQueueIsInternal', true);
   });
 };

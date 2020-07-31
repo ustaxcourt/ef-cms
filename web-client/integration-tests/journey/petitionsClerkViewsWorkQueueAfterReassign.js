@@ -1,11 +1,10 @@
-export const petitionsClerkViewsMessagesAfterReassign = test => {
-  return it('Petitions clerk views messages', async () => {
-    await test.runSequence('gotoMessagesSequence');
-    expect(test.getState('currentPage')).toEqual('Messages');
+export const petitionsClerkViewsWorkQueueAfterReassign = test => {
+  return it('Petitions clerk views work queue after reassign', async () => {
+    await test.runSequence('gotoWorkQueueSequence');
+    expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
-      workQueueIsInternal: false,
     });
     const workItem = test
       .getState('workQueue')

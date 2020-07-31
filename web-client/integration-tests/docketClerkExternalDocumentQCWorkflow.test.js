@@ -194,7 +194,7 @@ describe('Create a work item', () => {
       message: 'Motion in Limine QC completed and message sent.',
     });
 
-    expect(test.getState('currentPage')).toBe('Messages');
+    expect(test.getState('currentPage')).toBe('WorkQueue');
 
     const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
       item => item.docketNumber === caseDetail.docketNumber,
