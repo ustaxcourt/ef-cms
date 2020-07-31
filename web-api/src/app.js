@@ -345,7 +345,6 @@ const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
-const { forwardWorkItemLambda } = require('./workitems/forwardWorkItemLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
@@ -870,10 +869,6 @@ app.post('/users', lambdaWrapper(createUserLambda));
 /**
  * work-items
  */
-app.put(
-  '/work-items/:workItemId/assignee',
-  lambdaWrapper(forwardWorkItemLambda),
-);
 app.put(
   '/work-items/:workItemId/complete',
   lambdaWrapper(completeWorkItemLambda),
