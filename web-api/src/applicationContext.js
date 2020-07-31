@@ -302,9 +302,6 @@ const {
   forwardCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/forwardCaseMessageInteractor');
 const {
-  forwardWorkItemInteractor,
-} = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
-const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
@@ -1418,7 +1415,6 @@ module.exports = appContextUser => {
         fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
         forwardCaseMessageInteractor,
-        forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
