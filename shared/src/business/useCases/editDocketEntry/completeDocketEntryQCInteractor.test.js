@@ -76,7 +76,7 @@ describe('completeDocketEntryQCInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItems: [workItem],
+          workItem,
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
@@ -84,7 +84,7 @@ describe('completeDocketEntryQCInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItems: [workItem],
+          workItem,
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -92,7 +92,7 @@ describe('completeDocketEntryQCInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItems: [workItem],
+          workItem,
         },
       ],
       filingType: 'Myself',

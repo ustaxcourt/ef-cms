@@ -73,11 +73,9 @@ describe('formatCase', () => {
           eventCode: 'P',
           isLegacySealed: true,
           servedAt: getDateISO(),
-          workItems: [
-            {
-              completedAt: getDateISO(),
-            },
-          ],
+          workItem: {
+            completedAt: getDateISO(),
+          },
         },
         {
           createdAt: getDateISO(),
@@ -85,11 +83,9 @@ describe('formatCase', () => {
           documentType: 'Amended Answer',
           eventCode: 'ABC',
           servedAt: getDateISO(),
-          workItems: [
-            {
-              completedAt: getDateISO(),
-            },
-          ],
+          workItem: {
+            completedAt: getDateISO(),
+          },
         },
       ],
     });
