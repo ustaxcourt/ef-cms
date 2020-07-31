@@ -37,7 +37,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteDocument.mock
+      applicationContext.getPersistenceGateway().deleteDocumentFromS3.mock
         .calls[0][0],
     ).toMatchObject({
       key: 'abc',

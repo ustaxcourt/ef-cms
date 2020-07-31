@@ -2,10 +2,14 @@ export const lambdaWrapper = lambda => {
   return async (req, res) => {
     const event = {
       headers: req.headers,
-      path: req.params,
+      path: req.path,
       pathParameters: req.params,
       queryStringParameters: req.query,
     };
+
+    if (process.env.USTC_ENV === 'dev') {
+      console.log(`${req.method}: ${event.path}`);
+    }
 
     const response = await lambda({
       ...event,
