@@ -5,12 +5,10 @@ export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
-    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 

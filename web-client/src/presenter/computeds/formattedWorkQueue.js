@@ -47,7 +47,6 @@ export const formatWorkItem = ({
   applicationContext,
   workItem = {},
   selectedWorkItems = [],
-  workQueueIsInternal,
 }) => {
   const {
     COURT_ISSUED_DOCUMENT_TYPES,
@@ -92,9 +91,10 @@ export const formatWorkItem = ({
     selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
   );
 
-  result.receivedAt = workQueueIsInternal
-    ? result.createdAt
-    : isDateToday(result.document.receivedAt, applicationContext)
+  result.receivedAt = isDateToday(
+    result.document.receivedAt,
+    applicationContext,
+  )
     ? result.document.createdAt
     : result.document.receivedAt;
   result.received = formatDateIfToday(result.receivedAt, applicationContext);
@@ -149,9 +149,7 @@ export const getWorkItemDocumentLink = ({
   applicationContext,
   permissions,
   workItem,
-  workQueueToDisplay = {},
 }) => {
-  const { workQueueIsInternal } = workQueueToDisplay;
   const result = cloneDeep(workItem);
 
   const formattedDocument = applicationContext
@@ -180,7 +178,7 @@ export const getWorkItemDocumentLink = ({
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
 
   let editLink = documentDetailLink;
-  if (showDocumentEditLink && !workQueueIsInternal) {
+  if (showDocumentEditLink) {
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
         formattedDocument,
@@ -215,7 +213,7 @@ export const filterWorkItems = ({
 }) => {
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
 
-  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
+  const { box, queue } = workQueueToDisplay;
   let docQCUserSection = user.section;
 
   if (user.section !== PETITIONS_SECTION) {
@@ -338,7 +336,7 @@ export const filterWorkItems = ({
     },
   };
 
-  const view = workQueueIsInternal ? 'messages' : 'documentQc';
+  const view = 'documentQc';
   const composedFilter = filters[view][queue][box];
   return composedFilter;
 };
@@ -348,7 +346,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
-  const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
   const { USER_ROLES } = applicationContext.getConstants();
 
@@ -368,7 +365,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
         applicationContext,
         selectedWorkItems,
         workItem: item,
-        workQueueIsInternal,
       });
       const editLink = getWorkItemDocumentLink({
         applicationContext,
@@ -436,18 +432,14 @@ export const formattedWorkQueue = (get, applicationContext) => {
   };
 
   const sortField =
-    sortFields[workQueueIsInternal ? 'messages' : 'documentQc'][
-      workQueueToDisplay.queue
-    ][workQueueToDisplay.box];
+    sortFields.documentQc[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   const sortDirection =
-    sortDirections[workQueueIsInternal ? 'messages' : 'documentQc'][
-      workQueueToDisplay.queue
-    ][workQueueToDisplay.box];
+    sortDirections.documentQc[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [];
   let highPriorityDirection = [];
-  if (!workQueueIsInternal && workQueueToDisplay.box == 'inbox') {
+  if (workQueueToDisplay.box == 'inbox') {
     highPriorityField = ['highPriority', 'trialDate'];
     highPriorityDirection = ['desc', 'asc'];
   }

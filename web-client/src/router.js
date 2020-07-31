@@ -739,7 +739,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: null,
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -751,7 +750,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -763,7 +761,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -775,7 +772,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'outbox',
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -787,7 +783,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inProgress',
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -799,7 +794,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -811,7 +805,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -823,7 +816,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -835,7 +827,6 @@ const router = {
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'outbox',
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );

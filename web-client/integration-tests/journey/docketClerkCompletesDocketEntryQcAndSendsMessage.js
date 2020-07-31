@@ -10,7 +10,6 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
     const workQueueFormatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
