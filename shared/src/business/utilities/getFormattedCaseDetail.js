@@ -69,7 +69,7 @@ const formatDocument = (applicationContext, document) => {
 
   const qcWorkItem = result.workItem;
 
-  result.qcWorkItemsCompleted = qcWorkItem && qcWorkItem.completedAt;
+  result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
 
   result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
 
