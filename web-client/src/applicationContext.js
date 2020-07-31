@@ -102,7 +102,6 @@ import {
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardCaseMessageInteractor } from '../../shared/src/proxies/messages/forwardCaseMessageProxy';
-import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
@@ -307,7 +306,6 @@ const allUseCases = {
   filePetitionFromPaperInteractor,
   filePetitionInteractor,
   forwardCaseMessageInteractor,
-  forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateCourtIssuedDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
