@@ -63,7 +63,6 @@ export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -113,7 +112,6 @@ export const getFormattedDocumentQCSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -124,7 +122,6 @@ export const getFormattedDocumentQCMyOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -135,7 +132,6 @@ export const getFormattedDocumentQCSectionOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -168,50 +164,6 @@ export const createCourtIssuedDocketEntry = async ({
   });
 
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
-};
-
-export const getFormattedMyInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'inbox',
-    queue: 'my',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
-};
-
-export const getFormattedSectionInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'inbox',
-    queue: 'section',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
-};
-
-export const getFormattedMyOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'outbox',
-    queue: 'my',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
-};
-
-export const getFormattedSectionOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'outbox',
-    queue: 'section',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
 };
 
 export const getInboxCount = test => {
