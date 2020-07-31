@@ -16,6 +16,6 @@ export const petitionsDeletesOrderFromCase = test => {
 
     test.setState('archiveDraftDocument', draftOrder);
 
-    await test.runSequence('archiveDraftDocumentSequence');
+    await test.runSequence('removeDraftDocumentSequence');
   });
 };

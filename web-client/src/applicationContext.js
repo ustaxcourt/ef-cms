@@ -80,6 +80,7 @@ import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/dele
 import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
+import { deleteDraftDocumentInteractor } from '../../shared/src/proxies/deleteDraftDocumentProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
@@ -102,7 +103,6 @@ import {
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardCaseMessageInteractor } from '../../shared/src/proxies/messages/forwardCaseMessageProxy';
-import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
@@ -130,8 +130,6 @@ import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/w
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getInboxCaseMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxCaseMessagesForSectionProxy';
 import { getInboxCaseMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxCaseMessagesForUserProxy';
-import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
-import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
 import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getIrsPractitionersBySearchKeyProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
@@ -145,8 +143,6 @@ import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/docu
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
-import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
-import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
@@ -299,6 +295,7 @@ const allUseCases = {
   deleteCorrespondenceDocumentInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
+  deleteDraftDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   fetchPendingItemsInteractor,
@@ -311,7 +308,6 @@ const allUseCases = {
   filePetitionFromPaperInteractor,
   filePetitionInteractor,
   forwardCaseMessageInteractor,
-  forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateCourtIssuedDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
@@ -343,8 +339,6 @@ const allUseCases = {
   getEligibleCasesForTrialSessionInteractor,
   getInboxCaseMessagesForSectionInteractor,
   getInboxCaseMessagesForUserInteractor,
-  getInboxMessagesForSectionInteractor,
-  getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
   getItemInteractor,
@@ -357,8 +351,6 @@ const allUseCases = {
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
-  getSentMessagesForSectionInteractor,
-  getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsInteractor,

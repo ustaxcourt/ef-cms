@@ -216,7 +216,13 @@ const {
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
   deleteDocument,
-} = require('../../shared/src/persistence/s3/deleteDocument');
+} = require('../../shared/src/persistence/dynamo/documents/deleteDocument');
+const {
+  deleteDocumentFromS3,
+} = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
+const {
+  deleteDraftDocumentInteractor,
+} = require('../../shared/src/business/useCases/deleteDraftDocumentInteractor');
 const {
   deleteElasticsearchReindexRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
@@ -295,9 +301,6 @@ const {
 const {
   forwardCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/forwardCaseMessageInteractor');
-const {
-  forwardWorkItemInteractor,
-} = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
@@ -482,18 +485,6 @@ const {
   getInboxCaseMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxCaseMessagesForUserInteractor');
 const {
-  getInboxMessagesForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
-const {
-  getInboxMessagesForSectionInteractor,
-} = require('../../shared/src/business/useCases/workitems/getInboxMessagesForSectionInteractor');
-const {
-  getInboxMessagesForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForUser');
-const {
-  getInboxMessagesForUserInteractor,
-} = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
-const {
   getIndexedCasesForUser,
 } = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
 const {
@@ -565,18 +556,6 @@ const {
 const {
   getSectionOutboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
-const {
-  getSentMessagesForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
-const {
-  getSentMessagesForSectionInteractor,
-} = require('../../shared/src/business/useCases/workitems/getSentMessagesForSectionInteractor');
-const {
-  getSentMessagesForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForUser');
-const {
-  getSentMessagesForUserInteractor,
-} = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
   getTodaysOpinionsInteractor,
 } = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
@@ -1222,6 +1201,7 @@ module.exports = appContextUser => {
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
+        deleteDocumentFromS3,
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
@@ -1258,8 +1238,6 @@ module.exports = appContextUser => {
         getElasticsearchReindexRecords,
         getEligibleCasesForTrialCity,
         getEligibleCasesForTrialSession,
-        getInboxMessagesForSection,
-        getInboxMessagesForUser,
         getIndexMappingFields,
         getIndexMappingLimit,
         getIndexedCasesForUser,
@@ -1271,8 +1249,6 @@ module.exports = appContextUser => {
         getRecord,
         getSectionInboxMessages,
         getSectionOutboxMessages,
-        getSentMessagesForSection,
-        getSentMessagesForUser,
         getTrialSessionById,
         getTrialSessionWorkingCopy,
         getTrialSessions,
@@ -1428,6 +1404,7 @@ module.exports = appContextUser => {
         deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
+        deleteDraftDocumentInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
@@ -1438,7 +1415,6 @@ module.exports = appContextUser => {
         fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
         forwardCaseMessageInteractor,
-        forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
@@ -1471,8 +1447,6 @@ module.exports = appContextUser => {
         getEligibleCasesForTrialSessionInteractor,
         getInboxCaseMessagesForSectionInteractor,
         getInboxCaseMessagesForUserInteractor,
-        getInboxMessagesForSectionInteractor,
-        getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
@@ -1486,8 +1460,6 @@ module.exports = appContextUser => {
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
-        getSentMessagesForSectionInteractor,
-        getSentMessagesForUserInteractor,
         getTodaysOpinionsInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,

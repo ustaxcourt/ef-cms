@@ -52,7 +52,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   );
 
   if (stinDocument) {
-    await applicationContext.getPersistenceGateway().deleteDocument({
+    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
       applicationContext,
       key: stinDocument.documentId,
     });
