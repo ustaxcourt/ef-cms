@@ -86,6 +86,9 @@ const {
   deleteDeficiencyStatisticLambda,
 } = require('./cases/deleteDeficiencyStatisticLambda');
 const {
+  deleteDraftDocumentLambda,
+} = require('./documents/deleteDraftDocumentLambda');
+const {
   deleteTrialSessionLambda,
 } = require('./trialSessions/deleteTrialSessionLambda');
 const {
@@ -185,12 +188,6 @@ const {
   getInboxCaseMessagesForUserLambda,
 } = require('./messages/getInboxCaseMessagesForUserLambda');
 const {
-  getInboxMessagesForSectionLambda,
-} = require('./workitems/getInboxMessagesForSectionLambda');
-const {
-  getInboxMessagesForUserLambda,
-} = require('./workitems/getInboxMessagesForUserLambda');
-const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
@@ -211,12 +208,6 @@ const {
 const {
   getPrivatePractitionersBySearchKeyLambda,
 } = require('./users/getPrivatePractitionersBySearchKeyLambda');
-const {
-  getSentMessagesForSectionLambda,
-} = require('./workitems/getSentMessagesForSectionLambda');
-const {
-  getSentMessagesForUserLambda,
-} = require('./workitems/getSentMessagesForUserLambda');
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
@@ -357,7 +348,6 @@ const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
-const { forwardWorkItemLambda } = require('./workitems/forwardWorkItemLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
@@ -383,344 +373,379 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
 const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
 /**
+ * Important note: order of routes DOES matter!
+ * For example:
+ *   app.get('/something/:id', getId);
+ *     vs
+ *   app.get('/something/more', getMore);
+ *
+ * If the routes are given to express in the above order, a request to
+ *   `GET /something/more`
+ * will match the first which will execute `getId` rather than `getMore`.
+ * Always put "higher priority routes" before their competition.
+ * Consider grouping the routes by request method.
+ */
+
+/**
  * api
  */
-app.get('/api/swagger', lambdaWrapper(swaggerLambda));
-app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
-app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
-app.post(
-  '/api/court-issued-order',
-  lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
-);
-app.post(
-  '/api/docket-record-pdf',
-  lambdaWrapper(generateDocketRecordPdfLambda),
-);
+{
+  app.get('/api/swagger', lambdaWrapper(swaggerLambda));
+  app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
+  app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
+  app.post(
+    '/api/court-issued-order',
+    lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
+  );
+  app.post(
+    '/api/docket-record-pdf',
+    lambdaWrapper(generateDocketRecordPdfLambda),
+  );
+}
 
 /**
  * case-deadlines
  */
-app.put(
-  '/case-deadlines/:docketNumber/:caseDeadlineId',
-  lambdaWrapper(updateCaseDeadlineLambda),
-);
-app.delete(
-  '/case-deadlines/:docketNumber/:caseDeadlineId',
-  lambdaWrapper(deleteCaseDeadlineLambda),
-);
-app.post(
-  '/case-deadlines/:docketNumber',
-  lambdaWrapper(createCaseDeadlineLambda),
-);
-app.get(
-  '/case-deadlines/:docketNumber',
-  lambdaWrapper(getCaseDeadlinesForCaseLambda),
-);
-app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
-
+{
+  app.put(
+    '/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(updateCaseDeadlineLambda),
+  );
+  app.delete(
+    '/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(deleteCaseDeadlineLambda),
+  );
+  app.post(
+    '/case-deadlines/:docketNumber',
+    lambdaWrapper(createCaseDeadlineLambda),
+  );
+  app.get(
+    '/case-deadlines/:docketNumber',
+    lambdaWrapper(getCaseDeadlinesForCaseLambda),
+  );
+  app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
+}
 /**
  * case-documents
  */
-app.post(
-  '/case-documents/:docketNumber/:documentId/serve-court-issued',
-  lambdaWrapper(serveCourtIssuedDocumentLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/:documentId/coversheet',
-  lambdaWrapper(addCoversheetLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/:documentId/sign',
-  lambdaWrapper(saveSignedDocumentLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/:documentId/serve',
-  lambdaWrapper(serveExternallyFiledDocumentLambda),
-);
-app.get(
-  '/case-documents/:docketNumber/:documentId/download-policy-url',
-  lambdaWrapper(downloadPolicyUrlLambda),
-);
-app.get(
-  '/case-documents/:docketNumber/:documentId/document-download-url',
-  lambdaWrapper(getDocumentDownloadUrlLambda),
-);
-app.delete(
-  '/case-documents/:docketNumber/:documentId',
-  lambdaWrapper(archiveDraftDocumentLambda),
-);
-app.put(
-  '/case-documents/:docketNumber/court-issued-orders/:documentId',
-  lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/external-document',
-  lambdaWrapper(fileExternalDocumentToCaseLambda),
-);
-app.post(
-  '/case-documents/consolidated/:leadDocketNumber/external-document',
-  lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/docket-entry',
-  lambdaWrapper(fileDocketEntryToCaseLambda),
-);
-app.put(
-  '/case-documents/:docketNumber/docket-entry',
-  lambdaWrapper(updateDocketEntryOnCaseLambda),
-);
-app.put(
-  '/case-documents/:docketNumber/docket-entry-meta',
-  lambdaWrapper(updateDocketEntryMetaLambda),
-);
-app.put(
-  '/case-documents/:docketNumber/docket-entry-complete',
-  lambdaWrapper(completeDocketEntryQCLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/court-issued-docket-entry',
-  lambdaWrapper(fileCourtIssuedDocketEntryLambda),
-);
-app.put(
-  '/case-documents/:docketNumber/court-issued-docket-entry',
-  lambdaWrapper(updateCourtIssuedDocketEntryLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/court-issued-order',
-  lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
-);
-app.get(
-  '/case-documents/order-search',
-  lambdaWrapper(orderAdvancedSearchLambda),
-);
-app.get(
-  '/case-documents/opinion-search',
-  lambdaWrapper(opinionAdvancedSearchLambda),
-);
-app.put(
-  '/case-documents/:docketNumber/correspondence/:documentId',
-  lambdaWrapper(updateCorrespondenceDocumentLambda),
-);
-app.delete(
-  '/case-documents/:docketNumber/correspondence/:documentId',
-  lambdaWrapper(deleteCorrespondenceDocumentLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/correspondence',
-  lambdaWrapper(fileCorrespondenceDocumentLambda),
-);
+{
+  //GET
+  app.get(
+    '/case-documents/:docketNumber/:documentId/document-download-url',
+    lambdaWrapper(getDocumentDownloadUrlLambda),
+  );
+  app.get(
+    '/case-documents/:docketNumber/:documentId/download-policy-url',
+    lambdaWrapper(downloadPolicyUrlLambda),
+  );
+  app.get(
+    '/case-documents/opinion-search',
+    lambdaWrapper(opinionAdvancedSearchLambda),
+  );
+  app.get(
+    '/case-documents/order-search',
+    lambdaWrapper(orderAdvancedSearchLambda),
+  );
+  // POST
+  app.post(
+    '/case-documents/:docketNumber/:documentId/serve-court-issued',
+    lambdaWrapper(serveCourtIssuedDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:documentId/coversheet',
+    lambdaWrapper(addCoversheetLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:documentId/remove-signature',
+    lambdaWrapper(removeSignatureFromDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:documentId/sign',
+    lambdaWrapper(saveSignedDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:documentId/serve',
+    lambdaWrapper(serveExternallyFiledDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/external-document',
+    lambdaWrapper(fileExternalDocumentToCaseLambda),
+  );
+  app.post(
+    '/case-documents/consolidated/:leadDocketNumber/external-document',
+    lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/docket-entry',
+    lambdaWrapper(fileDocketEntryToCaseLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/court-issued-docket-entry',
+    lambdaWrapper(fileCourtIssuedDocketEntryLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/correspondence',
+    lambdaWrapper(fileCorrespondenceDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/court-issued-order',
+    lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
+  );
 
+  // PUT
+  app.put(
+    '/case-documents/:docketNumber/court-issued-orders/:documentId',
+    lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/docket-entry',
+    lambdaWrapper(updateDocketEntryOnCaseLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/docket-entry-meta',
+    lambdaWrapper(updateDocketEntryMetaLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/docket-entry-complete',
+    lambdaWrapper(completeDocketEntryQCLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/court-issued-docket-entry',
+    lambdaWrapper(updateCourtIssuedDocketEntryLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/correspondence/:documentId',
+    lambdaWrapper(updateCorrespondenceDocumentLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/:documentId',
+    lambdaWrapper(archiveDraftDocumentLambda),
+  );
+  // DELETE
+  app.delete(
+    '/case-documents/:docketNumber/:documentId',
+    lambdaWrapper(deleteDraftDocumentLambda),
+  );
+  app.delete(
+    '/case-documents/:docketNumber/correspondence/:documentId',
+    lambdaWrapper(deleteCorrespondenceDocumentLambda),
+  );
+}
 /**
  * case-meta
  */
-app.put(
-  '/case-meta/:docketNumber/update-case-trial-sort-tags',
-  lambdaWrapper(updateCaseTrialSortTagsLambda),
-);
-app.post(
-  '/case-meta/:docketNumber/block',
-  lambdaWrapper(blockCaseFromTrialLambda),
-);
-app.delete(
-  '/case-meta/:docketNumber/block',
-  lambdaWrapper(unblockCaseFromTrialLambda),
-);
-app.post(
-  '/case-meta/:docketNumber/high-priority',
-  lambdaWrapper(prioritizeCaseLambda),
-);
-app.delete(
-  '/case-meta/:docketNumber/high-priority',
-  lambdaWrapper(unprioritizeCaseLambda),
-);
-app.put(
-  '/case-meta/:docketNumber/case-context',
-  lambdaWrapper(updateCaseContextLambda),
-);
-app.put(
-  '/case-meta/:docketNumber/consolidate-case',
-  lambdaWrapper(addConsolidatedCaseLambda),
-);
-app.delete(
-  '/case-meta/:docketNumber/consolidate-case',
-  lambdaWrapper(removeConsolidatedCasesLambda),
-);
-app.put(
-  '/case-meta/:docketNumber/qc-complete',
-  lambdaWrapper(updateQcCompleteForTrialLambda),
-);
-app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
-app.post(
-  '/case-meta/:docketNumber/other-statistics',
-  lambdaWrapper(updateOtherStatisticsLambda),
-);
-app.put(
-  '/case-meta/:docketNumber/statistics/:statisticId',
-  lambdaWrapper(updateDeficiencyStatisticLambda),
-);
-app.delete(
-  '/case-meta/:docketNumber/statistics/:statisticId',
-  lambdaWrapper(deleteDeficiencyStatisticLambda),
-);
-app.post(
-  '/case-meta/:docketNumber/statistics',
-  lambdaWrapper(addDeficiencyStatisticLambda),
-);
-
+{
+  app.put(
+    '/case-meta/:docketNumber/update-case-trial-sort-tags',
+    lambdaWrapper(updateCaseTrialSortTagsLambda),
+  );
+  app.post(
+    '/case-meta/:docketNumber/block',
+    lambdaWrapper(blockCaseFromTrialLambda),
+  );
+  app.delete(
+    '/case-meta/:docketNumber/block',
+    lambdaWrapper(unblockCaseFromTrialLambda),
+  );
+  app.post(
+    '/case-meta/:docketNumber/high-priority',
+    lambdaWrapper(prioritizeCaseLambda),
+  );
+  app.delete(
+    '/case-meta/:docketNumber/high-priority',
+    lambdaWrapper(unprioritizeCaseLambda),
+  );
+  app.put(
+    '/case-meta/:docketNumber/case-context',
+    lambdaWrapper(updateCaseContextLambda),
+  );
+  app.put(
+    '/case-meta/:docketNumber/consolidate-case',
+    lambdaWrapper(addConsolidatedCaseLambda),
+  );
+  app.delete(
+    '/case-meta/:docketNumber/consolidate-case',
+    lambdaWrapper(removeConsolidatedCasesLambda),
+  );
+  app.put(
+    '/case-meta/:docketNumber/qc-complete',
+    lambdaWrapper(updateQcCompleteForTrialLambda),
+  );
+  app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
+  app.post(
+    '/case-meta/:docketNumber/other-statistics',
+    lambdaWrapper(updateOtherStatisticsLambda),
+  );
+  app.put(
+    '/case-meta/:docketNumber/statistics/:statisticId',
+    lambdaWrapper(updateDeficiencyStatisticLambda),
+  );
+  app.delete(
+    '/case-meta/:docketNumber/statistics/:statisticId',
+    lambdaWrapper(deleteDeficiencyStatisticLambda),
+  );
+  app.post(
+    '/case-meta/:docketNumber/statistics',
+    lambdaWrapper(addDeficiencyStatisticLambda),
+  );
+}
 /**
  * case-notes
  */
-app.get(
-  '/case-notes/batch-cases/:docketNumbers/user-notes',
-  lambdaWrapper(getUserCaseNoteForCasesLambda),
-);
-app.get(
-  '/case-notes/:docketNumber/user-notes',
-  lambdaWrapper(getUserCaseNoteLambda),
-);
-app.put(
-  '/case-notes/:docketNumber/user-notes',
-  lambdaWrapper(updateUserCaseNoteLambda),
-);
-app.delete(
-  '/case-notes/:docketNumber/user-notes',
-  lambdaWrapper(deleteUserCaseNoteLambda),
-);
-app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
-app.put('/case-notes/:docketNumber', lambdaWrapper(saveCaseNoteLambda));
-
+{
+  app.get(
+    '/case-notes/batch-cases/:docketNumbers/user-notes',
+    lambdaWrapper(getUserCaseNoteForCasesLambda),
+  );
+  app.get(
+    '/case-notes/:docketNumber/user-notes',
+    lambdaWrapper(getUserCaseNoteLambda),
+  );
+  app.put(
+    '/case-notes/:docketNumber/user-notes',
+    lambdaWrapper(updateUserCaseNoteLambda),
+  );
+  app.delete(
+    '/case-notes/:docketNumber/user-notes',
+    lambdaWrapper(deleteUserCaseNoteLambda),
+  );
+  app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
+  app.put('/case-notes/:docketNumber', lambdaWrapper(saveCaseNoteLambda));
+}
 /**
  * case-parties
  */
-app.put(
-  '/case-parties/:docketNumber/contact-primary',
-  lambdaWrapper(updatePrimaryContactLambda),
-);
-app.put(
-  '/case-parties/:docketNumber/contact-secondary',
-  lambdaWrapper(updateSecondaryContactLambda),
-);
-app.post(
-  '/case-parties/:docketNumber/associate-private-practitioner',
-  lambdaWrapper(associatePrivatePractitionerWithCaseLambda),
-);
-app.post(
-  '/case-parties/:docketNumber/associate-irs-practitioner',
-  lambdaWrapper(associateIrsPractitionerWithCaseLambda),
-);
-app.put(
-  '/case-parties/:docketNumber/counsel/:userId',
-  lambdaWrapper(updateCounselOnCaseLambda),
-);
-app.delete(
-  '/case-parties/:docketNumber/counsel/:userId',
-  lambdaWrapper(deleteCounselFromCaseLambda),
-);
-app.put(
-  '/case-parties/:docketNumber/petition-details',
-  lambdaWrapper(updatePetitionDetailsLambda),
-);
-app.put(
-  '/case-parties/:docketNumber/petitioner-info',
-  lambdaWrapper(updatePetitionerInformationLambda),
-);
-
+{
+  app.put(
+    '/case-parties/:docketNumber/contact-primary',
+    lambdaWrapper(updatePrimaryContactLambda),
+  );
+  app.put(
+    '/case-parties/:docketNumber/contact-secondary',
+    lambdaWrapper(updateSecondaryContactLambda),
+  );
+  app.post(
+    '/case-parties/:docketNumber/associate-private-practitioner',
+    lambdaWrapper(associatePrivatePractitionerWithCaseLambda),
+  );
+  app.post(
+    '/case-parties/:docketNumber/associate-irs-practitioner',
+    lambdaWrapper(associateIrsPractitionerWithCaseLambda),
+  );
+  app.put(
+    '/case-parties/:docketNumber/counsel/:userId',
+    lambdaWrapper(updateCounselOnCaseLambda),
+  );
+  app.delete(
+    '/case-parties/:docketNumber/counsel/:userId',
+    lambdaWrapper(deleteCounselFromCaseLambda),
+  );
+  app.put(
+    '/case-parties/:docketNumber/petition-details',
+    lambdaWrapper(updatePetitionDetailsLambda),
+  );
+  app.put(
+    '/case-parties/:docketNumber/petitioner-info',
+    lambdaWrapper(updatePetitionerInformationLambda),
+  );
+}
 /**
  * cases
  */
-app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
-app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
-app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
-app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
-app.delete(
-  '/cases/:docketNumber/remove-pending/:documentId',
-  lambdaWrapper(removeCasePendingItemLambda),
-);
-app.get(
-  '/cases/:docketNumber/consolidated-cases',
-  lambdaWrapper(getConsolidatedCasesByCaseLambda),
-);
-app.post(
-  '/cases/:docketNumber/serve-to-irs',
-  lambdaWrapper(serveCaseToIrsLambda),
-);
-app.put(
-  '/cases/:docketNumber',
-  lambdaWrapper(saveCaseDetailInternalEditLambda),
-);
-app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
-app.post('/cases', lambdaWrapper(createCaseLambda));
-
+{
+  app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
+  app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+  app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
+  app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
+  app.delete(
+    '/cases/:docketNumber/remove-pending/:documentId',
+    lambdaWrapper(removeCasePendingItemLambda),
+  );
+  app.get(
+    '/cases/:docketNumber/consolidated-cases',
+    lambdaWrapper(getConsolidatedCasesByCaseLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/serve-to-irs',
+    lambdaWrapper(serveCaseToIrsLambda),
+  );
+  app.put(
+    '/cases/:docketNumber',
+    lambdaWrapper(saveCaseDetailInternalEditLambda),
+  );
+  app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
+  app.post('/cases', lambdaWrapper(createCaseLambda));
+}
 /**
  * documents
  */
-app.post('/documents/:documentId/validate', lambdaWrapper(validatePdfLambda));
-app.get(
-  '/documents/:documentId/upload-policy',
-  lambdaWrapper(getUploadPolicyLambda),
-);
-app.post(
-  '/documents/filing-receipt-pdf',
-  lambdaWrapper(generatePrintableFilingReceiptLambda),
-);
+{
+  app.post('/documents/:documentId/validate', lambdaWrapper(validatePdfLambda));
+  app.get(
+    '/documents/:documentId/upload-policy',
+    lambdaWrapper(getUploadPolicyLambda),
+  );
+  app.post(
+    '/documents/filing-receipt-pdf',
+    lambdaWrapper(generatePrintableFilingReceiptLambda),
+  );
+}
+
 app.post(
   '/clamav/documents/:documentId/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
-);
-app.post(
-  '/case-documents/:docketNumber/:documentId/remove-signature',
-  lambdaWrapper(removeSignatureFromDocumentLambda),
 );
 
 /**
  * messages
  */
-app.post(
-  '/messages/:parentMessageId/reply',
-  lambdaWrapper(replyToCaseMessageLambda),
-);
-app.post(
-  '/messages/:parentMessageId/forward',
-  lambdaWrapper(forwardCaseMessageLambda),
-);
-app.post(
-  '/messages/:parentMessageId/complete',
-  lambdaWrapper(completeCaseMessageLambda),
-);
-app.get(
-  '/messages/:parentMessageId',
-  lambdaWrapper(getCaseMessageThreadLambda),
-);
-app.get(
-  '/messages/case/:docketNumber',
-  lambdaWrapper(getCaseMessagesForCaseLambda),
-);
-app.get(
-  '/messages/inbox/section/:section',
-  lambdaWrapper(getInboxCaseMessagesForSectionLambda),
-);
-app.get(
-  '/messages/inbox/:userId',
-  lambdaWrapper(getInboxCaseMessagesForUserLambda),
-);
-app.get(
-  '/messages/outbox/section/:section',
-  lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
-);
-app.get(
-  '/messages/outbox/:userId',
-  lambdaWrapper(getOutboxCaseMessagesForUserLambda),
-);
-app.get(
-  '/messages/completed/section/:section',
-  lambdaWrapper(getCompletedCaseMessagesForSectionLambda),
-);
-app.get(
-  '/messages/completed/:userId',
-  lambdaWrapper(getCompletedCaseMessagesForUserLambda),
-);
-app.post('/messages', lambdaWrapper(createCaseMessageLambda));
-
+{
+  app.post(
+    '/messages/:parentMessageId/reply',
+    lambdaWrapper(replyToCaseMessageLambda),
+  );
+  app.post(
+    '/messages/:parentMessageId/forward',
+    lambdaWrapper(forwardCaseMessageLambda),
+  );
+  app.post(
+    '/messages/:parentMessageId/complete',
+    lambdaWrapper(completeCaseMessageLambda),
+  );
+  app.get(
+    '/messages/:parentMessageId',
+    lambdaWrapper(getCaseMessageThreadLambda),
+  );
+  app.get(
+    '/messages/case/:docketNumber',
+    lambdaWrapper(getCaseMessagesForCaseLambda),
+  );
+  app.get(
+    '/messages/inbox/section/:section',
+    lambdaWrapper(getInboxCaseMessagesForSectionLambda),
+  );
+  app.get(
+    '/messages/inbox/:userId',
+    lambdaWrapper(getInboxCaseMessagesForUserLambda),
+  );
+  app.get(
+    '/messages/outbox/section/:section',
+    lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
+  );
+  app.get(
+    '/messages/outbox/:userId',
+    lambdaWrapper(getOutboxCaseMessagesForUserLambda),
+  );
+  app.get(
+    '/messages/completed/section/:section',
+    lambdaWrapper(getCompletedCaseMessagesForSectionLambda),
+  );
+  app.get(
+    '/messages/completed/:userId',
+    lambdaWrapper(getCompletedCaseMessagesForUserLambda),
+  );
+  app.post('/messages', lambdaWrapper(createCaseMessageLambda));
+}
 /**
  * migrate
  */
@@ -730,57 +755,52 @@ app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
 /**
  * practitioners
  */
-app.get(
-  '/practitioners/:barNumber',
-  lambdaWrapper(getPractitionerByBarNumberLambda),
-);
-app.put(
-  '/practitioners/:barNumber',
-  lambdaWrapper(updatePractitionerUserLambda),
-);
-app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
-app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
+{
+  app.get(
+    '/practitioners/:barNumber',
+    lambdaWrapper(getPractitionerByBarNumberLambda),
+  );
+  app.put(
+    '/practitioners/:barNumber',
+    lambdaWrapper(updatePractitionerUserLambda),
+  );
+  app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
+  app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
+}
 
 /**
  * reports
  */
-app.get(
-  '/reports/blocked/:trialLocation',
-  lambdaWrapper(getBlockedCasesLambda),
-);
-app.get(
-  '/reports/case-inventory-report',
-  lambdaWrapper(getCaseInventoryReportLambda),
-);
-app.get(
-  '/reports/printable-case-inventory-report',
-  lambdaWrapper(generatePrintableCaseInventoryReportLambda),
-);
-app.get('/reports/pending-items', lambdaWrapper(fetchPendingItemsLambda));
-app.get(
-  '/reports/pending-report',
-  lambdaWrapper(generatePrintablePendingReportLambda),
-);
-app.post(
-  '/reports/trial-calendar-pdf',
-  lambdaWrapper(generateTrialCalendarPdfLambda),
-);
-app.post(
-  '/reports/planning-report',
-  lambdaWrapper(runTrialSessionPlanningReportLambda),
-);
-
+{
+  app.get(
+    '/reports/blocked/:trialLocation',
+    lambdaWrapper(getBlockedCasesLambda),
+  );
+  app.get(
+    '/reports/case-inventory-report',
+    lambdaWrapper(getCaseInventoryReportLambda),
+  );
+  app.get(
+    '/reports/printable-case-inventory-report',
+    lambdaWrapper(generatePrintableCaseInventoryReportLambda),
+  );
+  app.get('/reports/pending-items', lambdaWrapper(fetchPendingItemsLambda));
+  app.get(
+    '/reports/pending-report',
+    lambdaWrapper(generatePrintablePendingReportLambda),
+  );
+  app.post(
+    '/reports/trial-calendar-pdf',
+    lambdaWrapper(generateTrialCalendarPdfLambda),
+  );
+  app.post(
+    '/reports/planning-report',
+    lambdaWrapper(runTrialSessionPlanningReportLambda),
+  );
+}
 /**
  * sections
  */
-app.get(
-  '/sections/:section/messages/inbox',
-  lambdaWrapper(getInboxMessagesForSectionLambda),
-);
-app.get(
-  '/sections/:section/messages/sent',
-  lambdaWrapper(getSentMessagesForSectionLambda),
-);
 app.get(
   '/sections/:section/document-qc/served',
   lambdaWrapper(getDocumentQCServedForSectionLambda),
@@ -794,57 +814,59 @@ app.get(
 /**
  * trial-sessions
  */
-app.post(
-  '/trial-sessions/:trialSessionId/generate-notices',
-  lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
-);
-app.post(
-  '/trial-sessions/:trialSessionId/set-swing-session',
-  lambdaWrapper(setTrialSessionAsSwingSessionLambda),
-);
-app.get(
-  '/trial-sessions/:trialSessionId/eligible-cases',
-  lambdaWrapper(getEligibleCasesForTrialSessionLambda),
-);
-app.post(
-  '/trial-sessions/:trialSessionId/set-calendar',
-  lambdaWrapper(setTrialSessionCalendarLambda),
-);
-app.get(
-  '/trial-sessions/:trialSessionId/get-calendared-cases',
-  lambdaWrapper(getCalendaredCasesForTrialSessionLambda),
-);
-app.get(
-  '/trial-sessions/:trialSessionId/working-copy',
-  lambdaWrapper(getTrialSessionWorkingCopyLambda),
-);
-app.put(
-  '/trial-sessions/:trialSessionId/working-copy',
-  lambdaWrapper(updateTrialSessionWorkingCopyLambda),
-);
-app.get(
-  '/trial-sessions/:trialSessionId/batch-download',
-  lambdaWrapper(batchDownloadTrialSessionLambda),
-);
-app.put(
-  '/trial-sessions/:trialSessionId/remove-case/:docketNumber',
-  lambdaWrapper(removeCaseFromTrialLambda),
-);
-app.post(
-  '/trial-sessions/:trialSessionId/cases/:docketNumber',
-  lambdaWrapper(addCaseToTrialSessionLambda),
-);
-app.get(
-  '/trial-sessions/:trialSessionId',
-  lambdaWrapper(getTrialSessionDetailsLambda),
-);
-app.delete(
-  '/trial-sessions/:trialSessionId',
-  lambdaWrapper(deleteTrialSessionLambda),
-);
-app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
-app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
-app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
+{
+  app.post(
+    '/trial-sessions/:trialSessionId/generate-notices',
+    lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
+  );
+  app.post(
+    '/trial-sessions/:trialSessionId/set-swing-session',
+    lambdaWrapper(setTrialSessionAsSwingSessionLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/eligible-cases',
+    lambdaWrapper(getEligibleCasesForTrialSessionLambda),
+  );
+  app.post(
+    '/trial-sessions/:trialSessionId/set-calendar',
+    lambdaWrapper(setTrialSessionCalendarLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/get-calendared-cases',
+    lambdaWrapper(getCalendaredCasesForTrialSessionLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/working-copy',
+    lambdaWrapper(getTrialSessionWorkingCopyLambda),
+  );
+  app.put(
+    '/trial-sessions/:trialSessionId/working-copy',
+    lambdaWrapper(updateTrialSessionWorkingCopyLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/batch-download',
+    lambdaWrapper(batchDownloadTrialSessionLambda),
+  );
+  app.put(
+    '/trial-sessions/:trialSessionId/remove-case/:docketNumber',
+    lambdaWrapper(removeCaseFromTrialLambda),
+  );
+  app.post(
+    '/trial-sessions/:trialSessionId/cases/:docketNumber',
+    lambdaWrapper(addCaseToTrialSessionLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId',
+    lambdaWrapper(getTrialSessionDetailsLambda),
+  );
+  app.delete(
+    '/trial-sessions/:trialSessionId',
+    lambdaWrapper(deleteTrialSessionLambda),
+  );
+  app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
+  app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
+  app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
+}
 
 /**
  * users
@@ -862,14 +884,6 @@ app.get(
 app.put(
   '/users/:userId/case/:docketNumber/pending',
   lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
-);
-app.get(
-  '/users/:userId/messages/inbox',
-  lambdaWrapper(getInboxMessagesForUserLambda),
-);
-app.get(
-  '/users/:userId/messages/sent',
-  lambdaWrapper(getSentMessagesForUserLambda),
 );
 app.get(
   '/users/:userId/document-qc/inbox',
@@ -898,19 +912,17 @@ app.post('/users', lambdaWrapper(createUserLambda));
 /**
  * work-items
  */
-app.put(
-  '/work-items/:workItemId/assignee',
-  lambdaWrapper(forwardWorkItemLambda),
-);
-app.put(
-  '/work-items/:workItemId/complete',
-  lambdaWrapper(completeWorkItemLambda),
-);
-app.post(
-  '/work-items/:workItemId/read',
-  lambdaWrapper(setWorkItemAsReadLambda),
-);
-app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
-app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
+{
+  app.put(
+    '/work-items/:workItemId/complete',
+    lambdaWrapper(completeWorkItemLambda),
+  );
+  app.post(
+    '/work-items/:workItemId/read',
+    lambdaWrapper(setWorkItemAsReadLambda),
+  );
+  app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
+  app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
+}
 
 exports.app = app;
