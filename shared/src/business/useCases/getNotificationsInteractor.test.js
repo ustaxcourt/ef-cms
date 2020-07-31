@@ -14,19 +14,11 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getInboxMessagesForUser.mockReturnValue([
-        {
-          isRead: false,
-        },
-      ]);
-
     const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ myInboxUnreadCount: 1, qcUnreadCount: 0 });
+    expect(result).toEqual({ qcUnreadCount: 0 });
   });
 
   it('returns an unread count for qc messages', async () => {
@@ -38,19 +30,11 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getInboxMessagesForUser.mockReturnValue([
-        {
-          isRead: true,
-        },
-      ]);
-
     const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ myInboxUnreadCount: 0, qcUnreadCount: 1 });
+    expect(result).toEqual({ qcUnreadCount: 1 });
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
@@ -62,17 +46,10 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getInboxMessagesForUser.mockReturnValue([
-        {
-          isRead: true,
-        },
-      ]);
     const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ myInboxUnreadCount: 0, qcUnreadCount: 0 });
+    expect(result).toEqual({ qcUnreadCount: 0 });
   });
 });
