@@ -374,7 +374,8 @@ Case.VALIDATION_RULES = {
   contactSecondary: joi.object().optional().allow(null),
   correspondence: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
     .description('List of Correspondence documents for the case.'),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the paper or electronic case was added to the system. This value cannot be edited.',
@@ -397,14 +398,11 @@ Case.VALIDATION_RULES = {
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
   docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    joi
-      .object()
-      .meta({ entityName: 'DocketRecord' })
-      .description('List of DocketRecord Entities for the case.'),
+    DocketRecord.VALIDATION_RULES,
   ).required(),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Document' }))
+    .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   entityName: joi.string().valid('Case').required(),
@@ -606,7 +604,7 @@ Case.VALIDATION_RULES = {
     ),
   statistics: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Statistic' }))
+    .items(Statistic.VALIDATION_RULES)
     .when('hasVerifiedIrsNotice', {
       is: true,
       otherwise: joi.optional(),

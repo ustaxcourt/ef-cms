@@ -1,15 +1,15 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES } = require('./EntityConstants');
-const { CaseMessage } = require('./CaseMessage');
+const { Message } = require('./Message');
 
-describe('CaseMessage', () => {
+describe('Message', () => {
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
-      expect(() => new CaseMessage({}, {})).toThrow();
+      expect(() => new Message({}, {})).toThrow();
     });
 
-    it('creates a valid CaseMessage without messageId (defaults to new uuid)', () => {
-      const message = new CaseMessage(
+    it('creates a valid Message without messageId (defaults to new uuid)', () => {
+      const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
@@ -30,8 +30,8 @@ describe('CaseMessage', () => {
       expect(message.isValid()).toBeTruthy();
     });
 
-    it('creates an invalid CaseMessage with no message', () => {
-      const message = new CaseMessage(
+    it('creates an invalid Message with no message', () => {
+      const message = new Message(
         {
           from: 'gg',
           fromSection: 'petitions',
@@ -43,8 +43,8 @@ describe('CaseMessage', () => {
       expect(message.isValid()).toBeFalsy();
     });
 
-    it('creates an invalid CaseMessage with isCompleted true and without completedBy fields', () => {
-      const message = new CaseMessage(
+    it('creates an invalid Message with isCompleted true and without completedBy fields', () => {
+      const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
@@ -72,8 +72,8 @@ describe('CaseMessage', () => {
       ]);
     });
 
-    it('creates a valid CaseMessage with attachments', () => {
-      const message = new CaseMessage(
+    it('creates a valid Message with attachments', () => {
+      const message = new Message(
         {
           attachments: [
             {
@@ -108,8 +108,8 @@ describe('CaseMessage', () => {
       ]);
     });
 
-    it('creates an invalid CaseMessage with invalid attachments', () => {
-      const message = new CaseMessage(
+    it('creates an invalid Message with invalid attachments', () => {
+      const message = new Message(
         {
           attachments: [
             {
@@ -139,7 +139,7 @@ describe('CaseMessage', () => {
 
   describe('markAsCompleted', () => {
     it('should mark the message as completed with a message and user', () => {
-      const message = new CaseMessage(
+      const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
@@ -181,7 +181,7 @@ describe('CaseMessage', () => {
 
   describe('addAttachment', () => {
     it('should add the passed in attachment to the attachments array', () => {
-      const message = new CaseMessage(
+      const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',

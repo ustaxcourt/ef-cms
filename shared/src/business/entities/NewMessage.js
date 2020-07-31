@@ -2,20 +2,20 @@ const joi = require('joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CaseMessage } = require('./CaseMessage');
+const { Message } = require('./Message');
 
 /**
- * NewCaseMessage entity - used for validating
+ * NewMessage entity - used for validating
  * the Create Case Message modal form
  *
  * @param {object} rawMessage the raw message data
  * @constructor
  */
-function NewCaseMessage(rawMessage, { applicationContext }) {
+function NewMessage(rawMessage, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'NewCaseMessage';
+  this.entityName = 'NewMessage';
 
   this.message = rawMessage.message;
   this.subject = rawMessage.subject;
@@ -23,9 +23,9 @@ function NewCaseMessage(rawMessage, { applicationContext }) {
   this.toUserId = rawMessage.toUserId;
 }
 
-NewCaseMessage.validationName = 'NewCaseMessage';
+NewMessage.validationName = 'NewMessage';
 
-NewCaseMessage.VALIDATION_ERROR_MESSAGES = {
+NewMessage.VALIDATION_ERROR_MESSAGES = {
   message: 'Enter a message',
   subject: 'Enter a subject line',
   toSection: 'Select a section',
@@ -33,15 +33,15 @@ NewCaseMessage.VALIDATION_ERROR_MESSAGES = {
 };
 
 joiValidationDecorator(
-  NewCaseMessage,
+  NewMessage,
   joi.object().keys({
-    entityName: joi.string().valid('NewCaseMessage').required(),
-    message: CaseMessage.VALIDATION_RULES.message,
-    subject: CaseMessage.VALIDATION_RULES.subject,
-    toSection: CaseMessage.VALIDATION_RULES.toSection,
-    toUserId: CaseMessage.VALIDATION_RULES.toUserId,
+    entityName: joi.string().valid('NewMessage').required(),
+    message: Message.VALIDATION_RULES.message,
+    subject: Message.VALIDATION_RULES.subject,
+    toSection: Message.VALIDATION_RULES.toSection,
+    toUserId: Message.VALIDATION_RULES.toUserId,
   }),
-  NewCaseMessage.VALIDATION_ERROR_MESSAGES,
+  NewMessage.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { NewCaseMessage };
+module.exports = { NewMessage };
