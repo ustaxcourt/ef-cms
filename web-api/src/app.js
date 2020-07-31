@@ -188,12 +188,6 @@ const {
   getInboxCaseMessagesForUserLambda,
 } = require('./messages/getInboxCaseMessagesForUserLambda');
 const {
-  getInboxMessagesForSectionLambda,
-} = require('./workitems/getInboxMessagesForSectionLambda');
-const {
-  getInboxMessagesForUserLambda,
-} = require('./workitems/getInboxMessagesForUserLambda');
-const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
@@ -214,12 +208,6 @@ const {
 const {
   getPrivatePractitionersBySearchKeyLambda,
 } = require('./users/getPrivatePractitionersBySearchKeyLambda');
-const {
-  getSentMessagesForSectionLambda,
-} = require('./workitems/getSentMessagesForSectionLambda');
-const {
-  getSentMessagesForUserLambda,
-} = require('./workitems/getSentMessagesForUserLambda');
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
@@ -814,25 +802,16 @@ app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
 /**
  * sections
  */
-{
-  app.get(
-    '/sections/:section/messages/inbox',
-    lambdaWrapper(getInboxMessagesForSectionLambda),
-  );
-  app.get(
-    '/sections/:section/messages/sent',
-    lambdaWrapper(getSentMessagesForSectionLambda),
-  );
-  app.get(
-    '/sections/:section/document-qc/served',
-    lambdaWrapper(getDocumentQCServedForSectionLambda),
-  );
-  app.get('/sections/:section/users', lambdaWrapper(getUsersInSectionLambda));
-  app.get(
-    '/sections/:section/document-qc/inbox',
-    lambdaWrapper(getDocumentQCInboxForSectionLambda),
-  );
-}
+app.get(
+  '/sections/:section/document-qc/served',
+  lambdaWrapper(getDocumentQCServedForSectionLambda),
+);
+app.get('/sections/:section/users', lambdaWrapper(getUsersInSectionLambda));
+app.get(
+  '/sections/:section/document-qc/inbox',
+  lambdaWrapper(getDocumentQCInboxForSectionLambda),
+);
+
 /**
  * trial-sessions
  */
@@ -893,53 +872,43 @@ app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
 /**
  * users
  */
-{
-  app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
-  app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
-  app.put(
-    '/users/:userId/case/:docketNumber',
-    lambdaWrapper(privatePractitionerCaseAssociationLambda),
-  );
-  app.get(
-    '/users/:userId/case/:docketNumber/pending',
-    lambdaWrapper(verifyPendingCaseForUserLambda),
-  );
-  app.put(
-    '/users/:userId/case/:docketNumber/pending',
-    lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
-  );
-  app.get(
-    '/users/:userId/messages/inbox',
-    lambdaWrapper(getInboxMessagesForUserLambda),
-  );
-  app.get(
-    '/users/:userId/messages/sent',
-    lambdaWrapper(getSentMessagesForUserLambda),
-  );
-  app.get(
-    '/users/:userId/document-qc/inbox',
-    lambdaWrapper(getDocumentQCInboxForUserLambda),
-  );
-  app.get(
-    '/users/:userId/document-qc/served',
-    lambdaWrapper(getDocumentQCServedForUserLambda),
-  );
-  app.put(
-    '/users/:userId/contact-info',
-    lambdaWrapper(updateUserContactInformationLambda),
-  );
-  app.get(
-    '/users/privatePractitioners/search',
-    lambdaWrapper(getPrivatePractitionersBySearchKeyLambda),
-  );
-  app.get(
-    '/users/irsPractitioners/search',
-    lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
-  );
-  app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
-  app.get('/users', lambdaWrapper(getUserLambda));
-  app.post('/users', lambdaWrapper(createUserLambda));
-}
+app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
+app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
+app.put(
+  '/users/:userId/case/:docketNumber',
+  lambdaWrapper(privatePractitionerCaseAssociationLambda),
+);
+app.get(
+  '/users/:userId/case/:docketNumber/pending',
+  lambdaWrapper(verifyPendingCaseForUserLambda),
+);
+app.put(
+  '/users/:userId/case/:docketNumber/pending',
+  lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
+);
+app.get(
+  '/users/:userId/document-qc/inbox',
+  lambdaWrapper(getDocumentQCInboxForUserLambda),
+);
+app.get(
+  '/users/:userId/document-qc/served',
+  lambdaWrapper(getDocumentQCServedForUserLambda),
+);
+app.put(
+  '/users/:userId/contact-info',
+  lambdaWrapper(updateUserContactInformationLambda),
+);
+app.get(
+  '/users/privatePractitioners/search',
+  lambdaWrapper(getPrivatePractitionersBySearchKeyLambda),
+);
+app.get(
+  '/users/irsPractitioners/search',
+  lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
+);
+app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
+app.get('/users', lambdaWrapper(getUserLambda));
+app.post('/users', lambdaWrapper(createUserLambda));
 
 /**
  * work-items
