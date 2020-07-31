@@ -219,7 +219,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/documents/deleteDocument');
 const {
   deleteDocumentFromS3,
-} = require('../../shared/src/persistence/s3/deleteDocument');
+} = require('../../shared/src/persistence/s3/deleteDocumentFroms3');
 const {
   deleteDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/deleteDraftDocumentInteractor');
