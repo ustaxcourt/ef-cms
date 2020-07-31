@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { CaseMessage } = require('../../entities/CaseMessage');
+const { Message } = require('../../entities/Message');
 const { Document } = require('../../entities/Document');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { orderBy } = require('lodash');
@@ -137,7 +137,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const caseMessageEntity = new CaseMessage(mostRecentMessage, {
+    const caseMessageEntity = new Message(mostRecentMessage, {
       applicationContext,
     }).validate();
     caseMessageEntity.addAttachment({
