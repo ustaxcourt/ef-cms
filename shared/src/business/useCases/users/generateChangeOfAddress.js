@@ -139,7 +139,6 @@ exports.generateChangeOfAddress = async ({
 
       const changeOfAddressDocument = new Document(documentData, {
         applicationContext,
-        updateIndex: true,
       });
 
       const servedParties = aggregatePartiesForService(caseEntity);

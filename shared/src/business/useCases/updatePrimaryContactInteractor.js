@@ -166,7 +166,6 @@ exports.updatePrimaryContactInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument, {
       applicationContext,
-      updateIndex: true,
     });
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({

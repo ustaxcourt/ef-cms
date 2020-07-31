@@ -172,7 +172,6 @@ exports.updatePetitionerInformationInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument, {
       applicationContext,
-      updateIndex: true,
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
