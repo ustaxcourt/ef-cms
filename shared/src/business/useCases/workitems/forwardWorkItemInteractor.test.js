@@ -45,7 +45,6 @@ const mockCase = {
           },
           gsi1pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           isInitializeCase: true,
-          isQC: true,
           pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           section: 'petitions',
           sentBy: 'Test Petitioner',
@@ -73,7 +72,6 @@ const mockCase = {
           },
           gsi1pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           isInitializeCase: true,
-          isQC: true,
           pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           section: 'petitions',
           sentBy: 'Test Petitioner',
@@ -95,7 +93,6 @@ describe('forwardWorkItemInteractor', () => {
     document: {
       sentBy: 'petitioner',
     },
-    isQC: true,
     sentBy: 'docketclerk',
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
@@ -145,7 +142,6 @@ describe('forwardWorkItemInteractor', () => {
         sentBy: 'petitioner',
       },
       isInitializeCase: undefined,
-      isQC: false,
       isRead: undefined,
       section: 'docket',
       sentBy: 'Petitionsclerk',

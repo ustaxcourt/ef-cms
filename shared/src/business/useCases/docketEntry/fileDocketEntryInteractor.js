@@ -100,7 +100,6 @@ exports.fileDocketEntryInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           inProgress: isSavingForLater,
-          isQC: true,
           isRead: user.role !== ROLES.privatePractitioner,
           section: DOCKET_SECTION,
           sentBy: user.name,

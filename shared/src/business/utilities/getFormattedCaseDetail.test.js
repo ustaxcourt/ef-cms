@@ -76,7 +76,6 @@ describe('formatCase', () => {
           workItems: [
             {
               completedAt: getDateISO(),
-              isQC: true,
             },
           ],
         },
@@ -89,7 +88,6 @@ describe('formatCase', () => {
           workItems: [
             {
               completedAt: getDateISO(),
-              isQC: false,
             },
           ],
         },

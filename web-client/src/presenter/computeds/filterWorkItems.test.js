@@ -8,20 +8,9 @@ import {
 import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
-const MY_DOCUMENT_QC_INBOX = {
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
-};
-
 const MY_DOCUMENT_QC_IN_PROGRESS = {
   workQueueToDisplay: {
     box: 'inProgress',
-    queue: 'my',
-  },
-};
-
-const MY_DOCUMENT_QC_OUTBOX = {
-  workQueueToDisplay: {
-    box: 'outbox',
     queue: 'my',
   },
 };
@@ -90,22 +79,6 @@ const generateWorkItem = (data, document) => {
       documentType: 'Answer',
       ...document,
     },
-    messages: [
-      {
-        createdAt: '2018-12-27T18:05:54.164Z',
-        from: 'Test Respondent',
-        fromUserId: 'respondent',
-        message: 'Answer filed by respondent is ready for review',
-        messageId: '789',
-      },
-      {
-        createdAt: '2018-12-27T18:05:54.164Z',
-        from: 'Test Docketclerk',
-        fromUserId: 'docketclerk',
-        message: '012',
-        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      },
-    ],
     section: 'docket',
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
@@ -154,19 +127,11 @@ const generateWorkItem = (data, document) => {
 
 describe('filterWorkItems', () => {
   // Petitions
-  let workItemPetitionsMyMessagesInbox;
-  let workItemPetitionsMyMessagesSent;
-  let workItemPetitionsSectionMessagesInbox;
-  let workItemPetitionsSectionMessagesSent;
   let workItemPetitionsMyDocumentQCInbox;
   let workItemPetitionsMyDocumentQCServed;
   let workItemPetitionsSectionDocumentQCInbox;
   let workItemPetitionsSectionDocumentQCServed;
   // Docket
-  let workItemDocketMyMessagesInbox;
-  let workItemDocketMyMessagesSent;
-  let workItemDocketSectionMessagesInbox;
-  let workItemDocketSectionMessagesSent;
   let workItemDocketMyDocumentQCInbox;
   let workItemDocketSectionDocumentQCInbox;
   let workItemDocketMyDocumentQCInProgress;
@@ -182,41 +147,9 @@ describe('filterWorkItems', () => {
       userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
     });
 
-    workItemPetitionsMyMessagesInbox = generateWorkItem({
-      assigneeId: petitionsClerk1.userId,
-      completedAt: null,
-      docketNumber: '100-01',
-      isQC: false,
-      section: PETITIONS_SECTION,
-    });
-
-    workItemPetitionsMyMessagesSent = generateWorkItem({
-      assigneeId: petitionsClerk2.userId,
-      docketNumber: '100-02',
-      isQC: false,
-      section: PETITIONS_SECTION,
-      sentBySection: PETITIONS_SECTION,
-      sentByUserId: petitionsClerk1.userId,
-    });
-
-    workItemPetitionsSectionMessagesInbox = generateWorkItem({
-      completedAt: null,
-      docketNumber: '100-03',
-      isQC: false,
-      section: PETITIONS_SECTION,
-    });
-
-    workItemPetitionsSectionMessagesSent = generateWorkItem({
-      docketNumber: '100-04',
-      isQC: false,
-      sentBySection: PETITIONS_SECTION,
-      sentByUserId: petitionsClerk2.userId,
-    });
-
     workItemPetitionsMyDocumentQCInbox = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       docketNumber: '100-05',
-      isQC: true,
       section: PETITIONS_SECTION,
     });
 
@@ -226,7 +159,6 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
-      isQC: true,
       section: IRS_SYSTEM_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
@@ -234,7 +166,6 @@ describe('filterWorkItems', () => {
     workItemPetitionsSectionDocumentQCInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-08',
-      isQC: true,
       section: PETITIONS_SECTION,
     });
 
@@ -244,53 +175,20 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
-      isQC: true,
       section: IRS_SYSTEM_SECTION,
       sentByUserId: petitionsClerk2.userId,
-    });
-
-    workItemDocketMyMessagesInbox = generateWorkItem({
-      assigneeId: docketClerk1.userId,
-      completedAt: null,
-      docketNumber: '100-11',
-      isQC: false,
-      section: DOCKET_SECTION,
-    });
-
-    workItemDocketMyMessagesSent = generateWorkItem({
-      assigneeId: docketClerk2.userId,
-      docketNumber: '100-12',
-      isQC: false,
-      sentBySection: DOCKET_SECTION,
-      sentByUserId: docketClerk1.userId,
-    });
-
-    workItemDocketSectionMessagesInbox = generateWorkItem({
-      completedAt: null,
-      docketNumber: '100-13',
-      isQC: false,
-      section: DOCKET_SECTION,
-    });
-
-    workItemDocketSectionMessagesSent = generateWorkItem({
-      docketNumber: '100-14',
-      isQC: false,
-      sentBySection: DOCKET_SECTION,
-      sentByUserId: docketClerk2.userId,
     });
 
     workItemDocketMyDocumentQCInbox = generateWorkItem({
       assigneeId: docketClerk1.userId,
       completedAt: null,
       docketNumber: '100-15',
-      isQC: true,
       section: DOCKET_SECTION,
     });
 
     workItemDocketSectionDocumentQCInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-17',
-      isQC: true,
       section: DOCKET_SECTION,
     });
 
@@ -299,7 +197,6 @@ describe('filterWorkItems', () => {
         assigneeId: docketClerk1.userId,
         completedAt: null,
         docketNumber: '100-18',
-        isQC: true,
         section: DOCKET_SECTION,
       },
       {
@@ -312,7 +209,6 @@ describe('filterWorkItems', () => {
         assigneeId: docketClerk2.userId,
         completedAt: null,
         docketNumber: '100-19',
-        isQC: true,
         section: DOCKET_SECTION,
       },
       {
@@ -321,61 +217,24 @@ describe('filterWorkItems', () => {
     );
 
     workQueueInbox = [
-      workItemPetitionsMyMessagesInbox,
-      workItemPetitionsSectionMessagesInbox,
       workItemPetitionsMyDocumentQCInbox,
       workItemPetitionsSectionDocumentQCInbox,
-      workItemDocketMyMessagesInbox,
-      workItemDocketSectionMessagesInbox,
       workItemDocketMyDocumentQCInbox,
       workItemDocketSectionDocumentQCInbox,
     ];
 
     workQueueInProgress = [
-      workItemPetitionsMyMessagesInbox,
-      workItemPetitionsMyMessagesSent,
       workItemDocketMyDocumentQCInProgress,
       workItemDocketSectionDocumentQCInProgress,
     ];
 
     workQueueOutbox = [
-      workItemPetitionsMyMessagesSent,
-      workItemPetitionsSectionMessagesSent,
       workItemPetitionsMyDocumentQCServed,
       workItemPetitionsSectionDocumentQCServed,
-      workItemDocketMyMessagesSent,
-      workItemDocketSectionMessagesSent,
     ];
   });
 
   // PETITIONS CLERK
-
-  it('Returns assigned messages for a Petitions Clerk in My Document QC Inbox', () => {
-    const filtered = workQueueInbox.filter(
-      filterWorkItems({
-        applicationContext,
-        ...MY_DOCUMENT_QC_INBOX,
-        user: petitionsClerk1,
-      }),
-    );
-    expect(filtered.length).toEqual(1);
-  });
-
-  it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', () => {
-    const filtered = workQueueOutbox.filter(
-      filterWorkItems({
-        USER_ROLES: ROLES,
-        applicationContext,
-        ...MY_DOCUMENT_QC_OUTBOX,
-        user: petitionsClerk1,
-      }),
-    );
-
-    expect(filtered.length).toEqual(1);
-    expect(filtered[0].docketNumber).toEqual(
-      workItemPetitionsMyDocumentQCServed.docketNumber,
-    );
-  });
 
   it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', () => {
     const user = petitionsClerk1;
@@ -440,17 +299,6 @@ describe('filterWorkItems', () => {
   });
 
   // DOCKET CLERK
-
-  it('Returns assigned messages for a Docket Clerk in My Document QC Inbox', () => {
-    const filtered = workQueueInbox.filter(
-      filterWorkItems({
-        applicationContext,
-        ...MY_DOCUMENT_QC_INBOX,
-        user: docketClerk1,
-      }),
-    );
-    expect(filtered.length).toEqual(1);
-  });
 
   it('Returns section work items for a Docket Clerk in Section Document QC Inbox', () => {
     const user = docketClerk1;

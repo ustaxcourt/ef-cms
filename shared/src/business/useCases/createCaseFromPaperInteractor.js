@@ -31,7 +31,6 @@ const addPetitionDocumentWithWorkItemToCase = ({
         createdAt: documentEntity.createdAt,
       },
       isInitializeCase: true,
-      isQC: true,
       section: user.section,
       sentBy: user.name,
       sentBySection: user.section,
