@@ -23,7 +23,7 @@ describe('setViewerDocumentToDisplayAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '48849291-d329-465d-a421-eecf06a671de',
+          docketNumber: '123-45',
         },
         viewerDocumentToDisplay: null,
       },
@@ -44,7 +44,7 @@ describe('setViewerDocumentToDisplayAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '48849291-d329-465d-a421-eecf06a671de',
+          docketNumber: '123-45',
         },
         viewerDocumentToDisplay: null,
       },

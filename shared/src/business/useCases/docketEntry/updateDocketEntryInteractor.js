@@ -135,7 +135,6 @@ exports.updateDocketEntryInteractor = async ({
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
-        caseId: caseEntity.caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketNumber: caseToUpdate.docketNumber,
@@ -145,7 +144,6 @@ exports.updateDocketEntryInteractor = async ({
           createdAt: documentEntity.createdAt,
         },
         inProgress: isSavingForLater,
-        isQC: true,
         section: DOCKET_SECTION,
         sentBy: user.userId,
       });
@@ -187,7 +185,6 @@ exports.updateDocketEntryInteractor = async ({
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
-        caseId: caseEntity.caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketNumber: caseToUpdate.docketNumber,
@@ -231,7 +228,6 @@ exports.updateDocketEntryInteractor = async ({
     Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,
-      caseId: caseEntity.caseId,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,

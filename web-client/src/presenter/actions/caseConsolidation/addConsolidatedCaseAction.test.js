@@ -8,7 +8,7 @@ describe('addConsolidatedCaseAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call addConsolidatedCaseInteractor and return caseId and caseToConsolidateId', async () => {
+  it('should call addConsolidatedCaseInteractor and return docketNumber and caseToConsolidate docketNumber', async () => {
     const result = await runAction(addConsolidatedCaseAction, {
       modules: {
         presenter,

@@ -13,8 +13,9 @@ export const completeDocumentSigningAction = async ({
   get,
 }) => {
   const originalDocumentId = get(state.pdfForSigning.documentId);
-  const { caseId, docketNumber } = get(state.caseDetail);
-  let documentIdToReturn = originalDocumentId;
+  const { docketNumber } = get(state.caseDetail);
+  const parentMessageId = get(state.parentMessageId);
+  let documentId;
 
   if (get(state.pdfForSigning.signatureData.x)) {
     const {
@@ -47,7 +48,7 @@ export const completeDocumentSigningAction = async ({
       type: 'application/pdf',
     });
 
-    const signedDocumentId = await applicationContext
+    const signedDocumentFromUploadId = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
         applicationContext,
@@ -55,20 +56,29 @@ export const completeDocumentSigningAction = async ({
         onUploadProgress: () => {},
       });
 
-    documentIdToReturn = signedDocumentId;
-
-    await applicationContext.getUseCases().saveSignedDocumentInteractor({
+    ({
+      signedDocumentId: documentId,
+    } = await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
       docketNumber,
       nameForSigning,
       originalDocumentId,
-      signedDocumentId,
-    });
+      parentMessageId,
+      signedDocumentId: signedDocumentFromUploadId,
+    }));
+  }
+
+  let redirectUrl;
+
+  if (parentMessageId) {
+    redirectUrl = `/case-messages/${docketNumber}/message-detail/${parentMessageId}`;
+  } else {
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`;
   }
 
   return {
-    caseId,
-    documentId: documentIdToReturn,
+    docketNumber,
+    redirectUrl,
     tab: 'docketRecord',
   };
 };

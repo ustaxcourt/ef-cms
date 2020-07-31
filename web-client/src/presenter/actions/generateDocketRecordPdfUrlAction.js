@@ -12,14 +12,14 @@ export const generateDocketRecordPdfUrlAction = async ({
 }) => {
   const caseDetail = get(state.caseDetail);
   const docketRecordSort = get(
-    state.sessionMetadata.docketRecordSort[caseDetail.caseId],
+    state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
 
   const {
     url,
   } = await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
     applicationContext,
-    caseId: caseDetail.caseId,
+    docketNumber: caseDetail.docketNumber,
     docketRecordSort,
     includePartyDetail: true,
   });

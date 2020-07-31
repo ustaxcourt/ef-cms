@@ -561,9 +561,9 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        caseId: 'abdc-1234-5678-xyz',
         contactPrimary: {},
         correspondence: [],
+        docketNumber: '123-45',
         docketRecord: [
           {
             description: 'Petition',
@@ -657,7 +657,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.caseId]: 'byDateDesc' },
+            docketRecordSort: { [caseDetail.docketNumber]: 'byDateDesc' },
           },
           validationErrors: {},
         },
@@ -691,7 +691,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.caseId]: 'byIndex' },
+            docketRecordSort: { [caseDetail.docketNumber]: 'byIndex' },
           },
           validationErrors: {},
         },
@@ -724,7 +724,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.caseId]: 'byIndexDesc' },
+            docketRecordSort: { [caseDetail.docketNumber]: 'byIndexDesc' },
           },
           validationErrors: {},
         },
@@ -1205,7 +1205,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
           {
             attachments: false,
@@ -1215,7 +1215,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
           {
             attachments: false,
@@ -1226,9 +1226,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
           {
             attachments: false,
@@ -1241,9 +1239,7 @@ describe('formattedCaseDetail', () => {
             isCourtIssuedDocument: true,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
           {
             attachments: false,
@@ -1256,9 +1252,7 @@ describe('formattedCaseDetail', () => {
             isCourtIssuedDocument: true,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: true },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
         ],
       };
@@ -1455,7 +1449,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
           {
             attachments: false,
@@ -1465,7 +1459,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
           {
             attachments: false,
@@ -1476,9 +1470,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
           {
             attachments: false,
@@ -1492,9 +1484,7 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
         ],
       };
@@ -1597,7 +1587,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
             isFileAttached: true,
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
           {
             attachments: false,
@@ -1608,7 +1598,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
             isFileAttached: true,
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
           {
             attachments: false,
@@ -1620,9 +1610,7 @@ describe('formattedCaseDetail', () => {
             eventCode: 'O',
             isCourtIssuedDocument: true,
             isFileAttached: true,
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
           {
             attachments: false,
@@ -1637,9 +1625,7 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [
-              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
-            ],
+            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
           },
         ],
       };
@@ -1739,7 +1725,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
         ],
         otherFilers,
@@ -2041,7 +2027,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{ isQC: true }],
+            workItems: [{}],
           },
         ],
         otherFilers,

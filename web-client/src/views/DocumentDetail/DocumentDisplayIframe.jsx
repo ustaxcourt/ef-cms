@@ -5,21 +5,23 @@ import React, { useEffect } from 'react';
 export const DocumentDisplayIframe = connect(
   {
     caseDetail: state.caseDetail,
-    documentDetailHelper: state.documentDetailHelper,
+    documentId: state.documentId,
+    formattedDocument: state.formattedDocument,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
   },
   function DocumentDisplayIframe({
     caseDetail,
-    documentDetailHelper,
+    documentId,
+    formattedDocument,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
   }) {
     useEffect(() => {
       openCaseDocumentDownloadUrlSequence({
         docketNumber: caseDetail.docketNumber,
-        documentId: documentDetailHelper.formattedDocument.documentId,
+        documentId: documentId,
         isForIFrame: true,
       });
     }, [caseDetail]);
@@ -31,7 +33,7 @@ export const DocumentDisplayIframe = connect(
           <iframe
             key={iframeSrc}
             src={iframeSrc}
-            title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
+            title={`Document type: ${formattedDocument.documentType}`}
           />
         )}
       </>

@@ -85,14 +85,6 @@ describe('createCase integration test', () => {
                 filedBy: 'Petr. Rick Petitioner',
               },
               isInitializeCase: true,
-              messages: [
-                {
-                  from: 'Alex Petitionsclerk',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Rick Petitioner is ready for review.',
-                },
-              ],
               section: 'petitions',
               sentBy: 'Alex Petitionsclerk',
               sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -146,13 +138,6 @@ describe('createCase integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Rick Petitioner is ready for review.',
-          },
-        ],
         section: 'petitions',
         sentBy: 'Alex Petitionsclerk',
         sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',

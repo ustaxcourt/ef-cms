@@ -17,7 +17,6 @@ exports.getInboxMessagesForSection = async ({
     applicationContext,
   });
   return workItems.filter(
-    workItem =>
-      !workItem.isQC && !workItem.completedAt & (workItem.section === section),
+    workItem => !workItem.completedAt & (workItem.section === section),
   );
 };

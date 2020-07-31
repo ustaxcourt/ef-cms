@@ -1,4 +1,4 @@
-# Code Review Process
+# Pull Request (PR) Review Process
 
 ## Introduction
 

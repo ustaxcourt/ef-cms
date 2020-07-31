@@ -1,4 +1,3 @@
-const { getCaseIdFromDocketNumber } = require('./getCaseIdFromDocketNumber');
 const { query } = require('../../dynamodbClientService');
 
 /**
@@ -13,17 +12,12 @@ exports.getCasesByLeadDocketNumber = async ({
   applicationContext,
   leadDocketNumber,
 }) => {
-  const leadCaseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber: leadDocketNumber,
-  });
-
   let consolidatedCases = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `case|${leadCaseId}`,
+      ':gsi1pk': `case|${leadDocketNumber}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

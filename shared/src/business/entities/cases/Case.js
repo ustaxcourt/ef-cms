@@ -167,7 +167,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
@@ -357,9 +356,6 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'Unique case ID only used by the system.',
-  ),
   caseNote: joi
     .string()
     .max(500)
@@ -400,12 +396,12 @@ Case.VALIDATION_RULES = {
     .string()
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: joi
-    .array()
-    .items(joi.object().meta({ entityName: 'DocketRecord' }))
-    .required()
-    .unique((a, b) => a.index === b.index)
-    .description('List of DocketRecord Entities for the case.'),
+  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
+    joi
+      .object()
+      .meta({ entityName: 'DocketRecord' })
+      .description('List of DocketRecord Entities for the case.'),
+  ).required(),
   documents: joi
     .array()
     .items(joi.object().meta({ entityName: 'Document' }))
@@ -836,7 +832,6 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function (document, { applicationContext }) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -859,7 +854,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
@@ -1171,8 +1165,8 @@ Case.prototype.generateSortableDocketNumber = function () {
  */
 Case.prototype.generateTrialSortTags = function () {
   const {
-    caseId,
     caseType,
+    docketNumber,
     highPriority,
     preferredTrialCity,
     procedureType,
@@ -1200,7 +1194,7 @@ Case.prototype.generateTrialSortTags = function () {
     caseProcedureSymbol,
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   const hybridSortKey = [
@@ -1208,7 +1202,7 @@ Case.prototype.generateTrialSortTags = function () {
     'H', // Hybrid Tag
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   return {

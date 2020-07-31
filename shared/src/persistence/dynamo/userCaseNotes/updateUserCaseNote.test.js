@@ -1,25 +1,17 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { updateUserCaseNote } = require('./updateUserCaseNote');
-jest.mock('../cases/getCaseIdFromDocketNumber');
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { updateUserCaseNote } = require('./updateUserCaseNote');
 
 describe('updateUserCaseNote', () => {
-  beforeEach(() => {
-    getCaseIdFromDocketNumber.mockReturnValue(MOCK_CASE.caseId);
-  });
-
-  it('invokes the persistence layer with pk of user-case-note|{caseId}, sk of {userId} and other expected params', async () => {
+  it('invokes the persistence layer with pk of user-case-note|{docketNumber}, sk of {userId} and other expected params', async () => {
     await updateUserCaseNote({
       applicationContext,
       caseNoteToUpdate: {
-        docketNumber: '123-45',
+        docketNumber: MOCK_CASE.docketNumber,
         notes: 'something!!!',
-        userId: '123',
+        userId: MOCK_CASE.userId,
       },
     });
 
@@ -28,8 +20,8 @@ describe('updateUserCaseNote', () => {
     ).toMatchObject({
       Item: {
         notes: 'something!!!',
-        pk: `user-case-note|${MOCK_CASE.caseId}`,
-        sk: 'user|123',
+        pk: `user-case-note|${MOCK_CASE.docketNumber}`,
+        sk: `user|${MOCK_CASE.userId}`,
       },
     });
   });

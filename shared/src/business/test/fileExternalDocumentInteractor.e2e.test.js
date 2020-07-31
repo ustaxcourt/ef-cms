@@ -32,7 +32,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId, docketNumber } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -130,7 +130,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     expect(caseAfterDocument).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
-      caseId,
       caseType: CASE_TYPES_MAP.innocentSpouse,
       contactPrimary: {
         address1: '19 First Freeway',
@@ -193,14 +192,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
               isInitializeCase: true,
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Test Petitioner is ready for review.',
-                },
-              ],
               section: 'petitions',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -250,14 +241,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 supportingDocument: 'Brief in Support',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Motion for Leave to File filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
             },
@@ -293,14 +276,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Brief in Support filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -333,14 +308,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Brief in Support filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -379,14 +346,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
               },
-              messages: [
-                {
-                  from: 'Test Petitioner',
-                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Brief in Support filed by Petitioner is ready for review.',
-                },
-              ],
               section: 'docket',
               sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
@@ -449,14 +408,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           supportingDocument: 'Brief in Support',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Motion for Leave to File filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
       },
@@ -478,14 +429,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Brief in Support filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
@@ -506,14 +449,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Brief in Support filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
@@ -537,14 +472,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        messages: [
-          {
-            from: 'Test Petitioner',
-            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Brief in Support filed by Petitioner is ready for review.',
-          },
-        ],
         section: 'docket',
         sentBy: 'Test Petitioner',
       },

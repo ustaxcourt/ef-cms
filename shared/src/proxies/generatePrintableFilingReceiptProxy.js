@@ -5,19 +5,19 @@ const { post } = require('./requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case in which the documents were filed
+ * @param {string} providers.docketNumber the docket number of the case in which the documents were filed
  * @param {object} providers.documentsFiled the documents filed
  * @returns {Promise<*>} the promise of the api call
  */
 exports.generatePrintableFilingReceiptInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentsFiled,
 }) => {
   return post({
     applicationContext,
     body: {
-      caseId,
+      docketNumber,
       documentsFiled,
     },
     endpoint: '/documents/filing-receipt-pdf',

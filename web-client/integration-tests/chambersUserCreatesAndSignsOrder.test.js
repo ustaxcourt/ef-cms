@@ -3,7 +3,6 @@ import { chambersUserAppliesSignatureToDraftDocument } from './journey/chambersU
 import { chambersUserSavesSignatureForDraftDocument } from './journey/chambersUserSavesSignatureForDraftDocument';
 import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDetail';
 import { chambersUserViewsCaseDetailAfterAddingOrder } from './journey/chambersUserViewsCaseDetailAfterAddingOrder';
-import { chambersUserViewsDocumentDetail } from './journey/chambersUserViewsDocumentDetail';
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -32,7 +31,6 @@ describe('Chambers dashboard', () => {
   chambersUserAddsOrderToCase(test);
   chambersUserViewsCaseDetailAfterAddingOrder(test);
   chambersUserViewsDraftDocuments(test, 1);
-  chambersUserViewsDocumentDetail(test);
   chambersUserViewsSignDraftDocument(test);
   chambersUserAppliesSignatureToDraftDocument(test);
   chambersUserSavesSignatureForDraftDocument(test);

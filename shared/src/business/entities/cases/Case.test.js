@@ -1551,7 +1551,6 @@ describe('Case entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -1567,7 +1566,6 @@ describe('Case entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
           sentBy: 'bob',
         },
       ]);
@@ -1766,10 +1764,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-D-20181212000000-101-18',
       });
     });
 
@@ -1785,10 +1781,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-D-20181212000000-101-18',
       });
     });
 
@@ -1804,10 +1798,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-C-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-C-20181212000000-101-18',
       });
     });
 
@@ -1823,10 +1815,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-B-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-B-20181212000000-101-18',
       });
     });
 
@@ -1843,10 +1833,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-A-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-A-20181212000000-101-18',
       });
     });
   });
@@ -2161,7 +2149,7 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
-    it('does not remove a practitioner from associated case privatePractitioners array', () => {
+    it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {
       const caseToVerify = new Case(
         {
           privatePractitioners: [
@@ -2996,30 +2984,24 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3028,38 +3010,30 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3070,39 +3044,33 @@ describe('Case entity', () => {
       it('Should return the case with the lowest docket number for cases filed in the same year', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('100-19');
       });
 
       it('Should return the case with the lowest docket number for cases filed in different years', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('110-18');
       });
     });
   });

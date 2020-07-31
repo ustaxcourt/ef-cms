@@ -1,7 +1,4 @@
 const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
-const {
   getCaseMessageThreadByParentId,
 } = require('./getCaseMessageThreadByParentId');
 const { update } = require('../../dynamodbClientService');
@@ -24,11 +21,6 @@ exports.markCaseMessageThreadRepliedTo = async ({
   });
 
   if (messages.length) {
-    const caseId = await getCaseIdFromDocketNumber({
-      applicationContext,
-      docketNumber: messages[0].docketNumber,
-    });
-
     const updateMessage = async message => {
       return await update({
         ExpressionAttributeNames: {
@@ -38,7 +30,7 @@ exports.markCaseMessageThreadRepliedTo = async ({
           ':isRepliedTo': true,
         },
         Key: {
-          pk: `case|${caseId}`,
+          pk: `case|${message.docketNumber}`,
           sk: `message|${message.messageId}`,
         },
         UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',

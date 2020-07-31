@@ -20,7 +20,6 @@ describe('formattedPendingItems', () => {
     {
       associatedJudge: CHIEF_JUDGE,
       caseCaption: 'Brett Osborne, Petitioner',
-      caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
       caseStatus: STATUS_TYPES.new,
       category: 'Miscellaneous',
       certificateOfServiceDate: null,
@@ -46,7 +45,6 @@ describe('formattedPendingItems', () => {
         {
           assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           assigneeName: 'Test Docketclerk',
-          caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           completedAt: '2019-11-13T00:38:59.049Z',
           completedBy: 'Test Docketclerk',
@@ -56,7 +54,6 @@ describe('formattedPendingItems', () => {
           docketNumber: '101-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           document: {
-            caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
             category: 'Miscellaneous',
             certificateOfServiceDate: null,
             createdAt: '2019-01-10',
@@ -78,7 +75,6 @@ describe('formattedPendingItems', () => {
             scenario: 'Standard',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
-          isQC: true,
           isRead: true,
           messages: [
             {
@@ -102,7 +98,6 @@ describe('formattedPendingItems', () => {
     {
       associatedJudge: CHIEF_JUDGE,
       caseCaption: 'Brett Osborne, Petitioner',
-      caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
       caseStatus: STATUS_TYPES.new,
       category: 'Supporting Document',
       certificateOfServiceDate: null,
@@ -131,7 +126,6 @@ describe('formattedPendingItems', () => {
         {
           assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           assigneeName: 'Test Docketclerk',
-          caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           completedAt: '2019-11-13T02:27:07.801Z',
           completedBy: 'Test Docketclerk',
@@ -141,7 +135,6 @@ describe('formattedPendingItems', () => {
           docketNumber: '101-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           document: {
-            caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
             category: 'Supporting Document',
             certificateOfServiceDate: null,
             createdAt: '2019-01-20',
@@ -165,7 +158,6 @@ describe('formattedPendingItems', () => {
             scenario: 'Nonstandard C',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
-          isQC: true,
           isRead: true,
           messages: [
             {
@@ -189,7 +181,6 @@ describe('formattedPendingItems', () => {
     {
       associatedJudge: 'Judge A',
       caseCaption: 'Brett Osborne, Petitioner',
-      caseId: '421872dc-e87d-4214-8ad0-c861d9b76c88',
       caseStatus: STATUS_TYPES.new,
       category: 'Supporting Document',
       certificateOfServiceDate: null,
@@ -218,7 +209,6 @@ describe('formattedPendingItems', () => {
         {
           assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           assigneeName: 'Test Docketclerk',
-          caseId: '421872dc-e87d-4214-8ad0-c861d9b76c88',
           caseStatus: STATUS_TYPES.new,
           completedAt: '2019-11-13T02:27:07.801Z',
           completedBy: 'Test Docketclerk',
@@ -228,7 +218,6 @@ describe('formattedPendingItems', () => {
           docketNumber: '101-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           document: {
-            caseId: '421872dc-e87d-4214-8ad0-c861d9b76c88',
             category: 'Supporting Document',
             certificateOfServiceDate: null,
             createdAt: '2019-01-20',
@@ -252,7 +241,6 @@ describe('formattedPendingItems', () => {
             scenario: 'Nonstandard C',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
-          isQC: true,
           isRead: true,
           messages: [
             {
@@ -286,7 +274,6 @@ describe('formattedPendingItems', () => {
         {
           associatedJudge: CHIEF_JUDGE,
           associatedJudgeFormatted: CHIEF_JUDGE,
-          caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
@@ -295,7 +282,6 @@ describe('formattedPendingItems', () => {
         {
           associatedJudge: 'Judge A',
           associatedJudgeFormatted: 'A',
-          caseId: '421872dc-e87d-4214-8ad0-c861d9b76c88',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
@@ -304,7 +290,6 @@ describe('formattedPendingItems', () => {
         {
           associatedJudge: CHIEF_JUDGE,
           associatedJudgeFormatted: CHIEF_JUDGE,
-          caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/10/19',
           formattedName: 'Administrative Record',
@@ -328,7 +313,6 @@ describe('formattedPendingItems', () => {
         {
           associatedJudge: CHIEF_JUDGE,
           associatedJudgeFormatted: CHIEF_JUDGE,
-          caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
@@ -337,7 +321,6 @@ describe('formattedPendingItems', () => {
         {
           associatedJudge: CHIEF_JUDGE,
           associatedJudgeFormatted: CHIEF_JUDGE,
-          caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/10/19',
           formattedName: 'Administrative Record',

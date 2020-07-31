@@ -30,8 +30,9 @@ describe('prioritizeCaseInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateHighPriorityCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .updateHighPriorityCaseTrialSortMappingRecords.mock.calls[0][0]
+        .docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw an unauthorized error if the user has no access to prioritize cases', async () => {

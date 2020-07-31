@@ -22,7 +22,6 @@ describe('serveCaseToIrsInteractor', () => {
     {
       assigneeId: null,
       assigneeName: 'IRSBatchSystem',
-      caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2018-12-27T18:06:02.968Z',
       completedBy: PARTY_TYPES.petitioner,
@@ -36,7 +35,6 @@ describe('serveCaseToIrsInteractor', () => {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
       isInitializeCase: true,
-      isQC: true,
       messages: [
         {
           createdAt: '2018-12-27T18:06:02.968Z',

@@ -52,7 +52,7 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
-  it('should authorize a petitions serve petition', () => {
+  it('should authorize a petitions clerk serve petition', () => {
     expect(
       isAuthorized(
         { role: ROLES.petitionsClerk, userId: 'petitionsclerk' },

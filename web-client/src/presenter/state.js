@@ -28,7 +28,6 @@ import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
-import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { documentViewerHelper } from './computeds/documentViewerHelper';
 import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper';
@@ -47,6 +46,7 @@ import {
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedDocument } from './computeds/formattedDocument';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
@@ -120,7 +120,6 @@ const helpers = {
   createPractitionerUserHelper,
   dashboardExternalHelper,
   docketRecordHelper,
-  documentDetailHelper,
   documentSigningHelper,
   documentViewerHelper,
   draftDocumentViewerHelper,
@@ -136,6 +135,7 @@ const helpers = {
   formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
+  formattedDocument,
   formattedMessageDetail,
   formattedMessages,
   formattedOpenCases,
@@ -184,7 +184,7 @@ export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
     // used by the delete draft document modal
-    caseId: null,
+    docketNumber: null,
     documentId: null,
     documentTitle: null,
   },
@@ -288,7 +288,7 @@ export const baseState = {
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
 export const state = {

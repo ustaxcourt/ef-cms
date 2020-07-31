@@ -280,7 +280,7 @@ describe('formattedTrialSessionDetails', () => {
         ...TRIAL_SESSION,
         calendaredCases: [
           {
-            caseId: MOCK_CASE.caseId,
+            docketNumber: MOCK_CASE.docketNumber,
           },
         ],
         isCalendared: true,
