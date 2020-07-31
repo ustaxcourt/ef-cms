@@ -51,12 +51,10 @@ exports.deleteDraftDocumentInteractor = async ({
 
   const validatedRawCase = caseEntity.validate().toRawObject();
 
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: validatedRawCase,
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: validatedRawCase,
+  });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  return validatedRawCase;
 };
