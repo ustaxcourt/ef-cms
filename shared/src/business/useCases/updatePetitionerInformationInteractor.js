@@ -170,7 +170,10 @@ exports.updatePetitionerInformationInteractor = async ({
       pdfData: changeOfAddressPdf,
     });
 
-    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+    caseEntity.addDocument(changeOfAddressDocument, {
+      applicationContext,
+      updateIndex: true,
+    });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,

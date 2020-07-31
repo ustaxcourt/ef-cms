@@ -164,7 +164,10 @@ exports.updateSecondaryContactInteractor = async ({
     workItem.addMessage(message);
     changeOfAddressDocument.addWorkItem(workItem);
 
-    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+    caseEntity.addDocument(changeOfAddressDocument, {
+      applicationContext,
+      updateIndex: true,
+    });
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,

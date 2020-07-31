@@ -162,6 +162,8 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           },
         );
 
+        const isAutoServed = documentEntity.isAutoServed();
+
         if (isFilingDocumentForCase) {
           const isCaseForWorkItem =
             caseEntity.docketNumber === caseWithLowestDocketNumber.docketNumber;
@@ -235,7 +237,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
           caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-          if (documentEntity.isAutoServed()) {
+          if (isAutoServed) {
             documentEntity.setAsServed(servedParties.all);
 
             await applicationContext
@@ -259,7 +261,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           { applicationContext },
         );
 
-        caseEntity.addDocketRecord(docketRecordEntity);
+        caseEntity.addDocketRecord(docketRecordEntity, isAutoServed);
 
         saveCasesMap[
           caseEntity.docketNumber
