@@ -11,7 +11,6 @@ import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabActio
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setSuccessFromDocumentTitleAction } from '../actions/setSuccessFromDocumentTitleAction';
-import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const saveDocumentSigningSequence = showProgressSequenceDecorator([
