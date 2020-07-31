@@ -1551,7 +1551,6 @@ describe('Case entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -1567,7 +1566,6 @@ describe('Case entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
           sentBy: 'bob',
         },
       ]);
@@ -2151,7 +2149,7 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
-    it('does not remove a practitioner from associated case privatePractitioners array', () => {
+    it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {
       const caseToVerify = new Case(
         {
           privatePractitioners: [

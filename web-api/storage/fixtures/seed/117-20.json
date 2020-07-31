@@ -125,22 +125,11 @@
         "workItemId": "883c974c-d9cd-4e3f-9f28-e63a3da0fd8e",
         "isInitializeCase": true,
         "assigneeId": null,
-        "isQC": true,
         "sentBy": "Test Petitioner",
         "createdAt": "2020-06-25T20:40:13.685Z",
         "assigneeName": null,
         "entityName": "WorkItem",
         "docketNumberWithSuffix": "117-20L",
-        "messages": [
-          {
-            "createdAt": "2020-06-25T20:40:13.686Z",
-            "messageId": "71b19b86-87eb-4477-a549-ec7883abbad9",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Bart Simpson is ready for review.",
-            "entityName": "Message",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
         "docketNumber": "117-20",
         "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "updatedAt": "2020-06-25T20:40:13.686Z"

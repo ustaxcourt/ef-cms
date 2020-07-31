@@ -10,8 +10,15 @@ export const DraftDocuments = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
     showModal: state.modal.showModal,
+    stipulatedDecisionEventCode: state.constants.STIPULATED_DECISION_EVENT_CODE,
+    viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
-  function DraftDocuments({ formattedCaseDetail, showModal }) {
+  function DraftDocuments({
+    formattedCaseDetail,
+    showModal,
+    stipulatedDecisionEventCode,
+    viewerDraftDocumentToDisplay,
+  }) {
     return (
       <>
         {formattedCaseDetail.formattedDraftDocuments.length === 0 && (
@@ -20,9 +27,18 @@ export const DraftDocuments = connect(
         {formattedCaseDetail.formattedDraftDocuments.length > 0 && (
           <DraftDocumentViewer />
         )}
-        {showModal === 'ArchiveDraftDocumentModal' && (
-          <ArchiveDraftDocumentModal />
-        )}
+        {showModal === 'ArchiveDraftDocumentModal' &&
+          viewerDraftDocumentToDisplay.eventCode ===
+            stipulatedDecisionEventCode && (
+            <ArchiveDraftDocumentModal
+              message="Return to the Proposed Stipulated Decision to re-sign."
+              showDocumentTitle={false}
+              title="Are You Sure You Want to Delete the Stipulated Decision?"
+            />
+          )}
+        {showModal === 'ArchiveDraftDocumentModal' &&
+          viewerDraftDocumentToDisplay.eventCode !==
+            stipulatedDecisionEventCode && <ArchiveDraftDocumentModal />}
         {showModal === 'ConfirmEditModal' && (
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}

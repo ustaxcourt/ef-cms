@@ -4,7 +4,6 @@ export const petitionsClerkAssignsWorkItemToOther = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -61,7 +60,6 @@ export const petitionsClerkAssignsWorkItemToOther = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
-      workQueueIsInternal: false,
     });
     const workQueue = test.getState('workQueue');
     const movedWorkItem = workQueue.find(

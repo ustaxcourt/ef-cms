@@ -22,7 +22,6 @@ describe('getInboxMessagesForSectionInteractor', () => {
     document: {
       sentBy: 'petitioner',
     },
-    isQC: false,
     messages: [],
     section: 'petitions',
     sentBy: 'docketclerk',

@@ -75,7 +75,6 @@ import { createCaseMessageInteractor } from '../../shared/src/proxies/messages/c
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
 import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
@@ -295,7 +294,6 @@ const allUseCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
-  createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCorrespondenceDocumentInteractor,

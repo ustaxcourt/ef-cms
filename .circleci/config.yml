@@ -368,7 +368,10 @@ jobs:
       - checkout
       - run:
           name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: |
+            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -386,22 +389,22 @@ jobs:
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
           name: Setup Elasticsearch Index Settings
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
       # - run:
       #     name: 'Deploy - Switch environment color'
       #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0 && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0"
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
       - run:
           name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0 && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0"
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
       - run:
           name: 'Deploy - Web API - Global Tables'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
@@ -482,6 +485,21 @@ jobs:
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
+
+build-and-deploy-defaults: &build-and-deploy-defaults
+  filters:
+    branches:
+      ignore:
+        - develop # run hourly below
+        - prod    # run with context workflow below
+
+build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - prod
+
 workflows:
   version: 2
   hourly:
@@ -515,41 +533,21 @@ workflows:
   build-and-deploy:
     jobs:
       - build-shared:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-api:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-unit:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-integration:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-pa11y:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - e2e-cypress-public:
-          filters:
-            branches:
-              ignore:
-                - develop
+          <<: *build-and-deploy-defaults
       - build-client-coverage:
+          <<: *build-and-deploy-defaults
           requires:
             - build-shared
             - build-api
@@ -558,10 +556,6 @@ workflows:
             - e2e-pa11y
             - e2e-cypress
             - e2e-cypress-public
-          filters:
-            branches:
-              ignore:
-                - develop
       - deploy:
           requires:
             - build-client-coverage
@@ -575,3 +569,35 @@ workflows:
                 - master
                 - experimental1
                 - experimental2
+                - dawson
+
+  build-and-deploy-with-context:
+    jobs:
+      - build-shared:
+          <<: *build-and-deploy-with-context-defaults
+      - build-api:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-unit:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-with-context-defaults
+      - build-client-coverage:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-shared
+            - build-api
+            - build-client-unit
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-cypress
+            - e2e-cypress-public
+      - deploy:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - build-client-coverage

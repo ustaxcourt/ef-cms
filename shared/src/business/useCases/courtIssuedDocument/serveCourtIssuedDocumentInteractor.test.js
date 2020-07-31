@@ -44,7 +44,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockWorkItem = {
     docketNumber: '101-20',
-    isQC: true,
     section: DOCKET_SECTION,
     sentBy: mockUser.name,
     sentByUserId: mockUser.userId,
