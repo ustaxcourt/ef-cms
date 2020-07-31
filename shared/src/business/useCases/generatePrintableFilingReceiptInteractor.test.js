@@ -4,14 +4,9 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
-jest.mock('../entities/Document');
-const { Document } = require('../entities/Document');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   beforeAll(() => {
-    Document.mockImplementation(function Mockument() {
-      this.workItems = [];
-    });
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );

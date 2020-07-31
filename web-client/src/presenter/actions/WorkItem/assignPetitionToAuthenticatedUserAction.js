@@ -21,8 +21,7 @@ export const assignPetitionToAuthenticatedUserAction = async ({
   );
 
   const petitionDocumentQCWorkItem =
-    petitionDocument &&
-    (petitionDocument.workItems || []).find(workItem => workItem.isQC);
+    petitionDocument && petitionDocument.workItem;
 
   if (petitionDocumentQCWorkItem) {
     await applicationContext.getUseCases().assignWorkItemsInteractor({

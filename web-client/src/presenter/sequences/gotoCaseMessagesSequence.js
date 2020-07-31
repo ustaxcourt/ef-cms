@@ -26,7 +26,7 @@ const goToCaseMessages = [
     sectionoutbox: [getOutboxCaseMessagesForSectionAction],
   },
   setCaseMessagesAction,
-  setCurrentPageAction('CaseMessages'),
+  setCurrentPageAction('Messages'),
 ];
 
 export const gotoCaseMessagesSequence = [

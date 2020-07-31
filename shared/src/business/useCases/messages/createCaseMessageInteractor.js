@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { CaseMessage } = require('../../entities/CaseMessage');
+const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -50,7 +50,7 @@ exports.createCaseMessageInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const caseMessage = new CaseMessage(
+  const caseMessage = new Message(
     {
       attachments,
       caseStatus: status,

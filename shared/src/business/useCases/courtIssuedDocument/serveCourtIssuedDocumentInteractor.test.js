@@ -44,7 +44,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockWorkItem = {
     docketNumber: '101-20',
-    isQC: true,
     section: DOCKET_SECTION,
     sentBy: mockUser.name,
     sentByUserId: mockUser.userId,
@@ -80,7 +79,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         signedByUserId: uuidv4(),
         signedJudgeName: 'Chief Judge',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-        workItems: [mockWorkItem],
+        workItem: mockWorkItem,
       };
     },
   );
@@ -129,7 +128,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         {
           documentId: mockDocumentId,
@@ -139,7 +138,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         ...documentsWithCaseClosingEventCodes,
       ],
@@ -202,7 +201,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         {
           documentId: mockDocumentId,
@@ -212,7 +211,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         ...documentsWithCaseClosingEventCodes,
       ],
