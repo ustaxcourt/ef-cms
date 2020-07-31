@@ -1,4 +1,4 @@
-import { NewCaseMessage } from '../../../shared/src/business/entities/NewCaseMessage';
+import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
 import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
@@ -53,7 +53,7 @@ export const createNewCaseMessageOnCase = test => {
     await test.runSequence('createCaseMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      message: NewCaseMessage.VALIDATION_ERROR_MESSAGES.message,
+      message: NewMessage.VALIDATION_ERROR_MESSAGES.message,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
