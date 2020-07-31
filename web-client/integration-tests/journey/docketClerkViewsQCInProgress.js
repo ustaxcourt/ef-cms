@@ -5,12 +5,10 @@ export const docketClerkViewsQCInProgress = (test, shouldExist) => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'my',
-      workQueueIsInternal: false,
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
-    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 

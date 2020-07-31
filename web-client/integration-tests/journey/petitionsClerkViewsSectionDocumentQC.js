@@ -11,7 +11,6 @@ export const petitionsClerkViewsSectionDocumentQC = (test, storeCount) => {
     });
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
-    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 

@@ -3,8 +3,8 @@ import {
   ROLES,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
-  getFormattedMyOutbox,
-  getFormattedSectionOutbox,
+  getFormattedDocumentQCMyOutbox,
+  getFormattedDocumentQCSectionOutbox,
   loginAs,
   setupTest,
   uploadPetition,
@@ -53,6 +53,8 @@ describe('verify old sent work items do not show up in the outbox', () => {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test petitionsclerk1',
       caseStatus: CASE_STATUS_TYPES.new,
+      completedBy: 'Test Petitionsclerk',
+      completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       createdAt: CREATED_8_DAYS_AGO.toISOString(),
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
@@ -62,18 +64,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      isQC: false,
-      messages: [
-        {
-          createdAt: CREATED_8_DAYS_AGO.toISOString(),
-          from: 'Test petitionsclerk1',
-          fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'Testing a Created Message',
-          messageId: 'c31368e6-8e75-4400-ad1d-a0b2bf0a4083',
-          to: 'Test petitionsclerk1',
-          toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
+      isQC: true,
       section: 'petitions',
       sentBy: 'Test petitionsclerk1',
       sentBySection: 'petitions',
@@ -84,17 +75,17 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
     workItem7Days = {
       ...workItem8Days,
+      completedAt: CREATED_7_DAYS_AGO.toISOString(),
       createdAt: CREATED_7_DAYS_AGO.toISOString(),
       workItemId: `${workItemId7}`,
     };
-    workItem7Days.messages[0].createdAt = CREATED_7_DAYS_AGO.toISOString();
 
     workItem6Days = {
       ...workItem8Days,
+      completedAt: CREATED_6_DAYS_AGO.toISOString(),
       createdAt: CREATED_6_DAYS_AGO.toISOString(),
       workItemId: `${workItemId6}`,
     };
-    workItem7Days.messages[0].createdAt = CREATED_6_DAYS_AGO.toISOString();
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
@@ -115,7 +106,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
   loginAs(test, 'petitionsclerk@example.com');
 
   it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
-    const myOutbox = (await getFormattedMyOutbox(test)).filter(
+    const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
       item => item.docketNumber === caseDetail.docketNumber,
     );
     expect(myOutbox.length).toEqual(2);
@@ -126,9 +117,9 @@ describe('verify old sent work items do not show up in the outbox', () => {
       myOutbox.find(item => item.workItemId === workItemId7),
     ).toBeDefined();
 
-    const sectionOutbox = (await getFormattedSectionOutbox(test)).filter(
-      item => item.docketNumber === caseDetail.docketNumber,
-    );
+    const sectionOutbox = (
+      await getFormattedDocumentQCSectionOutbox(test)
+    ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(sectionOutbox.length).toEqual(2);
     expect(
       sectionOutbox.find(item => item.workItemId === workItemId6),
