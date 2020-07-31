@@ -6,7 +6,7 @@ const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
 export const chambersUserAddsOrderToCase = test => {
   return it('Chambers user adds order to case', async () => {
-    await test.runSequence('openCreateMessageModalSequence');
+    await test.runSequence('openCreateOrderChooseTypeModalSequence');
 
     await test.runSequence('submitCreateOrderModalSequence');
 
