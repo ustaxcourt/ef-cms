@@ -38,11 +38,6 @@ exports.archiveDraftDocumentInteractor = async ({
 
   documentToArchive.archive();
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
   await Promise.all(
     documentToArchive.workItems.map(workItem =>
       Promise.all([
@@ -63,4 +58,13 @@ exports.archiveDraftDocumentInteractor = async ({
       ]),
     ),
   );
+
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
