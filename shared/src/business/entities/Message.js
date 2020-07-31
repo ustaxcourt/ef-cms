@@ -17,7 +17,7 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawMessage the raw message data
  * @constructor
  */
-function CaseMessage(rawMessage, { applicationContext }) {
+function Message(rawMessage, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -36,7 +36,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
-  this.entityName = 'CaseMessage';
+  this.entityName = 'Message';
   this.from = rawMessage.from;
   this.fromSection = rawMessage.fromSection;
   this.fromUserId = rawMessage.fromUserId;
@@ -51,16 +51,16 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.toUserId = rawMessage.toUserId;
 }
 
-CaseMessage.validationName = 'CaseMessage';
+Message.validationName = 'Message';
 
-CaseMessage.VALIDATION_ERROR_MESSAGES = {
+Message.VALIDATION_ERROR_MESSAGES = {
   message: 'Enter a message',
   subject: 'Enter a subject line',
   toSection: 'Select a section',
   toUserId: 'Select a recipient',
 };
 
-CaseMessage.VALIDATION_RULES = {
+Message.VALIDATION_RULES = {
   attachments: joi
     .array()
     .items(
@@ -123,7 +123,7 @@ CaseMessage.VALIDATION_RULES = {
     .max(20)
     .required()
     .description('The docket number and suffix for the associated case.'),
-  entityName: joi.string().valid('CaseMessage').required(),
+  entityName: joi.string().valid('Message').required(),
   from: joi
     .string()
     .max(100)
@@ -176,9 +176,9 @@ CaseMessage.VALIDATION_RULES = {
 };
 
 joiValidationDecorator(
-  CaseMessage,
-  joi.object().keys(CaseMessage.VALIDATION_RULES),
-  CaseMessage.VALIDATION_ERROR_MESSAGES,
+  Message,
+  joi.object().keys(Message.VALIDATION_RULES),
+  Message.VALIDATION_ERROR_MESSAGES,
 );
 
 /**
@@ -186,9 +186,9 @@ joiValidationDecorator(
  *
  * @param {string} message the message provided when completing the thread
  * @param {object} user the user who completed the thread
- * @returns {CaseMessage} the updated case message
+ * @returns {Message} the updated case message
  */
-CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
+Message.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
   this.completedAt = createISODateString();
   this.completedBy = user.name;
@@ -203,12 +203,12 @@ CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
  * adds the attachment to the attachments array on the case message
  *
  * @param {object} attachmentToAdd the attachment to add to the case message
- * @returns {CaseMessage} the updated case message
+ * @returns {Message} the updated case message
  */
-CaseMessage.prototype.addAttachment = function (attachmentToAdd) {
+Message.prototype.addAttachment = function (attachmentToAdd) {
   this.attachments.push(attachmentToAdd);
 
   return this;
 };
 
-module.exports = { CaseMessage };
+module.exports = { Message };

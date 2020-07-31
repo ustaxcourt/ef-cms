@@ -1,14 +1,14 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { NewCaseMessage } = require('./NewCaseMessage');
+const { NewMessage } = require('./NewMessage');
 
-describe('NewCaseMessage', () => {
+describe('NewMessage', () => {
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
-      expect(() => new NewCaseMessage({}, {})).toThrow();
+      expect(() => new NewMessage({}, {})).toThrow();
     });
 
-    it('creates a valid NewCaseMessage', () => {
-      const message = new NewCaseMessage(
+    it('creates a valid NewMessage', () => {
+      const message = new NewMessage(
         {
           message: 'hello world',
           subject: 'hey!',
@@ -21,8 +21,8 @@ describe('NewCaseMessage', () => {
       expect(message.isValid()).toBeTruthy();
     });
 
-    it('creates an invalid NewCaseMessage with no message', () => {
-      const message = new NewCaseMessage(
+    it('creates an invalid NewMessage with no message', () => {
+      const message = new NewMessage(
         {
           subject: 'hey!',
           to: 'bob',

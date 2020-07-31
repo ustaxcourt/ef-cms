@@ -3,8 +3,8 @@ const {
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { CaseMessage } = require('../entities/CaseMessage');
 const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { orderBy } = require('lodash');
 
 const saveOriginalDocumentWithNewId = async ({
@@ -117,7 +117,7 @@ exports.saveSignedDocumentInteractor = async ({
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-      const caseMessageEntity = new CaseMessage(mostRecentMessage, {
+      const caseMessageEntity = new Message(mostRecentMessage, {
         applicationContext,
       }).validate();
       caseMessageEntity.addAttachment({

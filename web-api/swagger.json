@@ -6477,7 +6477,7 @@
         },
         "entityName": {
           "type": "string",
-          "description": "the name of the entity - CaseMessage"
+          "description": "the name of the entity - Message"
         },
         "from": {
           "type": "string",
