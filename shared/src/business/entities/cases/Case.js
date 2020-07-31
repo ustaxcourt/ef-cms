@@ -36,6 +36,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  shouldGenerateDocketRecordIndex,
+} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -831,10 +834,7 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function (
-  document,
-  { applicationContext, updateIndex },
-) {
+Case.prototype.addDocument = function (document, { applicationContext }) {
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -849,7 +849,6 @@ Case.prototype.addDocument = function (
       },
       { applicationContext },
     ),
-    updateIndex,
   );
 };
 
@@ -1029,10 +1028,14 @@ Case.prototype.generateNextDocketRecordIndex = function () {
 /**
  *
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
- * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.addDocketRecord = function (docketRecordEntity, updateIndex) {
+Case.prototype.addDocketRecord = function (docketRecordEntity) {
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: docketRecordEntity,
+  });
+
   if (updateIndex) {
     docketRecordEntity.index = this.generateNextDocketRecordIndex();
   }
@@ -1044,16 +1047,17 @@ Case.prototype.addDocketRecord = function (docketRecordEntity, updateIndex) {
 /**
  *
  * @param {DocketRecord} updatedDocketEntry the update docket entry data
- * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecordEntry = function (
-  updatedDocketEntry,
-  updateIndex,
-) {
+Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
     entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
+
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: foundEntry,
+  });
 
   if (updateIndex) {
     updatedDocketEntry.index = this.generateNextDocketRecordIndex();
