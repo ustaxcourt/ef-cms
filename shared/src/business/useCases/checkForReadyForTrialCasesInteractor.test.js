@@ -90,7 +90,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
             documentType: 'Petition',
             processingStatus: 'pending',
             userId: 'petitioner',
-            workItems: [],
           },
         ],
         status: CASE_STATUS_TYPES.generalDocket,

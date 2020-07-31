@@ -19,9 +19,7 @@ export const completeWorkItemForDocumentSigningAction = async ({
   );
 
   if (messageId && document) {
-    const workItemIdToClose = document.workItems.find(workItem =>
-      workItem.messages.find(message => message.messageId === messageId),
-    ).workItemId;
+    const workItemIdToClose = document.workItem.workItemId;
 
     await applicationContext.getUseCases().completeWorkItemInteractor({
       applicationContext,
