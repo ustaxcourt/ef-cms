@@ -13,14 +13,14 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessages = connect(
+export const Messages = connect(
   {
     inboxCount: state.inboxCount || 0,
     messagesHelper: state.messagesHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.messageBoxToDisplay.queue,
   },
-  function CaseMessages({
+  function Messages({
     inboxCount,
     messagesHelper,
     navigateToPathSequence,

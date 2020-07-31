@@ -12,7 +12,7 @@ describe('bulkIndexRecords', () => {
     createdAt: { S: '2020-06-10T15:10:23.553Z' },
     docketNumber: { S: '105-19' },
     docketNumberWithSuffix: { S: '105-19' },
-    entityName: { S: 'CaseMessage' },
+    entityName: { S: 'Message' },
     from: { S: 'Test Docketclerk' },
     fromSection: { S: 'docket' },
     fromUserId: { S: '1805d1ab-18d0-43ec-bafb-654e83405416' },
