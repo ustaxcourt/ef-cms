@@ -30,12 +30,10 @@ describe('completeWorkItemInteractor', () => {
         caseDetail: {
           documents: [
             {
-              workItems: [
-                {
-                  messages: [],
-                  workItemId: 'abc',
-                },
-              ],
+              workItem: {
+                messages: [],
+                workItemId: 'abc',
+              },
             },
           ],
         },
@@ -64,12 +62,10 @@ describe('completeWorkItemInteractor', () => {
         caseDetail: {
           documents: [
             {
-              workItems: [
-                {
-                  messages: [],
-                  workItemId: 'abc',
-                },
-              ],
+              workItem: {
+                messages: [],
+                workItemId: 'abc',
+              },
             },
           ],
         },

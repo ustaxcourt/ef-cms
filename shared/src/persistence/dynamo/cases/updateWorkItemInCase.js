@@ -6,19 +6,18 @@ exports.updateWorkItemInCase = async ({
   workItem,
 }) => {
   let documentId = null;
-  let workItemIndex = null;
-  caseToUpdate.documents.forEach(document =>
-    document.workItems.forEach((item, wIndex) => {
-      if (item.workItemId === workItem.workItemId) {
-        ({ documentId } = document);
-        workItemIndex = wIndex;
-      }
-    }),
-  );
+  caseToUpdate.documents.forEach(document => {
+    if (
+      document.workItem &&
+      document.workItem.workItemId === workItem.workItemId
+    ) {
+      ({ documentId } = document);
+    }
+  });
 
   await client.update({
     ExpressionAttributeNames: {
-      '#workItems': 'workItems',
+      '#workItem': 'workItem',
     },
     ExpressionAttributeValues: {
       ':workItem': workItem,
@@ -27,7 +26,7 @@ exports.updateWorkItemInCase = async ({
       pk: `case|${caseToUpdate.docketNumber}`,
       sk: `document|${documentId}`,
     },
-    UpdateExpression: `SET #workItems[${workItemIndex}] = :workItem`,
+    UpdateExpression: 'SET #workItem = :workItem',
     applicationContext,
   });
 };

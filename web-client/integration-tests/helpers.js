@@ -248,24 +248,6 @@ export const uploadProposedStipulatedDecision = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
-export const forwardWorkItem = async (test, to, workItemId, message) => {
-  let assigneeId;
-  if (to === 'docketclerk1') {
-    assigneeId = '2805d1ab-18d0-43ec-bafb-654e83405416';
-  }
-  test.setState('form', {
-    [workItemId]: {
-      assigneeId: assigneeId,
-      forwardMessage: message,
-      section: 'petitions',
-    },
-  });
-
-  await test.runSequence('submitForwardSequence', {
-    workItemId,
-  });
-};
-
 export const uploadPetition = async (
   test,
   overrides = {},
@@ -558,5 +540,5 @@ export const getPetitionDocumentForCase = caseDetail => {
 
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
-  return petitionDocument.workItems[0];
+  return petitionDocument.workItem;
 };

@@ -1080,14 +1080,5 @@
         - 
           tags: 
             - "Restricted"
-    workItems: 
-      type: "array"
-      flags: 
-        presence: "optional"
-        description: "List of system messages associated with this case."
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
 
  ```

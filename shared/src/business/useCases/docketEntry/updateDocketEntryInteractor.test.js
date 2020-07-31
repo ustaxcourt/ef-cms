@@ -36,7 +36,7 @@ describe('updateDocketEntryInteractor', () => {
       eventCode: 'A',
       filedBy: 'Test Petitioner',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      workItems: [workItem],
+      workItem,
     },
   ];
 

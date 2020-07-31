@@ -41,7 +41,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
-  this.document = omit(rawWorkItem.document, 'workItems');
+  this.document = omit(rawWorkItem.document, 'workItem');
   this.entityName = 'WorkItem';
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority = rawWorkItem.highPriority;

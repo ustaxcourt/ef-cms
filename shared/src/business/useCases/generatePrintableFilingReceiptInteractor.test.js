@@ -9,9 +9,7 @@ const { Document } = require('../entities/Document');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   beforeAll(() => {
-    Document.mockImplementation(function Mockument() {
-      this.workItems = [];
-    });
+    Document.mockImplementation(function Mockument() {});
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
