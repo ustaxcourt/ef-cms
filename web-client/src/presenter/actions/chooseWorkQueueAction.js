@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 const DEFAULT_QUEUE_PREFS = {
   box: 'inbox',
   queue: 'my',
-  workQueueIsInternal: true,
 };
 /**
  * Used for changing which work queue (myself, section) and box (inbox, outbox).
@@ -18,13 +17,6 @@ const DEFAULT_QUEUE_PREFS = {
  * @returns {*} returns the next action in the sequence's path
  */
 export const chooseWorkQueueAction = ({ get, path, props, store }) => {
-  if (props.hasOwnProperty('workQueueIsInternal')) {
-    store.set(
-      state.workQueueToDisplay.workQueueIsInternal,
-      props.workQueueIsInternal,
-    );
-  }
-
   if (props.queue) {
     store.set(state.workQueueToDisplay.queue, props.queue);
   }
@@ -38,9 +30,7 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
     ...get(state.workQueueToDisplay),
   };
 
-  let workQueuePath = `${
-    queuePrefs.workQueueIsInternal ? 'messages' : 'documentqc'
-  }${queuePrefs.queue}${queuePrefs.box}`;
+  let workQueuePath = `documentqc${queuePrefs.queue}${queuePrefs.box}`;
 
   if (typeof path[workQueuePath] !== 'function') {
     throw new Error(`Work queue path "${workQueuePath}" not found`);
