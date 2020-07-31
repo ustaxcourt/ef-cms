@@ -31,7 +31,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [true],
@@ -57,7 +56,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -83,7 +81,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -106,7 +103,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -129,7 +125,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -152,7 +147,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -173,7 +167,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -194,7 +187,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -213,7 +205,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -232,7 +223,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -251,7 +241,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
@@ -270,7 +259,6 @@ describe('workQueueHelper', () => {
       state: {
         ...getBaseState(user),
         notifications: {
-          myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],

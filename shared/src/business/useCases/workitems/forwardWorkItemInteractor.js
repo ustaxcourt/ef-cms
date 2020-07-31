@@ -45,16 +45,16 @@ exports.forwardWorkItemInteractor = async ({
       workItemId: workItemId,
     });
 
-  const workItemToForward = new WorkItem(fullWorkItem, { applicationContext })
-    .setAsInternal()
-    .assignToUser({
-      assigneeId: userToForwardTo.userId,
-      assigneeName: userToForwardTo.name,
-      section: userToForwardTo.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
+  const workItemToForward = new WorkItem(fullWorkItem, {
+    applicationContext,
+  }).assignToUser({
+    assigneeId: userToForwardTo.userId,
+    assigneeName: userToForwardTo.name,
+    section: userToForwardTo.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   const caseObject = await applicationContext
     .getPersistenceGateway()

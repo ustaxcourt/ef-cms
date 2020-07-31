@@ -15,35 +15,30 @@ describe('setSectionInboxCountAction', () => {
         document: {
           isFileAttached: true,
         },
-        isQC: false,
       },
       {
         associatedJudge: 'Judge Carey',
         document: {
           isFileAttached: true,
         },
-        isQC: false,
       },
       {
         associatedJudge: CHIEF_JUDGE,
         document: {
           isFileAttached: true,
         },
-        isQC: false,
       },
       {
         associatedJudge: 'Judge Barker',
         document: {
           isFileAttached: true,
         },
-        isQC: true,
       },
       {
         associatedJudge: 'Judge Barker',
         document: {
           isFileAttached: false,
         },
-        isQC: false,
       },
     ];
 

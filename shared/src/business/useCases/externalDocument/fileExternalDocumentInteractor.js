@@ -153,7 +153,6 @@ exports.fileExternalDocumentInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           highPriority: highPriorityWorkItem,
-          isQC: true,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,

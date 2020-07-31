@@ -234,7 +234,6 @@ export const filterWorkItems = ({
             (item.assigneeId === user.userId &&
               user.role === USER_ROLES.docketClerk &&
               !item.completedAt &&
-              item.isQC &&
               item.section === user.section &&
               (item.document.isFileAttached === false || item.inProgress)) ||
             // PetitionsClerks
@@ -248,7 +247,6 @@ export const filterWorkItems = ({
           return (
             item.assigneeId === user.userId &&
             !item.completedAt &&
-            item.isQC &&
             item.section === user.section &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
@@ -257,7 +255,6 @@ export const filterWorkItems = ({
         },
         outbox: item => {
           return (
-            item.isQC &&
             (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
             item.completedByUserId &&
             item.completedByUserId === user.userId &&
@@ -271,7 +268,6 @@ export const filterWorkItems = ({
             // DocketClerks
             (!item.completedAt &&
               user.role === USER_ROLES.docketClerk &&
-              item.isQC &&
               item.section === user.section &&
               (item.document.isFileAttached === false || item.inProgress)) ||
             // PetitionsClerks
@@ -283,7 +279,6 @@ export const filterWorkItems = ({
         inbox: item => {
           return (
             !item.completedAt &&
-            item.isQC &&
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
             !item.inProgress &&
@@ -294,42 +289,7 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             !!item.completedAt &&
-            item.isQC &&
             (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
-          );
-        },
-      },
-    },
-    messages: {
-      my: {
-        inbox: item => {
-          return (
-            !item.completedAt &&
-            !item.isQC &&
-            item.section === user.section &&
-            item.assigneeId === user.userId
-          );
-        },
-        outbox: item => {
-          return (
-            !item.completedAt &&
-            !item.isQC &&
-            item.sentByUserId &&
-            item.sentByUserId === user.userId
-          );
-        },
-      },
-      section: {
-        inbox: item => {
-          return (
-            !item.completedAt && !item.isQC && item.section === user.section
-          );
-        },
-        outbox: item => {
-          return (
-            !item.completedAt &&
-            !item.isQC &&
-            item.sentBySection === user.section
           );
         },
       },
