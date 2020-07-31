@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { CaseMessage } = require('../../entities/CaseMessage');
+const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -30,7 +30,7 @@ exports.getOutboxCaseMessagesForUserInteractor = async ({
       userId,
     });
 
-  return CaseMessage.validateRawCollection(messages, {
+  return Message.validateRawCollection(messages, {
     applicationContext,
   });
 };

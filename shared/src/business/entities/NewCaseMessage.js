@@ -2,7 +2,7 @@ const joi = require('joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CaseMessage } = require('./CaseMessage');
+const { Message } = require('./Message');
 
 /**
  * NewCaseMessage entity - used for validating
@@ -36,10 +36,10 @@ joiValidationDecorator(
   NewCaseMessage,
   joi.object().keys({
     entityName: joi.string().valid('NewCaseMessage').required(),
-    message: CaseMessage.VALIDATION_RULES.message,
-    subject: CaseMessage.VALIDATION_RULES.subject,
-    toSection: CaseMessage.VALIDATION_RULES.toSection,
-    toUserId: CaseMessage.VALIDATION_RULES.toUserId,
+    message: Message.VALIDATION_RULES.message,
+    subject: Message.VALIDATION_RULES.subject,
+    toSection: Message.VALIDATION_RULES.toSection,
+    toUserId: Message.VALIDATION_RULES.toUserId,
   }),
   NewCaseMessage.VALIDATION_ERROR_MESSAGES,
 );

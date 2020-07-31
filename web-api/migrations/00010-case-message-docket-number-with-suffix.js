@@ -1,14 +1,12 @@
 const createApplicationContext = require('../src/applicationContext');
-const {
-  CaseMessage,
-} = require('../../shared/src/business/entities/CaseMessage');
 const { isCaseMessageRecord, upGenerator } = require('./utilities');
+const { Message } = require('../../shared/src/business/entities/Message');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async item => {
   if (isCaseMessageRecord(item)) {
     if (!item.docketNumberWithSuffix) {
-      const caseMessageEntity = new CaseMessage(item, { applicationContext });
+      const caseMessageEntity = new Message(item, { applicationContext });
       caseMessageEntity.docketNumberWithSuffix = caseMessageEntity.docketNumber;
 
       const caseMessage = caseMessageEntity.validate().toRawObject();
