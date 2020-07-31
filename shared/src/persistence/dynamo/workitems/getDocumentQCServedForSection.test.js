@@ -14,25 +14,21 @@ describe('getDocumentQCServedForSection', () => {
         Items: [
           {
             completedAt: 'today',
-            isQC: true,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            isQC: true,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
-            isQC: false,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            isQC: false,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -56,7 +52,11 @@ describe('getDocumentQCServedForSection', () => {
     expect(items).toEqual([
       {
         completedAt: 'today',
-        isQC: true,
+        section: 'docket',
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        completedAt: 'today',
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
