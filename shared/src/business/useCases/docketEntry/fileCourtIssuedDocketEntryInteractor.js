@@ -107,7 +107,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       },
       hideFromPendingMessages: true,
       inProgress: true,
-      isQC: true,
       section: DOCKET_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,

@@ -12,7 +12,6 @@ describe('getWorkItemInteractor', () => {
     document: {
       sentBy: 'petitioner',
     },
-    isQC: true,
     section: 'docket',
     sentBy: 'docketclerk',
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -140,7 +140,6 @@ exports.updateSecondaryContactInteractor = async ({
           ...changeOfAddressDocument.toRawObject(),
           createdAt: changeOfAddressDocument.createdAt,
         },
-        isQC: true,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
