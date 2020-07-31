@@ -13,5 +13,5 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
-  return workItems.filter(workItem => !workItem.completedAt && workItem.isQC);
+  return workItems.filter(workItem => !workItem.completedAt);
 };

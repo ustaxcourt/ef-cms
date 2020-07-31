@@ -14,7 +14,6 @@ exports.getInboxMessagesForUser = async ({ applicationContext, userId }) => {
     applicationContext,
   });
   return workItems.filter(
-    workItem =>
-      !workItem.isQC && !workItem.completedAt && workItem.assigneeId === userId,
+    workItem => !workItem.completedAt && workItem.assigneeId === userId,
   );
 };

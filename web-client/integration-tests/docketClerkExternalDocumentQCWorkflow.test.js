@@ -116,7 +116,6 @@ describe('Create a work item', () => {
   it('verify the docketclerk has the expected unread count', async () => {
     const notifications = getNotifications(test);
     expect(notifications).toMatchObject({
-      myInboxUnreadCount: notificationsBefore.myInboxUnreadCount,
       qcUnreadCount: notificationsBefore.qcUnreadCount + 3,
     });
   });

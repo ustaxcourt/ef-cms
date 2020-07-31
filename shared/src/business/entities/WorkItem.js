@@ -47,7 +47,6 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
-  this.isQC = rawWorkItem.isQC;
   this.isRead = rawWorkItem.isRead;
   this.section = rawWorkItem.section;
   this.sentBy = rawWorkItem.sentBy;
@@ -91,7 +90,6 @@ joiValidationDecorator(
     highPriority: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
-    isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
     section: joi
       .string()
@@ -117,11 +115,6 @@ joiValidationDecorator(
     workItemId: JoiValidationConstants.UUID.required(),
   }),
 );
-
-WorkItem.prototype.setAsInternal = function () {
-  this.isQC = false;
-  return this;
-};
 
 /**
  * Assign to a user

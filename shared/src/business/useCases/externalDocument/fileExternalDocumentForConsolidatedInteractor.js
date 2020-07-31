@@ -184,7 +184,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                   ...documentEntity.toRawObject(),
                   createdAt: documentEntity.createdAt,
                 },
-                isQC: true,
                 section: DOCKET_SECTION,
                 sentBy: user.name,
                 sentByUserId: user.userId,
