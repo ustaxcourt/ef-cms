@@ -65,18 +65,6 @@ describe('verify old served work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      isQC: true,
-      messages: [
-        {
-          createdAt: CREATED_8_DAYS_AGO.toISOString(),
-          from: 'Test petitionsclerk1',
-          fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'Testing a Created Message',
-          messageId: 'c31368e6-8e75-4400-ad1d-a0b2bf0a4083',
-          to: 'Test petitionsclerk1',
-          toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
       section: 'irsSystem',
       sentBy: 'Test petitionsclerk1',
       sentBySection: 'petitions',

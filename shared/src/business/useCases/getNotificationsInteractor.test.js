@@ -10,7 +10,6 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getDocumentQCInboxForUser.mockReturnValue([
         {
-          isQC: false,
           isRead: true,
         },
       ]);
@@ -19,7 +18,6 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getInboxMessagesForUser.mockReturnValue([
         {
-          isQC: false,
           isRead: false,
         },
       ]);
@@ -36,7 +34,6 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getDocumentQCInboxForUser.mockReturnValue([
         {
-          isQC: false,
           isRead: false,
         },
       ]);
@@ -45,7 +42,6 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getInboxMessagesForUser.mockReturnValue([
         {
-          isQC: true,
           isRead: true,
         },
       ]);
@@ -62,7 +58,6 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getDocumentQCInboxForUser.mockReturnValue([
         {
-          isQC: false,
           isRead: true,
         },
       ]);
@@ -71,7 +66,6 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getInboxMessagesForUser.mockReturnValue([
         {
-          isQC: false,
           isRead: true,
         },
       ]);

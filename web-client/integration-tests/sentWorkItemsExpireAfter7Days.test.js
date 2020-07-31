@@ -64,7 +64,6 @@ describe('verify old sent work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      isQC: true,
       section: 'petitions',
       sentBy: 'Test petitionsclerk1',
       sentBySection: 'petitions',

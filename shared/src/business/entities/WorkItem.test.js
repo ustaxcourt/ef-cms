@@ -21,7 +21,6 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          isQC: true,
           section: 'docket',
           sentBy: 'bob',
         },
@@ -39,7 +38,6 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          isQC: true,
           section: 'docket',
           sentBy: 'bob',
         },
@@ -48,26 +46,6 @@ describe('WorkItem', () => {
       workItem.setStatus(CASE_STATUS_TYPES.new);
       expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
       expect(workItem.isValid()).toBeTruthy();
-    });
-
-    it('Returns a reference to a valid workItem when calling setAsInternal', () => {
-      const workItem = new WorkItem(
-        {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseTitle: 'Johnny Joe Jacobson',
-          docketNumber: '101-18',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          document: {},
-          isQC: true,
-          section: 'docket',
-          sentBy: 'bob',
-        },
-        { applicationContext },
-      );
-      const updatedWorkItem = workItem.setAsInternal();
-      expect(updatedWorkItem.isQC).toEqual(false);
-      expect(updatedWorkItem.isValid()).toBeTruthy();
     });
 
     it('Update a valid workitem with a workItemId', () => {
@@ -80,7 +58,6 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          isQC: true,
           section: 'docket',
           sentBy: 'bob',
           workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -100,7 +77,6 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          isQC: true,
           isRead: true,
           section: 'docket',
           sentBy: 'bob',
@@ -122,7 +98,6 @@ describe('WorkItem', () => {
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         document: {},
-        isQC: true,
         sentBy: 'bob',
       },
       { applicationContext },

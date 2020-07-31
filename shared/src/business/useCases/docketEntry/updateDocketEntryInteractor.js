@@ -144,7 +144,6 @@ exports.updateDocketEntryInteractor = async ({
           createdAt: documentEntity.createdAt,
         },
         inProgress: isSavingForLater,
-        isQC: true,
         section: DOCKET_SECTION,
         sentBy: user.userId,
       });

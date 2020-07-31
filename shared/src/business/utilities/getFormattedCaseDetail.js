@@ -67,7 +67,7 @@ const formatDocument = (applicationContext, document) => {
     !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
     result.documentType === 'Stipulated Decision';
 
-  const qcWorkItems = (result.workItems || []).filter(wi => wi.isQC);
+  const qcWorkItems = result.workItems || [];
 
   result.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
     return acc && !!wi.completedAt;
