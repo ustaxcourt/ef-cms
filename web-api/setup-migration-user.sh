@@ -76,7 +76,31 @@ generate_post_data() {
 EOF
 }
 
+createAdmin() {
+  email=$1
+  role=$2
+  name=$3
 
+  aws cognito-idp sign-up \
+    --region "${REGION}" \
+    --client-id "${CLIENT_ID}" \
+    --username "${email}" \
+    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
+    --password "${USTC_ADMIN_PASS}" || true
+
+  aws cognito-idp admin-confirm-sign-up \
+    --region "${REGION}" \
+    --user-pool-id "${USER_POOL_ID}" \
+    --username "${email}" || true
+
+  response=$(aws cognito-idp admin-initiate-auth \
+    --user-pool-id "${USER_POOL_ID}" \
+    --client-id "${CLIENT_ID}" \
+    --region "${REGION}" \
+    --auth-flow ADMIN_NO_SRP_AUTH \
+    --auth-parameters USERNAME="${email}"',PASSWORD'="${USTC_ADMIN_PASS}")
+  adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
+}
 
 #createAccount [email] [role] [index] [barNumber] [section] [overrideName(optional)] [employer(optional)] [firstName(*optional)] [middleName(optional)] [lastName(*optional)] [suffix(optional)]
 # *optional - only optional when user is NOT irsPractitioner or privatePractitioner
@@ -119,5 +143,7 @@ createAccount() {
   fi
 }
 
+createAdmin "ustcadmin@example.com" "admin" "admin"
 createAccount "migrator@example.com" "admin" "" "" "admin"
+
 wait
