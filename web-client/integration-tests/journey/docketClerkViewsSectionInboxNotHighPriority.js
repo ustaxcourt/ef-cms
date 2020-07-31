@@ -5,7 +5,6 @@ export const docketClerkViewsSectionInboxNotHighPriority = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
 
     const inboxQueue = test.getState('workQueue');

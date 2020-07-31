@@ -11,12 +11,10 @@ export const petitionsClerkViewsSectionInProgress = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'section',
-      workQueueIsInternal: false,
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
-    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 

@@ -65,7 +65,6 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
 
     const formattedWorkItem = runCompute(formattedWorkQueue, {

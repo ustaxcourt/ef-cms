@@ -288,7 +288,7 @@ export const baseState = {
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
 export const state = {

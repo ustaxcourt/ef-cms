@@ -1,5 +1,4 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { cloneDeep } from 'lodash';
 import {
   formatDateIfToday,
   formatWorkItem,
@@ -106,77 +105,6 @@ describe('formatted work queue computed', () => {
     section: 'docket',
   };
 
-  it('formats the workitems for my inbox', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [workItem],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-
-    expect(result[0]).toMatchObject(FORMATTED_WORK_ITEM);
-  });
-
-  it('formats the workitems for section inbox', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [workItem],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'section',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-
-    expect(result[0]).toMatchObject(FORMATTED_WORK_ITEM);
-  });
-
-  it('should set isCourtIssuedDocument to true for a court-issued document in the selected work item', () => {
-    const workItemCopy = cloneDeep(workItem);
-    workItemCopy.document.documentType = 'Order';
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [workItemCopy],
-        workQueue: [workItemCopy],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-
-    expect(result2[0].isCourtIssuedDocument).toEqual(true);
-  });
-
-  it('sets showSendTo and showComplete to false when isInitializeCase is true', () => {
-    workItem.isInitializeCase = true;
-    const result2 = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result2[0].showSendTo).toBeFalsy();
-    expect(result2[0].showComplete).toBeFalsy();
-  });
-
   it('filters the workitems for section QC inbox', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
@@ -186,7 +114,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -206,7 +133,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -226,7 +152,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -246,7 +171,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -268,26 +192,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-
-    expect(result).toEqual([]);
-  });
-
-  it('should not show a workItem in section messages outbox if it is completed', () => {
-    workItem.completedAt = '2019-06-17T15:27:55.801Z';
-
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        selectedWorkItems: [],
-        workQueue: [workItem],
-        workQueueToDisplay: {
-          box: 'outbox',
-          queue: 'section',
-          workQueueIsInternal: true,
         },
       },
     });
@@ -306,7 +210,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -338,7 +241,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -384,7 +286,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -427,7 +328,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -477,7 +377,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -530,7 +429,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -585,7 +483,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -636,7 +533,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -675,7 +571,7 @@ describe('formatted work queue computed', () => {
     const documentViewLink =
       '/case-detail/114-19/document-view?documentId=6db35185-2445-4952-9449-5479a5cadab0';
 
-    it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
+    it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -696,7 +592,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual('/case-detail/114-19/petition-qc');
@@ -723,13 +618,12 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/edit-court-issued`);
     });
 
-    it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
+    it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -750,7 +644,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(documentViewLink);
@@ -785,7 +678,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
@@ -823,7 +715,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(
@@ -862,7 +753,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(
@@ -898,7 +788,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(baseWorkItemEditLink);
@@ -930,7 +819,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
@@ -962,7 +850,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
@@ -993,7 +880,6 @@ describe('formatted work queue computed', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'my',
-          workQueueIsInternal: false,
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/review`);
@@ -1193,7 +1079,7 @@ describe('formatted work queue computed', () => {
       expect(result.selected).toEqual(true);
     });
 
-    it('should return document.createdAt for receivedAt when workQueueIsInternal is false', () => {
+    it('should return document.createdAt for receivedAt', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         document: {
@@ -1206,12 +1092,11 @@ describe('formatted work queue computed', () => {
       const result = formatWorkItem({
         applicationContext,
         workItem,
-        workQueueIsInternal: false,
       });
       expect(result.receivedAt).toEqual(result.document.receivedAt);
     });
 
-    it('should return document.createdAt for receivedAt when document.receivedAt is today and workQueueIsInternal is false', () => {
+    it('should return document.createdAt for receivedAt when document.receivedAt is today', () => {
       const now = new Date().toISOString();
       const workItem = {
         ...FORMATTED_WORK_ITEM,
@@ -1225,7 +1110,6 @@ describe('formatted work queue computed', () => {
       const result = formatWorkItem({
         applicationContext,
         workItem,
-        workQueueIsInternal: false,
       });
       expect(result.receivedAt).toEqual(result.document.createdAt);
     });
@@ -1243,7 +1127,6 @@ describe('formatted work queue computed', () => {
       const result = formatWorkItem({
         applicationContext,
         workItem,
-        workQueueIsInternal: false,
       });
       expect(result.received).toEqual('12/27/18');
     });
