@@ -74,54 +74,6 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('returns My Messages for workQueueTitle if showing individual internal work queue', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
-    const result = runCompute(workQueueHelper, {
-      state: {
-        ...getBaseState(user),
-        notifications: {
-          myInboxUnreadCount: 0,
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
-        workQueueToDisplay: {
-          queue: 'my',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      workQueueTitle: 'My Messages',
-    });
-  });
-
-  it('returns Section Messages for workQueueTitle if showing section internal work queue', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
-    const result = runCompute(workQueueHelper, {
-      state: {
-        ...getBaseState(user),
-        notifications: {
-          myInboxUnreadCount: 0,
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
-        workQueueToDisplay: {
-          queue: 'section',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      workQueueTitle: 'Section Messages',
-    });
-  });
-
   it('returns My Document QC for workQueueTitle if showing individual non-internal work queue', () => {
     const user = {
       role: ROLES.petitionsClerk,
@@ -137,7 +89,6 @@ describe('workQueueHelper', () => {
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'my',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -161,7 +112,6 @@ describe('workQueueHelper', () => {
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -185,7 +135,6 @@ describe('workQueueHelper', () => {
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
@@ -312,29 +261,6 @@ describe('workQueueHelper', () => {
     expect(result.showFromColumn).toBeTruthy();
   });
 
-  it('shows "Received" as filed label on messages inbox', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
-    };
-    const result = runCompute(workQueueHelper, {
-      state: {
-        ...getBaseState(user),
-        notifications: {
-          myInboxUnreadCount: 0,
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'section',
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result.inboxFiledColumnLabel).toEqual('Received');
-  });
-
   it('shows in progress petitions for a petitionsclerk', () => {
     const user = {
       role: ROLES.petitionsClerk,
@@ -351,7 +277,6 @@ describe('workQueueHelper', () => {
         workQueueToDisplay: {
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         },
       },
     });
