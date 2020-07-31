@@ -5,7 +5,7 @@
     "caseTitle": "Bill Burr",
     "docketNumber": "105-20",
     "docketNumberWithSuffix": "105-20L",
-    "entityName": "CaseMessage",
+    "entityName": "Message",
     "from": "Test Petitionsclerk",
     "fromSection": "petitions",
     "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
