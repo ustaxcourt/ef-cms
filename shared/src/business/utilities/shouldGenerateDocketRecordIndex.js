@@ -10,7 +10,7 @@ const {
  * @param {string} applicationContext the application context
  * @param {string} caseDetail the case detail object
  * @param {string} docketRecordEntry the docket record entry
- * @returns {Promise} the template with the brackets replaced with replacement values
+ * @returns {boolean} true if a given entry should have an index applied or false otherwise
  */
 const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
   if (!docketRecordEntry) {
