@@ -27,8 +27,7 @@ export const CaseDetailHeaderMenu = connect(
       sequences.openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
-    openCreateCaseMessageModalSequence:
-      sequences.openCreateCaseMessageModalSequence,
+    openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
@@ -42,7 +41,7 @@ export const CaseDetailHeaderMenu = connect(
     isCaseDetailMenuOpen,
     openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence,
-    openCreateCaseMessageModalSequence,
+    openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     resetCaseMenuSequence,
     showModal,
@@ -124,7 +123,7 @@ export const CaseDetailHeaderMenu = connect(
                     id="menu-button-add-new-message"
                     onClick={() => {
                       resetCaseMenuSequence();
-                      openCreateCaseMessageModalSequence();
+                      openCreateMessageModalSequence();
                     }}
                   >
                     Message
