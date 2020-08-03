@@ -3,6 +3,7 @@ const {
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
+  PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
 const {
   createCaseFromPaperInteractor,
@@ -103,7 +104,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
               filedBy: 'Petr. Bob Jones',
             },
             isInitializeCase: true,
-            section: 'petitions',
+            section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
             sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -147,14 +148,14 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
         },
         isInitializeCase: true,
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
       },
     ]);
 
     const petitionsSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     expect(petitionsSectionInbox).toMatchObject([
@@ -169,7 +170,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
         },
         isInitializeCase: true,
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
       },
     ]);

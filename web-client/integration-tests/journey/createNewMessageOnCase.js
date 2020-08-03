@@ -1,8 +1,11 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
@@ -22,7 +25,7 @@ export const createNewMessageOnCase = test => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: 'petitions',
+      value: PETITIONS_SECTION,
     });
 
     await test.runSequence('updateModalFormValueSequence', {

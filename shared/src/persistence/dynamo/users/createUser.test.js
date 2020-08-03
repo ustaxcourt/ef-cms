@@ -1,15 +1,18 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  PETITIONS_SECTION,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
 const { createUser, createUserRecords } = require('./createUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
 const petitionsClerkUser = {
   name: 'Test Petitionsclerk',
   role: ROLES.petitionsClerk,
-  section: 'petitions',
+  section: PETITIONS_SECTION,
 };
 
 const privatePractitionerUser = {
@@ -57,7 +60,7 @@ describe('createUser', () => {
     const petitionsclerkUser = {
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     };
 
     await createUser({ applicationContext, user: petitionsclerkUser });
