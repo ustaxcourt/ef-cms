@@ -1,4 +1,4 @@
-import { applicationContextForClients as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setReplyToMessageModalDialogModalStateAction } from './setReplyToMessageModalDialogModalStateAction';
