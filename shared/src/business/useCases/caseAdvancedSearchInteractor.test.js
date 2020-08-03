@@ -86,7 +86,7 @@ describe('caseAdvancedSearchInteractor', () => {
   it('returns results if practitioner is associated', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsPractitioner,
-      userId: 'abc',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
     applicationContext
@@ -96,7 +96,7 @@ describe('caseAdvancedSearchInteractor', () => {
           docketNumber: '101-20',
           irsPractitioners: [
             {
-              userId: 'abc',
+              userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
             },
           ],
           sealedDate: 'yup',
@@ -113,7 +113,7 @@ describe('caseAdvancedSearchInteractor', () => {
         docketNumber: '101-20',
         irsPractitioners: [
           {
-            userId: 'abc',
+            userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
           },
         ],
         sealedDate: 'yup',
