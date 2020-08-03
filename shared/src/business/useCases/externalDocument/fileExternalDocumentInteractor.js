@@ -175,9 +175,12 @@ exports.fileExternalDocumentInteractor = async ({
         },
         { applicationContext },
       );
+
+      const isAutoServed = documentEntity.isAutoServed();
+
       caseEntity.addDocketRecord(docketRecordEntity);
 
-      if (documentEntity.isAutoServed()) {
+      if (isAutoServed) {
         documentEntity.setAsServed(servedParties.all);
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
