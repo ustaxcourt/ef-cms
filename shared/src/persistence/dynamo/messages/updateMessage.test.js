@@ -1,9 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { updateCaseMessage } = require('./updateCaseMessage');
+const { updateMessage } = require('./updateMessage');
 
-const mockCaseMessage = {
+const mockMessage = {
   createdAt: '2019-03-01T21:40:46.415Z',
   docketNumber: '101-20',
   from: 'Test Petitionsclerk',
@@ -18,7 +18,7 @@ const mockCaseMessage = {
   toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
 };
 
-describe('updateCaseMessage', () => {
+describe('updateMessage', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
     applicationContext.getDocumentClient().put.mockReturnValue({
@@ -26,10 +26,10 @@ describe('updateCaseMessage', () => {
     });
   });
 
-  it('attempts to persist the case message record', async () => {
-    await updateCaseMessage({
+  it('attempts to persist the message record', async () => {
+    await updateMessage({
       applicationContext,
-      caseMessage: mockCaseMessage,
+      message: mockMessage,
     });
 
     expect(
@@ -38,10 +38,10 @@ describe('updateCaseMessage', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.parentMessageId}`,
-      pk: `case|${mockCaseMessage.docketNumber}`,
-      sk: `message|${mockCaseMessage.messageId}`,
-      ...mockCaseMessage,
+      gsi1pk: `message|${mockMessage.parentMessageId}`,
+      pk: `case|${mockMessage.docketNumber}`,
+      sk: `message|${mockMessage.messageId}`,
+      ...mockMessage,
     });
   });
 });

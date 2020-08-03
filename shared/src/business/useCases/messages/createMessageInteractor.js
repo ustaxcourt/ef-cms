@@ -50,7 +50,7 @@ exports.createMessageInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const caseMessage = new Message(
+  const validatedRawMessage = new Message(
     {
       attachments,
       caseStatus: status,
@@ -71,10 +71,10 @@ exports.createMessageInteractor = async ({
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createCaseMessage({
+  await applicationContext.getPersistenceGateway().createMessage({
     applicationContext,
-    caseMessage,
+    message: validatedRawMessage,
   });
 
-  return caseMessage;
+  return validatedRawMessage;
 };

@@ -1,15 +1,17 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * lambda which is used for retrieving messages for a case
+ * gets the outbox messages for the user
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getCaseMessagesForCaseLambda = event =>
+exports.getOutboxMessagesForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getMessagesForCaseInteractor({
-      applicationContext,
-      ...event.pathParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getOutboxMessagesForUserInteractor({
+        applicationContext,
+        userId: event.pathParameters.userId,
+      });
   });

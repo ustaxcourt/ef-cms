@@ -48,7 +48,7 @@ describe('getMessagesForCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessagesByDocketNumber.mockReturnValue([mockMessage]);
+      .getMessagesByDocketNumber.mockReturnValue([mockMessage]);
 
     const returnedMessage = await getMessagesForCaseInteractor({
       applicationContext,
@@ -56,7 +56,7 @@ describe('getMessagesForCaseInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseMessagesByDocketNumber,
+      applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
     ).toBeCalled();
     expect(returnedMessage).toMatchObject([mockMessage]);
   });
