@@ -20,6 +20,6 @@ describe('navigateToMessagesAction', () => {
       },
     });
 
-    expect(routeStub).toHaveBeenCalledWith('/case-messages/my/inbox');
+    expect(routeStub).toHaveBeenCalledWith('/messages/my/inbox');
   });
 });

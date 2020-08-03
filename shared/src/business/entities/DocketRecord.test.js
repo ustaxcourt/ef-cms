@@ -84,19 +84,6 @@ describe('DocketRecord', () => {
       ).toBeFalsy();
     });
 
-    it('fails validation if an index is omitted', () => {
-      expect(
-        new DocketRecord(
-          {
-            description: 'Test Docket Record',
-            eventCode: 'O',
-            filingDate: new Date('2000-01-01').toISOString(),
-          },
-          { applicationContext },
-        ).isValid(),
-      ).toBeFalsy();
-    });
-
     it('fails validation if nothing is passed in', () => {
       expect(
         new DocketRecord({}, { applicationContext }).isValid(),
@@ -113,7 +100,6 @@ describe('DocketRecord', () => {
         description: 'Enter a description',
         eventCode: 'Enter an event code',
         filingDate: 'Enter a valid filing date',
-        index: 'Enter an index',
       });
     });
 

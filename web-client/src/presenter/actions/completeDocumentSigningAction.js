@@ -71,7 +71,7 @@ export const completeDocumentSigningAction = async ({
   let redirectUrl;
 
   if (parentMessageId) {
-    redirectUrl = `/case-messages/${docketNumber}/message-detail/${parentMessageId}`;
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`;
   } else {
     redirectUrl = `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`;
   }

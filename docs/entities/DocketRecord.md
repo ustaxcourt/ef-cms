@@ -450,7 +450,7 @@
     index: 
       type: "number"
       flags: 
-        presence: "required"
+        presence: "optional"
         description: "Index of this item in the Docket Record list."
       rules: 
         - 

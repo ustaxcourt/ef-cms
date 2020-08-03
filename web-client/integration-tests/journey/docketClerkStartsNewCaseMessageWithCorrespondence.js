@@ -14,7 +14,7 @@ export const docketClerkStartsNewCaseMessageWithCorrespondence = test => {
   };
 
   it('docketclerk verifies correspondence is an available document when starting a new case message', async () => {
-    await test.runSequence('openCreateCaseMessageModalSequence');
+    await test.runSequence('openCreateMessageModalSequence');
 
     let helper = getHelper();
 
