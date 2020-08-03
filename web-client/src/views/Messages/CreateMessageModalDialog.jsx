@@ -1,11 +1,11 @@
-import { CaseMessageModalAttachments } from './CaseMessageModalAttachments';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { MessageModalAttachments } from './MessageModalAttachments';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ForwardCaseMessageModalDialog = connect(
+export const CreateMessageModalDialog = connect(
   {
     constants: state.constants,
     form: state.modal.form,
@@ -21,10 +21,12 @@ export const ForwardCaseMessageModalDialog = connect(
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  function ForwardCaseMessageModalDialog({
+  function CreateMessageModalDialog({
     constants,
     form,
+    onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
+    title = 'Create Message',
     updateChambersInCreateCaseMessageModalSequence,
     updateModalFormValueSequence,
     updateSectionInCreateCaseMessageModalSequence,
@@ -33,14 +35,18 @@ export const ForwardCaseMessageModalDialog = connect(
     validationErrors,
     workQueueSectionHelper,
   }) {
+    validationErrors = validationErrors || {};
+    form = form || {};
+
     return (
       <ConfirmModal
         cancelLabel="Cancel"
+        className="ustc-create-message-modal"
         confirmLabel="Send"
         preventCancelOnBlur={true}
-        title="Forward Message"
+        title={title}
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="forwardCaseMessageSequence"
+        onConfirmSequence={onConfirmSequence}
       >
         <FormGroup
           errorText={!showChambersSelect && validationErrors.toSection}
@@ -69,6 +75,7 @@ export const ForwardCaseMessageModalDialog = connect(
             ))}
           </select>
         </FormGroup>
+
         {showChambersSelect && (
           <FormGroup
             errorText={validationErrors.toSection && 'Select a chamber'}
@@ -97,6 +104,7 @@ export const ForwardCaseMessageModalDialog = connect(
             </select>
           </FormGroup>
         )}
+
         <FormGroup errorText={validationErrors.toUserId}>
           <label className="usa-label" htmlFor="toUserId">
             Select recipient
@@ -162,7 +170,7 @@ export const ForwardCaseMessageModalDialog = connect(
           />
         </FormGroup>
 
-        <CaseMessageModalAttachments />
+        <MessageModalAttachments />
       </ConfirmModal>
     );
   },

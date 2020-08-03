@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesSectionCompleted = connect(
-  { formattedMessages: state.formattedMessages.completedMessages },
-  function CaseMessagesSectionCompleted({ formattedMessages }) {
+export const MessagesSectionOutbox = connect(
+  { formattedMessages: state.formattedMessages.messages },
+  function MessagesSectionOutbox({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -14,27 +14,29 @@ export const CaseMessagesSectionCompleted = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 Docket No.
               </th>
-              <th className="small">Completed</th>
-              <th>Last Message</th>
-              <th>Comment</th>
-              <th>Completed by</th>
+              <th className="small">Sent</th>
+              <th>Message</th>
+              <th>Case Title</th>
+              <th>Case Status</th>
+              <th>To</th>
+              <th>From</th>
               <th>Section</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
             return (
               <tbody key={idx}>
-                <tr key={idx}>
+                <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
                     <span className="no-wrap">
-                      {message.completedAtFormatted}
+                      {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row">
+                  <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
@@ -49,12 +51,12 @@ export const CaseMessagesSectionCompleted = connect(
                       {message.message}
                     </div>
                   </td>
-                  <td className="message-queue-row">
-                    {message.completedMessage}
-                  </td>
-                  <td className="message-queue-row">{message.completedBy}</td>
-                  <td className="message-queue-row">
-                    {message.completedBySection}
+                  <td className="message-queue-row">{message.caseTitle}</td>
+                  <td className="message-queue-row">{message.caseStatus}</td>
+                  <td className="message-queue-row to">{message.to}</td>
+                  <td className="message-queue-row from">{message.from}</td>
+                  <td className="message-queue-row small">
+                    {message.toSection}
                   </td>
                 </tr>
               </tbody>

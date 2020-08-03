@@ -3,11 +3,11 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesCompleted = connect(
+export const MessagesCompleted = connect(
   {
     formattedCompletedMessages: state.formattedCaseMessages.completedMessages,
   },
-  function CaseMessagesCompleted({ formattedCompletedMessages }) {
+  function MessagesCompleted({ formattedCompletedMessages }) {
     return (
       <>
         {formattedCompletedMessages.length === 0 && (
