@@ -1,4 +1,5 @@
 const {
+  COURT_ISSUED_EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
   UNSERVABLE_EVENT_CODES,
@@ -33,6 +34,10 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
     docketRecordEntry.eventCode,
   );
 
+  const isCourtIssued = COURT_ISSUED_EVENT_CODES.map(
+    item => item.eventCode,
+  ).includes(docketRecordEntry.eventCode);
+
   if (docketRecordEntry.index) {
     return false;
   }
@@ -47,7 +52,7 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
       doc => doc.documentId === docketRecordEntry.documentId,
     );
 
-  if (document && !document.isPaper) {
+  if (document && !document.isPaper && !isCourtIssued) {
     return true;
   }
 

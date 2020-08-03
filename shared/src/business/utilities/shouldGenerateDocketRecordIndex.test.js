@@ -32,7 +32,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(false);
   });
 
-  it('returns true for electronically filed documents', () => {
+  it('returns true for electronically filed non court issued documents', () => {
     const caseDetail = {
       documents: [
         {
@@ -53,6 +53,28 @@ describe('shouldGenerateDocketRecordIndex', () => {
     });
 
     expect(result).toEqual(true);
+  });
+
+  it('returns false for electronically filed court issued documents', () => {
+    const caseDetail = {
+      documents: [
+        {
+          documentId: '123',
+          isPaper: false,
+        },
+      ],
+    };
+    const docketRecordEntry = {
+      documentId: '123',
+      documentType: 'Answer',
+      eventCode: 'O',
+    };
+    const result = shouldGenerateDocketRecordIndex({
+      caseDetail,
+      docketRecordEntry,
+    });
+
+    expect(result).toEqual(false);
   });
 
   it('returns true for petition documents', () => {
