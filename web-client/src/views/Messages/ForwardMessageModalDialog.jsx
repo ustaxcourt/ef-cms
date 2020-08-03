@@ -10,14 +10,14 @@ export const ForwardMessageModalDialog = connect(
     constants: state.constants,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
-    updateChambersInCreateCaseMessageModalSequence:
-      sequences.updateChambersInCreateCaseMessageModalSequence,
+    updateChambersInCreateMessageModalSequence:
+      sequences.updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence: sequences.updateModalFormValueSequence,
-    updateSectionInCreateCaseMessageModalSequence:
-      sequences.updateSectionInCreateCaseMessageModalSequence,
+    updateSectionInCreateMessageModalSequence:
+      sequences.updateSectionInCreateMessageModalSequence,
     users: state.users,
-    validateCreateCaseMessageInModalSequence:
-      sequences.validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence:
+      sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
@@ -25,11 +25,11 @@ export const ForwardMessageModalDialog = connect(
     constants,
     form,
     showChambersSelect,
-    updateChambersInCreateCaseMessageModalSequence,
+    updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence,
-    updateSectionInCreateCaseMessageModalSequence,
+    updateSectionInCreateMessageModalSequence,
     users,
-    validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence,
     validationErrors,
     workQueueSectionHelper,
   }) {
@@ -40,7 +40,7 @@ export const ForwardMessageModalDialog = connect(
         preventCancelOnBlur={true}
         title="Forward Message"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="forwardCaseMessageSequence"
+        onConfirmSequence="forwardMessageSequence"
       >
         <FormGroup
           errorText={!showChambersSelect && validationErrors.toSection}
@@ -54,11 +54,11 @@ export const ForwardMessageModalDialog = connect(
             id="toSection"
             name="toSection"
             onChange={e => {
-              updateSectionInCreateCaseMessageModalSequence({
+              updateSectionInCreateMessageModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -81,11 +81,11 @@ export const ForwardMessageModalDialog = connect(
               id="chambers"
               name="chambers"
               onChange={e => {
-                updateChambersInCreateCaseMessageModalSequence({
+                updateChambersInCreateMessageModalSequence({
                   key: 'toSection',
                   value: e.target.value,
                 });
-                validateCreateCaseMessageInModalSequence();
+                validateCreateMessageInModalSequence();
               }}
             >
               <option value="">- Select -</option>
@@ -112,7 +112,7 @@ export const ForwardMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -139,7 +139,7 @@ export const ForwardMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           />
         </FormGroup>
@@ -157,7 +157,7 @@ export const ForwardMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           />
         </FormGroup>

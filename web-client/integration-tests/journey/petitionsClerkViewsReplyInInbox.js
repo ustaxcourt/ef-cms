@@ -1,6 +1,6 @@
 export const petitionsClerkViewsReplyInInbox = test => {
   return it('petitions clerk views the reply they were sent in their inbox', async () => {
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });

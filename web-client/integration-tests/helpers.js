@@ -70,7 +70,7 @@ export const getFormattedDocumentQCMyInbox = async test => {
 };
 
 export const getMySentFormattedCaseMessages = async test => {
-  await test.runSequence('gotoCaseMessagesSequence', {
+  await test.runSequence('gotoMessagesSequence', {
     box: 'outbox',
     queue: 'my',
   });

@@ -9,14 +9,14 @@ export const ReplyToMessageModalDialog = connect(
   {
     form: state.modal.form,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateCreateCaseMessageInModalSequence:
-      sequences.validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence:
+      sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
   },
   function ReplyToMessageModalDialog({
     form,
     updateModalValueSequence,
-    validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence,
     validationErrors,
   }) {
     return (
@@ -26,7 +26,7 @@ export const ReplyToMessageModalDialog = connect(
         preventCancelOnBlur={true}
         title="Reply to Message"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="replyToCaseMessageSequence"
+        onConfirmSequence="replyToMessageSequence"
       >
         <FormGroup>
           <span className="usa-label">Recipient</span>
@@ -48,7 +48,7 @@ export const ReplyToMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           />
         </FormGroup>
@@ -66,7 +66,7 @@ export const ReplyToMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           />
         </FormGroup>

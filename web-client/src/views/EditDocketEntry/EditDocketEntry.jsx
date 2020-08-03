@@ -18,15 +18,15 @@ export const EditDocketEntry = connect(
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     editDocketEntryHelper: state.editDocketEntryHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    openCompleteAndSendCaseMessageModalSequence:
-      sequences.openCompleteAndSendCaseMessageModalSequence,
+    openCompleteAndSendMessageModalSequence:
+      sequences.openCompleteAndSendMessageModalSequence,
     showModal: state.modal.showModal,
   },
   function EditDocketEntry({
     completeDocketEntryQCSequence,
     editDocketEntryHelper,
     formCancelToggleCancelSequence,
-    openCompleteAndSendCaseMessageModalSequence,
+    openCompleteAndSendMessageModalSequence,
     showModal,
   }) {
     return (
@@ -82,7 +82,7 @@ export const EditDocketEntry = connect(
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      openCompleteAndSendCaseMessageModalSequence();
+                      openCompleteAndSendMessageModalSequence();
                     }}
                   >
                     Complete &amp; Send Message

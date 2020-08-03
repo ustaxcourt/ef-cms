@@ -992,7 +992,7 @@ const router = {
       '/messages/*/*',
       ifHasAccess((queue, box) => {
         setPageTitle('Messages');
-        return app.getSequence('gotoCaseMessagesSequence')({
+        return app.getSequence('gotoMessagesSequence')({
           box,
           queue,
         });

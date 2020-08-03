@@ -13,7 +13,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
 
-export const forwardCaseMessageSequence = showProgressSequenceDecorator([
+export const forwardMessageSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   startShowValidationAction,
   validateCreateCaseMessageAction,
