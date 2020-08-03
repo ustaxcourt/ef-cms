@@ -28,7 +28,7 @@ export const docketClerkAppliesSignatureFromMessage = test => {
       docketNumber: test.docketNumber,
       documentId: orderDocument.documentId,
       parentMessageId: test.parentMessageId,
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
     expect(test.getState('currentPage')).toEqual('SignOrder');

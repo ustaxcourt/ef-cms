@@ -222,7 +222,7 @@ const router = {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
         return app.getSequence('gotoPetitionQcSequence')({
           docketNumber,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
@@ -441,7 +441,7 @@ const router = {
           documentType: decodeURIComponent(documentType),
           eventCode,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -479,7 +479,7 @@ const router = {
         return app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
           docketNumber,
           documentId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -547,7 +547,7 @@ const router = {
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
           docketNumber,
           documentId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -574,7 +574,7 @@ const router = {
           docketNumber,
           documentId,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
         });
       }),
     );
@@ -600,7 +600,7 @@ const router = {
           docketNumber,
           documentIdToEdit,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -640,7 +640,7 @@ const router = {
         return sequence({
           docketNumber,
           documentId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -989,7 +989,7 @@ const router = {
     });
 
     registerRoute(
-      '/case-messages/*/*',
+      '/messages/*/*',
       ifHasAccess((queue, box) => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
@@ -1000,7 +1000,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-messages/*/message-detail/*',
+      '/messages/*/message-detail/*',
       ifHasAccess((docketNumber, parentMessageId) => {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
@@ -1011,7 +1011,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-messages/*/message-detail/*?..',
+      '/messages/*/message-detail/*?..',
       ifHasAccess((docketNumber, parentMessageId) => {
         const { documentId } = route.query();
         setPageTitle('Message detail');

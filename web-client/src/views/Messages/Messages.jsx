@@ -41,7 +41,7 @@ export const Messages = connect(
               <Button
                 link
                 className="button-switch-box"
-                href="/case-messages/section/inbox"
+                href="/messages/section/inbox"
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
                 Switch to Section Messages
@@ -51,7 +51,7 @@ export const Messages = connect(
               <Button
                 link
                 className="button-switch-box"
-                href="/case-messages/my/inbox"
+                href="/messages/my/inbox"
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
                 Switch to My Messages
@@ -67,7 +67,7 @@ export const Messages = connect(
             bind="messageBoxToDisplay.box"
             onSelect={box => {
               navigateToPathSequence({
-                path: `/case-messages/${queue}/${box}`,
+                path: `/messages/${queue}/${box}`,
               });
             }}
           >

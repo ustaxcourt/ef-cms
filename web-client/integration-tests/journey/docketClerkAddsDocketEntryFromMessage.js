@@ -27,7 +27,7 @@ export const docketClerkAddsDocketEntryFromMessage = test => {
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketNumber: test.docketNumber,
       documentId: orderDocument.documentId,
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
