@@ -5,6 +5,36 @@ const {
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 
+const getIsInitialFilingType = docketRecordEntry => {
+  const INITIAL_DOCUMENT_EVENT_CODES = Object.keys(INITIAL_DOCUMENT_TYPES).map(
+    key => INITIAL_DOCUMENT_TYPES[key].eventCode,
+  );
+
+  return INITIAL_DOCUMENT_EVENT_CODES.includes(docketRecordEntry.eventCode);
+};
+
+const getIsMinuteEntry = docketRecordEntry => {
+  const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
+    key => MINUTE_ENTRIES_MAP[key].eventCode,
+  );
+
+  return MINUTE_ENTRIES_EVENT_CODES.includes(docketRecordEntry.eventCode);
+};
+
+const getIsCourtIssued = docketRecordEntry =>
+  COURT_ISSUED_EVENT_CODES.map(item => item.eventCode).includes(
+    docketRecordEntry.eventCode,
+  );
+
+const getDocumentForEntry = (caseDetail, docketRecordEntry) =>
+  docketRecordEntry.documentId &&
+  caseDetail.documents.find(
+    doc => doc.documentId === docketRecordEntry.documentId,
+  );
+
+const getIsUnservable = docketRecordEntry =>
+  UNSERVABLE_EVENT_CODES.includes(docketRecordEntry.eventCode);
+
 /**
  * determines if a docket record entry should get an index
  *
@@ -14,43 +44,20 @@ const {
  * @returns {boolean} true if a given entry should have an index applied or false otherwise
  */
 const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
-  if (!docketRecordEntry) {
-    return false;
+  if (!docketRecordEntry || (docketRecordEntry && docketRecordEntry.index)) {
+    return false; // an index does not need to be generated
   }
 
-  let isInitialFilingType = false;
-  const INITIAL_DOCUMENT_EVENT_CODES = Object.keys(INITIAL_DOCUMENT_TYPES).map(
-    key => INITIAL_DOCUMENT_TYPES[key].eventCode,
-  );
-  if (INITIAL_DOCUMENT_EVENT_CODES.includes(docketRecordEntry.eventCode)) {
-    isInitialFilingType = true;
-  }
-
-  const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
-    key => MINUTE_ENTRIES_MAP[key].eventCode,
-  );
-
-  const isMinuteEntry = MINUTE_ENTRIES_EVENT_CODES.includes(
-    docketRecordEntry.eventCode,
-  );
-
-  const isCourtIssued = COURT_ISSUED_EVENT_CODES.map(
-    item => item.eventCode,
-  ).includes(docketRecordEntry.eventCode);
-
-  if (docketRecordEntry.index) {
-    return false;
-  }
+  const isMinuteEntry = getIsMinuteEntry(docketRecordEntry);
+  const isInitialFilingType = getIsInitialFilingType(docketRecordEntry);
+  const isCourtIssued = getIsCourtIssued(docketRecordEntry);
+  const isUnservable = getIsUnservable(docketRecordEntry);
 
   if (!isInitialFilingType && !isMinuteEntry && !docketRecordEntry.documentId) {
     return false;
   }
 
-  const document =
-    docketRecordEntry.documentId &&
-    caseDetail.documents.find(
-      doc => doc.documentId === docketRecordEntry.documentId,
-    );
+  const document = getDocumentForEntry(caseDetail, docketRecordEntry);
 
   if (document && !document.isPaper && !isCourtIssued) {
     return true;
@@ -62,36 +69,22 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
     ) {
       return true;
     } else {
-      const petitionRecord = caseDetail.docketRecord.find(
-        record =>
-          record.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      const petitionDocument = caseDetail.documents.find(
+        document =>
+          document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
       );
-
-      // Determine if the document was created along with the petition
-      const petitionFiled = new Date(petitionRecord.filingDate).getTime();
-      const documentFiled = new Date(docketRecordEntry.filingDate).getTime();
-      const acceptableTimeGap = 10000; // 10 seconds
-
-      if (Math.abs(petitionFiled - documentFiled) <= acceptableTimeGap) {
+      if (petitionDocument.servedAt) {
+        return false;
+      } else {
         return true;
       }
     }
   }
 
-  if (UNSERVABLE_EVENT_CODES.includes(docketRecordEntry.eventCode)) {
+  if (isUnservable || isMinuteEntry || document.servedAt) {
     return true;
-  }
-
-  if (isMinuteEntry) {
-    return true;
-  }
-
-  if (document && !document.servedAt) {
+  } else {
     return false;
-  }
-
-  if (document && document.servedAt) {
-    return true;
   }
 };
 
