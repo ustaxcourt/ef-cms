@@ -65,6 +65,7 @@ import { deleteDeficiencyStatisticsSequence } from './sequences/deleteDeficiency
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteOtherStatisticsSequence } from './sequences/deleteOtherStatisticsSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
+import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
@@ -645,6 +646,7 @@ export const presenter = {
     prioritizeCaseSequence,
     redirectToLoginSequence,
     refreshPdfSequence,
+    deleteUploadedPdfSequence,
     refreshStatisticsSequence,
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
