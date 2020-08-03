@@ -1,5 +1,5 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
-import { applicationContextForClients as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
