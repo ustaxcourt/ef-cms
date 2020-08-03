@@ -41,7 +41,6 @@ export const PetitionQcDocumentPreview = connect(
             {!isPetitionFile && pdfPreviewUrl && (
               <Button
                 link
-                secondary
                 className="red-warning push-right"
                 onClick={() => {
                   openConfirmDeletePDFModalSequence();
