@@ -22,12 +22,10 @@ const replyToMessage = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .markCaseMessageThreadRepliedTo({
-      applicationContext,
-      parentMessageId,
-    });
+  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
+    applicationContext,
+    parentMessageId,
+  });
 
   const {
     caseCaption,
@@ -45,7 +43,7 @@ const replyToMessage = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const caseMessage = new Message(
+  const validatedRawMessage = new Message(
     {
       attachments,
       caseStatus: status,
@@ -67,12 +65,12 @@ const replyToMessage = async ({
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().createCaseMessage({
+  await applicationContext.getPersistenceGateway().createMessage({
     applicationContext,
-    caseMessage,
+    message: validatedRawMessage,
   });
 
-  return caseMessage;
+  return validatedRawMessage;
 };
 
 exports.replyToMessage = replyToMessage;

@@ -25,7 +25,7 @@ exports.getMessageThreadInteractor = async ({
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCaseMessageThreadByParentId({
+    .getMessageThreadByParentId({
       applicationContext,
       parentMessageId,
     });

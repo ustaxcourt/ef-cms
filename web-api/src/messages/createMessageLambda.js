@@ -1,17 +1,15 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * gets the completed messages for the user
+ * lambda which is used for creating a new message
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getCompletedCaseMessagesForUserLambda = event =>
+exports.createMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getCompletedMessagesForUserInteractor({
-        applicationContext,
-        userId: event.pathParameters.userId,
-      });
+    return await applicationContext.getUseCases().createMessageInteractor({
+      ...JSON.parse(event.body),
+      applicationContext,
+    });
   });
