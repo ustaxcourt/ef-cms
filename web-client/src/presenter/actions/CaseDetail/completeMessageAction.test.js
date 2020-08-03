@@ -5,17 +5,15 @@ import { runAction } from 'cerebral/test';
 
 describe('completeMessageAction', () => {
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .completeCaseMessageInteractor.mockReturnValue({
-        docketNumber: '123-45',
-        parentMessageId: '123',
-      });
+    applicationContext.getUseCases().completeMessageInteractor.mockReturnValue({
+      docketNumber: '123-45',
+      parentMessageId: '123',
+    });
 
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call completeCaseMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
+  it('should call completeMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
     const result = await runAction(completeMessageAction, {
       modules: {
         presenter,
@@ -35,10 +33,10 @@ describe('completeMessageAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().completeCaseMessageInteractor,
+      applicationContext.getUseCases().completeMessageInteractor,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().completeCaseMessageInteractor.mock
+      applicationContext.getUseCases().completeMessageInteractor.mock
         .calls[0][0],
     ).toMatchObject({
       message: 'the complete message',

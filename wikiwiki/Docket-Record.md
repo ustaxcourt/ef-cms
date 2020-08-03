@@ -11,6 +11,24 @@
 * Request for Place of Trial is listed as an event docket entry with no document link if the place of trial was entered as metadata. If a paper Request for Place of Trial document is received, the docket entry contains a document link and functions the same as any electronically filed document
 * Pages displays on docket record to inform all users on how many pages including the coversheet the documents include
 
+## Index
+**Petition and initial documents**
+* eFiled and paper-filed Petition and initial documents display an index number associated when filed (i.e. before they are served to IRS)
+* Initial documents (RQT, ODS, APW) filed after the Petition will display an index number only after service
+
+**Paper-filed documents**
+* Docket entry does not have index number until the document is served
+
+**Court-issued documents**
+* Docket entry does not have index number until the document is served
+
+**Minute Entries**
+* Docket entries display index number when added to docket record
+
+**Court-issued documents that are not served**
+* Unservable documents are given an index number when added to the docket record
+
+
 ## Document Title (Docket Record)
 * Order of docket entry information: [Concatenated Document Title] [Additional Line 1 (C/S 04/17/19)(Attachment(s)) (Objection) (Lodged) Additional Line 2
 
@@ -20,3 +38,6 @@ Filed By should displays in format:  [Other Filing Party Name]
 
 **Other Filing Party with multiple filing parties**
 * Other filing party name should be appended to the other Filed By information : Resp. & Petr. [Primary Contact], [Other Filing Party Name]
+
+## Sorting
+* Default sorting is by Filed date, then Index number  

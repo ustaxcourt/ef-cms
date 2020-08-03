@@ -100,6 +100,7 @@ describe('validate case detail', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         signature: true,
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     });
     expect(errors).toEqual(null);
@@ -164,6 +165,7 @@ describe('validate case detail', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         signature: true,
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     });
     expect(errors).toEqual(null);
@@ -216,6 +218,7 @@ describe('validate case detail', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         signature: true,
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     });
     expect(errors).toEqual(null);

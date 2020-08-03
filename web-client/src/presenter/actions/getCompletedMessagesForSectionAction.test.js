@@ -12,7 +12,7 @@ describe('getCompletedMessagesForSectionAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .getCompletedCaseMessagesForSectionInteractor.mockReturnValue([message]);
+      .getCompletedMessagesForSectionInteractor.mockReturnValue([message]);
   });
 
   it('returns the messages retrieved from the use case', async () => {

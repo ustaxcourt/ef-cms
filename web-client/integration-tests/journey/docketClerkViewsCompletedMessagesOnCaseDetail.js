@@ -14,10 +14,10 @@ export const docketClerkViewsCompletedMessagesOnCaseDetail = test => {
 
     expect(test.getState('caseDetail.messages').length).toEqual(4);
 
-    const caseMessagesFormatted = runCompute(formattedCaseMessages, {
+    const messagesFormatted = runCompute(formattedCaseMessages, {
       state: test.getState(),
     });
-    expect(caseMessagesFormatted.inProgressMessages.length).toEqual(1);
-    expect(caseMessagesFormatted.completedMessages.length).toEqual(1);
+    expect(messagesFormatted.inProgressMessages.length).toEqual(1);
+    expect(messagesFormatted.completedMessages.length).toEqual(1);
   });
 };

@@ -429,7 +429,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/create-order/*/?..',
+      '/case-detail/*/create-order/*?..',
       ifHasAccess((docketNumber, parentMessageId) => {
         const { documentTitle, documentType, eventCode } = route.query();
         setPageTitle(

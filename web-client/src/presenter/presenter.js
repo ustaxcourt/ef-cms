@@ -353,7 +353,6 @@ import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/upda
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
-import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
@@ -778,7 +777,6 @@ export const presenter = {
     updateFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
     updateMessageModalAttachmentsSequence,
-    updateMessageValueInModalSequence,
     updateModalFormValueSequence,
     updateModalValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,

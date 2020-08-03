@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * deletes an uploaded pdf
+ * Deletes an uploaded pdf
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
@@ -9,21 +9,13 @@ import { state } from 'cerebral';
  * @returns {object} the new documentUploadMode
  *
  */
-export const deleteUploadedPdfAction = async ({
-  applicationContext,
-  get,
-  store,
-}) => {
+export const deleteUploadedPdfAction = async ({ applicationContext, get }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const documentId = get(state.documentId);
 
-  console.log(get(state.currentViewMetadata.documentSelectedForPreview));
-
-  store.unset(state.pdfPreviewUrl);
-
   const updatedCase = await applicationContext
     .getUseCases()
-    .deleteDraftDocumentInteractor({
+    .deleteDocumentInteractor({
       applicationContext,
       docketNumber,
       documentId,

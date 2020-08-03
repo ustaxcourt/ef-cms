@@ -43,7 +43,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     };
   });
 
-  it('returns the associated document url for the applicationForWaiverOfFilingFeeFile', async () => {
+  it('returns the associated document url and id for the applicationForWaiverOfFilingFeeFile', async () => {
     const { output } = await runAction(getFormDocumentUrlForPreviewAction, {
       modules: {
         presenter,
@@ -59,11 +59,12 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
+      documentId: 'test-apw-id',
       pdfUrl: 'http://example.com',
     });
   });
 
-  it('returns the associated document url for the ownershipDisclosureFile', async () => {
+  it('returns the associated document url and id for the ownershipDisclosureFile', async () => {
     const { output } = await runAction(getFormDocumentUrlForPreviewAction, {
       modules: {
         presenter,
@@ -79,11 +80,12 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
+      documentId: 'test-ods-id',
       pdfUrl: 'http://example.com',
     });
   });
 
-  it('returns the associated document url for the petitionFile', async () => {
+  it('returns the associated document url and id for the petitionFile', async () => {
     const { output } = await runAction(getFormDocumentUrlForPreviewAction, {
       modules: {
         presenter,
@@ -99,11 +101,12 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
+      documentId: 'test-petition-id',
       pdfUrl: 'http://example.com',
     });
   });
 
-  it('returns the associated document url for the requestForPlaceOfTrialFile', async () => {
+  it('returns the associated document url and id for the requestForPlaceOfTrialFile', async () => {
     const { output } = await runAction(getFormDocumentUrlForPreviewAction, {
       modules: {
         presenter,
@@ -119,11 +122,12 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
+      documentId: 'test-rqt-id',
       pdfUrl: 'http://example.com',
     });
   });
 
-  it('returns the associated document url for the stinFile', async () => {
+  it('returns the associated document url and id for the stinFile', async () => {
     const { output } = await runAction(getFormDocumentUrlForPreviewAction, {
       modules: {
         presenter,
@@ -139,6 +143,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
+      documentId: 'test-stin-id',
       pdfUrl: 'http://example.com',
     });
   });

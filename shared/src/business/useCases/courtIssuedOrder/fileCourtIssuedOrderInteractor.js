@@ -130,24 +130,24 @@ exports.fileCourtIssuedOrderInteractor = async ({
   if (documentMetadata.parentMessageId) {
     const messages = await applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId({
+      .getMessageThreadByParentId({
         applicationContext,
         parentMessageId: documentMetadata.parentMessageId,
       });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const caseMessageEntity = new Message(mostRecentMessage, {
+    const messageEntity = new Message(mostRecentMessage, {
       applicationContext,
     }).validate();
-    caseMessageEntity.addAttachment({
+    messageEntity.addAttachment({
       documentId: documentEntity.documentId,
       documentTitle: documentEntity.documentTitle,
     });
 
-    await applicationContext.getPersistenceGateway().updateCaseMessage({
+    await applicationContext.getPersistenceGateway().updateMessage({
       applicationContext,
-      caseMessage: caseMessageEntity.validate().toRawObject(),
+      message: messageEntity.validate().toRawObject(),
     });
   }
 

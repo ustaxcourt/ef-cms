@@ -49,7 +49,6 @@ export const PetitionQcDocumentPreview = connect(
             {pdfPreviewUrl && (
               <Button
                 link
-                secondary
                 className="red-warning push-right"
                 onClick={() => {
                   if (isPetitionFile) {
