@@ -449,6 +449,7 @@ Case.VALIDATION_RULES = {
     .description('Last date that the petitioner is allowed to file before.'),
   irsPractitioners: joi
     .array()
+    .items(IrsPractitioner.VALIDATION_RULES)
     .optional()
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
@@ -573,6 +574,7 @@ Case.VALIDATION_RULES = {
     .description('Where the petitioner would prefer to hold the case trial.'),
   privatePractitioners: joi
     .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
@@ -645,10 +647,7 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: joi
-    .string()
-    .max(50)
-    .optional()
+  userId: JoiValidationConstants.UUID.optional()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
 };
