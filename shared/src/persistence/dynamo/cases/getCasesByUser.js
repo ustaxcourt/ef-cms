@@ -1,6 +1,5 @@
 const client = require('../../dynamodbClientService');
 const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
   const docketNumbers = (
@@ -27,5 +26,5 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
     ),
   );
 
-  return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
+  return cases;
 };

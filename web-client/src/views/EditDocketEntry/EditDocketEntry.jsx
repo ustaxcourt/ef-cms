@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
-import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
+import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';

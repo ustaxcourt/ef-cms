@@ -13,7 +13,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to be updated
- * @param {object} providers.docketRecordIndex the index of the docket record entry to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
@@ -21,7 +20,6 @@ exports.updateDocketEntryMetaInteractor = async ({
   applicationContext,
   docketEntryMeta,
   docketNumber,
-  docketRecordIndex,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -43,7 +41,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const originalDocketEntry = caseEntity.docketRecord.find(
-    record => record.index === docketRecordIndex,
+    record => record.docketRecordId === docketEntryMeta.docketRecordId,
   );
   const originalDocument = caseEntity.getDocumentById({
     documentId: originalDocketEntry.documentId,

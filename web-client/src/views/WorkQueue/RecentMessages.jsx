@@ -7,7 +7,7 @@ export const RecentMessages = () => {
     <div className="margin-top-6">
       <h1>
         Recent Messages
-        <Button link className="margin-left-205" href="/case-messages/my/inbox">
+        <Button link className="margin-left-205" href="/messages/my/inbox">
           View All Messages
         </Button>
       </h1>
