@@ -1,4 +1,4 @@
-import { NewCaseMessage } from '../../../shared/src/business/entities/NewCaseMessage';
+import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
 import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
@@ -20,9 +20,9 @@ export const createNewCaseMessageOnCase = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openCreateCaseMessageModalSequence');
+    await test.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
+    await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
       value: 'petitions',
     });
@@ -35,7 +35,7 @@ export const createNewCaseMessageOnCase = test => {
     const messageDocument = getHelper().documents[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
-    await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
+    await test.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: messageDocument.documentId,
     });
 
@@ -50,10 +50,10 @@ export const createNewCaseMessageOnCase = test => {
       value: test.testMessageSubject,
     });
 
-    await test.runSequence('createCaseMessageSequence');
+    await test.runSequence('createMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      message: NewCaseMessage.VALIDATION_ERROR_MESSAGES.message,
+      message: NewMessage.VALIDATION_ERROR_MESSAGES.message,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
@@ -61,7 +61,7 @@ export const createNewCaseMessageOnCase = test => {
       value: 'bears, beets, battlestar galactica',
     });
 
-    await test.runSequence('createCaseMessageSequence');
+    await test.runSequence('createMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

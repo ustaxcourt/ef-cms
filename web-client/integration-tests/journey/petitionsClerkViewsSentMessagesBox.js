@@ -1,6 +1,6 @@
 export const petitionsClerkViewsSentMessagesBox = test => {
   return it('petitions clerk views their sent messages box', async () => {
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'outbox',
       queue: 'my',
     });

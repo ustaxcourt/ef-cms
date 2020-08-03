@@ -785,7 +785,7 @@
             index: 
               type: "number"
               flags: 
-                presence: "required"
+                presence: "optional"
                 description: "Index of this item in the Docket Record list."
               rules: 
                 - 
@@ -3461,8 +3461,8 @@
                     options: 
                       version: 
                         - "uuidv4"
-            workItems: 
-              type: "array"
+            workItem: 
+              type: "object"
               flags: 
                 presence: "optional"
     entityName: 
@@ -5234,15 +5234,6 @@
           name: "max"
           args: 
             limit: 50
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-    workItems: 
-      type: "array"
-      flags: 
-        presence: "optional"
-        description: "List of system messages associated with this case."
       metas: 
         - 
           tags: 

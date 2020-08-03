@@ -6270,12 +6270,9 @@
               "documentType": {
                 "type": "string"
               },
-              "workItems": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
+              "workItem": {
+                "type": "object",
+                "properties": {}
               },
               "documentId": {
                 "type": "string"
@@ -6480,7 +6477,7 @@
         },
         "entityName": {
           "type": "string",
-          "description": "the name of the entity - CaseMessage"
+          "description": "the name of the entity - Message"
         },
         "from": {
           "type": "string",

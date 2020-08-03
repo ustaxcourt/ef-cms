@@ -96,8 +96,7 @@
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "filedBy": "Test Practitioner",
-      "workItems": []
+      "filedBy": "Test Practitioner"
     },
     "section": "petitions",
     "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
@@ -126,8 +125,7 @@
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "filedBy": "Test Practitioner",
-      "workItems": []
+      "filedBy": "Test Practitioner"
     },
     "section": "petitions",
     "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
@@ -171,33 +169,31 @@
     "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.297Z",
-    "workItems": [
-      {
-        "associatedJudge": "Chief Judge",
-        "docketNumberSuffix": null,
-        "caseStatus": "New",
-        "caseIsInProgress": false,
-        "document": {
-          "createdAt": "2019-03-27T21:53:00.297Z",
-          "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-          "numberOfPages": 1,
-          "documentTitle": "Petition",
-          "documentType": "Petition",
-          "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-          "filedBy": "Test Practitioner"
-        },
-        "section": "petitions",
-        "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-        "isInitializeCase": true,
-        "assigneeId": null,
-        "sentBy": "Test Private Practitioner",
-        "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "docketNumberSuffix": null,
+      "caseStatus": "New",
+      "caseIsInProgress": false,
+      "document": {
         "createdAt": "2019-03-27T21:53:00.297Z",
-        "assigneeName": null,
-        "docketNumber": "105-19",
-        "updatedAt": "2019-03-27T21:53:00.297Z"
-      }
-    ],
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "numberOfPages": 1,
+        "documentTitle": "Petition",
+        "documentType": "Petition",
+        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+        "filedBy": "Test Practitioner"
+      },
+      "section": "petitions",
+      "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Private Practitioner",
+      "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+      "createdAt": "2019-03-27T21:53:00.297Z",
+      "assigneeName": null,
+      "docketNumber": "105-19",
+      "updatedAt": "2019-03-27T21:53:00.297Z"
+    },
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.309Z",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -215,7 +211,6 @@
     "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.298Z",
-    "workItems": [],
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.310Z",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",

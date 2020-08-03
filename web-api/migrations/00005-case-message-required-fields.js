@@ -1,8 +1,6 @@
 const createApplicationContext = require('../src/applicationContext');
-const {
-  CaseMessage,
-} = require('../../shared/src/business/entities/CaseMessage');
 const { isCaseMessageRecord, upGenerator } = require('./utilities');
+const { Message } = require('../../shared/src/business/entities/Message');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async (item, documentClient, tableName) => {
@@ -27,7 +25,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
         caseTitle,
       };
 
-      const caseMessageEntity = new CaseMessage(messageAfter, {
+      const caseMessageEntity = new Message(messageAfter, {
         applicationContext,
       })
         .validate()

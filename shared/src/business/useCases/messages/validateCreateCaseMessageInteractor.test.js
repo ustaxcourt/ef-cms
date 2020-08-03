@@ -6,7 +6,7 @@ const {
 } = require('./validateCreateCaseMessageInteractor');
 
 describe('validateCreateCaseMessageInteractor', () => {
-  it('returns null when no errors exist in the CaseMessage', () => {
+  it('returns null when no errors exist in the Message', () => {
     const errors = validateCreateCaseMessageInteractor({
       applicationContext,
       message: {

@@ -31,7 +31,6 @@ describe('uploadExternalDocumentsAction', () => {
           eventCode: 'A',
           processingStatus: 'pending',
           userId: 'petitioner',
-          workItems: [],
         },
       ],
     });
@@ -76,7 +75,6 @@ describe('uploadExternalDocumentsAction', () => {
           eventCode: 'A',
           processingStatus: 'pending',
           userId: 'petitioner',
-          workItems: [],
         },
         {
           createdAt: '2018-11-21T20:49:28.192Z',
@@ -87,7 +85,6 @@ describe('uploadExternalDocumentsAction', () => {
           isFileAttached: false,
           processingStatus: 'pending',
           userId: 'petitioner',
-          workItems: [],
         },
       ],
     });

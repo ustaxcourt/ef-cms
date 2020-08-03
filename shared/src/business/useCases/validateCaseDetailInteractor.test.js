@@ -80,7 +80,6 @@ describe('validate case detail', () => {
             filedBy: 'Test Petitioner',
             role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -91,7 +90,6 @@ describe('validate case detail', () => {
             filedBy: 'Test Petitioner',
             role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
-            workItems: [],
           },
         ],
         filingType: 'Myself',
@@ -146,7 +144,6 @@ describe('validate case detail', () => {
             filedBy: 'Test Petitioner',
             role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -157,7 +154,6 @@ describe('validate case detail', () => {
             filedBy: 'Test Petitioner',
             role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
-            workItems: [],
           },
         ],
         filingType: CASE_TYPES_MAP.other,
@@ -200,7 +196,6 @@ describe('validate case detail', () => {
             filedBy: 'Test Petitioner',
             role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -211,7 +206,6 @@ describe('validate case detail', () => {
             filedBy: 'Test Petitioner',
             role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
-            workItems: [],
           },
         ],
         filingType: CASE_TYPES_MAP.other,

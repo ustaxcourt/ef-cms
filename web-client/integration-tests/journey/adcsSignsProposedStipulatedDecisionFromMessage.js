@@ -1,6 +1,6 @@
 export const adcsSignsProposedStipulatedDecisionFromMessage = test => {
   return it('adc signs the proposed stipulated decision from message', async () => {
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
@@ -24,7 +24,7 @@ export const adcsSignsProposedStipulatedDecisionFromMessage = test => {
       docketNumber: test.docketNumber,
       documentId: test.proposedStipDecisionDocumentId,
       parentMessageId: foundMessage.parentMessageId,
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${foundMessage.parentMessageId}?documentId=${test.proposedStipDecisionDocumentId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${foundMessage.parentMessageId}?documentId=${test.proposedStipDecisionDocumentId}`,
     });
     expect(test.getState('currentPage')).toEqual('SignOrder');
 

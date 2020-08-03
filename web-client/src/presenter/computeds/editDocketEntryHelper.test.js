@@ -32,7 +32,7 @@ describe('editDocketEntryHelper', () => {
             {
               documentId: 'abc',
               documentType: 'Notice of Change of Address',
-              workItems: [{ isRead: true }],
+              workItem: { isRead: true },
             },
           ],
         },
@@ -67,7 +67,7 @@ describe('editDocketEntryHelper', () => {
             {
               documentId: 'abc',
               documentType: 'Notice of Change of Address',
-              workItems: [{ isRead: false }],
+              workItem: { isRead: false },
             },
           ],
         },

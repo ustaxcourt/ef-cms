@@ -38,8 +38,10 @@ exports.archiveDraftDocumentInteractor = async ({
 
   documentToArchive.archive();
 
-  await Promise.all(
-    documentToArchive.workItems.map(workItem =>
+  const { workItem } = documentToArchive;
+
+  if (workItem) {
+    await Promise.all(
       Promise.all([
         applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
           applicationContext,
@@ -56,8 +58,8 @@ exports.archiveDraftDocumentInteractor = async ({
           userId: workItem.sentByUserId,
         }),
       ]),
-    ),
-  );
+    );
+  }
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
