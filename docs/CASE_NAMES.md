@@ -2,7 +2,7 @@
 
 There are several values used throughout the system to identify cases by name.
 
-`caseCaptionWithPostfix`: 
+`caseCaptionWithPostfix`:
 * Not stored directly on the case but can be computed when needed by appending the `CASE_CAPTION_POSTFIX` constant to the `caseCaption`
 * Example: `Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent`
 
