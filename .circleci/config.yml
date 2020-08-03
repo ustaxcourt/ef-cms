@@ -231,6 +231,9 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
