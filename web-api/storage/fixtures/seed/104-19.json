@@ -118,8 +118,7 @@
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-      "filedBy": "Test Petitioner",
-      "workItems": []
+      "filedBy": "Test Petitioner"
     },
     "section": "petitions",
     "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
@@ -148,8 +147,7 @@
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-      "filedBy": "Test Petitioner",
-      "workItems": []
+      "filedBy": "Test Petitioner"
     },
     "section": "petitions",
     "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
@@ -207,7 +205,6 @@
     "eventCode": "DISC",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
-    "workItems": [],
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.111Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -225,7 +222,6 @@
     "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
-    "workItems": [],
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.111Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -243,33 +239,31 @@
     "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.490Z",
-    "workItems": [
-      {
-        "associatedJudge": "Chief Judge",
-        "docketNumberSuffix": null,
-        "caseStatus": "New",
-        "caseIsInProgress": false,
-        "document": {
-          "createdAt": "2019-03-05T17:34:13.490Z",
-          "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
-          "numberOfPages": 1,
-          "documentTitle": "Petition",
-          "documentType": "Petition",
-          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-          "filedBy": "Test Petitioner"
-        },
-        "caseTitle": "Mufutau Wade",
-        "section": "petitions",
-        "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-        "isInitializeCase": true,
-        "assigneeId": null,
-        "sentBy": "petitioner",
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "docketNumberSuffix": null,
+      "caseStatus": "New",
+      "caseIsInProgress": false,
+      "document": {
         "createdAt": "2019-03-05T17:34:13.490Z",
-        "assigneeName": null,
-        "docketNumber": "104-19",
-        "updatedAt": "2019-03-05T17:34:13.490Z"
-      }
-    ],
+        "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+        "numberOfPages": 1,
+        "documentTitle": "Petition",
+        "documentType": "Petition",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "filedBy": "Test Petitioner"
+      },
+      "caseTitle": "Mufutau Wade",
+      "section": "petitions",
+      "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "petitioner",
+      "createdAt": "2019-03-05T17:34:13.490Z",
+      "assigneeName": null,
+      "docketNumber": "104-19",
+      "updatedAt": "2019-03-05T17:34:13.490Z"
+    },
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.110Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

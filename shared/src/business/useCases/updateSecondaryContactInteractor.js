@@ -147,7 +147,7 @@ exports.updateSecondaryContactInteractor = async ({
       { applicationContext },
     );
 
-    changeOfAddressDocument.addWorkItem(workItem);
+    changeOfAddressDocument.setWorkItem(workItem);
 
     caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 

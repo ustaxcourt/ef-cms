@@ -35,16 +35,14 @@ describe('updateCase', () => {
         eventCode: 'P',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-        workItems: [
-          {
-            docketNumber: '56789-18',
-            document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
-            isInitializeCase: true,
-            section: 'petitions',
-            sentBy: 'petitioner',
-            workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-          },
-        ],
+        workItem: {
+          docketNumber: '56789-18',
+          document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
+          isInitializeCase: true,
+          section: 'petitions',
+          sentBy: 'petitioner',
+          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+        },
       },
       {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',

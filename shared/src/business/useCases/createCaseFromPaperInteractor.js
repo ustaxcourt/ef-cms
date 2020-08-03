@@ -39,7 +39,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
     { applicationContext },
   );
 
-  documentEntity.addWorkItem(workItemEntity);
+  documentEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return {

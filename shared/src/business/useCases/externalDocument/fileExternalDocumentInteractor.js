@@ -161,7 +161,7 @@ exports.fileExternalDocumentInteractor = async ({
         { applicationContext },
       );
 
-      documentEntity.addWorkItem(workItem);
+      documentEntity.setWorkItem(workItem);
 
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);

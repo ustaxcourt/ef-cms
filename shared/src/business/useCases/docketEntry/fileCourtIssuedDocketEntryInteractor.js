@@ -118,7 +118,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     workItem.setAsCompleted({ message: 'completed', user });
   }
 
-  documentEntity.addWorkItem(workItem);
+  documentEntity.setWorkItem(workItem);
   caseEntity.updateDocument(documentEntity);
 
   workItem.assignToUser({

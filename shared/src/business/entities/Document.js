@@ -62,9 +62,9 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.signedByUserId = rawDocument.signedByUserId;
     this.signedJudgeName = rawDocument.signedJudgeName;
     this.userId = rawDocument.userId;
-    this.workItems = (rawDocument.workItems || []).map(
-      workItem => new WorkItem(workItem, { applicationContext }),
-    );
+    this.workItem = rawDocument.workItem
+      ? new WorkItem(rawDocument.workItem, { applicationContext })
+      : undefined;
   }
 
   this.additionalInfo = rawDocument.additionalInfo;
@@ -467,7 +467,7 @@ Document.VALIDATION_RULES = joi.object().keys({
       'An optional trial location used when generating a fully concatenated document title.',
     ),
   userId: JoiValidationConstants.UUID.required(),
-  workItems: joi.array().optional(),
+  workItem: joi.object().optional(),
 });
 
 joiValidationDecorator(Document, Document.VALIDATION_RULES);
@@ -476,8 +476,8 @@ joiValidationDecorator(Document, Document.VALIDATION_RULES);
  *
  * @param {WorkItem} workItem the work item to add to the document
  */
-Document.prototype.addWorkItem = function (workItem) {
-  this.workItems = [...this.workItems, workItem];
+Document.prototype.setWorkItem = function (workItem) {
+  this.workItem = workItem;
 };
 
 /**
@@ -582,10 +582,6 @@ Document.prototype.unsignDocument = function () {
 
 Document.prototype.setAsProcessingStatusAsCompleted = function () {
   this.processingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-};
-
-Document.prototype.getQCWorkItem = function () {
-  return this.workItems[0];
 };
 
 Document.prototype.isAutoServed = function () {
