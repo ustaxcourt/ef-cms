@@ -27,7 +27,7 @@ export const openCompleteAndSendCaseMessageModalSequence = [
       generateTitleAction,
       setCreateMessageModalDialogModalStateAction,
       updateCaseMessageModalAttachmentsAction,
-      setShowModalFactoryAction('CreateCaseMessageModalDialog'),
+      setShowModalFactoryAction('CreateMessageModalDialog'),
     ],
   },
 ];

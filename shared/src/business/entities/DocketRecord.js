@@ -41,7 +41,6 @@ DocketRecord.VALIDATION_ERROR_MESSAGES = {
   description: 'Enter a description',
   eventCode: 'Enter an event code',
   filingDate: 'Enter a valid filing date',
-  index: 'Enter an index',
 };
 
 DocketRecord.VALIDATION_RULES = joi.object().keys({
@@ -90,7 +89,7 @@ DocketRecord.VALIDATION_RULES = joi.object().keys({
   index: joi
     .number()
     .integer()
-    .required()
+    .optional()
     .description('Index of this item in the Docket Record list.'),
   isLegacy: joi
     .boolean()

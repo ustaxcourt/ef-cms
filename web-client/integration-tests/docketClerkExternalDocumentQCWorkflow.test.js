@@ -147,7 +147,7 @@ describe('Create a work item', () => {
     await test.runSequence('openCompleteAndSendCaseMessageModalSequence');
 
     expect(test.getState('modal.showModal')).toEqual(
-      'CreateCaseMessageModalDialog',
+      'CreateMessageModalDialog',
     );
 
     await test.runSequence('completeDocketEntryQCAndSendMessageSequence');

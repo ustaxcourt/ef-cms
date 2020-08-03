@@ -17,7 +17,7 @@ export const petitionsClerk1ServesPetitionFromMessageDetail = test => {
 
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
     expect(test.getState('currentPage')).toEqual('PetitionQc');
