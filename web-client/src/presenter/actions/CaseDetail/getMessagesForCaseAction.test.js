@@ -3,18 +3,20 @@ import { getMessagesForCaseAction } from './getMessagesForCaseAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
+const { PETITIONS_SECTION } = applicationContextForClient.getConstants();
+
 describe('getMessagesForCaseAction', () => {
-  const mockCaseMessage = {
+  const mockMessage = {
     createdAt: '2019-03-01T21:40:46.415Z',
     docketNumber: '101-20',
     from: 'Test Petitionsclerk',
-    fromSection: 'petitions',
+    fromSection: PETITIONS_SECTION,
     fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
     message: 'hey there',
     messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
     subject: 'hello',
     to: 'Test Petitionsclerk2',
-    toSection: 'petitions',
+    toSection: PETITIONS_SECTION,
     toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
   };
 
@@ -22,7 +24,7 @@ describe('getMessagesForCaseAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
     applicationContextForClient
       .getUseCases()
-      .getCaseMessagesForCaseInteractor.mockReturnValue([mockCaseMessage]);
+      .getMessagesForCaseInteractor.mockReturnValue([mockMessage]);
   });
 
   it('calls the use case with docketNumber', async () => {
@@ -38,15 +40,14 @@ describe('getMessagesForCaseAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases()
-        .getCaseMessagesForCaseInteractor,
+      applicationContextForClient.getUseCases().getMessagesForCaseInteractor,
     ).toBeCalled();
     expect(
-      applicationContextForClient.getUseCases().getCaseMessagesForCaseInteractor
+      applicationContextForClient.getUseCases().getMessagesForCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
       docketNumber: '101-20',
     });
-    expect(result.state.caseDetail.messages).toEqual([mockCaseMessage]);
+    expect(result.state.caseDetail.messages).toEqual([mockMessage]);
   });
 });

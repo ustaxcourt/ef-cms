@@ -12,7 +12,7 @@ describe('getInboxMessagesForUserAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .getInboxCaseMessagesForUserInteractor.mockReturnValue([message]);
+      .getInboxMessagesForUserInteractor.mockReturnValue([message]);
   });
 
   it('returns the messages retrieved from the use case', async () => {

@@ -4,7 +4,7 @@ const { getNotificationsInteractor } = require('./getNotificationsInteractor');
 describe('getNotificationsInteractor', () => {
   it('returns an unread count for my messages', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'abc',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
     applicationContext
       .getPersistenceGateway()

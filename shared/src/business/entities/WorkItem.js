@@ -59,62 +59,61 @@ function WorkItem(rawWorkItem, { applicationContext }) {
 
 WorkItem.validationName = 'WorkItem';
 
-joiValidationDecorator(
-  WorkItem,
-  joi.object().keys({
-    assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
-    assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
-    associatedJudge: joi.string().max(100).required(),
-    caseIsInProgress: joi.boolean().optional(),
-    caseStatus: joi
-      .string()
-      .valid(...Object.values(CASE_STATUS_TYPES))
-      .optional(),
-    caseTitle: joi.string().max(500).optional(),
-    completedAt: JoiValidationConstants.ISO_DATE.optional(),
-    completedBy: joi.string().max(100).optional().allow(null),
-    completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
-    completedMessage: joi.string().max(100).optional().allow(null),
-    createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-      'Unique case identifier in XXXXX-YY format.',
-    ),
-    docketNumberSuffix: joi
-      .string()
-      .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
-      .allow(null)
-      .optional(),
-    document: joi.object().required(),
-    entityName: joi.string().valid('WorkItem').required(),
-    hideFromPendingMessages: joi.boolean().optional(),
-    highPriority: joi.boolean().optional(),
-    inProgress: joi.boolean().optional(),
-    isInitializeCase: joi.boolean().optional(),
-    isRead: joi.boolean().optional(),
-    section: joi
-      .string()
-      .valid(
-        ...SECTIONS,
-        ...CHAMBERS_SECTIONS,
-        ...Object.values(ROLES),
-        IRS_SYSTEM_SECTION,
-      )
-      .required(),
-    sentBy: joi
-      .string()
-      .max(100)
-      .required()
-      .description('The name of the user that sent the WorkItem'),
-    sentBySection: joi
-      .string()
-      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
-      .optional(),
-    sentByUserId: JoiValidationConstants.UUID.optional(),
-    trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
-    updatedAt: JoiValidationConstants.ISO_DATE.required(),
-    workItemId: JoiValidationConstants.UUID.required(),
-  }),
-);
+WorkItem.VALIDATION_RULES = joi.object().keys({
+  assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
+  assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
+  associatedJudge: joi.string().max(100).required(),
+  caseIsInProgress: joi.boolean().optional(),
+  caseStatus: joi
+    .string()
+    .valid(...Object.values(CASE_STATUS_TYPES))
+    .optional(),
+  caseTitle: joi.string().max(500).optional(),
+  completedAt: JoiValidationConstants.ISO_DATE.optional(),
+  completedBy: joi.string().max(100).optional().allow(null),
+  completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
+  completedMessage: joi.string().max(100).optional().allow(null),
+  createdAt: JoiValidationConstants.ISO_DATE.optional(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
+  docketNumberSuffix: joi
+    .string()
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+    .allow(null)
+    .optional(),
+  document: joi.object().required(),
+  entityName: joi.string().valid('WorkItem').required(),
+  hideFromPendingMessages: joi.boolean().optional(),
+  highPriority: joi.boolean().optional(),
+  inProgress: joi.boolean().optional(),
+  isInitializeCase: joi.boolean().optional(),
+  isRead: joi.boolean().optional(),
+  section: joi
+    .string()
+    .valid(
+      ...SECTIONS,
+      ...CHAMBERS_SECTIONS,
+      ...Object.values(ROLES),
+      IRS_SYSTEM_SECTION,
+    )
+    .required(),
+  sentBy: joi
+    .string()
+    .max(100)
+    .required()
+    .description('The name of the user that sent the WorkItem'),
+  sentBySection: joi
+    .string()
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
+    .optional(),
+  sentByUserId: JoiValidationConstants.UUID.optional(),
+  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+  updatedAt: JoiValidationConstants.ISO_DATE.required(),
+  workItemId: JoiValidationConstants.UUID.required(),
+});
+
+joiValidationDecorator(WorkItem, WorkItem.VALIDATION_RULES);
 
 /**
  * Assign to a user

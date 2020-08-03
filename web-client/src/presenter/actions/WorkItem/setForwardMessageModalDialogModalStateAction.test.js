@@ -1,6 +1,9 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setForwardMessageModalDialogModalStateAction } from './setForwardMessageModalDialogModalStateAction';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('setForwardMessageModalDialogModalStateAction', () => {
   it('should set the modal state for forwarding a message', async () => {
@@ -19,7 +22,7 @@ describe('setForwardMessageModalDialogModalStateAction', () => {
               },
             ],
             from: 'test user 1',
-            fromSection: 'petitions',
+            fromSection: PETITIONS_SECTION,
             fromUserId: '589002b0-dacd-4e84-874a-52d9898623c3',
             parentMessageId: '530f9b43-4934-4b2f-9aa4-50dcbe8064fa',
             subject: 'the subject',
@@ -38,7 +41,7 @@ describe('setForwardMessageModalDialogModalStateAction', () => {
           },
         ],
         from: 'test user 1',
-        fromSection: 'petitions',
+        fromSection: PETITIONS_SECTION,
         fromUserId: '589002b0-dacd-4e84-874a-52d9898623c3',
         parentMessageId: '530f9b43-4934-4b2f-9aa4-50dcbe8064fa',
         subject: 'the subject',
