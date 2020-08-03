@@ -2,12 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  PETITIONS_SECTION,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   completeCaseMessageInteractor,
 } = require('./completeCaseMessageInteractor');
 const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
-const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('completeCaseMessageInteractor', () => {
   const mockCaseMessages = [
@@ -18,7 +22,7 @@ describe('completeCaseMessageInteractor', () => {
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       from: 'gg',
-      fromSection: 'petitions',
+      fromSection: PETITIONS_SECTION,
       fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'hello world',
       messageId: '829e790e-3c22-4308-9267-a251c0d4ce77',
@@ -27,7 +31,7 @@ describe('completeCaseMessageInteractor', () => {
       sk: 'message|5a79c990-cc6c-4b99-8fca-8e31f2d9e78a',
       subject: 'hey!',
       to: 'bob',
-      toSection: 'petitions',
+      toSection: PETITIONS_SECTION,
       toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
     {
@@ -37,7 +41,7 @@ describe('completeCaseMessageInteractor', () => {
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       from: 'gg',
-      fromSection: 'petitions',
+      fromSection: PETITIONS_SECTION,
       fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'hello world2',
       messageId: 'ee84c7d5-31db-40dc-b1cc-7913be7138e8',
@@ -46,7 +50,7 @@ describe('completeCaseMessageInteractor', () => {
       sk: 'message|ee84c7d5-31db-40dc-b1cc-7913be7138e8',
       subject: 'hey!',
       to: 'bob',
-      toSection: 'petitions',
+      toSection: PETITIONS_SECTION,
       toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ];
@@ -72,7 +76,7 @@ describe('completeCaseMessageInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     });
     applicationContext
@@ -105,7 +109,7 @@ describe('completeCaseMessageInteractor', () => {
         .calls[0][0].caseMessage,
     ).toMatchObject({
       completedBy: 'Test Petitionsclerk',
-      completedBySection: 'petitions',
+      completedBySection: PETITIONS_SECTION,
       completedByUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       isCompleted: true,
     });

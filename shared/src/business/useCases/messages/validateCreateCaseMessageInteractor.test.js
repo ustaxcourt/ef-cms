@@ -4,6 +4,7 @@ const {
 const {
   validateCreateCaseMessageInteractor,
 } = require('./validateCreateCaseMessageInteractor');
+const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 
 describe('validateCreateCaseMessageInteractor', () => {
   it('returns null when no errors exist in the Message', () => {
@@ -12,7 +13,7 @@ describe('validateCreateCaseMessageInteractor', () => {
       message: {
         message: 'yup',
         subject: 'hi',
-        toSection: 'petitions',
+        toSection: PETITIONS_SECTION,
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
       },
     });
@@ -25,7 +26,7 @@ describe('validateCreateCaseMessageInteractor', () => {
       applicationContext,
       message: {
         message: 'yup',
-        toSection: 'petitions',
+        toSection: PETITIONS_SECTION,
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
       },
     });

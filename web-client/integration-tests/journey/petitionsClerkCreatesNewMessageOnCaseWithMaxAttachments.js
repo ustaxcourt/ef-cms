@@ -1,8 +1,11 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
+import { applicationContextForClients as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 const caseMessageModalHelper = withAppContextDecorator(
   caseMessageModalHelperComputed,
@@ -24,7 +27,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: 'petitions',
+      value: PETITIONS_SECTION,
     });
 
     await test.runSequence('updateModalFormValueSequence', {

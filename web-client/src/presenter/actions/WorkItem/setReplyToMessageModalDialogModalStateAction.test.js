@@ -1,6 +1,9 @@
+import { applicationContextForClients as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setReplyToMessageModalDialogModalStateAction } from './setReplyToMessageModalDialogModalStateAction';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('setReplyToMessageModalDialogModalStateAction', () => {
   it('should set the modal state for replying to a message', async () => {
@@ -19,7 +22,7 @@ describe('setReplyToMessageModalDialogModalStateAction', () => {
               },
             ],
             from: 'test user 1',
-            fromSection: 'petitions',
+            fromSection: PETITIONS_SECTION,
             fromUserId: '589002b0-dacd-4e84-874a-52d9898623c3',
             parentMessageId: '530f9b43-4934-4b2f-9aa4-50dcbe8064fa',
             subject: 'the subject',
@@ -40,7 +43,7 @@ describe('setReplyToMessageModalDialogModalStateAction', () => {
         parentMessageId: '530f9b43-4934-4b2f-9aa4-50dcbe8064fa',
         subject: 'the subject',
         to: 'test user 1',
-        toSection: 'petitions',
+        toSection: PETITIONS_SECTION,
         toUserId: '589002b0-dacd-4e84-874a-52d9898623c3',
       },
       validationErrors: {},
