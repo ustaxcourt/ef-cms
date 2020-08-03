@@ -14,7 +14,7 @@ const getDocumentOption = document => {
   );
 };
 
-export const CaseMessageModalAttachments = connect(
+export const MessageModalAttachments = connect(
   {
     caseMessageModalHelper: state.caseMessageModalHelper,
     form: state.modal.form,
@@ -24,7 +24,7 @@ export const CaseMessageModalAttachments = connect(
     validateCreateCaseMessageInModalSequence:
       sequences.validateCreateCaseMessageInModalSequence,
   },
-  function CaseMessageModalAttachments({
+  function MessageModalAttachments({
     caseMessageModalHelper,
     form,
     updateCaseMessageModalAttachmentsSequence,

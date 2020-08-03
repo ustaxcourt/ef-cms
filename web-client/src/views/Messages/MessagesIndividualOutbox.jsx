@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesSectionInbox = connect(
+export const MessagesIndividualOutbox = connect(
   { formattedMessages: state.formattedMessages.messages },
-  function CaseMessagesIndividualInbox({ formattedMessages }) {
+  function MessagesIndividualOutbox({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -14,12 +14,11 @@ export const CaseMessagesSectionInbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 Docket No.
               </th>
-              <th className="small">Received</th>
+              <th className="small">Sent</th>
               <th>Message</th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
-              <th>From</th>
               <th className="small">Section</th>
             </tr>
           </thead>
@@ -41,11 +40,12 @@ export const CaseMessagesSectionInbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>
                     </div>
+
                     <div className="message-document-detail">
                       {message.message}
                     </div>
@@ -53,9 +53,8 @@ export const CaseMessagesSectionInbox = connect(
                   <td className="message-queue-row">{message.caseTitle}</td>
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
-                  <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
-                    {message.fromSection}
+                    {message.toSection}
                   </td>
                 </tr>
               </tbody>

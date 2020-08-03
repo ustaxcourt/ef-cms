@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesSectionCompleted = connect(
+export const MessagesIndividualCompleted = connect(
   { formattedMessages: state.formattedMessages.completedMessages },
-  function CaseMessagesSectionCompleted({ formattedMessages }) {
+  function MessagesIndividualCompleted({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -17,8 +17,7 @@ export const CaseMessagesSectionCompleted = connect(
               <th className="small">Completed</th>
               <th>Last Message</th>
               <th>Comment</th>
-              <th>Completed by</th>
-              <th>Section</th>
+              <th>Case Title</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -39,12 +38,11 @@ export const CaseMessagesSectionCompleted = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>
                     </div>
-
                     <div className="message-document-detail">
                       {message.message}
                     </div>
@@ -52,10 +50,7 @@ export const CaseMessagesSectionCompleted = connect(
                   <td className="message-queue-row">
                     {message.completedMessage}
                   </td>
-                  <td className="message-queue-row">{message.completedBy}</td>
-                  <td className="message-queue-row">
-                    {message.completedBySection}
-                  </td>
+                  <td className="message-queue-row">{message.caseTitle}</td>
                 </tr>
               </tbody>
             );

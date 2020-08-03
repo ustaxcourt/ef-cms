@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesIndividualCompleted = connect(
+export const MessagesSectionCompleted = connect(
   { formattedMessages: state.formattedMessages.completedMessages },
-  function CaseMessagesIndividualInbox({ formattedMessages }) {
+  function MessagesSectionCompleted({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -17,7 +17,8 @@ export const CaseMessagesIndividualCompleted = connect(
               <th className="small">Completed</th>
               <th>Last Message</th>
               <th>Comment</th>
-              <th>Case Title</th>
+              <th>Completed by</th>
+              <th>Section</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -38,11 +39,12 @@ export const CaseMessagesIndividualCompleted = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>
                     </div>
+
                     <div className="message-document-detail">
                       {message.message}
                     </div>
@@ -50,7 +52,10 @@ export const CaseMessagesIndividualCompleted = connect(
                   <td className="message-queue-row">
                     {message.completedMessage}
                   </td>
-                  <td className="message-queue-row">{message.caseTitle}</td>
+                  <td className="message-queue-row">{message.completedBy}</td>
+                  <td className="message-queue-row">
+                    {message.completedBySection}
+                  </td>
                 </tr>
               </tbody>
             );
