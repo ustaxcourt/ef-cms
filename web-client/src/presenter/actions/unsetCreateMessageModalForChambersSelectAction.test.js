@@ -1,4 +1,4 @@
-import { applicationContextForClients as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runAction } from 'cerebral/test';
 import { unsetCreateMessageModalForChambersSelectAction } from './unsetCreateMessageModalForChambersSelectAction';
 
