@@ -133,11 +133,11 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    const wavedDocument = result.docketRecord.find(
+    const waivedDocument = result.docketRecord.find(
       entry => entry.description === 'Filing Fee Waived',
     );
 
-    expect(wavedDocument).toBeTruthy();
+    expect(waivedDocument).toBeTruthy();
   });
 
   it('should create a docket entry when moved from unpaid to paid', async () => {
