@@ -5227,7 +5227,7 @@
     userId: 
       type: "string"
       flags: 
-        presence: "required"
+        presence: "optional"
         description: "The unique ID of the User who added the case to the system."
       rules: 
         - 
