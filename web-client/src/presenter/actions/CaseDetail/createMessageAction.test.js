@@ -8,7 +8,7 @@ describe('createMessageAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call createCaseMessageInteractor with the expected parameters and return the alertSuccess', async () => {
+  it('should call createMessageInteractor with the expected parameters and return the alertSuccess', async () => {
     const result = await runAction(createMessageAction, {
       modules: {
         presenter,
@@ -33,11 +33,10 @@ describe('createMessageAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createCaseMessageInteractor,
+      applicationContext.getUseCases().createMessageInteractor,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().createCaseMessageInteractor.mock
-        .calls[0][0],
+      applicationContext.getUseCases().createMessageInteractor.mock.calls[0][0],
     ).toMatchObject({
       attachments: [
         {

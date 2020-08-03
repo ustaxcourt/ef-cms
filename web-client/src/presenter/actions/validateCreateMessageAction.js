@@ -18,7 +18,7 @@ export const validateCreateMessageAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateCreateCaseMessageInteractor({
+    .validateCreateMessageInteractor({
       applicationContext,
       message,
     });
