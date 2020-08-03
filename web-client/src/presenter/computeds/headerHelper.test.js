@@ -143,7 +143,7 @@ describe('headerHelper', () => {
       expect(result.showMyCases).toBeFalsy();
     });
   });
-  it('should know when the page is Case Messages', () => {
+  it('should know when the page is Messages', () => {
     const result = runCompute(headerHelper, {
       state: {
         ...getBaseState({ role: ROLES.petitionsClerk }),
