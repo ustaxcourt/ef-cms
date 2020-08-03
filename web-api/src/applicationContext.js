@@ -383,6 +383,9 @@ const {
   getCaseMessagesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/messages/getCaseMessagesByDocketNumber');
 const {
+  getCaseMessageThreadByParentId,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageThreadByParentId');
+const {
   getCasesByDocketNumbers,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers');
 const {
@@ -502,9 +505,6 @@ const {
 const {
   getMessagesForCaseInteractor,
 } = require('../../shared/src/business/useCases/messages/getMessagesForCaseInteractor');
-const {
-  getMessageThreadByParentId,
-} = require('../../shared/src/persistence/dynamo/messages/getMessageThreadByParentId');
 const {
   getMessageThreadInteractor,
 } = require('../../shared/src/business/useCases/messages/getMessageThreadInteractor');
@@ -1220,6 +1220,7 @@ module.exports = appContextUser => {
         getCaseByDocketNumber,
         getCaseDeadlinesByDocketNumber,
         getCaseInventoryReport,
+        getCaseMessageThreadByParentId,
         getCaseMessagesByDocketNumber,
         getCasesByDocketNumbers,
         getCasesByLeadDocketNumber,
@@ -1240,7 +1241,6 @@ module.exports = appContextUser => {
         getIndexMappingLimit,
         getIndexedCasesForUser,
         getInternalUsers,
-        getMessageThreadByParentId,
         getOpenCasesByUser,
         getPractitionerByBarNumber,
         getPractitionersByName,
