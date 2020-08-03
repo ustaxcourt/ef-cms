@@ -1,16 +1,14 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
-import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
+import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseMessageModalHelper = withAppContextDecorator(
-  caseMessageModalHelperComputed,
-);
+const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
   const getHelper = () => {
-    return runCompute(caseMessageModalHelper, {
+    return runCompute(messageModalHelper, {
       state: test.getState(),
     });
   };

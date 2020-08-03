@@ -46,7 +46,7 @@ describe('generateChangeOfAddress', () => {
             userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
           },
         ],
-        userId: 'abc',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     ]);
   });

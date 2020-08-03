@@ -478,11 +478,11 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
-  /* case messages */
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/inbox&info=case-messages-inbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/outbox&info=case-messages-outbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/inbox&info=case-messages-section-inbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/outbox&info=case-messages-section-outbox',
+  /* messages */
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/inbox&info=messages-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/outbox&info=messages-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/inbox&info=messages-section-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/outbox&info=messages-section-outbox',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
   {
     actions: [
