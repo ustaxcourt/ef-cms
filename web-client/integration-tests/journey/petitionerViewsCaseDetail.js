@@ -56,8 +56,5 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetail.highPriority).toBeUndefined();
     expect(caseDetail.highPriorityReason).toBeUndefined();
     expect(caseDetail.qcCompleteForTrial).toBeUndefined();
-    // expect(caseDetail.status).toBeUndefined();
-    // expect(caseDetail.userId).toBeUndefined();
-    expect(caseDetail.workItems).toBeUndefined();
   });
 };

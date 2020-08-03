@@ -62,9 +62,9 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.signedByUserId = rawDocument.signedByUserId;
     this.signedJudgeName = rawDocument.signedJudgeName;
     this.userId = rawDocument.userId;
-    this.workItems = (rawDocument.workItems || []).map(
-      workItem => new WorkItem(workItem, { applicationContext }),
-    );
+    this.workItem = rawDocument.workItem
+      ? new WorkItem(rawDocument.workItem, { applicationContext })
+      : undefined;
   }
 
   this.additionalInfo = rawDocument.additionalInfo;
@@ -160,329 +160,324 @@ Document.isPendingOnCreation = rawDocument => {
   return isPending;
 };
 
-joiValidationDecorator(
-  Document,
-  joi.object().keys({
-    addToCoversheet: joi.boolean().optional(),
-    additionalInfo: joi.string().max(500).optional(),
-    additionalInfo2: joi.string().max(500).optional(),
-    archived: joi
-      .boolean()
-      .optional()
-      .description(
-        'A document that was archived instead of added to the Docket Record.',
-      ),
-    attachments: joi.boolean().optional(),
-    certificateOfService: joi.boolean().optional(),
-    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.when(
-      'certificateOfService',
-      {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      },
+Document.VALIDATION_RULES = joi.object().keys({
+  addToCoversheet: joi.boolean().optional(),
+  additionalInfo: joi.string().max(500).optional(),
+  additionalInfo2: joi.string().max(500).optional(),
+  archived: joi
+    .boolean()
+    .optional()
+    .description(
+      'A document that was archived instead of added to the Docket Record.',
     ),
-    createdAt: JoiValidationConstants.ISO_DATE.required().description(
-      'When the Document was added to the system.',
+  attachments: joi.boolean().optional(),
+  certificateOfService: joi.boolean().optional(),
+  certificateOfServiceDate: JoiValidationConstants.ISO_DATE.when(
+    'certificateOfService',
+    {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    },
+  ),
+  createdAt: JoiValidationConstants.ISO_DATE.required().description(
+    'When the Document was added to the system.',
+  ),
+  date: JoiValidationConstants.ISO_DATE.optional()
+    .allow(null)
+    .description(
+      'An optional date used when generating a fully concatenated document title.',
     ),
-    date: JoiValidationConstants.ISO_DATE.optional()
-      .allow(null)
-      .description(
-        'An optional date used when generating a fully concatenated document title.',
-      ),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
-      'Docket Number of the associated Case in XXXXX-YY format.',
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
+    'Docket Number of the associated Case in XXXXX-YY format.',
+  ),
+  docketNumbers: joi
+    .string()
+    .max(500)
+    .optional()
+    .description(
+      'Optional Docket Number text used when generating a fully concatenated document title.',
     ),
-    docketNumbers: joi
-      .string()
-      .max(500)
-      .optional()
-      .description(
-        'Optional Docket Number text used when generating a fully concatenated document title.',
-      ),
-    documentContentsId: JoiValidationConstants.UUID.optional().description(
-      'The S3 ID containing the text contents of the document.',
-    ),
-    documentId: JoiValidationConstants.UUID.required().description(
-      'ID of the associated PDF document in the S3 bucket.',
-    ),
-    documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
-      'The id for the original document that was uploaded.',
-    ),
-    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
-      'The title of this document.',
-    ),
-    documentType: joi
-      .string()
-      .valid(...ALL_DOCUMENT_TYPES)
-      .required()
-      .description('The type of this document.'),
-    draftState: joi.object().allow(null).optional(),
-    entityName: joi.string().valid('Document').required(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .required(),
-    filedBy: joi
-      .string()
-      .max(500)
-      .when('documentType', {
+  documentContentsId: JoiValidationConstants.UUID.optional().description(
+    'The S3 ID containing the text contents of the document.',
+  ),
+  documentId: JoiValidationConstants.UUID.required().description(
+    'ID of the associated PDF document in the S3 bucket.',
+  ),
+  documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
+    'The id for the original document that was uploaded.',
+  ),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+    'The title of this document.',
+  ),
+  documentType: joi
+    .string()
+    .valid(...ALL_DOCUMENT_TYPES)
+    .required()
+    .description('The type of this document.'),
+  draftState: joi.object().allow(null).optional(),
+  entityName: joi.string().valid('Document').required(),
+  eventCode: joi
+    .string()
+    .valid(...ALL_EVENT_CODES)
+    .required(),
+  filedBy: joi
+    .string()
+    .max(500)
+    .when('documentType', {
+      is: joi
+        .string()
+        .valid(...EXTERNAL_DOCUMENT_TYPES, ...INTERNAL_DOCUMENT_TYPES),
+      otherwise: joi.allow('').optional(),
+      then: joi.when('documentType', {
         is: joi
           .string()
-          .valid(...EXTERNAL_DOCUMENT_TYPES, ...INTERNAL_DOCUMENT_TYPES),
-        otherwise: joi.allow('').optional(),
-        then: joi.when('documentType', {
-          is: joi
-            .string()
-            .valid(
-              ...AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES,
-              ...AUTOGENERATED_INTERNAL_DOCUMENT_TYPES,
-            ),
-          otherwise: joi.required(),
-          then: joi.when('isAutoGenerated', {
-            is: false,
-            otherwise: joi.allow('').optional(),
-            then: joi.required(),
-          }),
-        }),
-      })
-      .description(
-        'The party who filed the document, either the petitioner or respondent on the case.',
-      ),
-    filingDate: JoiValidationConstants.ISO_DATE.max('now')
-      .required()
-      .description('Date that this Document was filed.'),
-    freeText: joi.string().max(500).optional(),
-    freeText2: joi.string().max(500).optional(),
-    hasOtherFilingParty: joi
-      .boolean()
-      .optional()
-      .description('Whether the document has other filing party.'),
-    hasSupportingDocuments: joi.boolean().optional(),
-    isAutoGenerated: joi
-      .boolean()
-      .optional()
-      .description(
-        'A flag that indicates when a document was generated by the system as opposed to being uploaded by a user.',
-      ),
-    isDraft: joi
-      .boolean()
-      .required()
-      .description(
-        'Whether the document is a draft (not on the docket record).',
-      ),
-    isFileAttached: joi
-      .boolean()
-      .optional()
-      .description('Has an associated PDF in S3.'),
-    isLegacy: joi
-      .boolean()
-      .when('isLegacySealed', {
-        is: true,
-        otherwise: joi.optional(),
-        then: joi.required().valid(true),
-      })
-      .description(
-        'Indicates whether or not the document belongs to a legacy case that has been migrated to the new system.',
-      ),
-    isLegacySealed: joi
-      .boolean()
-      .optional()
-      .description(
-        'Indicates whether or not the legacy document was sealed prior to being migrated to the new system.',
-      ),
-    isPaper: joi.boolean().optional(),
-    isSealed: joi
-      .boolean()
-      .when('isLegacySealed', {
-        is: true,
-        otherwise: joi.optional(),
-        then: joi.required().valid(true),
-      })
-      .description('Indicates whether or not the document is sealed.'),
-    judge: joi
-      .string()
-      .max(100)
-      .allow(null)
-      .description('The judge associated with the document.')
-      .when('documentType', {
-        is: joi
-          .string()
-          .valid(...OPINION_DOCUMENT_TYPES.map(t => t.documentType)),
-        otherwise: joi.optional(),
-        then: joi.required(),
-      }),
-    lodged: joi
-      .boolean()
-      .optional()
-      .description(
-        'A lodged document is awaiting action by the judge to enact or refuse.',
-      ),
-    mailingDate: joi.string().max(100).optional(),
-    numberOfPages: joi.number().optional().allow(null),
-    objections: joi
-      .string()
-      .valid(...OBJECTIONS_OPTIONS)
-      .optional(),
-    ordinalValue: joi.string().optional(),
-    otherFilingParty: joi
-      .string()
-      .max(100)
-      .when('hasOtherFilingParty', {
-        is: true,
-        otherwise: joi.optional(),
-        then: joi.required(),
-      })
-      .description(
-        'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
-      ),
-    partyIrsPractitioner: joi.boolean().optional(),
-    partyPrimary: joi
-      .boolean()
-      .optional()
-      .description('Use the primary contact to compose the filedBy text.'),
-    partySecondary: joi
-      .boolean()
-      .optional()
-      .description('Use the secondary contact to compose the filedBy text.'),
-    pending: joi.boolean().optional(),
-    previousDocument: joi.object().optional(),
-    privatePractitioners: joi // TODO: limit keys
-      .array()
-      .items({ name: joi.string().max(100).required() })
-      .optional()
-      .description(
-        'Practitioner names to be used to compose the filedBy text.',
-      ),
-    processingStatus: joi
-      .string()
-      .valid(...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS))
-      .optional(),
-    qcAt: JoiValidationConstants.ISO_DATE.optional(),
-    qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
-    receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-    relationship: joi
-      .string()
-      .valid(...Object.values(DOCUMENT_RELATIONSHIPS))
-      .optional(),
-    scenario: joi
-      .string()
-      .valid(...SCENARIOS)
-      .optional(),
-    secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
-      'A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents.',
-    ),
-    secondaryDocument: joi // TODO: limit keys
-      .object()
-      .keys({
-        documentTitle: joi
-          .string()
-          .max(500)
-          .optional()
-          .description('The title of the secondary document.'),
-        documentType: joi
-          .string()
-          .valid(...ALL_DOCUMENT_TYPES)
-          .required()
-          .description('The type of the secondary document.'),
-        eventCode: joi
-          .string()
-          .valid(...ALL_EVENT_CODES)
-          .required()
-          .description('The event code of the secondary document.'),
-      })
-      .when('scenario', {
-        is: 'Nonstandard H',
-        otherwise: joi.forbidden(),
-        then: joi.optional(),
-      })
-      .description('The secondary document.'),
-    servedAt: joi
-      .alternatives()
-      .conditional('servedParties', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.ISO_DATE.optional(),
-        then: JoiValidationConstants.ISO_DATE.required(),
-      })
-      .description('When the document is served on the parties.'),
-    servedParties: joi
-      .array()
-      .items({
-        email: JoiValidationConstants.EMAIL.optional(),
-        name: joi
-          .string()
-          .max(100)
-          .required()
-          .description('The name of a party from a contact, or "IRS"'),
-        role: joi
-          .string()
-          .valid(...Object.values(ROLES))
-          .optional()
-          .description('Currently only required for the IRS'),
-      })
-      .when('servedAt', {
-        is: joi.exist().not(null),
-        otherwise: joi.optional(),
-        then: joi.required(),
-      })
-      .description('The parties to whom the document has been served.'),
-    serviceDate: JoiValidationConstants.ISO_DATE.max('now')
-      .optional()
-      .allow(null)
-      .description(
-        'Used by certificate of service documents to construct the document title.',
-      ),
-    serviceStamp: joi.string().optional(),
-    signedAt: joi
-      .string()
-      .max(100)
-      .when('isDraft', {
-        is: false,
-        otherwise: joi.optional().allow(null),
-        then: joi.when('eventCode', {
-          is: joi.valid(...EVENT_CODES_REQUIRING_SIGNATURE),
-          otherwise: joi.optional().allow(null),
+          .valid(
+            ...AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES,
+            ...AUTOGENERATED_INTERNAL_DOCUMENT_TYPES,
+          ),
+        otherwise: joi.required(),
+        then: joi.when('isAutoGenerated', {
+          is: false,
+          otherwise: joi.allow('').optional(),
           then: joi.required(),
         }),
-      })
-      .description('The time at which the document was signed.'),
-    signedByUserId: joi
-      .when('signedJudgeName', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.UUID.optional().allow(null),
-        then: JoiValidationConstants.UUID.required(),
-      })
-      .description('The id of the user who applied the signature.'),
-    signedJudgeName: joi // TODO: limit string size
-      .when('isDraft', {
-        is: false,
+      }),
+    })
+    .description(
+      'The party who filed the document, either the petitioner or respondent on the case.',
+    ),
+  filingDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description('Date that this Document was filed.'),
+  freeText: joi.string().max(500).optional(),
+  freeText2: joi.string().max(500).optional(),
+  hasOtherFilingParty: joi
+    .boolean()
+    .optional()
+    .description('Whether the document has other filing party.'),
+  hasSupportingDocuments: joi.boolean().optional(),
+  isAutoGenerated: joi
+    .boolean()
+    .optional()
+    .description(
+      'A flag that indicates when a document was generated by the system as opposed to being uploaded by a user.',
+    ),
+  isDraft: joi
+    .boolean()
+    .required()
+    .description('Whether the document is a draft (not on the docket record).'),
+  isFileAttached: joi
+    .boolean()
+    .optional()
+    .description('Has an associated PDF in S3.'),
+  isLegacy: joi
+    .boolean()
+    .when('isLegacySealed', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required().valid(true),
+    })
+    .description(
+      'Indicates whether or not the document belongs to a legacy case that has been migrated to the new system.',
+    ),
+  isLegacySealed: joi
+    .boolean()
+    .optional()
+    .description(
+      'Indicates whether or not the legacy document was sealed prior to being migrated to the new system.',
+    ),
+  isPaper: joi.boolean().optional(),
+  isSealed: joi
+    .boolean()
+    .when('isLegacySealed', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required().valid(true),
+    })
+    .description('Indicates whether or not the document is sealed.'),
+  judge: joi
+    .string()
+    .max(100)
+    .allow(null)
+    .description('The judge associated with the document.')
+    .when('documentType', {
+      is: joi
+        .string()
+        .valid(...OPINION_DOCUMENT_TYPES.map(t => t.documentType)),
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
+  lodged: joi
+    .boolean()
+    .optional()
+    .description(
+      'A lodged document is awaiting action by the judge to enact or refuse.',
+    ),
+  mailingDate: joi.string().max(100).optional(),
+  numberOfPages: joi.number().optional().allow(null),
+  objections: joi
+    .string()
+    .valid(...OBJECTIONS_OPTIONS)
+    .optional(),
+  ordinalValue: joi.string().optional(),
+  otherFilingParty: joi
+    .string()
+    .max(100)
+    .when('hasOtherFilingParty', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    })
+    .description(
+      'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
+    ),
+  partyIrsPractitioner: joi.boolean().optional(),
+  partyPrimary: joi
+    .boolean()
+    .optional()
+    .description('Use the primary contact to compose the filedBy text.'),
+  partySecondary: joi
+    .boolean()
+    .optional()
+    .description('Use the secondary contact to compose the filedBy text.'),
+  pending: joi.boolean().optional(),
+  previousDocument: joi.object().optional(),
+  privatePractitioners: joi // TODO: limit keys
+    .array()
+    .items({ name: joi.string().max(100).required() })
+    .optional()
+    .description('Practitioner names to be used to compose the filedBy text.'),
+  processingStatus: joi
+    .string()
+    .valid(...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS))
+    .optional(),
+  qcAt: JoiValidationConstants.ISO_DATE.optional(),
+  qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
+  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+  relationship: joi
+    .string()
+    .valid(...Object.values(DOCUMENT_RELATIONSHIPS))
+    .optional(),
+  scenario: joi
+    .string()
+    .valid(...SCENARIOS)
+    .optional(),
+  secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
+    'A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents.',
+  ),
+  secondaryDocument: joi // TODO: limit keys
+    .object()
+    .keys({
+      documentTitle: joi
+        .string()
+        .max(500)
+        .optional()
+        .description('The title of the secondary document.'),
+      documentType: joi
+        .string()
+        .valid(...ALL_DOCUMENT_TYPES)
+        .required()
+        .description('The type of the secondary document.'),
+      eventCode: joi
+        .string()
+        .valid(...ALL_EVENT_CODES)
+        .required()
+        .description('The event code of the secondary document.'),
+    })
+    .when('scenario', {
+      is: 'Nonstandard H',
+      otherwise: joi.forbidden(),
+      then: joi.optional(),
+    })
+    .description('The secondary document.'),
+  servedAt: joi
+    .alternatives()
+    .conditional('servedParties', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.optional(),
+      then: JoiValidationConstants.ISO_DATE.required(),
+    })
+    .description('When the document is served on the parties.'),
+  servedParties: joi
+    .array()
+    .items({
+      email: JoiValidationConstants.EMAIL.optional(),
+      name: joi
+        .string()
+        .max(100)
+        .required()
+        .description('The name of a party from a contact, or "IRS"'),
+      role: joi
+        .string()
+        .valid(...Object.values(ROLES))
+        .optional()
+        .description('Currently only required for the IRS'),
+    })
+    .when('servedAt', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional(),
+      then: joi.required(),
+    })
+    .description('The parties to whom the document has been served.'),
+  serviceDate: JoiValidationConstants.ISO_DATE.max('now')
+    .optional()
+    .allow(null)
+    .description(
+      'Used by certificate of service documents to construct the document title.',
+    ),
+  serviceStamp: joi.string().optional(),
+  signedAt: joi
+    .string()
+    .max(100)
+    .when('isDraft', {
+      is: false,
+      otherwise: joi.optional().allow(null),
+      then: joi.when('eventCode', {
+        is: joi.valid(...EVENT_CODES_REQUIRING_SIGNATURE),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }),
+    })
+    .description('The time at which the document was signed.'),
+  signedByUserId: joi
+    .when('signedJudgeName', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.UUID.optional().allow(null),
+      then: JoiValidationConstants.UUID.required(),
+    })
+    .description('The id of the user who applied the signature.'),
+  signedJudgeName: joi // TODO: limit string size
+    .when('isDraft', {
+      is: false,
+      otherwise: joi.string().optional().allow(null),
+      then: joi.when('eventCode', {
+        is: joi.string().valid(...EVENT_CODES_REQUIRING_JUDGE_SIGNATURE),
         otherwise: joi.string().optional().allow(null),
-        then: joi.when('eventCode', {
-          is: joi.string().valid(...EVENT_CODES_REQUIRING_JUDGE_SIGNATURE),
-          otherwise: joi.string().optional().allow(null),
-          then: joi.string().required(),
-        }),
-      })
-      .description('The judge who signed the document.'),
-    supportingDocument: joi.string().optional().allow(null), // TODO: limit string size
-    trialLocation: joi // TODO: limit string size
-      .string()
-      .optional()
-      .allow(null)
-      .description(
-        'An optional trial location used when generating a fully concatenated document title.',
-      ),
-    userId: JoiValidationConstants.UUID.required(),
-    workItems: joi.array().optional(),
-  }),
-);
+        then: joi.string().required(),
+      }),
+    })
+    .description('The judge who signed the document.'),
+  supportingDocument: joi.string().optional().allow(null), // TODO: limit string size
+  trialLocation: joi // TODO: limit string size
+    .string()
+    .optional()
+    .allow(null)
+    .description(
+      'An optional trial location used when generating a fully concatenated document title.',
+    ),
+  userId: JoiValidationConstants.UUID.required(),
+  workItem: joi.object().optional(),
+});
+
+joiValidationDecorator(Document, Document.VALIDATION_RULES);
 
 /**
  *
  * @param {WorkItem} workItem the work item to add to the document
  */
-Document.prototype.addWorkItem = function (workItem) {
-  this.workItems = [...this.workItems, workItem];
+Document.prototype.setWorkItem = function (workItem) {
+  this.workItem = workItem;
 };
 
 /**
@@ -587,10 +582,6 @@ Document.prototype.unsignDocument = function () {
 
 Document.prototype.setAsProcessingStatusAsCompleted = function () {
   this.processingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-};
-
-Document.prototype.getQCWorkItem = function () {
-  return this.workItems.find(workItem => workItem.isQC === true);
 };
 
 Document.prototype.isAutoServed = function () {

@@ -16,8 +16,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
-const { Message } = require('./Message');
-const { omit, orderBy } = require('lodash');
+const { omit } = require('lodash');
 
 /**
  * constructor
@@ -42,13 +41,12 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
-  this.document = omit(rawWorkItem.document, 'workItems');
+  this.document = omit(rawWorkItem.document, 'workItem');
   this.entityName = 'WorkItem';
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
-  this.isQC = rawWorkItem.isQC;
   this.isRead = rawWorkItem.isRead;
   this.section = rawWorkItem.section;
   this.sentBy = rawWorkItem.sentBy;
@@ -57,10 +55,6 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
-
-  this.messages = (rawWorkItem.messages || []).map(
-    message => new Message(message, { applicationContext }),
-  );
 }
 
 WorkItem.validationName = 'WorkItem';
@@ -96,9 +90,7 @@ joiValidationDecorator(
     highPriority: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
-    isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object().instance(Message)).required(),
     section: joi
       .string()
       .valid(
@@ -123,30 +115,6 @@ joiValidationDecorator(
     workItemId: JoiValidationConstants.UUID.required(),
   }),
 );
-
-/**
- *
- * @param {Message} message the message to add to the work item
- * @returns {WorkItem} the updated work item
- */
-WorkItem.prototype.addMessage = function (message) {
-  this.messages = [...this.messages, message];
-  return this;
-};
-
-WorkItem.prototype.setAsInternal = function () {
-  this.isQC = false;
-  return this;
-};
-
-/**
- * get the latest message (by createdAt)
- *
- * @returns {Message} the latest message entity by date
- */
-WorkItem.prototype.getLatestMessageEntity = function () {
-  return orderBy(this.messages, 'createdAt', 'desc')[0];
-};
 
 /**
  * Assign to a user

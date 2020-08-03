@@ -18,12 +18,5 @@ export const petitionsClerkViewsDocketEntry = (test, draftOrderIndex) => {
     );
 
     expect(docketRecordEntry.document).toBeTruthy();
-
-    await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.docketNumber,
-      documentId: docketRecordEntry.document.documentId,
-    });
-
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
   });
 };

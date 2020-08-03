@@ -31,7 +31,6 @@ describe('Get case', () => {
           filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: petitionerId,
-          workItems: [],
         },
       ],
     };

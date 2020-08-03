@@ -63,7 +63,6 @@ export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -113,7 +112,6 @@ export const getFormattedDocumentQCSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -124,7 +122,6 @@ export const getFormattedDocumentQCMyOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -135,43 +132,10 @@ export const getFormattedDocumentQCSectionOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
-    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
   });
-};
-
-export const signProposedStipulatedDecision = async (test, stipDecision) => {
-  await viewDocumentDetailMessage({
-    docketNumber: stipDecision.docketNumber,
-    documentId: stipDecision.document.documentId,
-    messageId: stipDecision.currentMessage.messageId,
-    test,
-    workItemIdToMarkAsRead: stipDecision.workItemId,
-  });
-
-  await test.runSequence('gotoSignPDFDocumentSequence', {
-    docketNumber: stipDecision.docketNumber,
-    documentId: stipDecision.document.documentId,
-    pageNumber: 1,
-  });
-
-  await test.runSequence('setPDFSignatureDataSequence', {
-    signatureData: {
-      scale: 1,
-      x: 100,
-      y: 100,
-    },
-  });
-
-  test.setState('form', {
-    assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    message: 'serve this please!',
-    section: 'docket',
-  });
-
-  await test.runSequence('completeDocumentSigningSequence');
 };
 
 export const serveDocument = async ({ docketNumber, documentId, test }) => {
@@ -189,11 +153,6 @@ export const createCourtIssuedDocketEntry = async ({
   documentId,
   test,
 }) => {
-  await test.runSequence('gotoDocumentDetailSequence', {
-    docketNumber,
-    documentId,
-  });
-
   await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketNumber,
     documentId,
@@ -205,50 +164,6 @@ export const createCourtIssuedDocketEntry = async ({
   });
 
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
-};
-
-export const getFormattedMyInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'inbox',
-    queue: 'my',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
-};
-
-export const getFormattedSectionInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'inbox',
-    queue: 'section',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
-};
-
-export const getFormattedMyOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'outbox',
-    queue: 'my',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
-};
-
-export const getFormattedSectionOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
-    box: 'outbox',
-    queue: 'section',
-    workQueueIsInternal: true,
-  });
-  return runCompute(formattedWorkQueue, {
-    state: test.getState(),
-  });
 };
 
 export const getInboxCount = test => {
@@ -329,37 +244,8 @@ export const uploadProposedStipulatedDecision = async test => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
-    serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
-};
-
-export const createMessage = async ({ assigneeId, message, test }) => {
-  test.setState('form', {
-    assigneeId,
-    message,
-    section: 'docket',
-  });
-
-  await test.runSequence('createWorkItemSequence');
-};
-
-export const forwardWorkItem = async (test, to, workItemId, message) => {
-  let assigneeId;
-  if (to === 'docketclerk1') {
-    assigneeId = '2805d1ab-18d0-43ec-bafb-654e83405416';
-  }
-  test.setState('form', {
-    [workItemId]: {
-      assigneeId: assigneeId,
-      forwardMessage: message,
-      section: 'petitions',
-    },
-  });
-
-  await test.runSequence('submitForwardSequence', {
-    workItemId,
-  });
 };
 
 export const uploadPetition = async (
@@ -605,21 +491,6 @@ export const viewCaseDetail = async ({ docketNumber, test }) => {
   });
 };
 
-export const viewDocumentDetailMessage = async ({
-  docketNumber,
-  documentId,
-  messageId,
-  test,
-  workItemIdToMarkAsRead,
-}) => {
-  await test.runSequence('gotoDocumentDetailSequence', {
-    docketNumber,
-    documentId,
-    messageId,
-    workItemIdToMarkAsRead,
-  });
-};
-
 export const wait = time => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
@@ -669,5 +540,5 @@ export const getPetitionDocumentForCase = caseDetail => {
 
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
-  return petitionDocument.workItems[0];
+  return petitionDocument.workItem;
 };

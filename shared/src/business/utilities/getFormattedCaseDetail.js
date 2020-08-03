@@ -67,11 +67,9 @@ const formatDocument = (applicationContext, document) => {
     !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
     result.documentType === 'Stipulated Decision';
 
-  const qcWorkItems = (result.workItems || []).filter(wi => wi.isQC);
+  const qcWorkItem = result.workItem;
 
-  result.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
-    return acc && !!wi.completedAt;
-  }, true);
+  result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
 
   result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
 
@@ -88,10 +86,7 @@ const formatDocument = (applicationContext, document) => {
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
   result.qcWorkItemsUntouched =
-    !!qcWorkItems.length &&
-    qcWorkItems.reduce((acc, wi) => {
-      return acc && !wi.isRead && !wi.completedAt;
-    }, true);
+    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
   result.servedPartiesCode = getServedPartiesCode(result.servedParties);
@@ -256,15 +251,10 @@ const formatCase = (applicationContext, caseDetail) => {
     .map(document => ({
       ...document,
       editUrl:
-        document.documentType === 'Stipulated Decision'
-          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-          : document.documentType === 'Miscellaneous'
+        document.documentType === 'Miscellaneous'
           ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-      signUrl:
-        document.documentType === 'Stipulated Decision'
-          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
+      signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
       signedAtFormatted: applicationContext
         .getUtilities()
         .formatDateString(document.signedAt, 'MMDDYY'),

@@ -59,7 +59,7 @@ exports.sendServedPartiesEmails = async ({
               .formatDateString(servedAt, 'DATE_TIME_TZ'),
           },
           name: party.name,
-          taxCourtLoginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+          taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,
         },
       }),
     },

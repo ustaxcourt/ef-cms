@@ -253,12 +253,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.irsPractitioners = [];
   }
 
-  this.documents.forEach(document => {
-    document.workItems.forEach(workItem => {
-      workItem.docketNumberSuffix = this.docketNumberSuffix;
-    });
-  });
-
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
       docketRecord => new DocketRecord(docketRecord, { applicationContext }),
@@ -374,7 +368,8 @@ Case.VALIDATION_RULES = {
   contactSecondary: joi.object().optional().allow(null),
   correspondence: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
     .description('List of Correspondence documents for the case.'),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the paper or electronic case was added to the system. This value cannot be edited.',
@@ -396,15 +391,12 @@ Case.VALIDATION_RULES = {
     .string()
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: joi
-    .array()
-    .items(joi.object().meta({ entityName: 'DocketRecord' }))
-    .required()
-    .unique((a, b) => a.index === b.index)
-    .description('List of DocketRecord Entities for the case.'),
+  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
+    DocketRecord.VALIDATION_RULES,
+  ).required(),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Document' }))
+    .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   entityName: joi.string().valid('Case').required(),
@@ -606,7 +598,7 @@ Case.VALIDATION_RULES = {
     ),
   statistics: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Statistic' }))
+    .items(Statistic.VALIDATION_RULES)
     .when('hasVerifiedIrsNotice', {
       is: true,
       otherwise: joi.optional(),
@@ -656,11 +648,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
-  workItems: joi
-    .array()
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description('List of system messages associated with this case.'),
 };
 
 joiValidationDecorator(
@@ -1092,19 +1079,6 @@ Case.prototype.updateDocument = function (updatedDocument) {
 Case.stripLeadingZeros = docketNumber => {
   const [number, year] = docketNumber.split('-');
   return `${parseInt(number)}-${year}`;
-};
-
-/**
- * getWorkItems
- *
- * @returns {WorkItem[]} the work items on the case
- */
-Case.prototype.getWorkItems = function () {
-  let workItems = [];
-  this.documents.forEach(
-    document => (workItems = [...workItems, ...(document.workItems || [])]),
-  );
-  return workItems;
 };
 
 /**

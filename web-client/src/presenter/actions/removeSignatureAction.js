@@ -19,6 +19,7 @@ export const removeSignatureAction = async ({ applicationContext, props }) => {
     });
 
   return {
+    alertSuccess: { message: 'Signature removed.' },
     caseDetail: updatedCase,
     viewerDraftDocumentToDisplay: { documentId },
   };
