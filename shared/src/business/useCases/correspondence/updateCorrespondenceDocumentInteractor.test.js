@@ -67,6 +67,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
+    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   beforeEach(() => {
