@@ -1,15 +1,15 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
-import { caseMessageModalHelper as caseMessageModalHelperComputed } from './caseMessageModalHelper';
+import { messageModalHelper as messageModalHelperComputed } from './messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseMessageModalHelper = withAppContextDecorator(
-  caseMessageModalHelperComputed,
+const messageModalHelper = withAppContextDecorator(
+  messageModalHelperComputed,
   applicationContext,
 );
 
-describe('caseMessageModalHelper', () => {
+describe('messageModalHelper', () => {
   let caseDetail;
 
   beforeAll(() => {
@@ -47,7 +47,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns documents on the docket record', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -67,7 +67,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns correspondence from formattedCaseDetail', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -85,7 +85,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns draftDocuments from formattedCaseDetail', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -101,7 +101,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns hasCorrespondence true when there are correspondence documents on the case', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [{ documentId: '123' }],
@@ -120,7 +120,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns hasCorrespondence false when there are NO correspondence documents on the case', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
@@ -139,7 +139,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns hasDocuments true when there are documents with files attached on the case', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
@@ -161,7 +161,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns hasDocuments false when there are NO documents on the case', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
@@ -181,7 +181,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns hasDraftDocuments true when there are draft documents on the case', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
@@ -203,7 +203,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns hasDraftDocuments false when there are NO draft documents on the case', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [{ documentId: '234' }],
@@ -223,7 +223,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm true when the current attachment count is zero', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -239,7 +239,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm true when screenMetadata.showAddDocumentForm is true and the maximum number of attachments has not been met', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -257,7 +257,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm false when screenMetadata.showAddDocumentForm is false and the maximum number of attachments has not been met', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -275,7 +275,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm false when maximum number of attachments have been reached', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -293,7 +293,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showAddMoreDocumentsButton true when showAddDocumentForm is false and the current attachment count is greater than zero but less than the maximum', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -311,7 +311,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showAddMoreDocumentsButton false when maximum number of attachments have been reached', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -329,7 +329,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showMessageAttachments true when the the form has message attachments', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -347,7 +347,7 @@ describe('caseMessageModalHelper', () => {
   });
 
   it('returns showMessageAttachments false when the the form has NO message attachments', () => {
-    const result = runCompute(caseMessageModalHelper, {
+    const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
         modal: {

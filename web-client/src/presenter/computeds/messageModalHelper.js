@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const caseMessageModalHelper = (get, applicationContext) => {
+export const messageModalHelper = (get, applicationContext) => {
   const {
     CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
   } = applicationContext.getConstants();
