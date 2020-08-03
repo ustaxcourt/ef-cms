@@ -22,17 +22,19 @@ function IrsPractitioner(rawUser) {
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
 
+IrsPractitioner.VALIDATION_RULES = joi.object().keys({
+  ...userValidation,
+  entityName: joi.string().valid('IrsPractitioner').required(),
+  role: joi.string().valid(ROLES.irsPractitioner).required(),
+  serviceIndicator: joi
+    .string()
+    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
+    .required(),
+});
+
 joiValidationDecorator(
   IrsPractitioner,
-  joi.object().keys({
-    ...userValidation,
-    entityName: joi.string().valid('IrsPractitioner').required(),
-    role: joi.string().valid(ROLES.irsPractitioner).required(),
-    serviceIndicator: joi
-      .string()
-      .valid(...Object.values(SERVICE_INDICATOR_TYPES))
-      .required(),
-  }),
+  IrsPractitioner.VALIDATION_RULES,
   VALIDATION_ERROR_MESSAGES,
 );
 

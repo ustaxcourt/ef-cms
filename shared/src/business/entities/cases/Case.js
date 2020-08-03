@@ -452,6 +452,7 @@ Case.VALIDATION_RULES = {
     .description('Last date that the petitioner is allowed to file before.'),
   irsPractitioners: joi
     .array()
+    .items(IrsPractitioner.VALIDATION_RULES)
     .optional()
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
@@ -576,6 +577,7 @@ Case.VALIDATION_RULES = {
     .description('Where the petitioner would prefer to hold the case trial.'),
   privatePractitioners: joi
     .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
