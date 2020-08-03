@@ -157,6 +157,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
           documentId: '012',
           eventCode: 'P',
           isPaper: true,
+          servedAt: '2019-03-01T21:40:46.415Z',
         },
         {
           documentId: '123',
