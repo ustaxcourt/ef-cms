@@ -3,7 +3,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
-import { completeCaseMessageAction } from '../actions/CaseDetail/completeCaseMessageAction';
+import { completeMessageAction } from '../actions/CaseDetail/completeMessageAction';
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { setMessageAction } from '../actions/setMessageAction';
@@ -12,7 +12,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const completeMessageSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   getMostRecentMessageInThreadAction,
-  completeCaseMessageAction,
+  completeMessageAction,
   clearScreenMetadataAction,
   clearUsersAction,
   clearModalAction,
