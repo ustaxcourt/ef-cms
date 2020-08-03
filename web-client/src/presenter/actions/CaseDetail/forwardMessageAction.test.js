@@ -5,17 +5,15 @@ import { runAction } from 'cerebral/test';
 
 describe('forwardMessageAction', () => {
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .forwardCaseMessageInteractor.mockReturnValue({
-        docketNumber: '123-45',
-        parentMessageId: '123',
-      });
+    applicationContext.getUseCases().forwardMessageInteractor.mockReturnValue({
+      docketNumber: '123-45',
+      parentMessageId: '123',
+    });
 
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call forwardCaseMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
+  it('should call forwardMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
     const result = await runAction(forwardMessageAction, {
       modules: {
         presenter,
@@ -41,10 +39,10 @@ describe('forwardMessageAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().forwardCaseMessageInteractor,
+      applicationContext.getUseCases().forwardMessageInteractor,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().forwardCaseMessageInteractor.mock
+      applicationContext.getUseCases().forwardMessageInteractor.mock
         .calls[0][0],
     ).toMatchObject({
       attachments: [
