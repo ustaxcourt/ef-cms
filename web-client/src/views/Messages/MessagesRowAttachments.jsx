@@ -3,12 +3,12 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesRowAttachments = connect(
+export const MessagesRowAttachments = connect(
   {
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
   },
-  function CaseMessagesRowAttachments({
+  function MessagesRowAttachments({
     attachments,
     docketNumber,
     openCaseDocumentDownloadUrlSequence,

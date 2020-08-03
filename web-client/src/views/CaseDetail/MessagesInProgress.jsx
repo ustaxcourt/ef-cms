@@ -1,14 +1,14 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseMessagesRowAttachments } from '../Messages/CaseMessagesRowAttachments';
+import { MessagesRowAttachments } from '../Messages/MessagesRowAttachments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesInProgress = connect(
+export const MessagesInProgress = connect(
   {
     formattedInProgressMessages: state.formattedCaseMessages.inProgressMessages,
   },
-  function CaseMessagesInProgress({ formattedInProgressMessages }) {
+  function MessagesInProgress({ formattedInProgressMessages }) {
     return (
       <>
         {formattedInProgressMessages.length === 0 && (
@@ -58,7 +58,7 @@ export const CaseMessagesInProgress = connect(
                       <span>No attachments</span>
                     )}
                     {message.attachments.length > 0 && (
-                      <CaseMessagesRowAttachments
+                      <MessagesRowAttachments
                         attachments={message.attachments}
                         docketNumber={message.docketNumber}
                       />
