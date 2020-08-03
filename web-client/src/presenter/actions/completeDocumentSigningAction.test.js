@@ -189,7 +189,7 @@ describe('completeDocumentSigningAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockDocumentId}`,
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockDocumentId}`,
     });
   });
 
