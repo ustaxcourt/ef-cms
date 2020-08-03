@@ -1,20 +1,19 @@
-import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
+import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
+import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseMessageModalHelper = withAppContextDecorator(
-  caseMessageModalHelperComputed,
-);
+const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const userSendsCaseMessageToJudge = (test, subject) => {
+export const createNewMessageOnCase = test => {
   const getHelper = () => {
-    return runCompute(caseMessageModalHelper, {
+    return runCompute(messageModalHelper, {
       state: test.getState(),
     });
   };
 
-  return it('internal user sends case message to judgeArmen', async () => {
+  return it('user creates new message on a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -23,12 +22,12 @@ export const userSendsCaseMessageToJudge = (test, subject) => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: 'armensChambers',
+      value: 'petitions',
     });
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
-      value: 'dabbad00-18d0-43ec-bafb-654e83405416', //judgeArmen
+      value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
     const messageDocument = getHelper().documents[0];
@@ -42,14 +41,22 @@ export const userSendsCaseMessageToJudge = (test, subject) => {
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
+    test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+
     await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',
-      value: subject,
+      value: test.testMessageSubject,
+    });
+
+    await test.runSequence('createMessageSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      message: NewMessage.VALIDATION_ERROR_MESSAGES.message,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'message',
-      value: "don't forget to be awesome",
+      value: 'bears, beets, battlestar galactica',
     });
 
     await test.runSequence('createMessageSequence');

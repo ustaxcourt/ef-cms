@@ -1,4 +1,4 @@
-import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
+import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
@@ -16,7 +16,7 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  createNewCaseMessageOnCase(test);
+  createNewMessageOnCase(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
