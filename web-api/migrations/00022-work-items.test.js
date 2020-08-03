@@ -1,12 +1,14 @@
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
+const { omit } = require('lodash');
 const { up } = require('./00022-work-items');
 
-describe('add docketNumber to user case notes', () => {
+describe('work items array to object', () => {
   let documentClient;
   let scanStub;
   let putStub;
   let deleteStub;
+  let getStub;
   let mockItems = [];
 
   const WORK_ITEM_ID_1 = '03b2c114-c8b7-4643-852c-3364a197ccb2';
@@ -31,7 +33,11 @@ describe('add docketNumber to user case notes', () => {
     pk: `case|${MOCK_CASE.docketNumber}`,
     sk: 'document|2ffd0350-65a3-4aea-a395-4a9665a05d91',
     userId: '82d199bd-6d7d-4655-993a-3fe76be43b63',
-    workItems: [mockWorkItem, { ...mockWorkItem, workItemId: WORK_ITEM_ID_2 }],
+    workItems: [mockWorkItem],
+  };
+
+  const mockCaseRecord = {
+    ...MOCK_CASE,
   };
 
   beforeEach(() => {
@@ -51,8 +57,13 @@ describe('add docketNumber to user case notes', () => {
       promise: async () => ({}),
     });
 
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({ Item: mockCaseRecord }),
+    });
+
     documentClient = {
       delete: deleteStub,
+      get: getStub,
       put: putStub,
       scan: scanStub,
     };
@@ -71,23 +82,114 @@ describe('add docketNumber to user case notes', () => {
     expect(putStub).not.toBeCalled();
   });
 
-  it('should not modify document records that do not have a workItems array', async () => {
-    mockItems = [{ ...mockDocumentRecord, workItems: undefined }];
+  it('should not modify document records that do not have a workItems array and have an isDraft flag', async () => {
+    mockItems = [
+      { ...mockDocumentRecord, isDraft: false, workItems: undefined },
+    ];
 
     await up(documentClient, '', forAllRecords);
 
     expect(putStub).not.toBeCalled();
   });
 
-  it('should not modify document records that have an empty workItems array', async () => {
+  it('should not modify document records that have an empty workItems array and have an isDraft flag', async () => {
+    mockItems = [{ ...mockDocumentRecord, isDraft: false, workItems: [] }];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub).not.toBeCalled();
+  });
+
+  it('should modify document records that have an empty workItems array and do not have an isDraft flag', async () => {
     mockItems = [{ ...mockDocumentRecord, workItems: [] }];
 
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub).not.toBeCalled();
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      ...omit(mockDocumentRecord, 'workItems'),
+      isDraft: false,
+    });
+  });
+
+  it('should modify document records and add a default isDraft flag if the case record is not found', async () => {
+    documentClient.get = jest.fn().mockReturnValue({ promise: async () => {} });
+    mockItems = [{ ...mockDocumentRecord, workItems: [] }];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      ...omit(mockDocumentRecord, 'workItems'),
+      isDraft: false,
+    });
+  });
+
+  it('should modify document record with isDraft true if document is not archived, not served, and is a stipulated decision', async () => {
+    const mockDocument = {
+      ...mockDocumentRecord,
+      archived: false,
+      documentType: 'Stipulated Decision',
+    };
+    mockItems = [mockDocument];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      ...omit(mockDocument, 'workItems'),
+      isDraft: true,
+    });
+  });
+
+  it('should modify document record with isDraft true if document is not archived, not served, and is an order that is not on the docket record', async () => {
+    const mockDocument = {
+      ...mockDocumentRecord,
+      archived: false,
+      documentType: 'Order',
+    };
+    mockItems = [mockDocument];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      ...omit(mockDocument, 'workItems'),
+      isDraft: true,
+    });
+  });
+
+  it('should modify document record with isDraft false if document is not archived, not served, and is an order that is on the docket record', async () => {
+    documentClient.get = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {
+          ...mockCaseRecord,
+          docketRecord: [{ documentId: mockDocumentRecord.documentId }],
+        },
+      }),
+    });
+    const mockDocument = {
+      ...mockDocumentRecord,
+      archived: false,
+      documentType: 'Order',
+    };
+    mockItems = [mockDocument];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      ...omit(mockDocument, 'workItems'),
+      isDraft: false,
+    });
   });
 
   it('should add workItem to a document entity with a workItems array and delete all except the first workItem in the array', async () => {
+    mockItems = [
+      {
+        ...mockDocumentRecord,
+        workItems: [
+          mockWorkItem,
+          { ...mockWorkItem, workItemId: WORK_ITEM_ID_2 },
+        ],
+      },
+    ];
+
     await up(documentClient, '', forAllRecords);
 
     expect(putStub.mock.calls[0][0]['Item'].workItem).toMatchObject(
@@ -101,8 +203,6 @@ describe('add docketNumber to user case notes', () => {
   });
 
   it('should add workItem to a document entity with a workItems array and not call delete if there is only one workItem in the array', async () => {
-    mockItems = [{ ...mockDocumentRecord, workItems: [mockWorkItem] }];
-
     await up(documentClient, '', forAllRecords);
 
     expect(putStub.mock.calls[0][0]['Item'].workItem).toMatchObject(
