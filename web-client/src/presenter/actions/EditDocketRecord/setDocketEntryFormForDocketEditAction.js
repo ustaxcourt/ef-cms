@@ -23,7 +23,7 @@ export const setDocketEntryFormForDocketEditAction = ({
     entry => entry.documentId === documentId,
   );
 
-  let docketEntryFormData = omit(initialDocument, ['workItems']);
+  let docketEntryFormData = omit(initialDocument, ['workItem']);
 
   const docketRecordEntry = caseDetail.docketRecord.find(
     entry => entry.documentId === documentId,

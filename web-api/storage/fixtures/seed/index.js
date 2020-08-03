@@ -19,7 +19,7 @@ module.exports = [
   ...require('./105-20.json'),
   ...require('./117-20.json'),
   ...require('./120-20.json'),
-  ...require('./case-messages.json'),
+  ...require('./messages.json'),
   ...require('./trial-sessions.json'),
   ...require('./trial-sessions-past.json'),
   ...require('./misc.json'),

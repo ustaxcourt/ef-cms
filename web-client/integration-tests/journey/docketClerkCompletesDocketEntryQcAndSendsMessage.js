@@ -26,7 +26,7 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
       documentId: proposedStipulatedDecision.document.documentId,
     });
 
-    await test.runSequence('openCompleteAndSendCaseMessageModalSequence');
+    await test.runSequence('openCompleteAndSendMessageModalSequence');
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('modal.form.attachments').length).toEqual(1);
 

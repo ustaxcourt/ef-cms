@@ -2617,8 +2617,8 @@
             options: 
               version: 
                 - "uuidv4"
-    workItems: 
-      type: "array"
+    workItem: 
+      type: "object"
       flags: 
         presence: "optional"
 

@@ -39,7 +39,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
     { applicationContext },
   );
 
-  documentEntity.addWorkItem(workItemEntity);
+  documentEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return {
@@ -272,7 +272,9 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+    });
   }
 
   await Promise.all([

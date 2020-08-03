@@ -101,7 +101,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(documentEntity);
 
-  const workItem = documentEntity.getQCWorkItem();
+  const { workItem } = documentEntity;
 
   Object.assign(workItem, {
     document: {
@@ -110,7 +110,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     },
   });
 
-  documentEntity.addWorkItem(workItem);
+  documentEntity.setWorkItem(workItem);
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

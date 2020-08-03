@@ -43,7 +43,7 @@ const addPetitionDocumentToCase = ({
     { applicationContext },
   );
 
-  documentEntity.addWorkItem(workItemEntity);
+  documentEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return workItemEntity;
@@ -209,7 +209,9 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+    });
   }
 
   await applicationContext.getPersistenceGateway().createCase({

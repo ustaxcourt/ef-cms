@@ -147,9 +147,11 @@ exports.updatePrimaryContactInteractor = async ({
       { applicationContext },
     );
 
-    changeOfAddressDocument.addWorkItem(workItem);
+    changeOfAddressDocument.setWorkItem(workItem);
 
-    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+    caseEntity.addDocument(changeOfAddressDocument, {
+      applicationContext,
+    });
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,

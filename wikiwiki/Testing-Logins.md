@@ -49,16 +49,16 @@ trialclerk1@example.com – trialclerk5@example.com
 ## Gmail Login
 [Gmail login credentials](https://docs.google.com/document/d/15-8vn7iSMBKAYKP0Auvp5NNmdCFRctvBt1VpwiggVBM/edit?usp=sharing)
 
-## Practitioner
-email: flexionustc+practitioner@gmail.com
+## Private Practitioner
+email: flexionustc+privatePractitioner@gmail.com
 pass: Testing1234$
 
 ## Petitioner
 email: flexionustc+petitioner@gmail.com
 pass: Testing1234$
 
-## Respondent
-email: flexionustc+respondent@gmail.com
+## IRS Practitioner
+email: flexionustc+irsPractitioner@gmail.com
 pass: Testing1234$
 
 ## IRS Super User
