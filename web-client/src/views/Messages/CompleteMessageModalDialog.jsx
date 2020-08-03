@@ -4,9 +4,9 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-export const CompleteCaseMessageModalDialog = connect(
+export const CompleteMessageModalDialog = connect(
   { updateModalValueSequence: sequences.updateModalValueSequence },
-  function CompleteCaseMessageModalDialog({ updateModalValueSequence }) {
+  function CompleteMessageModalDialog({ updateModalValueSequence }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

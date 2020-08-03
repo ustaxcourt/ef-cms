@@ -1,12 +1,12 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseMessagesIndividualCompleted } from './CaseMessagesIndividualCompleted';
-import { CaseMessagesIndividualInbox } from './CaseMessagesIndividualInbox';
-import { CaseMessagesIndividualOutbox } from './CaseMessagesIndividualOutbox';
-import { CaseMessagesSectionCompleted } from './CaseMessagesSectionCompleted';
-import { CaseMessagesSectionInbox } from './CaseMessagesSectionInbox';
-import { CaseMessagesSectionOutbox } from './CaseMessagesSectionOutbox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MessagesIndividualCompleted } from './MessagesIndividualCompleted';
+import { MessagesIndividualInbox } from './MessagesIndividualInbox';
+import { MessagesIndividualOutbox } from './MessagesIndividualOutbox';
+import { MessagesSectionCompleted } from './MessagesSectionCompleted';
+import { MessagesSectionInbox } from './MessagesSectionInbox';
+import { MessagesSectionOutbox } from './MessagesSectionOutbox';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -74,32 +74,30 @@ export const Messages = connect(
             <Tab id="inbox-tab" tabName="inbox" title="Inbox">
               <div id="inbox-tab-content">
                 {messagesHelper.showIndividualMessages && (
-                  <CaseMessagesIndividualInbox />
+                  <MessagesIndividualInbox />
                 )}
 
-                {messagesHelper.showSectionMessages && (
-                  <CaseMessagesSectionInbox />
-                )}
+                {messagesHelper.showSectionMessages && <MessagesSectionInbox />}
               </div>
             </Tab>
             <Tab id="sent-tab" tabName="outbox" title="Sent">
               <div id="sent-tab-content">
                 {messagesHelper.showIndividualMessages && (
-                  <CaseMessagesIndividualOutbox />
+                  <MessagesIndividualOutbox />
                 )}
 
                 {messagesHelper.showSectionMessages && (
-                  <CaseMessagesSectionOutbox />
+                  <MessagesSectionOutbox />
                 )}
               </div>
             </Tab>
             <Tab id="completed-tab" tabName="completed" title="Completed">
               <div id="completed-tab-content">
                 {messagesHelper.showIndividualMessages && (
-                  <CaseMessagesIndividualCompleted />
+                  <MessagesIndividualCompleted />
                 )}
                 {messagesHelper.showSectionMessages && (
-                  <CaseMessagesSectionCompleted />
+                  <MessagesSectionCompleted />
                 )}
               </div>
             </Tab>
