@@ -1,8 +1,10 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  PETITIONS_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { getMessagesByDocketNumber } = require('./getMessagesByDocketNumber');
-const { PETITIONS_SECTION } = require('../../../entities/EntityConstants');
 
 const mockMessage = {
   createdAt: '2019-03-01T21:40:46.415Z',
