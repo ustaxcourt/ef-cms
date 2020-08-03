@@ -22,7 +22,7 @@ describe('getMessagesForCaseAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
     applicationContextForClient
       .getUseCases()
-      .getCaseMessagesForCaseInteractor.mockReturnValue([mockCaseMessage]);
+      .getMessagesForCaseInteractor.mockReturnValue([mockCaseMessage]);
   });
 
   it('calls the use case with docketNumber', async () => {
@@ -38,11 +38,10 @@ describe('getMessagesForCaseAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases()
-        .getCaseMessagesForCaseInteractor,
+      applicationContextForClient.getUseCases().getMessagesForCaseInteractor,
     ).toBeCalled();
     expect(
-      applicationContextForClient.getUseCases().getCaseMessagesForCaseInteractor
+      applicationContextForClient.getUseCases().getMessagesForCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
       docketNumber: '101-20',

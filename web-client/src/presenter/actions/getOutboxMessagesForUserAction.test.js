@@ -12,7 +12,7 @@ describe('getOutboxMessagesForUserAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .getOutboxCaseMessagesForUserInteractor.mockReturnValue([message]);
+      .getOutboxMessagesForUserInteractor.mockReturnValue([message]);
   });
 
   it('returns the messages retrieved from the use case', async () => {
