@@ -73,10 +73,10 @@ describe('completeMessageInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId.mockReturnValue(mockMessages);
+      .getMessageThreadByParentId.mockReturnValue(mockMessages);
     applicationContext
       .getPersistenceGateway()
-      .updateCaseMessage.mockResolvedValue(mockMessages[1]);
+      .updateMessage.mockResolvedValue(mockMessages[1]);
 
     const PARENT_MESSAGE_ID = 'b8ff88da-89fe-46a6-bc37-dc2100c7b2bd';
 
@@ -87,18 +87,18 @@ describe('completeMessageInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().markCaseMessageThreadRepliedTo,
+      applicationContext.getPersistenceGateway().markMessageThreadRepliedTo,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().markCaseMessageThreadRepliedTo
-        .mock.calls[0][0].parentMessageId,
+      applicationContext.getPersistenceGateway().markMessageThreadRepliedTo.mock
+        .calls[0][0].parentMessageId,
     ).toEqual(PARENT_MESSAGE_ID);
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage,
+      applicationContext.getPersistenceGateway().updateMessage,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage.mock
-        .calls[0][0].caseMessage,
+      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
+        .message,
     ).toMatchObject({
       completedBy: 'Test Petitionsclerk',
       completedBySection: 'petitions',

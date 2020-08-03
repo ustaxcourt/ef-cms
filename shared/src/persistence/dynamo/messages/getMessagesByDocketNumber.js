@@ -1,14 +1,14 @@
 const { query } = require('../../dynamodbClientService');
 
 /**
- * getCaseMessagesByDocketNumber
+ * getMessagesByDocketNumber
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the created case message
+ * @returns {object} the created message
  */
-exports.getCaseMessagesByDocketNumber = async ({
+exports.getMessagesByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {

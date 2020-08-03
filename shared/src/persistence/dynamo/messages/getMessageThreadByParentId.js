@@ -1,14 +1,14 @@
 const { query } = require('../../dynamodbClientService');
 
 /**
- * getCaseMessageThreadByParentId
+ * getMessageThreadByParentId
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.parentMessageId the id of the parent message
- * @returns {object} the created case message
+ * @returns {object} the created message
  */
-exports.getCaseMessageThreadByParentId = async ({
+exports.getMessageThreadByParentId = async ({
   applicationContext,
   parentMessageId,
 }) => {

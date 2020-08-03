@@ -1,15 +1,15 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * lambda which is used for creating a new message
+ * lambda which is used for retrieving messages by the parent message id
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.createCaseMessageLambda = event =>
+exports.getMessageThreadLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createMessageInteractor({
-      ...JSON.parse(event.body),
+    return await applicationContext.getUseCases().getMessageThreadInteractor({
       applicationContext,
+      parentMessageId: event.pathParameters.parentMessageId,
     });
   });
