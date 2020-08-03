@@ -351,7 +351,6 @@ jobs:
       - store_artifacts:
           path: /tmp/pa11y
 
-
   e2e-cypress:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -630,6 +629,7 @@ workflows:
       - build-client-unit
       - build-client-integration
       - e2e-pa11y
+      - e2e-pa11y-public
       - e2e-cypress
       - e2e-cypress-public
       - build-client-coverage:
@@ -639,6 +639,7 @@ workflows:
             - build-client-unit
             - build-client-integration
             - e2e-pa11y
+            - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
       - deploy:
@@ -663,6 +664,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-pa11y:
           <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
@@ -675,6 +678,7 @@ workflows:
             - build-client-unit
             - build-client-integration
             - e2e-pa11y
+            - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
       - deploy:
@@ -704,6 +708,8 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y:
           <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-with-context-defaults
       - e2e-cypress:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
@@ -716,6 +722,7 @@ workflows:
             - build-client-unit
             - build-client-integration
             - e2e-pa11y
+            - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
       - deploy:
