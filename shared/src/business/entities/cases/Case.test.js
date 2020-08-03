@@ -3148,6 +3148,7 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
+      userId: '"userId" is required',
     });
   });
 
