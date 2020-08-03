@@ -182,11 +182,11 @@ joiValidationDecorator(
 );
 
 /**
- * marks the case message as completed by the user at the current time
+ * marks the message as completed by the user at the current time
  *
  * @param {string} message the message provided when completing the thread
  * @param {object} user the user who completed the thread
- * @returns {Message} the updated case message
+ * @returns {Message} the updated message
  */
 Message.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
@@ -200,10 +200,10 @@ Message.prototype.markAsCompleted = function ({ message, user }) {
 };
 
 /**
- * adds the attachment to the attachments array on the case message
+ * adds the attachment to the attachments array on the message
  *
- * @param {object} attachmentToAdd the attachment to add to the case message
- * @returns {Message} the updated case message
+ * @param {object} attachmentToAdd the attachment to add to the message
+ * @returns {Message} the updated message
  */
 Message.prototype.addAttachment = function (attachmentToAdd) {
   this.attachments.push(attachmentToAdd);

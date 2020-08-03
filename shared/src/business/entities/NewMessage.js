@@ -6,7 +6,7 @@ const { Message } = require('./Message');
 
 /**
  * NewMessage entity - used for validating
- * the Create Case Message modal form
+ * the Create Message modal form
  *
  * @param {object} rawMessage the raw message data
  * @constructor
