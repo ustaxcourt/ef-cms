@@ -44,8 +44,4 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
     test,
     'Jeff, this is ready for review and signature',
   );
-  // docketClerkVerifiesStipulatedDecisionExistsInInbox(
-  //   test,
-  //   'Donna, this is not ready to serve. I need to follow up on something first',
-  // );
 });
