@@ -1,7 +1,7 @@
 import { judgeViewsCaseDetail } from './journey/judgeViewsCaseDetail';
 import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessages';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { userSendsCaseMessageToJudge } from './journey/userSendsCaseMessageToJudge';
+import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
 
 const test = setupTest();
 
@@ -21,10 +21,10 @@ describe('Judge messages journey', () => {
   const message2Subject = `message 2 ${Date.now()}`;
 
   loginAs(test, 'petitionsclerk@example.com');
-  userSendsCaseMessageToJudge(test, message1Subject);
+  userSendsMessageToJudge(test, message1Subject);
 
   loginAs(test, 'docketclerk@example.com');
-  userSendsCaseMessageToJudge(test, message2Subject);
+  userSendsMessageToJudge(test, message2Subject);
 
   loginAs(test, 'judgeArmen@example.com');
   judgeViewsDashboardMessages(test, [message1Subject, message2Subject]);

@@ -4,6 +4,7 @@ const {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
 const {
   getDocumentQCInboxForSectionInteractor,
@@ -84,7 +85,7 @@ describe('createCase integration test', () => {
               filedBy: 'Petr. Rick Petitioner',
             },
             isInitializeCase: true,
-            section: 'petitions',
+            section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
             sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -119,7 +120,7 @@ describe('createCase integration test', () => {
 
     const docketsSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     expect(docketsSectionInbox).toMatchObject([
@@ -135,7 +136,7 @@ describe('createCase integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
         sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },

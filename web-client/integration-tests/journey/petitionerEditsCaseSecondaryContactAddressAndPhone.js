@@ -37,8 +37,12 @@ export const petitionerEditsCaseSecondaryContactAddressAndPhone = test => {
         state: test.getState(),
       },
     );
-    expect(
-      caseDetailFormatted.docketRecordWithDocument[4].record.description,
-    ).toContain('Notice of Change of Address and Telephone Number');
+
+    const noticeDocument = caseDetailFormatted.docketRecordWithDocument.find(
+      entry =>
+        entry.record.description ===
+        'Notice of Change of Address and Telephone Number for Mona Schultz',
+    );
+    expect(noticeDocument).toBeTruthy();
   });
 };

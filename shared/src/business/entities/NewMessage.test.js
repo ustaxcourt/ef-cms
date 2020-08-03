@@ -1,5 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { NewMessage } = require('./NewMessage');
+const { PETITIONS_SECTION } = require('./EntityConstants');
 
 describe('NewMessage', () => {
   describe('isValid', () => {
@@ -13,7 +14,7 @@ describe('NewMessage', () => {
           message: 'hello world',
           subject: 'hey!',
           to: 'bob',
-          toSection: 'petitions',
+          toSection: PETITIONS_SECTION,
           toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },
@@ -26,7 +27,7 @@ describe('NewMessage', () => {
         {
           subject: 'hey!',
           to: 'bob',
-          toSection: 'petitions',
+          toSection: PETITIONS_SECTION,
           toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },

@@ -1,5 +1,6 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
 const {
   saveSignedDocumentInteractor,
@@ -33,7 +34,7 @@ describe('saveSignedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId.mockReturnValue([
+      .getMessageThreadByParentId.mockReturnValue([
         {
           caseStatus: mockCase.status,
           caseTitle: 'Test Petitioner',
@@ -41,14 +42,14 @@ describe('saveSignedDocumentInteractor', () => {
           docketNumber: mockCase.docketNumber,
           docketNumberWithSuffix: mockCase.docketNumber,
           from: 'Test Petitionsclerk',
-          fromSection: 'petitions',
+          fromSection: PETITIONS_SECTION,
           fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
           message: 'hey there',
           messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
           parentMessageId: mockParentMessageId,
           subject: 'hello',
           to: 'Test Petitionsclerk2',
-          toSection: 'petitions',
+          toSection: PETITIONS_SECTION,
           toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
         },
       ]);
@@ -158,11 +159,11 @@ describe('saveSignedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage,
+      applicationContext.getPersistenceGateway().updateMessage,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage.mock
-        .calls[0][0].caseMessage,
+      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
+        .message,
     ).toMatchObject({
       attachments: [
         {

@@ -5,6 +5,7 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
+  PETITIONS_SECTION,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
@@ -106,9 +107,9 @@ describe('assignWorkItemsInteractor integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Test Petitionsclerk',
-        sentBySection: 'petitions',
+        sentBySection: PETITIONS_SECTION,
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);

@@ -1,12 +1,12 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CompleteCaseMessageModalDialog } from './CompleteCaseMessageModalDialog';
+import { CompleteMessageModalDialog } from './CompleteMessageModalDialog';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { ConfirmRemoveSignatureModal } from './ConfirmRemoveSignatureModal';
 import { ErrorNotification } from '../ErrorNotification';
-import { ForwardCaseMessageModalDialog } from './ForwardCaseMessageModalDialog';
+import { ForwardMessageModalDialog } from './ForwardMessageModalDialog';
 import { MessageDocument } from './MessageDocument';
-import { ReplyToCaseMessageModalDialog } from './ReplyToCaseMessageModalDialog';
+import { ReplyToMessageModalDialog } from './ReplyToMessageModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -253,15 +253,9 @@ export const MessageDetail = connect(
             </div>
           </div>
         </section>
-        {showModal === 'CompleteMessageModal' && (
-          <CompleteCaseMessageModalDialog />
-        )}
-        {showModal === 'ForwardMessageModal' && (
-          <ForwardCaseMessageModalDialog />
-        )}
-        {showModal === 'ReplyToMessageModal' && (
-          <ReplyToCaseMessageModalDialog />
-        )}
+        {showModal === 'CompleteMessageModal' && <CompleteMessageModalDialog />}
+        {showModal === 'ForwardMessageModal' && <ForwardMessageModalDialog />}
+        {showModal === 'ReplyToMessageModal' && <ReplyToMessageModalDialog />}
         {showModal === 'ConfirmEditModal' && (
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}

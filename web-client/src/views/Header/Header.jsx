@@ -62,9 +62,9 @@ const NavigationItems = (
           <a
             className={classNames(
               'usa-nav__link',
-              headerHelper.pageIsCaseMessages && 'usa-current',
+              headerHelper.pageIsMessages && 'usa-current',
             )}
-            href="/case-messages/my/inbox"
+            href="/messages/my/inbox"
             onClick={() => toggleMobileMenuSequence()}
           >
             Messages

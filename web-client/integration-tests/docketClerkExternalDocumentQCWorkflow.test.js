@@ -2,11 +2,11 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,
+  getCaseMessagesForCase,
   getFormattedDocumentQCMyInbox,
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
   getInboxCount,
-  getMySentFormattedCaseMessages,
   getNotifications,
   loginAs,
   setupTest,
@@ -54,6 +54,7 @@ describe('Create a work item', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
+    test.docketNumber = caseDetail.docketNumber;
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
@@ -141,13 +142,13 @@ describe('Create a work item', () => {
     );
   });
 
-  it('docket clerk completes QC of a document and sends a case message', async () => {
+  it('docket clerk completes QC of a document and sends a message', async () => {
     test.setState('modal.showModal', '');
 
-    await test.runSequence('openCompleteAndSendCaseMessageModalSequence');
+    await test.runSequence('openCompleteAndSendMessageModalSequence');
 
     expect(test.getState('modal.showModal')).toEqual(
-      'CreateCaseMessageModalDialog',
+      'CreateMessageModalDialog',
     );
 
     await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
@@ -161,7 +162,7 @@ describe('Create a work item', () => {
     });
 
     const updatedDocumentTitle = 'Motion in Limine';
-    const caseMessageBody = 'This is a message in a bottle';
+    const messageBody = 'This is a message in a bottle';
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -170,7 +171,7 @@ describe('Create a work item', () => {
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'message',
-      value: caseMessageBody,
+      value: messageBody,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
@@ -202,9 +203,10 @@ describe('Create a work item', () => {
 
     expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 
-    const mySentCaseMessages = await getMySentFormattedCaseMessages(test);
-    const qcDocumentMessage = mySentCaseMessages.inProgressMessages[0].message;
+    const formattedCaseMessages = await getCaseMessagesForCase(test);
+    const qcDocumentMessage =
+      formattedCaseMessages.inProgressMessages[0].message;
 
-    expect(qcDocumentMessage).toBe(caseMessageBody);
+    expect(qcDocumentMessage).toBe(messageBody);
   });
 });
