@@ -447,20 +447,23 @@ Document.VALIDATION_RULES = joi.object().keys({
       then: JoiValidationConstants.UUID.required(),
     })
     .description('The id of the user who applied the signature.'),
-  signedJudgeName: joi // TODO: limit string size
+  signedJudgeName: joi
+    .string()
+    .max(100)
     .when('isDraft', {
       is: false,
-      otherwise: joi.string().optional().allow(null),
+      otherwise: joi.optional().allow(null),
       then: joi.when('eventCode', {
         is: joi.string().valid(...EVENT_CODES_REQUIRING_JUDGE_SIGNATURE),
-        otherwise: joi.string().optional().allow(null),
-        then: joi.string().required(),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
       }),
     })
     .description('The judge who signed the document.'),
-  supportingDocument: joi.string().optional().allow(null), // TODO: limit string size
-  trialLocation: joi // TODO: limit string size
+  supportingDocument: joi.string().max(100).optional().allow(null),
+  trialLocation: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description(
