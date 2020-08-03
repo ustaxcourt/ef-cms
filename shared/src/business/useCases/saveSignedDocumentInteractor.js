@@ -110,24 +110,24 @@ exports.saveSignedDocumentInteractor = async ({
     if (parentMessageId) {
       const messages = await applicationContext
         .getPersistenceGateway()
-        .getCaseMessageThreadByParentId({
+        .getMessageThreadByParentId({
           applicationContext,
           parentMessageId: parentMessageId,
         });
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-      const caseMessageEntity = new Message(mostRecentMessage, {
+      const messageEntity = new Message(mostRecentMessage, {
         applicationContext,
       }).validate();
-      caseMessageEntity.addAttachment({
+      messageEntity.addAttachment({
         documentId: signedDocumentEntity.documentId,
         documentTitle: signedDocumentEntity.documentTitle,
       });
 
-      await applicationContext.getPersistenceGateway().updateCaseMessage({
+      await applicationContext.getPersistenceGateway().updateMessage({
         applicationContext,
-        caseMessage: caseMessageEntity.validate().toRawObject(),
+        message: messageEntity.validate().toRawObject(),
       });
     }
   } else {

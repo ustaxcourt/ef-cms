@@ -140,9 +140,6 @@ const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
-  createCaseMessage,
-} = require('../../shared/src/persistence/dynamo/messages/createCaseMessage');
-const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
@@ -157,6 +154,9 @@ const {
   formatNow,
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
+const {
+  createMessage,
+} = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
@@ -380,12 +380,6 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
-  getCaseMessagesByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/messages/getCaseMessagesByDocketNumber');
-const {
-  getCaseMessageThreadByParentId,
-} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageThreadByParentId');
-const {
   getCasesByDocketNumbers,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers');
 const {
@@ -503,8 +497,14 @@ const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
 const {
+  getMessagesByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber');
+const {
   getMessagesForCaseInteractor,
 } = require('../../shared/src/business/useCases/messages/getMessagesForCaseInteractor');
+const {
+  getMessageThreadByParentId,
+} = require('../../shared/src/persistence/dynamo/messages/getMessageThreadByParentId');
 const {
   getMessageThreadInteractor,
 } = require('../../shared/src/business/useCases/messages/getMessageThreadInteractor');
@@ -653,8 +653,8 @@ const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
-  markCaseMessageThreadRepliedTo,
-} = require('../../shared/src/persistence/dynamo/messages/markCaseMessageThreadRepliedTo');
+  markMessageThreadRepliedTo,
+} = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
 const {
   migrateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseDeadlineInteractor');
@@ -833,9 +833,6 @@ const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
 const {
-  updateCaseMessage,
-} = require('../../shared/src/persistence/dynamo/messages/updateCaseMessage');
-const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
@@ -874,6 +871,9 @@ const {
 const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
+const {
+  updateMessage,
+} = require('../../shared/src/persistence/dynamo/messages/updateMessage');
 const {
   updateOtherStatisticsInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor');
@@ -1187,9 +1187,9 @@ module.exports = appContextUser => {
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
-        createCaseMessage,
         createCaseTrialSortMappingRecords,
         createElasticsearchReindexRecord,
+        createMessage,
         createPractitionerUser,
         createSectionInboxRecord,
         createTrialSession,
@@ -1220,8 +1220,6 @@ module.exports = appContextUser => {
         getCaseByDocketNumber,
         getCaseDeadlinesByDocketNumber,
         getCaseInventoryReport,
-        getCaseMessageThreadByParentId,
-        getCaseMessagesByDocketNumber,
         getCasesByDocketNumbers,
         getCasesByLeadDocketNumber,
         getCasesByUser,
@@ -1241,6 +1239,8 @@ module.exports = appContextUser => {
         getIndexMappingLimit,
         getIndexedCasesForUser,
         getInternalUsers,
+        getMessageThreadByParentId,
+        getMessagesByDocketNumber,
         getOpenCasesByUser,
         getPractitionerByBarNumber,
         getPractitionersByName,
@@ -1266,7 +1266,7 @@ module.exports = appContextUser => {
         incrementCounter,
         indexRecord,
         isFileExists,
-        markCaseMessageThreadRepliedTo,
+        markMessageThreadRepliedTo,
         persistUser,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
@@ -1280,12 +1280,12 @@ module.exports = appContextUser => {
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
-        updateCaseMessage,
         updateCaseTrialSortMappingRecords,
         updateDocketRecord,
         updateDocument,
         updateDocumentProcessingStatus,
         updateHighPriorityCaseTrialSortMappingRecords,
+        updateMessage,
         updatePractitionerUser,
         updateTrialSession,
         updateTrialSessionWorkingCopy,

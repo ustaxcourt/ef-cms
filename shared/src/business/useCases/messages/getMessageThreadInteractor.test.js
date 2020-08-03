@@ -46,7 +46,7 @@ describe('getMessageThreadInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId.mockReturnValue([mockMessage]);
+      .getMessageThreadByParentId.mockReturnValue([mockMessage]);
 
     const returnedMessage = await getMessageThreadInteractor({
       applicationContext,
@@ -54,7 +54,7 @@ describe('getMessageThreadInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseMessageThreadByParentId,
+      applicationContext.getPersistenceGateway().getMessageThreadByParentId,
     ).toBeCalled();
     expect(returnedMessage).toMatchObject([mockMessage]);
   });
