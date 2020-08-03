@@ -145,7 +145,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx1g'
-      - image: elastic/elasticsearch:7.5.2
+      - image: elastic/elasticsearch:7.8.1
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -237,7 +237,7 @@ jobs:
         entrypoint: ["java", "-Djava.library.path=./DynamoDBLocal_lib", "-Xmx512m", "-jar", "DynamoDBLocal.jar", "-sharedDb"]
         environment:
           discovery.type: single-node
-      - image: elastic/elasticsearch:7.5.2
+      - image: elastic/elasticsearch:7.8.1
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xmx1g'
@@ -302,7 +302,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx1g'
-      - image: elastic/elasticsearch:7.5.2
+      - image: elastic/elasticsearch:7.8.1
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -367,7 +367,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx1g'
-      - image: elastic/elasticsearch:7.5.2
+      - image: elastic/elasticsearch:7.8.1
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
