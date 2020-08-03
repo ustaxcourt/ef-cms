@@ -16,7 +16,7 @@ export const headerHelper = (get, applicationContext) => {
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
   const isWorkQueue = currentPage.startsWith('WorkQueue');
-  const isCaseMessages = currentPage.startsWith('Messages');
+  const isMessages = currentPage.startsWith('Messages');
 
   const pageIsHome =
     isDashboard ||
@@ -25,7 +25,7 @@ export const headerHelper = (get, applicationContext) => {
       USER_ROLES.petitionsClerk,
       USER_ROLES.adc,
     ].includes(userRole) &&
-      isCaseMessages);
+      isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
 
@@ -33,11 +33,11 @@ export const headerHelper = (get, applicationContext) => {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
-    pageIsCaseMessages: isCaseMessages,
     pageIsDashboard:
       isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
     pageIsDocumentQC: isWorkQueue,
     pageIsHome,
+    pageIsMessages: isMessages,
     pageIsMyCases:
       isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,

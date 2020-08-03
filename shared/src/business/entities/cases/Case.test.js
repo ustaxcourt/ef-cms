@@ -1154,6 +1154,45 @@ describe('Case entity', () => {
     });
   });
 
+  describe('generateNextDocketRecordIndex', () => {
+    it('returns the next possible index based on the current docket record array', () => {
+      const caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [
+            {
+              index: 1,
+            },
+            {
+              index: 2,
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const nextIndex = caseRecord.generateNextDocketRecordIndex();
+      expect(nextIndex).toEqual(3);
+    });
+
+    it('returns an index of 1 if the docketRecord array is empty', () => {
+      const caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const nextIndex = caseRecord.generateNextDocketRecordIndex();
+      expect(nextIndex).toEqual(1);
+    });
+  });
+
   describe('addDocketRecord', () => {
     it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -1173,19 +1212,8 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord).toHaveLength(4);
       expect(caseRecord.docketRecord[3].description).toEqual('test');
       expect(caseRecord.docketRecord[3].index).toEqual(5);
-
-      caseRecord.addDocketRecord(
-        new DocketRecord(
-          {
-            description: 'some description',
-            filingDate: new Date().toISOString(),
-          },
-          { applicationContext },
-        ),
-      );
-
-      expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
+
     it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
@@ -1203,7 +1231,7 @@ describe('Case entity', () => {
     });
   });
   describe('updateDocketRecord', () => {
-    it('updates the docket record entity at the provided docketRecordIndex', () => {
+    it('updates the docket record entity with the provided docketRecordId', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -1217,8 +1245,7 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
-      caseRecord.updateDocketRecord(1, updatedDocketEntry);
-
+      caseRecord.updateDocketRecord(updatedDocketEntry);
       expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
       expect(caseRecord.docketRecord[1].description).toEqual(
         'second record now updated',
@@ -1226,6 +1253,7 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[1].index).toEqual(7);
     });
   });
+
   describe('updateDocketRecordEntry', () => {
     it('updates an existing docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -3120,6 +3148,7 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
+      userId: '"userId" is required',
     });
   });
 
@@ -3215,42 +3244,6 @@ describe('Case entity', () => {
       });
 
       expect(isAssociated).toBeFalsy();
-    });
-  });
-
-  describe('DocketRecord indices must be unique', () => {
-    it('identifies duplicate values in docket record indices', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          docketRecord: [
-            {
-              description: 'first record',
-              documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-              eventCode: 'P',
-              filingDate: '2018-03-01T00:01:00.000Z',
-              index: 1,
-            },
-            {
-              description: 'second record',
-              documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-              filingDate: '2018-03-01T00:02:00.000Z',
-              index: 1,
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(caseEntity.getFormattedValidationErrors()).toEqual({
-        'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
-      });
     });
   });
 

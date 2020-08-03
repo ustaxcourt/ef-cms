@@ -18,7 +18,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns viewerDocumentToDisplay null if there are no attachments on the case message', async () => {
+  it('returns viewerDocumentToDisplay null if there are no attachments on the message', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {

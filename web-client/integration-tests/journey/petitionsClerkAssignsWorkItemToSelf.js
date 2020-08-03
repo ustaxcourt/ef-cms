@@ -1,3 +1,7 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
+
 export const petitionsClerkAssignsWorkItemToSelf = test => {
   return it('Petitions clerk assigns work item to self', async () => {
     // find the work item that is part of an Petition upload
@@ -52,7 +56,7 @@ export const petitionsClerkAssignsWorkItemToSelf = test => {
     );
     expect(assignedWorkItem).toMatchObject({
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     // the work item should appear in the individual work queue
@@ -62,7 +66,7 @@ export const petitionsClerkAssignsWorkItemToSelf = test => {
     );
     expect(movedWorkItem).toMatchObject({
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
   });
 };

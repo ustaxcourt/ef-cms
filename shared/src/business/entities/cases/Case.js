@@ -36,6 +36,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  shouldGenerateDocketRecordIndex,
+} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -446,6 +449,7 @@ Case.VALIDATION_RULES = {
     .description('Last date that the petitioner is allowed to file before.'),
   irsPractitioners: joi
     .array()
+    .items(IrsPractitioner.VALIDATION_RULES)
     .optional()
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
@@ -570,6 +574,7 @@ Case.VALIDATION_RULES = {
     .description('Where the petitioner would prefer to hold the case trial.'),
   privatePractitioners: joi
     .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
@@ -642,10 +647,7 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: joi
-    .string()
-    .max(50)
-    .optional()
+  userId: JoiValidationConstants.UUID.required()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
 };
@@ -997,18 +999,33 @@ Case.prototype.setRequestForTrialDocketRecord = function (
 };
 
 /**
+ * gets the next possible (unused) index for the docket record
+ *
+ * @returns {number} the next docket record index
+ */
+Case.prototype.generateNextDocketRecordIndex = function () {
+  const recordsWithIndex = [...this.docketRecord]
+    .filter(record => record.index !== undefined)
+    .sort((a, b) => a.index - b.index);
+  const nextIndex = recordsWithIndex.length + 1;
+  return nextIndex;
+};
+
+/**
  *
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
  * @returns {Case} the updated case entity
  */
 Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  const nextIndex =
-    this.docketRecord.reduce(
-      (maxIndex, docketRecord, currentIndex) =>
-        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
-      0,
-    ) + 1;
-  docketRecordEntity.index = docketRecordEntity.index || nextIndex;
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: docketRecordEntity,
+  });
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
@@ -1022,6 +1039,16 @@ Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
     entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
+
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: foundEntry,
+  });
+
+  if (updateIndex) {
+    updatedDocketEntry.index = this.generateNextDocketRecordIndex();
+  }
+
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
 };
@@ -1042,14 +1069,19 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 
 /**
  *
- * @param {number} docketRecordIndex the index of the docket record to update
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
+ * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function (
-  docketRecordIndex,
-  docketRecordEntity,
-) {
+Case.prototype.updateDocketRecord = function (docketRecordEntity, updateIndex) {
+  const docketRecordIndex = this.docketRecord.findIndex(
+    entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
+  );
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord[docketRecordIndex] = docketRecordEntity;
   return this;
 };

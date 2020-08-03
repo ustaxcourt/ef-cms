@@ -48,7 +48,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         eventCode: 'P',
         filedBy: 'Test User',
         filingDate: '2019-01-01T00:01:00.000Z',
-        index: 0,
+        index: 1,
       },
       {
         description: 'Test Entry 1',
@@ -57,14 +57,14 @@ describe('updateDocketEntryMetaInteractor', () => {
         eventCode: 'O',
         filedBy: 'Test User',
         filingDate: '2019-01-02T00:01:00.000Z',
-        index: 1,
+        index: 2,
       },
       {
         description: 'Test Entry 2',
         eventCode: 'O',
         filedBy: 'Test User',
         filingDate: '2019-01-02T00:01:00.000Z',
-        index: 2,
+        index: 3,
       },
     ];
 
@@ -134,11 +134,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         action: 'Updated Action',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     expect(updatedDocketEntry.action).toEqual('Updated Action');
   });
@@ -152,11 +151,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         description: 'Updated Description',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     expect(updatedDocketEntry.description).toEqual('Updated Description');
   });
@@ -170,11 +168,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         partyPrimary: true,
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
@@ -192,11 +189,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         filingDate: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     expect(updatedDocketEntry.filingDate).toEqual('2020-01-01T00:01:00.000Z');
   });
@@ -210,11 +206,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         servedAt: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
@@ -232,11 +227,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         otherFilingParty: 'Brianna Noble',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
@@ -254,11 +248,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         freeText: undefined,
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
+      record => record.index === 1,
     );
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
@@ -275,7 +268,6 @@ describe('updateDocketEntryMetaInteractor', () => {
         servedAt: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     expect(
@@ -292,7 +284,6 @@ describe('updateDocketEntryMetaInteractor', () => {
         filingDate: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     expect(
@@ -310,7 +301,6 @@ describe('updateDocketEntryMetaInteractor', () => {
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     expect(
@@ -327,7 +317,6 @@ describe('updateDocketEntryMetaInteractor', () => {
         description: 'Updated Description',
       },
       docketNumber: '101-20',
-      docketRecordIndex: 0,
     });
 
     expect(
@@ -349,7 +338,6 @@ describe('updateDocketEntryMetaInteractor', () => {
           filingDate: '2020-02-03T08:06:07.539Z',
         },
         docketNumber: '101-20',
-        docketRecordIndex: 2,
       }),
     ).resolves.not.toThrow();
   });

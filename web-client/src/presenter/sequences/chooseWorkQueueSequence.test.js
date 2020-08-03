@@ -4,10 +4,13 @@ import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
 import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
+  const { PETITIONS_SECTION } = applicationContext.getConstants();
   let test;
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({ section: 'petitions' });
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: PETITIONS_SECTION,
+    });
     applicationContext
       .getUseCases()
       .getDocumentQCInboxForSectionInteractor.mockReturnValue([

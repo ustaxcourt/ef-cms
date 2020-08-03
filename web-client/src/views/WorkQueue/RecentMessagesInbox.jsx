@@ -41,7 +41,7 @@ export const RecentMessagesInbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
+                        href={`/messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
                       >
                         {item.subject}
                       </Button>
