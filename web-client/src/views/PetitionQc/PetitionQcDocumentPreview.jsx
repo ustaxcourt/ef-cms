@@ -9,6 +9,7 @@ import React from 'react';
 export const PetitionQcDocumentPreview = connect(
   {
     constants: state.constants,
+    isPetitionFile: state.petitionQcHelper.isPetitionFile,
     openConfirmDeletePDFModalSequence:
       sequences.openConfirmDeletePDFModalSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
@@ -18,6 +19,7 @@ export const PetitionQcDocumentPreview = connect(
   },
   function PetitionQcDocumentPreview({
     documentTabs,
+    isPetitionFile,
     openConfirmDeletePDFModalSequence,
     pdfPreviewUrl,
     selectDocumentForPetitionQcPreviewSequence,
@@ -36,8 +38,7 @@ export const PetitionQcDocumentPreview = connect(
             />
           )}
           <div className="padding-top-2">
-            {/* helper.isPetitionFile */}
-            {pdfPreviewUrl && (
+            {!isPetitionFile && pdfPreviewUrl && (
               <Button
                 link
                 secondary
