@@ -2,11 +2,11 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,
+  getCaseMessagesForCase,
   getFormattedDocumentQCMyInbox,
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
   getInboxCount,
-  getMySentFormattedMessages,
   getNotifications,
   loginAs,
   setupTest,
@@ -54,6 +54,7 @@ describe('Create a work item', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
+    test.docketNumber = caseDetail.docketNumber;
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
@@ -202,8 +203,9 @@ describe('Create a work item', () => {
 
     expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 
-    const mySentMessages = await getMySentFormattedMessages(test);
-    const qcDocumentMessage = mySentMessages.inProgressMessages[0].message;
+    const formattedCaseMessages = await getCaseMessagesForCase(test);
+    const qcDocumentMessage =
+      formattedCaseMessages.inProgressMessages[0].message;
 
     expect(qcDocumentMessage).toBe(messageBody);
   });
