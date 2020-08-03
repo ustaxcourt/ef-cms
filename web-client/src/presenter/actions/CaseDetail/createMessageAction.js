@@ -5,7 +5,7 @@ export const createMessageAction = async ({ applicationContext, get }) => {
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  await applicationContext.getUseCases().createCaseMessageInteractor({
+  await applicationContext.getUseCases().createMessageInteractor({
     applicationContext,
     docketNumber,
     ...form,
