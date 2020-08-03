@@ -3,7 +3,6 @@ import { ConfirmDeletePDFModal } from './ConfirmDeletePdfModal';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
-  DeletePDFModal,
   EmptyHopperModal,
   ScanErrorModal,
   UnfinishedScansModal,

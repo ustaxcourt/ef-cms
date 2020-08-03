@@ -36,6 +36,7 @@ export const PetitionQcDocumentPreview = connect(
             />
           )}
           <div className="padding-top-2">
+            {/* helper.isPetitionFile */}
             {pdfPreviewUrl && (
               <Button
                 link
