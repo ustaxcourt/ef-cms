@@ -10,28 +10,28 @@ export const CreateMessageModalDialog = connect(
     constants: state.constants,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
-    updateChambersInCreateCaseMessageModalSequence:
-      sequences.updateChambersInCreateCaseMessageModalSequence,
+    updateChambersInCreateMessageModalSequence:
+      sequences.updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence: sequences.updateModalFormValueSequence,
-    updateSectionInCreateCaseMessageModalSequence:
-      sequences.updateSectionInCreateCaseMessageModalSequence,
+    updateSectionInCreateMessageModalSequence:
+      sequences.updateSectionInCreateMessageModalSequence,
     users: state.users,
-    validateCreateCaseMessageInModalSequence:
-      sequences.validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence:
+      sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   function CreateMessageModalDialog({
     constants,
     form,
-    onConfirmSequence = 'createCaseMessageSequence',
+    onConfirmSequence = 'createMessageSequence',
     showChambersSelect,
     title = 'Create Message',
-    updateChambersInCreateCaseMessageModalSequence,
+    updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence,
-    updateSectionInCreateCaseMessageModalSequence,
+    updateSectionInCreateMessageModalSequence,
     users,
-    validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence,
     validationErrors,
     workQueueSectionHelper,
   }) {
@@ -60,11 +60,11 @@ export const CreateMessageModalDialog = connect(
             id="toSection"
             name="toSection"
             onChange={e => {
-              updateSectionInCreateCaseMessageModalSequence({
+              updateSectionInCreateMessageModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -88,11 +88,11 @@ export const CreateMessageModalDialog = connect(
               id="chambers"
               name="chambers"
               onChange={e => {
-                updateChambersInCreateCaseMessageModalSequence({
+                updateChambersInCreateMessageModalSequence({
                   key: 'toSection',
                   value: e.target.value,
                 });
-                validateCreateCaseMessageInModalSequence();
+                validateCreateMessageInModalSequence();
               }}
             >
               <option value="">- Select -</option>
@@ -120,7 +120,7 @@ export const CreateMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -147,7 +147,7 @@ export const CreateMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           />
         </FormGroup>
@@ -165,7 +165,7 @@ export const CreateMessageModalDialog = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateCreateCaseMessageInModalSequence();
+              validateCreateMessageInModalSequence();
             }}
           />
         </FormGroup>

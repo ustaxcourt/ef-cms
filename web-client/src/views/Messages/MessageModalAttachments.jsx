@@ -18,18 +18,18 @@ export const MessageModalAttachments = connect(
   {
     caseMessageModalHelper: state.caseMessageModalHelper,
     form: state.modal.form,
-    updateCaseMessageModalAttachmentsSequence:
-      sequences.updateCaseMessageModalAttachmentsSequence,
+    updateMessageModalAttachmentsSequence:
+      sequences.updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
-    validateCreateCaseMessageInModalSequence:
-      sequences.validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence:
+      sequences.validateCreateMessageInModalSequence,
   },
   function MessageModalAttachments({
     caseMessageModalHelper,
     form,
-    updateCaseMessageModalAttachmentsSequence,
+    updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence,
-    validateCreateCaseMessageInModalSequence,
+    validateCreateMessageInModalSequence,
   }) {
     return (
       <>
@@ -66,14 +66,14 @@ export const MessageModalAttachments = connect(
               id="document"
               name="document"
               onChange={e => {
-                updateCaseMessageModalAttachmentsSequence({
+                updateMessageModalAttachmentsSequence({
                   documentId: e.target.value,
                 });
                 updateScreenMetadataSequence({
                   key: 'showAddDocumentForm',
                   value: false,
                 });
-                validateCreateCaseMessageInModalSequence();
+                validateCreateMessageInModalSequence();
               }}
             >
               <option value="">- Select -</option>

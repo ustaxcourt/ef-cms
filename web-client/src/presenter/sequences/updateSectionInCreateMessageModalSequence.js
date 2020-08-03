@@ -6,7 +6,7 @@ import { setModalFormValueAction } from '../actions/setModalFormValueAction';
 import { setPropsForUpdateSectionInCreateCaseModalAction } from '../actions/setPropsForUpdateSectionInCreateCaseModalAction';
 import { unsetCreateCaseMessageModalForChambersSelectAction } from '../actions/unsetCreateCaseMessageModalForChambersSelectAction';
 
-export const updateSectionInCreateCaseMessageModalSequence = [
+export const updateSectionInCreateMessageModalSequence = [
   setModalFormValueAction,
   setPropsForUpdateSectionInCreateCaseModalAction,
   isChambersPathAction,

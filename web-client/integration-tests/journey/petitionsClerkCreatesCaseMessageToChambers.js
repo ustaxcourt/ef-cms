@@ -19,9 +19,9 @@ export const petitionsClerkCreatesCaseMessageToChambers = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openCreateCaseMessageModalSequence');
+    await test.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
+    await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
       value: 'armensChambers',
     });
@@ -34,7 +34,7 @@ export const petitionsClerkCreatesCaseMessageToChambers = test => {
     const messageDocument = getHelper().documents[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
-    await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
+    await test.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: messageDocument.documentId,
     });
 
@@ -54,7 +54,7 @@ export const petitionsClerkCreatesCaseMessageToChambers = test => {
       value: 'how ya doin?',
     });
 
-    await test.runSequence('createCaseMessageSequence');
+    await test.runSequence('createMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
