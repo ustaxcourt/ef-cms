@@ -467,7 +467,7 @@ Document.VALIDATION_RULES = joi.object().keys({
       'An optional trial location used when generating a fully concatenated document title.',
     ),
   userId: JoiValidationConstants.UUID.required(),
-  workItem: joi.object().optional(),
+  workItem: WorkItem.VALIDATION_RULES.optional(),
 });
 
 joiValidationDecorator(Document, Document.VALIDATION_RULES);
