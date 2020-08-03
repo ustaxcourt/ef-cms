@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmDeletePDFModal } from '../ConfirmDeletePdfModal';
+import { ConfirmReplacePetitionModal } from '../ConfirmReplacePetitionModal';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -12,6 +13,8 @@ export const PetitionQcDocumentPreview = connect(
     isPetitionFile: state.petitionQcHelper.isPetitionFile,
     openConfirmDeletePDFModalSequence:
       sequences.openConfirmDeletePDFModalSequence,
+    openConfirmReplacePetitionPdfSequence:
+      sequences.openConfirmReplacePetitionPdfSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
     selectDocumentForPetitionQcPreviewSequence:
       sequences.selectDocumentForPetitionQcPreviewSequence,
@@ -21,6 +24,7 @@ export const PetitionQcDocumentPreview = connect(
     documentTabs,
     isPetitionFile,
     openConfirmDeletePDFModalSequence,
+    openConfirmReplacePetitionPdfSequence,
     pdfPreviewUrl,
     selectDocumentForPetitionQcPreviewSequence,
     showModal,
@@ -37,14 +41,22 @@ export const PetitionQcDocumentPreview = connect(
               title="The current PDF will be permanently removed, and you will need to add a new PDF."
             />
           )}
+
+          {showModal === 'ConfirmReplacePetitionModal' && (
+            <ConfirmReplacePetitionModal confirmSequence="removePetitionForReplacementSequence" />
+          )}
           <div className="padding-top-2">
-            {!isPetitionFile && pdfPreviewUrl && (
+            {pdfPreviewUrl && (
               <Button
                 link
                 secondary
                 className="red-warning push-right"
                 onClick={() => {
-                  openConfirmDeletePDFModalSequence();
+                  if (isPetitionFile) {
+                    openConfirmReplacePetitionPdfSequence();
+                  } else {
+                    openConfirmDeletePDFModalSequence();
+                  }
                 }}
               >
                 Remove PDF

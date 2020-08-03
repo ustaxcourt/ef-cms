@@ -3,5 +3,5 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 
 export const openConfirmReplacePetitionPdfSequence = [
   clearModalStateAction,
-  setShowModalFactoryAction('ConfirmRescanBatchModal'),
+  setShowModalFactoryAction('ConfirmReplacePetitionModal'),
 ];

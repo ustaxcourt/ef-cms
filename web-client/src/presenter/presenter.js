@@ -191,6 +191,7 @@ import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirm
 import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRemoveSignatureModalSequence } from './sequences/openConfirmRemoveSignatureModalSequence';
+import { openConfirmReplacePetitionPdfSequence } from './sequences/openConfirmReplacePetitionPdfSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openConfirmServeCourtIssuedDocumentSequence } from './sequences/openConfirmServeCourtIssuedDocumentSequence';
 import { openConfirmServePaperFiledDocumentSequence } from './sequences/openConfirmServePaperFiledDocumentSequence';
@@ -227,6 +228,7 @@ import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removeDraftDocumentSequence } from './sequences/removeDraftDocumentSequence';
+import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
 import { removeSignatureSequence } from './sequences/removeSignatureSequence';
@@ -490,6 +492,7 @@ export const presenter = {
     deleteJudgesCaseNoteFromCaseDetailSequence,
     deleteOtherStatisticsSequence,
     deleteTrialSessionSequence,
+    deleteUploadedPdfSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
     dismissAlertSequence,
@@ -615,6 +618,7 @@ export const presenter = {
     openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRemoveSignatureModalSequence,
+    openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence,
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
@@ -646,12 +650,12 @@ export const presenter = {
     prioritizeCaseSequence,
     redirectToLoginSequence,
     refreshPdfSequence,
-    deleteUploadedPdfSequence,
     refreshStatisticsSequence,
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
     removeDraftDocumentSequence,
+    removePetitionForReplacementSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
     removeSignatureSequence,
