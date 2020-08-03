@@ -647,7 +647,7 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: JoiValidationConstants.UUID.optional()
+  userId: JoiValidationConstants.UUID.required()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
 };

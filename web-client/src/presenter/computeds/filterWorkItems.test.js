@@ -1,12 +1,13 @@
-import {
-  CASE_STATUS_TYPES,
+import { applicationContext } from '../../applicationContext';
+import { filterWorkItems } from './formattedWorkQueue';
+
+const {
   DOCKET_SECTION,
   IRS_SYSTEM_SECTION,
   PETITIONS_SECTION,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
-import { filterWorkItems } from './formattedWorkQueue';
+  STATUS_TYPES: CASE_STATUS_TYPES,
+  USER_ROLES: ROLES,
+} = applicationContext.getConstants();
 
 const MY_DOCUMENT_QC_IN_PROGRESS = {
   workQueueToDisplay: {
@@ -38,13 +39,13 @@ const SECTION_DOCUMENT_QC_OUTBOX = {
 
 const petitionsClerk1 = {
   role: ROLES.petitionsClerk,
-  section: 'petitions',
+  section: PETITIONS_SECTION,
   userId: 'p1',
 };
 
 const petitionsClerk2 = {
   role: ROLES.petitionsClerk,
-  section: 'petitions',
+  section: PETITIONS_SECTION,
   userId: 'p2',
 };
 

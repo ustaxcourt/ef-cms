@@ -1,9 +1,15 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
+const {
+  CASE_STATUS_TYPES,
+  PETITIONS_SECTION,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
+  UnauthorizedError,
+} = require('../../../../../shared/src/errors/errors');
 const { replyToMessageInteractor } = require('./replyToMessageInteractor');
-const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('replyToMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -31,7 +37,7 @@ describe('replyToMessageInteractor', () => {
       message: "How's it going?",
       parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
       subject: 'Hey!',
-      toSection: 'petitions',
+      toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
     applicationContext.getCurrentUser.mockReturnValue({
@@ -43,13 +49,13 @@ describe('replyToMessageInteractor', () => {
       .getUserById.mockReturnValueOnce({
         name: 'Test Petitionsclerk',
         role: ROLES.petitionsClerk,
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       })
       .mockReturnValueOnce({
         name: 'Test Petitionsclerk2',
         role: ROLES.petitionsClerk,
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
       });
 
@@ -80,7 +86,7 @@ describe('replyToMessageInteractor', () => {
       docketNumber: '101-20',
       docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
-      fromSection: 'petitions',
+      fromSection: PETITIONS_SECTION,
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       to: 'Test Petitionsclerk2',
     });

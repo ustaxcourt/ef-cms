@@ -18,13 +18,14 @@ describe('formatted work queue computed', () => {
     CHIEF_JUDGE,
     DOCKET_NUMBER_SUFFIXES,
     DOCUMENT_RELATIONSHIPS,
+    PETITIONS_SECTION,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
   const petitionsClerkUser = {
     role: USER_ROLES.petitionsClerk,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     userId: 'abc',
   };
 
@@ -54,7 +55,7 @@ describe('formatted work queue computed', () => {
       documentType: 'Answer',
     },
     isCourtIssuedDocument: false,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     selected: true,
     sentBy: 'respondent',
     showComplete: true,
@@ -93,7 +94,7 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
     workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
@@ -584,7 +585,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: true,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -609,7 +610,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -863,7 +864,7 @@ describe('formatted work queue computed', () => {
             servedAt: null,
           },
           isInitializeCase: false,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         workQueueToDisplay: {
           box: 'inProgress',
