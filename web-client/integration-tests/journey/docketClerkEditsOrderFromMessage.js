@@ -28,7 +28,7 @@ export const docketClerkEditsOrderFromMessage = test => {
       docketNumber: test.docketNumber,
       documentIdToEdit: orderDocument.documentId,
       parentMessageId: test.parentMessageId,
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
     await test.runSequence('navigateToEditOrderSequence');

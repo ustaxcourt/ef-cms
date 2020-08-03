@@ -55,9 +55,6 @@ const {
   getSurvivingSpouseContact,
 } = require('../business/entities/contacts/SurvivingSpouseContact');
 const {
-  InitialWorkItemMessage,
-} = require('../business/entities/InitialWorkItemMessage');
-const {
   OrderWithoutBody,
 } = require('../business/entities/orders/OrderWithoutBody');
 const {
@@ -75,7 +72,6 @@ const { Correspondence } = require('../business/entities/Correspondence');
 const { COUNTRY_TYPES } = require('../business/entities/EntityConstants');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
-const { ForwardMessage } = require('../business/entities/ForwardMessage');
 const { IrsPractitioner } = require('../business/entities/IrsPractitioner');
 const { Message } = require('../business/entities/Message');
 const { NewMessage } = require('../business/entities/NewMessage');
@@ -387,8 +383,6 @@ generateMarkdownSchema(Message, 'Message');
 generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
-generateMarkdownSchema(ForwardMessage, 'ForwardMessage');
-generateMarkdownSchema(InitialWorkItemMessage, 'InitialWorkItemMessage');
 generateMarkdownSchema(IrsPractitioner, 'IrsPractitioner');
 generateMarkdownSchema(NewMessage, 'NewMessage');
 generateMarkdownSchema(NewPractitioner, 'NewPractitioner');

@@ -4,7 +4,7 @@ const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
 export const chambersUserSkipSigningOrder = test => {
   return it('Chambers user adds order and skips signing', async () => {
-    await test.runSequence('openCreateMessageModalSequence');
+    await test.runSequence('openCreateOrderChooseTypeModalSequence');
 
     await test.runSequence('submitCreateOrderModalSequence');
 
