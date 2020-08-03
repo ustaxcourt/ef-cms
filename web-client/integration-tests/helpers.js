@@ -69,10 +69,9 @@ export const getFormattedDocumentQCMyInbox = async test => {
   });
 };
 
-export const getMySentFormattedCaseMessages = async test => {
-  await test.runSequence('gotoMessagesSequence', {
-    box: 'outbox',
-    queue: 'my',
+export const getCaseMessagesForCase = async test => {
+  await test.runSequence('gotoCaseDetailSequence', {
+    docketNumber: test.docketNumber,
   });
   return runCompute(formattedCaseMessages, {
     state: test.getState(),
