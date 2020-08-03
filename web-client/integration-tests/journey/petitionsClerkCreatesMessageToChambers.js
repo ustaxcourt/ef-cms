@@ -1,20 +1,18 @@
-import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
+import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseMessageModalHelper = withAppContextDecorator(
-  caseMessageModalHelperComputed,
-);
+const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const petitionsClerkCreatesCaseMessageToChambers = test => {
+export const petitionsClerkCreatesMessageToChambers = test => {
   const getHelper = () => {
-    return runCompute(caseMessageModalHelper, {
+    return runCompute(messageModalHelper, {
       state: test.getState(),
     });
   };
 
-  return it('Petitions clerk sends a case message to armensChambers', async () => {
+  return it('Petitions clerk sends a message to armensChambers', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });

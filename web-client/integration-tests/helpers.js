@@ -14,7 +14,7 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
+import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -37,9 +37,7 @@ import riotRoute from 'riot-route';
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
-const formattedCaseMessages = withAppContextDecorator(
-  formattedCaseMessagesComputed,
-);
+const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 Object.assign(applicationContext, {
@@ -69,12 +67,12 @@ export const getFormattedDocumentQCMyInbox = async test => {
   });
 };
 
-export const getMySentFormattedCaseMessages = async test => {
+export const getMySentFormattedMessages = async test => {
   await test.runSequence('gotoMessagesSequence', {
     box: 'outbox',
     queue: 'my',
   });
-  return runCompute(formattedCaseMessages, {
+  return runCompute(formattedMessages, {
     state: test.getState(),
   });
 };
