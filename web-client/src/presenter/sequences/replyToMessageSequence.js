@@ -4,23 +4,23 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
-import { replyToCaseMessageAction } from '../actions/CaseDetail/replyToCaseMessageAction';
+import { replyToMessageAction } from '../actions/CaseDetail/replyToMessageAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
+import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';
 
 export const replyToMessageSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   startShowValidationAction,
-  validateCreateCaseMessageAction,
+  validateCreateMessageAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
-      replyToCaseMessageAction,
+      replyToMessageAction,
       stopShowValidationAction,
       setAlertSuccessAction,
       clearScreenMetadataAction,
