@@ -351,7 +351,6 @@ import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/upda
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
-import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
@@ -392,8 +391,6 @@ import { validateDocketRecordSequence } from './sequences/validateDocketRecordSe
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
 import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
-import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
-import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
@@ -776,7 +773,6 @@ export const presenter = {
     updateFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
     updateMessageValueInModalSequence,
-    updateMessageValueSequence,
     updateModalFormValueSequence,
     updateModalValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
@@ -817,8 +813,6 @@ export const presenter = {
     validateEditIrsPractitionersSequence,
     validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,
-    validateInitialWorkItemMessageInModalSequence,
-    validateInitialWorkItemMessageSequence,
     validateNoteSequence,
     validateOpinionSearchSequence,
     validateOrderSearchSequence,

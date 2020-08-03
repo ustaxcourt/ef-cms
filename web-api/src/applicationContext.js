@@ -648,7 +648,6 @@ const {
 } = require('../../shared/src/business/entities/IrsPractitioner');
 const {
   isAuthorized,
-  ROLE_PERMISSIONS,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
   isFileExists,
@@ -1549,8 +1548,6 @@ module.exports = appContextUser => {
     },
     initHoneybadger,
     isAuthorized,
-    isAuthorizedForWorkItems: () =>
-      isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
     logger: {
       error: value => {
         // eslint-disable-next-line no-console
