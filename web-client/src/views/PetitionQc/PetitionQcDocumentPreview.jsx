@@ -1,23 +1,53 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmDeletePDFModal } from '../ConfirmDeletePdfModal';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PetitionQcDocumentPreview = connect(
   {
+    constants: state.constants,
+    openConfirmDeletePDFModalSequence:
+      sequences.openConfirmDeletePDFModalSequence,
+    pdfPreviewUrl: state.pdfPreviewUrl,
     selectDocumentForPetitionQcPreviewSequence:
       sequences.selectDocumentForPetitionQcPreviewSequence,
+    showModal: state.modal.showModal,
   },
   function PetitionQcDocumentPreview({
     documentTabs,
+    openConfirmDeletePDFModalSequence,
+    pdfPreviewUrl,
     selectDocumentForPetitionQcPreviewSequence,
+    showModal,
     title,
   }) {
     const renderIframePreview = () => {
       return (
         <>
-          <div className="padding-top-4">
+          {showModal === 'ConfirmDeletePDFModal' && (
+            <ConfirmDeletePDFModal
+              confirmSequence="deleteUploadedPdfSequence"
+              confirmText="Yes, Remove"
+              modalContent="This action cannot be undone."
+              title="The current PDF will be permanently removed, and you will need to add a new PDF."
+            />
+          )}
+          <div className="padding-top-2">
+            {pdfPreviewUrl && (
+              <Button
+                link
+                secondary
+                className="red-warning push-right"
+                onClick={() => {
+                  openConfirmDeletePDFModalSequence();
+                }}
+              >
+                Remove PDF
+              </Button>
+            )}
             <PdfPreview noDocumentText="No document added" />
           </div>
         </>
