@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  PETITIONS_SECTION,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00010-case-message-docket-number-with-suffix');
@@ -20,7 +21,7 @@ describe('case message docketNumberWithSuffix migration', () => {
       createdAt: '2019-01-01T17:29:13.122Z',
       docketNumber: '123-45',
       from: 'gg',
-      fromSection: 'petitions',
+      fromSection: PETITIONS_SECTION,
       fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       isRepliedTo: false,
       message: 'hello world',
@@ -30,7 +31,7 @@ describe('case message docketNumberWithSuffix migration', () => {
       sk: 'message|5a79c990-cc6c-4b99-8fca-8e31f2d9e78a',
       subject: 'hey!',
       to: 'bob',
-      toSection: 'petitions',
+      toSection: PETITIONS_SECTION,
       toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     };
 

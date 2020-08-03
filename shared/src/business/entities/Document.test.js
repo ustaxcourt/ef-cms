@@ -6,6 +6,7 @@ const {
   INTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
+  PETITIONS_SECTION,
   ROLES,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -200,7 +201,7 @@ describe('Document entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          section: 'petitions',
+          section: PETITIONS_SECTION,
           sentBy: 'bob',
         },
         { applicationContext },
