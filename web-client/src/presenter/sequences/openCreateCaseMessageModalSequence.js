@@ -7,6 +7,6 @@ export const openCreateCaseMessageModalSequence = showProgressSequenceDecorator(
   [
     clearModalStateAction,
     setCreateMessageModalDialogModalStateAction,
-    setShowModalFactoryAction('CreateCaseMessageModal'),
+    setShowModalFactoryAction('CreateMessageModal'),
   ],
 );

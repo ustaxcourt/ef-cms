@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesSectionOutbox = connect(
+export const MessagesIndividualInbox = connect(
   { formattedMessages: state.formattedMessages.messages },
-  function CaseMessagesIndividualInbox({ formattedMessages }) {
+  function MessagesIndividualInbox({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -14,19 +14,18 @@ export const CaseMessagesSectionOutbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 Docket No.
               </th>
-              <th className="small">Sent</th>
+              <th className="small">Received</th>
               <th>Message</th>
               <th>Case Title</th>
               <th>Case Status</th>
-              <th>To</th>
               <th>From</th>
-              <th>Section</th>
+              <th className="small">Section</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
             return (
               <tbody key={idx}>
-                <tr>
+                <tr key={idx}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
@@ -53,10 +52,9 @@ export const CaseMessagesSectionOutbox = connect(
                   </td>
                   <td className="message-queue-row">{message.caseTitle}</td>
                   <td className="message-queue-row">{message.caseStatus}</td>
-                  <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
-                    {message.toSection}
+                    {message.fromSection}
                   </td>
                 </tr>
               </tbody>

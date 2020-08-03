@@ -1,11 +1,11 @@
-import { CaseMessageModalAttachments } from './CaseMessageModalAttachments';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { MessageModalAttachments } from './MessageModalAttachments';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const ReplyToCaseMessageModalDialog = connect(
+export const ReplyToMessageModalDialog = connect(
   {
     form: state.modal.form,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -13,7 +13,7 @@ export const ReplyToCaseMessageModalDialog = connect(
       sequences.validateCreateCaseMessageInModalSequence,
     validationErrors: state.validationErrors,
   },
-  function ReplyToCaseMessageModalDialog({
+  function ReplyToMessageModalDialog({
     form,
     updateModalValueSequence,
     validateCreateCaseMessageInModalSequence,
@@ -71,7 +71,7 @@ export const ReplyToCaseMessageModalDialog = connect(
           />
         </FormGroup>
 
-        <CaseMessageModalAttachments />
+        <MessageModalAttachments />
       </ConfirmModal>
     );
   },
