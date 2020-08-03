@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesIndividualOutbox = connect(
+export const MessagesIndividualOutbox = connect(
   { formattedMessages: state.formattedMessages.messages },
-  function CaseMessagesIndividualInbox({ formattedMessages }) {
+  function MessagesIndividualOutbox({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">

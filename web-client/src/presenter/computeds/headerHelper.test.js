@@ -151,7 +151,7 @@ describe('headerHelper', () => {
         workQueueToDisplay: {},
       },
     });
-    expect(result.pageIsCaseMessages).toBeTruthy();
+    expect(result.pageIsMessages).toBeTruthy();
   });
   it('should know when the page is My Cases', () => {
     const result = runCompute(headerHelper, {

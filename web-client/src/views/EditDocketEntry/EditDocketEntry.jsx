@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
+import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -107,8 +107,8 @@ export const EditDocketEntry = connect(
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
-        {showModal === 'CreateCaseMessageModalDialog' && (
-          <CreateCaseMessageModalDialog
+        {showModal === 'CreateMessageModalDialog' && (
+          <CreateMessageModalDialog
             title="Complete and Send Message"
             onConfirmSequence="completeDocketEntryQCAndSendMessageSequence"
           />

@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesSectionInbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function CaseMessagesIndividualInbox({ formattedMessages }) {
+export const MessagesSectionCompleted = connect(
+  { formattedMessages: state.formattedMessages.completedMessages },
+  function MessagesSectionCompleted({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -14,13 +14,11 @@ export const CaseMessagesSectionInbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 Docket No.
               </th>
-              <th className="small">Received</th>
-              <th>Message</th>
-              <th>Case Title</th>
-              <th>Case Status</th>
-              <th>To</th>
-              <th>From</th>
-              <th className="small">Section</th>
+              <th className="small">Completed</th>
+              <th>Last Message</th>
+              <th>Comment</th>
+              <th>Completed by</th>
+              <th>Section</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -33,10 +31,10 @@ export const CaseMessagesSectionInbox = connect(
                   </td>
                   <td className="message-queue-row small">
                     <span className="no-wrap">
-                      {message.createdAtFormatted}
+                      {message.completedAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document message-subject">
+                  <td className="message-queue-row">
                     <div className="message-document-title">
                       <Button
                         link
@@ -46,16 +44,17 @@ export const CaseMessagesSectionInbox = connect(
                         {message.subject}
                       </Button>
                     </div>
+
                     <div className="message-document-detail">
                       {message.message}
                     </div>
                   </td>
-                  <td className="message-queue-row">{message.caseTitle}</td>
-                  <td className="message-queue-row">{message.caseStatus}</td>
-                  <td className="message-queue-row to">{message.to}</td>
-                  <td className="message-queue-row from">{message.from}</td>
-                  <td className="message-queue-row small">
-                    {message.fromSection}
+                  <td className="message-queue-row">
+                    {message.completedMessage}
+                  </td>
+                  <td className="message-queue-row">{message.completedBy}</td>
+                  <td className="message-queue-row">
+                    {message.completedBySection}
                   </td>
                 </tr>
               </tbody>
