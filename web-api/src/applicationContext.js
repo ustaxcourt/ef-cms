@@ -1,16 +1,10 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
-const AWSXRay = require('aws-xray-sdk');
-const Honeybadger = require('honeybadger'); // node version
-
-const AWS =
-  process.env.NODE_ENV === 'production'
-    ? AWSXRay.captureAWS(require('aws-sdk'))
-    : require('aws-sdk');
-
+const AWS = require('aws-sdk');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
+const Honeybadger = require('honeybadger');
 const pdfLib = require('pdf-lib');
 const util = require('util');
 const {
