@@ -1,16 +1,15 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * lambda which is used to forward a message
+ * lambda which is used for retrieving messages for a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.forwardCaseMessageLambda = event =>
+exports.getMessagesForCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().forwardMessageInteractor({
+    return await applicationContext.getUseCases().getMessagesForCaseInteractor({
       applicationContext,
-      parentMessageId: event.pathParameters.parentMessageId,
-      ...JSON.parse(event.body),
+      ...event.pathParameters,
     });
   });
