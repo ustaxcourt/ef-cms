@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
 }
 
 module "ui-public-certificate" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.2.1"
+  source = "../../../iam/terraform/shared/certificates"
 
   domain_name      = var.dns_domain
   hosted_zone_name = "${var.zone_name}."
@@ -211,6 +211,11 @@ resource "aws_cloudfront_distribution" "public_distribution" {
       restriction_type = "none"
     }
   }
+
+
+  depends_on = [
+    module.ui-public-certificate.dns_validation
+  ]
 
   viewer_certificate {
     acm_certificate_arn = module.ui-public-certificate.acm_certificate_arn

@@ -219,8 +219,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       record => record.docketNumber === docketNumber1,
     );
 
-    expect(lowestDocketNumberCase.documents[4].workItems.length).toEqual(1);
-    expect(nonLowestDocketNumberCase.documents[4].workItems.length).toEqual(0);
+    expect(lowestDocketNumberCase.documents[4].workItem).toBeDefined();
+    expect(nonLowestDocketNumberCase.documents[4].workItem).toBeUndefined();
   });
 
   it('should file multiple documents for each case if a secondary document is provided', async () => {

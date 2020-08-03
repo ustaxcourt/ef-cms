@@ -9,7 +9,7 @@ export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
       );
 
       return {
-        workItemId: firstDocument.workItems[0].workItemId,
+        workItemId: firstDocument.workItem.workItemId,
       };
     });
 

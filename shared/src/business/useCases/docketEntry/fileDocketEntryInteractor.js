@@ -108,7 +108,7 @@ exports.fileDocketEntryInteractor = async ({
         { applicationContext },
       );
 
-      documentEntity.addWorkItem(workItem);
+      documentEntity.setWorkItem(workItem);
 
       if (metadata.isFileAttached && !isSavingForLater) {
         const servedParties = aggregatePartiesForService(caseEntity);

@@ -73,9 +73,9 @@ describe('assignWorkItemsInteractor integration test', () => {
       docketNumber,
     });
 
-    const workItem = createdCase.documents.find(
+    const { workItem } = createdCase.documents.find(
       d => d.documentType === 'Petition',
-    ).workItems[0];
+    );
 
     let inbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,
@@ -122,16 +122,14 @@ describe('assignWorkItemsInteractor integration test', () => {
       caseAfterAssign.documents.find(d => d.documentType === 'Petition'),
     ).toMatchObject({
       documentType: 'Petition',
-      workItems: [
-        {
-          assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          assigneeName: 'Test Petitionsclerk',
-          document: {
-            documentType: 'Petition',
-            filedBy: 'Petr. Rick Petitioner',
-          },
+      workItem: {
+        assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+        assigneeName: 'Test Petitionsclerk',
+        document: {
+          documentType: 'Petition',
+          filedBy: 'Petr. Rick Petitioner',
         },
-      ],
+      },
     });
   });
 });
