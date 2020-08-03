@@ -29,7 +29,6 @@ describe('updateDocketEntryMetaAction', () => {
         docketRecordEntry: {
           servedParties: [],
         },
-        docketRecordIndex: 1,
       },
     });
 
@@ -55,7 +54,6 @@ describe('updateDocketEntryMetaAction', () => {
         docketRecordEntry: {
           description: 'Test Description',
         },
-        docketRecordIndex: 1,
       },
     });
 

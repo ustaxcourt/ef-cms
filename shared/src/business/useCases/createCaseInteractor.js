@@ -209,7 +209,9 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+    });
   }
 
   await applicationContext.getPersistenceGateway().createCase({
