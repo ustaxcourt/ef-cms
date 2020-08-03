@@ -1,11 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const {
-  markCaseMessageThreadRepliedTo,
-} = require('./markCaseMessageThreadRepliedTo');
+const { markMessageThreadRepliedTo } = require('./markMessageThreadRepliedTo');
 
-describe('markCaseMessageThreadRepliedTo', () => {
+describe('markMessageThreadRepliedTo', () => {
   const DOCKET_NUMBER = '123-20';
 
   beforeAll(() => {
@@ -36,8 +34,8 @@ describe('markCaseMessageThreadRepliedTo', () => {
     });
   });
 
-  it('attempts to update the case message records', async () => {
-    await markCaseMessageThreadRepliedTo({
+  it('attempts to update the message records', async () => {
+    await markMessageThreadRepliedTo({
       applicationContext,
       parentMessageId: '0c0de040-1dfd-4be8-937a-d6aefdfcd71d',
     });

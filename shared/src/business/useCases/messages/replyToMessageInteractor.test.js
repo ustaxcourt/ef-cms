@@ -68,11 +68,11 @@ describe('replyToMessageInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createCaseMessage,
+      applicationContext.getPersistenceGateway().createMessage,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().createCaseMessage.mock
-        .calls[0][0].caseMessage,
+      applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
+        .message,
     ).toMatchObject({
       ...messageData,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -85,11 +85,11 @@ describe('replyToMessageInteractor', () => {
       to: 'Test Petitionsclerk2',
     });
     expect(
-      applicationContext.getPersistenceGateway().markCaseMessageThreadRepliedTo,
+      applicationContext.getPersistenceGateway().markMessageThreadRepliedTo,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().markCaseMessageThreadRepliedTo
-        .mock.calls[0][0],
+      applicationContext.getPersistenceGateway().markMessageThreadRepliedTo.mock
+        .calls[0][0],
     ).toMatchObject({
       parentMessageId: messageData.parentMessageId,
     });

@@ -1,21 +1,19 @@
-const {
-  getCaseMessageThreadByParentId,
-} = require('./getCaseMessageThreadByParentId');
+const { getMessageThreadByParentId } = require('./getMessageThreadByParentId');
 const { update } = require('../../dynamodbClientService');
 
 /**
- * markCaseMessageThreadRepliedTo
+ * markMessageThreadRepliedTo
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.messageId the id of the message to update
  * @returns {object} the created case message
  */
-exports.markCaseMessageThreadRepliedTo = async ({
+exports.markMessageThreadRepliedTo = async ({
   applicationContext,
   parentMessageId,
 }) => {
-  const messages = await getCaseMessageThreadByParentId({
+  const messages = await getMessageThreadByParentId({
     applicationContext,
     parentMessageId,
   });

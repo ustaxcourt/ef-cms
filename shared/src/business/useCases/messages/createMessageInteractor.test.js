@@ -67,11 +67,11 @@ describe('createMessageInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createCaseMessage,
+      applicationContext.getPersistenceGateway().createMessage,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().createCaseMessage.mock
-        .calls[0][0].caseMessage,
+      applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
+        .message,
     ).toMatchObject({
       ...messageData,
       caseStatus: CASE_STATUS_TYPES.generalDocket,

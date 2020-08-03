@@ -30,36 +30,32 @@ exports.completeMessageInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .markCaseMessageThreadRepliedTo({
-      applicationContext,
-      parentMessageId,
-    });
+  await applicationContext.getPersistenceGateway().markMessageThreadRepliedTo({
+    applicationContext,
+    parentMessageId,
+  });
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCaseMessageThreadByParentId({
+    .getMessageThreadByParentId({
       applicationContext,
       parentMessageId,
     });
 
   const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-  const updatedCaseMessage = new Message(mostRecentMessage, {
+  const updatedMessage = new Message(mostRecentMessage, {
     applicationContext,
   }).validate();
 
-  updatedCaseMessage.markAsCompleted({ message, user });
+  updatedMessage.markAsCompleted({ message, user });
 
-  const updatedMessage = await applicationContext
-    .getPersistenceGateway()
-    .updateCaseMessage({
-      applicationContext,
-      caseMessage: updatedCaseMessage.validate().toRawObject(),
-    });
+  const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-  return new Message(updatedMessage, { applicationContext })
-    .validate()
-    .toRawObject();
+  await applicationContext.getPersistenceGateway().updateMessage({
+    applicationContext,
+    message: validatedRawMessage,
+  });
+
+  return validatedRawMessage;
 };
