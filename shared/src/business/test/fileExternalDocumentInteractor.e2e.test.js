@@ -5,6 +5,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
+  PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
 const {
   fileExternalDocumentInteractor,
@@ -191,7 +192,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
             isInitializeCase: true,
-            section: 'petitions',
+            section: PETITIONS_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },

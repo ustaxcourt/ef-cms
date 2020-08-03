@@ -1,5 +1,8 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runAction } from 'cerebral/test';
 import { unsetCreateMessageModalForChambersSelectAction } from './unsetCreateMessageModalForChambersSelectAction';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('unsetCreateMessageModalForChambersSelectAction', () => {
   it('sets state.modal values from props', async () => {
@@ -8,7 +11,7 @@ describe('unsetCreateMessageModalForChambersSelectAction', () => {
       {
         props: {
           key: 'toSection',
-          value: 'petitions',
+          value: PETITIONS_SECTION,
         },
         state: {
           modal: {
@@ -20,7 +23,7 @@ describe('unsetCreateMessageModalForChambersSelectAction', () => {
     );
 
     expect(state.modal).toEqual({
-      form: { toSection: 'petitions' },
+      form: { toSection: PETITIONS_SECTION },
       showChambersSelect: false,
     });
   });
