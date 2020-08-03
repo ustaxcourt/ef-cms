@@ -1,14 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
+import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';
 
 export const validateCreateMessageInModalSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      validateCreateCaseMessageAction,
+      validateCreateMessageAction,
       {
         error: [setValidationErrorsAction],
         success: [clearAlertsAction],

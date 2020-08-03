@@ -1,5 +1,5 @@
-import { updateCaseMessageModalAttachmentsAction } from '../actions/updateCaseMessageModalAttachmentsAction';
+import { updateMessageModalAttachmentsAction } from '../actions/updateMessageModalAttachmentsAction';
 
 export const updateMessageModalAttachmentsSequence = [
-  updateCaseMessageModalAttachmentsAction,
+  updateMessageModalAttachmentsAction,
 ];

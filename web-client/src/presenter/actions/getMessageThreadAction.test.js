@@ -19,11 +19,11 @@ describe('getMessageThreadAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().getCaseMessageThreadInteractor,
+      applicationContextForClient.getUseCases().getMessageThreadInteractor,
     ).toBeCalled();
     expect(
-      applicationContextForClient.getUseCases().getCaseMessageThreadInteractor
-        .mock.calls[0][0],
+      applicationContextForClient.getUseCases().getMessageThreadInteractor.mock
+        .calls[0][0],
     ).toMatchObject({
       parentMessageId: '0fbd6b64-6e13-4984-b46b-fd74906fd2c7',
     });

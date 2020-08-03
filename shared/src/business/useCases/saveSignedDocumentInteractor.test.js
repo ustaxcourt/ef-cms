@@ -34,7 +34,7 @@ describe('saveSignedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId.mockReturnValue([
+      .getMessageThreadByParentId.mockReturnValue([
         {
           caseStatus: mockCase.status,
           caseTitle: 'Test Petitioner',
@@ -159,11 +159,11 @@ describe('saveSignedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage,
+      applicationContext.getPersistenceGateway().updateMessage,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage.mock
-        .calls[0][0].caseMessage,
+      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
+        .message,
     ).toMatchObject({
       attachments: [
         {

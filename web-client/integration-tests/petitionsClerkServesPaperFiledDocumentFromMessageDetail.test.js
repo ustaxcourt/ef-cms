@@ -1,7 +1,7 @@
-import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
+import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerk1ServesDocumentFromCaseMessageDetail } from './journey/petitionsClerk1ServesDocumentFromCaseMessageDetail';
+import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petitionsClerk1ServesDocumentFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 
@@ -22,10 +22,10 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
 
   loginAs(test, 'docketclerk1@example.com');
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  createNewCaseMessageOnCase(test, 0);
+  createNewMessageOnCase(test, 0);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1ServesDocumentFromCaseMessageDetail(test);
+  petitionsClerk1ServesDocumentFromMessageDetail(test);
 });

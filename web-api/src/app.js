@@ -47,9 +47,6 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
-  completeCaseMessageLambda,
-} = require('./messages/completeCaseMessageLambda');
-const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -61,9 +58,6 @@ const {
 const {
   createCaseFromPaperLambda,
 } = require('./cases/createCaseFromPaperLambda');
-const {
-  createCaseMessageLambda,
-} = require('./messages/createCaseMessageLambda');
 const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
@@ -119,9 +113,6 @@ const {
   fileExternalDocumentToConsolidatedCasesLambda,
 } = require('./documents/fileExternalDocumentToConsolidatedCasesLambda');
 const {
-  forwardCaseMessageLambda,
-} = require('./messages/forwardCaseMessageLambda');
-const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
@@ -149,17 +140,11 @@ const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
 const {
-  getCaseMessagesForCaseLambda,
-} = require('./messages/getCaseMessagesForCaseLambda');
+  getCompletedMessagesForSectionLambda,
+} = require('./messages/getCompletedMessagesForSectionLambda');
 const {
-  getCaseMessageThreadLambda,
-} = require('./messages/getCaseMessageThreadLambda');
-const {
-  getCompletedCaseMessagesForSectionLambda,
-} = require('./messages/getCompletedCaseMessagesForSectionLambda');
-const {
-  getCompletedCaseMessagesForUserLambda,
-} = require('./messages/getCompletedCaseMessagesForUserLambda');
+  getCompletedMessagesForUserLambda,
+} = require('./messages/getCompletedMessagesForUserLambda');
 const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
@@ -182,23 +167,26 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
-  getInboxCaseMessagesForSectionLambda,
-} = require('./messages/getInboxCaseMessagesForSectionLambda');
+  getInboxMessagesForSectionLambda,
+} = require('./messages/getInboxMessagesForSectionLambda');
 const {
-  getInboxCaseMessagesForUserLambda,
-} = require('./messages/getInboxCaseMessagesForUserLambda');
+  getInboxMessagesForUserLambda,
+} = require('./messages/getInboxMessagesForUserLambda');
 const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
+  getMessagesForCaseLambda,
+} = require('./messages/getMessagesForCaseLambda');
+const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
 const {
-  getOutboxCaseMessagesForSectionLambda,
-} = require('./messages/getOutboxCaseMessagesForSectionLambda');
+  getOutboxMessagesForSectionLambda,
+} = require('./messages/getOutboxMessagesForSectionLambda');
 const {
-  getOutboxCaseMessagesForUserLambda,
-} = require('./messages/getOutboxCaseMessagesForUserLambda');
+  getOutboxMessagesForUserLambda,
+} = require('./messages/getOutboxMessagesForUserLambda');
 const {
   getPractitionerByBarNumberLambda,
 } = require('./practitioners/getPractitionerByBarNumberLambda');
@@ -247,9 +235,6 @@ const {
 const {
   removeSignatureFromDocumentLambda,
 } = require('./documents/removeSignatureFromDocumentLambda');
-const {
-  replyToCaseMessageLambda,
-} = require('./messages/replyToCaseMessageLambda');
 const {
   runTrialSessionPlanningReportLambda,
 } = require('./trialSessions/runTrialSessionPlanningReportLambda');
@@ -345,14 +330,18 @@ const {
 } = require('./cases/verifyPendingCaseForUserLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
+const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
+const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
+const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
+const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserByIdLambda } = require('./users/getUserByIdLambda');
@@ -362,6 +351,7 @@ const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
@@ -702,49 +692,46 @@ app.post(
 {
   app.post(
     '/messages/:parentMessageId/reply',
-    lambdaWrapper(replyToCaseMessageLambda),
+    lambdaWrapper(replyToMessageLambda),
   );
   app.post(
     '/messages/:parentMessageId/forward',
-    lambdaWrapper(forwardCaseMessageLambda),
+    lambdaWrapper(forwardMessageLambda),
   );
   app.post(
     '/messages/:parentMessageId/complete',
-    lambdaWrapper(completeCaseMessageLambda),
+    lambdaWrapper(completeMessageLambda),
   );
-  app.get(
-    '/messages/:parentMessageId',
-    lambdaWrapper(getCaseMessageThreadLambda),
-  );
+  app.get('/messages/:parentMessageId', lambdaWrapper(getMessageThreadLambda));
   app.get(
     '/messages/case/:docketNumber',
-    lambdaWrapper(getCaseMessagesForCaseLambda),
+    lambdaWrapper(getMessagesForCaseLambda),
   );
   app.get(
     '/messages/inbox/section/:section',
-    lambdaWrapper(getInboxCaseMessagesForSectionLambda),
+    lambdaWrapper(getInboxMessagesForSectionLambda),
   );
   app.get(
     '/messages/inbox/:userId',
-    lambdaWrapper(getInboxCaseMessagesForUserLambda),
+    lambdaWrapper(getInboxMessagesForUserLambda),
   );
   app.get(
     '/messages/outbox/section/:section',
-    lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
+    lambdaWrapper(getOutboxMessagesForSectionLambda),
   );
   app.get(
     '/messages/outbox/:userId',
-    lambdaWrapper(getOutboxCaseMessagesForUserLambda),
+    lambdaWrapper(getOutboxMessagesForUserLambda),
   );
   app.get(
     '/messages/completed/section/:section',
-    lambdaWrapper(getCompletedCaseMessagesForSectionLambda),
+    lambdaWrapper(getCompletedMessagesForSectionLambda),
   );
   app.get(
     '/messages/completed/:userId',
-    lambdaWrapper(getCompletedCaseMessagesForUserLambda),
+    lambdaWrapper(getCompletedMessagesForUserLambda),
   );
-  app.post('/messages', lambdaWrapper(createCaseMessageLambda));
+  app.post('/messages', lambdaWrapper(createMessageLambda));
 }
 /**
  * migrate

@@ -8,7 +8,7 @@ import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { updateCaseMessageModalAttachmentsAction } from '../actions/updateCaseMessageModalAttachmentsAction';
+import { updateMessageModalAttachmentsAction } from '../actions/updateMessageModalAttachmentsAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const openCompleteAndSendMessageModalSequence = [
@@ -26,7 +26,7 @@ export const openCompleteAndSendMessageModalSequence = [
       clearModalStateAction,
       generateTitleAction,
       setCreateMessageModalDialogModalStateAction,
-      updateCaseMessageModalAttachmentsAction,
+      updateMessageModalAttachmentsAction,
       setShowModalFactoryAction('CreateMessageModalDialog'),
     ],
   },

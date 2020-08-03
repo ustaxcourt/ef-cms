@@ -16,8 +16,8 @@ const getDocumentOption = document => {
 
 export const MessageModalAttachments = connect(
   {
-    caseMessageModalHelper: state.caseMessageModalHelper,
     form: state.modal.form,
+    messageModalHelper: state.messageModalHelper,
     updateMessageModalAttachmentsSequence:
       sequences.updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -25,15 +25,15 @@ export const MessageModalAttachments = connect(
       sequences.validateCreateMessageInModalSequence,
   },
   function MessageModalAttachments({
-    caseMessageModalHelper,
     form,
+    messageModalHelper,
     updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence,
     validateCreateMessageInModalSequence,
   }) {
     return (
       <>
-        {caseMessageModalHelper.showMessageAttachments && (
+        {messageModalHelper.showMessageAttachments && (
           <div className="margin-bottom-20">
             <div>
               <FontAwesomeIcon
@@ -56,7 +56,7 @@ export const MessageModalAttachments = connect(
           </div>
         )}
 
-        {caseMessageModalHelper.showAddDocumentForm && (
+        {messageModalHelper.showAddDocumentForm && (
           <FormGroup>
             <label className="usa-label" htmlFor="document">
               Add document(s) <span className="usa-hint">(optional)</span>
@@ -77,28 +77,28 @@ export const MessageModalAttachments = connect(
               }}
             >
               <option value="">- Select -</option>
-              {caseMessageModalHelper.hasDraftDocuments && (
+              {messageModalHelper.hasDraftDocuments && (
                 <optgroup label="Draft documents">
-                  {caseMessageModalHelper.draftDocuments.map(getDocumentOption)}
+                  {messageModalHelper.draftDocuments.map(getDocumentOption)}
                 </optgroup>
               )}
 
-              {caseMessageModalHelper.hasDocuments && (
+              {messageModalHelper.hasDocuments && (
                 <optgroup label="Docket record">
-                  {caseMessageModalHelper.documents.map(getDocumentOption)}
+                  {messageModalHelper.documents.map(getDocumentOption)}
                 </optgroup>
               )}
 
-              {caseMessageModalHelper.hasCorrespondence && (
+              {messageModalHelper.hasCorrespondence && (
                 <optgroup label="Correspondence">
-                  {caseMessageModalHelper.correspondence.map(getDocumentOption)}
+                  {messageModalHelper.correspondence.map(getDocumentOption)}
                 </optgroup>
               )}
             </select>
           </FormGroup>
         )}
 
-        {caseMessageModalHelper.showAddMoreDocumentsButton && (
+        {messageModalHelper.showAddMoreDocumentsButton && (
           <Button
             link
             className="modal-button-link"
