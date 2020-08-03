@@ -25,7 +25,7 @@ exports.getMessagesForCaseInteractor = async ({
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCaseMessagesByDocketNumber({
+    .getMessagesByDocketNumber({
       applicationContext,
       docketNumber,
     });
