@@ -142,9 +142,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx1g'
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: medium+
     parallelism: 5
     steps:
@@ -238,8 +242,6 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    environment:
-        _JAVA_OPTIONS_DISABLED: '-Xms1g -Xmx1g'
     resource_class: large
     steps:
       - restore_cache:
@@ -298,11 +300,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx1g'
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
     steps:
       - restore_cache:
@@ -361,11 +365,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx1g'
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: medium+
     steps:
       - restore_cache:
