@@ -11,7 +11,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { updateCaseMessageModalAttachmentsAction } from '../actions/updateCaseMessageModalAttachmentsAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-export const openCompleteAndSendCaseMessageModalSequence = [
+export const openCompleteAndSendMessageModalSequence = [
   computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,

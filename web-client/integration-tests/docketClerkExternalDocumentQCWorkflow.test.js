@@ -144,7 +144,7 @@ describe('Create a work item', () => {
   it('docket clerk completes QC of a document and sends a case message', async () => {
     test.setState('modal.showModal', '');
 
-    await test.runSequence('openCompleteAndSendCaseMessageModalSequence');
+    await test.runSequence('openCompleteAndSendMessageModalSequence');
 
     expect(test.getState('modal.showModal')).toEqual(
       'CreateMessageModalDialog',

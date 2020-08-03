@@ -14,7 +14,7 @@ export const CompleteMessageModalDialog = connect(
         preventCancelOnBlur={true}
         title="Complete Message"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="completeCaseMessageSequence"
+        onConfirmSequence="completeMessageSequence"
       >
         <FormGroup>
           <label className="usa-label" htmlFor="message">
