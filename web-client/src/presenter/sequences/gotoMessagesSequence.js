@@ -1,16 +1,16 @@
 import { chooseMessageBoxAction } from '../actions/chooseMessageBoxAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { getCompletedCaseMessagesForSectionAction } from '../actions/getCompletedCaseMessagesForSectionAction';
-import { getCompletedCaseMessagesForUserAction } from '../actions/getCompletedCaseMessagesForUserAction';
-import { getInboxCaseMessagesForSectionAction } from '../actions/getInboxCaseMessagesForSectionAction';
-import { getInboxCaseMessagesForUserAction } from '../actions/getInboxCaseMessagesForUserAction';
-import { getOutboxCaseMessagesForSectionAction } from '../actions/getOutboxCaseMessagesForSectionAction';
-import { getOutboxCaseMessagesForUserAction } from '../actions/getOutboxCaseMessagesForUserAction';
+import { getCompletedMessagesForSectionAction } from '../actions/getCompletedMessagesForSectionAction';
+import { getCompletedMessagesForUserAction } from '../actions/getCompletedMessagesForUserAction';
+import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
+import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
+import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
+import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCaseMessagesAction } from '../actions/setCaseMessagesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setMessagesAction } from '../actions/setMessagesAction';
 
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
@@ -18,14 +18,14 @@ const goToMessages = [
   clearErrorAlertsAction,
   chooseMessageBoxAction,
   {
-    mycompleted: [getCompletedCaseMessagesForUserAction],
-    myinbox: [getInboxCaseMessagesForUserAction],
-    myoutbox: [getOutboxCaseMessagesForUserAction],
-    sectioncompleted: [getCompletedCaseMessagesForSectionAction],
-    sectioninbox: [getInboxCaseMessagesForSectionAction],
-    sectionoutbox: [getOutboxCaseMessagesForSectionAction],
+    mycompleted: [getCompletedMessagesForUserAction],
+    myinbox: [getInboxMessagesForUserAction],
+    myoutbox: [getOutboxMessagesForUserAction],
+    sectioncompleted: [getCompletedMessagesForSectionAction],
+    sectioninbox: [getInboxMessagesForSectionAction],
+    sectionoutbox: [getOutboxMessagesForSectionAction],
   },
-  setCaseMessagesAction,
+  setMessagesAction,
   setCurrentPageAction('Messages'),
 ];
 
