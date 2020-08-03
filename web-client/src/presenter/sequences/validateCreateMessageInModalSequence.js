@@ -3,7 +3,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
 
-export const validateCreateCaseMessageInModalSequence = [
+export const validateCreateMessageInModalSequence = [
   shouldValidateAction,
   {
     ignore: [],

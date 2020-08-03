@@ -3,30 +3,32 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
-import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
-import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
+import { getMessageThreadAction } from '../actions/getMessageThreadAction';
+import { replyToCaseMessageAction } from '../actions/CaseDetail/replyToCaseMessageAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setMessageAction } from '../actions/setMessageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
 
-export const createCaseMessageSequence = [
+export const replyToMessageSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   startShowValidationAction,
   validateCreateCaseMessageAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
-      createCaseMessageAction,
+      replyToCaseMessageAction,
       stopShowValidationAction,
       setAlertSuccessAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
-      getCaseMessagesForCaseAction,
+      getMessageThreadAction,
+      setMessageAction,
     ]),
   },
-];
+]);

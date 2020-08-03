@@ -1,6 +1,6 @@
 export const adcsSignsProposedStipulatedDecisionFromMessage = test => {
   return it('adc signs the proposed stipulated decision from message', async () => {
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });

@@ -12,7 +12,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseMessagesAction } from '../actions/setCaseMessagesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-const goToCaseMessages = [
+const goToMessages = [
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
@@ -29,10 +29,10 @@ const goToCaseMessages = [
   setCurrentPageAction('Messages'),
 ];
 
-export const gotoCaseMessagesSequence = [
+export const gotoMessagesSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: goToCaseMessages,
+    isLoggedIn: goToMessages,
     unauthorized: [redirectToCognitoAction],
   },
 ];

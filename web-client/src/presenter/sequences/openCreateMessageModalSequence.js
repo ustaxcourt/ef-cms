@@ -3,10 +3,8 @@ import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openCreateCaseMessageModalSequence = showProgressSequenceDecorator(
-  [
-    clearModalStateAction,
-    setCreateMessageModalDialogModalStateAction,
-    setShowModalFactoryAction('CreateMessageModal'),
-  ],
-);
+export const openCreateMessageModalSequence = showProgressSequenceDecorator([
+  clearModalStateAction,
+  setCreateMessageModalDialogModalStateAction,
+  setShowModalFactoryAction('CreateMessageModal'),
+]);

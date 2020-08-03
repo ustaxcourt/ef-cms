@@ -9,7 +9,7 @@ import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMess
 import { setMessageAction } from '../actions/setMessageAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const completeCaseMessageSequence = showProgressSequenceDecorator([
+export const completeMessageSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   getMostRecentMessageInThreadAction,
   completeCaseMessageAction,
