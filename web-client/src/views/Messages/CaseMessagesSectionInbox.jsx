@@ -41,7 +41,7 @@ export const CaseMessagesSectionInbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>

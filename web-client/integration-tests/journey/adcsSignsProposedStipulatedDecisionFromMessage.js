@@ -24,7 +24,7 @@ export const adcsSignsProposedStipulatedDecisionFromMessage = test => {
       docketNumber: test.docketNumber,
       documentId: test.proposedStipDecisionDocumentId,
       parentMessageId: foundMessage.parentMessageId,
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${foundMessage.parentMessageId}?documentId=${test.proposedStipDecisionDocumentId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${foundMessage.parentMessageId}?documentId=${test.proposedStipDecisionDocumentId}`,
     });
     expect(test.getState('currentPage')).toEqual('SignOrder');
 

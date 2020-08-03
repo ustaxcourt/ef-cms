@@ -18,15 +18,15 @@ describe('helpers', () => {
       expect(cbSpy).toHaveBeenCalledWith('abc-123-Z', '123-ABC-T');
     });
 
-    it('should invoke the expected case-messages route definition', async () => {
+    it('should invoke the expected messages route definition', async () => {
       const cbSpy = jest.fn().mockResolvedValue('awesome');
       const routes = [
         {
           cb: cbSpy,
-          route: '/case-messages..',
+          route: '/messages..',
         },
       ];
-      const results = await gotoRoute(routes, '/case-messages/section/inbox');
+      const results = await gotoRoute(routes, '/messages/section/inbox');
       expect(results).toEqual('awesome');
       expect(cbSpy).toHaveBeenCalledWith('/section/inbox');
     });
@@ -40,7 +40,7 @@ describe('helpers', () => {
         },
         {
           cb: () => null,
-          route: '/case-messages..',
+          route: '/messages..',
         },
       ];
       const results = await gotoRoute(routes, '/');

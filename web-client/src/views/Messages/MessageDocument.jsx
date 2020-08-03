@@ -80,7 +80,7 @@ export const MessageDocument = connect(
                       docketNumber: caseDetail.docketNumber,
                       documentIdToEdit: viewerDocumentToDisplay.documentId,
                       parentMessageId,
-                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                      redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     })
                   }
                 >
@@ -140,7 +140,7 @@ export const MessageDocument = connect(
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                      redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
                 >
@@ -156,7 +156,7 @@ export const MessageDocument = connect(
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                      redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
                 >
