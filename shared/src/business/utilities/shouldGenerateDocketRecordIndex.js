@@ -81,7 +81,7 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
     }
   }
 
-  if (isUnservable || isMinuteEntry || document.servedAt) {
+  if (isUnservable || isMinuteEntry || (document && document.servedAt)) {
     return true;
   } else {
     return false;
