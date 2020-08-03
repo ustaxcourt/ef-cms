@@ -3314,9 +3314,14 @@
                     allow: 
                       - null
             signedJudgeName: 
-              type: "any"
+              type: "string"
               flags: 
                 description: "The judge who signed the document."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
               whens: 
                 - 
                   ref: 
@@ -3383,17 +3388,17 @@
                             - "ODJ"
                             - "SDEC"
                         then: 
-                          type: "string"
+                          type: "any"
                           flags: 
                             presence: "required"
                         otherwise: 
-                          type: "string"
+                          type: "any"
                           flags: 
                             presence: "optional"
                           allow: 
                             - null
                   otherwise: 
-                    type: "string"
+                    type: "any"
                     flags: 
                       presence: "optional"
                     allow: 
@@ -3441,6 +3446,11 @@
               type: "string"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
               allow: 
                 - null
             trialLocation: 
@@ -3448,6 +3458,11 @@
               flags: 
                 presence: "optional"
                 description: "An optional trial location used when generating a fully concatenated document title."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
               allow: 
                 - null
             userId: 
