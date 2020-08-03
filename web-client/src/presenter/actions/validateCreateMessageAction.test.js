@@ -19,7 +19,7 @@ describe('validateCreateMessageAction', () => {
 
     applicationContext
       .getUseCases()
-      .validateCreateCaseMessageInteractor.mockReturnValue(null);
+      .validateCreateMessageInteractor.mockReturnValue(null);
   });
 
   it('should call the success path when no errors are found', async () => {
@@ -45,7 +45,7 @@ describe('validateCreateMessageAction', () => {
       },
     });
     expect(
-      applicationContext.getUseCases().validateCreateCaseMessageInteractor.mock
+      applicationContext.getUseCases().validateCreateMessageInteractor.mock
         .calls[0][0].message,
     ).toMatchObject({
       docketNumber: '123-45',
@@ -64,7 +64,7 @@ describe('validateCreateMessageAction', () => {
   it('should call the error path when any errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateCreateCaseMessageInteractor.mockReturnValue('error');
+      .validateCreateMessageInteractor.mockReturnValue('error');
 
     await runAction(validateCreateMessageAction, {
       modules: {
