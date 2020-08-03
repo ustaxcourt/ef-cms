@@ -5,17 +5,15 @@ import { runAction } from 'cerebral/test';
 
 describe('replyToMessageAction', () => {
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .replyToCaseMessageInteractor.mockReturnValue({
-        docketNumber: '123-45',
-        parentMessageId: '123',
-      });
+    applicationContext.getUseCases().replyToMessageInteractor.mockReturnValue({
+      docketNumber: '123-45',
+      parentMessageId: '123',
+    });
 
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call replyToCaseMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
+  it('should call replyToMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
     const result = await runAction(replyToMessageAction, {
       modules: {
         presenter,
@@ -41,10 +39,10 @@ describe('replyToMessageAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().replyToCaseMessageInteractor,
+      applicationContext.getUseCases().replyToMessageInteractor,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().replyToCaseMessageInteractor.mock
+      applicationContext.getUseCases().replyToMessageInteractor.mock
         .calls[0][0],
     ).toMatchObject({
       attachments: [

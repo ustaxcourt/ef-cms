@@ -7,7 +7,7 @@ export const replyToMessageAction = async ({ applicationContext, get }) => {
 
   const {
     parentMessageId,
-  } = await applicationContext.getUseCases().replyToCaseMessageInteractor({
+  } = await applicationContext.getUseCases().replyToMessageInteractor({
     applicationContext,
     docketNumber,
     ...form,
