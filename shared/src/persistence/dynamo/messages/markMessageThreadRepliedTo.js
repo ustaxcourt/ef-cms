@@ -7,7 +7,7 @@ const { update } = require('../../dynamodbClientService');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.messageId the id of the message to update
- * @returns {object} the created case message
+ * @returns {object} the created message
  */
 exports.markMessageThreadRepliedTo = async ({
   applicationContext,

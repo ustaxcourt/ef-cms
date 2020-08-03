@@ -16,7 +16,6 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
-import { caseMessageModalHelper } from './computeds/caseMessageModalHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
@@ -59,6 +58,7 @@ import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
+import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
@@ -108,7 +108,6 @@ const helpers = {
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
-  caseMessageModalHelper,
   caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
@@ -149,6 +148,7 @@ const helpers = {
   loadingHelper,
   menuHelper,
   messageDocumentHelper,
+  messageModalHelper,
   messagesHelper,
   orderTypesHelper,
   paperDocketEntryHelper,

@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.message the message text
  * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @returns {object} the case message
+ * @returns {object} the message
  */
 exports.completeMessageInteractor = async ({
   applicationContext,

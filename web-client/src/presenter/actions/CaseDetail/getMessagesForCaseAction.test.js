@@ -4,7 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getMessagesForCaseAction', () => {
-  const mockCaseMessage = {
+  const mockMessage = {
     createdAt: '2019-03-01T21:40:46.415Z',
     docketNumber: '101-20',
     from: 'Test Petitionsclerk',
@@ -22,7 +22,7 @@ describe('getMessagesForCaseAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
     applicationContextForClient
       .getUseCases()
-      .getMessagesForCaseInteractor.mockReturnValue([mockCaseMessage]);
+      .getMessagesForCaseInteractor.mockReturnValue([mockMessage]);
   });
 
   it('calls the use case with docketNumber', async () => {
@@ -46,6 +46,6 @@ describe('getMessagesForCaseAction', () => {
     ).toMatchObject({
       docketNumber: '101-20',
     });
-    expect(result.state.caseDetail.messages).toEqual([mockCaseMessage]);
+    expect(result.state.caseDetail.messages).toEqual([mockMessage]);
   });
 });
