@@ -1,11 +1,5 @@
-import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 export const petitionsClerkAssignsWorkItemToSelf = test => {
   return it('Petitions clerk assigns work item to self', async () => {
-    test.setState('workQueueToDisplay.workQueueIsInternal', false);
     // find the work item that is part of an Petition upload
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -70,12 +64,5 @@ export const petitionsClerkAssignsWorkItemToSelf = test => {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       section: 'petitions',
     });
-    const formattedWorkItem = runCompute(formattedWorkQueue, {
-      state: test.getState(),
-    }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
-    expect(formattedWorkItem.currentMessage.message).toEqual(
-      'Petition filed by Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse is ready for review.',
-    );
-    test.setState('workQueueToDisplay.workQueueIsInternal', true);
   });
 };

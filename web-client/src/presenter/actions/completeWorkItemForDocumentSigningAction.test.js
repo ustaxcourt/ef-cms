@@ -21,15 +21,13 @@ describe('completeWorkItemForDocumentSigningAction', () => {
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItems: [
-                {
-                  messages: [
-                    {
-                      messageId: '123',
-                    },
-                  ],
-                },
-              ],
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
             },
           ],
         },
@@ -58,15 +56,13 @@ describe('completeWorkItemForDocumentSigningAction', () => {
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItems: [
-                {
-                  messages: [
-                    {
-                      messageId: '123',
-                    },
-                  ],
-                },
-              ],
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
             },
           ],
         },

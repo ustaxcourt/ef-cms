@@ -214,8 +214,8 @@ export const AccessibilityStatement = () => (
       </p>
       <ul className="usa-list technical-information related-evidence-other">
         <li>
-          <a href="https://github.com/ustaxcourt/ef-cms/tree/master/docs">
-            https://github.com/ustaxcourt/ef-cms/tree/master/docs
+          <a href="https://github.com/ustaxcourt/ef-cms/tree/prod/docs">
+            https://github.com/ustaxcourt/ef-cms/tree/prod/docs
           </a>
         </li>
       </ul>
