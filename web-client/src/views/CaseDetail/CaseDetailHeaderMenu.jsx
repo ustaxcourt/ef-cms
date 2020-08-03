@@ -3,7 +3,7 @@ import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
-import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
+import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
 import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
@@ -246,9 +246,7 @@ export const CaseDetailHeaderMenu = connect(
           <CreateOrderChooseTypeModal />
         )}
         {showModal === 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
-        {showModal === 'CreateCaseMessageModal' && (
-          <CreateCaseMessageModalDialog />
-        )}
+        {showModal === 'CreateMessageModal' && <CreateMessageModalDialog />}
       </div>
     );
   },
