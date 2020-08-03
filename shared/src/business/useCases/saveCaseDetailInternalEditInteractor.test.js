@@ -4,6 +4,7 @@ const {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
+  PETITIONS_SECTION,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
@@ -50,7 +51,7 @@ describe('updateCase', () => {
           docketNumber: '56789-18',
           document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
           isInitializeCase: true,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
           sentBy: 'petitioner',
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         },

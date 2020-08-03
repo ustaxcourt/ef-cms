@@ -51,11 +51,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
     NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
 
   const isPetitionDocument =
-    caseDocument &&
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
 
   const isStipulatedDecision =
-    caseDocument && caseDocument.eventCode === STIPULATED_DECISION_EVENT_CODE;
+    caseDocument.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
   const isInternalUser = applicationContext
     .getUtilities()

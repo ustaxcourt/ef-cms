@@ -13,7 +13,7 @@ import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessions
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
-const { USER_ROLES } = getConstants();
+const { PETITIONS_SECTION, USER_ROLES } = getConstants();
 
 const goToWorkQueue = [
   setCurrentPageAction('Interstitial'),
@@ -46,7 +46,7 @@ const goToWorkQueue = [
         ],
         judge: [getTrialSessionsAction, setTrialSessionsAction],
         petitionsclerk: [
-          getUsersInSectionAction({ section: 'petitions' }),
+          getUsersInSectionAction({ section: PETITIONS_SECTION }),
           setUsersAction,
         ],
       },
