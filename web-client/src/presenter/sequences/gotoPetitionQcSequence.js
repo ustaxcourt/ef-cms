@@ -6,6 +6,7 @@ import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFormDocumentForPreviewAction } from '../actions/setDefaultFormDocumentForPreviewAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -24,5 +25,6 @@ export const gotoPetitionQcSequence = [
   setDefaultFormDocumentForPreviewAction,
   getFormDocumentUrlForPreviewAction,
   setPdfPreviewUrlAction,
+  setDocumentIdAction,
   setCurrentPageAction('PetitionQc'),
 ];
