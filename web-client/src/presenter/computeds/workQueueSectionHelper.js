@@ -1,19 +1,15 @@
 export const workQueueSectionHelper = (get, applicationContext) => {
-  const {
-    CHAMBERS_SECTIONS_LABELS,
-    PETITIONS_SECTION,
-  } = applicationContext.getConstants();
+  const { CHAMBERS_SECTIONS_LABELS } = applicationContext.getConstants();
 
   const sectionDisplay = key => {
     return (
       {
         adc: 'ADC',
         admissions: 'Admissions',
-        calendar: 'Calendar',
         chambers: 'Chambers',
         clerkofcourt: 'Clerk of the Court',
         docket: 'Docket',
-        petitions: PETITIONS_SECTION,
+        petitions: 'Petitions',
         trialClerks: 'Trial Clerks',
       }[key] || chambersDisplay(key)
     );
