@@ -1464,8 +1464,7 @@ describe('Document entity', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       };
       document.setQCed(user);
-      expect(document.qcByUser.name).toEqual('Jean Luc');
-      expect(document.qcByUser.userId).toEqual(
+      expect(document.qcByUserId).toEqual(
         '02323349-87fe-4d29-91fe-8dd6916d2fda',
       );
       expect(document.qcAt).toBeDefined();

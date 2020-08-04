@@ -570,7 +570,7 @@ Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
  * @param {object} user the user completing QC process
  */
 Document.prototype.setQCed = function (user) {
-  this.qcByUser = user;
+  this.qcByUserId = user.userId;
   this.qcAt = createISODateString();
 };
 
