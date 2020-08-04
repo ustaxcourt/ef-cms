@@ -17,7 +17,6 @@
     "createdAt": "2020-04-29T15:52:05.725Z",
     "scenario": "Type A",
     "entityName": "Document",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "documentTitle": "Order that this case is sealed",
     "documentContents": "We are sealing this case right meow.\n",
@@ -47,7 +46,6 @@
           "createdAt": "2020-04-29T15:52:05.725Z",
           "scenario": "Type A",
           "entityName": "Document",
-          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "documentTitle": "Order that this case is sealed",
           "relationship": "primaryDocument",
           "documentContents": "We are sealing this case right meow.\n",
@@ -75,7 +73,6 @@
         "createdAt": "2020-04-29T15:52:15.627Z",
         "assigneeName": "Test Petitionsclerk",
         "entityName": "WorkItem",
-        "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
         "hideFromPendingMessages": true,
         "messages": [
           {
@@ -101,7 +98,7 @@
     "signedAt": "2020-04-29T15:52:05.726Z",
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "numberOfPages": 1,
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "case|105-20",
     "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-04-29T15:52:16.484Z",
     "docketNumber": "105-20",
@@ -117,8 +114,8 @@
     "index": 3,
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "numberOfPages": 1,
-    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
+    "pk": "case|105-20"
   },
   {
     "date": null,
@@ -139,7 +136,6 @@
     "numberOfPages": 1,
     "scenario": "Type B",
     "entityName": "Document",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "document|130a3790-7e82-4f5c-8158-17f5d9d560e7",
     "judge": "Judge Armen",
     "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
@@ -170,7 +166,6 @@
           "numberOfPages": 1,
           "scenario": "Type B",
           "entityName": "Document",
-          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "judge": "Judge Armen",
           "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
           "relationship": "primaryDocument",
@@ -189,7 +184,6 @@
                   "scenario": "Type A",
                   "primaryDocumentFileSize": 3586249,
                   "freeText": "A Strong Opinion",
-                  "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
                   "documentTitle": "A Strong Opinion",
                   "docketNumber": "105-20"
                 },
@@ -206,7 +200,6 @@
                 "createdAt": "2020-05-13T14:50:04.929Z",
                 "scenario": "Type B",
                 "entityName": "Document",
-                "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
                 "freeText": "Some very strong opinions about sunglasses",
                 "signedAt": "2020-05-13T14:50:04.930Z",
                 "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
@@ -227,7 +220,6 @@
               "createdAt": "2020-05-13T14:50:45.762Z",
               "assigneeName": "Test Docketclerk1",
               "entityName": "WorkItem",
-              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "hideFromPendingMessages": true,
               "messages": [
                 {
@@ -266,7 +258,6 @@
         "createdAt": "2020-05-13T14:50:45.762Z",
         "assigneeName": "Test Docketclerk1",
         "entityName": "WorkItem",
-        "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
         "hideFromPendingMessages": true,
         "messages": [
           {
@@ -291,7 +282,7 @@
     "freeText": "Some very strong opinions about sunglasses",
     "signedAt": "2020-05-13T14:50:04.930Z",
     "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "case|105-20",
     "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-05-13T14:50:46.374Z",
     "docketNumber": "105-20"
@@ -342,7 +333,6 @@
         "createdAt": "2020-04-29T15:50:41.698Z",
         "assigneeName": null,
         "entityName": "WorkItem",
-        "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
         "messages": [
           {
             "createdAt": "2020-04-29T15:50:41.699Z",
@@ -367,13 +357,12 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "entityName": "Document",
     "filedBy": "Petr. Astra Santiago",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "isFileAttached": true,
     "sk": "document|af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
     "partySecondary": false,
     "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
     "numberOfPages": 1,
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "case|105-20",
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": []
   },
@@ -406,7 +395,6 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:50:41.698Z",
     "updatedAt": "2020-04-29T15:50:41.699Z",
     "completedAt": "2020-04-29T15:51:29.331Z",
@@ -452,7 +440,6 @@
       "createdAt": "2020-04-29T15:52:05.725Z",
       "scenario": "Type A",
       "entityName": "Document",
-      "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
       "documentTitle": "Order that this case is sealed",
       "relationship": "primaryDocument",
       "workItems": [
@@ -465,7 +452,6 @@
             "draftState": {
               "eventCode": "O",
               "documentType": "Order",
-              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "documentContents": "We are sealing this case right meow.\n",
               "documentTitle": "Order that this case is sealed",
               "richText": "<p>We are sealing this case right meow.</p>",
@@ -486,7 +472,6 @@
             "createdAt": "2020-04-29T15:52:05.725Z",
             "scenario": "Type A",
             "entityName": "Document",
-            "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
             "freeText": "Order that this case is sealed",
             "signedAt": "2020-04-29T15:52:05.726Z",
             "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
@@ -506,7 +491,6 @@
           "createdAt": "2020-04-29T15:52:15.627Z",
           "assigneeName": "Test Petitionsclerk",
           "entityName": "WorkItem",
-          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "hideFromPendingMessages": true,
           "messages": [
             {
@@ -544,7 +528,6 @@
     "createdAt": "2020-04-29T15:52:15.627Z",
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:52:15.627Z",
     "updatedAt": "2020-04-29T15:52:15.628Z",
     "completedAt": "2020-04-29T15:52:16.578Z",
@@ -571,10 +554,9 @@
     "completedBy": "Test Petitionsclerk"
   },
   {
-    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
-    "gsi1pk": "user-case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "case|105-20",
+    "gsi1pk": "user-case|105-20",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "caseCaption": "Astra Santiago, Petitioner",
     "createdAt": "2020-04-29T15:50:41.686Z",
     "docketNumber": "105-20",
@@ -583,14 +565,13 @@
     "entityName": "UserCase"
   },
   {
-    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "case|105-20",
     "pk": "case-by-docket-number|105-20"
   },
   {
-    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
-    "gsi1pk": "user-case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "case|105-20",
+    "gsi1pk": "user-case|105-20",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "caseCaption": "Astra Santiago, Petitioner",
     "createdAt": "2020-04-29T15:50:41.686Z",
     "docketNumber": "105-20",
@@ -630,8 +611,7 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Astra Santiago, Petitioner",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
-    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "case|105-20",
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
@@ -648,7 +628,7 @@
     "hasVerifiedIrsNotice": true,
     "petitionPaymentDate": null,
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "case|105-20",
     "docketNumber": "105-20",
     "docketNumberWithSuffix": "105-20L",
     "petitionPaymentWaivedDate": null,
@@ -682,8 +662,8 @@
     "index": 4,
     "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
     "numberOfPages": 1,
-    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
+    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
+    "pk": "case|105-20"
   },
   {
     "eventCode": "P",
@@ -696,7 +676,7 @@
     "index": 1,
     "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
     "numberOfPages": 1,
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
+    "pk": "case|105-20"
   },
   {
     "eventCode": "RQT",
@@ -706,7 +686,7 @@
     "sk": "docket-record|b9471b59-fbe3-436f-a695-2583f013b975",
     "description": "Request for Place of Trial at New York City, New York",
     "index": 2,
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
+    "pk": "case|105-20"
   },
   {
     "draftState": null,
@@ -728,13 +708,12 @@
     "createdAt": "2020-04-29T15:50:41.699Z",
     "entityName": "Document",
     "filedBy": "Petr. Astra Santiago",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "isFileAttached": true,
     "sk": "document|abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "numberOfPages": 1,
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "case|105-20",
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": []
   },
@@ -756,18 +735,17 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
     "section": "privatePractitioner",
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "case|105-20",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
   },
   {
     "sk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
-    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
+    "pk": "case|105-20"
   },
   {
-    "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "case|105-20",
     "pk": "catalog"
   },
   {
@@ -792,7 +770,6 @@
       "createdAt": "2020-04-29T15:52:05.725Z",
       "scenario": "Type A",
       "entityName": "Document",
-      "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
       "documentTitle": "Order that this case is sealed",
       "relationship": "primaryDocument",
       "workItems": [
@@ -805,7 +782,6 @@
             "draftState": {
               "eventCode": "O",
               "documentType": "Order",
-              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "documentContents": "We are sealing this case right meow.\n",
               "documentTitle": "Order that this case is sealed",
               "richText": "<p>We are sealing this case right meow.</p>",
@@ -826,7 +802,6 @@
             "createdAt": "2020-04-29T15:52:05.725Z",
             "scenario": "Type A",
             "entityName": "Document",
-            "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
             "freeText": "Order that this case is sealed",
             "signedAt": "2020-04-29T15:52:05.726Z",
             "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
@@ -846,7 +821,6 @@
           "createdAt": "2020-04-29T15:52:15.627Z",
           "assigneeName": "Test Petitionsclerk",
           "entityName": "WorkItem",
-          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "hideFromPendingMessages": true,
           "messages": [
             {
@@ -884,7 +858,6 @@
     "createdAt": "2020-04-29T15:52:15.627Z",
     "assigneeName": "Test Petitionsclerk",
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:52:15.627Z",
     "updatedAt": "2020-04-29T15:52:15.628Z",
     "completedAt": "2020-04-29T15:52:16.578Z",
@@ -945,7 +918,6 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
     "messages": [
       {
@@ -985,7 +957,6 @@
       "numberOfPages": 1,
       "scenario": "Type B",
       "entityName": "Document",
-      "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
       "judge": "Judge Armen",
       "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
       "relationship": "primaryDocument",
@@ -1004,7 +975,6 @@
               "scenario": "Type A",
               "primaryDocumentFileSize": 3586249,
               "freeText": "A Strong Opinion",
-              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "documentTitle": "A Strong Opinion",
               "docketNumber": "105-20"
             },
@@ -1021,7 +991,6 @@
             "createdAt": "2020-05-13T14:50:04.929Z",
             "scenario": "Type B",
             "entityName": "Document",
-            "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
             "freeText": "Some very strong opinions about sunglasses",
             "signedAt": "2020-05-13T14:50:04.930Z",
             "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
@@ -1042,7 +1011,6 @@
           "createdAt": "2020-05-13T14:50:45.762Z",
           "assigneeName": "Test Docketclerk1",
           "entityName": "WorkItem",
-          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "hideFromPendingMessages": true,
           "messages": [
             {
@@ -1077,7 +1045,6 @@
     "createdAt": "2020-05-13T14:50:45.762Z",
     "assigneeName": "Test Docketclerk1",
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-05-13T14:50:45.762Z",
     "updatedAt": "2020-05-13T14:50:45.763Z",
     "completedAt": "2020-05-13T14:50:46.662Z",
@@ -1126,7 +1093,6 @@
       "numberOfPages": 1,
       "scenario": "Type B",
       "entityName": "Document",
-      "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
       "judge": "Judge Armen",
       "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
       "relationship": "primaryDocument",
@@ -1145,7 +1111,6 @@
               "scenario": "Type A",
               "primaryDocumentFileSize": 3586249,
               "freeText": "A Strong Opinion",
-              "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
               "documentTitle": "A Strong Opinion",
               "docketNumber": "105-20"
             },
@@ -1162,7 +1127,6 @@
             "createdAt": "2020-05-13T14:50:04.929Z",
             "scenario": "Type B",
             "entityName": "Document",
-            "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
             "freeText": "Some very strong opinions about sunglasses",
             "signedAt": "2020-05-13T14:50:04.930Z",
             "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
@@ -1183,7 +1147,6 @@
           "createdAt": "2020-05-13T14:50:45.762Z",
           "assigneeName": "Test Docketclerk1",
           "entityName": "WorkItem",
-          "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
           "hideFromPendingMessages": true,
           "messages": [
             {
@@ -1218,7 +1181,6 @@
     "createdAt": "2020-05-13T14:50:45.762Z",
     "assigneeName": "Test Docketclerk1",
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-05-13T14:50:45.762Z",
     "updatedAt": "2020-05-13T14:50:45.763Z",
     "completedAt": "2020-05-13T14:50:46.662Z",
@@ -1273,7 +1235,6 @@
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
-    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "2020-04-29T15:50:41.698Z",
     "updatedAt": "2020-04-29T15:50:41.699Z",
     "completedAt": "2020-04-29T15:51:29.331Z",

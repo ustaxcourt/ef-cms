@@ -652,4 +652,99 @@ describe('documentViewerHelper', () => {
       expect(result.showServePetitionButton).toEqual(true);
     });
   });
+
+  describe('showSignStipulatedDecisionButton', () => {
+    it('should be true if the eventCode is PSDE and the SDEC eventCode is not in the documents', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be false if the document code is PSDE and the SDEC eventCode is in the documents', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+              {
+                documentId: '234',
+                documentType: 'Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'SDEC',
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+
+    it('should be false if the eventCode is not PSDE', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(false);
+    });
+  });
 });

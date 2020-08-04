@@ -9,7 +9,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const replyToMessage = async ({
   applicationContext,
   attachments,
-  caseId,
+  docketNumber,
   message,
   parentMessageId,
   subject,
@@ -31,12 +31,11 @@ const replyToMessage = async ({
 
   const {
     caseCaption,
-    docketNumber,
     docketNumberWithSuffix,
     status,
   } = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId });
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()
@@ -49,7 +48,6 @@ const replyToMessage = async ({
   const caseMessage = new CaseMessage(
     {
       attachments,
-      caseId,
       caseStatus: status,
       caseTitle: Case.getCaseTitle(caseCaption),
       docketNumber,
@@ -85,7 +83,7 @@ exports.replyToMessage = replyToMessage;
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.message the message text
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @param {string} providers.subject the message subject
@@ -96,7 +94,7 @@ exports.replyToMessage = replyToMessage;
 exports.replyToCaseMessageInteractor = async ({
   applicationContext,
   attachments,
-  caseId,
+  docketNumber,
   message,
   parentMessageId,
   subject,
@@ -106,7 +104,7 @@ exports.replyToCaseMessageInteractor = async ({
   return await replyToMessage({
     applicationContext,
     attachments,
-    caseId,
+    docketNumber,
     message,
     parentMessageId,
     subject,

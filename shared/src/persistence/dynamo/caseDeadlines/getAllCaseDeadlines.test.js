@@ -9,7 +9,7 @@ describe('getAllCaseDeadlines', () => {
   const mockDeadlines = [
     {
       caseDeadlineId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       pk: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       sk: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },

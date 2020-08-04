@@ -43,7 +43,9 @@ export const AddDocketEntry = connect(
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
-                {isEditingDocketEntry ? 'Edit' : 'Add'} Docket Entry
+                <span>
+                  {isEditingDocketEntry ? 'Edit' : 'Add'} Paper Filing
+                </span>
               </h1>
             </div>
 

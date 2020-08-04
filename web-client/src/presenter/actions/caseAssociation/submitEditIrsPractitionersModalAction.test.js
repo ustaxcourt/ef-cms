@@ -38,7 +38,7 @@ describe('submitEditIrsPractitionersModalAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         modal: form,
       },
@@ -54,16 +54,16 @@ describe('submitEditIrsPractitionersModalAction', () => {
     ).toMatchObject(
       [
         {
-          caseId: '123',
+          docketNumber: '123-20',
           userData: { userId: '1' },
-          userIdToUpdate: '1',
+          userId: '1',
         },
       ],
       [
         {
-          caseId: '123',
+          docketNumber: '123-20',
           userData: { userId: '3' },
-          userIdToUpdate: '3',
+          userId: '3',
         },
       ],
     );
@@ -75,8 +75,8 @@ describe('submitEditIrsPractitionersModalAction', () => {
       applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
-      caseId: '123',
-      userIdToDelete: '2',
+      docketNumber: '123-20',
+      userId: '2',
     });
     expect(successStub).toHaveBeenCalled();
   });

@@ -12,14 +12,14 @@ describe('updateDeleteUserCaseNotePropsFromModalStateAction', () => {
         },
         props: {},
         state: {
-          modal: { caseId: '123' },
+          modal: { docketNumber: '123-45' },
           trialSession: { trialSessionId: '456' },
         },
       },
     );
 
     expect(result.output).toEqual({
-      caseId: '123',
+      docketNumber: '123-45',
       trialSessionId: '456',
     });
   });

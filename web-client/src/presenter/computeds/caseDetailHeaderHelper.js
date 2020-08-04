@@ -48,11 +48,15 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     }
   }
 
-  const showConsolidatedCaseIcon = !!caseDetail.leadCaseId;
+  const showConsolidatedCaseIcon = !!caseDetail.leadDocketNumber;
 
   const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
 
   const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
+
+  const showNewTabLink = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
 
   const showCaseDetailHeaderMenu = !isExternalUser;
 
@@ -77,6 +81,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showExternalButtons: isExternalUser && petitionIsServed,
     showFileDocumentButton,
     showFileFirstDocumentButton,
+    showNewTabLink,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
     showSealedCaseBanner: isCaseSealed,

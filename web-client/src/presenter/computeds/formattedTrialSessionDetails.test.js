@@ -286,7 +286,6 @@ describe('formattedTrialSessionDetails', () => {
             {
               ...MOCK_CASE,
               caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              caseId: 'ef88c665-4d1d-48a9-898a-eae698187b2b',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               removedFromTrial: true,
             },
@@ -338,7 +337,7 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          caseOrder: [{ caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039' }],
+          caseOrder: [{ docketNumber: '123-45' }],
           isCalendared: true,
         },
       },
@@ -353,7 +352,7 @@ describe('formattedTrialSessionDetails', () => {
           ...TRIAL_SESSION,
           caseOrder: [
             {
-              caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039',
+              docketNumber: '123-45',
               removedFromTrial: true,
             },
           ],

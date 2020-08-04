@@ -18,7 +18,7 @@ describe('isPrintPreviewPreparedAction', () => {
         presenter,
       },
       state: {
-        caseId: '123-19',
+        docketNumber: '123-19',
       },
     });
     expect(presenter.providers.path.no).toHaveBeenCalled();

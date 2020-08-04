@@ -31,8 +31,8 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
     expect(
       applicationContext.getUseCases().updateCaseTrialSortTagsInteractor.mock
-        .calls[0][0].caseId,
-    ).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
+        .calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should not call the updateCaseTrialSortTags use case if case status is not ready for trial', async () => {

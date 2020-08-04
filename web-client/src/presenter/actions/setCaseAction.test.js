@@ -6,13 +6,13 @@ describe('setCaseAction', () => {
     const { state } = await runAction(setCaseAction, {
       props: {
         caseDetail: {
-          caseId: '1234',
+          docketNumber: '123-45',
         },
       },
     });
 
     expect(state.caseDetail).toEqual({
-      caseId: '1234',
+      docketNumber: '123-45',
     });
   });
 });

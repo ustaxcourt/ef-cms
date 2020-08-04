@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,

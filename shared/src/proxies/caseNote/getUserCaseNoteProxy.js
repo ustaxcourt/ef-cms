@@ -5,12 +5,12 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id to get notes for the logged in user
+ * @param {string} providers.docketNumber the docket number to get notes for the logged in user
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUserCaseNoteInteractor = ({ applicationContext, caseId }) => {
+exports.getUserCaseNoteInteractor = ({ applicationContext, docketNumber }) => {
   return get({
     applicationContext,
-    endpoint: `/case-notes/${caseId}/user-notes`,
+    endpoint: `/case-notes/${docketNumber}/user-notes`,
   });
 };

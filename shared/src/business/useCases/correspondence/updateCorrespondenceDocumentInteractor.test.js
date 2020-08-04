@@ -29,7 +29,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   });
   const mockCase = {
     caseCaption: 'Caption',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
@@ -76,7 +75,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
@@ -85,7 +84,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     await expect(
       updateCorrespondenceDocumentInteractor({
         applicationContext,
-        documentMetadata: { caseId: '2368f6c6-e91f-4df3-98fd-43e55c00f6f1' },
+        documentMetadata: { docketNumber: mockCase.docketNumber },
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -94,7 +93,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '2e528c9c-70f5-4b3e-81c6-1a2f715261b4',
+        docketNumber: mockCase.docketNumber,
         documentId: mockCorrespondence.documentId,
         documentTitle: 'A title that has been updated',
       },
@@ -104,11 +103,11 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '2e528c9c-70f5-4b3e-81c6-1a2f715261b4',
       correspondence: {
         ...mockCorrespondence,
         documentTitle: 'A title that has been updated',
       },
+      docketNumber: mockCase.docketNumber,
     });
   });
 
@@ -116,7 +115,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     const result = await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '2368f6c6-e91f-4df3-98fd-43e55c00f6f1',
+        docketNumber: mockCase.docketNumber,
         documentId: mockCorrespondence.documentId,
         documentTitle: 'A title that has been updated',
       },

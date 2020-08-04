@@ -15,7 +15,7 @@ export const setViewerCorrespondenceToDisplayAction = async ({
   store,
 }) => {
   const { viewerCorrespondenceToDisplay } = props;
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   store.set(state.viewerCorrespondenceToDisplay, viewerCorrespondenceToDisplay);
 
@@ -26,7 +26,7 @@ export const setViewerCorrespondenceToDisplayAction = async ({
       .getUseCases()
       .getDocumentDownloadUrlInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         documentId: viewerCorrespondenceToDisplay.documentId,
         isPublic: false,
       });

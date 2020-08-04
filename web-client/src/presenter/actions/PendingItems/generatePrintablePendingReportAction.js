@@ -9,14 +9,14 @@ export const generatePrintablePendingReportAction = async ({
   applicationContext,
   props,
 }) => {
-  const { caseIdFilter, judgeFilter } = props;
+  const { docketNumberFilter, judgeFilter } = props;
 
   const params = {
     applicationContext,
   };
 
-  if (caseIdFilter) {
-    params.caseId = caseIdFilter;
+  if (docketNumberFilter) {
+    params.docketNumber = docketNumberFilter;
   } else if (judgeFilter) {
     params.judge = judgeFilter;
   }

@@ -103,7 +103,7 @@ describe('uploadExternalDocumentsInteractor', () => {
     ).resolves.not.toThrow();
   });
 
-  it('should call fileExternalDocumentForConsolidatedInteractor when a leadCaseId is provided', async () => {
+  it('should call fileExternalDocumentForConsolidatedInteractor when a leadDocketNumber is provided', async () => {
     await uploadExternalDocumentsInteractor({
       applicationContext,
       documentFiles: {
@@ -113,7 +113,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         secondarySupporting0: 'something4',
       },
       documentMetadata: {},
-      leadCaseId: '123',
+      leadDocketNumber: '123-20',
       progressFunctions: {
         primary: 'something',
         primarySupporting0: 'something3',

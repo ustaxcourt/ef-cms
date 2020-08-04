@@ -1,11 +1,13 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { getCaseMessagesByCaseId } = require('./getCaseMessagesByCaseId');
+const {
+  getCaseMessagesByDocketNumber,
+} = require('./getCaseMessagesByDocketNumber');
 
 const mockCaseMessage = {
-  caseId: 'b3f09a45-b27c-4383-acc1-2ab1f99e6725',
   createdAt: '2019-03-01T21:40:46.415Z',
+  docketNumber: '123-20',
   from: 'Test Petitionsclerk',
   fromSection: 'petitions',
   fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
@@ -17,18 +19,18 @@ const mockCaseMessage = {
   toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
 };
 
-describe('getCaseMessagesByCaseId', () => {
+describe('getCaseMessagesByDocketNumber', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
-    applicationContext.getDocumentClient().query.mockReturnValue({
+    applicationContext.getDocumentClient().query.mockReturnValueOnce({
       promise: () => Promise.resolve({ Items: [mockCaseMessage] }),
     });
   });
 
   it('retrieves the case message from persistence', async () => {
-    const retrievedMessage = await getCaseMessagesByCaseId({
+    const retrievedMessage = await getCaseMessagesByDocketNumber({
       applicationContext,
-      caseId: mockCaseMessage.caseId,
+      docketNumber: mockCaseMessage.docketNumber,
     });
 
     expect(retrievedMessage).toEqual([mockCaseMessage]);

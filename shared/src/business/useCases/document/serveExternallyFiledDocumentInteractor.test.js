@@ -21,7 +21,7 @@ const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
-  const CASE_ID = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+  const DOCKET_NUMBER = '101-20';
   const DOCUMENT_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
 
   beforeAll(() => {
@@ -65,7 +65,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   beforeEach(() => {
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: CASE_ID,
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -78,7 +77,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
+      docketNumber: DOCKET_NUMBER,
       docketRecord: [],
       documents: [
         {
@@ -111,7 +110,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -127,7 +126,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should update the document with a servedAt date', async () => {
     await serveExternallyFiledDocumentInteractor({
       applicationContext,
-      caseId: CASE_ID,
+      docketNumber: DOCKET_NUMBER,
       documentId: DOCUMENT_ID,
     });
 
@@ -146,7 +145,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should add a coversheet to the document', async () => {
     await serveExternallyFiledDocumentInteractor({
       applicationContext,
-      caseId: CASE_ID,
+      docketNumber: DOCKET_NUMBER,
       documentId: DOCUMENT_ID,
     });
 
@@ -156,7 +155,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should send electronic-service parties emails', async () => {
     await serveExternallyFiledDocumentInteractor({
       applicationContext,
-      caseId: CASE_ID,
+      docketNumber: DOCKET_NUMBER,
       documentId: DOCUMENT_ID,
     });
 
@@ -191,11 +190,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
     const result = await serveExternallyFiledDocumentInteractor({
       applicationContext,
-      caseId: CASE_ID,
+      docketNumber: DOCKET_NUMBER,
       documentId: DOCUMENT_ID,
     });
 

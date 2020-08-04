@@ -3,7 +3,6 @@ import { adcVerifiesStipulatedDecisionDoesNotExistInInbox } from './journey/adcV
 import { adcVerifiesStipulatedDecisionExistsInOutbox } from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
 import { adcViewsStipulatedDecisionForSigning } from './journey/adcViewsStipulatedDecisionForSigning';
 import { docketClerkSendsStipDecisionToADC } from './journey/docketClerkSendsStipDecisionToADC';
-import { docketClerkVerifiesStipulatedDecisionExistsInInbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
 import { docketClerkVerifiesStipulatedDecisionExistsInOutbox } from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
 import { docketClerkViewsStipulatedDecision } from './journey/docketClerkViewsStipulatedDecision';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -44,9 +43,5 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   docketClerkVerifiesStipulatedDecisionExistsInOutbox(
     test,
     'Jeff, this is ready for review and signature',
-  );
-  docketClerkVerifiesStipulatedDecisionExistsInInbox(
-    test,
-    'Donna, this is not ready to serve. I need to follow up on something first',
   );
 });

@@ -17,7 +17,7 @@ export const setQcCompleteOnCaseOnTrialSessionAction = ({
   const eligibleCases = get(state.trialSession.eligibleCases);
 
   const eligibleCase = eligibleCases.find(
-    myCase => myCase.caseId === updatedCase.caseId,
+    myCase => myCase.docketNumber === updatedCase.docketNumber,
   );
 
   eligibleCase.qcCompleteForTrial = updatedCase.qcCompleteForTrial;

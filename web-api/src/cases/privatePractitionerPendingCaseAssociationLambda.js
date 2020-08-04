@@ -8,13 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.privatePractitionerPendingCaseAssociationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, userId } = event.pathParameters || {};
-
     return await applicationContext
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor({
         applicationContext,
-        caseId,
-        userId,
+        ...event.pathParameters,
       });
   });

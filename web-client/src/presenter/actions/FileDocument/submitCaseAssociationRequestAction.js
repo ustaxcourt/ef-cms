@@ -12,14 +12,13 @@ export const submitCaseAssociationRequestAction = async ({
   applicationContext,
   get,
 }) => {
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const { docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
 
   let documentMetadata = get(state.form);
 
   documentMetadata = {
     ...documentMetadata,
-    caseId,
     docketNumber,
     privatePractitioners: [
       {
@@ -46,7 +45,7 @@ export const submitCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitCaseAssociationRequestInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         representingPrimary: documentMetadata.representingPrimary,
         representingSecondary: documentMetadata.representingSecondary,
       });
@@ -55,12 +54,11 @@ export const submitCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
       });
   }
 
   return {
-    caseId,
     docketNumber,
     documentWithImmediateAssociation,
     documentWithPendingAssociation,

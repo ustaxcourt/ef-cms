@@ -24,7 +24,6 @@ const addPetitionDocumentWithWorkItemToCase = ({
       assigneeId: user.userId,
       assigneeName: user.name,
       associatedJudge: caseToAdd.associatedJudge,
-      caseId: caseToAdd.caseId,
       caseIsInProgress: true,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),

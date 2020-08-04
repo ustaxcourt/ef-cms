@@ -17,7 +17,7 @@ let mockCase;
 describe('updateCaseModalHelper', () => {
   beforeEach(() => {
     mockCase = {
-      caseId: '123',
+      docketNumber: '123-20',
       status: CASE_STATUS_TYPES.new,
     };
   });

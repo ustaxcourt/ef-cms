@@ -12,8 +12,7 @@ exports.updateDeficiencyStatisticLambda = event =>
       .getUseCases()
       .updateDeficiencyStatisticInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
-        statisticId: event.pathParameters.statisticId,
+        ...event.pathParameters,
         ...JSON.parse(event.body),
       });
   });

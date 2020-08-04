@@ -1547,7 +1547,6 @@ describe('Case entity', () => {
         {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
@@ -1564,7 +1563,6 @@ describe('Case entity', () => {
         {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
@@ -1768,10 +1766,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-D-20181212000000-101-18',
       });
     });
 
@@ -1787,10 +1783,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-D-20181212000000-101-18',
       });
     });
 
@@ -1806,10 +1800,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-C-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-C-20181212000000-101-18',
       });
     });
 
@@ -1825,10 +1817,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-B-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-B-20181212000000-101-18',
       });
     });
 
@@ -1845,10 +1835,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-A-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-A-20181212000000-101-18',
       });
     });
   });
@@ -2959,8 +2947,8 @@ describe('Case entity', () => {
     });
 
     describe('setLeadCase', () => {
-      it('Should set the leadCaseId on the given case', async () => {
-        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+      it('Should set the leadDocketNumber on the given case', async () => {
+        const leadDocketNumber = '101-20';
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
@@ -2970,18 +2958,18 @@ describe('Case entity', () => {
           },
           { applicationContext },
         );
-        const result = caseEntity.setLeadCase(leadCaseId);
+        const result = caseEntity.setLeadCase(leadDocketNumber);
 
-        expect(result.leadCaseId).toEqual(leadCaseId);
+        expect(result.leadDocketNumber).toEqual(leadDocketNumber);
       });
     });
 
     describe('removeConsolidation', () => {
-      it('Should unset the leadCaseId on the given case', async () => {
+      it('Should unset the leadDocketNumber on the given case', async () => {
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
-            leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
+            leadDocketNumber: '101-20',
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
             status: CASE_STATUS_TYPES.submitted,
@@ -2990,7 +2978,7 @@ describe('Case entity', () => {
         );
         const result = caseEntity.removeConsolidation();
 
-        expect(result.leadCaseId).toBeUndefined();
+        expect(result.leadDocketNumber).toBeUndefined();
       });
     });
 
@@ -2998,30 +2986,24 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3030,38 +3012,30 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3072,39 +3046,33 @@ describe('Case entity', () => {
       it('Should return the case with the lowest docket number for cases filed in the same year', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('100-19');
       });
 
       it('Should return the case with the lowest docket number for cases filed in different years', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('110-18');
       });
     });
   });

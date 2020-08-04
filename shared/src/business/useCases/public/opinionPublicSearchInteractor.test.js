@@ -15,7 +15,6 @@ describe('opinionPublicSearchInteractor', () => {
   const mockOpinionSearchResult = [
     {
       caseCaption: 'Reuben Blair, Petitioner',
-      caseId: '24fcb050-9c95-4d69-a149-96acba0196b8',
       contactPrimary: {
         address1: '66 East Clarendon Parkway',
         address2: 'Ut culpa cum sint ',

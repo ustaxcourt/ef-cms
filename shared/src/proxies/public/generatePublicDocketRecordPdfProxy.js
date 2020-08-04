@@ -5,18 +5,18 @@ const { post } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id
+ * @param {string} providers.docketNumber the case docket number
  * @returns {Promise<*>} the promise of the api call
  */
 exports.generatePublicDocketRecordPdfInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   return post({
     applicationContext,
     body: {
-      caseId,
+      docketNumber,
     },
-    endpoint: `/public-api/cases/${caseId}/generate-docket-record`,
+    endpoint: `/public-api/cases/${docketNumber}/generate-docket-record`,
   });
 };

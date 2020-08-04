@@ -17,7 +17,7 @@ describe('completeWorkItemForDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -54,7 +54,7 @@ describe('completeWorkItemForDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',

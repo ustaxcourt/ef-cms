@@ -12,8 +12,7 @@ exports.updateCounselOnCaseLambda = event =>
       .getUseCases()
       .updateCounselOnCaseInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
         userData: JSON.parse(event.body),
-        userIdToUpdate: event.pathParameters.userId,
       });
   });
