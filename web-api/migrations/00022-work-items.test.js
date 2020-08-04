@@ -8,7 +8,7 @@ describe('work items array to object', () => {
   let scanStub;
   let putStub;
   let deleteStub;
-  let getStub;
+  let queryStub;
   let mockItems = [];
 
   const WORK_ITEM_ID_1 = '03b2c114-c8b7-4643-852c-3364a197ccb2';
@@ -38,6 +38,8 @@ describe('work items array to object', () => {
 
   const mockCaseRecord = {
     ...MOCK_CASE,
+    pk: `case|${MOCK_CASE.docketNumber}`,
+    sk: `case|${MOCK_CASE.docketNumber}`,
   };
 
   beforeEach(() => {
@@ -57,14 +59,14 @@ describe('work items array to object', () => {
       promise: async () => ({}),
     });
 
-    getStub = jest.fn().mockReturnValue({
-      promise: async () => ({ Item: mockCaseRecord }),
+    queryStub = jest.fn().mockReturnValue({
+      promise: async () => ({ Items: [mockCaseRecord] }),
     });
 
     documentClient = {
       delete: deleteStub,
-      get: getStub,
       put: putStub,
+      query: queryStub,
       scan: scanStub,
     };
   });
@@ -112,7 +114,9 @@ describe('work items array to object', () => {
   });
 
   it('should modify document records and add a default isDraft flag if the case record is not found', async () => {
-    documentClient.get = jest.fn().mockReturnValue({ promise: async () => {} });
+    documentClient.query = jest
+      .fn()
+      .mockReturnValue({ promise: async () => {} });
     mockItems = [{ ...mockDocumentRecord, workItems: [] }];
 
     await up(documentClient, '', forAllRecords);
@@ -156,12 +160,19 @@ describe('work items array to object', () => {
   });
 
   it('should modify document record with isDraft false if document is not archived, not served, and is an order that is on the docket record', async () => {
-    documentClient.get = jest.fn().mockReturnValue({
+    documentClient.query = jest.fn().mockReturnValue({
       promise: async () => ({
-        Item: {
-          ...mockCaseRecord,
-          docketRecord: [{ documentId: mockDocumentRecord.documentId }],
-        },
+        Items: [
+          {
+            ...mockCaseRecord,
+          },
+          {
+            docketRecordId: 'f499ee5f-303f-46fc-9c3c-1b1dc3debfe9',
+            documentId: mockDocumentRecord.documentId,
+            pk: mockCaseRecord.pk,
+            sk: 'docket-record|f499ee5f-303f-46fc-9c3c-1b1dc3debfe9',
+          },
+        ],
       }),
     });
     const mockDocument = {
