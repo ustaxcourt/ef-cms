@@ -5,15 +5,21 @@ import { DateRangePickerComponent } from './DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDeadlines = connect(
   {
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
+    selectDateRangeFromCalendarSequence:
+      sequences.selectDateRangeFromCalendarSequence,
   },
-  function CaseDeadlines({ caseDeadlineReportHelper, judgeFilter }) {
+  function CaseDeadlines({
+    caseDeadlineReportHelper,
+    judgeFilter,
+    selectDateRangeFromCalendarSequence,
+  }) {
     return (
       <>
         <BigHeader text="Reports" />
@@ -30,8 +36,20 @@ export const CaseDeadlines = connect(
               </div>
               <div className="blue-container">
                 <DateRangePickerComponent
-                  onChangeEnd={() => {}}
-                  onChangeStart={() => {}}
+                  endName="deadlineEnd"
+                  startName="deadlineStart"
+                  onChangeEnd={e => {
+                    selectDateRangeFromCalendarSequence({
+                      date: e.target.value,
+                      type: 'End',
+                    });
+                  }}
+                  onChangeStart={e => {
+                    selectDateRangeFromCalendarSequence({
+                      date: e.target.value,
+                      type: 'Start',
+                    });
+                  }}
                 />
               </div>
             </div>
