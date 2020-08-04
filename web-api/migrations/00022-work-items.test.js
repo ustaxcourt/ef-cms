@@ -159,6 +159,31 @@ describe('work items array to object', () => {
     });
   });
 
+  it('should modify document record with isDraft false and eventCode is in EVENT_CODES_REQUIRING_JUDGE_SIGNATURE', async () => {
+    const mockDocument = {
+      ...mockDocumentRecord,
+      documentType: 'Order of Dismissal',
+      eventCode: 'OD',
+      isDraft: false,
+      signedAt: undefined,
+      signedByUserId: undefined,
+      signedJudgeName: undefined,
+    };
+    mockItems = [mockDocument];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      ...mockDocument,
+      documentType: 'Order of Dismissal',
+      eventCode: 'OD',
+      isDraft: false,
+      signedAt: '2020-07-06T17:06:04.552Z',
+      signedByUserId: '7b69a8b5-bcc4-4449-8994-08fda8d342e7',
+      signedJudgeName: 'Chief Judge',
+    });
+  });
+
   it('should modify document record with isDraft false if document is not archived, not served, and is an order that is on the docket record', async () => {
     documentClient.query = jest.fn().mockReturnValue({
       promise: async () => ({
