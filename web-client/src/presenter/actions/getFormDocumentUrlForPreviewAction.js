@@ -38,6 +38,8 @@ export const getFormDocumentUrlForPreviewAction = async ({
   );
 
   let pdfUrl;
+  let selectedDocumentId;
+
   if (selectedDocument) {
     const {
       url,
@@ -50,7 +52,8 @@ export const getFormDocumentUrlForPreviewAction = async ({
       });
 
     pdfUrl = url;
+    selectedDocumentId = selectedDocument.documentId;
   }
 
-  return { pdfUrl };
+  return { documentId: selectedDocumentId, pdfUrl };
 };
