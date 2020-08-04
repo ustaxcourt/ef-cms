@@ -212,5 +212,6 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
     );
 
     expect(newDocketEntry).toBeTruthy();
+    expect(newDocketEntry.index).toBeFalsy();
   });
 };
