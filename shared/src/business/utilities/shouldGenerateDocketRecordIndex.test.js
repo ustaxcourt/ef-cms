@@ -139,7 +139,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(true);
   });
 
-  it('returns true for initial document types filed after the petition', () => {
+  it('returns true for initial document types filed after the petition if the docuemnt is being served', () => {
     const caseDetail = {
       docketRecord: [
         {
@@ -169,7 +169,48 @@ describe('shouldGenerateDocketRecordIndex', () => {
       documentId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
-      filingDate: '2019-03-01T21:40:57.415Z', // 11 seconds
+      filingDate: '2019-03-01T21:40:57.415Z',
+      servedAt: '2019-03-02T21:40:46.415Z',
+    };
+    const result = shouldGenerateDocketRecordIndex({
+      caseDetail,
+      docketRecordEntry,
+    });
+
+    expect(result).toEqual(false);
+  });
+
+  it('returns false for initial document types filed after the petition if the docuemnt is NOT being served', () => {
+    const caseDetail = {
+      docketRecord: [
+        {
+          description: 'Petition',
+          docketRecordId: '234',
+          documentId: '123',
+          eventCode: 'P',
+          filingDate: '2019-03-01T21:40:46.415Z',
+          index: 1,
+        },
+      ],
+      documents: [
+        {
+          createdAt: '2019-03-01T21:40:46.415Z',
+          documentId: '012',
+          eventCode: 'P',
+          isPaper: true,
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+        {
+          documentId: '123',
+          isPaper: true,
+        },
+      ],
+    };
+    const docketRecordEntry = {
+      documentId: '123',
+      documentType: 'Ownership Disclosure Statement',
+      eventCode: 'DISC',
+      filingDate: '2019-03-01T21:40:57.415Z',
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
