@@ -105,7 +105,7 @@ export const EditDocketEntry = connect(
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog onCancelSequence="closeModalAndNavigateBackSequence" />
         )}
         {showModal === 'CreateMessageModalDialog' && (
           <CreateMessageModalDialog
