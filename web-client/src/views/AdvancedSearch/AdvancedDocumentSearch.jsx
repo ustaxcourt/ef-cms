@@ -287,6 +287,7 @@ export const AdvancedDocumentSearch = connect(
                             key: 'startDate',
                             value: e.target.value,
                           });
+                          validateSequence();
                         }}
                       />
                     </div>
@@ -309,6 +310,7 @@ export const AdvancedDocumentSearch = connect(
                             key: 'endDate',
                             value: e.target.value,
                           });
+                          validateSequence();
                         }}
                       />
                     </div>
