@@ -139,7 +139,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(true);
   });
 
-  it('returns true for initial document types filed after the petition if the docuemnt is being served', () => {
+  it('returns true for initial document types filed after the petition if the document is being served', () => {
     const caseDetail = {
       docketRecord: [
         {
@@ -180,7 +180,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     expect(result).toEqual(false);
   });
 
-  it('returns false for initial document types filed after the petition if the docuemnt is NOT being served', () => {
+  it('returns false for initial document types filed after the petition if the document is NOT being served', () => {
     const caseDetail = {
       docketRecord: [
         {
