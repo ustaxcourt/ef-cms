@@ -5,9 +5,9 @@ import React from 'react';
 
 export const RecentMessagesInbox = connect(
   {
-    formattedMessages: state.formattedMessages,
+    recentMessagesHelper: state.recentMessagesHelper,
   },
-  function RecentMessagesInbox({ formattedMessages }) {
+  function RecentMessagesInbox({ recentMessagesHelper }) {
     return (
       <React.Fragment>
         <table
@@ -28,7 +28,7 @@ export const RecentMessagesInbox = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.messages.slice(0, 5).map((item, idx) => {
+          {recentMessagesHelper.recentMessages.map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>
@@ -61,7 +61,7 @@ export const RecentMessagesInbox = connect(
             );
           })}
         </table>
-        {formattedMessages.messages.length === 0 && (
+        {recentMessagesHelper.recentMessages.length === 0 && (
           <p>There are no messages.</p>
         )}
       </React.Fragment>
