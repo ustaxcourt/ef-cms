@@ -26,5 +26,8 @@ export const forwardMessageAction = async ({ applicationContext, get }) => {
       message: 'Your message has been sent.',
     },
     parentMessageId,
+    viewerDocumentToDisplay: {
+      documentId: form.attachments[0].documentId,
+    },
   };
 };
