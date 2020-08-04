@@ -4,6 +4,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
 const {
   COURT_ISSUED_DOCUMENT_TYPES,
+  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   ORDER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { Document } = require('../../shared/src/business/entities/Document');
@@ -69,6 +70,23 @@ const mutateRecord = async (item, documentClient, tableName) => {
         documentClient,
         tableName,
       });
+
+      isUpdated = true;
+    }
+
+    if (
+      item.isDraft === false &&
+      EVENT_CODES_REQUIRING_JUDGE_SIGNATURE.includes(item.eventCode)
+    ) {
+      if (item.signedAt === undefined) {
+        item.signedAt = '2020-07-06T17:06:04.552Z';
+      }
+      if (item.signedJudgeName === undefined) {
+        item.signedJudgeName = 'Chief Judge';
+      }
+      if (item.signedByUserId === undefined) {
+        item.signedByUserId = '7b69a8b5-bcc4-4449-8994-08fda8d342e7';
+      }
 
       isUpdated = true;
     }
