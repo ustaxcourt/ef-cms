@@ -1,5 +1,8 @@
 const createApplicationContext = require('../src/applicationContext');
 const {
+  aggregateCaseItems,
+} = require('../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
+const {
   COURT_ISSUED_DOCUMENT_TYPES,
   ORDER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
@@ -14,21 +17,29 @@ const getIsDraftForDocument = async ({
   documentClient,
   tableName,
 }) => {
-  const caseRecord = await documentClient
-    .get({
-      Key: {
-        pk: `case|${document.docketNumber}`,
-        sk: `case|${document.docketNumber}`,
+  const caseRecords = await documentClient
+    .query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
       },
+      ExpressionAttributeValues: {
+        ':pk': `case|${document.docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
       TableName: tableName,
     })
     .promise();
 
-  if (caseRecord && caseRecord.Item) {
-    const caseData = caseRecord.Item;
+  if (!caseRecords || !caseRecords.Items) {
+    return false;
+  }
+
+  const fullCaseRecord = aggregateCaseItems(caseRecords.Items);
+
+  if (fullCaseRecord) {
     const isNotArchived = !document.archived;
     const isNotServed = !document.servedAt;
-    const isDocumentOnDocketRecord = caseData.docketRecord.find(
+    const isDocumentOnDocketRecord = fullCaseRecord.docketRecord.find(
       docketEntry => docketEntry.documentId === document.documentId,
     );
     const isStipDecision = document.documentType === 'Stipulated Decision';
