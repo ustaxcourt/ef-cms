@@ -58,5 +58,10 @@ describe('forwardMessageAction', () => {
     });
     expect(result.output).toHaveProperty('alertSuccess');
     expect(result.output).toHaveProperty('parentMessageId');
+    expect(result.output).toMatchObject({
+      viewerDocumentToDisplay: {
+        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+      },
+    });
   });
 });
