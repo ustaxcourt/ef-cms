@@ -21,8 +21,8 @@ export const docketClerkViewsInactiveCasesForTrialSession = test => {
     );
 
     expect(trialSessionDetailsFormatted.inactiveCases.length).toEqual(1);
-    expect(trialSessionDetailsFormatted.inactiveCases[0].caseId).toEqual(
-      test.caseId,
+    expect(trialSessionDetailsFormatted.inactiveCases[0].docketNumber).toEqual(
+      test.docketNumber,
     );
     expect(trialSessionDetailsFormatted.inactiveCases[0].disposition).toEqual(
       `Status was changed to ${CASE_STATUS_TYPES.submitted}`,

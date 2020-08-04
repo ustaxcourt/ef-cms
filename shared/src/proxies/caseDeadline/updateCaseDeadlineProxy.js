@@ -15,6 +15,6 @@ exports.updateCaseDeadlineInteractor = ({
   return put({
     applicationContext,
     body: { caseDeadline },
-    endpoint: `/case-deadlines/${caseDeadline.caseId}/${caseDeadline.caseDeadlineId}`,
+    endpoint: `/case-deadlines/${caseDeadline.docketNumber}/${caseDeadline.caseDeadlineId}`,
   });
 };

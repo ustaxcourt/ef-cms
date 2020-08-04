@@ -35,18 +35,18 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
   );
 
   // get the needed cases info data for caseDeadlines
-  const caseIds = Object.keys(
+  const docketNumbers = Object.keys(
     validatedCaseDeadlines.reduce((acc, item) => {
-      acc[item.caseId] = true;
+      acc[item.docketNumber] = true;
       return acc;
     }, {}),
   );
 
   const allCaseData = await applicationContext
     .getPersistenceGateway()
-    .getCasesByCaseIds({
+    .getCasesByDocketNumbers({
       applicationContext,
-      caseIds,
+      docketNumbers,
     });
 
   const validatedCaseData = Case.validateRawCollection(allCaseData, {
@@ -54,13 +54,13 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
   });
 
   const caseMap = validatedCaseData.reduce((acc, item) => {
-    acc[item.caseId] = item;
+    acc[item.docketNumber] = item;
     return acc;
   }, {});
 
   const afterCaseMapping = validatedCaseDeadlines.map(deadline => ({
     ...deadline,
-    ...pick(caseMap[deadline.caseId], [
+    ...pick(caseMap[deadline.docketNumber], [
       'associatedJudge',
       'caseCaption',
       'docketNumber',

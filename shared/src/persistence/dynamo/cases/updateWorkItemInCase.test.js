@@ -18,7 +18,7 @@ describe('updateWorkItemInCase', () => {
     await updateWorkItemInCase({
       applicationContext,
       caseToUpdate: {
-        caseId: '123',
+        docketNumber: '123-20',
         documents: [
           {
             documentId: '321',
@@ -39,7 +39,7 @@ describe('updateWorkItemInCase', () => {
         },
       },
       Key: {
-        pk: 'case|123',
+        pk: 'case|123-20',
         sk: 'document|321',
       },
       UpdateExpression: 'SET #workItems[0] = :workItem',

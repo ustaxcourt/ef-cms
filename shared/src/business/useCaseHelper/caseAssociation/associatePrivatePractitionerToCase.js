@@ -8,7 +8,7 @@ const { UserCase } = require('../../entities/UserCase');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {boolean} providers.representingPrimary true if the practitioner is
  * representing the primary contact on the case, false otherwise
  * @param {boolean} providers.representingSecondary true if the practitioner is
@@ -19,7 +19,7 @@ const { UserCase } = require('../../entities/UserCase');
  */
 exports.associatePrivatePractitionerToCase = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   representingPrimary,
   representingSecondary,
   serviceIndicator,
@@ -29,23 +29,23 @@ exports.associatePrivatePractitionerToCase = async ({
     .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
-      caseId,
+      docketNumber,
       userId: user.userId,
     });
 
   if (!isAssociated) {
     const caseToUpdate = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
 
     const userCaseEntity = new UserCase(caseToUpdate);
 
     await applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
-      caseId: caseId,
+      docketNumber,
       userCase: userCaseEntity.validate().toRawObject(),
       userId: user.userId,
     });

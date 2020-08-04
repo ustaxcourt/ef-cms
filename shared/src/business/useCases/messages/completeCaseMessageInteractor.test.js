@@ -12,7 +12,6 @@ const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 describe('completeCaseMessageInteractor', () => {
   const mockCaseMessages = [
     {
-      caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
       caseStatus: CASE_STATUS_TYPES.new,
       caseTitle: 'Test Petitioner',
       createdAt: '2019-01-01T17:29:13.122Z',
@@ -32,7 +31,6 @@ describe('completeCaseMessageInteractor', () => {
       toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
     {
-      caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
       caseStatus: CASE_STATUS_TYPES.new,
       caseTitle: 'Test Petitioner',
       createdAt: '2019-01-04T17:29:13.122Z',

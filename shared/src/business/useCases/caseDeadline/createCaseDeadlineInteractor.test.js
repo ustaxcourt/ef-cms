@@ -15,9 +15,9 @@ const { User } = require('../../entities/User');
 
 describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
-    caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
+    docketNumber: '123-19',
   };
   let user;
   let mockCase;
@@ -37,10 +37,12 @@ describe('createCaseDeadlineInteractor', () => {
       .createCaseDeadline.mockImplementation(v => v);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(() => mockCase);
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {

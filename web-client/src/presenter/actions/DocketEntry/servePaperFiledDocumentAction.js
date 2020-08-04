@@ -12,7 +12,7 @@ export const servePaperFiledDocumentAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const documentId = get(state.documentId);
 
   const {
@@ -21,7 +21,7 @@ export const servePaperFiledDocumentAction = async ({
     .getUseCases()
     .serveExternallyFiledDocumentInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       documentId,
     });
 

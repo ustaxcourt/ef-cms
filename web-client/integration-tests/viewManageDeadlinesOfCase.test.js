@@ -1,9 +1,4 @@
-import { captureCreatedCase } from './journey/captureCreatedCase';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkDeletesCaseDeadline } from './journey/petitionsClerkDeletesCaseDeadline';
 import { petitionsClerkEditsCaseDeadline } from './journey/petitionsClerkEditsCaseDeadline';
@@ -18,15 +13,13 @@ describe('View and manage the deadlines of a case', () => {
     jest.setTimeout(30000);
   });
 
-  const createdIds = [];
-
   describe('Create a case', () => {
     loginAs(test, 'petitioner@example.com');
-    petitionerChoosesProcedureType(test);
-    petitionerChoosesCaseType(test);
-    petitionerCreatesNewCase(test, fakeFile);
-    petitionerViewsDashboard(test);
-    captureCreatedCase(test, createdIds);
+    it('login as a petitioner and create a case', async () => {
+      const caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
+      test.docketNumber = caseDetail.docketNumber;
+    });
   });
 
   describe('View a case with no deadlines', () => {

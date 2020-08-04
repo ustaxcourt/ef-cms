@@ -28,35 +28,38 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
 
   let {
     casesAssociatedWithUserOrLeadCaseMap,
-    leadCaseIdsAssociatedWithUser,
-    userAssociatedCaseIdsMap,
-  } = applicationContext
+    leadDocketNumbersAssociatedWithUser,
+    userAssociatedDocketNumbersMap,
+  } = await applicationContext
     .getUseCaseHelpers()
     .processUserAssociatedCases(openUserCases);
 
-  for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
+  for (const leadDocketNumber of leadDocketNumbersAssociatedWithUser) {
     const consolidatedCases = await applicationContext
       .getUseCaseHelpers()
-      .getConsolidatedCasesForLeadCase({ applicationContext, leadCaseId });
+      .getConsolidatedCasesForLeadCase({
+        applicationContext,
+        leadDocketNumber,
+      });
 
-    if (!casesAssociatedWithUserOrLeadCaseMap[leadCaseId]) {
+    if (!casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber]) {
       casesAssociatedWithUserOrLeadCaseMap[
-        leadCaseId
+        leadDocketNumber
       ] = applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
         casesAssociatedWithUserOrLeadCaseMap,
         consolidatedCases,
-        leadCaseId,
+        leadDocketNumber,
       });
     }
 
     casesAssociatedWithUserOrLeadCaseMap[
-      leadCaseId
+      leadDocketNumber
     ].consolidatedCases = applicationContext
       .getUseCaseHelpers()
       .formatAndSortConsolidatedCases({
         consolidatedCases,
-        leadCaseId,
-        userAssociatedCaseIdsMap,
+        leadDocketNumber,
+        userAssociatedDocketNumbersMap,
       });
   }
 

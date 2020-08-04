@@ -3,17 +3,15 @@
 ---
   type: "object"
   keys: 
-    caseId: 
+    docketNumber: 
       type: "string"
       flags: 
         presence: "required"
       rules: 
         - 
-          name: "guid"
+          name: "pattern"
           args: 
-            options: 
-              version: 
-                - "uuidv4"
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
     entityName: 
       type: "string"
       flags: 

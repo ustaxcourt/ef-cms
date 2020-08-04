@@ -12,13 +12,13 @@ export const unblockCaseFromTrialAction = async ({
   applicationContext,
   get,
 }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const caseDetail = await applicationContext
     .getUseCases()
     .unblockCaseFromTrialInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   return {

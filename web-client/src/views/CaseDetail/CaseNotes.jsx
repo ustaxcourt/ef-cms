@@ -98,7 +98,7 @@ export const CaseNotes = connect(
                           icon="plus-circle"
                           onClick={() => {
                             openAddEditUserCaseNoteModalFromDetailSequence({
-                              caseId: caseDetail.caseId,
+                              docketNumber: caseDetail.docketNumber,
                             });
                           }}
                         >
@@ -117,7 +117,7 @@ export const CaseNotes = connect(
                               icon="edit"
                               onClick={() => {
                                 openAddEditUserCaseNoteModalFromDetailSequence({
-                                  caseId: caseDetail.caseId,
+                                  docketNumber: caseDetail.docketNumber,
                                 });
                               }}
                             >
@@ -131,7 +131,7 @@ export const CaseNotes = connect(
                               icon="trash"
                               onClick={() => {
                                 openDeleteUserCaseNoteConfirmModalSequence({
-                                  caseId: caseDetail.caseId,
+                                  docketNumber: caseDetail.docketNumber,
                                 });
                               }}
                             >

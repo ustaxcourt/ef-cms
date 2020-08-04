@@ -6,13 +6,13 @@ describe('setCaseOnFormAction', () => {
     const { state } = await runAction(setCaseOnFormAction, {
       props: {
         caseDetail: {
-          caseId: '1234',
+          docketNumber: '123-45',
         },
       },
     });
 
     expect(state.form).toEqual({
-      caseId: '1234',
+      docketNumber: '123-45',
     });
   });
 });

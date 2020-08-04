@@ -21,7 +21,6 @@ describe('getUserInteractor', () => {
 
     const user = await getUserInteractor({
       applicationContext,
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(user).toEqual({
@@ -53,7 +52,6 @@ describe('getUserInteractor', () => {
 
     const user = await getUserInteractor({
       applicationContext,
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(user).toEqual({

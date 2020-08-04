@@ -27,7 +27,6 @@ const addPetitionDocumentToCase = ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
-      caseId: caseToAdd.caseId,
       caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
@@ -240,7 +239,7 @@ exports.createCaseInteractor = async ({
 
   await applicationContext.getPersistenceGateway().associateUserWithCase({
     applicationContext,
-    caseId: caseToAdd.caseId,
+    docketNumber: caseToAdd.docketNumber,
     userCase: userCaseEntity.validate().toRawObject(),
     userId: user.userId,
   });

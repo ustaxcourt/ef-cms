@@ -35,9 +35,9 @@ exports.createCaseDeadlineInteractor = async ({
 
   const caseDetail = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId: caseDeadline.caseId,
+      docketNumber: caseDeadline.docketNumber,
     });
   let caseEntity = new Case(caseDetail, { applicationContext });
 

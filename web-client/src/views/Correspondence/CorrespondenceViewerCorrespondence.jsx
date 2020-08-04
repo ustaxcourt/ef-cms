@@ -84,7 +84,7 @@ export const CorrespondenceViewerCorrespondence = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
-                    caseId: caseDetail.caseId,
+                    docketNumber: caseDetail.docketNumber,
                     documentId: viewerCorrespondenceToDisplay.documentId,
                   })
                 }

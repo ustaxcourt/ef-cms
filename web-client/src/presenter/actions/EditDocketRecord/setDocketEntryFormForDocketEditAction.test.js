@@ -8,8 +8,8 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
   it("sets the given document's edit state on form.state", async () => {
     const editState = {
-      caseId: '123',
       date: '2020-01-01T05:00:00.000Z',
+      docketNumber: '123-45',
       documentId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
@@ -23,7 +23,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
           docketRecord: [
             {
               documentId: '123-abc-123-abc',
@@ -44,9 +44,9 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     });
 
     const expectedResult = {
-      caseId: '123',
       date: '2020-01-01T05:00:00.000Z',
       day: '1',
+      docketNumber: '123-45',
       documentId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
@@ -59,7 +59,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     expect(result.output.docketEntry).toEqual(expectedResult);
   });
 
-  it("does not set the given document's edit state on form.state if the docketRecord editState does not contain a caseId", async () => {
+  it("does not set the given document's edit state on form.state if the docketRecord editState does not contain a docketNumber", async () => {
     const editState = {
       documentId: '123-abc-123-abc',
       eventCode: 'OPP',
@@ -74,7 +74,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
           docketRecord: [
             {
               documentId: '123-abc-123-abc',
@@ -112,7 +112,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
           docketRecord: [],
           documents: [
             {

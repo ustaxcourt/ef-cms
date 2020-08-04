@@ -1,6 +1,10 @@
 const client = require('../../dynamodbClientService');
 
-exports.verifyCaseForUser = async ({ applicationContext, caseId, userId }) => {
+exports.verifyCaseForUser = async ({
+  applicationContext,
+  docketNumber,
+  userId,
+}) => {
   const myCase = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -8,7 +12,7 @@ exports.verifyCaseForUser = async ({ applicationContext, caseId, userId }) => {
     },
     ExpressionAttributeValues: {
       ':pk': `user|${userId}`,
-      ':sk': `case|${caseId}`,
+      ':sk': `case|${docketNumber}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk = :sk',
     applicationContext,

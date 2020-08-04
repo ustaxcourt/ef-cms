@@ -10,7 +10,6 @@ exports.deleteCaseDeadlineLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().deleteCaseDeadlineInteractor({
       applicationContext,
-      caseDeadlineId: event.pathParameters.caseDeadlineId,
-      caseId: event.pathParameters.caseId,
+      ...event.pathParameters,
     });
   });

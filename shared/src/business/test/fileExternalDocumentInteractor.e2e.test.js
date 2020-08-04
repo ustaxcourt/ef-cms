@@ -32,7 +32,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId, docketNumber } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -79,10 +79,9 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       documentMetadata: {
         attachments: false,
-        caseId,
         certificateOfService: false,
         certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
-        docketNumber: '201-19',
+        docketNumber,
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
@@ -131,7 +130,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     expect(caseAfterDocument).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
-      caseId,
       caseType: CASE_TYPES_MAP.innocentSpouse,
       contactPrimary: {
         address1: '19 First Freeway',
@@ -146,7 +144,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         state: 'AL',
       },
       contactSecondary: {},
-      docketNumber: '101-19',
+      docketNumber,
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       docketRecord: [
         {
@@ -184,9 +182,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: CASE_STATUS_TYPES.new,
-              docketNumber: '101-19',
+              docketNumber,
               docketNumberWithSuffix: '101-19S',
               document: {
                 documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
@@ -219,7 +216,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           attachments: false,
           certificateOfService: false,
-          docketNumber: '201-19',
+          docketNumber,
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
@@ -234,15 +231,14 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: CASE_STATUS_TYPES.new,
-              docketNumber: '101-19',
+              docketNumber,
               docketNumberWithSuffix: '101-19S',
               document: {
                 attachments: false,
                 certificateOfService: false,
                 certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
-                docketNumber: '201-19',
+                docketNumber,
                 documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle:
                   'Motion for Leave to File Brief in Support of Petition',
@@ -281,9 +277,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: CASE_STATUS_TYPES.new,
-              docketNumber: '101-19',
+              docketNumber,
               docketNumberWithSuffix: '101-19S',
               document: {
                 documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
@@ -325,7 +320,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseStatus: CASE_STATUS_TYPES.new,
-              docketNumber: '101-19',
+              docketNumber,
               docketNumberWithSuffix: '101-19S',
               document: {
                 documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
@@ -368,7 +363,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseStatus: CASE_STATUS_TYPES.new,
-              docketNumber: '101-19',
+              docketNumber,
               docketNumberWithSuffix: '101-19S',
               document: {
                 documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
@@ -437,12 +432,12 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
+        docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
           attachments: false,
           certificateOfService: false,
-          docketNumber: '201-19',
+          docketNumber,
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
@@ -468,7 +463,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
+        docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
@@ -498,7 +493,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
+        docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
@@ -526,7 +521,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
+        docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
@@ -556,7 +551,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {
-    const { caseId, docketNumber } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -603,10 +598,9 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       documentMetadata: {
         attachments: false,
-        caseId,
         certificateOfService: false,
         certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
-        docketNumber: '201-19',
+        docketNumber,
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',

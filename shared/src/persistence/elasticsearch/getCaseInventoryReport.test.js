@@ -15,13 +15,13 @@ describe('getCaseInventoryReport', () => {
 
   const mockDataOne = {
     associatedJudge: CHIEF_JUDGE,
-    caseId: '1',
+    docketNumber: '101-20',
     status: CASE_STATUS_TYPES.new,
   };
 
   const mockDataTwo = {
     associatedJudge: CHIEF_JUDGE,
-    caseId: '2',
+    docketNumber: '102-20',
     status: CASE_STATUS_TYPES.closed,
   };
 
@@ -74,12 +74,12 @@ describe('getCaseInventoryReport', () => {
       foundCases: [
         {
           associatedJudge: CHIEF_JUDGE,
-          caseId: '1',
+          docketNumber: '101-20',
           status: CASE_STATUS_TYPES.new,
         },
         {
           associatedJudge: CHIEF_JUDGE,
-          caseId: '2',
+          docketNumber: '102-20',
           status: CASE_STATUS_TYPES.closed,
         },
       ],
@@ -118,7 +118,7 @@ describe('getCaseInventoryReport', () => {
       foundCases: [
         {
           associatedJudge: CHIEF_JUDGE,
-          caseId: '1',
+          docketNumber: '101-20',
           status: CASE_STATUS_TYPES.new,
         },
       ],
@@ -166,12 +166,12 @@ describe('getCaseInventoryReport', () => {
       foundCases: [
         {
           associatedJudge: CHIEF_JUDGE,
-          caseId: '1',
+          docketNumber: '101-20',
           status: CASE_STATUS_TYPES.new,
         },
         {
           associatedJudge: CHIEF_JUDGE,
-          caseId: '2',
+          docketNumber: '102-20',
           status: CASE_STATUS_TYPES.closed,
         },
       ],

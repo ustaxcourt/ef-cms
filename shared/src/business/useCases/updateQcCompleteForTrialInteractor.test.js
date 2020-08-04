@@ -12,7 +12,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) =>
@@ -29,7 +29,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
     await expect(
       updateQcCompleteForTrialInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
         qcCompleteForTrial: true,
         trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
       }),
@@ -44,7 +44,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
 
     const result = await updateQcCompleteForTrialInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       qcCompleteForTrial: true,
       trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
     });
