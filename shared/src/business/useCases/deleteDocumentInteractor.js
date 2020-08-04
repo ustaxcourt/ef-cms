@@ -6,7 +6,7 @@ const { Case } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * deleteDraftDocumentInteractor
+ * deleteDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.documentId the id of the document which will be deleted
  * @returns {object} the updated case returned from persistence
  */
-exports.deleteDraftDocumentInteractor = async ({
+exports.deleteDocumentInteractor = async ({
   applicationContext,
   docketNumber,
   documentId,

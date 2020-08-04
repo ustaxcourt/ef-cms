@@ -1,11 +1,9 @@
-const {
-  deleteDraftDocumentInteractor,
-} = require('./deleteDraftDocumentInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { deleteDocumentInteractor } = require('./deleteDocumentInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { ROLES } = require('../entities/EntityConstants');
 
-describe('deleteDraftDocumentInteractor', () => {
+describe('deleteDocumentInteractor', () => {
   const documentToDeleteId = 'a54ba5a9-b37b-479d-9201-067ec6e335bb';
   const docketNumber = '999-99';
 
@@ -21,7 +19,7 @@ describe('deleteDraftDocumentInteractor', () => {
     });
 
     await expect(
-      deleteDraftDocumentInteractor({
+      deleteDocumentInteractor({
         applicationContext,
         docketNumber,
         documentId: documentToDeleteId,
@@ -34,7 +32,7 @@ describe('deleteDraftDocumentInteractor', () => {
       role: ROLES.petitionsClerk,
     });
 
-    await deleteDraftDocumentInteractor({
+    await deleteDocumentInteractor({
       applicationContext,
       docketNumber,
       documentId: documentToDeleteId,
@@ -51,7 +49,7 @@ describe('deleteDraftDocumentInteractor', () => {
       role: ROLES.petitionsClerk,
     });
 
-    await deleteDraftDocumentInteractor({
+    await deleteDocumentInteractor({
       applicationContext,
       docketNumber,
       documentId: documentToDeleteId,
@@ -72,7 +70,7 @@ describe('deleteDraftDocumentInteractor', () => {
       role: ROLES.petitionsClerk,
     });
 
-    await deleteDraftDocumentInteractor({
+    await deleteDocumentInteractor({
       applicationContext,
       docketNumber,
       documentId: documentToDeleteId,

@@ -215,8 +215,8 @@ const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
-  deleteDraftDocumentInteractor,
-} = require('../../shared/src/business/useCases/deleteDraftDocumentInteractor');
+  deleteDocumentInteractor,
+} = require('../../shared/src/business/useCases/deleteDocumentInteractor');
 const {
   deleteElasticsearchReindexRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
@@ -1397,7 +1397,7 @@ module.exports = appContextUser => {
         deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
-        deleteDraftDocumentInteractor,
+        deleteDocumentInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
