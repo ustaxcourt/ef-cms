@@ -12,7 +12,7 @@ export const RecentMessagesInbox = connect(
       <React.Fragment>
         <table
           aria-describedby="recent-messages-tab"
-          className="usa-table work-queue subsection"
+          className="usa-table work-queue subsection messages"
           id="my-recent-messages"
         >
           <thead>
