@@ -10,8 +10,8 @@ import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrde
 export const deleteUploadedPdfSequence = [
   deleteUploadedPdfAction,
   clearPdfPreviewUrlAction,
-  ...setDocumentUploadModeSequence,
-  ...clearModalSequence,
+  setDocumentUploadModeSequence,
+  clearModalSequence,
   getFormValueDocumentAction,
   updateOrderForDesignatingPlaceOfTrialAction,
   updateOrderForOdsAction,
