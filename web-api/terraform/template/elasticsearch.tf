@@ -15,4 +15,10 @@ resource "aws_elasticsearch_domain" "efcms-search" {
   snapshot_options {
     automated_snapshot_start_hour = 23
   }
+
+  log_publishing_options = {
+    enabled                  = "true"
+    cloudwatch_log_group_arn = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/aes/debug_${var.environment}"
+    log_type                 = "ES_APPLICATION_LOGS"
+  }
 }
