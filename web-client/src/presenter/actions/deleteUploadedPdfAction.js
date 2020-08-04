@@ -4,7 +4,6 @@ import { state } from 'cerebral';
  * Deletes an uploaded pdf
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store
  * @param {object} providers.get the cerebral get function
  * @returns {object} the new documentUploadMode
  *
