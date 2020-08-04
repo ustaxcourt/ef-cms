@@ -54,9 +54,29 @@ function DocumentSearch(rawProps = {}) {
       month: rawProps.startDateMonth,
       year: rawProps.startDateYear,
     });
+  } else if (rawProps.startDate) {
+    const [year, month, day] = rawProps.startDate.split('-');
+    this.startDate = createEndOfDayISO({
+      day,
+      month,
+      year,
+    });
   }
 
-  if (rawProps.endDateDay || rawProps.endDateMonth || rawProps.endDateYear) {
+  if (rawProps.endDate) {
+    const [year, month, day] = rawProps.endDate.split('-');
+    this.endDate = createEndOfDayISO({
+      day,
+      month,
+      year,
+    });
+    this.tomorrow = new Date();
+    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
+  } else if (
+    rawProps.endDateDay ||
+    rawProps.endDateMonth ||
+    rawProps.endDateYear
+  ) {
     this.endDate = createEndOfDayISO({
       day: rawProps.endDateDay,
       month: rawProps.endDateMonth,
