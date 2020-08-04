@@ -143,25 +143,14 @@ DocumentSearch.schema = joi
       .string()
       .optional()
       .description('The opinion document type to filter the search results by'),
-    startDate: joi.alternatives().conditional('endDate', {
-      is: joi.exist().not(null),
-      otherwise: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
-      )
-        .max('now')
-        .optional()
-        .description(
-          'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
-        ),
-      then: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
-      )
-        .max('now')
-        .required()
-        .description(
-          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-        ),
-    }),
+    startDate: JoiValidationConstants.ISO_DATE.format(
+      DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+    )
+      .max('now')
+      .required()
+      .description(
+        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      ),
     tomorrow: joi
       .optional()
       .description(
