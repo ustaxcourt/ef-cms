@@ -2,13 +2,23 @@ import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 
 export const DatePickerComponent = ({ label, name, onChange }) => {
+  const datePickerRef = useRef();
+  const inputRef = useRef();
+
   useEffect(() => {
     if (datePickerRef.current) {
       datePicker.on(datePickerRef.current);
     }
   }, [datePickerRef]);
 
-  const datePickerRef = useRef();
+  useEffect(() => {
+    if (inputRef.current) {
+      console.log(inputRef.current);
+      inputRef.current.addEventListener('change', e => {
+        onChange(e);
+      });
+    }
+  }, [inputRef]);
 
   return (
     <>
@@ -29,6 +39,7 @@ export const DatePickerComponent = ({ label, name, onChange }) => {
             className="usa-input"
             id={`${name}-date`}
             name={`${name}-date`}
+            ref={inputRef}
             type="text"
             onChange={onChange}
           />
