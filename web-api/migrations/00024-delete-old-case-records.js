@@ -1,10 +1,10 @@
 const {
   DOCKET_NUMBER_MATCHER,
 } = require('../../shared/src/business/entities/EntityConstants');
-const { isCaseMessageRecord, upGenerator } = require('./utilities');
+const { upGenerator } = require('./utilities');
 
 const mutateRecord = async (item, documentClient, tableName) => {
-  if (isCaseMessageRecord(item)) {
+  if (item.pk.startsWith('case|')) {
     const caseIdentifier = item.pk.split('|')[1];
 
     if (caseIdentifier && !caseIdentifier.match(DOCKET_NUMBER_MATCHER)) {
