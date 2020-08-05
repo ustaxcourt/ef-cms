@@ -8,6 +8,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
     const caseIdentifier = item.pk.split('|')[1];
 
     if (caseIdentifier && !caseIdentifier.match(DOCKET_NUMBER_MATCHER)) {
+      console.log('deleting record for case', caseIdentifier);
       await documentClient
         .delete({
           Key: {
