@@ -1,7 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { DateSelectCalendar } from './DateSelectCalendar';
+import { DateRangePickerComponent } from './DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -25,7 +25,15 @@ export const CaseDeadlines = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-3">
-              <DateSelectCalendar />
+              <div className="header-with-blue-background">
+                <h3>Show Deadlines by Date(s)</h3>
+              </div>
+              <div className="blue-container">
+                <DateRangePickerComponent
+                  onChangeEnd={() => {}}
+                  onChangeStart={() => {}}
+                />
+              </div>
             </div>
             <div className="grid-col-9">
               <div className="grid-row">
