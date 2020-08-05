@@ -1,6 +1,6 @@
-const chambers = require('./pa11y/pa11y-chambers');
-const docketclerk = require('./pa11y/pa11y-docketclerk');
-const judge = require('./pa11y/pa11y-judge');
+const chambers = require('./pa11y-chambers');
+const docketclerk = require('./pa11y-docketclerk');
+const judge = require('./pa11y-judge');
 const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
 
 const userUrls = [...docketclerk, ...judge, ...chambers];

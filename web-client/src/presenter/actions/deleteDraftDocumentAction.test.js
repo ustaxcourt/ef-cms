@@ -13,7 +13,7 @@ describe('deleteDraftDocumentAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .deleteDraftDocumentInteractor.mockResolvedValue(MOCK_CASE);
+      .deleteDocumentInteractor.mockResolvedValue(MOCK_CASE);
   });
 
   it('should delete the draft document and return an updated case and docketNumber if state.redirectToCaseDetail is true', async () => {
@@ -31,7 +31,7 @@ describe('deleteDraftDocumentAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().deleteDraftDocumentInteractor.mock
+      applicationContext.getUseCases().deleteDocumentInteractor.mock
         .calls[0][0],
     ).toMatchObject({ docketNumber, documentId });
     expect(result.state.alertSuccess).toEqual({
@@ -59,7 +59,7 @@ describe('deleteDraftDocumentAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().deleteDraftDocumentInteractor.mock
+      applicationContext.getUseCases().deleteDocumentInteractor.mock
         .calls[0][0],
     ).toMatchObject({ docketNumber, documentId });
     expect(result.state.alertSuccess).toEqual({

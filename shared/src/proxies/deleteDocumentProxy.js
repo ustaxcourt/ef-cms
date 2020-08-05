@@ -1,7 +1,7 @@
 const { remove } = require('./requests');
 
 /**
- * deleteDraftDocumentInteractor
+ * deleteDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ const { remove } = require('./requests');
  * @param {string} providers.documentId the document id to delete
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteDraftDocumentInteractor = ({
+exports.deleteDocumentInteractor = ({
   applicationContext,
   docketNumber,
   documentId,
