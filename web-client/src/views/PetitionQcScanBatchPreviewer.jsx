@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { ConfirmDeletePDFModal } from './ConfirmDeletePdfModal';
+import { ConfirmReplacePetitionModal } from './ConfirmReplacePetitionModal';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
@@ -23,14 +24,18 @@ export const PetitionQcScanBatchPreviewer = connect(
     constants: state.constants,
     generatePdfFromScanSessionSequence:
       sequences.generatePdfFromScanSessionSequence,
+    isPetitionFile: state.petitionQcHelper.isPetitionFile,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence:
       sequences.openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence:
       sequences.openConfirmDeletePDFModalSequence,
+    openConfirmReplacePetitionPdfSequence:
+      sequences.openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
+    pdfPreviewUrl: state.pdfPreviewUrl,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scanHelper: state.scanHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
@@ -49,10 +54,13 @@ export const PetitionQcScanBatchPreviewer = connect(
     documentTabs,
     documentType,
     generatePdfFromScanSessionSequence,
+    isPetitionFile,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
+    openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence,
+    pdfPreviewUrl,
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
@@ -260,27 +268,36 @@ export const PetitionQcScanBatchPreviewer = connect(
     const renderIframePreview = () => {
       return (
         <>
+          {pdfPreviewUrl && (
+            <>
+              <Button
+                link
+                className="red-warning push-right"
+                onClick={() => {
+                  if (isPetitionFile) {
+                    openConfirmReplacePetitionPdfSequence();
+                  } else {
+                    openConfirmDeletePDFModalSequence();
+                  }
+                }}
+              >
+                Remove PDF
+              </Button>
+              <PdfPreview />
+            </>
+          )}
           {showModal === 'ConfirmDeletePDFModal' && (
             <ConfirmDeletePDFModal
-              confirmSequence="removeScannedPdfSequence"
-              confirmText="Yes, Delete"
+              confirmSequence="deleteUploadedPdfSequence"
+              confirmText="Yes, Remove"
               modalContent="This action cannot be undone."
-              title="Are you sure you want to delete this PDF?"
+              title="The current PDF will be permanently removed, and you will need to add a new PDF."
             />
           )}
-          <div className="padding-top-4">
-            <PdfPreview />
-            <Button
-              secondary
-              className="margin-top-3 red-warning bg-white"
-              icon={['fas', 'times-circle']}
-              onClick={() => {
-                openConfirmDeletePDFModalSequence();
-              }}
-            >
-              Delete PDF
-            </Button>
-          </div>
+
+          {showModal === 'ConfirmReplacePetitionModal' && (
+            <ConfirmReplacePetitionModal confirmSequence="removePetitionForReplacementSequence" />
+          )}
         </>
       );
     };
