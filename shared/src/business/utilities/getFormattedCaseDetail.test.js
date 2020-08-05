@@ -965,4 +965,59 @@ describe('sortDocketRecords', () => {
 
     expect(result).toEqual([]);
   });
+
+  it('should sort items that do not display a filingDate (based on createdAtFormatted) at the bottom', () => {
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            createdAtFormatted: '2019-08-04T00:10:02.000Z',
+          },
+        },
+        {
+          record: {
+            createdAtFormatted: undefined,
+          },
+        },
+        {
+          index: '1',
+          record: {
+            createdAtFormatted: '2019-08-03T00:10:02.000Z',
+          },
+        },
+        {
+          record: {
+            createdAtFormatted: undefined,
+          },
+        },
+      ],
+      'byIndexDesc',
+    );
+
+    expect(result).toEqual([
+      {
+        index: '1',
+        record: {
+          createdAtFormatted: '2019-08-03T00:10:02.000Z',
+        },
+      },
+      {
+        index: '2',
+        record: {
+          createdAtFormatted: '2019-08-04T00:10:02.000Z',
+        },
+      },
+      {
+        record: {
+          createdAtFormatted: undefined,
+        },
+      },
+      {
+        record: {
+          createdAtFormatted: undefined,
+        },
+      },
+    ]);
+  });
 });
