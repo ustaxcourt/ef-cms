@@ -4,7 +4,7 @@ import { state } from 'cerebral';
  * calls the proxy/interactor to delete a document on the backend
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the delete deleteDraftDocumentInteractor we will need from the getUseCases method
+ * @param {object} providers.applicationContext contains the delete deleteDocumentInteractor we will need from the getUseCases method
  * @param {object} providers.get the cerebral get helper function
  * @param {object} providers.store the cerebral store object
  * @returns {Promise} async action
@@ -19,7 +19,7 @@ export const deleteDraftDocumentAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .deleteDraftDocumentInteractor({
+    .deleteDocumentInteractor({
       applicationContext,
       docketNumber,
       documentId,

@@ -1,6 +1,10 @@
 const createApplicationContext = require('../src/applicationContext');
 const {
+  aggregateCaseItems,
+} = require('../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
+const {
   COURT_ISSUED_DOCUMENT_TYPES,
+  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   ORDER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { Document } = require('../../shared/src/business/entities/Document');
@@ -14,21 +18,29 @@ const getIsDraftForDocument = async ({
   documentClient,
   tableName,
 }) => {
-  const caseRecord = await documentClient
-    .get({
-      Key: {
-        pk: `case|${document.docketNumber}`,
-        sk: `case|${document.docketNumber}`,
+  const caseRecords = await documentClient
+    .query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
       },
+      ExpressionAttributeValues: {
+        ':pk': `case|${document.docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
       TableName: tableName,
     })
     .promise();
 
-  if (caseRecord && caseRecord.Item) {
-    const caseData = caseRecord.Item;
+  if (!caseRecords || !caseRecords.Items) {
+    return false;
+  }
+
+  const fullCaseRecord = aggregateCaseItems(caseRecords.Items);
+
+  if (fullCaseRecord) {
     const isNotArchived = !document.archived;
     const isNotServed = !document.servedAt;
-    const isDocumentOnDocketRecord = caseData.docketRecord.find(
+    const isDocumentOnDocketRecord = fullCaseRecord.docketRecord.find(
       docketEntry => docketEntry.documentId === document.documentId,
     );
     const isStipDecision = document.documentType === 'Stipulated Decision';
@@ -62,18 +74,37 @@ const mutateRecord = async (item, documentClient, tableName) => {
       isUpdated = true;
     }
 
+    if (
+      item.isDraft === false &&
+      EVENT_CODES_REQUIRING_JUDGE_SIGNATURE.includes(item.eventCode)
+    ) {
+      if (item.signedAt === undefined) {
+        item.signedAt = '2020-07-06T17:06:04.552Z';
+      }
+      if (item.signedJudgeName === undefined) {
+        item.signedJudgeName = 'Chief Judge';
+      }
+      if (item.signedByUserId === undefined) {
+        item.signedByUserId = '7b69a8b5-bcc4-4449-8994-08fda8d342e7';
+      }
+
+      isUpdated = true;
+    }
+
     if (item.workItems && item.workItems[0]) {
       item.workItem = item.workItems[0];
       const otherWorkItems = item.workItems.splice(1);
 
       for (const workItemToDelete of otherWorkItems) {
-        await documentClient.delete({
-          Key: {
-            pk: `work-item|${workItemToDelete.workItemId}`,
-            sk: `work-item|${workItemToDelete.workItemId}`,
-          },
-          TableName: tableName,
-        });
+        await documentClient
+          .delete({
+            Key: {
+              pk: `work-item|${workItemToDelete.workItemId}`,
+              sk: `work-item|${workItemToDelete.workItemId}`,
+            },
+            TableName: tableName,
+          })
+          .promise();
       }
 
       isUpdated = true;

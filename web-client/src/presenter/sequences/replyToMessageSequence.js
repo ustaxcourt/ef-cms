@@ -8,6 +8,7 @@ import { replyToMessageAction } from '../actions/CaseDetail/replyToMessageAction
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -21,6 +22,7 @@ export const replyToMessageSequence = showProgressSequenceDecorator([
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       replyToMessageAction,
+      setViewerDocumentToDisplayAction,
       stopShowValidationAction,
       setAlertSuccessAction,
       clearScreenMetadataAction,
