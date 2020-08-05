@@ -1,17 +1,5 @@
 import { state } from 'cerebral';
 
-const formatDateFromCalendar = ({ applicationContext, date }) => {
-  let day = date.getDate();
-  let year = date.getYear() + 1900;
-  let month = date.getMonth() + 1;
-
-  let formattedDate = applicationContext
-    .getUtilities()
-    .createISODateString(`${year}-${month}-${day}`, 'YYYY-MM-DD');
-
-  return formattedDate;
-};
-
 /**
  * sets the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  * based on the props.startDate and props.endDate passed in.
@@ -20,7 +8,7 @@ const formatDateFromCalendar = ({ applicationContext, date }) => {
  * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  * @param {object} providers.props the cerebral props object used for passing the props.startDate and props.endDate
  */
-export const updateDateFromCalendarAction = ({
+export const updateDateFromPickerAction = ({
   applicationContext,
   props,
   store,
@@ -28,17 +16,18 @@ export const updateDateFromCalendarAction = ({
   const filterStartDate = props.startDate;
   const filterEndDate = props.endDate;
 
-  const formattedFilterStartDate = formatDateFromCalendar({
-    applicationContext,
-    date: filterStartDate,
-  });
-  store.set(state.screenMetadata.filterStartDate, formattedFilterStartDate);
+  if (filterStartDate) {
+    const formattedFilterStartDate = applicationContext
+      .getUtilities()
+      .createISODateString(filterStartDate, 'YYYY-MM-DD');
+    store.set(state.screenMetadata.filterStartDate, formattedFilterStartDate);
+  }
 
   if (filterEndDate) {
-    const formattedFilterEndDate = formatDateFromCalendar({
-      applicationContext,
-      date: filterEndDate,
-    });
+    const formattedFilterEndDate = applicationContext
+      .getUtilities()
+      .createISODateString(filterEndDate, 'YYYY-MM-DD');
+
     store.set(state.screenMetadata.filterEndDate, formattedFilterEndDate);
   } else {
     store.unset(state.screenMetadata.filterEndDate);
