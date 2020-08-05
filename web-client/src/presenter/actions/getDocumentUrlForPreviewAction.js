@@ -15,15 +15,15 @@ export const getDocumentUrlForPreviewAction = async ({
   props,
 }) => {
   const { docketNumber } = get(state.form);
-  const { selectedDocument } = props;
+  const { documentInS3 } = props;
 
   const {
     url,
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
     docketNumber,
-    documentId: selectedDocument.documentId,
+    documentId: documentInS3.documentId,
   });
 
-  return { documentId: selectedDocument.documentId, pdfUrl: url };
+  return { documentId: documentInS3.documentId, pdfUrl: url };
 };

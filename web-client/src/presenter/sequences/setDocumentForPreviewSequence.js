@@ -7,7 +7,7 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { state } from 'cerebral';
 
-export const petitionQcSelectDocumentForScanSequence = [
+export const setDocumentForPreviewSequence = [
   newAction,
   petitionQcShouldShowPreviewAction,
   {

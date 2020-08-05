@@ -14,13 +14,18 @@ export const newAction = async ({ applicationContext, get, path }) => {
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
-  const { documents } = get(state.form);
   const documentTypeSelectedForPreview =
     INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview];
+  const file = get(state.form[documentSelectedForPreview]);
+
+  if (file) {
+    return { fileFromBrowserMemory: file };
+  }
+
+  const { documents } = get(state.form);
   const selectedDocument = get(documents).find(
     document => document.documentType === documentTypeSelectedForPreview,
   );
 
-  const file = get(state.form[documentSelectedForPreview]);
-  return { file, selectedDocument };
+  return { documentInS3: selectedDocument };
 };

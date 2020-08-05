@@ -1,4 +1,4 @@
-const { CaseInternal } = require('../entities/cases/CaseInternal');
+const { Case } = require('../entities/cases/Case');
 
 /**
  * validateCaseDetailInteractor
@@ -8,7 +8,7 @@ const { CaseInternal } = require('../entities/cases/CaseInternal');
  * @returns {object} errors (null if no errors)
  */
 exports.validateCaseDetailInteractor = ({ applicationContext, caseDetail }) => {
-  return new CaseInternal(caseDetail, {
+  return new Case(caseDetail, {
     applicationContext,
   }).getFormattedValidationErrors();
 };

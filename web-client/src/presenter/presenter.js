@@ -219,7 +219,6 @@ import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSess
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
-import { petitionQcSelectDocumentForScanSequence } from './sequences/petitionQcSelectDocumentForScanSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
@@ -262,6 +261,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
+import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setFieldOrderSequence } from './sequences/setFieldOrderSequence';
@@ -647,7 +647,6 @@ export const presenter = {
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
-    petitionQcSelectDocumentForScanSequence,
     printDocketRecordSequence,
     printTrialCalendarSequence,
     prioritizeCaseSequence,
@@ -681,6 +680,7 @@ export const presenter = {
     selectDocumentForScanSequence,
     selectScannerSequence,
     selectWorkItemSequence,
+    setDocumentForPreviewSequence,
     serveCaseToIrsSequence,
     serveCourtIssuedDocumentFromDocketEntrySequence,
     serveCourtIssuedDocumentSequence,
