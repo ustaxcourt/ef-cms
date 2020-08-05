@@ -502,3 +502,13 @@ label.ustc-upload {
 .input-medium {
   width: 140px;
 }
+
+.usa-date-picker {
+  * {
+    animation: none;
+  }
+
+  .usa-date-picker__button {
+    margin-top: 0;
+  }
+}
