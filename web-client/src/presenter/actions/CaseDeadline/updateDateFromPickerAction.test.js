@@ -1,15 +1,15 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { updateDateFromCalendarAction } from './updateDateFromCalendarAction';
+import { updateDateFromPickerAction } from './updateDateFromPickerAction';
 
 presenter.providers.applicationContext = applicationContextForClient;
 
-describe('updateDateFromCalendarAction', () => {
+describe('updateDateFromPickerAction', () => {
   it('sets only state.screenMetadata.filterStartDate to the formatted props.startDate if props.endDate is not passed in', async () => {
     const testDate = new Date('2019-05-14T07:12:12.457Z');
 
-    const result = await runAction(updateDateFromCalendarAction, {
+    const result = await runAction(updateDateFromPickerAction, {
       modules: { presenter },
       props: {
         startDate: testDate,
@@ -28,7 +28,7 @@ describe('updateDateFromCalendarAction', () => {
     const testStartDate = new Date('2019-05-14T07:12:12.457Z');
     const testEndDate = new Date('2019-05-17T07:12:12.457Z');
 
-    const result = await runAction(updateDateFromCalendarAction, {
+    const result = await runAction(updateDateFromPickerAction, {
       modules: { presenter },
       props: {
         endDate: testEndDate,

@@ -40,14 +40,12 @@ export const CaseDeadlines = connect(
                   startName="deadlineStart"
                   onChangeEnd={e => {
                     selectDateRangeFromCalendarSequence({
-                      date: e.target.value,
-                      type: 'End',
+                      endDate: e.target.value,
                     });
                   }}
                   onChangeStart={e => {
                     selectDateRangeFromCalendarSequence({
-                      date: e.target.value,
-                      type: 'Start',
+                      startDate: e.target.value,
                     });
                   }}
                 />
