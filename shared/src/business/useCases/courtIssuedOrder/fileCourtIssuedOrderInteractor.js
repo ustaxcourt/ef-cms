@@ -46,6 +46,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
+    if (documentMetadata.draftState) {
+      documentMetadata.draftState.freeText = documentMetadata.documentTitle;
+    }
   }
 
   if (shouldScrapePDFContents) {
