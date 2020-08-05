@@ -2,12 +2,14 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 exports.filePetitionFromPaperInteractor = async ({
   applicationContext,
   applicationForWaiverOfFilingFeeFile,
   applicationForWaiverOfFilingFeeUploadProgress,
+  caseDetail,
   ownershipDisclosureFile,
   ownershipDisclosureUploadProgress,
   petitionFile,
@@ -23,6 +25,8 @@ exports.filePetitionFromPaperInteractor = async ({
   if (!isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  console.log('horze 1');
 
   /**
    * uploads a document and then immediately processes it to scan for viruses and validate the document.
@@ -52,6 +56,8 @@ exports.filePetitionFromPaperInteractor = async ({
     return documentId;
   };
 
+  console.log('horze 2');
+
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeFile) {
     applicationForWaiverOfFilingFeeUpload = uploadDocumentAndMakeSafe(
@@ -59,11 +65,25 @@ exports.filePetitionFromPaperInteractor = async ({
       applicationForWaiverOfFilingFeeUploadProgress,
     );
   }
+  console.log('horze 3');
 
-  const petitionFileUpload = uploadDocumentAndMakeSafe(
-    petitionFile,
-    petitionUploadProgress,
-  );
+  let petitionFileUpload;
+  if (petitionFile) {
+    if (caseDetail) {
+      const previousPetitionDocumentId = caseDetail.documents.find(
+        doc =>
+          doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+      );
+
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        document: petitionFile,
+        documentId: previousPetitionDocumentId,
+      });
+    } else {
+      uploadDocumentAndMakeSafe(petitionFile, petitionUploadProgress);
+    }
+  }
 
   let ownershipDisclosureFileUpload;
   if (ownershipDisclosureFile) {
@@ -73,10 +93,35 @@ exports.filePetitionFromPaperInteractor = async ({
     );
   }
 
+  // TODO
+  // const documentMap = {}
+  // loop through documents array on caseEntity
+  // recreate map used in client action
+
   let stinFileUpload;
+  console.log('**************', stinFile, caseDetail);
   if (stinFile) {
-    stinFileUpload = uploadDocumentAndMakeSafe(stinFile, stinUploadProgress);
+    if (caseDetail) {
+      const previousStinDocumentId = caseDetail.documents.find(
+        doc =>
+          doc.documentType === INITIAL_DOCUMENT_TYPES.stinFile.documentType,
+      );
+
+      console.log('**************', previousStinDocumentId);
+
+      stinFileUpload = await applicationContext
+        .getPersistenceGateway()
+        .saveDocumentFromLambda({
+          applicationContext,
+          document: stinFile,
+          documentId: previousStinDocumentId,
+        });
+    } else {
+      stinFileUpload = uploadDocumentAndMakeSafe(stinFile, stinUploadProgress);
+    }
   }
+
+  console.log('horze 4');
 
   let requestForPlaceOfTrialFileUpload;
   if (requestForPlaceOfTrialFile) {
@@ -94,13 +139,19 @@ exports.filePetitionFromPaperInteractor = async ({
     stinFileUpload,
   ]);
 
-  return await applicationContext.getUseCases().createCaseFromPaperInteractor({
-    applicationContext,
-    applicationForWaiverOfFilingFeeFileId: await applicationForWaiverOfFilingFeeUpload,
-    ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
-    petitionFileId: await petitionFileUpload,
-    petitionMetadata,
-    requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
-    stinFileId: await stinFileUpload,
-  });
+  console.log('horze 5');
+
+  if (!caseDetail) {
+    return await applicationContext
+      .getUseCases()
+      .createCaseFromPaperInteractor({
+        applicationContext,
+        applicationForWaiverOfFilingFeeFileId: await applicationForWaiverOfFilingFeeUpload,
+        ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
+        petitionFileId: await petitionFileUpload,
+        petitionMetadata,
+        requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
+        stinFileId: await stinFileUpload,
+      });
+  }
 };
