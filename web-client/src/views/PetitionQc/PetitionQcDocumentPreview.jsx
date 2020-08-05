@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmDeletePDFModal } from '../ConfirmDeletePdfModal';
 import { ConfirmReplacePetitionModal } from '../ConfirmReplacePetitionModal';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
+import { PetitionQcScanBatchPreviewer } from '../PetitionQcScanBatchPreviewer';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -93,7 +94,33 @@ export const PetitionQcDocumentPreview = connect(
 
     return (
       <>
-        <div className="scanner-area-header">
+        <PetitionQcScanBatchPreviewer
+          documentTabs={[
+            {
+              documentType: 'petitionFile',
+              title: 'Petition',
+            },
+            {
+              documentType: 'stinFile',
+              title: 'STIN',
+            },
+            {
+              documentType: 'requestForPlaceOfTrialFile',
+              title: 'RQT',
+            },
+            {
+              documentType: 'ownershipDisclosureFile',
+              title: 'ODS',
+            },
+            {
+              documentType: 'applicationForWaiverOfFilingFeeFile',
+              title: 'APW',
+            },
+          ]}
+          documentType="petition"
+          title="Add Document(s)"
+        />
+        {/* <div className="scanner-area-header">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
@@ -106,7 +133,7 @@ export const PetitionQcDocumentPreview = connect(
         <div className="document-select-container">
           {renderTabs(documentTabs)}
           {renderIframePreview()}
-        </div>
+        </div> */}
       </>
     );
   },
