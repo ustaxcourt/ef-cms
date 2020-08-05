@@ -14,63 +14,26 @@ export const petitionQcShouldShowPreviewAction = async ({
   get,
   path,
 }) => {
+  const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
 
-  console.log('documentSelectedForPreview', documentSelectedForPreview);
-
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-
-  const documentTypeMap = {
-    applicationForWaiverOfFilingFeeFile:
-      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
-    ownershipDisclosureFile:
-      INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-    petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
-    requestForPlaceOfTrialFile:
-      INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-    stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
-  };
-
-  const documentTypeSelectedForPreview =
-    documentTypeMap[documentSelectedForPreview];
-
-  const { docketNumber, documents } = get(state.form);
-
-  const selectedDocument = get(documents).find(
-    document => document.documentType === documentTypeSelectedForPreview,
-  );
-
-  let pdfUrl;
-  let selectedDocumentId;
-
-  if (selectedDocument) {
-    const {
-      url,
-    } = await applicationContext
-      .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
-        docketNumber,
-        documentId: selectedDocument.documentId,
-      });
-
-    pdfUrl = url;
-    selectedDocumentId = selectedDocument.documentId;
-  }
-
-  //should be getting from form.documents????
-  //check if pdf is on form aka in memory
-  // if not,
   const file = get(state.form[documentSelectedForPreview]);
 
   if (file) {
     return path.pdfInMemory({ file });
   }
 
+  const { documents } = get(state.form);
+  const documentTypeSelectedForPreview =
+    INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview];
+  const selectedDocument = get(documents).find(
+    document => document.documentType === documentTypeSelectedForPreview,
+  );
+
   if (selectedDocument) {
-    return path.pdfInS3({ documentId: selectedDocumentId, pdfUrl });
+    return path.pdfInS3({ selectedDocument });
   }
 
   return path.no();
