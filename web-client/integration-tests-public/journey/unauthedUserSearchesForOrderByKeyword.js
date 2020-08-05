@@ -7,6 +7,7 @@ export const unauthedUserSearchesForOrderByKeyword = (test, testClient) => {
     test.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'osteodontolignikeratic',
+        startDate: '1000-01-01',
       },
     });
 
@@ -18,6 +19,7 @@ export const unauthedUserSearchesForOrderByKeyword = (test, testClient) => {
     test.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'dismissed',
+        startDate: '1000-01-01',
       },
     });
 
