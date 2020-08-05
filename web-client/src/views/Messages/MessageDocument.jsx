@@ -52,11 +52,12 @@ export const MessageDocument = connect(
           <div className="padding-2">There are no attachments to preview</div>
         )}
 
-        {messageDocumentHelper.showDocumentNotSignedAlert && (
-          <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
-            Signature required for this document.
-          </div>
-        )}
+        {viewerDocumentToDisplay &&
+          messageDocumentHelper.showDocumentNotSignedAlert && (
+            <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
+              Signature required for this document.
+            </div>
+          )}
 
         {viewerDocumentToDisplay && (
           <>

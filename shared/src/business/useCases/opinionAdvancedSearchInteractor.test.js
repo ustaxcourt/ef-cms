@@ -56,6 +56,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     const result = await opinionAdvancedSearchInteractor({
       applicationContext,
       keyword: 'candy',
+      startDate: '2001-01-01',
     });
 
     expect(result).toMatchObject([
@@ -89,6 +90,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     await opinionAdvancedSearchInteractor({
       applicationContext,
       keyword,
+      startDate: '2001-01-01',
     });
 
     expect(

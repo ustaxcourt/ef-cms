@@ -12,6 +12,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unsetDocumentSelectedForPreviewAction } from '../actions/unsetDocumentSelectedForPreviewAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
 export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
@@ -27,6 +28,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
     ],
     success: [
       clearModalAction,
+      unsetDocumentSelectedForPreviewAction,
       stopShowValidationAction,
       saveCaseDetailInternalEditAction,
       setCaseAction,

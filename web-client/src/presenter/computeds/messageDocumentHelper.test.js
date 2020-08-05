@@ -38,6 +38,29 @@ const petitionerUser = {
 };
 
 describe('messageDocumentHelper', () => {
+  it('return null if viewerDocumentToDisplay is not set', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              isDraft: true,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result).toEqual(null);
+  });
+
   it('return showAddDocketEntryButton true for user role of docketClerk and a document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
