@@ -1,4 +1,5 @@
 import { getDocumentUrlForPreviewAction } from '../actions/getDocumentUrlForPreviewAction';
+import { newAction } from '../actions/newAction';
 import { petitionQcShouldShowPreviewAction } from '../actions/petitionQcShouldShowPreviewAction';
 import { selectDocumentForPreviewAction } from '../actions/selectDocumentForPreviewAction';
 import { set } from 'cerebral/factories';
@@ -7,6 +8,7 @@ import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPrevie
 import { state } from 'cerebral';
 
 export const petitionQcSelectDocumentForScanSequence = [
+  newAction,
   petitionQcShouldShowPreviewAction,
   {
     no: [set(state.currentViewMetadata.documentUploadMode, 'scan')],
