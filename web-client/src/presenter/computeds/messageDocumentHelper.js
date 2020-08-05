@@ -16,14 +16,16 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
+  if (!viewerDocumentToDisplay) {
+    return null;
+  }
+
   const { correspondence, documents } = caseDetail;
 
   const caseDocument =
-    (viewerDocumentToDisplay &&
-      [...correspondence, ...documents].find(
-        d => d.documentId === viewerDocumentToDisplay.documentId,
-      )) ||
-    {};
+    [...correspondence, ...documents].find(
+      d => d.documentId === viewerDocumentToDisplay.documentId,
+    ) || {};
 
   const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 
@@ -31,7 +33,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     caseDocument.eventCode,
   );
 
-  const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
+  const documentIsSigned = !!caseDocument.signedAt;
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -46,9 +48,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     ({ editUrl } = formattedDocument);
   }
 
-  const isNotice =
-    viewerDocumentToDisplay &&
-    NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
+  const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
 
   const isPetitionDocument =
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
