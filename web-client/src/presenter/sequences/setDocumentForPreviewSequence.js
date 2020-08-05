@@ -1,15 +1,15 @@
+import { getDocumentSelectedForPreviewAction } from '../actions/getDocumentSelectedForPreviewAction';
 import { getDocumentUrlForPreviewAction } from '../actions/getDocumentUrlForPreviewAction';
-import { newAction } from '../actions/newAction';
-import { petitionQcShouldShowPreviewAction } from '../actions/petitionQcShouldShowPreviewAction';
 import { selectDocumentForPreviewAction } from '../actions/selectDocumentForPreviewAction';
 import { set } from 'cerebral/factories';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { state } from 'cerebral';
+import { takePathForDocumentPreviewAction } from '../actions/takePathForDocumentPreviewAction';
 
 export const setDocumentForPreviewSequence = [
-  newAction,
-  petitionQcShouldShowPreviewAction,
+  getDocumentSelectedForPreviewAction,
+  takePathForDocumentPreviewAction,
   {
     no: [set(state.currentViewMetadata.documentUploadMode, 'scan')],
     pdfInMemory: [
