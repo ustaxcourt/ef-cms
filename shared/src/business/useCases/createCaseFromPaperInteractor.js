@@ -178,9 +178,12 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocumentWithoutDocketRecord(
+      applicationForWaiverOfFilingFeeDocumentEntity,
+      {
+        applicationContext,
+      },
+    );
   }
 
   if (requestForPlaceOfTrialFileId) {
@@ -216,9 +219,12 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocumentWithoutDocketRecord(
+      requestForPlaceOfTrialDocumentEntity,
+      {
+        applicationContext,
+      },
+    );
   }
 
   if (stinFileId) {
@@ -272,7 +278,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, {
+    caseToAdd.addDocumentWithoutDocketRecord(odsDocumentEntity, {
       applicationContext,
     });
   }
