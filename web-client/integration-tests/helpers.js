@@ -14,6 +14,7 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/createTestApplicationContext';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
@@ -36,6 +37,9 @@ import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const formattedCaseMessages = withAppContextDecorator(
   formattedCaseMessagesComputed,
@@ -65,6 +69,15 @@ export const getFormattedDocumentQCMyInbox = async test => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+export const getFormattedCaseDetailForTest = async test => {
+  await test.runSequence('gotoCaseDetailSequence', {
+    docketNumber: test.docketNumber,
+  });
+  return runCompute(formattedCaseDetail, {
     state: test.getState(),
   });
 };
@@ -150,17 +163,33 @@ export const serveDocument = async ({ docketNumber, documentId, test }) => {
 export const createCourtIssuedDocketEntry = async ({
   docketNumber,
   documentId,
+  eventCode,
   test,
+  trialLocation,
 }) => {
   await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketNumber,
     documentId,
   });
 
+  if (eventCode) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'eventCode',
+      value: eventCode,
+    });
+  }
+
   await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
     key: 'judge',
     value: 'Judge Buch',
   });
+
+  if (trialLocation) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'trialLocation',
+      value: trialLocation,
+    });
+  }
 
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
@@ -290,19 +319,21 @@ export const uploadPetition = async (
   //create token
   const userToken = jwt.sign(user, 'secret');
 
-  const response = await axios.post(
-    'http://localhost:4000/cases',
-    {
-      petitionFileId,
-      petitionMetadata,
-      stinFileId,
+  const data = {
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  };
+
+  if (overrides.ownershipDisclosureFileId) {
+    data.ownershipDisclosureFileId = overrides.ownershipDisclosureFileId;
+  }
+
+  const response = await axios.post('http://localhost:4000/cases', data, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    },
-  );
+  });
 
   test.setState('caseDetail', response.data);
 
