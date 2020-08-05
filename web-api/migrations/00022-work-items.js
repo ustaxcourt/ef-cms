@@ -96,13 +96,15 @@ const mutateRecord = async (item, documentClient, tableName) => {
       const otherWorkItems = item.workItems.splice(1);
 
       for (const workItemToDelete of otherWorkItems) {
-        await documentClient.delete({
-          Key: {
-            pk: `work-item|${workItemToDelete.workItemId}`,
-            sk: `work-item|${workItemToDelete.workItemId}`,
-          },
-          TableName: tableName,
-        });
+        await documentClient
+          .delete({
+            Key: {
+              pk: `work-item|${workItemToDelete.workItemId}`,
+              sk: `work-item|${workItemToDelete.workItemId}`,
+            },
+            TableName: tableName,
+          })
+          .promise();
       }
 
       isUpdated = true;
