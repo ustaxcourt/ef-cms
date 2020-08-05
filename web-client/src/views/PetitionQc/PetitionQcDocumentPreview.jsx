@@ -38,7 +38,7 @@ export const PetitionQcDocumentPreview = connect(
               confirmSequence="deleteUploadedPdfSequence"
               confirmText="Yes, Remove"
               modalContent="The current PDF will be permanently removed, and you will need to add a new PDF."
-              title="Are You Sure to Remove this PDF?"
+              title="Are You Sure You Want to Remove this PDF?"
             />
           )}
 
