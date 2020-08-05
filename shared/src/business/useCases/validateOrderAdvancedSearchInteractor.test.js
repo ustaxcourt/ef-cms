@@ -9,6 +9,7 @@ describe('validateOrderAdvancedSearchInteractor', () => {
       applicationContext,
       orderSearch: {
         keyword: 'Joe Exotic',
+        startDate: '2001-01-01',
       },
     });
 

@@ -12,26 +12,18 @@ exports.orderPublicSearchInteractor = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,
-  endDateDay,
-  endDateMonth,
-  endDateYear,
+  endDate,
   judge,
   keyword,
-  startDateDay,
-  startDateMonth,
-  startDateYear,
+  startDate,
 }) => {
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,
-    endDateDay,
-    endDateMonth,
-    endDateYear,
+    endDate,
     judge,
     keyword,
-    startDateDay,
-    startDateMonth,
-    startDateYear,
+    startDate,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();

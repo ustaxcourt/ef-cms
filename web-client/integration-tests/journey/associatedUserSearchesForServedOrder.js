@@ -5,6 +5,7 @@ export const associatedUserSearchesForServedOrder = (test, options) => {
     test.setState('advancedSearchForm', {
       orderSearch: {
         keyword: options.keyword,
+        startDate: '1000-01-01',
       },
     });
 

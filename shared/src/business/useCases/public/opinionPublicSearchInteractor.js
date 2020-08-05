@@ -12,28 +12,20 @@ exports.opinionPublicSearchInteractor = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,
-  endDateDay,
-  endDateMonth,
-  endDateYear,
+  endDate,
   judge,
   keyword,
   opinionType,
-  startDateDay,
-  startDateMonth,
-  startDateYear,
+  startDate,
 }) => {
   const opinionSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,
-    endDateDay,
-    endDateMonth,
-    endDateYear,
+    endDate,
     judge,
     keyword,
     opinionType,
-    startDateDay,
-    startDateMonth,
-    startDateYear,
+    startDate,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
