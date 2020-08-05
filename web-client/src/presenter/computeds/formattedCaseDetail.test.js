@@ -1345,7 +1345,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[2].showEditDocketRecordEntry,
+        result.formattedDocketEntries[4].showEditDocketRecordEntry,
       ).toBeFalsy();
     });
 
@@ -1362,7 +1362,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[3].showEditDocketRecordEntry,
+        result.formattedDocketEntries[5].showEditDocketRecordEntry,
       ).toEqual(false);
     });
 
@@ -1379,7 +1379,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[4].showEditDocketRecordEntry,
+        result.formattedDocketEntries[2].showEditDocketRecordEntry,
       ).toEqual(true);
     });
 
@@ -1396,7 +1396,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[5].showEditDocketRecordEntry,
+        result.formattedDocketEntries[3].showEditDocketRecordEntry,
       ).toEqual(true);
     });
   });
@@ -1515,7 +1515,7 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[4].numberOfPages).toEqual(9);
+      expect(result.formattedDocketEntries[2].numberOfPages).toEqual(9);
     });
 
     it('should show zero (0) number of pages with no document', () => {
