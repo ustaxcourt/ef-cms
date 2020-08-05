@@ -1,6 +1,7 @@
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getFormDocumentUrlForPreviewAction } from '../actions/getFormDocumentUrlForPreviewAction';
+import { getDocumentUrlForPreviewAction } from '../actions/getDocumentUrlForPreviewAction';
+import { newAction } from '../actions/newAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -23,7 +24,8 @@ export const gotoPetitionQcSequence = [
   setCaseOnFormAction,
   setFormForCaseAction,
   setDefaultFormDocumentForPreviewAction,
-  getFormDocumentUrlForPreviewAction,
+  newAction,
+  getDocumentUrlForPreviewAction,
   setPdfPreviewUrlAction,
   setDocumentIdAction,
   setCurrentPageAction('PetitionQc'),

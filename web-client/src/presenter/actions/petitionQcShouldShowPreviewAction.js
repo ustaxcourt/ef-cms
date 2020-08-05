@@ -9,31 +9,13 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {undefined}
  */
-export const petitionQcShouldShowPreviewAction = async ({
-  applicationContext,
-  get,
-  path,
-}) => {
-  const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
-  const documentSelectedForPreview = get(
-    state.currentViewMetadata.documentSelectedForPreview,
-  );
-
-  const file = get(state.form[documentSelectedForPreview]);
-
-  if (file) {
-    return path.pdfInMemory({ file });
+export const petitionQcShouldShowPreviewAction = async ({ path, props }) => {
+  if (props.file) {
+    return path.pdfInMemory({ file: props.file });
   }
 
-  const { documents } = get(state.form);
-  const documentTypeSelectedForPreview =
-    INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview];
-  const selectedDocument = get(documents).find(
-    document => document.documentType === documentTypeSelectedForPreview,
-  );
-
-  if (selectedDocument) {
-    return path.pdfInS3({ selectedDocument });
+  if (props.selectedDocument) {
+    return path.pdfInS3({ selectedDocumen: props.selectedDocumentt });
   }
 
   return path.no();
