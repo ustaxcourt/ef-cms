@@ -86,7 +86,6 @@ resource "aws_s3_bucket_public_access_block" "block_documents_west" {
   restrict_public_buckets = true
 }
 
-# TODO: Refactor bucket names (org name versus dns_domain since it changed via story #5666)
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
   provider = aws.us-east-1
   region   = "us-east-1"

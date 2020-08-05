@@ -47,6 +47,7 @@ describe('orderPublicSearchInteractor', () => {
     await orderPublicSearchInteractor({
       applicationContext,
       keyword: 'fish',
+      startDate: '2001-01-01',
     });
 
     expect(
@@ -61,6 +62,7 @@ describe('orderPublicSearchInteractor', () => {
     const result = await orderPublicSearchInteractor({
       applicationContext,
       keyword: 'fish',
+      startDate: '2001-01-01',
     });
 
     expect(result).toMatchObject([
