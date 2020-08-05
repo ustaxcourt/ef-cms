@@ -36,10 +36,11 @@ export const PetitionQcScanBatchPreviewer = connect(
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    petitionQcSelectDocumentForScanSequence:
+      sequences.petitionQcSelectDocumentForScanSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scanHelper: state.scanHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
-    selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
     selectedBatchIndex: state.scanner.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
@@ -61,10 +62,10 @@ export const PetitionQcScanBatchPreviewer = connect(
     openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence,
     pdfPreviewUrl,
+    petitionQcSelectDocumentForScanSequence,
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
-    selectDocumentForScanSequence,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentForUploadSequence,
@@ -433,10 +434,10 @@ export const PetitionQcScanBatchPreviewer = connect(
       if (documentTabs && documentTabs.length > 1) {
         return (
           <Tabs
-            bind="currentViewMetadata.documentSelectedForScan"
+            bind="currentViewMetadata.documentSelectedForPreview"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
             onSelect={() => {
-              selectDocumentForScanSequence();
+              petitionQcSelectDocumentForScanSequence();
             }}
           >
             {documentTabs.map(documentTab => (
