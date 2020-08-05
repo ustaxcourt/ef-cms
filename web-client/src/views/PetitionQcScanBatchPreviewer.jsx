@@ -507,7 +507,9 @@ export const PetitionQcScanBatchPreviewer = connect(
 
         <div className="document-select-container">
           {renderTabs(documentTabs)}
-          {scanBatchPreviewerHelper.uploadMode !== 'preview' &&
+
+          {(scanBatchPreviewerHelper.uploadMode !== 'preview' ||
+            !pdfPreviewUrl) &&
             renderModeRadios()}
 
           {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
