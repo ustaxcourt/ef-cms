@@ -74,7 +74,7 @@
     "is-reachable": "^4.0.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^26.2.2",
-    "joi": "^17.2.0",
+    "joi": "^17.1.1",
     "js-yaml": "^3.14.0",
     "jsdoc": "^3.6.5",
     "jsdom": "^16.2.2",
