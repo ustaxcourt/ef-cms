@@ -11,16 +11,16 @@ export const setDocumentForPreviewSequence = [
   getDocumentSelectedForPreviewAction,
   takePathForDocumentPreviewAction,
   {
+    documentInS3: [
+      getDocumentUrlForPreviewAction,
+      setPdfPreviewUrlAction,
+      setDocumentIdAction,
+      set(state.currentViewMetadata.documentUploadMode, 'preview'),
+    ],
     no: [set(state.currentViewMetadata.documentUploadMode, 'scan')],
     pdfInMemory: [
       selectDocumentForPreviewAction,
       setPdfPreviewUrlAction,
-      set(state.currentViewMetadata.documentUploadMode, 'preview'),
-    ],
-    pdfInS3: [
-      getDocumentUrlForPreviewAction,
-      setPdfPreviewUrlAction,
-      setDocumentIdAction,
       set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
   },

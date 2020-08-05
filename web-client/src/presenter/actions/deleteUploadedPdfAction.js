@@ -11,9 +11,6 @@ import { state } from 'cerebral';
 export const deleteUploadedPdfAction = async ({ applicationContext, get }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const documentId = get(state.documentId);
-  const documentSelectedForPreview = get(
-    state.currentViewMetadata.documentSelectedForPreview,
-  );
 
   const updatedCase = await applicationContext
     .getUseCases()
@@ -26,6 +23,5 @@ export const deleteUploadedPdfAction = async ({ applicationContext, get }) => {
   return {
     caseDetail: updatedCase,
     documentUploadMode: 'scan',
-    key: documentSelectedForPreview,
   };
 };
