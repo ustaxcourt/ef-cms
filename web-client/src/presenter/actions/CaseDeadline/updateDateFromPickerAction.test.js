@@ -7,7 +7,7 @@ presenter.providers.applicationContext = applicationContextForClient;
 
 describe('updateDateFromPickerAction', () => {
   it('sets only state.screenMetadata.filterStartDate to the formatted props.startDate if props.endDate is not passed in', async () => {
-    const testDate = new Date('2019-05-14T07:12:12.457Z');
+    const testDate = '2019-05-14';
 
     const result = await runAction(updateDateFromPickerAction, {
       modules: { presenter },
@@ -25,8 +25,8 @@ describe('updateDateFromPickerAction', () => {
   });
 
   it('sets state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate to the formatted props.startDate and props.endDate if both are passed in', async () => {
-    const testStartDate = new Date('2019-05-14T07:12:12.457Z');
-    const testEndDate = new Date('2019-05-17T07:12:12.457Z');
+    const testStartDate = '2019-05-14';
+    const testEndDate = '2019-05-17';
 
     const result = await runAction(updateDateFromPickerAction, {
       modules: { presenter },

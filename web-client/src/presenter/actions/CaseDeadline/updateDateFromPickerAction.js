@@ -8,15 +8,26 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  * @param {object} providers.props the cerebral props object used for passing the props.startDate and props.endDate
  */
-export const updateDateFromPickerAction = ({ props, store }) => {
+export const updateDateFromPickerAction = ({
+  applicationContext,
+  props,
+  store,
+}) => {
   const filterStartDate = props.startDate;
   const filterEndDate = props.endDate;
 
-  const formattedFilterStartDate = filterStartDate;
-  store.set(state.screenMetadata.filterStartDate, formattedFilterStartDate);
+  if (filterStartDate) {
+    const formattedFilterStartDate = applicationContext
+      .getUtilities()
+      .createISODateString(filterStartDate, 'YYYY-MM-DD');
+    store.set(state.screenMetadata.filterStartDate, formattedFilterStartDate);
+  }
 
   if (filterEndDate) {
-    const formattedFilterEndDate = filterEndDate;
+    const formattedFilterEndDate = applicationContext
+      .getUtilities()
+      .createISODateString(filterEndDate, 'YYYY-MM-DD');
+
     store.set(state.screenMetadata.filterEndDate, formattedFilterEndDate);
   } else {
     store.unset(state.screenMetadata.filterEndDate);
