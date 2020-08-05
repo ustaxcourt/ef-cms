@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  */
-export const setDefaultFormDocumentForPreviewAction = ({ get, store }) => {
+export const setDefaultDocumentSelectedForPreviewAction = ({ get, store }) => {
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
