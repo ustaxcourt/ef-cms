@@ -9,20 +9,22 @@ import { state } from 'cerebral';
  * @returns {void} sets the new state for form.documents
  */
 
-export const removePetitionFromFormDocumentsAction = ({ get, store }) => {
+export const removePetitionFromFormDocumentsAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const documents = get(state.form.documents);
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
   );
 
-  documents.some((document, idx) => {
-    if (document.documentType === 'Petition') {
-      documents.splice(idx, 1);
-      return true;
-    }
-  });
+  const caseDocumentsWithoutPetition = documents.filter(
+    doc => doc.documentType !== INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
 
-  store.set(state.form.documents, documents);
+  store.set(state.form.documents, caseDocumentsWithoutPetition);
 
   return { key: documentSelectedForPreview };
 };
