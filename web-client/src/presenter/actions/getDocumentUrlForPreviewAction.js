@@ -1,13 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * fixme
- * gets the form document based on the state of currentViewMetadata.documentSelectedForPreview
+ * Gets the url of the document for previewing
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get method
- * @returns {object} object containing pdfUrl
+ * @param {object} providers.props the cerebral props object
+ * @returns {object} object containing documentId and pdfUrl
  */
 export const getDocumentUrlForPreviewAction = async ({
   applicationContext,
