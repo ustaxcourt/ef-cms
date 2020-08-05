@@ -11,6 +11,9 @@ import { state } from 'cerebral';
 
 export const removePetitionFromFormDocumentsAction = ({ get, store }) => {
   const documents = get(state.form.documents);
+  const documentSelectedForPreview = get(
+    state.currentViewMetadata.documentSelectedForPreview,
+  );
 
   documents.some((document, idx) => {
     if (document.documentType === 'Petition') {
@@ -20,4 +23,6 @@ export const removePetitionFromFormDocumentsAction = ({ get, store }) => {
   });
 
   store.set(state.form.documents, documents);
+
+  return { key: documentSelectedForPreview };
 };
