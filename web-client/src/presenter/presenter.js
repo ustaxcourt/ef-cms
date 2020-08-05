@@ -247,7 +247,6 @@ import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
-import { selectDocumentForPetitionQcPreviewSequence } from './sequences/selectDocumentForPetitionQcPreviewSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
@@ -675,7 +674,6 @@ export const presenter = {
     sealCaseSequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,
-    selectDocumentForPetitionQcPreviewSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
     selectScannerSequence,
