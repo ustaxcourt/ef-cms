@@ -462,7 +462,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView;
+  petitionsClerkServesPetitionFromDocumentView(test);
 
   loginAs(test, 'petitioner@example.com');
   petitionerFilesADocumentForCase(test, fakeFile);
@@ -482,6 +482,3 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 });
-
-// TODO: Add showNotServed
-// TODO: Check orders
