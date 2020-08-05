@@ -37,8 +37,8 @@ export const PetitionQcDocumentPreview = connect(
             <ConfirmDeletePDFModal
               confirmSequence="deleteUploadedPdfSequence"
               confirmText="Yes, Remove"
-              modalContent="This action cannot be undone."
-              title="The current PDF will be permanently removed, and you will need to add a new PDF."
+              modalContent="The current PDF will be permanently removed, and you will need to add a new PDF."
+              title="Are You Sure You Want to Remove this PDF?"
             />
           )}
 
