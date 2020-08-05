@@ -1,14 +1,11 @@
 const joi = require('joi');
 const {
-  createEndOfDayISO,
-  createStartOfDayISO,
-} = require('../../utilities/DateHandler');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { createEndOfDayISO } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
@@ -44,17 +41,7 @@ function DocumentSearch(rawProps = {}) {
     this.docketNumber = rawProps.docketNumber;
   }
 
-  if (
-    rawProps.startDateDay ||
-    rawProps.startDateMonth ||
-    rawProps.startDateYear
-  ) {
-    this.startDate = createStartOfDayISO({
-      day: rawProps.startDateDay,
-      month: rawProps.startDateMonth,
-      year: rawProps.startDateYear,
-    });
-  } else if (rawProps.startDate) {
+  if (rawProps.startDate) {
     const [year, month, day] = rawProps.startDate.split('-');
     this.startDate = createEndOfDayISO({
       day,
@@ -70,19 +57,6 @@ function DocumentSearch(rawProps = {}) {
       month,
       year,
     });
-    this.tomorrow = new Date();
-    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
-  } else if (
-    rawProps.endDateDay ||
-    rawProps.endDateMonth ||
-    rawProps.endDateYear
-  ) {
-    this.endDate = createEndOfDayISO({
-      day: rawProps.endDateDay,
-      month: rawProps.endDateMonth,
-      year: rawProps.endDateYear,
-    });
-
     this.tomorrow = new Date();
     this.tomorrow.setDate(this.tomorrow.getDate() + 1);
   }
