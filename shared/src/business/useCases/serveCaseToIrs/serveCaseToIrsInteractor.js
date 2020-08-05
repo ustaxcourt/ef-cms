@@ -14,6 +14,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
@@ -243,6 +244,25 @@ exports.serveCaseToIrsInteractor = async ({
   });
 
   if (caseEntity.isPaper) {
+    // add each document except petition to docket record
+    caseEntity.documents.forEach(doc => {
+      const intitialDocumentTypesNeedingDocketEntry = omit(
+        Object.values(INITIAL_DOCUMENT_TYPES),
+        'Petition',
+      );
+      if (intitialDocumentTypesNeedingDocketEntry.includes(doc.documentType)) {
+        const newDocketRecord = new DocketRecord(
+          {
+            description: doc.documentTitle,
+            eventCode: doc.eventCode,
+            filingDate: doc.filingDate,
+          },
+          { applicationContext },
+        );
+        caseEntity.addDocketRecord(newDocketRecord);
+      }
+    });
+
     const {
       url,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
