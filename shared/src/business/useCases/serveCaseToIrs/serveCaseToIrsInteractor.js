@@ -13,8 +13,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
+const { flatten, omit } = require('lodash');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
@@ -246,9 +246,8 @@ exports.serveCaseToIrsInteractor = async ({
   if (caseEntity.isPaper) {
     // add each document except petition to docket record
     caseEntity.documents.forEach(doc => {
-      const intitialDocumentTypesNeedingDocketEntry = omit(
-        Object.values(INITIAL_DOCUMENT_TYPES),
-        'Petition',
+      const intitialDocumentTypesNeedingDocketEntry = flatten(
+        omit(...Object.values(INITIAL_DOCUMENT_TYPES), 'Petition'),
       );
       if (intitialDocumentTypesNeedingDocketEntry.includes(doc.documentType)) {
         const newDocketRecord = new DocketRecord(
@@ -261,6 +260,12 @@ exports.serveCaseToIrsInteractor = async ({
         );
         caseEntity.addDocketRecord(newDocketRecord);
       }
+    });
+
+    //why did it add a docket record entry for some cases and dnot for the other???
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
     const {
