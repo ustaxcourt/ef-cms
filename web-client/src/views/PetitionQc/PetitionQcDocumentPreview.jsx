@@ -1,10 +1,14 @@
 import { PetitionQcScanBatchPreviewer } from '../PetitionQcScanBatchPreviewer';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const PetitionQcDocumentPreview = connect(
-  {},
-  function PetitionQcDocumentPreview() {
+  {
+    documentSelectedForPreview:
+      state.currentViewMetadata.documentSelectedForPreview,
+  },
+  function PetitionQcDocumentPreview({ documentSelectedForPreview }) {
     return (
       <>
         <PetitionQcScanBatchPreviewer
@@ -30,7 +34,7 @@ export const PetitionQcDocumentPreview = connect(
               title: 'APW',
             },
           ]}
-          documentType="stinFile"
+          documentType={documentSelectedForPreview}
           title="Add Document(s)"
         />
       </>
