@@ -3,8 +3,12 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { petitionsClerkAddsGenericOrderToCase } from './journey/petitionsClerkAddsGenericOrderToCase';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkEditsDraftOrder } from './journey/petitionsClerkEditsDraftOrder';
+import { petitionsClerkEditsGenericOrder } from './journey/petitionsClerkEditsGenericOrder';
+import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
+import { petitionsClerkViewsAddDocketEntryForGenericOrder } from './journey/petitionsClerkViewsAddDocketEntryForGenericOrder';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
@@ -37,4 +41,11 @@ describe('Petitions Clerk Create Order Journey', () => {
   });
   petitionsDeletesOrderFromCase(test);
   petitionsClerkViewsDraftDocuments(test, 0);
+
+  petitionsClerkAddsGenericOrderToCase(test);
+  petitionsClerkSignsOrder(test);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
+  petitionsClerkEditsGenericOrder(test);
+  petitionsClerkSignsOrder(test);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
 });
