@@ -7,6 +7,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'osteodontolignikeratic',
+        startDate: '2001-01-01',
       },
     });
 
@@ -19,6 +20,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
       opinionSearch: {
         keyword: 'opinion',
         opinionType: 'Summary Opinion',
+        startDate: '2001-01-01',
       },
     });
 
@@ -31,6 +33,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
       opinionSearch: {
         keyword: 'opinion',
         opinionType: 'T.C. Opinion',
+        startDate: '2001-01-01',
       },
     });
 
