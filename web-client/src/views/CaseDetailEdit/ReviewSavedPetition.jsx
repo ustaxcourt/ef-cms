@@ -282,6 +282,15 @@ export const ReviewSavedPetition = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined" id="attachments-card">
                       Attachments
+                      <Button
+                        link
+                        aria-label="edit parties"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        href={`/case-detail/${form.docketNumber}/petition-qc?tab=partyInfo`}
+                        icon="edit"
+                      >
+                        Edit
+                      </Button>
                     </h3>
                     <div>
                       {reviewSavedPetitionHelper.petitionFile && (
