@@ -75,18 +75,21 @@ const addDocketEntries = ({ applicationContext, caseEntity }) => {
       doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
-  for (let doc of caseEntity.documents) {
-    if (
-      initialDocumentTypesListRequiringDocketEntry.includes(doc.documentType)
-    ) {
+  for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
+    const foundDocument = caseEntity.documents.find(
+      caseDocument => caseDocument.documentType === documentType,
+    );
+
+    if (foundDocument) {
       const newDocketRecord = new DocketRecord(
         {
-          description: doc.documentTitle || doc.documentType,
-          documentId: doc.documentId,
-          eventCode: doc.eventCode,
-          filedBy: doc.filedBy,
-          filingDate: doc.filingDate,
-          servedPartiesCode: doc.servedPartiesCode,
+          description:
+            foundDocument.documentTitle || foundDocument.documentType,
+          documentId: foundDocument.documentId,
+          eventCode: foundDocument.eventCode,
+          filedBy: foundDocument.filedBy,
+          filingDate: foundDocument.filingDate,
+          servedPartiesCode: foundDocument.servedPartiesCode,
         },
         { applicationContext },
       );
