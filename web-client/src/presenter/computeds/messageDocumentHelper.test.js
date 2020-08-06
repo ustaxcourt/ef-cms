@@ -717,12 +717,10 @@ describe('messageDocumentHelper', () => {
         },
         viewerDocumentToDisplay: {
           documentId: '123',
-          eventCode: 'NOT',
         },
       },
     });
 
-    expect(result.showEditButtonNotSigned).toEqual(true);
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
