@@ -8,7 +8,7 @@ describe('submitUpdateCaseModalAction', () => {
 
   const caseMock = {
     caption: 'Test Caption',
-    caseId: '123',
+    docketNumber: '123-20',
     status: STATUS_TYPES.new,
   };
 
@@ -35,7 +35,7 @@ describe('submitUpdateCaseModalAction', () => {
         .calls[0][0],
     ).toMatchObject({
       caseCaption: 'Updated Test Caption',
-      caseId: '123',
+      docketNumber: '123-20',
     });
   });
 
@@ -59,8 +59,8 @@ describe('submitUpdateCaseModalAction', () => {
       applicationContext.getUseCases().updateCaseContextInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
       caseStatus: STATUS_TYPES.generalDocket,
+      docketNumber: '123-20',
     });
   });
 
@@ -84,8 +84,8 @@ describe('submitUpdateCaseModalAction', () => {
       applicationContext.getUseCases().updateCaseContextInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
       caseStatus: STATUS_TYPES.generalDocket,
+      docketNumber: '123-20',
     });
   });
 
@@ -110,8 +110,8 @@ describe('submitUpdateCaseModalAction', () => {
       applicationContext.getUseCases().updateCaseContextInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
       caseStatus: STATUS_TYPES.generalDocket,
+      docketNumber: '123-20',
     });
   });
 });

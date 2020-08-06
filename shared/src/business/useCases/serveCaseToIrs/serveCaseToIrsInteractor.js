@@ -191,7 +191,7 @@ exports.serveCaseToIrsInteractor = async ({
   for (const doc of caseEntity.documents) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
       documentId: doc.documentId,
       replaceCoversheet: !caseEntity.isPaper,
       useInitialData: !caseEntity.isPaper,

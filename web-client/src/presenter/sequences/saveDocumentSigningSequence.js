@@ -5,11 +5,9 @@ import { completeDocumentSigningAction } from '../actions/completeDocumentSignin
 import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
-import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setSuccessFromDocumentTitleAction } from '../actions/setSuccessFromDocumentTitleAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -20,7 +18,7 @@ export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   setSuccessFromDocumentTitleAction,
   completeDocumentSigningAction,
   completeWorkItemForDocumentSigningAction,
-  parallel([setDocumentIdAction, setDocumentDetailTabAction]),
+  setDocumentDetailTabAction,
   clearPDFSignatureDataAction,
   clearFormAction,
   setAlertSuccessAction,

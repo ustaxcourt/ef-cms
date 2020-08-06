@@ -10,14 +10,11 @@ exports.generatePublicDocketRecordPdfLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const { caseId, docketRecordSort } = JSON.parse(event.body);
-
       return await applicationContext
         .getUseCases()
         .generateDocketRecordPdfInteractor({
           applicationContext,
-          caseId,
-          docketRecordSort,
+          ...JSON.parse(event.body),
           includePartyDetail: false,
         });
     },

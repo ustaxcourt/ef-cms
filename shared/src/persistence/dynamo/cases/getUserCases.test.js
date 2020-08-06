@@ -27,8 +27,8 @@ describe('getUserCases', () => {
   beforeEach(() => {
     client.query = jest.fn().mockReturnValueOnce([
       {
-        caseId: '123',
-        leadCaseId: '321',
+        docketNumber: '123-20',
+        leadDocketNumber: '321-20',
         pk: 'user|123',
         sk: 'case|123',
         status: CASE_STATUS_TYPES.new,
@@ -44,8 +44,8 @@ describe('getUserCases', () => {
 
     expect(result).toEqual([
       {
-        caseId: '123',
-        leadCaseId: '321',
+        docketNumber: '123-20',
+        leadDocketNumber: '321-20',
         status: CASE_STATUS_TYPES.new,
       },
     ]);

@@ -44,7 +44,6 @@ describe('formatted work queue computed', () => {
   const FORMATTED_WORK_ITEM = {
     assigneeId: 'abc',
     assigneeName: 'Unassigned',
-    caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     caseStatus: STATUS_TYPES.generalDocket,
     createdAtFormatted: '12/27/18',
     currentMessage: {
@@ -120,7 +119,6 @@ describe('formatted work queue computed', () => {
   const workItem = {
     assigneeId: 'abc',
     assigneeName: null,
-    caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     caseStatus: STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
@@ -745,7 +743,6 @@ describe('formatted work queue computed', () => {
       assigneeId: null,
       assigneeName: null,
       caseCaption: 'Ori Petersen',
-      caseId: 'fa73b4ed-4b3d-43b3-b704-8b2af5bdecc1',
       caseStatus: 'New',
       createdAt: '2019-12-16T16:48:02.889Z',
       docketNumber: '114-19',
@@ -860,7 +857,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual(documentViewLink);
     });
 
-    it('should return /complete if document is in progress and user is docketclerk', () => {
+    it('should return /complete if work item is in progress and user is docketclerk', () => {
       const { permissions } = getBaseState(docketClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -881,6 +878,7 @@ describe('formatted work queue computed', () => {
             relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Standard',
           },
+          inProgress: true,
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],

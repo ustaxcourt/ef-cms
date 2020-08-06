@@ -29,8 +29,6 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
 
     await test.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',

@@ -6,7 +6,7 @@ describe('setPropsForRemoveSignatureAction', () => {
     const { output } = await runAction(setPropsForRemoveSignatureAction, {
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
         },
         modal: { documentIdToEdit: 'abc' },
       },
@@ -14,7 +14,7 @@ describe('setPropsForRemoveSignatureAction', () => {
 
     expect(output).toEqual({
       caseDetail: {
-        caseId: '123',
+        docketNumber: '123-45',
       },
       documentIdToEdit: 'abc',
     });

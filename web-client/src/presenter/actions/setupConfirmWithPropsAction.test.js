@@ -6,7 +6,6 @@ describe('setupConfirmWithPropsAction', () => {
     const result = await runAction(setupConfirmWithPropsAction, {
       state: {
         modal: {
-          caseId: 'abc-123',
           docketNumber: 'abc-123',
           documentIdToEdit: 'abc-123',
           parentMessageId: '987',
@@ -16,7 +15,6 @@ describe('setupConfirmWithPropsAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      caseId: 'abc-123',
       docketNumber: 'abc-123',
       documentIdToEdit: 'abc-123',
       parentMessageId: '987',

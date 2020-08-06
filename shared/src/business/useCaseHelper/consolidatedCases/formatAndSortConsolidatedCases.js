@@ -4,22 +4,22 @@ const { Case } = require('../../entities/cases/Case');
  * Formats and sorts consolidated cases
  *
  * @param {object} arguments.consolidatedCases list of consolidated cases
- * @param {object} arguments.leadCaseId the leadCaseId
- * @param {object} arguments.userAssociatedCaseIdsMap the list of caseIds the user is associated with
+ * @param {object} arguments.leadDocketNumber the leadDocketNumber
+ * @param {object} arguments.userAssociatedDocketNumbersMap the list of docketNumbers the user is associated with
  * @returns {object} consolidated cases sorted by docket number
  */
 exports.formatAndSortConsolidatedCases = ({
   consolidatedCases,
-  leadCaseId,
-  userAssociatedCaseIdsMap,
+  leadDocketNumber,
+  userAssociatedDocketNumbersMap,
 }) => {
   const caseConsolidatedCases = [];
   consolidatedCases.forEach(consolidatedCase => {
-    consolidatedCase.isRequestingUserAssociated = !!userAssociatedCaseIdsMap[
-      consolidatedCase.caseId
+    consolidatedCase.isRequestingUserAssociated = !!userAssociatedDocketNumbersMap[
+      consolidatedCase.docketNumber
     ];
 
-    if (consolidatedCase.caseId !== leadCaseId) {
+    if (consolidatedCase.docketNumber !== leadDocketNumber) {
       caseConsolidatedCases.push(consolidatedCase);
     }
   });

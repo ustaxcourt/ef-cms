@@ -17,6 +17,6 @@ export const extractUserNotesFromCalendaredCasesAction = ({ get, store }) => {
   }
   store.set(
     state.trialSessionWorkingCopy.userNotes,
-    makeMap(userNotes, 'caseId'),
+    makeMap(userNotes, 'docketNumber'),
   );
 };

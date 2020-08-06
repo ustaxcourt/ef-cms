@@ -74,9 +74,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
 
   const caseDeadlines = get(state.caseDeadlines);
-  const caseId = get(state.caseDetail.caseId);
-  if (caseId) {
-    docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
+  const docketNumber = get(state.caseDetail.docketNumber);
+  if (docketNumber) {
+    docketRecordSort = get(
+      state.sessionMetadata.docketRecordSort[docketNumber],
+    );
   }
 
   const result = {

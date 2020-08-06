@@ -11,7 +11,6 @@ const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
 describe('completeWorkItemInteractor', () => {
   let mockWorkItem = {
     assigneeId: 'docketclerk',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '2019-03-11T21:56:01.625Z',
     docketNumber: '101-18',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,

@@ -61,7 +61,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
       test,
     );
     decisionWorkItem = documentQCSectionInbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(decisionWorkItem).toMatchObject({
       document: {
@@ -91,7 +91,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
   it('verify a new message exists on the user outbox', async () => {
     const myOutbox = await getFormattedMyOutbox(test);
     const workItem = myOutbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(workItem).toMatchObject({
       document: {
@@ -114,7 +114,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
   it('verify a new message exists on the section outbox', async () => {
     const mySectionOutbox = await getFormattedSectionOutbox(test);
     const workItem = mySectionOutbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(workItem).toMatchObject({
       document: {
@@ -139,7 +139,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
   it('login as docketclerk1 and verify we have a message in my inbox', async () => {
     const myInbox = await getFormattedMyInbox(test);
     myInboxWorkItem = myInbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(myInboxWorkItem).toMatchObject({
       document: {
@@ -185,7 +185,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
     });
     const myInbox = await getFormattedMyInbox(test);
     const workItem = myInbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(workItem).toMatchObject({
       showUnreadIndicators: false,

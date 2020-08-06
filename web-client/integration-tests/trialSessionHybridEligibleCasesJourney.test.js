@@ -26,7 +26,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     sessionType: 'Hybrid',
     trialLocation,
   };
-  const createdCaseIds = [];
+  const createdDocketNumbers = [];
 
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
     loginAs(test, 'docketclerk@example.com');
@@ -49,7 +49,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
 
@@ -73,7 +73,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
 
@@ -97,7 +97,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
-        createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
 
@@ -118,15 +118,15 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
       });
 
       expect(test.getState('trialSession.eligibleCases').length).toEqual(3);
-      expect(test.getState('trialSession.eligibleCases.0.caseId')).toEqual(
-        createdCaseIds[0],
-      );
-      expect(test.getState('trialSession.eligibleCases.1.caseId')).toEqual(
-        createdCaseIds[1],
-      );
-      expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
-        createdCaseIds[2],
-      );
+      expect(
+        test.getState('trialSession.eligibleCases.0.docketNumber'),
+      ).toEqual(createdDocketNumbers[0]);
+      expect(
+        test.getState('trialSession.eligibleCases.1.docketNumber'),
+      ).toEqual(createdDocketNumbers[1]);
+      expect(
+        test.getState('trialSession.eligibleCases.2.docketNumber'),
+      ).toEqual(createdDocketNumbers[2]);
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
@@ -134,9 +134,9 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   describe('Calendar clerk marks all eligible cases as QCed', () => {
     loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
-      createdCaseIds[0],
-      createdCaseIds[1],
-      createdCaseIds[2],
+      createdDocketNumbers[0],
+      createdDocketNumbers[1],
+      createdDocketNumbers[2],
     ]);
   });
 
@@ -155,12 +155,12 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
 
       expect(test.getState('trialSession.calendaredCases').length).toEqual(2);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
-      expect(test.getState('trialSession.calendaredCases.0.caseId')).toEqual(
-        createdCaseIds[0],
-      );
-      expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
-        createdCaseIds[1],
-      );
+      expect(
+        test.getState('trialSession.calendaredCases.0.docketNumber'),
+      ).toEqual(createdDocketNumbers[0]);
+      expect(
+        test.getState('trialSession.calendaredCases.1.docketNumber'),
+      ).toEqual(createdDocketNumbers[1]);
     });
   });
 });

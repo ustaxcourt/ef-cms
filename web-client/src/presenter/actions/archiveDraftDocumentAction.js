@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+
 /**
  * calls the proxy/interactor to archive a document on the backend
  *
@@ -13,11 +14,13 @@ export const archiveDraftDocumentAction = async ({
   store,
 }) => {
   const { documentId, redirectToCaseDetail } = get(state.archiveDraftDocument);
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
-  await applicationContext
-    .getUseCases()
-    .archiveDraftDocumentInteractor({ applicationContext, caseId, documentId });
+  await applicationContext.getUseCases().archiveDraftDocumentInteractor({
+    applicationContext,
+    docketNumber,
+    documentId,
+  });
 
   store.set(state.alertSuccess, {
     message: 'Document deleted.',
@@ -27,7 +30,7 @@ export const archiveDraftDocumentAction = async ({
     store.set(state.saveAlertsForNavigation, true);
 
     return {
-      caseId,
+      docketNumber,
     };
   }
 };

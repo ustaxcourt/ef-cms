@@ -17,7 +17,7 @@ describe('setDocumentToFormAction', () => {
     const result = await runAction(setDocumentToFormAction, {
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',
@@ -43,8 +43,8 @@ describe('setDocumentToFormAction', () => {
     const result = await runAction(setDocumentToFormAction, {
       props: {
         caseDetail: {
-          caseId: 'c123',
           correspondence: [mockCorrespondence],
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',
@@ -75,7 +75,7 @@ describe('setDocumentToFormAction', () => {
     const result = await runAction(setDocumentToFormAction, {
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',

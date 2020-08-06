@@ -15,7 +15,6 @@ const { MOCK_CASE } = require('../../../test/mockCase.js');
 describe('submitCaseAssociationRequest', () => {
   let caseRecord = {
     caseCaption: 'Caption',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
@@ -56,7 +55,7 @@ describe('submitCaseAssociationRequest', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(() => caseRecord);
+      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -69,7 +68,7 @@ describe('submitCaseAssociationRequest', () => {
     await expect(
       submitCaseAssociationRequestInteractor({
         applicationContext,
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -102,7 +101,7 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -135,7 +134,7 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -174,7 +173,7 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

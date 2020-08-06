@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { updateSessionNoteInTrialSessionWorkingCopyAction } from './updateSessionNoteInTrialSessionWorkingCopyAction';
 
 describe('updateSessionNoteInTrialSessionWorkingCopyAction', () => {
-  it('should set the modal caseId state', async () => {
+  it('should set the modal state', async () => {
     const result = await runAction(
       updateSessionNoteInTrialSessionWorkingCopyAction,
       {

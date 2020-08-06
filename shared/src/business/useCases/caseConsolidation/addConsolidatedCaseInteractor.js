@@ -10,14 +10,14 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseId the id of the case to consolidate
- * @param {object} providers.caseIdToConsolidateWith the id of the case with which to consolidate
+ * @param {object} providers.docketNumber the docket number of the case to consolidate
+ * @param {object} providers.docketNumberToConsolidateWith the docket number of the case with which to consolidate
  * @returns {object} the updated case data
  */
 exports.addConsolidatedCaseInteractor = async ({
   applicationContext,
-  caseId,
-  caseIdToConsolidateWith,
+  docketNumber,
+  docketNumberToConsolidateWith,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -27,44 +27,47 @@ exports.addConsolidatedCaseInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId });
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseToConsolidateWith = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId: caseIdToConsolidateWith });
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: docketNumberToConsolidateWith,
+    });
 
   if (!caseToConsolidateWith) {
     throw new NotFoundError(
-      `Case to consolidate with (${caseIdToConsolidateWith}) was not found.`,
+      `Case to consolidate with (${docketNumberToConsolidateWith}) was not found.`,
     );
   }
 
   let allCasesToConsolidate = [];
 
   if (
-    caseToUpdate.leadCaseId &&
-    caseToUpdate.leadCaseId !== caseToConsolidateWith.leadCaseId
+    caseToUpdate.leadDocketNumber &&
+    caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
     allCasesToConsolidate = await applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId({
+      .getCasesByLeadDocketNumber({
         applicationContext,
-        leadCaseId: caseToUpdate.leadCaseId,
+        leadDocketNumber: caseToUpdate.leadDocketNumber,
       });
   } else {
     allCasesToConsolidate = [caseToUpdate];
   }
 
-  if (caseToConsolidateWith.leadCaseId) {
+  if (caseToConsolidateWith.leadDocketNumber) {
     const casesConsolidatedWithLeadCase = await applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId({
+      .getCasesByLeadDocketNumber({
         applicationContext,
-        leadCaseId: caseToConsolidateWith.leadCaseId,
+        leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
       });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
   } else {
@@ -74,13 +77,13 @@ exports.addConsolidatedCaseInteractor = async ({
   const newLeadCase = Case.findLeadCaseForCases(allCasesToConsolidate);
 
   const casesToUpdate = allCasesToConsolidate.filter(filterCaseToUpdate => {
-    return filterCaseToUpdate.leadCaseId !== newLeadCase.caseId;
+    return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
   });
 
   const updateCasePromises = [];
   casesToUpdate.forEach(caseToUpdate => {
     const caseEntity = new Case(caseToUpdate, { applicationContext });
-    caseEntity.setLeadCase(newLeadCase.caseId);
+    caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(
       applicationContext.getPersistenceGateway().updateCase({

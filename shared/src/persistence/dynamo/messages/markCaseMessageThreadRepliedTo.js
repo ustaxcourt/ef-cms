@@ -20,22 +20,24 @@ exports.markCaseMessageThreadRepliedTo = async ({
     parentMessageId,
   });
 
-  const updateMessage = async message => {
-    return await update({
-      ExpressionAttributeNames: {
-        '#isRepliedTo': 'isRepliedTo',
-      },
-      ExpressionAttributeValues: {
-        ':isRepliedTo': true,
-      },
-      Key: {
-        pk: `case|${message.caseId}`,
-        sk: `message|${message.messageId}`,
-      },
-      UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
-      applicationContext,
-    });
-  };
+  if (messages.length) {
+    const updateMessage = async message => {
+      return await update({
+        ExpressionAttributeNames: {
+          '#isRepliedTo': 'isRepliedTo',
+        },
+        ExpressionAttributeValues: {
+          ':isRepliedTo': true,
+        },
+        Key: {
+          pk: `case|${message.docketNumber}`,
+          sk: `message|${message.messageId}`,
+        },
+        UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
+        applicationContext,
+      });
+    };
 
-  await Promise.all(messages.map(updateMessage));
+    await Promise.all(messages.map(updateMessage));
+  }
 };

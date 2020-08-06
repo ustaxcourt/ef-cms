@@ -12,7 +12,6 @@ const { ROLES } = require('../../entities/EntityConstants');
 const MOCK_WORK_ITEM = {
   assigneeId: null,
   assigneeName: 'bob',
-  caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
   caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAt: '2018-12-27T18:06:02.971Z',
   docketNumber: '101-18',
@@ -58,7 +57,7 @@ describe('assignWorkItemsInteractor', () => {
   it('fail on validation if the work items provided are invalid', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getWorkItemById.mockReturnValue(omit(MOCK_WORK_ITEM, 'caseId'));
+      .getWorkItemById.mockReturnValue(omit(MOCK_WORK_ITEM, 'docketNumber'));
 
     applicationContext.user = {
       name: 'bob',

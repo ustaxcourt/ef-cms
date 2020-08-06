@@ -6,19 +6,17 @@ import { setDeleteCaseNoteModalStateAction } from './setDeleteCaseNoteModalState
 presenter.providers.applicationContext = applicationContextForClient;
 
 describe('setDeleteCaseNoteModalStateAction', () => {
-  it('should set the modal state caseId from caseDetail', async () => {
+  it('should set the modal state docketNumber from caseDetail', async () => {
     const result = await runAction(setDeleteCaseNoteModalStateAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '123-45',
         },
       },
     });
-    expect(result.state.modal.caseId).toEqual(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
+    expect(result.state.modal.docketNumber).toEqual('123-45');
   });
 });

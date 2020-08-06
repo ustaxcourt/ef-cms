@@ -13,7 +13,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.assigneeId the id to assign the work item to
- * @param {string} providers.caseId the id of the case to attach the work item to
+ * @param {string} providers.docketNumber the docket number of the case to attach the work item to
  * @param {string} providers.documentId the id of the document to attach the work item to
  * @param {string} providers.message the message for creating the work item
  * @returns {object} the created work item
@@ -21,7 +21,7 @@ const { WorkItem } = require('../../entities/WorkItem');
 exports.createWorkItemInteractor = async ({
   applicationContext,
   assigneeId,
-  caseId,
+  docketNumber,
   documentId,
   message,
 }) => {
@@ -44,9 +44,9 @@ exports.createWorkItemInteractor = async ({
 
   const theCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(theCase, { applicationContext });
@@ -69,7 +69,6 @@ exports.createWorkItemInteractor = async ({
   const newWorkItem = new WorkItem(
     {
       associatedJudge: theCase.associatedJudge,
-      caseId: caseId,
       caseIsInProgress: theCase.inProgress,
       caseStatus: theCase.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),

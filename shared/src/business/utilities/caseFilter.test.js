@@ -8,7 +8,6 @@ describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
     const result = caseSealedFormatter({
       baz: 'quux',
-      caseId: '123',
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       foo: 'bar',
@@ -16,7 +15,6 @@ describe('caseFilter', () => {
     });
 
     expect(result).toEqual({
-      caseId: '123',
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       sealedDate: '2020-01-02T03:04:05.007Z',
@@ -27,7 +25,6 @@ describe('caseFilter', () => {
     const caseSearchResults = [
       {
         baz: 'quux',
-        caseId: '456',
         docketNumber: '101-20',
         documents: [{ documentType: 'Petition' }],
         foo: 'baz',
@@ -35,7 +32,6 @@ describe('caseFilter', () => {
       },
       {
         baz: 'quux',
-        caseId: '123',
         docketNumber: '102-20',
         documents: [{ documentType: 'Petition' }],
         foo: 'bar',
@@ -45,7 +41,6 @@ describe('caseFilter', () => {
       },
       {
         baz: 'quux',
-        caseId: '123',
         docketNumber: '102-20',
         documents: [
           { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },

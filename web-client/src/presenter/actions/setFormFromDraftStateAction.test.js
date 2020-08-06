@@ -23,7 +23,7 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',
@@ -47,7 +47,7 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',
@@ -69,7 +69,7 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: 'c123',
+          docketNumber: '123-45',
           documents: [
             {
               documentId: '321',

@@ -172,7 +172,7 @@ export const getWorkItemDocumentLink = ({
     .getUtilities()
     .formatDocument(applicationContext, result.document);
 
-  const isInProgress = formattedDocument && formattedDocument.isInProgress;
+  const isInProgress = workItem.inProgress;
 
   const qcWorkItemsUntouched =
     !isInProgress &&
