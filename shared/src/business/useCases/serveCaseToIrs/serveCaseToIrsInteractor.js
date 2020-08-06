@@ -63,6 +63,38 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   }
 };
 
+const addDocketEntries = ({ applicationContext, caseEntity }) => {
+  const initialDocumentTypesListRequiringDocketEntry = Object.values(
+    INITIAL_DOCUMENT_TYPES_MAP,
+  );
+
+  remove(
+    initialDocumentTypesListRequiringDocketEntry,
+    doc =>
+      doc === INITIAL_DOCUMENT_TYPES.petition.documentType ||
+      doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
+  );
+
+  for (let doc of caseEntity.documents) {
+    if (
+      initialDocumentTypesListRequiringDocketEntry.includes(doc.documentType)
+    ) {
+      const newDocketRecord = new DocketRecord(
+        {
+          description: doc.documentTitle || doc.documentType,
+          documentId: doc.documentId,
+          eventCode: doc.eventCode,
+          filedBy: doc.filedBy,
+          filingDate: doc.filingDate,
+          servedPartiesCode: doc.servedPartiesCode,
+        },
+        { applicationContext },
+      );
+      caseEntity.addDocketRecord(newDocketRecord);
+    }
+  }
+};
+
 /**
  * serveCaseToIrsInteractor
  *
@@ -248,27 +280,7 @@ exports.serveCaseToIrsInteractor = async ({
   let urlToReturn;
 
   if (caseEntity.isPaper) {
-    const initialDocumentTypesList = Object.values(INITIAL_DOCUMENT_TYPES_MAP);
-
-    remove(initialDocumentTypesList, doc => doc === 'Petition');
-
-    // add each document except petition to docket record
-    for (let doc of caseEntity.documents) {
-      if (initialDocumentTypesList.includes(doc.documentType)) {
-        const newDocketRecord = new DocketRecord(
-          {
-            description: doc.documentTitle,
-            documentId: doc.documentId,
-            eventCode: doc.eventCode,
-            filedBy: doc.filedBy,
-            filingDate: doc.filingDate,
-            servedPartiesCode: doc.servedPartiesCode,
-          },
-          { applicationContext },
-        );
-        caseEntity.addDocketRecord(newDocketRecord);
-      }
-    }
+    addDocketEntries({ applicationContext, caseEntity });
 
     ({
       url: urlToReturn,
