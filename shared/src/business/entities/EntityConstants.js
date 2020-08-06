@@ -1,4 +1,5 @@
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
+const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy, without } = require('lodash');
@@ -909,7 +910,7 @@ const OTHER_FILER_TYPES = [
 
 const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
 
-module.exports = {
+module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
@@ -1009,4 +1010,4 @@ module.exports = {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
-};
+});

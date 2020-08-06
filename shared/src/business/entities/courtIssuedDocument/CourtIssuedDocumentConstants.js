@@ -1,8 +1,10 @@
+const deepFreeze = require('deep-freeze');
+
 /**
  * these are in a separate file from the entity so they can be used
  * in each of the sub-types without a circular dependency
  */
-exports.VALIDATION_ERROR_MESSAGES = {
+const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments',
   date: [
     {
@@ -23,7 +25,7 @@ exports.VALIDATION_ERROR_MESSAGES = {
   trialLocation: 'Select a trial location',
 };
 
-exports.ENTERED_AND_SERVED_EVENT_CODES = [
+const ENTERED_AND_SERVED_EVENT_CODES = [
   'ODJ',
   'OD',
   'ODD',
@@ -32,6 +34,13 @@ exports.ENTERED_AND_SERVED_EVENT_CODES = [
   'SDEC',
 ];
 
-exports.GENERIC_ORDER_DOCUMENT_TYPE = 'Order';
+const GENERIC_ORDER_DOCUMENT_TYPE = 'Order';
 
-exports.SERVICE_STAMP_OPTIONS = ['Served', 'Entered and Served'];
+const SERVICE_STAMP_OPTIONS = ['Served', 'Entered and Served'];
+
+module.exports = deepFreeze({
+  ENTERED_AND_SERVED_EVENT_CODES,
+  GENERIC_ORDER_DOCUMENT_TYPE,
+  SERVICE_STAMP_OPTIONS,
+  VALIDATION_ERROR_MESSAGES,
+});
