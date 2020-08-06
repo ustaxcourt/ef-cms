@@ -3,9 +3,6 @@ const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
 const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { ROLES } = require('./EntityConstants');
