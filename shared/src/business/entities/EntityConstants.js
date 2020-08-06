@@ -219,14 +219,17 @@ const TRACKED_DOCUMENT_TYPES = {
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
+    documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
   },
   ownershipDisclosure: {
+    documentTitle: 'Ownership Disclosure Statement',
     documentType: 'Ownership Disclosure Statement',
     eventCode: 'DISC',
   },
   petition: {
+    documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
   },
