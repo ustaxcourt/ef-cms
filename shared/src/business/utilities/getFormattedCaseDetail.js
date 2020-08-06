@@ -454,15 +454,26 @@ const getDocketRecordSortFunc = sortBy => {
   }
 };
 
+// sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
+const sortUndefined = (a, b) => {
+  if (a.record.createdAtFormatted && !b.record.createdAtFormatted) {
+    return -1;
+  }
+
+  if (!a.record.createdAtFormatted && b.record.createdAtFormatted) {
+    return 1;
+  }
+};
+
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
   const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
-    return result.reverse();
+    return result.reverse().sort(sortUndefined);
   }
-  return result;
+  return result.sort(sortUndefined);
 };
 
 const getFormattedCaseDetail = ({
