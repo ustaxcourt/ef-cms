@@ -21,7 +21,7 @@ export const forwardMessageAction = async ({ applicationContext, get }) => {
     ...form,
   });
 
-  let viewerDocumentToDisplay = {};
+  let viewerDocumentToDisplay;
   if (form.attachments.length) {
     viewerDocumentToDisplay = {
       documentId: form.attachments[0].documentId,
