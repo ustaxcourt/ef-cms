@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
 
 export const DateRangePickerComponent = ({
   endLabel,
   endName,
+  endPickerCls,
   onChangeEnd,
   onChangeStart,
+  pickerSpacer,
+  rangePickerCls,
   startLabel,
   startName,
+  startPickerCls,
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -36,10 +41,12 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
+  const Spacer = pickerSpacer;
+
   return (
     <div ref={dateRangePickerRef}>
-      <div className="usa-date-range-picker">
-        <div className="usa-form-group" ref={startDatePickerRef}>
+      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
+        <div className={classNames(startPickerCls)} ref={startDatePickerRef}>
           <label
             className="usa-label"
             htmlFor={`${startName}-date-start`}
@@ -62,7 +69,9 @@ export const DateRangePickerComponent = ({
           </div>
         </div>
 
-        <div className="usa-form-group" ref={endDatePickerRef}>
+        {Spacer && <Spacer />}
+
+        <div className={classNames(endPickerCls)} ref={endDatePickerRef}>
           <label
             className="usa-label"
             htmlFor={`${endName}-date-start`}
