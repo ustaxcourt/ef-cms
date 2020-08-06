@@ -8,7 +8,7 @@ const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments',
   date: [
     {
-      contains: 'must be larger than or equal to',
+      contains: 'must be greater than or equal to',
       message: 'Enter a valid date',
     },
     {
