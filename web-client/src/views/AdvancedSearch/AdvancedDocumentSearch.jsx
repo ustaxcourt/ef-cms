@@ -136,6 +136,7 @@ export const AdvancedDocumentSearch = connect(
                           }
                           label="Start Date"
                           name="startDate"
+                          value={advancedSearchForm[formType].startDate}
                           onBlur={validateSequence}
                           onChange={e => {
                             updateSequence({
@@ -155,12 +156,13 @@ export const AdvancedDocumentSearch = connect(
                           }
                           label="End Date"
                           name="endDate"
+                          value={advancedSearchForm[formType].endDate}
+                          onBlur={validateSequence}
                           onChange={e => {
                             updateSequence({
                               key: 'endDate',
                               value: e.target.value,
                             });
-                            validateSequence();
                           }}
                         />
                       </div>
@@ -281,6 +283,7 @@ export const AdvancedDocumentSearch = connect(
                         }
                         label="End Date"
                         name="startDate"
+                        value={advancedSearchForm[formType].startDate}
                         onBlur={validateSequence}
                         onChange={e => {
                           updateSequence({
@@ -304,6 +307,7 @@ export const AdvancedDocumentSearch = connect(
                         }
                         label="End Date"
                         name="endDate"
+                        value={advancedSearchForm[formType].endDate}
                         onBlur={validateSequence}
                         onChange={e => {
                           updateSequence({
