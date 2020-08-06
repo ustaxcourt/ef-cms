@@ -4,6 +4,7 @@ const {
 } = require('../../entities/EntityConstants');
 const {
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   PAYMENT_STATUS,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -13,8 +14,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
-const { flatten, omit } = require('lodash');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
@@ -152,7 +153,6 @@ exports.serveCaseToIrsInteractor = async ({
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-
   const initializeCaseWorkItem = petitionDocument.workItem;
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
@@ -182,11 +182,6 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
   for (const doc of caseEntity.documents) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
@@ -195,6 +190,13 @@ exports.serveCaseToIrsInteractor = async ({
       replaceCoversheet: !caseEntity.isPaper,
       useInitialData: !caseEntity.isPaper,
     });
+
+    doc.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentId: doc.documentId,
+      });
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -243,39 +245,44 @@ exports.serveCaseToIrsInteractor = async ({
     s3Client.upload(params, resolve);
   });
 
+  let urlToReturn;
+
   if (caseEntity.isPaper) {
+    const initialDocumentTypesList = Object.values(INITIAL_DOCUMENT_TYPES_MAP);
+
+    remove(initialDocumentTypesList, doc => doc === 'Petition');
+
     // add each document except petition to docket record
-    caseEntity.documents.forEach(doc => {
-      const intitialDocumentTypesNeedingDocketEntry = flatten(
-        omit(...Object.values(INITIAL_DOCUMENT_TYPES), 'Petition'),
-      );
-      if (intitialDocumentTypesNeedingDocketEntry.includes(doc.documentType)) {
+    for (let doc of caseEntity.documents) {
+      if (initialDocumentTypesList.includes(doc.documentType)) {
         const newDocketRecord = new DocketRecord(
           {
             description: doc.documentTitle,
+            documentId: doc.documentId,
             eventCode: doc.eventCode,
+            filedBy: doc.filedBy,
             filingDate: doc.filingDate,
+            servedPartiesCode: doc.servedPartiesCode,
           },
           { applicationContext },
         );
         caseEntity.addDocketRecord(newDocketRecord);
       }
-    });
+    }
 
-    //why did it add a docket record entry for some cases and dnot for the other???
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-    const {
-      url,
+    ({
+      url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
       documentId: caseConfirmationPdfName,
       useTempBucket: false,
-    });
-
-    return url;
+    }));
   }
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
+
+  return urlToReturn;
 };
