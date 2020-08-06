@@ -45,7 +45,7 @@ describe('delete old case message records', () => {
     };
   });
 
-  it('should not modify records that are are NOT a case message', async () => {
+  it('should not modify records that are NOT a case message', async () => {
     mockItems = [
       {
         pk: 'case|101-20',
