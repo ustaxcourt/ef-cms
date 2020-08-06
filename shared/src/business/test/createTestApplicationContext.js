@@ -32,9 +32,6 @@ const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
-  createWorkItem: createWorkItemPersistence,
-} = require('../../persistence/dynamo/workitems/createWorkItem');
-const {
   deleteSectionOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
@@ -75,15 +72,6 @@ const {
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
-const {
-  getInboxMessagesForSection,
-} = require('../../persistence/dynamo/workitems/getInboxMessagesForSection');
-const {
-  getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getInboxMessagesForUser');
-const {
-  getSentMessagesForUser: getSentMessagesForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getSentMessagesForUser');
 const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
@@ -311,7 +299,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(createSectionInboxRecord),
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
-    createWorkItem: createWorkItemPersistence,
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteSectionOutboxRecord,
@@ -334,17 +321,8 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
-    getInboxMessagesForSection: jest
-      .fn()
-      .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: jest
-      .fn()
-      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getRecord: jest.fn(),
-    getSentMessagesForUser: jest
-      .fn()
-      .mockImplementation(getSentMessagesForUserPersistence),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
@@ -459,7 +437,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
-    isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
       info: jest.fn(),

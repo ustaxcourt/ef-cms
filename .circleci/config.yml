@@ -22,7 +22,11 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
       - run:
           name: Lint
           command: npm run lint
@@ -71,7 +75,11 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
       - run:
           name: Shared - Test
           command: npm run test:shared:ci
@@ -113,7 +121,11 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit:ci
@@ -130,9 +142,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-      - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx1g'
+      - image: elastic/elasticsearch:7.8.1
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: medium+
     parallelism: 5
     steps:
@@ -150,7 +166,11 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -215,61 +235,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-      - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
-      - run:
-          name: Create Pa11y Artifacts Directory
-          command: mkdir /tmp/pa11y
-      - run:
-          name: Pa11y
-          command: |
-            npm run build:all
-            SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci start:public:ci > /tmp/pa11y/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
-            sleep 15
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:public --node-flags --max-old-space-size=1024
-      - store_artifacts:
-          path: /root/project/web-client/pa11y/pa11y-screenshots
-      - store_artifacts:
-          path: /tmp/pa11y
-
-  e2e-cypress:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-      - image: elastic/elasticsearch:7.5.2
+          JAVA_OPTS: '-Xms512m -Xmx1g'
+      - image: elastic/elasticsearch:7.8.1
         environment:
           discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
     steps:
       - restore_cache:
@@ -286,20 +258,155 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
+      - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run build:all
+            npx run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:4000/api/swagger
+            sleep 10
+            npm run test:pa11y:1 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
+      - store_artifacts:
+          path: /tmp/pa11y
+
+  e2e-pa11y-public:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx1g'
+      - image: elastic/elasticsearch:7.8.1
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: medium+
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
+      - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run build:all
+            npx run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:5000/ 404
+            sleep 10
+            npm run test:pa11y:public --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
+      - store_artifacts:
+          path: /tmp/pa11y
+
+  e2e-cypress:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx1g'
+      - image: elastic/elasticsearch:7.8.1
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: large
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER          
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-
-            SKIP_CACHE_INVALIDATION=true TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
@@ -317,11 +424,13 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-      - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+          JAVA_OPTS: '-Xms512m -Xmx1g'
+      - image: elastic/elasticsearch:7.8.1
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: medium+
     steps:
       - restore_cache:
@@ -338,20 +447,31 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER          
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-
-            SKIP_CACHE_INVALIDATION=true TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
@@ -368,7 +488,10 @@ jobs:
       - checkout
       - run:
           name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: |
+            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -386,22 +509,22 @@ jobs:
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
           name: Setup Elasticsearch Index Settings
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
       # - run:
       #     name: 'Deploy - Switch environment color'
       #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0 && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0"
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
       - run:
           name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0 && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0"
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
       - run:
           name: 'Deploy - Web API - Global Tables'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
@@ -463,7 +586,7 @@ jobs:
           name: 'Deploy - Pa11y Smoke Tests'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests --prefix=web-client/pa11y/"
             else
               echo "skipping…"
             fi
@@ -506,6 +629,7 @@ workflows:
       - build-client-unit
       - build-client-integration
       - e2e-pa11y
+      - e2e-pa11y-public
       - e2e-cypress
       - e2e-cypress-public
       - build-client-coverage:
@@ -515,6 +639,7 @@ workflows:
             - build-client-unit
             - build-client-integration
             - e2e-pa11y
+            - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
       - deploy:
@@ -522,7 +647,7 @@ workflows:
             - build-client-coverage
     triggers:
       - schedule:
-          cron: '0 12-23 * * 1-5'
+          cron: '0 13-22 * * 1-5'
           filters:
             branches:
               only:
@@ -539,6 +664,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-pa11y:
           <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
@@ -551,6 +678,7 @@ workflows:
             - build-client-unit
             - build-client-integration
             - e2e-pa11y
+            - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
       - deploy:
@@ -566,6 +694,7 @@ workflows:
                 - master
                 - experimental1
                 - experimental2
+                - dawson
 
   build-and-deploy-with-context:
     jobs:
@@ -579,6 +708,8 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y:
           <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-with-context-defaults
       - e2e-cypress:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
@@ -591,6 +722,7 @@ workflows:
             - build-client-unit
             - build-client-integration
             - e2e-pa11y
+            - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
       - deploy:

@@ -1,4 +1,8 @@
-const { ADC_SECTION, ROLES } = require('../business/entities/EntityConstants');
+const {
+  ADC_SECTION,
+  PETITIONS_SECTION,
+  ROLES,
+} = require('../business/entities/EntityConstants');
 
 exports.MOCK_USERS = {
   '330d4b65-620a-489d-8414-6623653ebc4f': {
@@ -22,7 +26,7 @@ exports.MOCK_USERS = {
   'c7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Petitionsclerk',
     role: ROLES.petitionsClerk,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'd7d90c05-f6cd-442c-a168-202db587f16f': {
@@ -34,7 +38,7 @@ exports.MOCK_USERS = {
   'e7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Petitionsclerk1',
     role: ROLES.petitionsClerk,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'f7d90c05-f6cd-442c-a168-202db587f16f': {

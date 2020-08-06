@@ -167,27 +167,10 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    isQC: 
-      type: "boolean"
-      flags: 
-        presence: "required"
     isRead: 
       type: "boolean"
       flags: 
         presence: "optional"
-    messages: 
-      type: "array"
-      flags: 
-        presence: "required"
-      items: 
-        - 
-          type: "object"
-          rules: 
-            - 
-              name: "instance"
-              args: 
-                constructor: [object Function]
-                name: "Message"
     section: 
       type: "string"
       flags: 

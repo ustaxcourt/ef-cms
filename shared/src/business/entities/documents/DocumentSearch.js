@@ -1,14 +1,11 @@
 const joi = require('joi');
 const {
-  createEndOfDayISO,
-  createStartOfDayISO,
-} = require('../../utilities/DateHandler');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { createEndOfDayISO } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
@@ -44,25 +41,22 @@ function DocumentSearch(rawProps = {}) {
     this.docketNumber = rawProps.docketNumber;
   }
 
-  if (
-    rawProps.startDateDay ||
-    rawProps.startDateMonth ||
-    rawProps.startDateYear
-  ) {
-    this.startDate = createStartOfDayISO({
-      day: rawProps.startDateDay,
-      month: rawProps.startDateMonth,
-      year: rawProps.startDateYear,
+  if (rawProps.startDate) {
+    const [year, month, day] = rawProps.startDate.split('-');
+    this.startDate = createEndOfDayISO({
+      day,
+      month,
+      year,
     });
   }
 
-  if (rawProps.endDateDay || rawProps.endDateMonth || rawProps.endDateYear) {
+  if (rawProps.endDate) {
+    const [year, month, day] = rawProps.endDate.split('-');
     this.endDate = createEndOfDayISO({
-      day: rawProps.endDateDay,
-      month: rawProps.endDateMonth,
-      year: rawProps.endDateYear,
+      day,
+      month,
+      year,
     });
-
     this.tomorrow = new Date();
     this.tomorrow.setDate(this.tomorrow.getDate() + 1);
   }
@@ -123,25 +117,14 @@ DocumentSearch.schema = joi
       .string()
       .optional()
       .description('The opinion document type to filter the search results by'),
-    startDate: joi.alternatives().conditional('endDate', {
-      is: joi.exist().not(null),
-      otherwise: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
-      )
-        .max('now')
-        .optional()
-        .description(
-          'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
-        ),
-      then: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
-      )
-        .max('now')
-        .required()
-        .description(
-          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-        ),
-    }),
+    startDate: JoiValidationConstants.ISO_DATE.format(
+      DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+    )
+      .max('now')
+      .required()
+      .description(
+        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      ),
     tomorrow: joi
       .optional()
       .description(

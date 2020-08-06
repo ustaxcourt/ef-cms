@@ -1,19 +1,18 @@
 /**
- * fetches the inbox messages for a section.
+ * fetches the inbox messages for the section
  *
  * @param {object} applicationContext object that contains all the context specific methods
- * @returns {Promise<{workItems: Array}>} a list of work items
+ * @returns {Promise<{Message: Array}>} a list of messages
  */
 export const getInboxMessagesForSectionAction = async ({
   applicationContext,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const messages = await applicationContext
+    .getUseCases()
+    .getInboxMessagesForSectionInteractor({
+      applicationContext,
+      section: applicationContext.getCurrentUser().section,
+    });
 
-  const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getInboxMessagesForSectionInteractor({
-    applicationContext,
-    section: user.section,
-  });
-
-  return { workItems };
+  return { messages };
 };

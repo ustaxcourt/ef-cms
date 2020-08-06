@@ -3,8 +3,8 @@ const {
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { CaseMessage } = require('../entities/CaseMessage');
 const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { orderBy } = require('lodash');
 
 const saveOriginalDocumentWithNewId = async ({
@@ -61,7 +61,7 @@ const replaceOriginalWithSignedDocument = async ({
  * @param {string} providers.originalDocumentId the id of the original (unsigned) document
  * @param {string} providers.parentMessageId the id of the parent message to add the signed document to
  * @param {string} providers.signedDocumentId the id of the signed document
- * @returns {object} the updated case
+ * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
 exports.saveSignedDocumentInteractor = async ({
   applicationContext,
@@ -110,24 +110,24 @@ exports.saveSignedDocumentInteractor = async ({
     if (parentMessageId) {
       const messages = await applicationContext
         .getPersistenceGateway()
-        .getCaseMessageThreadByParentId({
+        .getMessageThreadByParentId({
           applicationContext,
           parentMessageId: parentMessageId,
         });
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-      const caseMessageEntity = new CaseMessage(mostRecentMessage, {
+      const messageEntity = new Message(mostRecentMessage, {
         applicationContext,
       }).validate();
-      caseMessageEntity.addAttachment({
+      messageEntity.addAttachment({
         documentId: signedDocumentEntity.documentId,
         documentTitle: signedDocumentEntity.documentTitle,
       });
 
-      await applicationContext.getPersistenceGateway().updateCaseMessage({
+      await applicationContext.getPersistenceGateway().updateMessage({
         applicationContext,
-        caseMessage: caseMessageEntity.validate().toRawObject(),
+        message: messageEntity.validate().toRawObject(),
       });
     }
   } else {
@@ -162,5 +162,5 @@ exports.saveSignedDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  return caseEntity;
+  return { caseEntity, signedDocumentId: signedDocumentEntity.documentId };
 };

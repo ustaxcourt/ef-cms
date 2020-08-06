@@ -1,6 +1,5 @@
 const client = require('../../dynamodbClientService');
 const { omit } = require('lodash');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
  * createCase
@@ -75,5 +74,5 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
     }),
   ]);
 
-  return stripWorkItems(results, applicationContext.isAuthorizedForWorkItems());
+  return results;
 };

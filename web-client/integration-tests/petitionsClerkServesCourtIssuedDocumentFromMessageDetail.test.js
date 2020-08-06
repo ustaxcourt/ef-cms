@@ -1,10 +1,10 @@
-import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
+import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerk1ServesDocumentFromCaseMessageDetail } from './journey/petitionsClerk1ServesDocumentFromCaseMessageDetail';
+import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petitionsClerk1ServesDocumentFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 
@@ -38,10 +38,10 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   docketClerkViewsDraftOrder(test, 0);
   docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  createNewCaseMessageOnCase(test, 0);
+  createNewMessageOnCase(test, 0);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1ServesDocumentFromCaseMessageDetail(test);
+  petitionsClerk1ServesDocumentFromMessageDetail(test);
 });
