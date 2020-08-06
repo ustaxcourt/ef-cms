@@ -75,7 +75,7 @@ exports.serveCaseToIrsInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
