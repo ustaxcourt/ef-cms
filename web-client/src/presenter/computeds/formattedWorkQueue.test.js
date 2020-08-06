@@ -912,7 +912,7 @@ describe('formatted work queue computed', () => {
       expect(result.sentBySection).toEqual('Section');
     });
 
-    it('should return completedAtFormatted as DATE_TIME format', () => {
+    it('should return completedAtFormatted as MM/DD/YY format for items older than the prior day', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         completedAt: '2019-02-28T21:14:39.488Z',
@@ -920,7 +920,42 @@ describe('formatted work queue computed', () => {
       };
 
       const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.completedAtFormatted).toEqual('02/28/19 04:14 pm');
+      expect(result.completedAtFormatted).toEqual('02/28/19');
+    });
+
+    it('should return completedAtFormatted as Yesterday for items from the prior day', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+      const yesterday = applicationContext
+        .getUtilities()
+        .calculateISODate({ dateString: currentTime, howMuch: -1 });
+
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        completedAt: yesterday,
+        completedAtFormatted: undefined,
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+      expect(result.completedAtFormatted).toEqual('Yesterday');
+    });
+
+    it('should return the current time for items completed today', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        completedAt: currentTime,
+        completedAtFormatted: undefined,
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+      expect(result.completedAtFormatted).toContain(':');
+      expect(result.completedAtFormatted).toContain('ET');
+      expect(result.completedAtFormatted).not.toContain('/');
     });
 
     it('should return completedAtFormattedTZ as DATE_TIME_TZ format', () => {
