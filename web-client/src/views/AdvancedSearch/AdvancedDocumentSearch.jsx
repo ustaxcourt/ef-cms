@@ -130,11 +130,13 @@ export const AdvancedDocumentSearch = connect(
                   <FormGroup>
                     <div className="grid-row">
                       <DateRangePickerComponent
-                        endPickerBtnCls="padding-5"
-                        // pickerSpacer={() => <div className="grid-col-1" />}
+                        endName="endDate"
+                        // endPickerBtnCls="padding-5"
                         endPickerCls="grid-col-5"
+                        pickerSpacer={() => <div className="margin-left-1" />}
                         rangePickerCls="grid-row grid-gap-lg"
-                        startPickerBtnCls="padding-5"
+                        startName="startDate"
+                        // startPickerBtnCls="padding-5"
                         startPickerCls="grid-col-5"
                         onChangeEnd={e => {
                           updateSequence({
