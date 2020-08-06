@@ -37,8 +37,8 @@ export const DateRangePickerComponent = ({
   }, [startDateInputRef, endDateInputRef]);
 
   return (
-    <>
-      <div className="usa-date-range-picker" ref={dateRangePickerRef}>
+    <div ref={dateRangePickerRef}>
+      <div className="usa-date-range-picker">
         <div className="usa-form-group" ref={startDatePickerRef}>
           <label
             className="usa-label"
@@ -85,6 +85,6 @@ export const DateRangePickerComponent = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
