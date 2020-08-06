@@ -26,26 +26,28 @@ exports.migrateCaseInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const docketNumber = caseMetadata.docketNumber.replace(/^0+/, '');
+  if (caseMetadata && caseMetadata.docketNumber) {
+    const docketNumber = caseMetadata.docketNumber.replace(/^0+/, '');
 
-  const caseToDelete = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+    const caseToDelete = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
-  if (caseToDelete) {
-    await Promise.all([
-      applicationContext
-        .getPersistenceGateway()
-        .deleteCaseByDocketNumber({ applicationContext, docketNumber }),
-      ...caseToDelete.documents.map(({ documentId }) =>
+    if (caseToDelete) {
+      await Promise.all([
         applicationContext
           .getPersistenceGateway()
-          .deleteDocumentFromS3({ applicationContext, documentId }),
-      ),
-    ]);
+          .deleteCaseByDocketNumber({ applicationContext, docketNumber }),
+        ...caseToDelete.documents.map(({ documentId }) =>
+          applicationContext
+            .getPersistenceGateway()
+            .deleteDocumentFromS3({ applicationContext, documentId }),
+        ),
+      ]);
+    }
   }
 
   const caseToAdd = new Case(
