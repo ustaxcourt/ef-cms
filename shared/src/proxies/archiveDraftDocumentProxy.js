@@ -1,4 +1,4 @@
-const { remove } = require('./requests');
+const { put } = require('./requests');
 
 /**
  * archiveDraftDocumentInteractor
@@ -14,7 +14,7 @@ exports.archiveDraftDocumentInteractor = ({
   docketNumber,
   documentId,
 }) => {
-  return remove({
+  return put({
     applicationContext,
     endpoint: `/case-documents/${docketNumber}/${documentId}`,
   });

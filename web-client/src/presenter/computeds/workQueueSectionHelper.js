@@ -6,7 +6,6 @@ export const workQueueSectionHelper = (get, applicationContext) => {
       {
         adc: 'ADC',
         admissions: 'Admissions',
-        calendar: 'Calendar',
         chambers: 'Chambers',
         clerkofcourt: 'Clerk of the Court',
         docket: 'Docket',

@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
  * @param {object} providers.props props passed through via cerebral
+ * @param {object} providers.store the cerebral store object
  * @returns {Promise} async action
  */
 export const archiveDraftDocumentAction = async ({
@@ -16,11 +17,13 @@ export const archiveDraftDocumentAction = async ({
   const { documentId, redirectToCaseDetail } = get(state.archiveDraftDocument);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  await applicationContext.getUseCases().archiveDraftDocumentInteractor({
-    applicationContext,
-    docketNumber,
-    documentId,
-  });
+  const updatedCase = await applicationContext
+    .getUseCases()
+    .archiveDraftDocumentInteractor({
+      applicationContext,
+      docketNumber,
+      documentId,
+    });
 
   store.set(state.alertSuccess, {
     message: 'Document deleted.',
@@ -30,7 +33,10 @@ export const archiveDraftDocumentAction = async ({
     store.set(state.saveAlertsForNavigation, true);
 
     return {
+      caseDetail: updatedCase,
       docketNumber,
     };
   }
+
+  return { caseDetail: updatedCase };
 };

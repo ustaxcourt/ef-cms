@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedMessageDetail as formattedMessageDetailComputed } from './formattedMessageDetail';
+import { getConstants } from '../../getConstants';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -9,6 +10,8 @@ const formattedMessageDetail = withAppContextDecorator(
     ...applicationContext,
   },
 );
+
+const { PETITIONS_SECTION } = getConstants();
 
 describe('formattedMessageDetail', () => {
   it('formats the messages with createdAtFormatted and sorts by createdAt', () => {
@@ -79,7 +82,7 @@ describe('formattedMessageDetail', () => {
             ],
             completedAt: '2019-05-01T21:40:46.415Z',
             completedBy: 'Test Petitioner',
-            completedBySection: 'petitions',
+            completedBySection: PETITIONS_SECTION,
             completedByUserId: '23869007-384d-464f-b079-cb1fcfb21e03',
             createdAt: '2019-04-01T21:40:46.415Z',
             docketNumber: '101-20',

@@ -1,15 +1,16 @@
 /**
- * fetches the inbox messages for a user.
+ * fetches the inbox messages for the user
  *
  * @param {object} applicationContext object that contains all the context specific methods
- * @returns {Promise<{workItems: Array}>} a list of work items
+ * @returns {Promise<{Message: Array}>} a list of messages
  */
 export const getInboxMessagesForUserAction = async ({ applicationContext }) => {
-  const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getInboxMessagesForUserInteractor({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-  });
+  const messages = await applicationContext
+    .getUseCases()
+    .getInboxMessagesForUserInteractor({
+      applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
+    });
 
-  return { workItems };
+  return { messages };
 };

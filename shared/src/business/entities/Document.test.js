@@ -6,11 +6,11 @@ const {
   INTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
+  PETITIONS_SECTION,
   ROLES,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
-const { Message } = require('./Message');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
@@ -185,8 +185,14 @@ describe('Document entity', () => {
       expect(myDoc.isValid()).toBeFalsy();
     });
 
-    it('addWorkItem', () => {
-      const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
+    it('setWorkItem', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '68584a2f-52d8-4876-8e44-0920f5061428',
+        },
+        { applicationContext },
+      );
       const workItem = new WorkItem(
         {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -195,22 +201,14 @@ describe('Document entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          isQC: true,
+          section: PETITIONS_SECTION,
           sentBy: 'bob',
         },
         { applicationContext },
       );
-      const message = new Message(
-        {
-          from: 'Test User',
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'hello world',
-          messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        },
-        { applicationContext },
-      );
-      workItem.addMessage(message);
-      myDoc.addWorkItem(new WorkItem({}, { applicationContext }));
+      myDoc.setWorkItem(workItem);
+      expect(myDoc.isValid()).toBeTruthy();
+      myDoc.setWorkItem(new WorkItem({}, { applicationContext }));
       expect(myDoc.isValid()).toBeFalsy();
     });
   });
@@ -1466,98 +1464,10 @@ describe('Document entity', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       };
       document.setQCed(user);
-      expect(document.qcByUser.name).toEqual('Jean Luc');
-      expect(document.qcByUser.userId).toEqual(
+      expect(document.qcByUserId).toEqual(
         '02323349-87fe-4d29-91fe-8dd6916d2fda',
       );
       expect(document.qcAt).toBeDefined();
-    });
-  });
-
-  describe('getQCWorkItem', () => {
-    it('returns the first workItem with isQC = true', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          workItems: [
-            {
-              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
-              assigneeName: 'bill',
-              caseStatus: CASE_STATUS_TYPES.NEW,
-              caseTitle: 'Johnny Joe Jacobson',
-              docketNumber: '101-18',
-              document: {},
-              isQC: false,
-              messages: [
-                {
-                  from: 'Test User',
-                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'hello world',
-                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                },
-              ],
-              sentBy: 'bill',
-              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
-            },
-            {
-              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-              assigneeName: 'bob',
-              caseStatus: CASE_STATUS_TYPES.NEW,
-              caseTitle: 'Johnny Joe Jacobson',
-              docketNumber: '101-18',
-              document: {},
-              isQC: true,
-              messages: [
-                {
-                  from: 'Test User',
-                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'hello world',
-                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                },
-              ],
-              sentBy: 'bob',
-              workItemId: '062d334b-7589-4b28-9dcf-72989574b7a7',
-            },
-          ],
-        },
-        { applicationContext },
-      );
-
-      expect(document.getQCWorkItem()).toMatchObject({
-        workItemId: '062d334b-7589-4b28-9dcf-72989574b7a7',
-      });
-    });
-
-    it('returns undefined if there is no QC work item', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          workItems: [
-            {
-              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
-              assigneeName: 'bill',
-              caseStatus: CASE_STATUS_TYPES.NEW,
-              caseTitle: 'Johnny Joe Jacobson',
-              docketNumber: '101-18',
-              document: {},
-              isQC: false,
-              messages: [
-                {
-                  from: 'Test User',
-                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'hello world',
-                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-                },
-              ],
-              sentBy: 'bill',
-              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
-            },
-          ],
-        },
-        { applicationContext },
-      );
-
-      expect(document.getQCWorkItem()).toBeUndefined();
     });
   });
 

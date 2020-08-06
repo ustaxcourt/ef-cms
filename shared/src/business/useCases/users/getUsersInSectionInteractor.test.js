@@ -5,7 +5,7 @@ const {
   getUsersInSectionInteractor,
 } = require('./getUsersInSectionInteractor');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PETITIONS_SECTION, ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_SECTION = [
   {
@@ -42,7 +42,7 @@ describe('Get users in section', () => {
     applicationContext
       .getPersistenceGateway()
       .getUsersInSection.mockReturnValue(MOCK_SECTION);
-    const sectionToGet = { section: 'petitions' };
+    const sectionToGet = { section: PETITIONS_SECTION };
     const section = await getUsersInSectionInteractor({
       applicationContext,
       sectionToGet,

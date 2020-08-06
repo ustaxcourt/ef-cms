@@ -222,7 +222,7 @@ const router = {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
         return app.getSequence('gotoPetitionQcSequence')({
           docketNumber,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
@@ -235,19 +235,6 @@ const router = {
         return app.getSequence('gotoPetitionQcSequence')({
           docketNumber,
           tab,
-        });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*',
-      ifHasAccess((docketNumber, documentId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-        );
-        return app.getSequence('gotoDocumentDetailSequence')({
-          docketNumber,
-          documentId,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
@@ -315,74 +302,6 @@ const router = {
           documentId,
         });
       }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/sign',
-      ifHasAccess((docketNumber, documentId) => {
-        return app.getSequence('gotoSignPDFDocumentSequence')({
-          docketNumber,
-          documentId,
-          pageNumber: 1,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/messages/*/sign',
-      ifHasAccess((docketNumber, documentId, messageId) => {
-        return app.getSequence('gotoSignPDFDocumentSequence')({
-          docketNumber,
-          documentId,
-          messageId,
-          pageNumber: 1,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/mark/*',
-      ifHasAccess((docketNumber, documentId, workItemIdToMarkAsRead) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-        );
-        return app.getSequence('gotoDocumentDetailSequence')({
-          docketNumber,
-          documentId,
-          workItemIdToMarkAsRead,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/messages/*',
-      ifHasAccess((docketNumber, documentId, messageId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-        );
-        return app.getSequence('gotoDocumentDetailSequence')({
-          docketNumber,
-          documentId,
-          messageId,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/messages/*/mark/*',
-      ifHasAccess(
-        (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
-          setPageTitle(
-            `${getPageTitleDocketPrefix(docketNumber)} Document details`,
-          );
-          return app.getSequence('gotoDocumentDetailSequence')({
-            docketNumber,
-            documentId,
-            messageId,
-            workItemIdToMarkAsRead,
-          });
-        },
-      ),
     );
 
     registerRoute(
@@ -510,7 +429,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/create-order/*/?..',
+      '/case-detail/*/create-order/*?..',
       ifHasAccess((docketNumber, parentMessageId) => {
         const { documentTitle, documentType, eventCode } = route.query();
         setPageTitle(
@@ -522,7 +441,7 @@ const router = {
           documentType: decodeURIComponent(documentType),
           eventCode,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -560,7 +479,7 @@ const router = {
         return app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
           docketNumber,
           documentId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -628,7 +547,7 @@ const router = {
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
           docketNumber,
           documentId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -655,7 +574,7 @@ const router = {
           docketNumber,
           documentId,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
         });
       }),
     );
@@ -681,7 +600,7 @@ const router = {
           docketNumber,
           documentIdToEdit,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -721,7 +640,7 @@ const router = {
         return sequence({
           docketNumber,
           documentId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -817,10 +736,9 @@ const router = {
       '/document-qc',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: null,
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -829,10 +747,9 @@ const router = {
       '/document-qc/my',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -841,10 +758,9 @@ const router = {
       '/document-qc/my/inbox',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: 'inbox',
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -853,10 +769,9 @@ const router = {
       '/document-qc/my/outbox',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: 'outbox',
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -865,10 +780,9 @@ const router = {
       '/document-qc/my/inProgress',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: 'inProgress',
           queue: 'my',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -877,10 +791,9 @@ const router = {
       '/document-qc/section',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -889,10 +802,9 @@ const router = {
       '/document-qc/section/inbox',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: 'inbox',
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -901,10 +813,9 @@ const router = {
       '/document-qc/section/inProgress',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: 'inProgress',
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -913,10 +824,9 @@ const router = {
       '/document-qc/section/outbox',
       ifHasAccess(() => {
         setPageTitle('Document QC');
-        return app.getSequence('gotoMessagesSequence')({
+        return app.getSequence('gotoWorkQueueSequence')({
           box: 'outbox',
           queue: 'section',
-          workQueueIsInternal: false,
         });
       }),
     );
@@ -1079,94 +989,10 @@ const router = {
     });
 
     registerRoute(
-      '/messages',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: null,
-          queue: null,
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/messages/my',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: null,
-          queue: 'my',
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/messages/section',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: null,
-          queue: 'section',
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/messages/my/inbox',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: 'inbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/messages/my/outbox',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: 'outbox',
-          queue: 'my',
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/messages/section/inbox',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: 'inbox',
-          queue: 'section',
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/messages/section/outbox',
-      ifHasAccess(() => {
-        setPageTitle('Messages');
-        return app.getSequence('gotoMessagesSequence')({
-          box: 'outbox',
-          queue: 'section',
-          workQueueIsInternal: true,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-messages/*/*',
+      '/messages/*/*',
       ifHasAccess((queue, box) => {
         setPageTitle('Messages');
-        return app.getSequence('gotoCaseMessagesSequence')({
+        return app.getSequence('gotoMessagesSequence')({
           box,
           queue,
         });
@@ -1174,7 +1000,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-messages/*/message-detail/*',
+      '/messages/*/message-detail/*',
       ifHasAccess((docketNumber, parentMessageId) => {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
@@ -1185,7 +1011,7 @@ const router = {
     );
 
     registerRoute(
-      '/case-messages/*/message-detail/*?..',
+      '/messages/*/message-detail/*?..',
       ifHasAccess((docketNumber, parentMessageId) => {
         const { documentId } = route.query();
         setPageTitle('Message detail');

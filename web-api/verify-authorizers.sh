@@ -10,14 +10,14 @@
 
 ENV=$1
 
-response=$(curl -I "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/api/swagger" | head -n 1 | cut -d$' ' -f2)
+response=$(curl -I "https://api.${EFCMS_DOMAIN}/api/swagger" | head -n 1 | cut -d$' ' -f2)
 
 if [[ "$response" != "403" ]]; then
   echo "expected endpoint to throw Unauthorized error with invalid token"
   exit 1
 fi
 
-response=$(curl -I "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/open" \
+response=$(curl -I "https://api.${EFCMS_DOMAIN}/cases/open" \
   -H "Authorization: b" | head -n 1 | cut -d$' ' -f2
 )
 

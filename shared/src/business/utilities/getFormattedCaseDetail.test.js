@@ -73,12 +73,9 @@ describe('formatCase', () => {
           eventCode: 'P',
           isLegacySealed: true,
           servedAt: getDateISO(),
-          workItems: [
-            {
-              completedAt: getDateISO(),
-              isQC: true,
-            },
-          ],
+          workItem: {
+            completedAt: getDateISO(),
+          },
         },
         {
           createdAt: getDateISO(),
@@ -86,12 +83,9 @@ describe('formatCase', () => {
           documentType: 'Amended Answer',
           eventCode: 'ABC',
           servedAt: getDateISO(),
-          workItems: [
-            {
-              completedAt: getDateISO(),
-              isQC: false,
-            },
-          ],
+          workItem: {
+            completedAt: getDateISO(),
+          },
         },
       ],
     });
@@ -729,8 +723,8 @@ describe('getFormattedCaseDetail', () => {
         signedAtFormatted: undefined,
       },
       {
-        editUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
-        signUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
+        editUrl: '/case-detail/123-45/edit-order/d-2-3-4',
+        signUrl: '/case-detail/123-45/edit-order/d-2-3-4/sign',
         signedAtFormatted: undefined,
       },
       {
@@ -970,5 +964,60 @@ describe('sortDocketRecords', () => {
     const result = sortDocketRecords();
 
     expect(result).toEqual([]);
+  });
+
+  it('should sort items that do not display a filingDate (based on createdAtFormatted) at the bottom', () => {
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            createdAtFormatted: '2019-08-04T00:10:02.000Z',
+          },
+        },
+        {
+          record: {
+            createdAtFormatted: undefined,
+          },
+        },
+        {
+          index: '1',
+          record: {
+            createdAtFormatted: '2019-08-03T00:10:02.000Z',
+          },
+        },
+        {
+          record: {
+            createdAtFormatted: undefined,
+          },
+        },
+      ],
+      'byIndexDesc',
+    );
+
+    expect(result).toEqual([
+      {
+        index: '1',
+        record: {
+          createdAtFormatted: '2019-08-03T00:10:02.000Z',
+        },
+      },
+      {
+        index: '2',
+        record: {
+          createdAtFormatted: '2019-08-04T00:10:02.000Z',
+        },
+      },
+      {
+        record: {
+          createdAtFormatted: undefined,
+        },
+      },
+      {
+        record: {
+          createdAtFormatted: undefined,
+        },
+      },
+    ]);
   });
 });

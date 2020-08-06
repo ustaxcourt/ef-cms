@@ -15,35 +15,30 @@ describe('setSectionInboxCountAction', () => {
         document: {
           isFileAttached: true,
         },
-        isQC: false,
       },
       {
         associatedJudge: 'Judge Carey',
         document: {
           isFileAttached: true,
         },
-        isQC: false,
       },
       {
         associatedJudge: CHIEF_JUDGE,
         document: {
           isFileAttached: true,
         },
-        isQC: false,
       },
       {
         associatedJudge: 'Judge Barker',
         document: {
           isFileAttached: true,
         },
-        isQC: true,
       },
       {
         associatedJudge: 'Judge Barker',
         document: {
           isFileAttached: false,
         },
-        isQC: false,
       },
     ];
 
@@ -64,12 +59,10 @@ describe('setSectionInboxCountAction', () => {
       },
       state: {
         judgeUser: undefined,
-        workQueueToDisplay: {
-          workQueueIsInternal: true,
-        },
+        workQueueToDisplay: {},
       },
     });
-    expect(result.state.sectionInboxCount).toEqual(3);
+    expect(result.state.sectionInboxCount).toEqual(4);
   });
 
   it('sets sectionInboxCount for a judge user', async () => {
@@ -89,12 +82,10 @@ describe('setSectionInboxCountAction', () => {
         judgeUser: {
           name: 'Judge Barker',
         },
-        workQueueToDisplay: {
-          workQueueIsInternal: true,
-        },
+        workQueueToDisplay: {},
       },
     });
-    expect(result.state.sectionInboxCount).toEqual(1);
+    expect(result.state.sectionInboxCount).toEqual(2);
   });
 
   it('sets sectionInboxCount for a chambers user', async () => {
@@ -111,9 +102,7 @@ describe('setSectionInboxCountAction', () => {
         workItems,
       },
       state: {
-        workQueueToDisplay: {
-          workQueueIsInternal: true,
-        },
+        workQueueToDisplay: {},
       },
     });
     expect(result.state.sectionInboxCount).toEqual(1);

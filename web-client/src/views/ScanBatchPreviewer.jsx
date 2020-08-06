@@ -1,8 +1,8 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { ConfirmDeletePDFModal } from './ConfirmDeletePdfModal';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
-  DeletePDFModal,
   EmptyHopperModal,
   ScanErrorModal,
   UnfinishedScansModal,
@@ -260,7 +260,14 @@ export const ScanBatchPreviewer = connect(
     const renderIframePreview = () => {
       return (
         <>
-          {showModal === 'ConfirmDeletePDFModal' && <DeletePDFModal />}
+          {showModal === 'ConfirmDeletePDFModal' && (
+            <ConfirmDeletePDFModal
+              confirmSequence="removeScannedPdfSequence"
+              confirmText="Yes, Delete"
+              modalContent="This action cannot be undone."
+              title="Are you sure you want to delete this PDF?"
+            />
+          )}
           <div className="padding-top-4">
             <PdfPreview />
             <Button

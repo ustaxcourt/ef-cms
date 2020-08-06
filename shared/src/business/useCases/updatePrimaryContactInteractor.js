@@ -6,11 +6,9 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../entities/EntityConstants');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -142,7 +140,6 @@ exports.updatePrimaryContactInteractor = async ({
           ...changeOfAddressDocument.toRawObject(),
           createdAt: changeOfAddressDocument.createdAt,
         },
-        isQC: true,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
@@ -150,21 +147,11 @@ exports.updatePrimaryContactInteractor = async ({
       { applicationContext },
     );
 
-    const message = new Message(
-      {
-        from: user.name,
-        fromUserId: user.userId,
-        message: `${changeOfAddressDocument.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-      },
-      { applicationContext },
-    );
+    changeOfAddressDocument.setWorkItem(workItem);
 
-    workItem.addMessage(message);
-    changeOfAddressDocument.addWorkItem(workItem);
-
-    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+    caseEntity.addDocument(changeOfAddressDocument, {
+      applicationContext,
+    });
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
