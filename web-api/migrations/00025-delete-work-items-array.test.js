@@ -47,7 +47,7 @@ describe('delete work items array', () => {
     };
   });
 
-  it('should not modify records that are are NOT case document records', async () => {
+  it('should not modify records that are NOT case document records', async () => {
     mockItems = [
       {
         pk: 'user|a63bd8dd-c7ab-4628-8486-cd4f5a61eed7',
