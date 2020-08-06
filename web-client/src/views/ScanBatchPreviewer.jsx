@@ -268,18 +268,17 @@ export const ScanBatchPreviewer = connect(
               title="Are you sure you want to delete this PDF?"
             />
           )}
-          <div className="padding-top-4">
-            <PdfPreview />
+          <div className="padding-top-2">
             <Button
-              secondary
-              className="margin-top-3 red-warning bg-white"
-              icon={['fas', 'times-circle']}
+              link
+              className="red-warning push-right margin-bottom-1"
               onClick={() => {
                 openConfirmDeletePDFModalSequence();
               }}
             >
-              Delete PDF
+              Remove PDF
             </Button>
+            <PdfPreview />
           </div>
         </>
       );
