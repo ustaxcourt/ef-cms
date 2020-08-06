@@ -18,18 +18,20 @@ export const DatePickerComponent = ({
   useEffect(() => {
     if (datePickerRef.current) {
       datePicker.on(datePickerRef.current);
-
-      if (values && values.month && values.day && values.year) {
-        document.querySelector(
-          `#${name}-date`,
-        ).value = `${values.month}/${values.day}/${values.year}`;
-      }
     }
   }, [datePickerRef]);
 
   useEffect(() => {
     document.querySelector(`#${name}-date`).value = value;
   }, [value]);
+
+  useEffect(() => {
+    if (values && values.month && values.day && values.year) {
+      document.querySelector(
+        `#${name}-date`,
+      ).value = `${values.month}/${values.day}/${values.year}`;
+    }
+  }, [values]);
 
   useEffect(() => {
     if (inputRef.current) {
