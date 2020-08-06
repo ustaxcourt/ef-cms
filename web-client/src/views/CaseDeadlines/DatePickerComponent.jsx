@@ -22,7 +22,12 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
-    document.querySelector(`#${name}-date`).value = value;
+    if (value.indexOf('-') > -1) {
+      const [year, month, day] = value.split('-');
+      document.querySelector(`#${name}-date`).value = `${month}/${day}/${year}`;
+    } else {
+      document.querySelector(`#${name}-date`).value = value;
+    }
   }, [value]);
 
   useEffect(() => {
