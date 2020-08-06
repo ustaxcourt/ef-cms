@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import axios from 'axios';
 
 const test = setupTest();
@@ -41,10 +41,17 @@ const secondConsolidatedCase = {
   status: STATUS_TYPES.calendared,
 };
 
+const correspondenceCaseOriginalPetitionerName = `Original ${Date.now()}`;
+const correspondenceCaseUpdatedPetitionerName = `Updated ${Date.now()}`;
+
 const correspondenceCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Third Migrated Case',
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+    name: correspondenceCaseOriginalPetitionerName,
+  },
   correspondence: [
     {
       documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
@@ -198,6 +205,8 @@ describe('Case journey', () => {
       'http://localhost:4000/migrate/case',
       otherFilersCase,
     );
+
+    await refreshElasticsearchIndex();
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -241,12 +250,38 @@ describe('Case journey', () => {
     ).toBe('Placeat sed dolorum');
   });
 
+  it('Docketclerk searches for correspondence case by petitioner name and finds it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseOriginalPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseOriginalPetitionerName,
+        ),
+    ).toBeDefined();
+  });
+
   it('should re-migrate an existing case', async () => {
     jest.setTimeout(3000);
 
     const correspondenceCaseOverwritten = {
       ...correspondenceCase,
       caseCaption: 'The Third Migrated Case, Overwritten',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        name: correspondenceCaseUpdatedPetitionerName,
+      },
       correspondence: [],
     };
 
@@ -254,6 +289,8 @@ describe('Case journey', () => {
       'http://localhost:4000/migrate/case',
       correspondenceCaseOverwritten,
     );
+
+    await refreshElasticsearchIndex();
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -266,5 +303,49 @@ describe('Case journey', () => {
     expect(test.getState('caseDetail.caseCaption')).toBe(
       'The Third Migrated Case, Overwritten',
     );
+  });
+
+  it('Docketclerk searches for correspondence case by original petitioner name and does not find it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseOriginalPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseOriginalPetitionerName,
+        ),
+    ).not.toBeDefined();
+  });
+
+  it('Docketclerk searches for correspondence case by updated petitioner name and finds it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseUpdatedPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseUpdatedPetitionerName,
+        ),
+    ).toBeDefined();
   });
 });

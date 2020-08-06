@@ -44,6 +44,10 @@ const deleteDynamicAndNestedFields = record => {
   return record;
 };
 
+const getRemoveRecords = ({ records }) => {
+  return records.filter(record => record.eventName === 'REMOVE');
+};
+
 /**
  * filters out records we do not want to index with elasticsearch
  *
@@ -222,6 +226,37 @@ exports.processStreamRecordsInteractor = async ({
           await applicationContext.notifyHoneybadger(e);
         }
       }
+    }
+  }
+
+  const removeRecords = getRemoveRecords({ records: recordsToProcess });
+
+  if (removeRecords.length) {
+    try {
+      const {
+        failedRecords,
+      } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
+        applicationContext,
+        records: removeRecords,
+      });
+
+      if (failedRecords.length) {
+        for (const failedRecord of failedRecords) {
+          try {
+            await applicationContext.getPersistenceGateway().deleteRecord({
+              applicationContext,
+              indexName: failedRecord['_index'],
+              recordId: failedRecord['_id'],
+            });
+          } catch (e) {
+            applicationContext.logger.info('Error', e);
+            await applicationContext.notifyHoneybadger(e);
+          }
+        }
+      }
+    } catch (e) {
+      applicationContext.logger.info('Error', e);
+      await applicationContext.notifyHoneybadger(e);
     }
   }
 
