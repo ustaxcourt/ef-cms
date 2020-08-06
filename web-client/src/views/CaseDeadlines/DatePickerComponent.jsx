@@ -28,17 +28,13 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
-    console.log('value changed', value);
-    if (value) {
-      document.querySelector(`#${name}-date`).value = value;
-    }
+    document.querySelector(`#${name}-date`).value = value;
   }, [value]);
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.addEventListener('change', e => {
         if (values) {
-          console.log('we are there');
           const [year, month, day] = e.target.value.split('-');
           onChange({
             key: names.day,
@@ -54,7 +50,6 @@ export const DatePickerComponent = ({
           });
           onBlur();
         } else {
-          console.log('we are here');
           onChange(e);
           onBlur();
         }
