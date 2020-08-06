@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -6,27 +7,27 @@ import { setAddEditUserCaseNoteModalStateFromListAction } from './setAddEditUser
 describe('setAddEditUserCaseNoteModalStateFromListAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set the modal caseId state', async () => {
+  it('should set the modal docketNumber state', async () => {
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromListAction,
       {
         modules: {
           presenter,
         },
-        props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+        props: { docketNumber: MOCK_CASE.docketNumber },
         state: {
           trialSession: {
             calendaredCases: [
               {
                 caseCaption: 'Sisqo, Petitioner',
-                caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+                docketNumber: MOCK_CASE.docketNumber,
               },
             ],
           },
           trialSessionWorkingCopy: {
             userNotes: {
-              'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
-                caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              '101-18': {
+                docketNumber: MOCK_CASE.docketNumber,
                 notes: 'i got some notes',
               },
             },
@@ -36,9 +37,7 @@ describe('setAddEditUserCaseNoteModalStateFromListAction', () => {
     );
 
     expect(result.state.modal.caseTitle).toEqual('Sisqo');
-    expect(result.state.modal.caseId).toEqual(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
+    expect(result.state.modal.docketNumber).toEqual(MOCK_CASE.docketNumber);
     expect(result.state.modal.notes).toEqual('i got some notes');
   });
 
@@ -49,15 +48,15 @@ describe('setAddEditUserCaseNoteModalStateFromListAction', () => {
         modules: {
           presenter,
         },
-        props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+        props: { docketNumber: MOCK_CASE.docketNumber },
         state: {
           trialSession: {
             calendaredCases: [],
           },
           trialSessionWorkingCopy: {
             userNotes: {
-              'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
-                caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              '101-18': {
+                docketNumber: MOCK_CASE.docketNumber,
                 notes: 'i got some notes',
               },
             },
@@ -67,9 +66,7 @@ describe('setAddEditUserCaseNoteModalStateFromListAction', () => {
     );
 
     expect(result.state.modal.caseTitle).toEqual('');
-    expect(result.state.modal.caseId).toEqual(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
+    expect(result.state.modal.docketNumber).toEqual(MOCK_CASE.docketNumber);
     expect(result.state.modal.notes).toEqual('i got some notes');
   });
 });

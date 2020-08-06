@@ -6,8 +6,8 @@ const {
 } = require('./getCaseMessageThreadByParentId');
 
 const mockCaseMessage = {
-  caseId: 'b3f09a45-b27c-4383-acc1-2ab1f99e6725',
   createdAt: '2019-03-01T21:40:46.415Z',
+  docketNumber: '101-20',
   from: 'Test Petitionsclerk',
   fromSection: 'petitions',
   fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',

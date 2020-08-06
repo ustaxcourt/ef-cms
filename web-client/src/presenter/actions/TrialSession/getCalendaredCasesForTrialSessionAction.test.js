@@ -10,7 +10,7 @@ describe('getCalendaredCasesForTrialSessionAction', () => {
       .getUseCases()
       .getCalendaredCasesForTrialSessionInteractor.mockResolvedValue([
         {
-          caseId: '345',
+          docketNumber: '123-45',
         },
       ]);
   });

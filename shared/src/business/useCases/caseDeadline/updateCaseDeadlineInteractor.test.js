@@ -11,9 +11,9 @@ const { User } = require('../../entities/User');
 describe('updateCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
     caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
+    docketNumber: '123-20',
   };
 
   it('throws an error if the user is not valid or authorized', async () => {

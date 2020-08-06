@@ -4,75 +4,72 @@ const {
 const {
   getUserCaseNoteForCasesInteractor,
 } = require('./getUserCaseNoteForCasesInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const MOCK_NOTE = {
-  caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  notes: 'something',
-  userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-};
-
-const mockJudge = {
-  role: ROLES.judge,
-  userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-};
-
 describe('getUserCaseNoteForCasesInteractor', () => {
+  let mockCurrentUser;
+  let mockNote;
+
+  const MOCK_NOTE = {
+    docketNumber: MOCK_CASE.docketNumber,
+    notes: 'something',
+    userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  };
+
+  const mockJudge = {
+    role: ROLES.judge,
+    userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  };
+
+  beforeEach(() => {
+    mockCurrentUser = mockJudge;
+    mockNote = MOCK_NOTE;
+
+    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserCaseNoteForCases.mockResolvedValue([mockNote]);
+    applicationContext
+      .getUseCases()
+      .getJudgeForUserChambersInteractor.mockReturnValue(mockJudge);
+  });
+
   it('throws error if user is unauthorized', async () => {
-    const mockUnauthorizedUser = {
+    mockCurrentUser = {
       role: 'unauthorizedRole',
       userId: 'unauthorizedUser',
     };
-    applicationContext.getCurrentUser.mockReturnValue(mockUnauthorizedUser);
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => null,
-    });
 
     await expect(
       getUserCaseNoteForCasesInteractor({
         applicationContext,
-        caseId: MOCK_NOTE.caseId,
+        docketNumbers: [MOCK_NOTE.docketNumber],
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNoteForCases.mockResolvedValue([omit(MOCK_NOTE, 'userId')]);
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => mockJudge,
-    });
 
-    let error;
-    try {
-      await getUserCaseNoteForCasesInteractor({
+    await expect(
+      getUserCaseNoteForCasesInteractor({
         applicationContext,
-        caseId: MOCK_NOTE.caseId,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('The UserCaseNote entity was invalid');
+        docketNumbers: [MOCK_NOTE.docketNumber],
+      }),
+    ).rejects.toThrow('The UserCaseNote entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getUserCaseNoteForCases.mockResolvedValue([omit(MOCK_NOTE)]);
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => mockJudge,
-    });
-
     const result = await getUserCaseNoteForCasesInteractor({
       applicationContext,
-      caseId: MOCK_NOTE.caseId,
+      docketNumbers: [MOCK_NOTE.docketNumber],
     });
+
     expect(result).toMatchObject([MOCK_NOTE]);
   });
 });

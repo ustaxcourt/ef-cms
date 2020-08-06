@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  */
 export const canRequestAccessAction = ({ get, path, props }) => {
   const { isAssociated } = props;
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   if (!isAssociated) {
     return path['proceed']();
   } else {
-    return path['unauthorized']({ caseId });
+    return path['unauthorized']({ docketNumber });
   }
 };

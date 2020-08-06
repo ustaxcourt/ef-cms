@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
@@ -8,7 +8,6 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -168,7 +167,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
@@ -181,7 +179,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
-  this.leadCaseId = rawCase.leadCaseId;
+  this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
@@ -358,9 +356,6 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'Unique case ID only used by the system.',
-  ),
   caseNote: joi
     .string()
     .max(500)
@@ -389,11 +384,9 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Damages for the case.'),
-  docketNumber: joi
-    .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('Unique case identifier in XXXXX-YY format.'),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
   docketNumberSuffix: joi
     .string()
     .allow(null)
@@ -467,8 +460,8 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
-  leadCaseId: JoiValidationConstants.UUID.optional().description(
-    'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
+  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
+    'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
   litigationCosts: joi
     .number()
@@ -839,7 +832,6 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function (document, { applicationContext }) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -862,7 +854,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
@@ -1174,8 +1165,8 @@ Case.prototype.generateSortableDocketNumber = function () {
  */
 Case.prototype.generateTrialSortTags = function () {
   const {
-    caseId,
     caseType,
+    docketNumber,
     highPriority,
     preferredTrialCity,
     procedureType,
@@ -1203,7 +1194,7 @@ Case.prototype.generateTrialSortTags = function () {
     caseProcedureSymbol,
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   const hybridSortKey = [
@@ -1211,7 +1202,7 @@ Case.prototype.generateTrialSortTags = function () {
     'H', // Hybrid Tag
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   return {
@@ -1537,23 +1528,23 @@ Case.prototype.canConsolidate = function (caseToConsolidate) {
 };
 
 /**
- * sets lead case id on the current case
+ * sets lead docket number on the current case
  *
- * @param {string} leadCaseId the caseId of the lead case for consolidation
+ * @param {string} leadDocketNumber the docketNumber of the lead case for consolidation
  * @returns {Case} the updated Case entity
  */
-Case.prototype.setLeadCase = function (leadCaseId) {
-  this.leadCaseId = leadCaseId;
+Case.prototype.setLeadCase = function (leadDocketNumber) {
+  this.leadDocketNumber = leadDocketNumber;
   return this;
 };
 
 /**
- * removes the consolidation from the case by setting leadCaseId to undefined
+ * removes the consolidation from the case by setting leadDocketNumber to undefined
  *
  * @returns {Case} the updated Case entity
  */
 Case.prototype.removeConsolidation = function () {
-  this.leadCaseId = undefined;
+  this.leadDocketNumber = undefined;
   return this;
 };
 
@@ -1582,7 +1573,7 @@ Case.sortByDocketNumber = function (cases) {
 
 /**
  * return the lead case for the given set of cases based on createdAt
- * (does NOT evaluate leadCaseId)
+ * (does NOT evaluate leadDocketNumber)
  *
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity

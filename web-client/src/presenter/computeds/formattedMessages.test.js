@@ -15,7 +15,6 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             caseStatus: 'Ready for trial',
             completedAt: '2019-05-01T17:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
@@ -43,18 +42,18 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
@@ -62,13 +61,13 @@ describe('formattedMessages', () => {
 
       expect(result.messages).toMatchObject([
         {
-          caseId: '1',
+          docketNumber: '101-20',
         },
         {
-          caseId: '2',
+          docketNumber: '102-20',
         },
         {
-          caseId: '3',
+          docketNumber: '103-20',
         },
       ]);
     });
@@ -78,21 +77,21 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
             completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             isCompleted: true,
             message: 'This is a test message',
           },
@@ -101,14 +100,14 @@ describe('formattedMessages', () => {
 
       expect(result.completedMessages).toMatchObject([
         {
-          caseId: '2',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '1',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           isCompleted: true,
           message: 'This is a test message',
         },
@@ -120,23 +119,26 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
-            completedAt: '2019-01-03T16:29:13.122Z', // completed third
+            completedAt: '2019-01-03T16:29:13.122Z',
+            // completed third
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
-            completedAt: '2019-01-01T16:29:13.122Z', // completed first
+            completedAt: '2019-01-01T16:29:13.122Z',
+            // completed first
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '102-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '3',
-            completedAt: '2019-01-02T16:29:13.122Z', // completed second
+            completedAt: '2019-01-02T16:29:13.122Z',
+            // completed second
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '103-20',
             isCompleted: true,
             message: 'This is a test message',
           },
@@ -145,23 +147,23 @@ describe('formattedMessages', () => {
 
       expect(result.completedMessages).toMatchObject([
         {
-          caseId: '1',
           completedAt: '2019-01-03T16:29:13.122Z',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '3',
           completedAt: '2019-01-02T16:29:13.122Z',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '103-20',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '2',
           completedAt: '2019-01-01T16:29:13.122Z',
           createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '102-20',
           isCompleted: true,
           message: 'This is a test message',
         },
@@ -173,21 +175,21 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
             completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             isRepliedTo: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
@@ -195,13 +197,13 @@ describe('formattedMessages', () => {
 
       expect(result.inProgressMessages).toMatchObject([
         {
-          caseId: '1',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           message: 'This is a test message',
         },
         {
-          caseId: '2',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
           message: 'This is a test message',
         },
       ]);
@@ -213,22 +215,22 @@ describe('formattedMessages', () => {
       state: {
         messages: [
           {
-            caseId: '1',
             completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             completedAt: '2019-01-01T16:29:13.122Z',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
@@ -238,28 +240,28 @@ describe('formattedMessages', () => {
     expect(result).toMatchObject({
       completedMessages: [
         {
-          caseId: '3',
           completedAt: '2019-01-01T16:29:13.122Z',
           createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
           isCompleted: true,
           message: 'This is a test message',
         },
       ],
       messages: [
         {
-          caseId: '1',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           message: 'This is a test message',
         },
         {
-          caseId: '2',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
           message: 'This is a test message',
         },
         {
-          caseId: '3',
           completedAt: '2019-01-01T16:29:13.122Z',
           createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
           isCompleted: true,
           message: 'This is a test message',
         },

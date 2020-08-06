@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {Array<string>} providers.documentIds the document ids for the primary, supporting,
  * secondary, and secondary supporting documents
  * @param {object} providers.documentMetadata the metadata for all the documents
- * @param {object} providers.leadCaseId the id for the lead case in the consolidated set
+ * @param {object} providers.leadDocketNumber the docket number for the lead case in the consolidated set
  * @returns {Promise<*>} the promise of the api call
  */
 exports.fileExternalDocumentForConsolidatedInteractor = ({
@@ -16,7 +16,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = ({
   docketNumbersForFiling,
   documentIds,
   documentMetadata,
-  leadCaseId,
+  leadDocketNumber,
 }) => {
   return post({
     applicationContext,
@@ -25,6 +25,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = ({
       documentIds,
       documentMetadata,
     },
-    endpoint: `/case-documents/consolidated/${leadCaseId}/external-document`,
+    endpoint: `/case-documents/consolidated/${leadDocketNumber}/external-document`,
   });
 };

@@ -55,4 +55,38 @@ describe('getDefaultViewerCorrespondenceToDisplayAction', () => {
       viewerCorrespondenceToDisplay: undefined,
     });
   });
+
+  it('returns the correct document if props.documentId is set', async () => {
+    const result = await runAction(
+      getDefaultViewerCorrespondenceToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: { documentId: '345' },
+        state: {
+          caseDetail: {
+            correspondence: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+              },
+              {
+                documentId: '234',
+                documentType: 'Order',
+              },
+              {
+                documentId: '345',
+                documentType: 'Notice',
+                isDraft: true,
+              },
+            ],
+          },
+        },
+      },
+    );
+    expect(result.output).toMatchObject({
+      viewerCorrespondenceToDisplay: { documentId: '345' },
+    });
+  });
 });

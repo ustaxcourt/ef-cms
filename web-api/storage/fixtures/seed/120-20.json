@@ -1,7 +1,7 @@
 [
   {
     "sk": "work-item|d9edf05a-7b27-447c-aaf9-f12157823bc6",
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898"
+    "pk": "case|120-20"
   },
   {
     "documentType": "Petition",
@@ -40,7 +40,6 @@
         "createdAt": "2020-06-25T20:58:55.415Z",
         "assigneeName": null,
         "entityName": "WorkItem",
-        "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
         "docketNumberWithSuffix": "120-20SL",
         "messages": [
           {
@@ -71,7 +70,7 @@
     "sk": "document|d1d5ea49-bbe5-4a63-bdff-20de1fed05d7",
     "partySecondary": false,
     "documentId": "d1d5ea49-bbe5-4a63-bdff-20de1fed05d7",
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "pk": "case|120-20",
     "privatePractitioners": []
   },
   {
@@ -84,7 +83,7 @@
     "sk": "docket-record|eb1f6974-2d1d-4627-a16c-61ec03399fff",
     "description": "Legacy Stricken Document",
     "index": 3,
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898"
+    "pk": "case|120-20"
   },
   {
     "documentType": "Statement of Taxpayer Identification",
@@ -106,7 +105,7 @@
     "sk": "document|3bef545a-b185-4101-9822-c1722856ef62",
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "pk": "case|120-20",
     "privatePractitioners": []
   },
   {
@@ -117,7 +116,7 @@
     "sk": "docket-record|eb0f6974-2d1d-4627-a16c-61ec03399fff",
     "description": "Request for Place of Trial at Little Rock, Arkansas",
     "index": 2,
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898"
+    "pk": "case|120-20"
   },
   {
     "eventCode": "P",
@@ -130,7 +129,7 @@
     "description": "Petition",
     "index": 1,
     "documentId": "d1d5ea49-bbe5-4a63-bdff-20de1fed05d7",
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "pk": "case|120-20",
     "isLegacy": true,
     "isStricken": true
   },
@@ -163,8 +162,7 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Sean Connery, Petitioner",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
-    "sk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "sk": "case|120-20",
     "filingType": "Myself",
     "orderForOds": false,
     "docketNumberWithSuffix": "120-20SL",
@@ -181,18 +179,17 @@
     "hasPendingItems": false,
     "initialCaption": "Sean Connery, Petitioner",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "pk": "case|120-20",
     "docketNumber": "120-20",
     "status": "New",
     "statistics": []
   },
   {
-    "sk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "sk": "case|120-20",
     "pk": "catalog"
   },
   {
-    "sk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "sk": "case|120-20",
     "pk": "case-by-docket-number|120-20"
   },
   {
@@ -224,8 +221,7 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Sean Connery, Petitioner",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
-    "sk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "sk": "case|120-20",
     "filingType": "Myself",
     "orderForOds": false,
     "docketNumberWithSuffix": "120-20SL",
@@ -242,7 +238,7 @@
     "hasPendingItems": false,
     "initialCaption": "Sean Connery, Petitioner",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "pk": "case|120-20",
     "docketNumber": "120-20",
     "status": "New",
     "statistics": []
@@ -250,10 +246,9 @@
   {
     "createdAt": "2020-06-25T20:58:55.411Z",
     "entityName": "UserCase",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
     "caseCaption": "Sean Connery, Petitioner",
-    "gsi1pk": "user-case|ee049fa1-7cb0-4971-81c4-9944f1226898",
-    "sk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "gsi1pk": "user-case|120-20",
+    "sk": "case|120-20",
     "docketNumberWithSuffix": "120-20SL",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "120-20",

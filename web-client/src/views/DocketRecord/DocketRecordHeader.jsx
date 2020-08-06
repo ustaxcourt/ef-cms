@@ -22,7 +22,7 @@ export const DocketRecordHeader = connect(
   }) {
     const openDocketRecordPrintPreview = (options = {}) => {
       updateSessionMetadataSequence({
-        key: `docketRecordSort.${formattedCaseDetail.caseId}`,
+        key: `docketRecordSort.${formattedCaseDetail.docketNumber}`,
         value: 'byDate',
       });
       printDocketRecordSequence(options);
@@ -35,7 +35,7 @@ export const DocketRecordHeader = connect(
               <select
                 aria-label="docket record"
                 className="usa-select margin-top-0 margin-bottom-2 sort"
-                name={`docketRecordSort.${formattedCaseDetail.caseId}`}
+                name={`docketRecordSort.${formattedCaseDetail.docketNumber}`}
                 value={formattedCaseDetail.docketRecordSort}
                 onChange={e => {
                   updateSessionMetadataSequence({

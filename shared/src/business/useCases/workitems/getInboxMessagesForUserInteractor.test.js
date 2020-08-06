@@ -16,7 +16,6 @@ describe('getInboxMessagesForUserInteractor', () => {
   };
 
   let mockWorkItem = {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
     docketNumber: '101-18',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,

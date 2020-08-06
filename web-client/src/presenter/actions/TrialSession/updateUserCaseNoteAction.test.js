@@ -14,7 +14,7 @@ describe('updateUserCaseNoteAction', () => {
         presenter,
       },
       props: {
-        caseId: 'case-id-123',
+        docketNumber: '123-45',
         notes: 'welcome to flavortown',
       },
     });
@@ -26,7 +26,7 @@ describe('updateUserCaseNoteAction', () => {
       applicationContext.getUseCases().updateUserCaseNoteInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: 'case-id-123',
+      docketNumber: '123-45',
       notes: 'welcome to flavortown',
     });
   });

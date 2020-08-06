@@ -26,7 +26,7 @@ describe('updateQcCompleteForTrialAction', () => {
         presenter,
       },
       props: {
-        caseId: 'ce4fe698-e3d3-4b30-8925-c198a1955478',
+        docketNumber: '123-20',
         qcCompleteForTrial: true,
       },
       state: {
@@ -47,7 +47,7 @@ describe('updateQcCompleteForTrialAction', () => {
         presenter,
       },
       props: {
-        caseId: 'ce4fe698-e3d3-4b30-8925-c198a1955478',
+        docketNumber: '123-20',
         qcCompleteForTrial: true,
       },
       state: {

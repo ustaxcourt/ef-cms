@@ -18,7 +18,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
 
   if (user.role === USER_ROLES.privatePractitioner) {
     const caseDetailPractitioners = get(state.caseDetail.privatePractitioners);
-    const caseId = get(state.caseDetail.caseId);
+    const docketNumber = get(state.caseDetail.docketNumber);
 
     isAssociated = some(caseDetailPractitioners, { userId: user.userId });
 
@@ -27,7 +27,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
         .getUseCases()
         .verifyPendingCaseForUserInteractor({
           applicationContext,
-          caseId,
+          docketNumber,
           userId: user.userId,
         });
     }

@@ -12,7 +12,6 @@ exports.downloadPolicyUrlLambda = event =>
       .getUseCases()
       .getDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
-        documentId: event.pathParameters.documentId,
+        ...event.pathParameters,
       });
   });

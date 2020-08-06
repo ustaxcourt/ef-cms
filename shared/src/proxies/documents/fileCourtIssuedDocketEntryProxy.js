@@ -12,12 +12,12 @@ exports.fileCourtIssuedDocketEntryInteractor = ({
   applicationContext,
   documentMeta,
 }) => {
-  const { caseId } = documentMeta;
+  const { docketNumber } = documentMeta;
   return post({
     applicationContext,
     body: {
       documentMeta,
     },
-    endpoint: `/case-documents/${caseId}/court-issued-docket-entry`,
+    endpoint: `/case-documents/${docketNumber}/court-issued-docket-entry`,
   });
 };

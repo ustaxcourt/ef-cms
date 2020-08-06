@@ -12,7 +12,6 @@ describe('getSentMessagesForUserInteractor', () => {
 
   const sentMessagesForUserMock = [
     {
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18S',
       document: { sentBy: 'petitioner' },
@@ -22,7 +21,6 @@ describe('getSentMessagesForUserInteractor', () => {
       sentBy: 'docketclerk',
     },
     {
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18S',
       document: { sentBy: 'petitioner' },

@@ -31,7 +31,7 @@ for (const file of files) {
         items.push({
           ...record,
           docketRecordId,
-          pk: `case|${item.caseId}`,
+          pk: `case|${item.docketNumber}`,
           sk: `docket-record|${docketRecordId}`,
         });
       });

@@ -13,8 +13,8 @@ export const completeDocumentSigningAction = async ({
   get,
 }) => {
   const originalDocumentId = get(state.pdfForSigning.documentId);
-  const caseId = get(state.caseDetail.caseId);
-  let documentIdToReturn = originalDocumentId;
+  const { docketNumber } = get(state.caseDetail);
+  const parentMessageId = get(state.parentMessageId);
 
   if (get(state.pdfForSigning.signatureData.x)) {
     const {
@@ -55,20 +55,18 @@ export const completeDocumentSigningAction = async ({
         onUploadProgress: () => {},
       });
 
-    documentIdToReturn = signedDocumentId;
-
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       nameForSigning,
       originalDocumentId,
+      parentMessageId,
       signedDocumentId,
     });
   }
 
   return {
-    caseId,
-    documentId: documentIdToReturn,
+    docketNumber,
     tab: 'docketRecord',
   };
 };

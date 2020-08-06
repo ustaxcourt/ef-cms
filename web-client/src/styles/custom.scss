@@ -930,6 +930,12 @@ header.usa-header {
   }
 }
 
+#menu-button-new-tab > * {
+  margin-left: -45px;
+  font-size: 18px;
+  transform: rotate(315deg);
+}
+
 .title {
   border-bottom: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;

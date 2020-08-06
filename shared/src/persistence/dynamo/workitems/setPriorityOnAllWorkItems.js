@@ -5,14 +5,14 @@ const client = require('../../dynamodbClientService');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id to update work items for
+ * @param {string} providers.docketNumber docket number to update work items for
  * @param {boolean} providers.highPriority true if the work items should be set high priority, false otherwise
  * @param {string} providers.trialDate the date of the trial or undefined
  * @returns {Promise} the promise of the persistence calls
  */
 exports.setPriorityOnAllWorkItems = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   highPriority,
   trialDate,
 }) => {
@@ -22,7 +22,7 @@ exports.setPriorityOnAllWorkItems = async ({
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `case|${caseId}`,
+      ':pk': `case|${docketNumber}`,
       ':prefix': 'work-item',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
