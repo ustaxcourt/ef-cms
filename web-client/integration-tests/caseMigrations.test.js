@@ -334,6 +334,8 @@ describe('Case journey', () => {
 
     await test.runSequence('submitCaseAdvancedSearchSequence');
 
+    console.log('search results', test.getState('searchResults'));
+
     expect(
       test
         .getState('searchResults')
