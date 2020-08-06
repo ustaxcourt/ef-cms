@@ -70,6 +70,7 @@ describe('serveCaseToIrsInteractor', () => {
 
   it('should throw unauthorized error when user is unauthorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
       userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
     });
 
