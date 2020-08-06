@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
       'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwibmFtZSI6IlRlc3QgQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI4NmMzZjg3Yi0zNTBiLTQ3N2QtOTJjMy00M2JkMDk1Y2IwMDYiLCJjdXN0b206cm9sZSI6ImFkbWluIiwic3ViIjoiODZjM2Y4N2ItMzUwYi00NzdkLTkyYzMtNDNiZDA5NWNiMDA2IiwiaWF0IjoxNTgyOTIxMTI1fQ.PBmSyb6_E_53FNG0GiEpAFqTNmooSh4rI0ApUQt3UH8',
     'Content-Type': 'application/json',
   },
-  timeout: 1000,
+  timeout: 2000,
 });
 
 const {
@@ -183,8 +183,6 @@ describe('Case journey', () => {
   });
 
   it('should migrate cases', async () => {
-    jest.setTimeout(3000);
-
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       firstConsolidatedCase,
@@ -273,8 +271,6 @@ describe('Case journey', () => {
   });
 
   it('should re-migrate an existing case', async () => {
-    jest.setTimeout(3000);
-
     const correspondenceCaseOverwritten = {
       ...correspondenceCase,
       caseCaption: 'The Third Migrated Case, Overwritten',
