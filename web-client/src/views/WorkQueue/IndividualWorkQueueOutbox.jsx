@@ -30,8 +30,7 @@ export const IndividualWorkQueueOutbox = connect(
               {workQueueHelper.showAssignedToColumn && (
                 <th className="max-width-7">Assigned To</th>
               )}
-              <th>Processed By</th>
-              {workQueueHelper.showServedColumn && <th>Served</th>}
+              <th>{workQueueHelper.sentTitle} Date</th>
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
@@ -69,12 +68,9 @@ export const IndividualWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
-                <td className="message-queue-row">{item.completedBy}</td>
-                {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">
-                    {item.completedAtFormatted}
-                  </td>
-                )}
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
               </tr>
             </tbody>
           ))}
