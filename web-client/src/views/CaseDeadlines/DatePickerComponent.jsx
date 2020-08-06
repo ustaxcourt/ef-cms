@@ -2,20 +2,62 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 
-export const DatePickerComponent = ({ errorText, label, name, onChange }) => {
+export const DatePickerComponent = ({
+  errorText,
+  label,
+  name,
+  names,
+  onBlur,
+  onChange,
+  value = '',
+  values,
+}) => {
   const datePickerRef = useRef();
   const inputRef = useRef();
 
   useEffect(() => {
     if (datePickerRef.current) {
       datePicker.on(datePickerRef.current);
+
+      if (values && values.month && values.day && values.year) {
+        document.querySelector(
+          `#${name}-date`,
+        ).value = `${values.month}/${values.day}/${values.year}`;
+      }
     }
   }, [datePickerRef]);
 
   useEffect(() => {
+    console.log('value changed', value);
+    if (value) {
+      document.querySelector(`#${name}-date`).value = value;
+    }
+  }, [value]);
+
+  useEffect(() => {
     if (inputRef.current) {
       inputRef.current.addEventListener('change', e => {
-        onChange(e);
+        if (values) {
+          console.log('we are there');
+          const [year, month, day] = e.target.value.split('-');
+          onChange({
+            key: names.day,
+            value: day,
+          });
+          onChange({
+            key: names.month,
+            value: month,
+          });
+          onChange({
+            key: names.year,
+            value: year,
+          });
+          onBlur();
+        } else {
+          console.log('we are here');
+          onChange(e);
+          onBlur();
+        }
       });
     }
   }, [inputRef]);
@@ -36,11 +78,13 @@ export const DatePickerComponent = ({ errorText, label, name, onChange }) => {
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
           className="usa-input"
+          defaultValue={
+            values ? `${values.month}/${values.day}/${values.year}` : value
+          }
           id={`${name}-date`}
           name={`${name}-date`}
           ref={inputRef}
           type="text"
-          onChange={onChange}
         />
       </div>
     </FormGroup>
