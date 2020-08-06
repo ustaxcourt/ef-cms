@@ -240,4 +240,31 @@ describe('Case journey', () => {
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
     ).toBe('Placeat sed dolorum');
   });
+
+  it('should re-migrate an existing case', async () => {
+    jest.setTimeout(3000);
+
+    const correspondenceCaseOverwritten = {
+      ...correspondenceCase,
+      caseCaption: 'The Third Migrated Case, Overwritten',
+      correspondence: [],
+    };
+
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      correspondenceCaseOverwritten,
+    );
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+
+  it('Docketclerk views overwritten correspondence case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: correspondenceCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.correspondence').length).toBe(0);
+    expect(test.getState('caseDetail.caseCaption')).toBe(
+      'The Third Migrated Case, Overwritten',
+    );
+  });
 });
