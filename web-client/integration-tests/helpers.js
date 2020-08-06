@@ -531,7 +531,7 @@ export const refreshElasticsearchIndex = async () => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
   await axios.post('http://localhost:9200/_refresh');
-  return await wait(2000);
+  return await wait(3000);
 };
 
 export const base64ToUInt8Array = b64 => {
