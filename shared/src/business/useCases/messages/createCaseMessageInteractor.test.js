@@ -31,7 +31,7 @@ describe('createCaseMessageInteractor', () => {
           documentTitle: 'Petition',
         },
       ],
-      caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
+      docketNumber: '101-20',
       isRepliedTo: false,
       message: "How's it going?",
       subject: 'Hey!',
@@ -57,12 +57,13 @@ describe('createCaseMessageInteractor', () => {
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
       });
 
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      caseCaption: 'Guy Fieri, Petitioner',
-      docketNumber: '123-45',
-      docketNumberWithSuffix: '123-45S',
-      status: CASE_STATUS_TYPES.generalDocket,
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        caseCaption: 'Guy Fieri, Petitioner',
+        docketNumberWithSuffix: '123-45S',
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
 
     await createCaseMessageInteractor({
       applicationContext,
@@ -79,7 +80,7 @@ describe('createCaseMessageInteractor', () => {
       ...caseMessageData,
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Guy Fieri',
-      docketNumber: '123-45',
+      docketNumber: '101-20',
       docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
       fromSection: 'petitions',

@@ -1,6 +1,3 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { processUserAssociatedCases } = require('./processUserAssociatedCases');
 
@@ -11,64 +8,66 @@ describe('processUserAssociatedCases', () => {
     mockFoundCasesList = [MOCK_CASE];
   });
 
-  it('should set isRequestingUserAssociated to true for each case', async () => {
+  it('should set isRequestingUserAssociated to true for each case', () => {
     processUserAssociatedCases(mockFoundCasesList);
 
     expect(MOCK_CASE.isRequestingUserAssociated).toBe(true);
   });
 
-  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', async () => {
+  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', () => {
     mockFoundCasesList = [{ ...MOCK_CASE, isLeadCase: true }];
 
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
-      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
+      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.docketNumber],
     ).toEqual({ ...MOCK_CASE, isLeadCase: true });
   });
 
-  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadCaseId', async () => {
+  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadDocketNumber', () => {
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
-      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
+      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.docketNumber],
     ).toEqual(MOCK_CASE);
   });
 
-  it("should add a case's caseId to userAssociatedCaseIdsMap", async () => {
+  it("should add a case's docketNumber to userAssociatedDocketNumbersMap", () => {
     const result = processUserAssociatedCases(mockFoundCasesList);
 
-    expect(result.userAssociatedCaseIdsMap[MOCK_CASE.caseId]).toEqual(true);
+    expect(
+      result.userAssociatedDocketNumbersMap[MOCK_CASE.docketNumber],
+    ).toEqual(true);
   });
 
-  it('should add a case to leadCaseIdsAssociatedWithUser if it has a leadCaseId and is not associated with the user', async () => {
-    let mockCaseWithLeadCaseId = {
+  it('should add a case to leadDocketNumbersAssociatedWithUser if it has a leadDocketNumber and is not associated with the user', () => {
+    let mockCaseWithLeadDocketNumber = {
       ...MOCK_CASE,
-      leadCaseId: applicationContext.getUniqueId(),
+      leadDocketNumber: '101-20',
     };
-    mockFoundCasesList = [mockCaseWithLeadCaseId];
+    mockFoundCasesList = [mockCaseWithLeadDocketNumber];
 
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
-      result.leadCaseIdsAssociatedWithUser.includes(
-        mockCaseWithLeadCaseId.leadCaseId.toString(),
+      result.leadDocketNumbersAssociatedWithUser.includes(
+        mockCaseWithLeadDocketNumber.leadDocketNumber.toString(),
       ),
     ).toBe(true);
   });
 
-  it('should populate casesAssociatedWithUserOrLeadCaseMap, leadCaseIdsAssociatedWithUser and userAssociatedCaseIdsMap', async () => {
-    let mockCaseWithLeadCaseId = {
+  it('should populate casesAssociatedWithUserOrLeadCaseMap, leadDocketNumbersAssociatedWithUser and userAssociatedDocketNumbersMap', () => {
+    let mockCaseWithLeadDocketNumber = {
       ...MOCK_CASE,
       isLeadCase: true,
-      leadCaseId: applicationContext.getUniqueId(),
+      leadDocketNumber: '101-20',
     };
-    mockFoundCasesList = [mockCaseWithLeadCaseId, MOCK_CASE];
+    mockFoundCasesList = [mockCaseWithLeadDocketNumber, MOCK_CASE];
 
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(result.casesAssociatedWithUserOrLeadCaseMap).not.toBe({});
-    expect(result.leadCaseIdsAssociatedWithUser.length).toBe(1);
-    expect(result.userAssociatedCaseIdsMap).not.toBe({});
+    expect(result.leadDocketNumbersAssociatedWithUser.length).toBe(1);
+    expect(result.userAssociatedDocketNumbersMap).not.toBe({});
   });
 });

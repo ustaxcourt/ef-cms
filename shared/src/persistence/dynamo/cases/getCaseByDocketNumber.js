@@ -1,5 +1,5 @@
 const client = require('../../dynamodbClientService');
-const { getCaseByCaseId } = require('../../dynamo/cases/getCaseByCaseId');
+const { aggregateCaseItems } = require('../helpers/aggregateCaseItems');
 
 /**
  * getCaseByDocketNumber
@@ -13,29 +13,20 @@ exports.getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {
-  const results = await client.query({
+  const caseItems = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':pk': `case-by-docket-number|${docketNumber}`,
+      ':pk': `case|${docketNumber}`,
     },
     KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
 
-  if (results.length === 0) {
+  if (!caseItems) {
     return null;
   }
 
-  const [firstEntry] = results;
-
-  const [, caseId] = firstEntry.sk.split('|');
-
-  const fullCase = await getCaseByCaseId({
-    applicationContext,
-    caseId,
-  });
-
-  return fullCase;
+  return aggregateCaseItems(caseItems);
 };

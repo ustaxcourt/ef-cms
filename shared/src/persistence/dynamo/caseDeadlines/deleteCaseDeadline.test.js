@@ -12,7 +12,7 @@ describe('deleteCaseDeadline', () => {
     await deleteCaseDeadline({
       applicationContext,
       caseDeadlineId: '123',
-      caseId: '456',
+      docketNumber: '456-20',
     });
 
     expect(
@@ -28,7 +28,7 @@ describe('deleteCaseDeadline', () => {
       applicationContext.getDocumentClient().delete.mock.calls[1][0],
     ).toMatchObject({
       Key: {
-        pk: 'case|456',
+        pk: 'case|456-20',
         sk: 'case-deadline|123',
       },
       TableName: 'efcms-dev',

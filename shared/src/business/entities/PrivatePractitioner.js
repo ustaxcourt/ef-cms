@@ -1,4 +1,7 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');

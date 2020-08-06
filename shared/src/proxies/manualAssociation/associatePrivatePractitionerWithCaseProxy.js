@@ -5,7 +5,7 @@ const { post } = require('../requests');
  *
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
- * @param {string} params.caseId the case id
+ * @param {string} params.docketNumber the docket number of the case
  * @param {boolean} params.representingPrimary whether the practitioner is
  * representing the primary contact
  * @param {boolean} params.representingSecondary whether the practitioner is
@@ -16,7 +16,7 @@ const { post } = require('../requests');
  */
 exports.associatePrivatePractitionerWithCaseInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   representingPrimary,
   representingSecondary,
   serviceIndicator,
@@ -25,12 +25,12 @@ exports.associatePrivatePractitionerWithCaseInteractor = ({
   return post({
     applicationContext,
     body: {
-      caseId,
+      docketNumber,
       representingPrimary,
       representingSecondary,
       serviceIndicator,
       userId,
     },
-    endpoint: `/case-parties/${caseId}/associate-private-practitioner`,
+    endpoint: `/case-parties/${docketNumber}/associate-private-practitioner`,
   });
 };

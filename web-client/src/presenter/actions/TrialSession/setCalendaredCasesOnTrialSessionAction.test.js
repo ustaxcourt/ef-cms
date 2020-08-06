@@ -5,12 +5,12 @@ describe('setCalendaredCasesOnTrialSessionAction', () => {
   it('sets calendared cases on trial session', async () => {
     const result = await runAction(setCalendaredCasesOnTrialSessionAction, {
       props: {
-        calendaredCases: [{ caseId: 'case-id-123' }],
+        calendaredCases: [{ docketNumber: '123-45' }],
       },
     });
 
     expect(result.state.trialSession.calendaredCases).toMatchObject([
-      { caseId: 'case-id-123' },
+      { docketNumber: '123-45' },
     ]);
   });
 });

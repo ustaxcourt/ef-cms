@@ -10,15 +10,15 @@ describe('submitCorrespondenceAction', () => {
     applicationContext
       .getUseCases()
       .fileCorrespondenceDocumentInteractor.mockResolvedValue({
-        caseId: 'case-id-123',
         correspondence: [],
+        docketNumber: '101-20',
       });
 
     applicationContext
       .getUseCases()
       .updateCorrespondenceDocumentInteractor.mockResolvedValue({
-        caseId: 'case-id-123',
         correspondence: [],
+        docketNumber: '101-20',
       });
   });
 
@@ -32,7 +32,6 @@ describe('submitCorrespondenceAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'case-id-123',
           docketNumber: '101-20',
         },
         form: {
@@ -50,10 +49,9 @@ describe('submitCorrespondenceAction', () => {
     ).toBeCalled();
     expect(result.output).toMatchObject({
       caseDetail: {
-        caseId: 'case-id-123',
         correspondence: [],
+        docketNumber: '101-20',
       },
-      caseId: 'case-id-123',
       docketNumber: '101-20',
       documentId: 'correspondence-document-id-123',
     });
@@ -69,7 +67,6 @@ describe('submitCorrespondenceAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'case-id-123',
           docketNumber: '101-20',
         },
         form: {
@@ -88,10 +85,9 @@ describe('submitCorrespondenceAction', () => {
     ).toBeCalled();
     expect(result.output).toMatchObject({
       caseDetail: {
-        caseId: 'case-id-123',
         correspondence: [],
+        docketNumber: '101-20',
       },
-      caseId: 'case-id-123',
       docketNumber: '101-20',
       documentId: 'correspondence-document-id-123',
     });

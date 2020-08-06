@@ -51,7 +51,11 @@ exports.completeDocketEntryQCInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId, documentId, overridePaperServiceAddress } = entryMetadata;
+  const {
+    docketNumber,
+    documentId,
+    overridePaperServiceAddress,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -59,9 +63,9 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -195,7 +199,6 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
     Object.assign(workItemToUpdate, {
-      caseId: caseId,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
@@ -395,7 +398,7 @@ exports.completeDocketEntryQCInteractor = async ({
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId,
+      docketNumber: caseEntity.docketNumber,
       documentId,
     });
   }

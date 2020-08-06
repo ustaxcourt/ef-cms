@@ -9,19 +9,19 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
-const MOCK_TRIAL = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2025-12-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2025',
-  trialLocation: 'Birmingham, Alabama',
-};
-
-let mockTrialsById;
-let user;
-
 describe('updateTrialSessionInteractor', () => {
+  let mockTrialsById;
+  let user;
+
+  const MOCK_TRIAL = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2025-12-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '2025',
+    trialLocation: 'Birmingham, Alabama',
+  };
+
   const MOCK_TRIAL_ID_1 = '8a3ed061-bdc6-44f0-baec-7e2c007c51bb';
   const MOCK_TRIAL_ID_2 = '84949ffd-9aed-4595-b6af-ff91ea01112b';
   const MOCK_TRIAL_ID_3 = '76cfdfee-795a-4056-a383-8622e5d527d1';
@@ -47,7 +47,7 @@ describe('updateTrialSessionInteractor', () => {
       },
       [MOCK_TRIAL_ID_4]: {
         ...MOCK_TRIAL,
-        caseOrder: [{ caseId: 'cff9429c-6ce7-469f-addc-4eb3591fc9fc' }],
+        caseOrder: [{ docketNumber: '123-45' }],
         trialSessionId: MOCK_TRIAL_ID_4,
       },
       [MOCK_TRIAL_ID_5]: {
@@ -62,8 +62,6 @@ describe('updateTrialSessionInteractor', () => {
         trialSessionId: MOCK_TRIAL_ID_6,
       },
     };
-
-    applicationContext.environment.stage = 'local';
 
     user = new User({
       name: 'Docket Clerk',
@@ -99,18 +97,12 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('throws an error if the trial session start date has passed', async () => {
-    let error;
-
-    try {
-      await updateTrialSessionInteractor({
+    await expect(
+      updateTrialSessionInteractor({
         applicationContext,
         trialSession: mockTrialsById[MOCK_TRIAL_ID_1],
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow();
   });
 
   it('throws an exception when it fails to update a trial session', async () => {
@@ -120,18 +112,12 @@ describe('updateTrialSessionInteractor', () => {
         throw new Error('Error!');
       });
 
-    let error;
-
-    try {
-      await updateTrialSessionInteractor({
+    await expect(
+      updateTrialSessionInteractor({
         applicationContext,
         trialSession: MOCK_TRIAL,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow();
   });
 
   it('updates a trial session successfully', async () => {
@@ -230,24 +216,17 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('updates calendared case with new trial session info', async () => {
-    const persistenceGateway = applicationContext.getPersistenceGateway();
-    applicationContext.getPersistenceGateway = () => ({
-      ...persistenceGateway,
-      getCaseByCaseId: () => mockCalendaredCase.toRawObject(),
-      updateCase: updateCaseMock,
-    });
-
+    const mockCalendaredCase = new Case(
+      { ...MOCK_CASE, docketNumber: '123-45' },
+      { applicationContext },
+    );
     const calendaredTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_4],
       startDate: '2025-12-02T00:00:00.000Z',
     };
-
-    const updateCaseMock = jest.fn();
-    const mockCalendaredCase = new Case(
-      { ...MOCK_CASE, caseId: 'cff9429c-6ce7-469f-addc-4eb3591fc9fc' },
-      { applicationContext },
-    );
-
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
     mockCalendaredCase.setAsCalendared(MOCK_TRIAL);
 
     await updateTrialSessionInteractor({
@@ -258,8 +237,13 @@ describe('updateTrialSessionInteractor', () => {
       },
     });
 
-    expect(updateCaseMock).toHaveBeenCalled();
-    expect(updateCaseMock.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
       trialDate: '2025-12-02T00:00:00.000Z',
     });
   });

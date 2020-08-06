@@ -28,7 +28,6 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
 
   test.casesReadyForTrial = [];
 
-  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
@@ -36,7 +35,6 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
-      createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;
     });
@@ -59,7 +57,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
 
   loginAs(test, 'petitionsclerk@example.com');
   markAllCasesAsQCed(test, () => {
-    return [createdCaseIds[0], createdCaseIds[1]];
+    return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
   petitionsClerkCompletesAndSetsTrialSession(test);
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {

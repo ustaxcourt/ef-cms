@@ -18,7 +18,6 @@ describe('opinionAdvancedSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
-          caseId: '1',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents:
@@ -30,7 +29,6 @@ describe('opinionAdvancedSearchInteractor', () => {
         },
         {
           caseCaption: 'Samson Workman, Petitioner',
-          caseId: '2',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents: 'KitKats are inferior candies',
@@ -63,7 +61,6 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',
-        caseId: '1',
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents:
@@ -75,7 +72,6 @@ describe('opinionAdvancedSearchInteractor', () => {
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
-        caseId: '2',
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents: 'KitKats are inferior candies',

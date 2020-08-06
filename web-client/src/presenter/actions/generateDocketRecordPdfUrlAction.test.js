@@ -25,12 +25,11 @@ describe('generateDocketRecordPdfUrlAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'ca123',
           docketNumber: '123-45',
         },
         sessionMetadata: {
           docketRecordSort: {
-            ca123: 'byDate',
+            '123-45': 'byDate',
           },
         },
       },

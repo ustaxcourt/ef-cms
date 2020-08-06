@@ -19,7 +19,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   let caseRecord = {
     caseCaption: 'Caption',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
@@ -97,7 +96,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(caseRecord);
+      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -109,7 +108,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         applicationContext,
         documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
         },
@@ -125,7 +124,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         applicationContext,
         documentIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
         },
@@ -138,7 +137,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext,
       documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
         draftState: {},
         eventCode: 'OSC',
@@ -146,7 +145,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -159,7 +158,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext,
       documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentContents: 'the contents!',
         documentType: 'Order to Show Cause',
         draftState: {
@@ -193,7 +192,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext,
       documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
         draftState: {},
         eventCode: 'OSC',
@@ -202,7 +201,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]

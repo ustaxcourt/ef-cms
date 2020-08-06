@@ -6,17 +6,17 @@ import { runAction } from 'cerebral/test';
 const mockCaseDeadlines = [
   {
     caseDeadlineId: 'cd1',
-    caseId: 'abc',
     createdAt: '2019-07-19T20:20:15.680Z',
     deadlineDate: '2020-02-03T05:00:00.000Z',
     description: 'Test case deadline.',
+    docketNumber: '123-20',
   },
   {
     caseDeadlineId: 'cd2',
-    caseId: 'abc',
     createdAt: '2019-07-19T20:20:15.680Z',
     deadlineDate: '2030-03-04T05:00:00.000Z',
     description: 'Another test case deadline.',
+    docketNumber: '123-20',
   },
 ];
 
@@ -34,7 +34,7 @@ describe('getCaseDeadlinesForCaseAction', () => {
       },
       state: {
         caseDetails: {
-          caseId: 'abc',
+          docketNumber: '123-20',
         },
       },
     });

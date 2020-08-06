@@ -9,9 +9,9 @@ import { state } from 'cerebral';
  * @returns {object} the path to execute next
  */
 export const isConsolidatedCaseAction = async ({ get, path }) => {
-  const leadCaseId = get(state.caseDetail.leadCaseId);
+  const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
 
-  if (leadCaseId) {
+  if (leadDocketNumber) {
     return path.yes();
   } else {
     return path.no();
