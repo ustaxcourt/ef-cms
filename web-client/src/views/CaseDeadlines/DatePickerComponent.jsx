@@ -22,6 +22,8 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
+    const input = document.querySelector(`#${name}-date`);
+    if (!input) return;
     if (value.indexOf('-') > -1) {
       const [year, month, day] = value.split('-');
       document.querySelector(`#${name}-date`).value = `${month}/${day}/${year}`;
