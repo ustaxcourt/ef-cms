@@ -367,8 +367,10 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: joi.object().required(),
-  contactSecondary: joi.object().optional().allow(null),
+  contactPrimary: ContactFactory.getValidationRules('primary').required(),
+  contactSecondary: ContactFactory.getValidationRules('secondary')
+    .optional()
+    .allow(null),
   correspondence: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -516,7 +518,7 @@ Case.VALIDATION_RULES = {
     .description('Reminder for clerks to review the Order to Show Cause.'),
   otherFilers: joi
     .array()
-    .items(joi.object().meta({ entityName: 'OtherFilerContact' }))
+    .items(ContactFactory.getValidationRules('otherFilers'))
     .unique(
       (a, b) =>
         a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
@@ -526,7 +528,7 @@ Case.VALIDATION_RULES = {
     .optional(),
   otherPetitioners: joi
     .array()
-    .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
+    .items(ContactFactory.getValidationRules('otherPetitioners'))
     .description('List of OtherPetitionerContact Entities for the case.')
     .optional(),
   partyType: joi

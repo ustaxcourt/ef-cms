@@ -72,6 +72,15 @@ function getFormattedValidationErrors(entity) {
     errors = getFormattedValidationErrorsHelper(entity);
   }
   if (errors) {
+    for (const key of Object.keys(errors)) {
+      if (
+        // remove unhelpful error messages from contact validations
+        typeof errors[key] == 'string' &&
+        errors[key].endsWith('does not match any of the allowed types')
+      ) {
+        errors[key] = undefined;
+      }
+    }
     Object.assign(obj, errors);
   }
   for (let key of keys) {
