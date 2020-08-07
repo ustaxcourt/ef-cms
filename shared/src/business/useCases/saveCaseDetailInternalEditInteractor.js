@@ -1,4 +1,8 @@
 const {
+  INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
+} = require('../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -8,7 +12,7 @@ const {
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { INITIAL_DOCUMENT_TYPES_MAP } = require('../entities/EntityConstants');
+const { Document } = require('../entities/Document');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -47,72 +51,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
       docketNumber,
     });
 
-  if (caseRecord.isPaper) {
-    for (const key of Object.keys(INITIAL_DOCUMENT_TYPES_MAP)) {
-      const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
-
-      const originalCaseDocument = caseRecord.documents.find(
-        doc => doc.documentType === documentType,
-      );
-      const currentCaseDocument = caseToUpdate.documents.find(
-        doc => doc.documentType === documentType,
-      );
-
-      if (originalCaseDocument && currentCaseDocument) {
-        if (
-          originalCaseDocument.documentId !== currentCaseDocument.documentId
-        ) {
-          originalCaseDocument.documentId = currentCaseDocument.documentId;
-          console.log('\n', '\n', caseRecord.documents, '\n');
-        }
-      }
-
-      // if (!originalCaseDocument && currentCaseDocument) {
-      //   // newly added pdf
-      // }
-
-      if (originalCaseDocument && !currentCaseDocument) {
-        caseRecord.documents = caseRecord.documents.filter(
-          item => item.documentId !== originalCaseDocument.documentId,
-        );
-        await applicationContext.getPersistenceGateway().deleteDocument({
-          applicationContext,
-          docketNumber: caseRecord.docketNumber,
-          documentId: originalCaseDocument.documentId,
-        });
-
-        await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
-          applicationContext,
-          key: originalCaseDocument.documentId,
-        });
-      }
-    }
-  } else {
-    const petitionDocument = caseEntityWithFormEdits.getPetitionDocument();
-
-    const initializeCaseWorkItem = petitionDocument.workItem;
-
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: initializeCaseWorkItem.validate().toRawObject(),
-    });
-
-    const workItemEntity = new WorkItem(
-      {
-        ...initializeCaseWorkItem,
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        caseIsInProgress: true,
-      },
-      { applicationContext },
-    );
-
-    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-      applicationContext,
-      workItem: workItemEntity.validate().toRawObject(),
-    });
-  }
-
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
     caseType: caseToUpdate.caseType,
@@ -143,37 +81,157 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     statistics: caseToUpdate.statistics,
   };
 
-  const caseRecordWithFormEdits = {
+  const caseWithFormEdits = {
     ...caseRecord,
     ...editableFields,
   };
 
-  if (!isEmpty(caseRecordWithFormEdits.contactPrimary)) {
-    caseRecordWithFormEdits.contactPrimary = ContactFactory.createContacts({
+  const caseEntity = new Case(caseWithFormEdits, {
+    applicationContext,
+  });
+
+  if (!isEmpty(caseWithFormEdits.contactPrimary)) {
+    caseWithFormEdits.contactPrimary = ContactFactory.createContacts({
       applicationContext,
-      contactInfo: { primary: caseRecordWithFormEdits.contactPrimary },
-      partyType: caseRecordWithFormEdits.partyType,
+      contactInfo: { primary: caseWithFormEdits.contactPrimary },
+      partyType: caseWithFormEdits.partyType,
     }).primary.toRawObject();
   }
 
-  if (!isEmpty(caseRecordWithFormEdits.contactSecondary)) {
-    caseRecordWithFormEdits.contactSecondary = ContactFactory.createContacts({
+  if (!isEmpty(caseWithFormEdits.contactSecondary)) {
+    caseWithFormEdits.contactSecondary = ContactFactory.createContacts({
       applicationContext,
-      contactInfo: { secondary: caseRecordWithFormEdits.contactSecondary },
-      partyType: caseRecordWithFormEdits.partyType,
+      contactInfo: { secondary: caseWithFormEdits.contactSecondary },
+      partyType: caseWithFormEdits.partyType,
     }).secondary.toRawObject();
   }
 
-  const caseEntityWithFormEdits = new Case(caseRecordWithFormEdits, {
-    applicationContext,
-  });
+  if (caseEntity.isPaper) {
+    await updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser,
+      caseRecord: caseEntity,
+      caseToUpdate,
+    });
+  } else {
+    const petitionDocument = caseEntity.getPetitionDocument();
+
+    const initializeCaseWorkItem = petitionDocument.workItem;
+
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: initializeCaseWorkItem.validate().toRawObject(),
+    });
+
+    const workItemEntity = new WorkItem(
+      {
+        ...initializeCaseWorkItem,
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        caseIsInProgress: true,
+      },
+      { applicationContext },
+    );
+
+    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    });
+  }
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
     .updateCase({
       applicationContext,
-      caseToUpdate: caseEntityWithFormEdits.validate().toRawObject(),
+      caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
+};
+
+const addNewInitialFilingToCase = ({
+  applicationContext,
+  authorizedUser,
+  caseRecord,
+  currentCaseDocument,
+  documentType,
+}) => {
+  const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
+    dt => dt.documentType === documentType,
+  );
+  // newly added pdf
+  const documentToAdd = new Document(
+    {
+      ...currentCaseDocument,
+      eventCode,
+      ...caseRecord.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
+      userId: authorizedUser.userId,
+    },
+    { applicationContext },
+  );
+  caseRecord.documents.push(documentToAdd);
+};
+
+const deleteInitialFilingFromCase = async ({
+  applicationContext,
+  caseRecord,
+  originalCaseDocument,
+}) => {
+  caseRecord.documents = caseRecord.documents.filter(
+    item => item.documentId !== originalCaseDocument.documentId,
+  );
+  await applicationContext.getPersistenceGateway().deleteDocument({
+    applicationContext,
+    docketNumber: caseRecord.docketNumber,
+    documentId: originalCaseDocument.documentId,
+  });
+
+  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+    applicationContext,
+    key: originalCaseDocument.documentId,
+  });
+};
+
+const updateInitialFilingDocuments = async ({
+  applicationContext,
+  authorizedUser,
+  caseRecord,
+  caseToUpdate,
+}) => {
+  for (const key of Object.keys(INITIAL_DOCUMENT_TYPES_MAP)) {
+    const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
+    const originalCaseDocument = caseRecord.documents.find(
+      doc => doc.documentType === documentType,
+    );
+    const currentCaseDocument = caseToUpdate.documents.find(
+      doc => doc.documentType === documentType,
+    );
+
+    if (originalCaseDocument && currentCaseDocument) {
+      if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
+        originalCaseDocument.documentId = currentCaseDocument.documentId;
+      }
+    }
+
+    if (!originalCaseDocument && currentCaseDocument) {
+      addNewInitialFilingToCase({
+        applicationContext,
+        authorizedUser,
+        caseRecord,
+        currentCaseDocument,
+        documentType,
+      });
+    }
+
+    if (originalCaseDocument && !currentCaseDocument) {
+      await deleteInitialFilingFromCase({
+        applicationContext,
+        caseRecord,
+        originalCaseDocument,
+      });
+    }
+  }
 };
