@@ -83,7 +83,6 @@ async function run() {
       pattern: /^\d+[\w-]+\.js$/,
     },
     storage,
-    logging: true,
   });
 
   try {
