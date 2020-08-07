@@ -4,7 +4,39 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-exports.filePetitionFromPaperInteractor = async ({
+/**
+ * uploads a document and then immediately processes it to scan for viruses and validate the document.
+ *
+ * @param {object} document the documentFile
+ * @param {Function} onUploadProgress the progressFunction
+ * @returns {Promise<string>} the documentId returned from a successful upload
+ */
+export const uploadDocumentAndMakeSafe = async ({
+  applicationContext,
+  document,
+  onUploadProgress,
+}) => {
+  const documentId = await applicationContext
+    .getPersistenceGateway()
+    .uploadDocumentFromClient({
+      applicationContext,
+      document,
+      onUploadProgress,
+    });
+
+  await applicationContext.getUseCases().virusScanPdfInteractor({
+    applicationContext,
+    documentId,
+  });
+  await applicationContext.getUseCases().validatePdfInteractor({
+    applicationContext,
+    documentId,
+  });
+
+  return documentId;
+};
+
+export const filePetitionFromPaperInteractor = async ({
   applicationContext,
   applicationForWaiverOfFilingFeeFile,
   applicationForWaiverOfFilingFeeUploadProgress,
@@ -24,66 +56,46 @@ exports.filePetitionFromPaperInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  /**
-   * uploads a document and then immediately processes it to scan for viruses and validate the document.
-   *
-   * @param {object} document the documentFile
-   * @param {Function} onUploadProgress the progressFunction
-   * @returns {Promise<string>} the documentId returned from a successful upload
-   */
-  const uploadDocumentAndMakeSafe = async (document, onUploadProgress) => {
-    const documentId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocumentFromClient({
-        applicationContext,
-        document,
-        onUploadProgress,
-      });
-
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId,
-    });
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId,
-    });
-
-    return documentId;
-  };
-
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeFile) {
-    applicationForWaiverOfFilingFeeUpload = uploadDocumentAndMakeSafe(
-      applicationForWaiverOfFilingFeeFile,
-      applicationForWaiverOfFilingFeeUploadProgress,
-    );
+    applicationForWaiverOfFilingFeeUpload = uploadDocumentAndMakeSafe({
+      applicationContext,
+      document: applicationForWaiverOfFilingFeeFile,
+      onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
+    });
   }
 
-  const petitionFileUpload = uploadDocumentAndMakeSafe(
-    petitionFile,
-    petitionUploadProgress,
-  );
+  const petitionFileUpload = uploadDocumentAndMakeSafe({
+    applicationContext,
+    document: petitionFile,
+    onUploadProgress: petitionUploadProgress,
+  });
 
   let ownershipDisclosureFileUpload;
   if (ownershipDisclosureFile) {
-    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafe(
-      ownershipDisclosureFile,
-      ownershipDisclosureUploadProgress,
-    );
+    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafe({
+      applicationContext,
+      document: ownershipDisclosureFile,
+      onUploadProgress: ownershipDisclosureUploadProgress,
+    });
   }
 
   let stinFileUpload;
   if (stinFile) {
-    stinFileUpload = uploadDocumentAndMakeSafe(stinFile, stinUploadProgress);
+    stinFileUpload = uploadDocumentAndMakeSafe({
+      applicationContext,
+      document: stinFile,
+      onUploadProgress: stinUploadProgress,
+    });
   }
 
   let requestForPlaceOfTrialFileUpload;
   if (requestForPlaceOfTrialFile) {
-    requestForPlaceOfTrialFileUpload = uploadDocumentAndMakeSafe(
-      requestForPlaceOfTrialFile,
-      requestForPlaceOfTrialUploadProgress,
-    );
+    requestForPlaceOfTrialFileUpload = uploadDocumentAndMakeSafe({
+      applicationContext,
+      document: requestForPlaceOfTrialFile,
+      onUploadProgress: requestForPlaceOfTrialUploadProgress,
+    });
   }
 
   await Promise.all([
