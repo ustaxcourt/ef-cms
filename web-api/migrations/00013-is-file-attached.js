@@ -5,7 +5,7 @@ const { Document } = require('../../shared/src/business/entities/Document');
 
 const mutateRecord = async item => {
   if (isDocumentRecord(item)) {
-    console.log(`step 13: (${item.docktNumber} ${item.documentId}) isFileAttached: ${item.isFileAttached ? 'yes' : 'no'}`)
+    console.log(`step 13: (${item.docketNumber} ${item.documentId}) isFileAttached: ${typeof item.isFileAttached === 'undefined' ? 'undefined ': 'defined'}`)
     if (item.isFileAttached === undefined) {
       item.isFileAttached = true;
     }
