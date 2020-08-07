@@ -21,6 +21,11 @@ export const saveCaseDetailInternalEditAction = async ({
   } = applicationContext.getConstants();
   const caseToUpdate = props.formWithComputedDates;
 
+  console.log(
+    '-------- in action but should be same as formWithComputedDates',
+    { ...caseToUpdate.documents },
+  );
+
   //extract to interactor
 
   // things we could do

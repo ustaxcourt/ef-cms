@@ -14,5 +14,9 @@ export const getCaseAction = async ({ applicationContext, get, props }) => {
     applicationContext,
     docketNumber,
   });
+
+  console.log('-------getcaseaction SHOULD NOT HAVE 4 docs', {
+    ...caseDetail.documents,
+  });
   return { caseDetail };
 };

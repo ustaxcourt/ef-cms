@@ -212,6 +212,12 @@ const updateInitialFilingDocuments = async ({
     if (originalCaseDocument && currentCaseDocument) {
       if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
         originalCaseDocument.documentId = currentCaseDocument.documentId;
+        await deleteInitialFilingFromCase({
+          applicationContext,
+          caseRecord,
+          originalCaseDocument,
+        });
+        //fixme caserecor.documents
       }
     }
 
