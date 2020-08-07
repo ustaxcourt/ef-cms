@@ -26,20 +26,20 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
-    const input = document.querySelector(`#${name}-date`);
+    const input = document.getElementById(`${name}-date`);
     if (!input) return;
     if (value.indexOf('-') > -1) {
       const [year, month, day] = value.split('-');
-      document.querySelector(`#${name}-date`).value = `${month}/${day}/${year}`;
+      input.value = `${month}/${day}/${year}`;
     } else {
-      document.querySelector(`#${name}-date`).value = value;
+      input.value = value;
     }
   }, [value]);
 
   useEffect(() => {
     if (values && values.month && values.day && values.year) {
-      document.querySelector(
-        `#${name}-date`,
+      document.getElementById(
+        `${name}-date`,
       ).value = `${values.month}/${values.day}/${values.year}`;
     }
   }, [values]);
