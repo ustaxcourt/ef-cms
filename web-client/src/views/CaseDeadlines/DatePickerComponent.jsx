@@ -76,15 +76,13 @@ export const DatePickerComponent = ({
       errorText={errorText}
       formGroupRef={datePickerRef}
     >
-      {!hideLegend && (
-        <label
-          className={classNames('usa-label', hideLegend && 'usa-sr-only')}
-          htmlFor={`${name}-date`}
-          id={`${name}-date-label`}
-        >
-          {label} {optional && <span className="usa-hint">(optional)</span>}
-        </label>
-      )}
+      <label
+        className={classNames('usa-label', hideLegend && 'usa-sr-only')}
+        htmlFor={`${name}-date`}
+        id={`${name}-date-label`}
+      >
+        {label} {optional && <span className="usa-hint">(optional)</span>}
+      </label>
       <div className="usa-hint" id={`${name}-date-hint`}>
         MM/DD/YYYY
       </div>
