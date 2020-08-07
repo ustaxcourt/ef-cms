@@ -206,6 +206,17 @@ describe('Case entity', () => {
     });
   });
 
+  describe('formattedDocketNumber', () => {
+    it('formats docket numbers with leading zeroes', () => {
+      const docketNumber = '00000456-19';
+      expect(Case.formatDocketNumber(docketNumber)).toEqual('456-19');
+    });
+    it('does not alter properly-formatted docket numbers', () => {
+      const docketNumber = '123456-19';
+      expect(Case.formatDocketNumber(docketNumber)).toEqual(docketNumber);
+    });
+  });
+
   describe('filtered', () => {
     it('does not return private data if filtered is true and the user is external', () => {
       applicationContext.getCurrentUser.mockReturnValue(
