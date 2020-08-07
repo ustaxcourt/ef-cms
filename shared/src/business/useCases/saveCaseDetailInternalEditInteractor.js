@@ -7,7 +7,9 @@ const {
   UnprocessableEntityError,
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { INITIAL_DOCUMENT_TYPES_MAP } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -25,6 +27,8 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   caseToUpdate,
   docketNumber,
 }) => {
+  console.log('casetoupdate ', caseToUpdate);
+
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -69,7 +73,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     statistics: caseToUpdate.statistics,
   };
 
-  const theCase = await applicationContext
+  const caseBeforeEdits = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -77,7 +81,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     });
 
   const fullCase = {
-    ...theCase,
+    ...caseBeforeEdits,
     ...editableFields,
   };
 
@@ -97,9 +101,57 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     }).secondary.toRawObject();
   }
 
-  const caseEntity = new Case(fullCase, { applicationContext }).validate();
+  if (fullCase.isPaper) {
+    // get current caseEntity in persistence
+    const caseEntity = new CaseInternal(fullCase, {
+      applicationContext,
+    }).validate();
 
-  if (!caseEntity.isPaper) {
+    // loop through INITIAL_DOCUMENTS_MAP (documentTYpe)
+    const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
+
+    // for the documentType, if originalCaseEntity.documents[documentType].documentId !== caseEntity.documents[documentType].documentId
+    for (const key of keys) {
+      const { documentType } = INITIAL_DOCUMENT_TYPES_MAP[key];
+
+      const originalCaseDocument = caseBeforeEdits.documents.find(
+        doc => doc.documentType === documentType,
+      );
+
+      // application for waiver of filing fee file
+      const currentCaseDocument = caseToUpdate[key];
+
+      if (originalCaseDocument && currentCaseDocument) {
+        if (
+          originalCaseDocument.documentId === currentCaseDocument.documentId
+        ) {
+          // do nothing
+        } else {
+          // replace document
+          await applicationContext
+            .getPersistenceGateway()
+            .saveDocumentFromLambda({
+              applicationContext,
+              document: currentCaseDocument,
+              documentId: originalCaseDocument.documentId,
+            });
+        }
+      }
+
+      if (!originalCaseDocument && currentCaseDocument) {
+        // newly added pdf
+      }
+
+      if (originalCaseDocument && !currentCaseDocument) {
+        // remove pdf
+      }
+    }
+
+    // we know the pdf has changed
+    // remove and/or replace pdf
+  } else {
+    const caseEntity = new Case(fullCase, { applicationContext }).validate();
+
     const petitionDocument = caseEntity.getPetitionDocument();
 
     const initializeCaseWorkItem = petitionDocument.workItem;
