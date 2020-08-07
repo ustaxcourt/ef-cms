@@ -174,7 +174,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
   if (rawCase.docketNumber) {
-    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+    this.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
   }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
@@ -1587,6 +1587,18 @@ Case.sortByDocketNumber = function (cases) {
 Case.findLeadCaseForCases = function (cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
+};
+
+/**
+ * re-formats docket number with any leading zeroes removed
+ *
+ * @param {string} docketNumber the docket number to re-format
+ * @returns {string} the formatted docket Number
+ */
+Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
+  const leadingZeroes = /^0+/;
+  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
+  return formattedDocketNumber;
 };
 
 /**
