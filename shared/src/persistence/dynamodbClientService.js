@@ -145,7 +145,7 @@ exports.query = params => {
     })
     .promise()
     .then(result => {
-      result.Items.forEach(item => removeAWSGlobalFields(item));
+      result.Items.forEach(removeAWSGlobalFields);
       return result.Items;
     });
 };
@@ -193,6 +193,9 @@ exports.batchGet = async ({ applicationContext, keys }) => {
  * @returns {Promise} the promise of the persistence call
  */
 exports.batchWrite = ({ applicationContext, items }) => {
+  if (!items || items.length === 0) {
+    return Promise.resolve();
+  }
   return applicationContext
     .getDocumentClient()
     .batchWrite({
@@ -221,6 +224,9 @@ exports.batchWrite = ({ applicationContext, items }) => {
  * @returns {Promise} the promise of the persistence call
  */
 exports.batchDelete = ({ applicationContext, items }) => {
+  if (!items || items.length === 0) {
+    return Promise.resolve();
+  }
   return applicationContext
     .getDocumentClient()
     .batchWrite({
