@@ -70,7 +70,7 @@ describe('removePdfFromCaseAction', () => {
     });
   });
 
-  it('resets the preferredTrialCity and orderDesignationPlaceOfTrial when a RQT is removed', async () => {
+  it('resets the preferredTrialCity and orderDesignatingPlaceOfTrial when a RQT is removed', async () => {
     const { output } = await runAction(removePdfFromCaseAction, {
       modules: {
         presenter,
