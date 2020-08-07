@@ -1,14 +1,23 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
 
 export const DateRangePickerComponent = ({
+  endDateErrorText,
   endLabel,
   endName,
+  endPickerCls,
   onChangeEnd,
   onChangeStart,
+  pickerSpacer,
+  rangePickerCls,
+  showHint,
+  startDateErrorText,
   startLabel,
   startName,
+  startPickerCls,
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -36,10 +45,17 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
+  const Spacer = pickerSpacer;
+  const displayHint = showHint !== undefined ? showHint : true;
+
   return (
-    <>
-      <div className="usa-date-range-picker" ref={dateRangePickerRef}>
-        <div className="usa-form-group" ref={startDatePickerRef}>
+    <FormGroup formGroupRef={dateRangePickerRef}>
+      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
+        <FormGroup
+          className={startPickerCls}
+          errorText={startDateErrorText}
+          formGroupRef={startDatePickerRef}
+        >
           <label
             className="usa-label"
             htmlFor={`${startName}-date-start`}
@@ -47,9 +63,11 @@ export const DateRangePickerComponent = ({
           >
             {startLabel || 'Start date'}
           </label>
-          <div className="usa-hint" id={`${startName}-date-start-hint`}>
-            MM/DD/YYYY
-          </div>
+          {displayHint && (
+            <div className="usa-hint" id={`${startName}-date-start-hint`}>
+              MM/DD/YYYY
+            </div>
+          )}
           <div className="usa-date-picker">
             <input
               aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
@@ -60,31 +78,39 @@ export const DateRangePickerComponent = ({
               type="text"
             />
           </div>
-        </div>
+        </FormGroup>
 
-        <div className="usa-form-group" ref={endDatePickerRef}>
+        {Spacer && <Spacer />}
+
+        <FormGroup
+          className={endPickerCls}
+          errorText={endDateErrorText}
+          formGroupRef={endDatePickerRef}
+        >
           <label
             className="usa-label"
-            htmlFor={`${endName}-date-start`}
-            id={`${endName}-date-start-label`}
+            htmlFor={`${endName}-date-end`}
+            id={`${endName}-date-end-label`}
           >
             {endLabel || 'End date'}
           </label>
-          <div className="usa-hint" id={`${endName}-date-start-hint`}>
-            MM/DD/YYYY
-          </div>
+          {displayHint && (
+            <div className="usa-hint" id={`${endName}-date-end-hint`}>
+              MM/DD/YYYY
+            </div>
+          )}
           <div className="usa-date-picker">
             <input
-              aria-describedby={`${endName}-date-start-label ${endName}-date-start-hint`}
+              aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
               className="usa-input"
-              id={`${endName}-date-start`}
-              name={`${endName}-date-start`}
+              id={`${endName}-date-end`}
+              name={`${endName}-date-end`}
               ref={endDateInputRef}
               type="text"
             />
           </div>
-        </div>
+        </FormGroup>
       </div>
-    </>
+    </FormGroup>
   );
 };
