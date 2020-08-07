@@ -72,7 +72,7 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
   sessionType: 'Select a session type',
   startDate: [
     {
-      contains: 'must be larger than or equal to',
+      contains: 'must be greater than or equal to',
       message: 'Enter a valid start date',
     },
     'Enter a valid start date',
