@@ -324,7 +324,7 @@ describe('Case journey', () => {
   });
 
   it('Docketclerk searches for correspondence case by updated petitioner name and finds it', async () => {
-    await wait(15000);
+    await wait(20000);
 
     await test.runSequence('gotoAdvancedSearchSequence');
 
