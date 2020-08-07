@@ -1,14 +1,18 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 
 export const DatePickerComponent = ({
+  className,
   errorText,
+  hideLegend,
   label,
   name,
   names,
   onBlur,
   onChange,
+  optional,
   value = '',
   values,
 }) => {
@@ -67,14 +71,20 @@ export const DatePickerComponent = ({
   }, [inputRef]);
 
   return (
-    <FormGroup errorText={errorText} formGroupRef={datePickerRef}>
-      <label
-        className="usa-label"
-        htmlFor={`${name}-date`}
-        id={`${name}-date-label`}
-      >
-        {label}
-      </label>
+    <FormGroup
+      className={className}
+      errorText={errorText}
+      formGroupRef={datePickerRef}
+    >
+      {!hideLegend && (
+        <label
+          className={classNames('usa-label', hideLegend && 'usa-sr-only')}
+          htmlFor={`${name}-date`}
+          id={`${name}-date-label`}
+        >
+          {label} {optional && <span className="usa-hint">(optional)</span>}
+        </label>
+      )}
       <div className="usa-hint" id={`${name}-date-hint`}>
         MM/DD/YYYY
       </div>

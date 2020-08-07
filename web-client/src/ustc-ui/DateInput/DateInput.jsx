@@ -5,10 +5,13 @@ export const DateInput = props => {
   const {
     errorText,
     id,
+    className,
     label,
     onBlur = () => {},
     onChange = () => {},
     value,
+    hideLegend,
+    optional,
     values = null,
     names = {
       day: 'day',
@@ -19,10 +22,13 @@ export const DateInput = props => {
 
   return (
     <DatePickerComponent
+      className={className}
       errorText={errorText}
+      hideLegend={hideLegend}
       label={label}
       name={id}
       names={names}
+      optional={optional}
       value={value}
       values={values}
       onBlur={onBlur}
