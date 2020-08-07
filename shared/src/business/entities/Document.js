@@ -54,7 +54,13 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
       rawDocument.pending === undefined
         ? Document.isPendingOnCreation(rawDocument)
         : rawDocument.pending;
-    this.previousDocument = rawDocument.previousDocument;
+    if (rawDocument.previousDocument) {
+      this.previousDocument = {
+        documentId: rawDocument.previousDocument.documentId,
+        documentTitle: rawDocument.previousDocument.documentTitle,
+        documentType: rawDocument.previousDocument.documentType,
+      };
+    }
     this.processingStatus = rawDocument.processingStatus || 'pending';
     this.qcAt = rawDocument.qcAt;
     this.qcByUserId = rawDocument.qcByUserId;
@@ -342,7 +348,22 @@ Document.VALIDATION_RULES = joi.object().keys({
     .optional()
     .description('Use the secondary contact to compose the filedBy text.'),
   pending: joi.boolean().optional(),
-  previousDocument: joi.object().optional(),
+  previousDocument: joi
+    .object()
+    .keys({
+      documentId: JoiValidationConstants.UUID.optional().description(
+        'The ID of the previous document.',
+      ),
+      documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+        'The title of the previous document.',
+      ),
+      documentType: joi
+        .string()
+        .valid(...ALL_DOCUMENT_TYPES)
+        .optional()
+        .description('The type of the previous document.'),
+    })
+    .optional(),
   privatePractitioners: joi // TODO: limit keys
     .array()
     .items({ name: joi.string().max(100).required() })
