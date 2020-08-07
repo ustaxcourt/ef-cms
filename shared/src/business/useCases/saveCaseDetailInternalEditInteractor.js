@@ -40,7 +40,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     throw new UnprocessableEntityError();
   }
 
-  const caseRecord = await applicationContext
+  let caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -71,9 +71,21 @@ exports.saveCaseDetailInternalEditInteractor = async ({
       //   // newly added pdf
       // }
 
-      // if (originalCaseDocument && !currentCaseDocument) {
-      //   // remove pdf
-      // }
+      if (originalCaseDocument && !currentCaseDocument) {
+        caseRecord.documents = caseRecord.documents.filter(
+          item => item.documentId !== originalCaseDocument.documentId,
+        );
+        await applicationContext.getPersistenceGateway().deleteDocument({
+          applicationContext,
+          docketNumber: caseRecord.docketNumber,
+          documentId: originalCaseDocument.documentId,
+        });
+
+        await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+          applicationContext,
+          key: originalCaseDocument.documentId,
+        });
+      }
     }
   } else {
     const petitionDocument = caseEntityWithFormEdits.getPetitionDocument();
