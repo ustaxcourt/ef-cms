@@ -157,6 +157,8 @@ exports.processStreamRecordsInteractor = async ({
     records: recordsToProcess,
   });
 
+  console.log('processing', filteredRecords);
+
   if (filteredRecords.length) {
     try {
       const {
@@ -230,6 +232,8 @@ exports.processStreamRecordsInteractor = async ({
   }
 
   const removeRecords = getRemoveRecords({ records: recordsToProcess });
+
+  console.log('removing', filteredRecords);
 
   if (removeRecords.length) {
     try {
