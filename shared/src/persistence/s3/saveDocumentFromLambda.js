@@ -9,7 +9,6 @@ exports.saveDocumentFromLambda = ({
   if (useTempBucket) {
     Bucket = applicationContext.getTempDocumentsBucketName();
   }
-  console.log('*_*_*_*_*_*_*_ we are in here', key, Bucket);
   return applicationContext
     .getStorageClient()
     .putObject({

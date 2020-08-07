@@ -17,12 +17,11 @@ export const saveCaseDetailInternalEditAction = async ({
   store,
 }) => {
   const {
-    INITIAL_DOCUMENT_TYPES,
     INITIAL_DOCUMENT_TYPES_MAP,
     STATUS_TYPES,
   } = applicationContext.getConstants();
   const { formWithComputedDates } = props;
-  const caseToUpdate = formWithComputedDates || get(state.form);
+  const caseToUpdate = props.caseDetail;
 
   //extract to interactor
 
@@ -42,6 +41,8 @@ export const saveCaseDetailInternalEditAction = async ({
     store,
   );
 
+  console.log('before ', caseToUpdate.documents);
+
   for (const key of keys) {
     if (caseToUpdate[key]) {
       const newDocumentId = await applicationContext
@@ -53,12 +54,13 @@ export const saveCaseDetailInternalEditAction = async ({
         });
 
       caseToUpdate.documents.push({
+        documentId: newDocumentId,
         documentType: INITIAL_DOCUMENT_TYPES_MAP[key],
-        newDocumentId,
       });
     }
   }
-  //
+
+  console.log('update ', { ...caseToUpdate.documents });
 
   const caseDetail = await applicationContext
     .getUseCases()

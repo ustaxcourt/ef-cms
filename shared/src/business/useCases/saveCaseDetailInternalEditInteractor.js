@@ -7,7 +7,6 @@ const {
   UnprocessableEntityError,
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
-const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { INITIAL_DOCUMENT_TYPES_MAP } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
@@ -27,8 +26,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   caseToUpdate,
   docketNumber,
 }) => {
-  console.log('casetoupdate ', caseToUpdate);
-
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -41,6 +38,67 @@ exports.saveCaseDetailInternalEditInteractor = async ({
 
   if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();
+  }
+
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  if (caseRecord.isPaper) {
+    for (const key of Object.keys(INITIAL_DOCUMENT_TYPES_MAP)) {
+      const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
+
+      const originalCaseDocument = caseRecord.documents.find(
+        doc => doc.documentType === documentType,
+      );
+      const currentCaseDocument = caseToUpdate.documents.find(
+        doc => doc.documentType === documentType,
+      );
+
+      if (originalCaseDocument && currentCaseDocument) {
+        if (
+          originalCaseDocument.documentId !== currentCaseDocument.documentId
+        ) {
+          originalCaseDocument.documentId = currentCaseDocument.documentId;
+          console.log('\n', '\n', caseRecord.documents, '\n');
+        }
+      }
+
+      // if (!originalCaseDocument && currentCaseDocument) {
+      //   // newly added pdf
+      // }
+
+      // if (originalCaseDocument && !currentCaseDocument) {
+      //   // remove pdf
+      // }
+    }
+  } else {
+    const petitionDocument = caseEntityWithFormEdits.getPetitionDocument();
+
+    const initializeCaseWorkItem = petitionDocument.workItem;
+
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: initializeCaseWorkItem.validate().toRawObject(),
+    });
+
+    const workItemEntity = new WorkItem(
+      {
+        ...initializeCaseWorkItem,
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        caseIsInProgress: true,
+      },
+      { applicationContext },
+    );
+
+    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    });
   }
 
   const editableFields = {
@@ -73,107 +131,36 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     statistics: caseToUpdate.statistics,
   };
 
-  const caseBeforeEdits = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  const fullCase = {
-    ...caseBeforeEdits,
+  const caseRecordWithFormEdits = {
+    ...caseRecord,
     ...editableFields,
   };
 
-  if (!isEmpty(fullCase.contactPrimary)) {
-    fullCase.contactPrimary = ContactFactory.createContacts({
+  if (!isEmpty(caseRecordWithFormEdits.contactPrimary)) {
+    caseRecordWithFormEdits.contactPrimary = ContactFactory.createContacts({
       applicationContext,
-      contactInfo: { primary: fullCase.contactPrimary },
-      partyType: fullCase.partyType,
+      contactInfo: { primary: caseRecordWithFormEdits.contactPrimary },
+      partyType: caseRecordWithFormEdits.partyType,
     }).primary.toRawObject();
   }
 
-  if (!isEmpty(fullCase.contactSecondary)) {
-    fullCase.contactSecondary = ContactFactory.createContacts({
+  if (!isEmpty(caseRecordWithFormEdits.contactSecondary)) {
+    caseRecordWithFormEdits.contactSecondary = ContactFactory.createContacts({
       applicationContext,
-      contactInfo: { secondary: fullCase.contactSecondary },
-      partyType: fullCase.partyType,
+      contactInfo: { secondary: caseRecordWithFormEdits.contactSecondary },
+      partyType: caseRecordWithFormEdits.partyType,
     }).secondary.toRawObject();
   }
 
-  const caseEntity = new Case(fullCase, { applicationContext }).validate();
-
-  if (fullCase.isPaper) {
-    // get current caseEntity in persistence
-
-    // loop through INITIAL_DOCUMENTS_MAP (documentTYpe)
-    const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
-
-    // for the documentType, if originalCaseEntity.documents[documentType].documentId !== caseEntity.documents[documentType].documentId
-    for (const key of keys) {
-      const { documentType } = INITIAL_DOCUMENT_TYPES_MAP[key];
-
-      const originalCaseDocument = caseEntity.documents.find(
-        doc => doc.documentType === documentType,
-      );
-
-      // application for waiver of filing fee file
-      const currentCaseDocument = caseToUpdate[key];
-
-      if (originalCaseDocument && currentCaseDocument) {
-        if (
-          originalCaseDocument.documentId === currentCaseDocument.documentId
-        ) {
-          // do nothing
-        } else {
-          // replace documentid in case with the new one
-
-          originalCaseDocument.documentId = currentCaseDocument.documentId;
-        }
-      }
-
-      if (!originalCaseDocument && currentCaseDocument) {
-        // newly added pdf
-      }
-
-      if (originalCaseDocument && !currentCaseDocument) {
-        // remove pdf
-      }
-    }
-
-    // we know the pdf has changed
-    // remove and/or replace pdf
-  } else {
-    const petitionDocument = caseEntity.getPetitionDocument();
-
-    const initializeCaseWorkItem = petitionDocument.workItem;
-
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: initializeCaseWorkItem.validate().toRawObject(),
-    });
-
-    const workItemEntity = new WorkItem(
-      {
-        ...initializeCaseWorkItem,
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        caseIsInProgress: true,
-      },
-      { applicationContext },
-    );
-
-    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-      applicationContext,
-      workItem: workItemEntity.validate().toRawObject(),
-    });
-  }
+  const caseEntityWithFormEdits = new Case(caseRecordWithFormEdits, {
+    applicationContext,
+  });
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
     .updateCase({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntityWithFormEdits.validate().toRawObject(),
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
