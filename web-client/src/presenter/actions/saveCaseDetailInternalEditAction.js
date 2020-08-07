@@ -1,5 +1,4 @@
 import { setupPercentDone } from './createCaseFromPaperAction';
-import { state } from 'cerebral';
 
 /**
  * takes the state.caseDetail and updates it via the updateCase use case.
@@ -21,15 +20,7 @@ export const saveCaseDetailInternalEditAction = async ({
   } = applicationContext.getConstants();
   const caseToUpdate = props.formWithComputedDates;
 
-  console.log(
-    '-------- in action but should be same as formWithComputedDates',
-    { ...caseToUpdate.documents },
-  );
-
-  //extract to interactor
-
-  // things we could do
-
+  // TODO - refactor to an interactor
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
 
   const progressFunctions = setupPercentDone(

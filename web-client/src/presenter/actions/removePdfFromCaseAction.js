@@ -12,17 +12,12 @@ export const removePdfFromCaseAction = async ({ get }) => {
   const form = get(state.form);
   const documentId = get(state.documentId);
 
-  console.log('before remove ', { ...form.documents });
-
   (form.documents || []).some((document, idx) => {
     if (document.documentId === documentId) {
-      console.log('FOUND THIS ', document);
       form.documents.splice(idx, 1);
       return true;
     }
   });
-
-  console.log('after remove ', { ...form.documents });
 
   return {
     caseDetail: form,
