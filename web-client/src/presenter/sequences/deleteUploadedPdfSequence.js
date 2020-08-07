@@ -1,7 +1,7 @@
 import { clearModalSequence } from './clearModalSequence';
 import { clearPdfPreviewUrlAction } from '../actions/clearPdfPreviewUrlAction';
-import { deleteUploadedPdfAction } from '../actions/deleteUploadedPdfAction';
 import { getFormValueDocumentAction } from '../actions/getFormValueDocumentAction';
+import { removePdfFromCaseAction } from '../actions/removePdfFromCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
@@ -9,7 +9,7 @@ import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOr
 import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
 
 export const deleteUploadedPdfSequence = [
-  deleteUploadedPdfAction,
+  removePdfFromCaseAction,
   clearPdfPreviewUrlAction,
   setDocumentUploadModeSequence,
   clearModalSequence,
