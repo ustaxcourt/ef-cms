@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * gets the document size key, value pair based on props
  *
@@ -5,8 +7,10 @@
  * @param {object} providers.props the cerebral store used for getting the props.documentType and props.file
  * @returns {object} object containing the documentType and file
  */
-export const getFormValueDocumentSizeAction = ({ props }) => {
+export const getFormValueDocumentSizeAction = ({ get, props }) => {
   const { documentType, file } = props;
+
+  console.log(get(state.form));
 
   return {
     key: `${documentType}Size`,

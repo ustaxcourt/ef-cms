@@ -18,6 +18,8 @@ export const saveCaseDetailInternalEditAction = async ({
   const { formWithComputedDates } = props;
   const caseToUpdate = formWithComputedDates || get(state.form);
 
+  // upload documents
+
   const caseDetail = await applicationContext
     .getUseCases()
     .saveCaseDetailInternalEditInteractor({

@@ -4,39 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-/**
- * uploads a document and then immediately processes it to scan for viruses and validate the document.
- *
- * @param {object} document the documentFile
- * @param {Function} onUploadProgress the progressFunction
- * @returns {Promise<string>} the documentId returned from a successful upload
- */
-export const uploadDocumentAndMakeSafe = async ({
-  applicationContext,
-  document,
-  onUploadProgress,
-}) => {
-  const documentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocumentFromClient({
-      applicationContext,
-      document,
-      onUploadProgress,
-    });
-
-  await applicationContext.getUseCases().virusScanPdfInteractor({
-    applicationContext,
-    documentId,
-  });
-  await applicationContext.getUseCases().validatePdfInteractor({
-    applicationContext,
-    documentId,
-  });
-
-  return documentId;
-};
-
-export const filePetitionFromPaperInteractor = async ({
+exports.filePetitionFromPaperInteractor = async ({
   applicationContext,
   applicationForWaiverOfFilingFeeFile,
   applicationForWaiverOfFilingFeeUploadProgress,
@@ -58,44 +26,54 @@ export const filePetitionFromPaperInteractor = async ({
 
   let applicationForWaiverOfFilingFeeUpload;
   if (applicationForWaiverOfFilingFeeFile) {
-    applicationForWaiverOfFilingFeeUpload = uploadDocumentAndMakeSafe({
-      applicationContext,
-      document: applicationForWaiverOfFilingFeeFile,
-      onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
-    });
+    applicationForWaiverOfFilingFeeUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafe({
+        applicationContext,
+        document: applicationForWaiverOfFilingFeeFile,
+        onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
+      });
   }
 
-  const petitionFileUpload = uploadDocumentAndMakeSafe({
-    applicationContext,
-    document: petitionFile,
-    onUploadProgress: petitionUploadProgress,
-  });
+  const petitionFileUpload = applicationContext
+    .getUseCases()
+    .uploadDocumentAndMakeSafe({
+      applicationContext,
+      document: petitionFile,
+      onUploadProgress: petitionUploadProgress,
+    });
 
   let ownershipDisclosureFileUpload;
   if (ownershipDisclosureFile) {
-    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafe({
-      applicationContext,
-      document: ownershipDisclosureFile,
-      onUploadProgress: ownershipDisclosureUploadProgress,
-    });
+    ownershipDisclosureFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafe({
+        applicationContext,
+        document: ownershipDisclosureFile,
+        onUploadProgress: ownershipDisclosureUploadProgress,
+      });
   }
 
   let stinFileUpload;
   if (stinFile) {
-    stinFileUpload = uploadDocumentAndMakeSafe({
-      applicationContext,
-      document: stinFile,
-      onUploadProgress: stinUploadProgress,
-    });
+    stinFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafe({
+        applicationContext,
+        document: stinFile,
+        onUploadProgress: stinUploadProgress,
+      });
   }
 
   let requestForPlaceOfTrialFileUpload;
   if (requestForPlaceOfTrialFile) {
-    requestForPlaceOfTrialFileUpload = uploadDocumentAndMakeSafe({
-      applicationContext,
-      document: requestForPlaceOfTrialFile,
-      onUploadProgress: requestForPlaceOfTrialUploadProgress,
-    });
+    requestForPlaceOfTrialFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafe({
+        applicationContext,
+        document: requestForPlaceOfTrialFile,
+        onUploadProgress: requestForPlaceOfTrialUploadProgress,
+      });
   }
 
   await Promise.all([
