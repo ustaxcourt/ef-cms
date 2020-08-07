@@ -159,7 +159,6 @@ const addNewInitialFilingToCase = ({
   const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
     dt => dt.documentType === documentType,
   );
-  // newly added pdf
   const documentToAdd = new Document(
     {
       ...currentCaseDocument,

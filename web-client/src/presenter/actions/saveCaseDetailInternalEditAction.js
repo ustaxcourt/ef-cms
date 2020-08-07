@@ -39,8 +39,6 @@ export const saveCaseDetailInternalEditAction = async ({
     store,
   );
 
-  console.log('before ', caseToUpdate.documents);
-
   for (const key of keys) {
     if (caseToUpdate[key]) {
       const newDocumentId = await applicationContext
@@ -57,8 +55,6 @@ export const saveCaseDetailInternalEditAction = async ({
       });
     }
   }
-
-  console.log('update ', { ...caseToUpdate.documents });
 
   const caseDetail = await applicationContext
     .getUseCases()
