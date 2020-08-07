@@ -44,7 +44,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     throw new UnprocessableEntityError();
   }
 
-  let caseRecord = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -110,7 +110,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     await updateInitialFilingDocuments({
       applicationContext,
       authorizedUser,
-      caseRecord: caseEntity,
+      caseEntity,
       caseToUpdate,
     });
   } else {
@@ -152,39 +152,49 @@ exports.saveCaseDetailInternalEditInteractor = async ({
 const addNewInitialFilingToCase = ({
   applicationContext,
   authorizedUser,
-  caseRecord,
+  caseEntity,
   currentCaseDocument,
   documentType,
 }) => {
   const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
     dt => dt.documentType === documentType,
   );
+
+  let partySecondary = false;
+  if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
+    partySecondary = true;
+  }
+
   const documentToAdd = new Document(
     {
       ...currentCaseDocument,
       eventCode,
-      ...caseRecord.getCaseContacts({
+      partyPrimary: true,
+      partySecondary,
+      userId: authorizedUser.userId,
+      ...caseEntity.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
       }),
-      userId: authorizedUser.userId,
     },
     { applicationContext },
   );
-  caseRecord.documents.push(documentToAdd);
+
+  caseEntity.documents.push(documentToAdd);
 };
 
 const deleteInitialFilingFromCase = async ({
   applicationContext,
-  caseRecord,
+  caseEntity,
   originalCaseDocument,
 }) => {
-  caseRecord.documents = caseRecord.documents.filter(
+  caseEntity.documents = caseEntity.documents.filter(
     item => item.documentId !== originalCaseDocument.documentId,
   );
+
   await applicationContext.getPersistenceGateway().deleteDocument({
     applicationContext,
-    docketNumber: caseRecord.docketNumber,
+    docketNumber: caseEntity.docketNumber,
     documentId: originalCaseDocument.documentId,
   });
 
@@ -197,35 +207,41 @@ const deleteInitialFilingFromCase = async ({
 const updateInitialFilingDocuments = async ({
   applicationContext,
   authorizedUser,
-  caseRecord,
+  caseEntity,
   caseToUpdate,
 }) => {
   for (const key of Object.keys(INITIAL_DOCUMENT_TYPES_MAP)) {
     const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
-    const originalCaseDocument = caseRecord.documents.find(
+    const originalCaseDocument = caseEntity.documents.find(
       doc => doc.documentType === documentType,
     );
     const currentCaseDocument = caseToUpdate.documents.find(
       doc => doc.documentType === documentType,
     );
 
-    if (originalCaseDocument && currentCaseDocument) {
-      if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
-        originalCaseDocument.documentId = currentCaseDocument.documentId;
-        await deleteInitialFilingFromCase({
-          applicationContext,
-          caseRecord,
-          originalCaseDocument,
-        });
-        //fixme caserecor.documents
-      }
-    }
+    // if (originalCaseDocument && currentCaseDocument) {
+    //   if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
+    //     originalCaseDocument.documentId = currentCaseDocument.documentId;
+    //     addNewInitialFilingToCase({
+    //       applicationContext,
+    //       authorizedUser,
+    //       caseEntity,
+    //       currentCaseDocument,
+    //       documentType,
+    //     });
+    //     await deleteInitialFilingFromCase({
+    //       applicationContext,
+    //       caseEntity,
+    //       originalCaseDocument,
+    //     });
+    //   }
+    // }
 
     if (!originalCaseDocument && currentCaseDocument) {
       addNewInitialFilingToCase({
         applicationContext,
         authorizedUser,
-        caseRecord,
+        caseEntity,
         currentCaseDocument,
         documentType,
       });
@@ -234,7 +250,7 @@ const updateInitialFilingDocuments = async ({
     if (originalCaseDocument && !currentCaseDocument) {
       await deleteInitialFilingFromCase({
         applicationContext,
-        caseRecord,
+        caseEntity,
         originalCaseDocument,
       });
     }
