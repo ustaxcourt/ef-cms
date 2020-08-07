@@ -7,6 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setCaseOnFormAction = async ({ props, store }) => {
+export const setCaseOnFormAction = async ({ get, props, store }) => {
   store.set(state.form, props.caseDetail);
+
+  console.log('state.form.documents', { ...get(state.form.documents) });
 };
