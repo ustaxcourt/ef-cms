@@ -152,12 +152,41 @@ exports.processStreamRecordsInteractor = async ({
 }) => {
   applicationContext.logger.info('Time', createISODateString());
 
+  const removeRecords = getRemoveRecords({ records: recordsToProcess });
+
+  if (removeRecords.length) {
+    try {
+      const {
+        failedRecords,
+      } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
+        applicationContext,
+        records: removeRecords,
+      });
+
+      if (failedRecords.length) {
+        for (const failedRecord of failedRecords) {
+          try {
+            await applicationContext.getPersistenceGateway().deleteRecord({
+              applicationContext,
+              indexName: failedRecord['_index'],
+              recordId: failedRecord['_id'],
+            });
+          } catch (e) {
+            applicationContext.logger.info('Error', e);
+            await applicationContext.notifyHoneybadger(e);
+          }
+        }
+      }
+    } catch (e) {
+      applicationContext.logger.info('Error', e);
+      await applicationContext.notifyHoneybadger(e);
+    }
+  }
+
   const filteredRecords = await filterRecords({
     applicationContext,
     records: recordsToProcess,
   });
-
-  console.log('processing', filteredRecords);
 
   if (filteredRecords.length) {
     try {
@@ -228,39 +257,6 @@ exports.processStreamRecordsInteractor = async ({
           await applicationContext.notifyHoneybadger(e);
         }
       }
-    }
-  }
-
-  const removeRecords = getRemoveRecords({ records: recordsToProcess });
-
-  console.log('removing', filteredRecords);
-
-  if (removeRecords.length) {
-    try {
-      const {
-        failedRecords,
-      } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
-        applicationContext,
-        records: removeRecords,
-      });
-
-      if (failedRecords.length) {
-        for (const failedRecord of failedRecords) {
-          try {
-            await applicationContext.getPersistenceGateway().deleteRecord({
-              applicationContext,
-              indexName: failedRecord['_index'],
-              recordId: failedRecord['_id'],
-            });
-          } catch (e) {
-            applicationContext.logger.info('Error', e);
-            await applicationContext.notifyHoneybadger(e);
-          }
-        }
-      }
-    } catch (e) {
-      applicationContext.logger.info('Error', e);
-      await applicationContext.notifyHoneybadger(e);
     }
   }
 
