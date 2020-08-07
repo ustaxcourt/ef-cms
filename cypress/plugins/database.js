@@ -15,6 +15,8 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
+const CHUNK_SIZE = 25;
+
 const clearDatabase = async () => {
   let hasMoreResults = true;
   let lastKey = null;
@@ -32,9 +34,12 @@ const clearDatabase = async () => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
 
-        const chunks = chunk(results.Items, 25);
+        const chunks = chunk(
+          results.Items.filter(i => i.length > 0),
+          CHUNK_SIZE,
+        );
         for (let c of chunks) {
-          count += 25;
+          count += CHUNK_SIZE;
           console.log(`deleting chunk: ${count} total deleted`);
 
           await documentClient

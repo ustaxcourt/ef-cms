@@ -186,6 +186,17 @@ describe('dynamodbClientService', function () {
         },
       });
     });
+
+    it('should NOT call client.batchWrite if when items is undefined', async () => {
+      await batchWrite({
+        applicationContext,
+        item: undefined,
+        tableName: 'a',
+      });
+      expect(
+        applicationContext.getDocumentClient().batchWrite,
+      ).not.toHaveBeenCalled();
+    });
   });
 
   describe('delete', () => {
