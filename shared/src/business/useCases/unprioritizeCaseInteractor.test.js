@@ -13,18 +13,20 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should set the highPriority flag to false and remove the highPriorityReason and call updateCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue(
-      Promise.resolve({
-        ...MOCK_CASE,
-        highPriority: true,
-        highPriorityReason: 'because',
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      }),
-    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          highPriority: true,
+          highPriorityReason: 'because',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
 
     const result = await unprioritizeCaseInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(result).toMatchObject({
@@ -41,23 +43,25 @@ describe('unprioritizeCaseInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .updateCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should set the highPriority flag to false and remove the highPriorityReason and call deleteCaseTrialSortMappingRecords if the case status is NOT ready for trial', async () => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue(
-      Promise.resolve({
-        ...MOCK_CASE,
-        highPriority: true,
-        highPriorityReason: 'because',
-        status: CASE_STATUS_TYPES.new,
-      }),
-    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          highPriority: true,
+          highPriorityReason: 'because',
+          status: CASE_STATUS_TYPES.new,
+        }),
+      );
 
     const result = await unprioritizeCaseInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(result).toMatchObject({
@@ -74,8 +78,8 @@ describe('unprioritizeCaseInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
@@ -84,7 +88,7 @@ describe('unprioritizeCaseInteractor', () => {
     await expect(
       unprioritizeCaseInteractor({
         applicationContext,
-        caseId: '123',
+        docketNumber: '123-20',
       }),
     ).rejects.toThrow('Unauthorized');
   });

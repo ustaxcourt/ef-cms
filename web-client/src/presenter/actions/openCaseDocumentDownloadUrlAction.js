@@ -12,13 +12,13 @@ export const openCaseDocumentDownloadUrlAction = async ({
   props,
   store,
 }) => {
-  const { caseId, documentId, isForIFrame, isPublic } = props;
+  const { docketNumber, documentId, isForIFrame, isPublic } = props;
 
   const {
     url,
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
-    caseId,
+    docketNumber,
     documentId,
     isPublic,
   });

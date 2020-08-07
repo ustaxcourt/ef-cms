@@ -14,11 +14,13 @@ const { User } = require('../entities/User');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.docketNumber the docket number of the case containing the document
+ * @param {string} providers.documentId the id of the document
  * @returns {Array<string>} the filing type options based on user role
  */
 exports.getDownloadPolicyUrlInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -33,9 +35,9 @@ exports.getDownloadPolicyUrlInteractor = async ({
   if (!isInternalUser && !isIrsSuperuser) {
     const caseData = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
 
     const caseEntity = new Case(caseData, { applicationContext });
@@ -72,7 +74,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
           .getPersistenceGateway()
           .verifyCaseForUser({
             applicationContext,
-            caseId,
+            docketNumber: caseEntity.docketNumber,
             userId: user.userId,
           });
 
@@ -84,9 +86,9 @@ exports.getDownloadPolicyUrlInteractor = async ({
   } else if (isIrsSuperuser) {
     const caseData = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
 
     const caseEntity = new Case(caseData, { applicationContext });

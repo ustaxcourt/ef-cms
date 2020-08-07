@@ -32,7 +32,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
   it('should delete the specified correspondence document from s3', async () => {
     await deleteCorrespondenceDocumentInteractor({
       applicationContext,
-      caseId: '111',
+      docketNumber: '101-20',
       documentId: 'abc',
     });
 
@@ -47,7 +47,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
   it('should delete the specified correspondence document from the case', async () => {
     await deleteCorrespondenceDocumentInteractor({
       applicationContext,
-      caseId: '111',
+      docketNumber: '101-20',
       documentId: 'abc',
     });
 
@@ -55,7 +55,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().deleteCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '111',
+      docketNumber: '101-20',
       documentId: 'abc',
     });
   });

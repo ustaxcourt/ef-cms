@@ -23,7 +23,7 @@ describe('deleteOtherStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '101-19',
+          docketNumber: '101-19',
         },
       },
     });
@@ -44,7 +44,7 @@ describe('deleteOtherStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '101-19',
+          docketNumber: '101-19',
         },
       },
     });

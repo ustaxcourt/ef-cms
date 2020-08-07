@@ -8,15 +8,15 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.removeConsolidatedCasesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const caseIdsToRemove = (
-      event.queryStringParameters.caseIdsToRemove || ''
+    const docketNumbersToRemove = (
+      event.queryStringParameters.docketNumbersToRemove || ''
     ).split(',');
 
     return await applicationContext
       .getUseCases()
       .removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
-        caseIdsToRemove,
+        ...event.pathParameters,
+        docketNumbersToRemove,
       });
   });

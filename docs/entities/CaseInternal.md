@@ -38,6 +38,28 @@
         - "Passport"
         - "Whistleblower"
         - "Worker Classification"
+    contactPrimary: 
+      type: "object"
+      flags: 
+        presence: "required"
+    contactSecondary: 
+      type: "object"
+      flags: 
+        presence: "optional"
+      allow: 
+        - null
+    filingType: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "optional"
+      allow: 
+        - "Myself"
+        - "Myself and my spouse"
+        - "A business"
+        - "Other"
+        - "Individual petitioner"
+        - "Petitioner and spouse"
     hasVerifiedIrsNotice: 
       type: "boolean"
       flags: 

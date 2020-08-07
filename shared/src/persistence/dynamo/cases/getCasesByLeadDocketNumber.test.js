@@ -4,15 +4,15 @@ const {
 const {
   CASE_STATUS_TYPES,
 } = require('../../../business/entities/EntityConstants');
-const { getCasesByLeadCaseId } = require('./getCasesByLeadCaseId');
+const { getCasesByLeadDocketNumber } = require('./getCasesByLeadDocketNumber');
 
-describe('getCasesByLeadCaseId', () => {
-  it('attempts to retrieve the cases by leadCaseId', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
+describe('getCasesByLeadDocketNumber', () => {
+  it('attempts to retrieve the cases by leadDocketNumber', async () => {
+    applicationContext.getDocumentClient().query.mockReturnValueOnce({
       promise: async () => ({
         Items: [
           {
-            caseId: 'abc',
+            docketNumber: '101-20',
           },
         ],
       }),
@@ -20,55 +20,53 @@ describe('getCasesByLeadCaseId', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue({
-        caseId: '123',
+      .getCaseByDocketNumber.mockResolvedValue({
         docketRecord: [],
         documents: [],
         irsPractitioners: [],
-        pk: 'case|123',
+        pk: 'case|123-20',
         privatePractitioners: [],
-        sk: 'case|123',
+        sk: 'case|123-20',
         status: CASE_STATUS_TYPES.new,
       });
 
-    const result = await getCasesByLeadCaseId({
+    const result = await getCasesByLeadDocketNumber({
       applicationContext,
-      leadCaseId: 'case|123',
+      leadDocketNumber: '123-20',
     });
 
     expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(result).toEqual([
       {
-        caseId: '123',
         docketRecord: [],
         documents: [],
         irsPractitioners: [],
-        pk: 'case|123',
+        pk: 'case|123-20',
         privatePractitioners: [],
-        sk: 'case|123',
+        sk: 'case|123-20',
         status: CASE_STATUS_TYPES.new,
       },
     ]);
   });
 
   it('returns an empty array when no items are returned', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
+    applicationContext.getDocumentClient().query.mockReturnValueOnce({
       promise: async () => ({
         Items: [],
       }),
     });
 
-    const result = await getCasesByLeadCaseId({
+    const result = await getCasesByLeadDocketNumber({
       applicationContext,
-      leadCaseId: 'abc',
+      leadDocketNumber: '123-20',
     });
 
     expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).not.toHaveBeenCalled();
     expect(applicationContext.isAuthorizedForWorkItems).not.toHaveBeenCalled();
     expect(result).toEqual([]);

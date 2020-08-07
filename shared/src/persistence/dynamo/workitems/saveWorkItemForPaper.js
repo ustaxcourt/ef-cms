@@ -22,7 +22,7 @@ exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
     }),
     put({
       Item: {
-        pk: `case|${workItem.caseId}`,
+        pk: `case|${workItem.docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
       },
       applicationContext,

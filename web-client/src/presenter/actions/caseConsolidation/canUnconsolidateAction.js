@@ -11,11 +11,11 @@ import { state } from 'cerebral';
  */
 export const canUnconsolidateAction = async ({ get, path }) => {
   const casesToRemove = get(state.modal.casesToRemove) || {};
-  const caseIdsToRemove = Object.entries(casesToRemove)
+  const docketNumbersToRemove = Object.entries(casesToRemove)
     .filter(([, shouldRemove]) => shouldRemove)
-    .map(([caseId]) => caseId);
+    .map(([docketNumber]) => docketNumber);
 
-  if (!caseIdsToRemove || caseIdsToRemove.length === 0) {
+  if (!docketNumbersToRemove || docketNumbersToRemove.length === 0) {
     return path.error({
       error: 'Select a case',
     });

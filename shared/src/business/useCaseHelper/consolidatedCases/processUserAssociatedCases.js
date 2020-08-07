@@ -4,33 +4,36 @@
  *
  * @param {object} openUserCases the list of open cases associated with the current user
  * @returns {object} casesAssociatedWithUserOrLeadCaseMap - a map of
- *  consolidated and lead cases. leadCaseIdsAssociatedWithUser - a list of leadCaseIds
- *  associated with the current user. userAssociatedCaseIdsMap - a map of open cases associated
+ *  consolidated and lead cases. leadDocketNumbersAssociatedWithUser - a list of leadDocketNumbers
+ *  associated with the current user. userAssociatedDocketNumbersMap - a map of open cases associated
  *  with the current user
  */
 exports.processUserAssociatedCases = openUserCases => {
   let casesAssociatedWithUserOrLeadCaseMap = {};
-  let userAssociatedCaseIdsMap = {};
-  let leadCaseIdsAssociatedWithUser = [];
+  let userAssociatedDocketNumbersMap = {};
+  let leadDocketNumbersAssociatedWithUser = [];
 
-  openUserCases.forEach(caseRecord => {
-    const { caseId, leadCaseId } = caseRecord;
-    const caseIsALeadCase = leadCaseId === caseId;
+  for (const userCaseRecord of openUserCases) {
+    const { docketNumber, leadDocketNumber } = userCaseRecord;
+    const caseIsALeadCase = leadDocketNumber === docketNumber;
 
-    caseRecord.isRequestingUserAssociated = true;
-    userAssociatedCaseIdsMap[caseId] = true;
+    userCaseRecord.isRequestingUserAssociated = true;
+    userAssociatedDocketNumbersMap[docketNumber] = true;
 
-    if (!leadCaseId || caseIsALeadCase) {
-      casesAssociatedWithUserOrLeadCaseMap[caseId] = caseRecord;
+    if (!leadDocketNumber || caseIsALeadCase) {
+      casesAssociatedWithUserOrLeadCaseMap[docketNumber] = userCaseRecord;
     }
-    if (leadCaseId && !leadCaseIdsAssociatedWithUser.includes(leadCaseId)) {
-      leadCaseIdsAssociatedWithUser.push(leadCaseId);
+    if (
+      leadDocketNumber &&
+      !leadDocketNumbersAssociatedWithUser.includes(leadDocketNumber)
+    ) {
+      leadDocketNumbersAssociatedWithUser.push(leadDocketNumber);
     }
-  });
+  }
 
   return {
     casesAssociatedWithUserOrLeadCaseMap,
-    leadCaseIdsAssociatedWithUser,
-    userAssociatedCaseIdsMap,
+    leadDocketNumbersAssociatedWithUser,
+    userAssociatedDocketNumbersMap,
   };
 };

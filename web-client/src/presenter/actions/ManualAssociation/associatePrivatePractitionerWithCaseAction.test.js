@@ -18,7 +18,7 @@ describe('associatePrivatePractitionerWithCaseAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: 'sdsdfsd' },
+        caseDetail: { docketNumber: '123-20' },
         modal: {
           representingPrimary: true,
           representingSecondary: false,

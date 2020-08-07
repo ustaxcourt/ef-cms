@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Fetches the cases with the given lead case id.
+ * Fetches the cases with the given lead docket number.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
@@ -12,15 +12,15 @@ export const getConsolidatedCasesByCaseAction = async ({
   applicationContext,
   get,
 }) => {
-  const { leadCaseId } = get(state.caseDetail);
+  const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
   let consolidatedCases = [];
 
-  if (leadCaseId) {
+  if (leadDocketNumber) {
     const unsortedConsolidatedCases = await applicationContext
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor({
         applicationContext,
-        caseId: leadCaseId,
+        docketNumber: leadDocketNumber,
       });
 
     consolidatedCases = unsortedConsolidatedCases.sort(

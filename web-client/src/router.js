@@ -14,9 +14,9 @@ const externalRoute = path => {
   window.location.replace(path);
 };
 
-const openInNewTab = (path, noopener = true) => {
+const openInNewTab = (path, noopener = true, target = '_blank') => {
   const windowFeatures = (noopener && 'noopener, noreferrer') || '';
-  window.open(path, '_blank', windowFeatures);
+  window.open(path, target, windowFeatures);
 };
 
 const createObjectURL = object => {
@@ -494,23 +494,33 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/create-order',
+      '/case-detail/*/create-order?..',
       ifHasAccess(docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
-        );
-        return app.getSequence('gotoCreateOrderSequence')({ docketNumber });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/create-order/*',
-      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentTitle, documentType, eventCode } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
         );
         return app.getSequence('gotoCreateOrderSequence')({
           docketNumber,
+          documentTitle: decodeURIComponent(documentTitle),
+          documentType: decodeURIComponent(documentType),
+          eventCode,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/create-order/*/?..',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentTitle, documentType, eventCode } = route.query();
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
+        );
+        return app.getSequence('gotoCreateOrderSequence')({
+          docketNumber,
+          documentTitle: decodeURIComponent(documentTitle),
+          documentType: decodeURIComponent(documentType),
+          eventCode,
           parentMessageId,
           redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
@@ -556,6 +566,34 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/correspondence',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
+        );
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'correspondence',
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/correspondence?..',
+      ifHasAccess(docketNumber => {
+        const { documentId } = route.query();
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
+        );
+        return app.getSequence('gotoCaseDetailSequence')({
+          correspondenceDocumentId: documentId,
+          docketNumber,
+          primaryTab: 'correspondence',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-correspondence',
       ifHasAccess(docketNumber => {
         setPageTitle(
@@ -576,6 +614,7 @@ const router = {
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
           docketNumber,
           documentId,
+          redirectUrl: `/case-detail/${docketNumber}/correspondence?documentId=${documentId}`,
         });
       }),
     );
@@ -648,10 +687,10 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/add-docket-entry',
+      '/case-detail/*/add-paper-filing',
       ifHasAccess(docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+          `${getPageTitleDocketPrefix(docketNumber)} Add paper filing`,
         );
         return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
       }),
@@ -716,8 +755,8 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Pending Report`,
         );
         return app.getSequence('gotoPrintablePendingReportForCaseSequence')({
-          caseIdFilter: true,
           docketNumber,
+          docketNumberFilter: true,
         });
       }),
     );

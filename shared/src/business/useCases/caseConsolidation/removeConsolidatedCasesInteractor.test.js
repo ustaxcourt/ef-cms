@@ -12,40 +12,35 @@ let mockCases;
 describe('removeConsolidatedCasesInteractor', () => {
   beforeEach(() => {
     mockCases = {
-      'aaaba5a9-b37b-479d-9201-067ec6e33aaa': {
+      '101-19': {
         ...MOCK_CASE,
-        caseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
         createdAt: '2019-03-19T17:29:13.120Z',
         docketNumber: '101-19',
-        leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
+        leadDocketNumber: '101-19',
       },
-      'cccca5a9-b37b-479d-9201-067ec6e33ccc': {
+      '102-19': {
         ...MOCK_CASE,
-        caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
         createdAt: '2019-03-19T17:29:13.120Z',
         docketNumber: '102-19',
-        leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
+        leadDocketNumber: '101-19',
       },
-      'da210494-c410-428f-9d0a-a3fc24405f8d': {
+      '103-19': {
         ...MOCK_CASE,
-        caseId: 'da210494-c410-428f-9d0a-a3fc24405f8d',
         createdAt: '2019-03-19T17:29:13.120Z',
         docketNumber: '103-19',
-        leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
+        leadDocketNumber: '101-19',
       },
-      'eaaba5a9-b37b-479d-9201-067ec6e33aaa': {
+      '104-19': {
         ...MOCK_CASE,
-        caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
         createdAt: '2019-03-19T17:29:13.120Z',
         docketNumber: '104-19',
-        leadCaseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
+        leadDocketNumber: '104-19',
       },
-      'fccca5a9-b37b-479d-9201-067ec6e33ccc': {
+      '105-19': {
         ...MOCK_CASE,
-        caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc',
         createdAt: '2019-03-19T17:29:13.120Z',
         docketNumber: '105-19',
-        leadCaseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
+        leadDocketNumber: '104-19',
       },
     };
 
@@ -54,15 +49,15 @@ describe('removeConsolidatedCasesInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(({ caseId }) => {
-        return mockCases[caseId];
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+        return mockCases[docketNumber];
       });
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId.mockImplementation(({ leadCaseId }) => {
+      .getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
         return Object.keys(mockCases)
           .map(key => mockCases[key])
-          .filter(mockCase => mockCase.leadCaseId === leadCaseId);
+          .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
       });
     applicationContext
       .getPersistenceGateway()
@@ -70,78 +65,56 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
-    let error;
-
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
     });
 
-    try {
-      await removeConsolidatedCasesInteractor({
+    await expect(
+      removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
-        caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain('Unauthorized for case consolidation');
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['101-19'],
+      }),
+    ).rejects.toThrow('Unauthorized for case consolidation');
   });
 
-  it('Should try to get the case by its caseId', async () => {
+  it('Should try to get the case by its docketNumber', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
-      caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
+      docketNumber: '102-19',
+      docketNumbersToRemove: ['101-19'],
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
   });
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
-    let error;
-
-    try {
-      await removeConsolidatedCasesInteractor({
+    await expect(
+      removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
-        caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain(
-      'Case xxxba5a9-b37b-479d-9201-067ec6e33xxx was not found.',
-    );
+        docketNumber: '111-11',
+        docketNumbersToRemove: ['101-19'],
+      }),
+    ).rejects.toThrow('Case 111-11 was not found.');
   });
 
   it('Should return a Not Found error if the case to remove cannot be found', async () => {
-    let error;
-
-    try {
-      await removeConsolidatedCasesInteractor({
+    await expect(
+      removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
-        caseIdsToRemove: ['xxxba5a9-b37b-479d-9201-067ec6e33xxx'],
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain(
-      'Case to consolidate with (xxxba5a9-b37b-479d-9201-067ec6e33xxx) was not found.',
-    );
+        docketNumber: '102-19',
+        docketNumbersToRemove: ['111-11'],
+      }),
+    ).rejects.toThrow('Case to consolidate with (111-11) was not found.');
   });
 
   it('Should only update the removed case if the case to remove is not the lead case', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa', // docketNumber: '101-19'
-      caseIdsToRemove: ['cccca5a9-b37b-479d-9201-067ec6e33ccc'], // docketNumber: '102-19'
+      docketNumber: '101-19',
+      docketNumbersToRemove: ['102-19'],
     });
 
     expect(
@@ -151,99 +124,99 @@ describe('removeConsolidatedCasesInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
-      leadCaseId: undefined,
+      docketNumber: '102-19',
+      leadDocketNumber: undefined,
     });
   });
 
   it('Should update the removed case and all other currently consolidated cases if the case to remove is the lead case', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
-      caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
+      docketNumber: '102-19',
+      docketNumbersToRemove: ['101-19'],
     });
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
     ).toEqual(3);
-    // first updates cases with new lead case id
+    // first updates cases with new lead docket number
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
-      leadCaseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
+      docketNumber: '102-19',
+      leadDocketNumber: '102-19',
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'da210494-c410-428f-9d0a-a3fc24405f8d',
-      leadCaseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
+      docketNumber: '103-19',
+      leadDocketNumber: '102-19',
     });
-    // then removes leadCaseId from case to remove
+    // then removes leadDocketNumber from case to remove
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[2][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
-      leadCaseId: undefined,
+      docketNumber: '101-19',
+      leadDocketNumber: undefined,
     });
   });
 
   it('Should update the removed case and remove consolidation from the original lead case if there is only one case remaining after removal', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa', // docketNumber: '104-19'
-      caseIdsToRemove: ['fccca5a9-b37b-479d-9201-067ec6e33ccc'], // docketNumber: '105-19'
+      docketNumber: '104-19',
+      docketNumbersToRemove: ['105-19'],
     });
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
     ).toEqual(2);
-    // first removes leadCaseId from original case
+    // first removes leadDocketNumber from original case
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
-      leadCaseId: undefined,
+      docketNumber: '104-19',
+      leadDocketNumber: undefined,
     });
-    // then removes leadCaseId from case to remove
+    // then removes leadDocketNumber from case to remove
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc',
-      leadCaseId: undefined,
+      docketNumber: '105-19',
+      leadDocketNumber: undefined,
     });
   });
 
   it('Should update the removed case and remove consolidation from the original non-lead case if there is only one case remaining after removal', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '105-19'
-      caseIdsToRemove: ['eaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '104-19'
+      docketNumber: '105-19',
+      docketNumbersToRemove: ['104-19'],
     });
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls.length,
     ).toEqual(2);
-    // first removes leadCaseId from original case
+    // first removes leadDocketNumber from original case
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc',
-      leadCaseId: undefined,
+      docketNumber: '105-19',
+      leadDocketNumber: undefined,
     });
-    // then removes leadCaseId from case to remove
+    // then removes leadDocketNumber from case to remove
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate,
     ).toMatchObject({
-      caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa',
-      leadCaseId: undefined,
+      docketNumber: '104-19',
+      leadDocketNumber: undefined,
     });
   });
 });

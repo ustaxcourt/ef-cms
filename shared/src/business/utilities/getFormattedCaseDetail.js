@@ -403,11 +403,11 @@ const formatCase = (applicationContext, caseDetail) => {
   }
 
   result.isConsolidatedSubCase = !!(
-    result.leadCaseId && result.leadCaseId !== result.caseId
+    result.leadDocketNumber && result.leadDocketNumber !== result.docketNumber
   );
 
   result.isLeadCase = !!(
-    result.leadCaseId && result.leadCaseId === result.caseId
+    result.leadDocketNumber && result.leadDocketNumber === result.docketNumber
   );
 
   let paymentDate = '';
@@ -426,7 +426,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
   const caseEntity = new Case(caseDetail, { applicationContext });
   result.canConsolidate = caseEntity.canConsolidate();
-  result.canUnconsolidate = !!caseEntity.leadCaseId;
+  result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
 
   if (result.consolidatedCases) {

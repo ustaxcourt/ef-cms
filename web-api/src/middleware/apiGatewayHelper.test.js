@@ -40,12 +40,12 @@ describe('handle', () => {
     const response = await handle(
       {
         queryStringParameters: {
-          fields: 'caseId,docketNumber',
+          fields: 'docketNumber,documentId',
         },
       },
       async () => ({
-        caseId: '1',
         docketNumber: 'b',
+        documentId: '1',
         gg: undefined,
         isAwesome: true,
         something: 'false',
@@ -54,8 +54,8 @@ describe('handle', () => {
     );
     expect(response).toMatchObject({
       body: JSON.stringify({
-        caseId: '1',
         docketNumber: 'b',
+        documentId: '1',
       }),
     });
   });
@@ -64,21 +64,21 @@ describe('handle', () => {
     const response = await handle(
       {
         queryStringParameters: {
-          fields: 'caseId,docketNumber',
+          fields: 'docketNumber,documentId',
         },
       },
       async () => [
         {
-          caseId: '1',
           docketNumber: 'b',
+          documentId: '1',
           gg: undefined,
           isAwesome: true,
           something: 'false',
           yup: null,
         },
         {
-          caseId: '2',
           docketNumber: 'c',
+          documentId: '2',
           gg: undefined,
           isAwesome: false,
           something: 'true',
@@ -89,12 +89,12 @@ describe('handle', () => {
     expect(response).toMatchObject({
       body: JSON.stringify([
         {
-          caseId: '1',
           docketNumber: 'b',
+          documentId: '1',
         },
         {
-          caseId: '2',
           docketNumber: 'c',
+          documentId: '2',
         },
       ]),
     });

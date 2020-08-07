@@ -63,6 +63,9 @@ const {
 const {
   PrivatePractitioner,
 } = require('../business/entities/PrivatePractitioner');
+const {
+  TrialSession,
+} = require('../business/entities/trialSessions/TrialSession');
 const { Batch } = require('../business/entities/Batch');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
@@ -82,6 +85,7 @@ const { Note } = require('../business/entities/notes/Note');
 const { Order } = require('../business/entities/orders/Order');
 const { PARTY_TYPES } = require('../business/entities/EntityConstants');
 const { Practitioner } = require('../business/entities/Practitioner');
+const { PublicCase } = require('../business/entities/cases/PublicCase');
 const { PublicUser } = require('../business/entities/PublicUser');
 const { Scan } = require('../business/entities/Scan');
 const { Statistic } = require('../business/entities/Statistic');
@@ -402,3 +406,5 @@ generateMarkdownSchema(User, 'User');
 generateMarkdownSchema(UserCase, 'UserCase');
 generateMarkdownSchema(UserCaseNote, 'UserCaseNote');
 generateMarkdownSchema(WorkItem, 'WorkItem');
+generateMarkdownSchema(TrialSession, 'TrialSession');
+generateMarkdownSchema(PublicCase, 'PublicCase');
