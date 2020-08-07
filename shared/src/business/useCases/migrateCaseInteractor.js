@@ -27,7 +27,7 @@ exports.migrateCaseInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   if (caseMetadata && caseMetadata.docketNumber) {
-    const docketNumber = caseMetadata.docketNumber.replace(/^0+/, '');
+    const docketNumber = Case.formatDocketNumber(caseMetadata.docketNumber);
 
     const caseToDelete = await applicationContext
       .getPersistenceGateway()
