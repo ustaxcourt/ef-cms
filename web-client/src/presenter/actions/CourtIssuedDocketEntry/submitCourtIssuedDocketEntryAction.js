@@ -13,7 +13,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
   get,
 }) => {
   const documentId = get(state.documentId);
-  const caseId = get(state.caseDetail.caseId);
+  const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
   const {
@@ -22,7 +22,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
 
   const documentMeta = {
     ...form,
-    caseId,
+    docketNumber,
     documentId,
   };
 
@@ -39,7 +39,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
   ) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       documentId,
     });
   }

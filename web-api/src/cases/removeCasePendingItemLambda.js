@@ -8,13 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.removeCasePendingItemLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, documentId } = event.pathParameters || {};
-
     return await applicationContext
       .getUseCases()
       .removeCasePendingItemInteractor({
         applicationContext,
-        caseId,
-        documentId,
+        ...event.pathParameters,
       });
   });

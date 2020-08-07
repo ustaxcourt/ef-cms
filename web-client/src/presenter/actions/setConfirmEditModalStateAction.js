@@ -10,6 +10,5 @@ import { state } from 'cerebral';
 export const setConfirmEditModalStateAction = ({ props, store }) => {
   store.set(state.modal.docketNumber, props.docketNumber);
   store.set(state.modal.documentIdToEdit, props.documentIdToEdit);
-  store.set(state.modal.caseId, props.caseId);
   store.set(state.modal.parentMessageId, props.parentMessageId);
 };

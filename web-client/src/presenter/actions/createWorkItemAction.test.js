@@ -18,7 +18,7 @@ describe('createWorkItemAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '222',
+          docketNumber: '101-20',
         },
         documentId: '333',
       },
@@ -32,7 +32,7 @@ describe('createWorkItemAction', () => {
         .calls[0][0],
     ).toMatchObject({
       assigneeId: '111',
-      caseId: '222',
+      docketNumber: '101-20',
       documentId: '333',
       message: 'this is a test message',
     });
@@ -46,7 +46,7 @@ describe('createWorkItemAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '456',
+          docketNumber: '101-20',
         },
         documentId: '789',
         form: {
@@ -64,7 +64,7 @@ describe('createWorkItemAction', () => {
         .calls[0][0],
     ).toMatchObject({
       assigneeId: '123',
-      caseId: '456',
+      docketNumber: '101-20',
       documentId: '789',
       message: 'this is a different test message',
     });

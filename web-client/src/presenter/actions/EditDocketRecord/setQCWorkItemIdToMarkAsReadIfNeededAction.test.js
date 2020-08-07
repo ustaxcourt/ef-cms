@@ -13,7 +13,7 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
           docketRecord: [],
           documents: [
             {

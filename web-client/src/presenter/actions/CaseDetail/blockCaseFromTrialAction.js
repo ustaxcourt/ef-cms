@@ -9,14 +9,14 @@ import { state } from 'cerebral';
  * @returns {object} the alertSuccess and updated caseDetail object
  */
 export const blockCaseFromTrialAction = async ({ applicationContext, get }) => {
-  const { caseId } = get(state.caseDetail);
-  const { reason } = get(state.modal);
+  const docketNumber = get(state.caseDetail.docketNumber);
+  const reason = get(state.modal.reason);
 
   const caseDetail = await applicationContext
     .getUseCases()
     .blockCaseFromTrialInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       reason,
     });
 

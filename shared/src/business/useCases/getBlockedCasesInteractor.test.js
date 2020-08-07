@@ -11,10 +11,10 @@ describe('getBlockedCasesInteractor', () => {
 
     applicationContext.getPersistenceGateway().getBlockedCases.mockReturnValue([
       {
-        caseId: '1',
+        docketNumber: '101-20',
       },
       {
-        caseId: '2',
+        docketNumber: '201-20',
       },
     ]);
 
@@ -25,10 +25,10 @@ describe('getBlockedCasesInteractor', () => {
 
     expect(results).toEqual([
       {
-        caseId: '1',
+        docketNumber: '101-20',
       },
       {
-        caseId: '2',
+        docketNumber: '201-20',
       },
     ]);
   });

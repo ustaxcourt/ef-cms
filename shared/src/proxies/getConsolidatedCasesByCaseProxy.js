@@ -1,19 +1,19 @@
 const { get } = require('./requests');
 
 /**
- * calls a proxy to retrieve cases with the passed lead case id
+ * calls a proxy to retrieve cases with the passed lead docket number
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseId the case's id to pass to the endpoint
+ * @param {object} providers.docketNumber the docket number to pass to the endpoint
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getConsolidatedCasesByCaseInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/cases/${caseId}/consolidated-cases`,
+    endpoint: `/cases/${docketNumber}/consolidated-cases`,
   });
 };

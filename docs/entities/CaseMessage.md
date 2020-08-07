@@ -32,18 +32,6 @@
                   name: "max"
                   args: 
                     limit: 500
-    caseId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "ID of the case the message is attached to."
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
     caseStatus: 
       type: "string"
       flags: 

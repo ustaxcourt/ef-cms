@@ -11,7 +11,7 @@ describe('deleteUserFromCase', () => {
   it('attempts to delete the user from the case', async () => {
     await deleteUserFromCase({
       applicationContext,
-      caseId: '456',
+      docketNumber: '101-20',
       userId: '123',
     });
 
@@ -20,7 +20,7 @@ describe('deleteUserFromCase', () => {
     ).toMatchObject({
       Key: {
         pk: 'user|123',
-        sk: 'case|456',
+        sk: 'case|101-20',
       },
       TableName: 'efcms-dev',
     });

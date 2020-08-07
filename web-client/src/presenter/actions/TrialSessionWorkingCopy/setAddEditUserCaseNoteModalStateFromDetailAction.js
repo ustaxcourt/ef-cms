@@ -12,11 +12,8 @@ import { state } from 'cerebral';
 export const setAddEditUserCaseNoteModalStateFromDetailAction = ({
   applicationContext,
   get,
-  props,
   store,
 }) => {
-  const { caseId } = props;
-
   const notes = get(state.caseDetail.judgesNote.notes);
   const { caseCaption, docketNumber, docketNumberSuffix } = get(
     state.caseDetail,
@@ -28,6 +25,5 @@ export const setAddEditUserCaseNoteModalStateFromDetailAction = ({
     `${docketNumber}${docketNumberSuffix ? docketNumberSuffix : ''}`,
   );
   store.set(state.modal.caseTitle, caseTitle);
-  store.set(state.modal.caseId, caseId);
   store.set(state.modal.notes, notes);
 };

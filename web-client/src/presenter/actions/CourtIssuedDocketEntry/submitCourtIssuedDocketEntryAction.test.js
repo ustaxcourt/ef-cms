@@ -17,7 +17,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         documentId: 'abc',
         form: {
@@ -45,7 +45,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         documentId: 'abc',
         form: {
@@ -73,7 +73,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         documentId: 'abc',
         form: {

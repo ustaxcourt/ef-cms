@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+
 /**
  * clears the other statistics off the case
  *
@@ -13,13 +14,13 @@ export const deleteOtherStatisticsAction = async ({
   get,
   path,
 }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
     await applicationContext.getUseCases().updateOtherStatisticsInteractor({
       applicationContext,
-      caseId,
       damages: null,
+      docketNumber,
       litigationCosts: null,
     });
     return path.success({

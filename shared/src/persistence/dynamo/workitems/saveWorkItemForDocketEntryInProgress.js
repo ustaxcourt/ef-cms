@@ -36,7 +36,7 @@ exports.saveWorkItemForDocketEntryInProgress = async ({
     }),
     put({
       Item: {
-        pk: `case|${workItem.caseId}`,
+        pk: `case|${workItem.docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
       },
       applicationContext,

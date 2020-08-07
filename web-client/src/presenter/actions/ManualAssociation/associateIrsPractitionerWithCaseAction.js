@@ -16,13 +16,13 @@ export const associateIrsPractitionerWithCaseAction = async ({
 }) => {
   const userId = get(state.modal.user.userId);
   const serviceIndicator = get(state.modal.serviceIndicator);
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   await applicationContext
     .getUseCases()
     .associateIrsPractitionerWithCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       serviceIndicator,
       userId,
     });

@@ -26,9 +26,8 @@ const firstConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The First Migrated Case',
-  caseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   docketNumber: '101-21',
-  leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
+  leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
 };
@@ -36,9 +35,8 @@ const secondConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Second Migrated Case',
-  caseId: '116ff947-48cc-4ee5-9d9a-0bc4e0a64ba3',
   docketNumber: '102-21',
-  leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
+  leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
 };
@@ -47,7 +45,6 @@ const correspondenceCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Third Migrated Case',
-  caseId: applicationContext.getUniqueId(),
   correspondence: [
     {
       documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
@@ -65,7 +62,6 @@ const otherFilersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fourth Migrated Case',
-  caseId: applicationContext.getUniqueId(),
   docketNumber: '187-20',
   otherFilers: [
     {
@@ -105,7 +101,6 @@ const otherPetitionersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fifth Migrated Case',
-  caseId: applicationContext.getUniqueId(),
   docketNumber: '162-20',
   irsPractitioners: [
     {

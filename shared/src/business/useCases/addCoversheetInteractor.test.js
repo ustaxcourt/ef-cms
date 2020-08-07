@@ -21,7 +21,6 @@ describe('addCoversheetInteractor', () => {
   const testPdfDoc = testPdfDocBytes();
 
   const testingCaseData = {
-    caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     contactPrimary: {
       name: 'Daenerys Stormborn',
     },
@@ -86,11 +85,11 @@ describe('addCoversheetInteractor', () => {
   it('adds a cover page to a pdf document', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(testingCaseData);
+      .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
       applicationContext,
-      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-19',
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
@@ -107,11 +106,11 @@ describe('addCoversheetInteractor', () => {
   it('replaces the cover page on a document', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(testingCaseData);
+      .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
       applicationContext,
-      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-19',
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       replaceCoversheet: true,
     };
@@ -129,11 +128,11 @@ describe('addCoversheetInteractor', () => {
   it("updates the document's page numbers", async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(testingCaseData);
+      .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
       applicationContext,
-      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-19',
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
@@ -145,22 +144,24 @@ describe('addCoversheetInteractor', () => {
   });
 
   it("updates the document and docket record's page numbers", async () => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...testingCaseData,
-      docketRecord: [
-        {
-          description: 'Test Docket Record',
-          documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          eventCode: 'O',
-          filingDate: new Date('2000-01-01').toISOString(),
-          index: 0,
-        },
-      ],
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...testingCaseData,
+        docketRecord: [
+          {
+            description: 'Test Docket Record',
+            documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            eventCode: 'O',
+            filingDate: new Date('2000-01-01').toISOString(),
+            index: 0,
+          },
+        ],
+      });
 
     const params = {
       applicationContext,
-      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-19',
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
@@ -177,11 +178,11 @@ describe('addCoversheetInteractor', () => {
   it('adds a cover page to a pdf document with optional data', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(optionalTestingCaseData);
+      .getCaseByDocketNumber.mockReturnValue(optionalTestingCaseData);
 
     const params = {
       applicationContext,
-      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-19',
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 

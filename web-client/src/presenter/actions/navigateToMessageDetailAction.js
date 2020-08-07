@@ -9,10 +9,10 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const navigateToMessageDetailAction = async ({ get, router }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const parentMessageId = get(state.parentMessageId);
 
   await router.route(
-    `/case-messages/${caseId}/message-detail/${parentMessageId}`,
+    `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
   );
 };

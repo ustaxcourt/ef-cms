@@ -8,12 +8,12 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getUserCaseNoteForCasesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseIds } = event.pathParameters || {};
+    const { docketNumbers } = event.pathParameters || {};
 
     return await applicationContext
       .getUseCases()
       .getUserCaseNoteForCasesInteractor({
         applicationContext,
-        caseIds: caseIds.split(','),
+        docketNumbers: docketNumbers.split(','),
       });
   });

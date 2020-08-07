@@ -17,13 +17,13 @@ export const generatePrintableFilingReceiptAction = async ({
   props,
 }) => {
   const { documentsFiled } = props;
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const filingReceiptUrl = await applicationContext
     .getUseCases()
     .generatePrintableFilingReceiptInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       documentsFiled,
     });
 

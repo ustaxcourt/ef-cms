@@ -12,7 +12,7 @@ exports.updateCaseMessage = async ({ applicationContext, caseMessage }) => {
   return await put({
     Item: {
       gsi1pk: `message|${caseMessage.parentMessageId}`,
-      pk: `case|${caseMessage.caseId}`,
+      pk: `case|${caseMessage.docketNumber}`,
       sk: `message|${caseMessage.messageId}`,
       ...caseMessage,
     },

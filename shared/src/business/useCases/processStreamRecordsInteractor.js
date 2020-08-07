@@ -64,16 +64,16 @@ const filterRecords = async ({ applicationContext, records }) => {
   );
 
   for (let caseRecord of caseRecords) {
-    const caseId = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
+    const docketNumber = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
 
     const fullCase = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
 
-    if (fullCase.caseId) {
+    if (fullCase.docketNumber) {
       filteredRecords.push({
         dynamodb: {
           Keys: {

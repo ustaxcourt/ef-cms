@@ -24,7 +24,6 @@ describe('getCaseMessageThreadInteractor', () => {
   it('retrieves the case message thread from persistence and returns it', async () => {
     const mockCaseMessage = {
       attachments: [],
-      caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',

@@ -5,7 +5,7 @@ const { post } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.message the message text
  * @param {string} providers.subject the message subject
  * @param {string} providers.toSection the section of the user receiving the message
@@ -15,7 +15,7 @@ const { post } = require('../requests');
 exports.createCaseMessageInteractor = ({
   applicationContext,
   attachments,
-  caseId,
+  docketNumber,
   message,
   subject,
   toSection,
@@ -25,7 +25,7 @@ exports.createCaseMessageInteractor = ({
     applicationContext,
     body: {
       attachments,
-      caseId,
+      docketNumber,
       message,
       subject,
       toSection,
