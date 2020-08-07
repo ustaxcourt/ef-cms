@@ -145,7 +145,7 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to meow',
-      'set field #startDate-date to 08/03/2001',
+      'set field #startDate-date-start to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for svg.iconSealed to be visible',
     ],
