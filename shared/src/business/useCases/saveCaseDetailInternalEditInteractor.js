@@ -98,9 +98,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   }
 
   const caseEntity = new Case(fullCase, { applicationContext }).validate();
-  caseEntity.setRequestForTrialDocketRecord(fullCase.preferredTrialCity, {
-    applicationContext,
-  });
 
   if (!caseEntity.isPaper) {
     const petitionDocument = caseEntity.getPetitionDocument();

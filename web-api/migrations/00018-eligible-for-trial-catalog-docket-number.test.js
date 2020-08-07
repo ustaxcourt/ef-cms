@@ -47,7 +47,7 @@ describe('add docketNumber to eligible for trial catalog records', () => {
     };
   });
 
-  it('should not modify records that are are NOT eligible for trial records', async () => {
+  it('should not modify records that are NOT eligible for trial records', async () => {
     mockItems = [
       {
         pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',

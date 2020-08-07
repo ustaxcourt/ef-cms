@@ -65,9 +65,10 @@ export const formatWorkItem = ({
 
   result.highPriority = !!result.highPriority;
   result.sentBySection = capitalize(result.sentBySection);
-  result.completedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.completedAt, 'DATE_TIME');
+  result.completedAtFormatted = formatDateIfToday(
+    result.completedAt,
+    applicationContext,
+  );
   result.completedAtFormattedTZ = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME_TZ');
@@ -304,7 +305,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
-  const { USER_ROLES } = applicationContext.getConstants();
 
   const judgeUser = get(state.judgeUser);
 
@@ -336,14 +336,12 @@ export const formattedWorkQueue = (get, applicationContext) => {
     my: {
       inProgress: 'receivedAt',
       inbox: 'receivedAt',
-      outbox:
-        user.role === USER_ROLES.petitionsClerk ? 'completedAt' : 'receivedAt',
+      outbox: 'completedAt',
     },
     section: {
       inProgress: 'receivedAt',
       inbox: 'receivedAt',
-      outbox:
-        user.role === USER_ROLES.petitionsClerk ? 'completedAt' : 'receivedAt',
+      outbox: 'completedAt',
     },
   };
 

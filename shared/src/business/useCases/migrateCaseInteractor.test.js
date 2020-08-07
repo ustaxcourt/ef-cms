@@ -247,4 +247,31 @@ describe('migrateCaseInteractor', () => {
       expect(applicationContext.getUniqueId).toHaveBeenCalled();
     });
   });
+
+  describe('migrate existing case', () => {
+    it('should call persistence to delete old case records and documents if a case was retrieved for caseMetadata.docketNumber and then continue to recreate the case', async () => {
+      expect(createdCases.length).toEqual(0);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+      const result = await migrateCaseInteractor({
+        applicationContext,
+        caseMetadata,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().deleteCaseByDocketNumber,
+      ).toBeCalled();
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      ).toBeCalledTimes(4); // MOCK_CASE has 4 documents
+      expect(result).toBeDefined();
+      expect(
+        applicationContext.getPersistenceGateway().createCase,
+      ).toHaveBeenCalled();
+      expect(createdCases.length).toEqual(1);
+    });
+  });
 });
