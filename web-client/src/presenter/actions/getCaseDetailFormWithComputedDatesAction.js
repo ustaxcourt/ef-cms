@@ -137,8 +137,6 @@ export const getCaseDetailFormWithComputedDatesAction = ({
     });
   }
 
-  console.log('formwith computed dates', { ...form.documents });
-
   return {
     formWithComputedDates: form,
   };
