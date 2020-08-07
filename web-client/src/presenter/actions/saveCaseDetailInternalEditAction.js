@@ -1,3 +1,4 @@
+import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -13,12 +14,51 @@ export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
   get,
   props,
+  store,
 }) => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
+  const {
+    INITIAL_DOCUMENT_TYPES,
+    INITIAL_DOCUMENT_TYPES_MAP,
+    STATUS_TYPES,
+  } = applicationContext.getConstants();
   const { formWithComputedDates } = props;
   const caseToUpdate = formWithComputedDates || get(state.form);
 
-  // upload documents
+  //extract to interactor
+
+  // things we could do
+
+  const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
+
+  const progressFunctions = setupPercentDone(
+    {
+      applicationForWaiverOfFilingFeeFile:
+        caseToUpdate['applicationForWaiverOfFilingFeeFile'],
+      ownershipDisclosureFile: caseToUpdate['ownershipDisclosureFile'],
+      petitionFile: caseToUpdate['petitionFile'],
+      requestForPlaceOfTrialFile: caseToUpdate['requestForPlaceOfTrialFile'],
+      stinFile: caseToUpdate['stinFile'],
+    },
+    store,
+  );
+
+  for (const key of keys) {
+    if (caseToUpdate[key]) {
+      const newDocumentId = await applicationContext
+        .getUseCases()
+        .uploadDocumentAndMakeSafe({
+          applicationContext,
+          document: caseToUpdate[key],
+          onUploadProgress: progressFunctions[key],
+        });
+
+      caseToUpdate.documents.push({
+        documentType: INITIAL_DOCUMENT_TYPES_MAP[key],
+        newDocumentId,
+      });
+    }
+  }
+  //
 
   const caseDetail = await applicationContext
     .getUseCases()

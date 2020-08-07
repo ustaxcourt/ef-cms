@@ -101,11 +101,10 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     }).secondary.toRawObject();
   }
 
+  const caseEntity = new Case(fullCase, { applicationContext }).validate();
+
   if (fullCase.isPaper) {
     // get current caseEntity in persistence
-    const caseEntity = new CaseInternal(fullCase, {
-      applicationContext,
-    }).validate();
 
     // loop through INITIAL_DOCUMENTS_MAP (documentTYpe)
     const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
@@ -114,7 +113,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     for (const key of keys) {
       const { documentType } = INITIAL_DOCUMENT_TYPES_MAP[key];
 
-      const originalCaseDocument = caseBeforeEdits.documents.find(
+      const originalCaseDocument = caseEntity.documents.find(
         doc => doc.documentType === documentType,
       );
 
@@ -127,14 +126,9 @@ exports.saveCaseDetailInternalEditInteractor = async ({
         ) {
           // do nothing
         } else {
-          // replace document
-          await applicationContext
-            .getPersistenceGateway()
-            .saveDocumentFromLambda({
-              applicationContext,
-              document: currentCaseDocument,
-              documentId: originalCaseDocument.documentId,
-            });
+          // replace documentid in case with the new one
+
+          originalCaseDocument.documentId = currentCaseDocument.documentId;
         }
       }
 
@@ -150,8 +144,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     // we know the pdf has changed
     // remove and/or replace pdf
   } else {
-    const caseEntity = new Case(fullCase, { applicationContext }).validate();
-
     const petitionDocument = caseEntity.getPetitionDocument();
 
     const initializeCaseWorkItem = petitionDocument.workItem;
