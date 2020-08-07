@@ -7,6 +7,7 @@ import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUpl
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 import {
   createCourtIssuedDocketEntry,
@@ -30,7 +31,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile, 'Birmingham, Alabama', false);
-  it('verifies petition, APW, RQT, and DISC', async () => {
+  it('verifies docket entries exist for petition for an unserved case', async () => {
     const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
       test,
     );
@@ -43,32 +44,54 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
         showNotServed: true,
         showServed: false,
       },
+    ]);
+  });
+
+  petitionsClerkSubmitsCaseToIrs(test);
+  it('verifies docket entries exist for petition, APW, DISC and RQT for a served case', async () => {
+    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
+      test,
+    );
+
+    expect(formattedDocketEntries).toMatchObject([
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'P',
+        index: 1,
+        showNotServed: false,
+        showServed: true,
+      },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'APW',
         index: 2,
-        showNotServed: true,
-        showServed: false,
-      },
-      {
-        createdAtFormatted: expect.anything(),
-        eventCode: 'RQT',
-        index: 3,
-        showNotServed: true,
-        showServed: false,
+        showNotServed: false,
+        showServed: true,
       },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'DISC',
+        index: 3,
+        showNotServed: false,
+        showServed: true,
+      },
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'RQT',
         index: 4,
-        showNotServed: true,
-        showServed: false,
+        showNotServed: false,
+        showServed: true,
       },
     ]);
+
+    test.docketNumber = null;
   });
 
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(test, fakeFile, 'Birmingham, Alabama', false);
+
   loginAs(test, 'docketclerk@example.com');
-  it('files an initial filing type document AFTER a paper petition is added', async () => {
+  it('files an initial filing type document AFTER a paper petition is added but not served', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -123,26 +146,20 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       test,
     );
 
-    expect(formattedDocketEntries[4]).toMatchObject({
-      createdAtFormatted: expect.anything(),
-      eventCode: 'RQT',
-      index: 5,
-      showNotServed: true,
-      showServed: false,
-    });
+    //4654- docket entries for initial filing type documents are not created until after the case has been served
+    expect(formattedDocketEntries[4]).toBeUndefined();
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  it('serves the petition', async () => {
+  it('serves the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-
     await test.runSequence('serveCaseToIrsSequence');
   });
 
   loginAs(test, 'docketclerk@example.com');
-  it('files an initial filing type document AFTER the petition is served', async () => {
+  it('files an initial filing type document AFTER a paper petition is added and is served', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -193,14 +210,18 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       isSavingForLater: true,
     });
 
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
       test,
     );
 
-    expect(formattedDocketEntries[5]).toMatchObject({
+    //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
+    expect(formattedDocketEntries[4]).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'RQT',
-      index: undefined,
       showNotServed: true,
       showServed: false,
     });

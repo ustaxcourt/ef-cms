@@ -71,7 +71,7 @@ describe('work items array to object', () => {
     };
   });
 
-  it('should not modify records that are are NOT a document entity', async () => {
+  it('should not modify records that are NOT a document entity', async () => {
     mockItems = [
       {
         pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',

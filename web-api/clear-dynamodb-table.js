@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const { chunk } = require('lodash');
 const args = process.argv.slice(2);
+const CHUNK_SIZE = 25;
 
 if (args.length < 1) {
   console.error('must provide an environment to delete: [dev, stg, prod]');
@@ -31,9 +32,12 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
 
-        const chunks = chunk(results.Items, 25);
+        const chunks = chunk(
+          results.Items.filter(i => i.length > 0),
+          CHUNK_SIZE,
+        );
         for (let c of chunks) {
-          count += 25;
+          count += CHUNK_SIZE;
           console.log(`deleting chunk: ${count} total deleted`);
 
           await documentClient

@@ -37,7 +37,7 @@ module.exports = [
     actions: [
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-legend to be visible',
+      'wait for element #payment-date-waived-date to be visible',
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
@@ -76,7 +76,7 @@ module.exports = [
     actions: [
       'wait for element #certificate-of-service to be visible',
       'click element #certificate-of-service+label',
-      'wait for element #service-date-month to be visible',
+      'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
