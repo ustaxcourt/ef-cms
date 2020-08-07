@@ -12,29 +12,14 @@ export const removePdfFromCaseAction = async ({ get }) => {
   const caseDetail = get(state.caseDetail);
   const documentId = get(state.documentId);
 
-  const documents = get(caseDetail.documents);
+  const documents = get(state.caseDetail.documents);
 
-  documents.some((document, idx) => {
+  (documents || []).some((document, idx) => {
     if (document.documentId === documentId) {
       documents.splice(idx, 1);
       return true;
     }
   });
-
-  // TODO: Chat with Kristen about this
-  // const documentToRemove = caseDetail.documents.find(
-  //   document => document.documentId === documentId,
-  // );
-
-  // const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-
-  // Update necessary case detail based on the removed document
-  // switch (documentToRemove.eventCode) {
-  //   case INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode:
-  //     caseDetail.preferredTrialCity = '';
-  //     caseDetail.orderDesignatingPlaceOfTrial = true;
-  //     break;
-  // }
 
   return {
     caseDetail,
