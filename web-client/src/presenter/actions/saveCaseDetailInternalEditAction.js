@@ -12,7 +12,6 @@ import { state } from 'cerebral';
  */
 export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
-  get,
   props,
   store,
 }) => {
@@ -20,8 +19,7 @@ export const saveCaseDetailInternalEditAction = async ({
     INITIAL_DOCUMENT_TYPES_MAP,
     STATUS_TYPES,
   } = applicationContext.getConstants();
-  const { formWithComputedDates } = props;
-  const caseToUpdate = props.caseDetail;
+  const caseToUpdate = props.formWithComputedDates;
 
   //extract to interactor
 
