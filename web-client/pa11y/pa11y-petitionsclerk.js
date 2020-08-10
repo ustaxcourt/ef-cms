@@ -417,6 +417,16 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=penalties-modal',
   },
+  {
+    actions: [
+      'wait for .remove-pdf-button to be visible',
+      'click element .remove-pdf-button',
+      'wait for .confirm-replace-petition-modal to be visible',
+    ],
+    notes: 'checks a11y of ConfirmReplacePetitionModal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/121-20/petition-qc',
+  },
 
   /* review petition */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b/review',
