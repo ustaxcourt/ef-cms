@@ -20,7 +20,6 @@ export const saveCaseDetailInternalEditAction = async ({
   } = applicationContext.getConstants();
   const caseToUpdate = props.formWithComputedDates;
 
-  // TODO - refactor to an interactor
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
 
   const progressFunctions = setupPercentDone(
