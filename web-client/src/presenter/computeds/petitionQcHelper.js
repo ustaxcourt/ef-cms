@@ -25,8 +25,8 @@ export const initialFilingDocumentTabs = [
 
 export const petitionQcHelper = (get, applicationContext) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-  const { isPaper, ownershipDisclosureFile } = get(state.form);
-  const hasODS = !!ownershipDisclosureFile;
+  const { isPaper } = get(state.form);
+  const hasODS = get(state.hasOdsDocument);
 
   let documentTabsToDisplay = [...initialFilingDocumentTabs];
 
