@@ -19979,7 +19979,7 @@
                       name: "pattern"
                       args: 
                         regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-                docketNumberWithSuffix: 
+                docketNumberSuffix: 
                   type: "string"
                   flags: 
                     only: true
