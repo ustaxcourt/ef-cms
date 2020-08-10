@@ -9,20 +9,18 @@ import { state } from 'cerebral';
  *
  */
 export const removePdfFromCaseAction = async ({ get }) => {
-  const caseDetail = get(state.caseDetail);
+  const form = get(state.form);
   const documentId = get(state.documentId);
 
-  const documents = get(state.caseDetail.documents);
-
-  (documents || []).some((document, idx) => {
+  (form.documents || []).some((document, idx) => {
     if (document.documentId === documentId) {
-      documents.splice(idx, 1);
+      form.documents.splice(idx, 1);
       return true;
     }
   });
 
   return {
-    caseDetail,
+    caseDetail: form,
     documentUploadMode: 'scan',
   };
 };
