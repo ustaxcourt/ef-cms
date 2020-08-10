@@ -78,7 +78,7 @@ function getFormattedValidationErrors(entity) {
         typeof errors[key] == 'string' &&
         errors[key].endsWith('does not match any of the allowed types')
       ) {
-        errors[key] = undefined;
+        delete errors[key];
       }
     }
     Object.assign(obj, errors);
