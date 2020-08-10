@@ -38,7 +38,7 @@ export const saveCaseDetailInternalEditAction = async ({
     if (caseToUpdate[key]) {
       const newDocumentId = await applicationContext
         .getUseCases()
-        .uploadDocumentAndMakeSafe({
+        .uploadDocumentAndMakeSafeInteractor({
           applicationContext,
           document: caseToUpdate[key],
           onUploadProgress: progressFunctions[key],
