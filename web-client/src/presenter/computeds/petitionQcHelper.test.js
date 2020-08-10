@@ -81,8 +81,8 @@ describe('petitionQcHelper', () => {
         },
         form: {
           isPaper: false,
-          ownershipDisclosureFile: {},
         },
+        hasOdsDocument: true,
       };
 
       const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
@@ -107,8 +107,8 @@ describe('petitionQcHelper', () => {
         },
         form: {
           isPaper: false,
-          ownershipDisclosureFile: undefined,
         },
+        hasOdsDocument: false,
       };
 
       const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
