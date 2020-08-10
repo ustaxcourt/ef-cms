@@ -126,7 +126,7 @@
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-    docketNumberSuffix: 
+    docketNumberWithSuffix: 
       type: "string"
       flags: 
         only: true
