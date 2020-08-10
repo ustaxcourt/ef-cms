@@ -946,10 +946,32 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   return this;
 };
 
+/**
+ * gets the document with id documentId from the documents or correspondence arrays
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the document to retrieve
+ * @returns {object} the retrieved document
+ */
 Case.prototype.getDocumentById = function ({ documentId }) {
   const allCaseDocuments = [...this.documents, ...this.correspondence];
 
   return allCaseDocuments.find(document => document.documentId === documentId);
+};
+
+/**
+ * deletes the document with id documentId from the documents array
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the document to remove from the documents array
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.deleteDocumentById = function ({ documentId }) {
+  this.documents = this.documents.filter(
+    item => item.documentId !== documentId,
+  );
+
+  return this;
 };
 
 const getPetitionDocumentFromDocuments = function (documents) {
