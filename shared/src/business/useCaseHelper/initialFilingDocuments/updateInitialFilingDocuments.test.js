@@ -72,7 +72,7 @@ describe('addNewInitialFilingToCase', () => {
     expect(rqtFile).toBeUndefined();
   });
 
-  it('should remove the original document from the case and add a new one fix this test anme later', async () => {
+  it('should remove the original document and add the new one to the case when the document has been re-added', async () => {
     mockOriginalCase = new Case(
       { ...MOCK_CASE, documents: [...MOCK_CASE.documents, mockRQT] },
       { applicationContext },
