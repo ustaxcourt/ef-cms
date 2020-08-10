@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from './DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -14,11 +15,16 @@ export const CaseDeadlines = connect(
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
+    updateDateRangeForDeadlinesSequence:
+      sequences.updateDateRangeForDeadlinesSequence,
+    validationErrors: state.validationErrors,
   },
   function CaseDeadlines({
     caseDeadlineReportHelper,
     judgeFilter,
     selectDateRangeFromCalendarSequence,
+    updateDateRangeForDeadlinesSequence,
+    validationErrors,
   }) {
     return (
       <>
@@ -36,7 +42,9 @@ export const CaseDeadlines = connect(
               </div>
               <div className="blue-container">
                 <DateRangePickerComponent
+                  endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
+                  startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   onChangeEnd={e => {
                     selectDateRangeFromCalendarSequence({
@@ -49,6 +57,13 @@ export const CaseDeadlines = connect(
                     });
                   }}
                 />
+                <Button
+                  onClick={() => {
+                    updateDateRangeForDeadlinesSequence();
+                  }}
+                >
+                  Show Deadlines
+                </Button>
               </div>
             </div>
             <div className="grid-col-9">

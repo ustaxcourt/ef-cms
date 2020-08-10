@@ -344,6 +344,7 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateChambersInCreateMessageModalSequence } from './sequences/updateChambersInCreateMessageModalSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
+import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
@@ -769,6 +770,7 @@ export const presenter = {
     updateChambersInCreateMessageModalSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
     updateCreateOrderModalFormValueSequence,
+    updateDateRangeForDeadlinesSequence,
     updateDocketEntryFormValueSequence,
     updateDocketEntryMetaDocumentFormValueSequence,
     updateDocketNumberSearchFormSequence,
