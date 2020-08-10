@@ -256,4 +256,38 @@ describe('updateCase', () => {
       }),
     ).rejects.toThrow('Unauthorized for update case');
   });
+
+  it('should remove a new initial filing document from the case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+    const mockRQT = {
+      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      documentType: 'Request for Place of Trial',
+      eventCode: 'RQT',
+      filedBy: 'Test Petitioner',
+      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        documents: [...MOCK_CASE.documents, mockRQT],
+        isPaper: true,
+      });
+
+    await saveCaseDetailInternalEditInteractor({
+      applicationContext,
+      caseToUpdate: {
+        ...MOCK_CASE,
+        documents: [...MOCK_CASE.documents, mockRQT],
+        isPaper: true,
+        mailingDate: 'yesterday',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateInitialFilingDocuments,
+    ).toHaveBeenCalled();
+  });
 });
