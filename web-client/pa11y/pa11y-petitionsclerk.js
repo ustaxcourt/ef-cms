@@ -29,7 +29,7 @@ module.exports = [
     actions: [
       'wait for #tab-case-info to be visible',
       'click element #tab-case-info',
-      'wait for #date-received-legend to be visible',
+      'wait for #date-received-date-label to be visible',
     ],
     notes: 'checks a11y of Create Case with inputs revealed - Case Info tab',
     url:
@@ -41,7 +41,7 @@ module.exports = [
       'click element #tab-irs-notice',
       'wait for #irs-verified-notice-radios to be visible',
       'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
+      'wait for #date-of-notice-date-label to be visible',
     ],
     notes: 'checks a11y of Create Case with inputs revealed - IRS Notice tab',
     url:
@@ -198,7 +198,7 @@ module.exports = [
       'wait for #menu-button-add-deadline to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #menu-button-add-deadline',
-      'wait for #deadline-date-legend to be visible',
+      'wait for #deadline-date-date to be visible',
     ],
     notes: 'checks a11y of add deadline modal',
     url:
@@ -379,7 +379,7 @@ module.exports = [
       'click element button#tab-irs-notice',
       'wait for label#has-irs-verified-notice-yes to be visible',
       'click element label#has-irs-verified-notice-yes',
-      'wait for #date-of-notice-month to be visible',
+      'wait for #date-of-notice-date to be visible',
     ],
     notes: 'checks a11y of editable fields exposed when Yes notice attached',
     url:
@@ -391,7 +391,7 @@ module.exports = [
       'click element #tab-irs-notice',
       'wait for #irs-verified-notice-radios to be visible',
       'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
+      'wait for #date-of-notice-date to be visible',
       'set field #case-type to Deficiency',
       'check field #case-type',
       'wait for .statistic-form to be visible',
@@ -406,7 +406,7 @@ module.exports = [
       'click element #tab-irs-notice',
       'wait for #irs-verified-notice-radios to be visible',
       'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
+      'wait for #date-of-notice-date to be visible',
       'set field #case-type to Deficiency',
       'check field #case-type',
       'wait for .calculate-penalties to be visible',
@@ -416,6 +416,16 @@ module.exports = [
     notes: 'checks the Calculate Penalties on IRS Notice modal',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=penalties-modal',
+  },
+  {
+    actions: [
+      'wait for .remove-pdf-button to be visible',
+      'click element .remove-pdf-button',
+      'wait for .confirm-replace-petition-modal to be visible',
+    ],
+    notes: 'checks a11y of ConfirmReplacePetitionModal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/121-20/petition-qc',
   },
 
   /* review petition */
@@ -429,7 +439,7 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions',
   },
   {
-    actions: ['wait for #start-date-month to be visible'],
+    actions: ['wait for #start-date-date to be visible'],
     notes: 'checks a11y of trial sessions add form',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',

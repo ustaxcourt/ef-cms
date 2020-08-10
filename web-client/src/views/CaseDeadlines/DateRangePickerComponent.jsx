@@ -1,14 +1,23 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
 
 export const DateRangePickerComponent = ({
+  endDateErrorText,
   endLabel,
   endName,
+  endPickerCls,
   onChangeEnd,
   onChangeStart,
+  pickerSpacer,
+  rangePickerCls,
+  showHint,
+  startDateErrorText,
   startLabel,
   startName,
+  startPickerCls,
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -36,55 +45,74 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
+  const Spacer = pickerSpacer;
+  const displayHint = showHint !== undefined ? showHint : true;
+
   return (
-    <>
-      <div className="usa-date-range-picker" ref={dateRangePickerRef}>
-        <div className="usa-form-group" ref={startDatePickerRef}>
-          <label
-            className="usa-label"
-            htmlFor={`${startName}-date-start`}
-            id={`${startName}-date-start-label`}
+    <FormGroup formGroupRef={dateRangePickerRef}>
+      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
+        <div className={startPickerCls}>
+          <FormGroup
+            errorText={startDateErrorText}
+            formGroupRef={startDatePickerRef}
           >
-            {startLabel || 'Start date'}
-          </label>
-          <div className="usa-hint" id={`${startName}-date-start-hint`}>
-            MM/DD/YYYY
-          </div>
-          <div className="usa-date-picker">
-            <input
-              aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
-              className="usa-input"
-              id={`${startName}-date-start`}
-              name={`${startName}-date-start`}
-              ref={startDateInputRef}
-              type="text"
-            />
-          </div>
+            <label
+              className="usa-label"
+              htmlFor={`${startName}-date-start`}
+              id={`${startName}-date-start-label`}
+            >
+              {startLabel || 'Start date'}
+            </label>
+            {displayHint && (
+              <div className="usa-hint" id={`${startName}-date-start-hint`}>
+                MM/DD/YYYY
+              </div>
+            )}
+            <div className="usa-date-picker">
+              <input
+                aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
+                className="usa-input"
+                id={`${startName}-date-start`}
+                name={`${startName}-date-start`}
+                ref={startDateInputRef}
+                type="text"
+              />
+            </div>
+          </FormGroup>
         </div>
 
-        <div className="usa-form-group" ref={endDatePickerRef}>
-          <label
-            className="usa-label"
-            htmlFor={`${endName}-date-start`}
-            id={`${endName}-date-start-label`}
+        {Spacer && <Spacer />}
+
+        <div className={endPickerCls}>
+          <FormGroup
+            errorText={endDateErrorText}
+            formGroupRef={endDatePickerRef}
           >
-            {endLabel || 'End date'}
-          </label>
-          <div className="usa-hint" id={`${endName}-date-start-hint`}>
-            MM/DD/YYYY
-          </div>
-          <div className="usa-date-picker">
-            <input
-              aria-describedby={`${endName}-date-start-label ${endName}-date-start-hint`}
-              className="usa-input"
-              id={`${endName}-date-start`}
-              name={`${endName}-date-start`}
-              ref={endDateInputRef}
-              type="text"
-            />
-          </div>
+            <label
+              className="usa-label"
+              htmlFor={`${endName}-date-end`}
+              id={`${endName}-date-end-label`}
+            >
+              {endLabel || 'End date'}
+            </label>
+            {displayHint && (
+              <div className="usa-hint" id={`${endName}-date-end-hint`}>
+                MM/DD/YYYY
+              </div>
+            )}
+            <div className="usa-date-picker">
+              <input
+                aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
+                className="usa-input"
+                id={`${endName}-date-end`}
+                name={`${endName}-date-end`}
+                ref={endDateInputRef}
+                type="text"
+              />
+            </div>
+          </FormGroup>
         </div>
       </div>
-    </>
+    </FormGroup>
   );
 };

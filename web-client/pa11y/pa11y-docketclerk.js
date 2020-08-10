@@ -37,7 +37,7 @@ module.exports = [
     actions: [
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-legend to be visible',
+      'wait for element #payment-date-waived-date to be visible',
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
@@ -76,7 +76,7 @@ module.exports = [
     actions: [
       'wait for element #certificate-of-service to be visible',
       'click element #certificate-of-service+label',
-      'wait for element #service-date-month to be visible',
+      'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
@@ -117,7 +117,7 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to dismissal',
-      'set field #startDate-date to 08/03/2001',
+      'set field #startDate-date-start to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -131,7 +131,7 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to opinion',
-      'set field #startDate-date to 08/03/2001',
+      'set field #startDate-date-start to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -145,7 +145,7 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to meow',
-      'set field #startDate-date to 08/03/2001',
+      'set field #startDate-date-start to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for svg.iconSealed to be visible',
     ],
@@ -159,7 +159,7 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to sunglasses',
-      'set field #startDate-date to 08/03/2001',
+      'set field #startDate-date-start to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
