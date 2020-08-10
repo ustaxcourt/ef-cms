@@ -1,7 +1,34 @@
 import { state } from 'cerebral';
 
+export const initialFilingDocumentTabs = [
+  {
+    documentType: 'petitionFile',
+    title: 'Petition',
+  },
+  {
+    documentType: 'stinFile',
+    title: 'STIN',
+  },
+  {
+    documentType: 'requestForPlaceOfTrialFile',
+    title: 'RQT',
+  },
+  {
+    documentType: 'ownershipDisclosureFile',
+    title: 'ODS',
+  },
+  {
+    documentType: 'applicationForWaiverOfFilingFeeFile',
+    title: 'APW',
+  },
+];
+
 export const petitionQcHelper = (get, applicationContext) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const { isPaper, ownershipDisclosureFile } = get(state.form);
+  const hasODS = !!ownershipDisclosureFile;
+
+  let documentTabsToDisplay = [...initialFilingDocumentTabs];
 
   const documentTypeMap = {
     applicationForWaiverOfFilingFeeFile:
@@ -23,5 +50,17 @@ export const petitionQcHelper = (get, applicationContext) => {
   const isPetitionFile =
     documentTypeSelectedForPreview === documentTypeMap.petitionFile;
 
-  return { isPetitionFile };
+  if (!isPaper) {
+    documentTabsToDisplay = documentTabsToDisplay.filter(tab => {
+      if (tab.title === 'ODS') {
+        // Do not display ODS tab if one wasn't filed electronically
+        return hasODS;
+      } else {
+        // Do not display APW and RQT tabs for electronic filing
+        return tab.title !== 'APW' && tab.title !== 'RQT';
+      }
+    });
+  }
+
+  return { documentTabsToDisplay, isPetitionFile };
 };
