@@ -81,10 +81,10 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe,
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].document,
     ).toEqual(mockRqtFile);
     expect(

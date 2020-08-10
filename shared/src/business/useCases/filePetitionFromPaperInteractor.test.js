@@ -7,7 +7,7 @@ const { ROLES } = require('../entities/EntityConstants');
 beforeAll(() => {
   applicationContext
     .getUseCases()
-    .uploadDocumentAndMakeSafe.mockResolvedValue(
+    .uploadDocumentAndMakeSafeInteractor.mockResolvedValue(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     );
 });
@@ -57,7 +57,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionMetadata: null,
     });
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].document,
     ).toEqual('this petition file');
   });
@@ -73,7 +73,7 @@ describe('filePetitionFromPaperInteractor', () => {
       applicationForWaiverOfFilingFeeFile: 'this APW file',
     });
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].document,
     ).toEqual('this APW file');
   });
@@ -88,7 +88,7 @@ describe('filePetitionFromPaperInteractor', () => {
       ownershipDisclosureFile: 'this ods file',
     });
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][0].document,
     ).toEqual('this ods file');
   });
@@ -103,7 +103,7 @@ describe('filePetitionFromPaperInteractor', () => {
       stinFile: 'this stin file',
     });
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][0].document,
     ).toEqual('this stin file');
   });
@@ -118,7 +118,7 @@ describe('filePetitionFromPaperInteractor', () => {
       requestForPlaceOfTrialFile: 'this rqt file',
     });
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][0].document,
     ).toEqual('this rqt file');
   });
