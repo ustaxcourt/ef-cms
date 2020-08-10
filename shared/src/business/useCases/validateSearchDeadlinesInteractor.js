@@ -4,7 +4,7 @@ const { DeadlineSearch } = require('../entities/deadlines/DeadlineSearch');
  * validateSearchDeadlinesInteractor
  *
  * @param {object} providers the providers object
- * @param {object} providers.orderSearch the order search to validate
+ * @param {object} providers.deadlineSearch the deadlineSearch params to validate
  * @returns {object} errors (null if no errors)
  */
 exports.validateSearchDeadlinesInteractor = ({
