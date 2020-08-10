@@ -22,6 +22,7 @@ describe('replace leadCaseId with leadDocketNumber on consolidated cases', () =>
   };
   const mockUserCaseWithKeys = {
     caseCaption: MOCK_CASE.caseCaption,
+    createdAt: '2019-08-22T12:47:16.905Z',
     docketNumber: MOCK_CASE.docketNumber,
     pk: 'user|e761dca7-e708-490c-a7e2-98760237736d',
     sk: `case|${MOCK_CASE.caseId}`,

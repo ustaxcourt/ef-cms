@@ -77,7 +77,7 @@ WorkItem.VALIDATION_RULES = joi.object().keys({
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberWithSuffix: joi
+  docketNumberSuffix: joi
     .string()
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .allow(null)
