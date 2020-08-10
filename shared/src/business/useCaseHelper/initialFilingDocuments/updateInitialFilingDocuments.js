@@ -25,9 +25,9 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  caseEntity.documents = caseEntity.documents.filter(
-    item => item.documentId !== originalCaseDocument.documentId,
-  );
+  caseEntity.deleteDocumentById({
+    documentId: originalCaseDocument.documentId,
+  });
 
   await applicationContext.getPersistenceGateway().deleteDocument({
     applicationContext,
