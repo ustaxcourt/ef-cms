@@ -51,65 +51,67 @@ export const DateRangePickerComponent = ({
   return (
     <FormGroup formGroupRef={dateRangePickerRef}>
       <div className={classNames('usa-date-range-picker', rangePickerCls)}>
-        <FormGroup
-          className={startPickerCls}
-          errorText={startDateErrorText}
-          formGroupRef={startDatePickerRef}
-        >
-          <label
-            className="usa-label"
-            htmlFor={`${startName}-date-start`}
-            id={`${startName}-date-start-label`}
+        <div className={startPickerCls}>
+          <FormGroup
+            errorText={startDateErrorText}
+            formGroupRef={startDatePickerRef}
           >
-            {startLabel || 'Start date'}
-          </label>
-          {displayHint && (
-            <div className="usa-hint" id={`${startName}-date-start-hint`}>
-              MM/DD/YYYY
+            <label
+              className="usa-label"
+              htmlFor={`${startName}-date-start`}
+              id={`${startName}-date-start-label`}
+            >
+              {startLabel || 'Start date'}
+            </label>
+            {displayHint && (
+              <div className="usa-hint" id={`${startName}-date-start-hint`}>
+                MM/DD/YYYY
+              </div>
+            )}
+            <div className="usa-date-picker">
+              <input
+                aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
+                className="usa-input"
+                id={`${startName}-date-start`}
+                name={`${startName}-date-start`}
+                ref={startDateInputRef}
+                type="text"
+              />
             </div>
-          )}
-          <div className="usa-date-picker">
-            <input
-              aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
-              className="usa-input"
-              id={`${startName}-date-start`}
-              name={`${startName}-date-start`}
-              ref={startDateInputRef}
-              type="text"
-            />
-          </div>
-        </FormGroup>
+          </FormGroup>
+        </div>
 
         {Spacer && <Spacer />}
 
-        <FormGroup
-          className={endPickerCls}
-          errorText={endDateErrorText}
-          formGroupRef={endDatePickerRef}
-        >
-          <label
-            className="usa-label"
-            htmlFor={`${endName}-date-end`}
-            id={`${endName}-date-end-label`}
+        <div className={endPickerCls}>
+          <FormGroup
+            errorText={endDateErrorText}
+            formGroupRef={endDatePickerRef}
           >
-            {endLabel || 'End date'}
-          </label>
-          {displayHint && (
-            <div className="usa-hint" id={`${endName}-date-end-hint`}>
-              MM/DD/YYYY
+            <label
+              className="usa-label"
+              htmlFor={`${endName}-date-end`}
+              id={`${endName}-date-end-label`}
+            >
+              {endLabel || 'End date'}
+            </label>
+            {displayHint && (
+              <div className="usa-hint" id={`${endName}-date-end-hint`}>
+                MM/DD/YYYY
+              </div>
+            )}
+            <div className="usa-date-picker">
+              <input
+                aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
+                className="usa-input"
+                id={`${endName}-date-end`}
+                name={`${endName}-date-end`}
+                ref={endDateInputRef}
+                type="text"
+              />
             </div>
-          )}
-          <div className="usa-date-picker">
-            <input
-              aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
-              className="usa-input"
-              id={`${endName}-date-end`}
-              name={`${endName}-date-end`}
-              ref={endDateInputRef}
-              type="text"
-            />
-          </div>
-        </FormGroup>
+          </FormGroup>
+        </div>
       </div>
     </FormGroup>
   );
