@@ -39,6 +39,13 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     throw new UnprocessableEntityError();
   }
 
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
     caseType: caseToUpdate.caseType,
@@ -69,37 +76,39 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     statistics: caseToUpdate.statistics,
   };
 
-  const theCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  const fullCase = {
-    ...theCase,
+  const caseWithFormEdits = {
+    ...caseRecord,
     ...editableFields,
   };
 
-  if (!isEmpty(fullCase.contactPrimary)) {
-    fullCase.contactPrimary = ContactFactory.createContacts({
+  const caseEntity = new Case(caseWithFormEdits, {
+    applicationContext,
+  });
+
+  if (!isEmpty(caseWithFormEdits.contactPrimary)) {
+    caseWithFormEdits.contactPrimary = ContactFactory.createContacts({
       applicationContext,
-      contactInfo: { primary: fullCase.contactPrimary },
-      partyType: fullCase.partyType,
+      contactInfo: { primary: caseWithFormEdits.contactPrimary },
+      partyType: caseWithFormEdits.partyType,
     }).primary.toRawObject();
   }
 
-  if (!isEmpty(fullCase.contactSecondary)) {
-    fullCase.contactSecondary = ContactFactory.createContacts({
+  if (!isEmpty(caseWithFormEdits.contactSecondary)) {
+    caseWithFormEdits.contactSecondary = ContactFactory.createContacts({
       applicationContext,
-      contactInfo: { secondary: fullCase.contactSecondary },
-      partyType: fullCase.partyType,
+      contactInfo: { secondary: caseWithFormEdits.contactSecondary },
+      partyType: caseWithFormEdits.partyType,
     }).secondary.toRawObject();
   }
 
-  const caseEntity = new Case(fullCase, { applicationContext }).validate();
-
-  if (!caseEntity.isPaper) {
+  if (caseEntity.isPaper) {
+    await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      caseToUpdate,
+    });
+  } else {
     const petitionDocument = caseEntity.getPetitionDocument();
 
     const initializeCaseWorkItem = petitionDocument.workItem;
