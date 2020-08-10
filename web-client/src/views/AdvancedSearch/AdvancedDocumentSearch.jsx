@@ -130,17 +130,20 @@ export const AdvancedDocumentSearch = connect(
                     validationErrors.dateRangeRequired ||
                     validationErrors.endDate
                   }
+                  endDateOptional={true}
                   endName="endDate"
                   endPickerCls="grid-col-5"
+                  endValue={advancedSearchForm[formType].endDate}
                   pickerSpacer={() => <div className="margin-left-3" />}
                   rangePickerCls="grid-row grid-gap-lg"
-                  showHint={false}
+                  showHint={true}
                   startDateErrorText={
                     validationErrors.dateRangeRequired ||
                     validationErrors.startDate
                   }
                   startName="startDate"
                   startPickerCls="grid-col-5"
+                  startValue={advancedSearchForm[formType].startDate}
                   onChangeEnd={e => {
                     updateSequence({
                       key: 'endDate',
