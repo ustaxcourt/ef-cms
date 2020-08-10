@@ -8,9 +8,7 @@ exports.fillInCreateCaseFromPaperForm = () => {
 
   cy.get('#tab-case-info').click();
 
-  cy.get('#date-received-month').type('01');
-  cy.get('#date-received-day').type('01');
-  cy.get('#date-received-year').type('2020');
+  cy.get('#date-received-date').type('01/01/2020');
   cy.get('#mailing-date').type('01/01/2020');
   cy.get('#procedure-type-0').click();
   cy.get('#preferred-trial-city')

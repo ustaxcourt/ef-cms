@@ -9,6 +9,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setPdfPreviewUrlForCompleteDocketEntryAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForCompleteDocketEntryAction';
 import { setupCompleteDocketEntryAction } from '../actions/setupCompleteDocketEntryAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
@@ -26,6 +27,7 @@ export const gotoEditDocketEntry = [
   updateDocketEntryWizardDataAction,
   setDocumentIdAction,
   setupCompleteDocketEntryAction,
+  setPdfPreviewUrlForCompleteDocketEntryAction,
   setCurrentPageAction('AddDocketEntry'),
 ];
 

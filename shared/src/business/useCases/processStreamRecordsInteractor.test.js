@@ -1,17 +1,11 @@
 const {
-  bulkIndexRecords,
-} = require('../../persistence/elasticsearch/bulkIndexRecords');
-const {
   processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { indexRecord } = require('../../persistence/elasticsearch/indexRecord');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
     applicationContext.getSearchClient().bulk.mockReturnValue({ body: {} });
-    applicationContext.getPersistenceGateway().bulkIndexRecords = bulkIndexRecords;
-    applicationContext.getPersistenceGateway().indexRecord = indexRecord;
   });
 
   it('does not call bulk function if recordsToProcess is an empty array', async () => {
@@ -40,7 +34,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(applicationContext.getSearchClient().bulk).not.toHaveBeenCalled();
   });
 
-  it('calls bulk function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out items that are not cases, documents, or useres', async () => {
+  it('calls bulk function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out items that are not cases, documents, or users', async () => {
     await processStreamRecordsInteractor({
       applicationContext,
       recordsToProcess: [
@@ -644,5 +638,35 @@ describe('processStreamRecordsInteractor', () => {
         userId: { S: '1' },
       },
     ]);
+  });
+
+  it('calls bulk delete function with correct params only for records with eventName "REMOVE"', async () => {
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' } },
+            OldImage: {
+              caseMetadata: { '101-19': { M: { manuallyAdded: true } } },
+              docketNumber: { S: '1' },
+              entityName: { S: 'Case' },
+              pk: { S: '1' },
+              qcCompleteForTrial: { '123': true, '234': true },
+              sk: { S: '1' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
+    ).toEqual([{ delete: { _id: '1_1', _index: 'efcms-case' } }]);
   });
 });
