@@ -272,7 +272,7 @@ export const PetitionQcScanBatchPreviewer = connect(
             <>
               <Button
                 link
-                className="red-warning push-right"
+                className="red-warning push-right remove-pdf-button"
                 onClick={() => {
                   if (isPetitionFile) {
                     openConfirmReplacePetitionPdfSequence();

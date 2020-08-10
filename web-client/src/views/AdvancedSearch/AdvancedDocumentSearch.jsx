@@ -6,6 +6,7 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 
+import { DateRangePickerComponent } from '../CaseDeadlines/DateRangePickerComponent';
 import React from 'react';
 
 export const AdvancedDocumentSearch = connect(
@@ -126,46 +127,37 @@ export const AdvancedDocumentSearch = connect(
               </div>
               <div className="grid-row date-search-row">
                 <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
-                  <FormGroup>
-                    <div className="grid-row">
-                      <div className="grid-col-5">
-                        <DatePickerComponent
-                          errorText={
-                            validationErrors.dateRangeRequired ||
-                            validationErrors.startDate
-                          }
-                          label="Start Date"
-                          name="startDate"
-                          onBlur={validateSequence}
-                          onChange={e => {
-                            updateSequence({
-                              key: 'startDate',
-                              value: e.target.value,
-                            });
-                            validateSequence();
-                          }}
-                        />
-                      </div>
-                      <div className="grid-col-2 padding-left-1"></div>
-                      <div className="grid-col-5">
-                        <DatePickerComponent
-                          errorText={
-                            validationErrors.dateRangeRequired ||
-                            validationErrors.endDate
-                          }
-                          label="End Date"
-                          name="endDate"
-                          onChange={e => {
-                            updateSequence({
-                              key: 'endDate',
-                              value: e.target.value,
-                            });
-                            validateSequence();
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </FormGroup>
+                  <DateRangePickerComponent
+                    endDateErrorText={
+                      validationErrors.dateRangeRequired ||
+                      validationErrors.endDate
+                    }
+                    endName="endDate"
+                    endPickerCls="grid-col-5"
+                    pickerSpacer={() => <div className="margin-left-3" />}
+                    rangePickerCls="grid-row grid-gap-lg"
+                    showHint={false}
+                    startDateErrorText={
+                      validationErrors.dateRangeRequired ||
+                      validationErrors.startDate
+                    }
+                    startName="startDate"
+                    startPickerCls="grid-col-5"
+                    onChangeEnd={e => {
+                      updateSequence({
+                        key: 'endDate',
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                    onChangeStart={e => {
+                      updateSequence({
+                        key: 'startDate',
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                  />
                 </div>
               </div>
             </FormGroup>
@@ -281,6 +273,7 @@ export const AdvancedDocumentSearch = connect(
                         }
                         label="End Date"
                         name="startDate"
+                        value={advancedSearchForm[formType].startDate}
                         onBlur={validateSequence}
                         onChange={e => {
                           updateSequence({
@@ -304,6 +297,7 @@ export const AdvancedDocumentSearch = connect(
                         }
                         label="End Date"
                         name="endDate"
+                        value={advancedSearchForm[formType].endDate}
                         onBlur={validateSequence}
                         onChange={e => {
                           updateSequence({

@@ -13,6 +13,7 @@ const sleep = time => {
   });
 };
 const env = args[0];
+const CHUNK_SIZE = 25;
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
@@ -36,9 +37,9 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
 
-        const chunks = chunk(results.Items, 25);
+        const chunks = chunk(results.Items, CHUNK_SIZE);
         for (let c of chunks) {
-          count += 25;
+          count += CHUNK_SIZE;
           console.log(`reindexing chunk: ${count} total reindexed`);
 
           await documentClient
