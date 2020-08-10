@@ -16,20 +16,24 @@ export const updateDateFromPickerAction = ({
   const filterStartDate = props.startDate;
   const filterEndDate = props.endDate;
 
-  if (filterStartDate) {
+  if (filterStartDate === '') {
+    store.unset(state.screenMetadata.filterStartDateState);
+  } else if (filterStartDate !== undefined) {
     const formattedFilterStartDate = applicationContext
       .getUtilities()
       .createISODateString(filterStartDate, 'YYYY-MM-DD');
-    store.set(state.screenMetadata.filterStartDate, formattedFilterStartDate);
+    store.set(
+      state.screenMetadata.filterStartDateState,
+      formattedFilterStartDate,
+    );
   }
-
-  if (filterEndDate) {
+  if (filterEndDate === '') {
+    store.unset(state.screenMetadata.filterEndDateState);
+  } else if (filterEndDate !== undefined) {
     const formattedFilterEndDate = applicationContext
       .getUtilities()
       .createISODateString(filterEndDate, 'YYYY-MM-DD');
 
-    store.set(state.screenMetadata.filterEndDate, formattedFilterEndDate);
-  } else {
-    store.unset(state.screenMetadata.filterEndDate);
+    store.set(state.screenMetadata.filterEndDateState, formattedFilterEndDate);
   }
 };
