@@ -20,7 +20,7 @@ exports.enterDocumentKeywordForOpinionSearch = keyword => {
 };
 
 exports.enterStartDateForOpinionSearch = date => {
-  cy.get('input#startDate-date').type(date);
+  cy.get('input#startDate-date-start').type(date);
 };
 
 exports.enterDocumentDocketNumber = docketNumber => {
