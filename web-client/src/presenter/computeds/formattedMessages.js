@@ -40,6 +40,12 @@ export const formattedMessages = (get, applicationContext) => {
     messages: get(state.messages) || [],
   });
 
+  const currentMessageBox = get(state.messageBoxToDisplay.box);
+
+  if (currentMessageBox === 'outbox') {
+    messages.reverse();
+  }
+
   return {
     completedMessages,
     messages,
