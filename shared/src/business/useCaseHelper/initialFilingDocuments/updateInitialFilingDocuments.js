@@ -74,25 +74,22 @@ exports.updateInitialFilingDocuments = async ({
       doc => doc.documentType === documentType,
     );
 
-    // if (originalCaseDocument && currentCaseDocument) {
-    //   if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
-    //     originalCaseDocument.documentId = currentCaseDocument.documentId;
-    //     addNewInitialFilingToCase({
-    //       applicationContext,
-    //       authorizedUser,
-    //       caseEntity,
-    //       currentCaseDocument,
-    //       documentType,
-    //     });
-    //     await deleteInitialFilingFromCase({
-    //       applicationContext,
-    //       caseEntity,
-    //       originalCaseDocument,
-    //     });
-    //   }
-    // }
-
-    if (!originalCaseDocument && currentCaseDocument) {
+    if (originalCaseDocument && currentCaseDocument) {
+      if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
+        addNewInitialFilingToCase({
+          applicationContext,
+          authorizedUser,
+          caseEntity,
+          currentCaseDocument,
+          documentType,
+        });
+        await deleteInitialFilingFromCase({
+          applicationContext,
+          caseEntity,
+          originalCaseDocument,
+        });
+      }
+    } else if (!originalCaseDocument && currentCaseDocument) {
       addNewInitialFilingToCase({
         applicationContext,
         authorizedUser,
@@ -100,9 +97,7 @@ exports.updateInitialFilingDocuments = async ({
         currentCaseDocument,
         documentType,
       });
-    }
-
-    if (originalCaseDocument && !currentCaseDocument) {
+    } else if (originalCaseDocument && !currentCaseDocument) {
       await deleteInitialFilingFromCase({
         applicationContext,
         caseEntity,
