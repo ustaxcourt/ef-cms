@@ -46,6 +46,25 @@ describe('bulkDeleteRecords', () => {
       applicationContext,
       records: records,
     });
+    expect(applicationContext.getSearchClient().bulk).toBeCalled();
+    expect(result.failedRecords).toEqual([]);
+  });
+
+  it('does not call searchClient.bulk if the filtered records are empty', async () => {
+    const result = await bulkDeleteRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            OldImage: {
+              pk: { S: 'user|6f3d97f8-1bdd-4779-a150-c076d08ad8fd' },
+              sk: { S: 'user|6f3d97f8-1bdd-4779-a150-c076d08ad8fd' },
+            },
+          },
+        },
+      ],
+    });
+    expect(applicationContext.getSearchClient().bulk).not.toBeCalled();
     expect(result.failedRecords).toEqual([]);
   });
 
@@ -74,6 +93,7 @@ describe('bulkDeleteRecords', () => {
       applicationContext,
       records: records,
     });
+    expect(applicationContext.getSearchClient().bulk).toBeCalled();
     expect(result.failedRecords).toEqual([
       {
         delete: {
