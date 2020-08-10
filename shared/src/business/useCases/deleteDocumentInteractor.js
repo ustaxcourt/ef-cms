@@ -34,9 +34,7 @@ exports.deleteDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  caseEntity.documents = caseEntity.documents.filter(
-    item => item.documentId !== documentId,
-  );
+  caseEntity.deleteDocumentById({ documentId });
 
   await applicationContext.getPersistenceGateway().deleteDocument({
     applicationContext,

@@ -46,10 +46,13 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
     mockCaseToUpdate = { ...MOCK_CASE, documents: [] };
-    mockOriginalCase = {
-      ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockRQT],
-    };
+    mockOriginalCase = new Case(
+      {
+        ...MOCK_CASE,
+        documents: [...MOCK_CASE.documents, mockRQT],
+      },
+      { applicationContext },
+    );
 
     await updateInitialFilingDocuments({
       applicationContext,
