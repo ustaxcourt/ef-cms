@@ -1,11 +1,3 @@
-// eslint-disable-next-line spellcheck/spell-checker
-/*
-considerations:
-  possibly customize the stop-word list to exclude words like "tax", "court", "irs"?
-
-  test 'asciifolding' by putting the following into an Order contents: Déjà vu
-  then search for "deja" to see if the order is returned.
-*/
 module.exports = {
   mappings: {
     dynamic: false,
