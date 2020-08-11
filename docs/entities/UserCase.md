@@ -13,6 +13,14 @@
           name: "max"
           args: 
             limit: 4700
+    createdAt: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+        presence: "required"
+        description: "When the paper or electronic case was added to the system. This value cannot be edited."
     docketNumber: 
       type: "string"
       flags: 
@@ -28,6 +36,13 @@
       flags: 
         presence: "optional"
         description: "Auto-generated from docket number and the suffix."
+    entityName: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+      allow: 
+        - "UserCase"
     leadDocketNumber: 
       type: "string"
       flags: 

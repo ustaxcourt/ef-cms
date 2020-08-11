@@ -6,7 +6,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
-export const PetitionQc = connect({}, function PetitionQc() {
+export const PetitionQc = connect(function PetitionQc() {
   return (
     <>
       <CaseDetailHeader />
@@ -20,31 +20,7 @@ export const PetitionQc = connect({}, function PetitionQc() {
               <CaseDetailEdit />
             </div>
             <div className="grid-col-7">
-              <PetitionQcDocumentPreview
-                documentTabs={[
-                  {
-                    documentType: 'petitionFile',
-                    title: 'Petition',
-                  },
-                  {
-                    documentType: 'stinFile',
-                    title: 'STIN',
-                  },
-                  {
-                    documentType: 'requestForPlaceOfTrialFile',
-                    title: 'RQT',
-                  },
-                  {
-                    documentType: 'ownershipDisclosureFile',
-                    title: 'ODS',
-                  },
-                  {
-                    documentType: 'applicationForWaiverOfFilingFeeFile',
-                    title: 'APW',
-                  },
-                ]}
-                title="Add Document(s)"
-              />
+              <PetitionQcDocumentPreview title="Add Document(s)" />
             </div>
           </div>
         </div>
