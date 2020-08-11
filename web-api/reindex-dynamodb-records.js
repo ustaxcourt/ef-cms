@@ -54,7 +54,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
             })
             .promise();
 
-          await sleep(3000);
+          await sleep(1000);
         }
       });
   }
