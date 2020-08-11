@@ -13,6 +13,7 @@ import { calculateISODate, createISODateString } from './DateHandler';
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   ROLES,
   SERVED_PARTIES_CODES,
@@ -638,13 +639,13 @@ describe('formatDocument', () => {
 
 describe('getFilingsAndProceedings', () => {
   it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
-    const result = getFilingsAndProceedings({
+    const result = getFilingsAndProceedings(applicationContext, {
       attachments: true,
       certificateOfService: true,
       certificateOfServiceDateFormatted: '11/12/1999',
       exhibits: true,
       lodged: true,
-      objections: 'Yes',
+      objections: OBJECTIONS_OPTIONS_MAP.YES,
     });
 
     expect(result).toEqual(
@@ -653,12 +654,12 @@ describe('getFilingsAndProceedings', () => {
   });
 
   it('returns a value based on document properties with no objections', () => {
-    const result = getFilingsAndProceedings({
+    const result = getFilingsAndProceedings(applicationContext, {
       attachments: false,
       certificateOfService: false,
       exhibits: false,
       lodged: false,
-      objections: 'No',
+      objections: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     expect(result).toEqual('(No Objection)');
