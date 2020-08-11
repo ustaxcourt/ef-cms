@@ -3,6 +3,7 @@
   const { elasticsearchIndexes } = require('./elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
   const connectionClass = require('http-aws-es');
+  const efcmsDocumentMappings = require('./efcms-document-mappings');
   const efcmsMessageMappings = require('./efcms-message-mappings');
   const efcmsUserCaseMappings = require('./efcms-user-case-mappings');
   const efcmsUserMappings = require('./efcms-user-mappings');
@@ -53,6 +54,8 @@
         mappingsToUse = efcmsUserCaseMappings;
       } else if (index === 'efcms-user') {
         mappingsToUse = efcmsUserMappings;
+      } else if (index === 'efcms-document') {
+        mappingsToUse = efcmsDocumentMappings;
       }
 
       try {
