@@ -46,8 +46,10 @@ import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/tr
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
   calculateISODate,
+  createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
+  createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
   formatDateString,
@@ -535,8 +537,10 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
+      createEndOfDayISO,
       createISODateString,
       createISODateStringFromObject,
+      createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,

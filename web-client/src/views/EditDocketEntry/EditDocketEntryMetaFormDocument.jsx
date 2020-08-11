@@ -3,6 +3,7 @@ import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
   docketEntryOnChange,
@@ -11,7 +12,6 @@ import {
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 
 export const EditDocketEntryMetaFormDocument = connect(
   {
@@ -89,15 +89,11 @@ export const EditDocketEntryMetaFormDocument = connect(
             Document type
           </label>
 
-          <Select
+          <SelectSearch
             aria-describedby="document-type-label"
-            className="select-react-element"
-            classNamePrefix="select-react-element"
             id="document-type"
-            isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-            placeholder="- Select -"
             value={reactSelectValue({
               documentTypes:
                 internalTypesHelper.internalDocumentTypesForSelectSorted,
