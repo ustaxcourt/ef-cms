@@ -128,7 +128,7 @@ describe('Document Search entity', () => {
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
       expect(validationErrors.startDate).toEqual(
-        'Start date must not be in the future',
+        'Start date cannot be in the future. Enter valid start date.',
       );
     });
 
@@ -142,7 +142,7 @@ describe('Document Search entity', () => {
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
       expect(validationErrors.endDate).toEqual(
-        'End date must not be in the future',
+        'End date cannot be in the future. Enter valid end date.',
       );
     });
   });
