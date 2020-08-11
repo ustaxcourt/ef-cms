@@ -2,8 +2,7 @@ import { cloneDeep } from 'lodash';
 
 const getSelectSearchSortFunction = searchText => {
   const str = searchText.toUpperCase();
-  return (first, second) => {
-    let [a, b] = [first.value.toUpperCase(), second.value.toUpperCase()];
+  const compareAttributes = (a, b) => {
     if (a == str) return -1; // exact match for a
     if (b == str) return 1; // exact match for b
 
@@ -18,6 +17,20 @@ const getSelectSearchSortFunction = searchText => {
     }
     // otherwise don't change the order
     return 0;
+  };
+  return (first, second) => {
+    let result;
+    result = compareAttributes(
+      first.value.toUpperCase(),
+      second.value.toUpperCase(),
+    );
+    if (result == 0) {
+      result = compareAttributes(
+        first.label.toUpperCase(),
+        second.label.toUpperCase(),
+      );
+    }
+    return result;
   };
 };
 
