@@ -24,9 +24,7 @@ export const validateOrderAdvancedSearchAction = async ({
       orderSearch,
     });
 
-  const isValid = isEmpty(errors);
-
-  if (isValid) {
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({
