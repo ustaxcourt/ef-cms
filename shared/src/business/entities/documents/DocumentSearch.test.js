@@ -132,5 +132,17 @@ describe('Document Search entity', () => {
 
       expect(validationErrors.startDate).toEqual('Enter a valid start date');
     });
+
+    it('should fail validation when the end date is in the future', () => {
+      const documentSearch = new DocumentSearch({
+        endDate: '2030-10-10',
+        keyword: 'sunglasses',
+        startDate: '2009-10-10',
+      });
+
+      const validationErrors = documentSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.endDate).toEqual('Enter a valid end date');
+    });
   });
 });
