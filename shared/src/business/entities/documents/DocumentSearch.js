@@ -60,6 +60,8 @@ function DocumentSearch(rawProps = {}) {
       month,
       year,
     });
+    this.tomorrow = new Date();
+    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
   }
 
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
@@ -91,6 +93,7 @@ DocumentSearch.schema = joi
       otherwise: JoiValidationConstants.ISO_DATE.format(
         DocumentSearch.VALID_DATE_SEARCH_FORMATS,
       )
+        .less(joi.ref('tomorrow'))
         .optional()
         .description(
           'The end date search filter is not required if there is no start date',
@@ -98,6 +101,7 @@ DocumentSearch.schema = joi
       then: JoiValidationConstants.ISO_DATE.format(
         DocumentSearch.VALID_DATE_SEARCH_FORMATS,
       )
+        .less(joi.ref('tomorrow'))
         .min(joi.ref('startDate'))
         .optional()
         .description(
@@ -123,6 +127,11 @@ DocumentSearch.schema = joi
       .required()
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      ),
+    tomorrow: joi
+      .optional()
+      .description(
+        'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
       ),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
