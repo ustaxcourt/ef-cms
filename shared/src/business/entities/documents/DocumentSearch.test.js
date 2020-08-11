@@ -111,8 +111,7 @@ describe('Document Search entity', () => {
     it('should fail validation when the start date year is not provided', () => {
       const documentSearch = new DocumentSearch({
         keyword: 'sunglasses',
-        startDateDay: '10',
-        startDateMonth: '10',
+        startDate: '10/10',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -123,14 +122,14 @@ describe('Document Search entity', () => {
     it('should fail validation when the start date is in the future', () => {
       const documentSearch = new DocumentSearch({
         keyword: 'sunglasses',
-        startDateDay: '10',
-        startDateMonth: '10',
-        startDateYear: '3000',
+        startDate: '10/10/3000',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.startDate).toEqual('Enter a valid start date');
+      expect(validationErrors.startDate).toEqual(
+        'Start date must not be in the future',
+      );
     });
 
     it('should fail validation when the end date is in the future', () => {
@@ -142,7 +141,9 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.endDate).toEqual('Enter a valid end date');
+      expect(validationErrors.endDate).toEqual(
+        'End date must not be in the future',
+      );
     });
   });
 });
