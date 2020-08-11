@@ -1,5 +1,7 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 
+const { DOCKET_SECTION } = applicationContext.geetConstants();
 export const petitionsClerkForwardsMessageToDocketClerk = test => {
   return it('petitions clerk forwards the message to docket clerk', async () => {
     await test.runSequence('openForwardMessageModalSequence');
@@ -23,7 +25,7 @@ export const petitionsClerkForwardsMessageToDocketClerk = test => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: 'docket',
+      value: DOCKET_SECTION,
     });
 
     await test.runSequence('updateModalFormValueSequence', {

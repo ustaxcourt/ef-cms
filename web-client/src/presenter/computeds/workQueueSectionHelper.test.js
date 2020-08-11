@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 import { workQueueSectionHelper as workQueueSectionHelperComputed } from './workQueueSectionHelper';
@@ -8,12 +8,14 @@ const workQueueSectionHelper = withAppContextDecorator(
   applicationContext,
 );
 
+const { CLERK_OF_COURT_SECTION } = applicationContext.getConstants();
+
 describe('workQueueSectionHelper', () => {
   it('returns the expected state when set', () => {
     const { chambersDisplay, sectionDisplay } = runCompute(
       workQueueSectionHelper,
     );
-    expect(sectionDisplay('clerkofcourt')).toBe('Clerk of the Court');
+    expect(sectionDisplay(CLERK_OF_COURT_SECTION)).toBe('Clerk of the Court');
     expect(chambersDisplay('urdasChambers')).toBe('Urda’s Chambers');
   });
 

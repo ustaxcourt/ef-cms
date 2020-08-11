@@ -1,5 +1,6 @@
 const {
   ADC_SECTION,
+  DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } = require('../business/entities/EntityConstants');
@@ -14,13 +15,13 @@ exports.MOCK_USERS = {
   'a7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Docketclerk',
     role: ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'b7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Docketclerk1',
     role: ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     userId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'c7d90c05-f6cd-442c-a168-202db587f16f': {
