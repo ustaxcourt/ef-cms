@@ -123,9 +123,10 @@
 **Add Another Year/Period**
 * Clerks are able to add up to 12 year/period sets
 * Sets 2-12 are optional UNLESS any field in a set includes data
-* If any field in a set has data, then all fields in that set are required 
+* If any field in a set has data, then all fields in that set are required
 
 #### Upload PDFs
+* All PDFS other than the Petition can be removed before the Petition package is served to the IRS
 
 **Petition**
 * Is required
@@ -144,6 +145,7 @@
 #### On click of Create Case button
 * Case is created in system
 * Docket number is assigned
-* Attached documents are entered onto the Docket Record (without service information)
+* Petition document is entered onto the Docket Record (without service information)
+* All other documents are not entered onto the Docket Record until service
 * Case appears in the Petitions Section Document QC > In Progress tab
 * App navigates to New Case : Review the Petition screen

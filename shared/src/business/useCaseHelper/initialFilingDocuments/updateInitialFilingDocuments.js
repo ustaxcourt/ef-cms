@@ -1,36 +1,18 @@
 const {
-  INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
 } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
 
 const addNewInitialFilingToCase = ({
   applicationContext,
-  authorizedUser,
   caseEntity,
   currentCaseDocument,
-  documentType,
+  originalCaseDocument,
 }) => {
-  const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
-    dt => dt.documentType === documentType,
-  );
-
-  let partySecondary = false;
-  if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
-    partySecondary = true;
-  }
-
   const documentToAdd = new Document(
     {
+      ...originalCaseDocument,
       ...currentCaseDocument,
-      eventCode,
-      partyPrimary: true,
-      partySecondary,
-      userId: authorizedUser.userId,
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
     { applicationContext },
   );
@@ -43,9 +25,9 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  caseEntity.documents = caseEntity.documents.filter(
-    item => item.documentId !== originalCaseDocument.documentId,
-  );
+  caseEntity.deleteDocumentById({
+    documentId: originalCaseDocument.documentId,
+  });
 
   await applicationContext.getPersistenceGateway().deleteDocument({
     applicationContext,
@@ -61,7 +43,6 @@ const deleteInitialFilingFromCase = async ({
 
 exports.updateInitialFilingDocuments = async ({
   applicationContext,
-  authorizedUser,
   caseEntity,
   caseToUpdate,
 }) => {
@@ -78,10 +59,9 @@ exports.updateInitialFilingDocuments = async ({
       if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
         addNewInitialFilingToCase({
           applicationContext,
-          authorizedUser,
           caseEntity,
           currentCaseDocument,
-          documentType,
+          originalCaseDocument,
         });
         await deleteInitialFilingFromCase({
           applicationContext,
@@ -92,10 +72,9 @@ exports.updateInitialFilingDocuments = async ({
     } else if (!originalCaseDocument && currentCaseDocument) {
       addNewInitialFilingToCase({
         applicationContext,
-        authorizedUser,
         caseEntity,
         currentCaseDocument,
-        documentType,
+        originalCaseDocument,
       });
     } else if (originalCaseDocument && !currentCaseDocument) {
       await deleteInitialFilingFromCase({

@@ -65,6 +65,7 @@ export const ScanBatchPreviewer = connect(
     showModal,
     startScanSequence,
     title,
+    validateSequence,
     validationErrors,
   }) {
     useEffect(() => {
@@ -404,6 +405,9 @@ export const ScanBatchPreviewer = connect(
                   documentUploadMode: 'preview',
                   file,
                 });
+                if (validateSequence) {
+                  validateSequence();
+                }
               }}
             />
           </FormGroup>

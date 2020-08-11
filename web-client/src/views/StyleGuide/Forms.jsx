@@ -1,4 +1,5 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import React from 'react';
 
 export const Forms = () => (
@@ -136,6 +137,21 @@ export const Forms = () => (
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
           </select>
+        </div>
+
+        <div className="usa-form-group">
+          <label className="usa-label" htmlFor="options-searchable">
+            Dropdown label (searchable)
+          </label>
+          <SelectSearch
+            id="options-searchable"
+            options={[
+              { label: 'Bananas (BA)', value: 'BA' },
+              { label: 'Craps (C)', value: 'C' },
+              { label: 'Carrots (CA)', value: 'CA' },
+              { label: 'Baccarat (B)', value: 'B' },
+            ]}
+          />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
