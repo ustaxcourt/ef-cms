@@ -290,4 +290,52 @@ describe('updateCase', () => {
       applicationContext.getUseCaseHelpers().updateInitialFilingDocuments,
     ).toHaveBeenCalled();
   });
+
+  it('should update the petition docket entry if the petition file was updated', async () => {
+    const mockPetition = {
+      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      documentType: 'Petition',
+      eventCode: 'P',
+      filedBy: 'Test Petitioner',
+      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+    };
+
+    const mockPetitionDocketEntry = {
+      description: 'Petition',
+      docketRecordId: '88b81f4d-1e47-423a-8caf-6d2fdc3d3888',
+      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      eventCode: 'P',
+      filingDate: '2019-07-24T16:30:01.940Z',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketRecord: [mockPetitionDocketEntry],
+        documents: [...MOCK_CASE.documents, mockPetition],
+        isPaper: true,
+      });
+
+    await saveCaseDetailInternalEditInteractor({
+      applicationContext,
+      caseToUpdate: {
+        ...MOCK_CASE,
+        documents: [
+          ...MOCK_CASE.documents,
+          {
+            ...mockPetition,
+            documentId: 'aaa81f4d-1e47-423a-8caf-6d2fdc3d3000',
+          },
+        ],
+        isPaper: true,
+        mailingDate: 'yesterday',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketRecord,
+    ).toHaveBeenCalled();
+  });
 });
