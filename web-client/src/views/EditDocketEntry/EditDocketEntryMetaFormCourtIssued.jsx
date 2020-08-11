@@ -1,6 +1,7 @@
 import { CourtIssuedNonstandardForm } from '../CourtIssuedDocketEntry/CourtIssuedNonstandardForm';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
@@ -9,7 +10,6 @@ import {
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
@@ -58,15 +58,11 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
           >
             Document type
           </label>
-          <Select
+          <SelectSearch
             aria-labelledby="document-type-label"
-            className="select-react-element"
-            classNamePrefix="select-react-element"
             id="document-type"
-            isClearable={true}
             name="eventCode"
             options={addCourtIssuedDocketEntryHelper.documentTypes}
-            placeholder="- Select -"
             value={reactSelectValue({
               documentTypes: addCourtIssuedDocketEntryHelper.documentTypes,
               selectedEventCode: form.eventCode,
