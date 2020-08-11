@@ -1,21 +1,48 @@
 const {
+  INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
 } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
 
 const addNewInitialFilingToCase = ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   currentCaseDocument,
+  documentType,
   originalCaseDocument,
 }) => {
-  const documentToAdd = new Document(
-    {
+  let documentMeta;
+
+  if (originalCaseDocument) {
+    documentMeta = {
       ...originalCaseDocument,
       ...currentCaseDocument,
-    },
-    { applicationContext },
-  );
+    };
+  } else {
+    const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
+      dt => dt.documentType === documentType,
+    );
+
+    let partySecondary = false;
+    if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
+      partySecondary = true;
+    }
+
+    documentMeta = {
+      ...currentCaseDocument,
+      eventCode,
+      partyPrimary: true,
+      partySecondary,
+      userId: authorizedUser.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
+    };
+  }
+
+  const documentToAdd = new Document(documentMeta, { applicationContext });
 
   caseEntity.documents.push(documentToAdd);
 };
@@ -43,6 +70,7 @@ const deleteInitialFilingFromCase = async ({
 
 exports.updateInitialFilingDocuments = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   caseToUpdate,
 }) => {
@@ -72,9 +100,10 @@ exports.updateInitialFilingDocuments = async ({
     } else if (!originalCaseDocument && currentCaseDocument) {
       addNewInitialFilingToCase({
         applicationContext,
+        authorizedUser,
         caseEntity,
         currentCaseDocument,
-        originalCaseDocument,
+        documentType,
       });
     } else if (originalCaseDocument && !currentCaseDocument) {
       await deleteInitialFilingFromCase({
