@@ -6,13 +6,27 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  */
-export const updateDateRangeForDeadlinesAction = ({ store }) => {
-  store.set(
-    state.screenMetadata.filterStartDate,
-    state.screenMetadata.filterStartDateState,
-  );
-  store.set(
-    state.screenMetadata.filterEndDate,
-    state.screenMetadata.filterEndDateState,
-  );
+export const updateDateRangeForDeadlinesAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
+  let startDate = get(state.screenMetadata.filterStartDateState);
+  let endDate = get(state.screenMetadata.filterEndDateState);
+
+  const [startMonth, startDay, startYear] = startDate.split('/');
+  startDate = applicationContext
+    .getUtilities()
+    .createStartOfDayISO({ day: startDay, month: startMonth, year: startYear });
+
+  const [endMonth, endDay, endYear] = endDate.split('/');
+  endDate = applicationContext
+    .getUtilities()
+    .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear });
+
+  store.set(state.screenMetadata.filterStartDate, startDate);
+  store.set(state.screenMetadata.filterEndDate, endDate);
+
+  store.set(state.screenMetadata.filterStartDateState, '');
+  store.set(state.screenMetadata.filterEndDateState, '');
 };
