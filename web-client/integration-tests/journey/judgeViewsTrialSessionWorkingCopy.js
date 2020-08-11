@@ -1,3 +1,6 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
+const { DOCKET_SECTION } = applicationContext.geetConstants();
 export const judgeViewsTrialSessionWorkingCopy = test => {
   return it('Judge views trial session working copy', async () => {
     await test.runSequence('gotoTrialSessionWorkingCopySequence', {
@@ -10,7 +13,9 @@ export const judgeViewsTrialSessionWorkingCopy = test => {
     expect(test.getState('trialSessionWorkingCopy.filters.showAll')).toEqual(
       true,
     );
-    expect(test.getState('trialSessionWorkingCopy.sort')).toEqual('docket');
+    expect(test.getState('trialSessionWorkingCopy.sort')).toEqual(
+      DOCKET_SECTION,
+    );
     expect(test.getState('trialSessionWorkingCopy.sortOrder')).toEqual('asc');
     expect(test.getState('trialSession.caseOrder').length).toEqual(1);
   });
