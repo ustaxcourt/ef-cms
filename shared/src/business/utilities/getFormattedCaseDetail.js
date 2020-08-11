@@ -171,6 +171,7 @@ const formatDocketRecordWithDocument = (
       );
 
       record.filingsAndProceedings = getFilingsAndProceedings(
+        applicationContext,
         formattedDocument,
       );
 
@@ -183,9 +184,11 @@ const formatDocketRecordWithDocument = (
   });
 };
 
-const getFilingsAndProceedings = formattedDocument => {
+const getFilingsAndProceedings = (applicationContext, formattedDocument) => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   const filingsAndProceedingsArray = [
     `${
       formattedDocument.certificateOfService
@@ -195,9 +198,9 @@ const getFilingsAndProceedings = formattedDocument => {
     `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
     `${
-      formattedDocument.objections === 'Yes'
+      formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
-        : formattedDocument.objections === 'No'
+        : formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.NO
         ? '(No Objection)'
         : ''
     }`,

@@ -270,7 +270,6 @@ export const PrimaryDocumentForm = connect(
             validateSequence={validateDocketEntrySequence}
           />
 
-          {console.log(addDocketEntryHelper.showObjection, '****')}
           {addDocketEntryHelper.showObjection && (
             <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
