@@ -4,6 +4,7 @@ import {
   COUNTRY_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
+  TRANSCRIPT_EVENT_CODE,
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -58,6 +59,7 @@ const applicationContextPublic = {
       COUNTRY_TYPES: COUNTRY_TYPES,
       DOCUMENT_PROCESSING_STATUS_OPTIONS,
       INITIAL_DOCUMENT_TYPES,
+      TRANSCRIPT_EVENT_CODE,
       US_STATES,
       US_STATES_OTHER,
     }),

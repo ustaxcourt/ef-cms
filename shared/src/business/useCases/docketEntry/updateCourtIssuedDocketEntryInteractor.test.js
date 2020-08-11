@@ -9,6 +9,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
@@ -93,7 +94,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           userId: mockUserId,
           workItem: {
             assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -212,7 +213,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
-        eventCode: 'TRAN',
+        eventCode: TRANSCRIPT_EVENT_CODE,
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
       },
