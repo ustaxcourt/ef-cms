@@ -875,6 +875,9 @@ const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
 const {
+  updateInitialFilingDocuments,
+} = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
+const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
 const {
@@ -1375,6 +1378,7 @@ module.exports = appContextUser => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
+        updateInitialFilingDocuments,
       };
     },
     getUseCases: () => {

@@ -65,6 +65,7 @@ export const ScanBatchPreviewer = connect(
     showModal,
     startScanSequence,
     title,
+    validateSequence,
     validationErrors,
   }) {
     useEffect(() => {
@@ -271,7 +272,7 @@ export const ScanBatchPreviewer = connect(
           <div className="padding-top-2">
             <Button
               link
-              className="red-warning push-right margin-bottom-1"
+              className="red-warning push-right margin-bottom-1 padding-top-0"
               onClick={() => {
                 openConfirmDeletePDFModalSequence();
               }}
@@ -404,6 +405,9 @@ export const ScanBatchPreviewer = connect(
                   documentUploadMode: 'preview',
                   file,
                 });
+                if (validateSequence) {
+                  validateSequence();
+                }
               }}
             />
           </FormGroup>

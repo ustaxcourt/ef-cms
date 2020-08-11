@@ -1976,6 +1976,35 @@ describe('Case entity', () => {
     });
   });
 
+  describe('deleteDocumentById', () => {
+    it('should delete the document with the given id', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const documentIdToDelete = MOCK_DOCUMENTS[1].documentId;
+      expect(myCase.documents.length).toEqual(4);
+      myCase.deleteDocumentById({
+        documentId: documentIdToDelete,
+      });
+      expect(myCase.documents.length).toEqual(3);
+      expect(
+        myCase.documents.find(d => d.documentId === documentIdToDelete),
+      ).toBeUndefined();
+    });
+
+    it('should not delete a document if a document with the given id does not exist', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const documentIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
+      expect(myCase.documents.length).toEqual(4);
+      myCase.deleteDocumentById({
+        documentId: documentIdToDelete,
+      });
+      expect(myCase.documents.length).toEqual(4);
+    });
+  });
+
   describe('getPetitionDocument', () => {
     it('should get the petition document by documentType', () => {
       const myCase = new Case(MOCK_CASE, {
