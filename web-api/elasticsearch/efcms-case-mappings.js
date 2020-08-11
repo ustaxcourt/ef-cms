@@ -649,6 +649,11 @@ module.exports = {
       type: 'text',
     },
     'sortableDocketNumber.N': {
+      fields: {
+        keyword: {
+          type: 'keyword',
+        },
+      },
       type: 'text',
     },
     'statistics.L.M.determinationDeficiencyAmount.S': {
