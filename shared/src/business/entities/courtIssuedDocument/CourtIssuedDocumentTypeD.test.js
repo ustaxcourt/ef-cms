@@ -33,7 +33,6 @@ describe('CourtIssuedDocumentTypeD', () => {
         freeText: 'Some free text',
         scenario: 'Type D',
       });
-      console.log('VALIDATION_ERROR_MESSAGES', VALIDATION_ERROR_MESSAGES);
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         date: VALIDATION_ERROR_MESSAGES.date[0].message,
       });
