@@ -1,5 +1,4 @@
 module.exports = {
-  dynamic: false,
   properties: {
     'attachments.L.M.documentId.S': {
       type: 'text',
