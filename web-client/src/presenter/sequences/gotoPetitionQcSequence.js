@@ -7,7 +7,6 @@ import { setDefaultDocumentSelectedForPreviewAction } from '../actions/setDefaul
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentForPreviewSequence } from '../sequences/setDocumentForPreviewSequence';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
-import { setHasOdsAction } from '../actions/setHasOdsAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentSelectedForPreviewAction } from '../actions/unsetDocumentSelectedForPreviewAction';
@@ -20,7 +19,6 @@ export const gotoPetitionQcSequence = [
   setDocumentDetailTabAction,
   getCaseAction,
   setCaseAction,
-  setHasOdsAction,
   setCaseOnFormAction,
   setFormForCaseAction,
   unsetDocumentSelectedForPreviewAction,

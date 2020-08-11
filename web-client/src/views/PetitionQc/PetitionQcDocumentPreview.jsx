@@ -7,15 +7,16 @@ export const PetitionQcDocumentPreview = connect(
   {
     documentSelectedForPreview:
       state.currentViewMetadata.documentSelectedForPreview,
+    petitionQcHelper: state.petitionQcHelper,
   },
   function PetitionQcDocumentPreview({
     documentSelectedForPreview,
-    documentTabs,
+    petitionQcHelper,
   }) {
     return (
       <>
         <PetitionQcScanBatchPreviewer
-          documentTabs={documentTabs}
+          documentTabs={petitionQcHelper.documentTabsToDisplay}
           documentType={documentSelectedForPreview}
           title="Add Document(s)"
         />
