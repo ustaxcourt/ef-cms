@@ -51,7 +51,7 @@
         mappingsToUse = efcmsMessageMappings;
       } else if (index === 'efcms-user-case') {
         mappingsToUse = efcmsUserCaseMappings;
-      } else if (index === 'efcms-user-mappings') {
+      } else if (index === 'efcms-user') {
         mappingsToUse = efcmsUserMappings;
       }
 
