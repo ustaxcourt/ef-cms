@@ -1,5 +1,8 @@
 import { applicationContext } from '../../applicationContext';
-import { petitionQcHelper as petitionQcHelperComputed } from './petitionQcHelper';
+import {
+  initialFilingDocumentTabs,
+  petitionQcHelper as petitionQcHelperComputed,
+} from './petitionQcHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -10,11 +13,19 @@ describe('petitionQcHelper', () => {
   );
   let mockState;
 
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+
   describe('isPetitionFile', () => {
     it('should be false when the documentSelectedForPreview is NOT a petition file', () => {
       mockState = {
+        caseDetail: {
+          documents: [],
+        },
         currentViewMetadata: {
           documentSelectedForPreview: 'requestForPlaceOfTrialFile',
+        },
+        form: {
+          isPaper: true,
         },
       };
 
@@ -26,8 +37,14 @@ describe('petitionQcHelper', () => {
 
     it('should be true when the documentSelectedForPreview is a petition file', () => {
       mockState = {
+        caseDetail: {
+          documents: [],
+        },
         currentViewMetadata: {
           documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: true,
         },
       };
 
@@ -40,6 +57,141 @@ describe('petitionQcHelper', () => {
         },
       });
       expect(isPetitionFile).toBe(true);
+    });
+  });
+
+  describe('documentTabsToDisplay', () => {
+    it('returns all initial filing document tabs for paper filings', () => {
+      mockState = {
+        caseDetail: {
+          documents: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            signatureData: null,
+          },
+        },
+      });
+      expect(documentTabsToDisplay).toEqual(initialFilingDocumentTabs);
+    });
+
+    it('hides APW and RQT tabs for electronic filings', () => {
+      mockState = {
+        caseDetail: {
+          documents: [
+            {
+              eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+            },
+          ],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: false,
+        },
+      };
+
+      const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            signatureData: null,
+          },
+        },
+      });
+      expect(documentTabsToDisplay).toEqual([
+        initialFilingDocumentTabs[0], // Petition
+        initialFilingDocumentTabs[1], // STIN
+        initialFilingDocumentTabs[3], // ODS
+      ]);
+    });
+
+    it('hides ODS tab for electronic filings if one was NOT initially filed', () => {
+      mockState = {
+        caseDetail: {
+          documents: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: false,
+        },
+      };
+
+      const { documentTabsToDisplay } = runCompute(petitionQcHelper, {
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            signatureData: null,
+          },
+        },
+      });
+      expect(documentTabsToDisplay).toEqual([
+        initialFilingDocumentTabs[0], // Petition
+        initialFilingDocumentTabs[1], // STIN
+      ]);
+    });
+  });
+
+  describe('showRemovePdfButton', () => {
+    it('returns showRemovePdfButton true if the case is a paper filing', () => {
+      mockState = {
+        caseDetail: {
+          documents: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: true,
+        },
+      };
+
+      const { showRemovePdfButton } = runCompute(petitionQcHelper, {
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            signatureData: null,
+          },
+        },
+      });
+      expect(showRemovePdfButton).toEqual(true);
+    });
+
+    it('returns showRemovePdfButton false if the case is an electronic filing', () => {
+      mockState = {
+        caseDetail: {
+          documents: [],
+        },
+        currentViewMetadata: {
+          documentSelectedForPreview: 'petitionFile',
+        },
+        form: {
+          isPaper: false,
+        },
+      };
+
+      const { showRemovePdfButton } = runCompute(petitionQcHelper, {
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            signatureData: null,
+          },
+        },
+      });
+      expect(showRemovePdfButton).toEqual(false);
     });
   });
 });
