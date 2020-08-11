@@ -72,9 +72,21 @@ function DocumentSearch(rawProps = {}) {
 DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   chooseOneValue:
     'Enter either a Docket number or a Case name/Petitioner name, not both',
-  endDate: 'Enter a valid end date',
+  endDate: [
+    {
+      contains: 'must be less than',
+      message: 'End date must not be in the future',
+    },
+    'Enter a valid end date',
+  ],
   keyword: 'Enter a keyword or phrase',
-  startDate: 'Enter a valid start date',
+  startDate: [
+    {
+      contains: 'must be less than or equal to "now"',
+      message: 'Start date must not be in the future',
+    },
+    'Enter a valid start date',
+  ],
 };
 
 DocumentSearch.schema = joi
