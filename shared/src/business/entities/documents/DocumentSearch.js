@@ -75,7 +75,7 @@ DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   endDate: [
     {
       contains: 'must be less than',
-      message: 'End date must not be in the future',
+      message: 'End date cannot be in the future. Enter valid end date.',
     },
     'Enter a valid end date',
   ],
@@ -83,7 +83,7 @@ DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   startDate: [
     {
       contains: 'must be less than or equal to "now"',
-      message: 'Start date must not be in the future',
+      message: 'Start date cannot be in the future. Enter valid start date.',
     },
     'Enter a valid start date',
   ],
