@@ -24,7 +24,6 @@ export const PetitionQcScanBatchPreviewer = connect(
     constants: state.constants,
     generatePdfFromScanSessionSequence:
       sequences.generatePdfFromScanSessionSequence,
-    isPetitionFile: state.petitionQcHelper.isPetitionFile,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence:
@@ -36,6 +35,7 @@ export const PetitionQcScanBatchPreviewer = connect(
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    petitionQcHelper: state.petitionQcHelper,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scanHelper: state.scanHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
@@ -54,13 +54,13 @@ export const PetitionQcScanBatchPreviewer = connect(
     documentTabs,
     documentType,
     generatePdfFromScanSessionSequence,
-    isPetitionFile,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence,
     pdfPreviewUrl,
+    petitionQcHelper,
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
@@ -86,7 +86,7 @@ export const PetitionQcScanBatchPreviewer = connect(
         batchWrapperRef.current.scrollTop =
           batchWrapperRef.current.scrollHeight;
     }, [scanBatchPreviewerHelper.batches]);
-
+    console.log('petitionQcHelper', petitionQcHelper);
     const renderPreviewSection = () => {
       return (
         <>
@@ -270,19 +270,21 @@ export const PetitionQcScanBatchPreviewer = connect(
         <>
           {pdfPreviewUrl && (
             <>
-              <Button
-                link
-                className="red-warning push-right remove-pdf-button"
-                onClick={() => {
-                  if (isPetitionFile) {
-                    openConfirmReplacePetitionPdfSequence();
-                  } else {
-                    openConfirmDeletePDFModalSequence();
-                  }
-                }}
-              >
-                Remove PDF
-              </Button>
+              {petitionQcHelper.showRemovePdfButton && (
+                <Button
+                  link
+                  className="red-warning push-right remove-pdf-button"
+                  onClick={() => {
+                    if (petitionQcHelper.isPetitionFile) {
+                      openConfirmReplacePetitionPdfSequence();
+                    } else {
+                      openConfirmDeletePDFModalSequence();
+                    }
+                  }}
+                >
+                  Remove PDF
+                </Button>
+              )}
               <PdfPreview />
             </>
           )}
