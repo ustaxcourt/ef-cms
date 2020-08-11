@@ -6,7 +6,6 @@ const {
 } = require('./updateInitialFilingDocuments');
 const { Case } = require('../../../business/entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
@@ -15,12 +14,6 @@ describe('addNewInitialFilingToCase', () => {
     eventCode: 'RQT',
     filedBy: 'Test Petitioner',
     userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-  };
-
-  const petitionsClerkUser = {
-    name: 'petitions clerk',
-    role: ROLES.petitionsClerk,
-    userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
   };
 
   let mockOriginalCase;
@@ -41,7 +34,6 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
-      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
@@ -54,14 +46,16 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
     mockCaseToUpdate = { ...MOCK_CASE, documents: [] };
-    mockOriginalCase = {
-      ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockRQT],
-    };
+    mockOriginalCase = new Case(
+      {
+        ...MOCK_CASE,
+        documents: [...MOCK_CASE.documents, mockRQT],
+      },
+      { applicationContext },
+    );
 
     await updateInitialFilingDocuments({
       applicationContext,
-      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
@@ -89,7 +83,6 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
-      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
