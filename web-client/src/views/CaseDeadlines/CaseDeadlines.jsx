@@ -13,6 +13,7 @@ export const CaseDeadlines = connect(
   {
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
+    screenMetadata: state.screenMetadata,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence:
@@ -22,6 +23,7 @@ export const CaseDeadlines = connect(
   function CaseDeadlines({
     caseDeadlineReportHelper,
     judgeFilter,
+    screenMetadata,
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
     validationErrors,
@@ -44,8 +46,10 @@ export const CaseDeadlines = connect(
                 <DateRangePickerComponent
                   endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
+                  endValue={screenMetadata.filterEndDateState}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
+                  startValue={screenMetadata.filterStartDateState}
                   onChangeEnd={e => {
                     selectDateRangeFromCalendarSequence({
                       endDate: e.target.value,

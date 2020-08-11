@@ -126,20 +126,11 @@
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-    docketNumberSuffix: 
+    docketNumberWithSuffix: 
       type: "string"
       flags: 
-        only: true
         presence: "optional"
-      allow: 
-        - "X"
-        - "R"
-        - "L"
-        - "P"
-        - "S"
-        - "SL"
-        - "W"
-        - null
+        description: "Auto-generated from docket number and the suffix."
     document: 
       type: "object"
       flags: 

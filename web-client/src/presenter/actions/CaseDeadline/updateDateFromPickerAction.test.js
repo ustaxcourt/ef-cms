@@ -20,7 +20,7 @@ describe('updateDateFromPickerAction', () => {
     });
 
     expect(result.state.screenMetadata.filterStartDateState).toEqual(
-      '2019-05-14T04:00:00.000Z',
+      '2019-05-14',
     );
   });
 
@@ -38,10 +38,10 @@ describe('updateDateFromPickerAction', () => {
     });
 
     expect(result.state.screenMetadata.filterStartDateState).toEqual(
-      '2019-05-14T04:00:00.000Z',
+      '2019-05-14',
     );
     expect(result.state.screenMetadata.filterEndDateState).toEqual(
-      '2019-05-17T04:00:00.000Z',
+      '2019-05-17',
     );
   });
 });
