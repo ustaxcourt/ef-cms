@@ -4,6 +4,7 @@
   AWS.config.region = 'us-east-1';
   const connectionClass = require('http-aws-es');
   const efcmsMessageMappings = require('./efcms-message-mappings');
+  const efcmsUserCaseMappings = require('./efcms-user-case-mappings');
   const elasticsearch = require('elasticsearch');
   const { mappings, settings } = require('./elasticsearch-settings');
 
@@ -44,9 +45,11 @@
     elasticsearchIndexes.map(async index => {
       let mappingsToUse = mappings;
 
+      //override the dynamic mappings with explicit mappings
       if (index === 'efcms-message') {
-        //override the dynamic mappings with explicit mappings
         mappingsToUse = efcmsMessageMappings;
+      } else if (index === 'efcms-user-case') {
+        mappingsToUse = efcmsUserCaseMappings;
       }
 
       try {
