@@ -3,6 +3,10 @@
   const { elasticsearchIndexes } = require('./elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
   const connectionClass = require('http-aws-es');
+  const efcmsDocumentMappings = require('./efcms-document-mappings');
+  const efcmsMessageMappings = require('./efcms-message-mappings');
+  const efcmsUserCaseMappings = require('./efcms-user-case-mappings');
+  const efcmsUserMappings = require('./efcms-user-mappings');
   const elasticsearch = require('elasticsearch');
   const { mappings, settings } = require('./elasticsearch-settings');
 
@@ -41,6 +45,19 @@
 
   await Promise.all(
     elasticsearchIndexes.map(async index => {
+      let mappingsToUse = mappings;
+
+      //override the dynamic mappings with explicit mappings
+      if (index === 'efcms-message') {
+        mappingsToUse = efcmsMessageMappings;
+      } else if (index === 'efcms-user-case') {
+        mappingsToUse = efcmsUserCaseMappings;
+      } else if (index === 'efcms-user') {
+        mappingsToUse = efcmsUserMappings;
+      } else if (index === 'efcms-document') {
+        mappingsToUse = efcmsDocumentMappings;
+      }
+
       try {
         const indexExists = await searchClientCache.indices.exists({
           body: {},
@@ -49,7 +66,7 @@
         if (!indexExists) {
           searchClientCache.indices.create({
             body: {
-              mappings,
+              mappings: mappingsToUse,
               settings,
             },
             index,

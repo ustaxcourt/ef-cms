@@ -1,11 +1,14 @@
 const joi = require('joi');
 const {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} = require('../../utilities/DateHandler');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { createEndOfDayISO } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
@@ -42,8 +45,8 @@ function DocumentSearch(rawProps = {}) {
   }
 
   if (rawProps.startDate) {
-    const [year, month, day] = rawProps.startDate.split('-');
-    this.startDate = createEndOfDayISO({
+    const [month, day, year] = rawProps.startDate.split('/');
+    this.startDate = createStartOfDayISO({
       day,
       month,
       year,
@@ -51,7 +54,7 @@ function DocumentSearch(rawProps = {}) {
   }
 
   if (rawProps.endDate) {
-    const [year, month, day] = rawProps.endDate.split('-');
+    const [month, day, year] = rawProps.endDate.split('/');
     this.endDate = createEndOfDayISO({
       day,
       month,
@@ -69,9 +72,21 @@ function DocumentSearch(rawProps = {}) {
 DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   chooseOneValue:
     'Enter either a Docket number or a Case name/Petitioner name, not both',
-  endDate: 'Enter a valid end date',
+  endDate: [
+    {
+      contains: 'must be less than',
+      message: 'End date cannot be in the future. Enter valid end date.',
+    },
+    'Enter a valid end date',
+  ],
   keyword: 'Enter a keyword or phrase',
-  startDate: 'Enter a valid start date',
+  startDate: [
+    {
+      contains: 'must be less than or equal to "now"',
+      message: 'Start date cannot be in the future. Enter valid start date.',
+    },
+    'Enter a valid start date',
+  ],
 };
 
 DocumentSearch.schema = joi
@@ -98,8 +113,8 @@ DocumentSearch.schema = joi
       then: JoiValidationConstants.ISO_DATE.format(
         DocumentSearch.VALID_DATE_SEARCH_FORMATS,
       )
-        .min(joi.ref('startDate'))
         .less(joi.ref('tomorrow'))
+        .min(joi.ref('startDate'))
         .optional()
         .description(
           'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
