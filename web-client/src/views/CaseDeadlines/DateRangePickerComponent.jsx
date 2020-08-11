@@ -49,6 +49,13 @@ export const DateRangePickerComponent = ({
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
+      const backspaceEvent = new CustomEvent('change', {
+        bubbles: true,
+        cancelable: true,
+        detail: { value: '' },
+      });
+      startInput.dispatchEvent(backspaceEvent);
+      startHiddenInput.dispatchEvent(backspaceEvent);
     }
   }, [startValue]);
 
@@ -60,6 +67,13 @@ export const DateRangePickerComponent = ({
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';
+      const backspaceEvent = new CustomEvent('change', {
+        bubbles: true,
+        cancelable: true,
+        detail: { value: '' },
+      });
+      endInput.dispatchEvent(backspaceEvent);
+      endHiddenInput.dispatchEvent(backspaceEvent);
     }
   }, [endValue]);
 
