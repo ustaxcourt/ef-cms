@@ -14,7 +14,7 @@ module.exports = {
       type: 'text',
     },
     'completedAt.S': {
-      type: 'text',
+      type: 'date',
     },
     'completedBy.S': {
       type: 'text',
@@ -29,7 +29,7 @@ module.exports = {
       type: 'text',
     },
     'createdAt.S': {
-      type: 'text',
+      type: 'date',
     },
     'docketNumber.S': {
       type: 'text',
