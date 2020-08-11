@@ -16,6 +16,7 @@ const {
   PAYMENT_STATUS,
   ROLES,
   SERVED_PARTIES_CODES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -746,7 +747,7 @@ describe('documentMeetsAgeRequirements', () => {
   });
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
     });
     expect(result).toBeTruthy();
@@ -758,7 +759,7 @@ describe('documentMeetsAgeRequirements', () => {
       units: 'hours',
     });
     const result = documentMeetsAgeRequirements({
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       secondaryDate: aShortTimeAgo,
     });
     expect(result).toBeFalsy();
