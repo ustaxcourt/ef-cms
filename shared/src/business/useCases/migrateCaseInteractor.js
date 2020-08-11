@@ -86,7 +86,7 @@ exports.migrateCaseInteractor = async ({
       : applicationContext.getUniqueId();
   }
 
-  const caseValidatedRaw = caseToAdd.validate().toRawObject();
+  const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,

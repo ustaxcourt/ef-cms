@@ -147,7 +147,18 @@ exports.joiValidationDecorator = function (
       allowUnknown: true,
     });
 
-    return error;
+    if (error) {
+      throw new InvalidEntityError(
+        entityConstructor.validationName,
+        JSON.stringify(
+          error.details.map(detail => {
+            return detail.message.replace(/"/g, "'");
+          }),
+        ),
+      );
+    }
+
+    return this;
   };
 
   entityConstructor.prototype.validate = function validate() {

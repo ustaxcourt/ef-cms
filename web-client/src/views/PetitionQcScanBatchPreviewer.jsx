@@ -86,7 +86,6 @@ export const PetitionQcScanBatchPreviewer = connect(
         batchWrapperRef.current.scrollTop =
           batchWrapperRef.current.scrollHeight;
     }, [scanBatchPreviewerHelper.batches]);
-    console.log('petitionQcHelper', petitionQcHelper);
     const renderPreviewSection = () => {
       return (
         <>
