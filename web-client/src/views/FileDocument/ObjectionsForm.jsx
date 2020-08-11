@@ -6,6 +6,7 @@ import React from 'react';
 export const ObjectionsForm = connect(
   {
     DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
+    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     data: state[props.bind],
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
@@ -17,6 +18,7 @@ export const ObjectionsForm = connect(
   function ObjectionsForm({
     data,
     DOCUMENT_RELATIONSHIPS,
+    OBJECTIONS_OPTIONS,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -29,7 +31,7 @@ export const ObjectionsForm = connect(
             <legend id={`${type}-objections-legend`}>
               Are there any objections to the granting of this document?
             </legend>
-            {['Yes', 'No', 'Unknown'].map(option => (
+            {OBJECTIONS_OPTIONS.map(option => (
               <div className="usa-radio usa-radio__inline" key={option}>
                 <input
                   aria-describedby={`${type}-objections-legend`}
