@@ -170,6 +170,7 @@ module.exports = {
       type: 'text',
     },
     'documentContents.S': {
+      analyzer: 'ustc_analyzer',
       type: 'text',
     },
     'documentContentsId.S': {
@@ -182,6 +183,7 @@ module.exports = {
       type: 'text',
     },
     'documentTitle.S': {
+      analyzer: 'ustc_analyzer',
       type: 'text',
     },
     'documentType.S': {
