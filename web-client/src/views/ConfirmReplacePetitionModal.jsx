@@ -13,7 +13,7 @@ export const ConfirmReplacePetitionModal = connect(
       <ModalDialog
         cancelLabel="No, Keep Current PDF"
         cancelSequence={cancelSequence}
-        className=""
+        className="confirm-replace-petition-modal"
         confirmLabel="Yes, Continue"
         confirmSequence={confirmSequence}
         message="You must scan or upload another Petition PDF, or the original PDF will remain on the case."

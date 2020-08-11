@@ -16,21 +16,22 @@ exports.bulkDeleteRecords = async ({ applicationContext, records }) => {
     })
     .filter(item => item);
 
-  const response = await searchClient.bulk({
-    body,
-    refresh: true,
-  });
-
   const failedRecords = [];
-  if (response.errors) {
-    response.items.forEach((action, i) => {
-      const operation = Object.keys(action)[0];
-      if (action[operation].error) {
-        let record = body[i * 2];
-        failedRecords.push(record);
-      }
+  if (body.length) {
+    const response = await searchClient.bulk({
+      body,
+      refresh: true,
     });
-  }
 
+    if (response.errors) {
+      response.items.forEach((action, i) => {
+        const operation = Object.keys(action)[0];
+        if (action[operation].error) {
+          let record = body[i * 2];
+          failedRecords.push(record);
+        }
+      });
+    }
+  }
   return { failedRecords };
 };

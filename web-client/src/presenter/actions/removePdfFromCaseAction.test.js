@@ -11,12 +11,13 @@ describe('removePdfFromCaseAction', () => {
   });
 
   it('should delete the pdf specified in props', async () => {
-    const { state } = await runAction(removePdfFromCaseAction, {
+    const { output } = await runAction(removePdfFromCaseAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: {
+        documentId: mockDocumentId,
+        form: {
           docketNumber: '101-19',
           documents: [
             {
@@ -27,11 +28,10 @@ describe('removePdfFromCaseAction', () => {
             },
           ],
         },
-        documentId: mockDocumentId,
       },
     });
 
-    expect(state.caseDetail.documents).toEqual([
+    expect(output.caseDetail.documents).toEqual([
       {
         documentId: '123',
       },
@@ -44,7 +44,8 @@ describe('removePdfFromCaseAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        documentId: mockDocumentId,
+        form: {
           docketNumber: '101-19',
           documents: [
             {
@@ -55,7 +56,6 @@ describe('removePdfFromCaseAction', () => {
             },
           ],
         },
-        documentId: mockDocumentId,
       },
     });
 
@@ -75,7 +75,8 @@ describe('removePdfFromCaseAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
+        documentId: mockDocumentId,
+        form: {
           docketNumber: '101-19',
           documents: [
             {
@@ -86,7 +87,6 @@ describe('removePdfFromCaseAction', () => {
             },
           ],
         },
-        documentId: mockDocumentId,
       },
     });
 

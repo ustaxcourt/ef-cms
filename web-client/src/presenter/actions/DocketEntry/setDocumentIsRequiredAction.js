@@ -9,10 +9,16 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state
  */
 export const setDocumentIsRequiredAction = ({ get, props, store }) => {
-  const { isFileAttached } = get(state.form);
+  const isFileAttached = get(state.form.isFileAttached);
   const { isSavingForLater } = props;
+  const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
 
-  if (!isFileAttached && !isSavingForLater) {
+  if (
+    isSavingForLater ||
+    (isFileAttached && documentUploadMode === 'preview')
+  ) {
+    store.unset(state.form.isDocumentRequired);
+  } else if (documentUploadMode !== 'preview') {
     store.set(state.form.isDocumentRequired, true);
   }
 };
