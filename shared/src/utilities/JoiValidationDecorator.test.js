@@ -147,7 +147,7 @@ describe('Joi Validation Decorator', () => {
       expect(rawEntity.arry2[1]).toEqual('two');
     });
 
-    it('should correctly display formatted error messages for joi alternatives', () => {
+    it('should ignore formatted error messages for joi alternatives', () => {
       const obj = new MockEntity2({
         arry1: [{ baz: 'foz', foo: 'bar' }],
         arry2: ['one', 'two'],
@@ -157,11 +157,7 @@ describe('Joi Validation Decorator', () => {
         obj1: { foo: 'bar' },
         reallyMessyNestedThing: { will: 'not match' },
       });
-
       expect(obj.getFormattedValidationErrors()).toBe(null);
-      expect(obj.validateForMigration().toString()).toContain(
-        'does not match any of the allowed types',
-      );
     });
   });
 
