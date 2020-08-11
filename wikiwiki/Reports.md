@@ -11,6 +11,7 @@
 * Defaulted to today's date
 * Deadline table is sorted by docket number (oldest to newest)
 * When date range is selected, table is sorted chronologically by due date, and then by docket number
+* Date range can be past, present or future 
 
 ## Case Inventory Report
 * Results table is sorted by docket number (oldest to newest)

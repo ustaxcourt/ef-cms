@@ -10,6 +10,11 @@ See [Add Docket Entry - Externally Filed Paper Document User Flow ](https://www.
 * Clerks have the option to upload a PDF or to scan documents directly from their desk scanner
 * scanner settings include single-sided, two-sided, and flatbed
 
+**Remove PDF**
+* Docket clerk can remove a paper filing PDF any time before serving the document
+* After service, PDFs cannot be removed
+
+
 ### Add Docket Entry Form
 **Filing Status**
 * Filed - default selection, document will display as "Filed" on docket record
@@ -46,13 +51,16 @@ See [Add Docket Entry - Externally Filed Paper Document User Flow ](https://www.
 * If checked, document is added to the pending report until manually removed
 * Motions, Applications, Order to Show Cause, and Proposed Stipulated Decisions are automatically added to pending report and this checkbox is hidden
 
-**On Finish**
+**On Save Entry**
 * app navigates to Case Detail > Docket record with success message
-* New docket entry is added to docket record; index number is applied in sequential order
+* New docket entry is added to docket record as "not served"
+* Document displays in the Docket Document QC > In Progress queue until it is served
 
-**On "Add Another Entry"
-* New docket entry is added to docket record; index number is applied in sequential order
-* App navigates to a clear version of the Add Docket Entry to allow user to add another document
+**Save and Serve**
+* Service confirmation modal Displays
+* On serve, the docket entry is added to docket record with served date and parties included
+* Served stamp is applied to coversheet
+
 
 ### Incomplete Entries
 * Docket entry can be saved without adding a PDF document as an incomplete entry
