@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -23,7 +24,7 @@ export const validateOrderAdvancedSearchAction = async ({
       orderSearch,
     });
 
-  if (!errors) {
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({
