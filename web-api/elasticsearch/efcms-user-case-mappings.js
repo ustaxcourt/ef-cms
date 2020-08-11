@@ -1,5 +1,4 @@
 module.exports = {
-  dynamic: false,
   properties: {
     'caseCaption.S': {
       type: 'text',
