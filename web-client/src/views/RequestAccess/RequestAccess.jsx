@@ -3,11 +3,11 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import { reactSelectValue } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 import classNames from 'classnames';
 
 export const RequestAccess = connect(
@@ -66,17 +66,15 @@ export const RequestAccess = connect(
               or use the dropdown to select your document type.
             </span>
 
-            <Select
+            <SelectSearch
               aria-describedby="document-type-label"
               className={classNames(
                 'select-react-element',
                 validationErrors.documentType && 'usa-select--error',
               )}
-              classNamePrefix="select-react-element"
               id="document-type"
               name="documentType"
               options={requestAccessHelper.documentsForSelect}
-              placeholder="- Select -"
               value={reactSelectValue({
                 documentTypes: requestAccessHelper.documentsForSelect,
                 selectedEventCode: form.eventCode,

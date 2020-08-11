@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay/';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
   fileDocumentPrimaryOnChange,
@@ -12,7 +13,6 @@ import {
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 
 export const CompleteDocumentTypeSection = connect(
   {
@@ -55,18 +55,13 @@ export const CompleteDocumentTypeSection = connect(
             or use the dropdown to select your document type.
           </span>
 
-          <Select
-            aria-describedby="document-type-label"
+          <SelectSearch
             aria-labelledby="document-type-label"
-            className="select-react-element"
-            classNamePrefix="select-react-element"
             id="document-type"
-            isClearable={true}
             name="eventCode"
             options={
               completeDocumentTypeSectionHelper.documentTypesForSelectSorted
             }
-            placeholder="- Select -"
             value={reactSelectValue({
               documentTypes:
                 completeDocumentTypeSectionHelper.documentTypesForSelectSorted,

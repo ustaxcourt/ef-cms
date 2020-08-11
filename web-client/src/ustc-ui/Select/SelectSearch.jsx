@@ -16,6 +16,9 @@ export class SelectSearch extends React.Component {
     if (action === 'input-change') {
       this.setState({ inputText });
     }
+    if (typeof this.props.onInputChange === 'function') {
+      this.props.onInputChange.apply(this, arguments);
+    }
   }
 
   render() {
