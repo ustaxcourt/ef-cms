@@ -22,7 +22,8 @@ DeadlineSearch.VALIDATION_ERROR_MESSAGES = {
   endDate: [
     {
       contains: 'ref:startDate',
-      message: 'End date cannot be prior to Start Date. Enter valid End date.',
+      message:
+        'End date cannot be prior to Start Date. Enter a valid End date.',
     },
     {
       contains: 'is required',
