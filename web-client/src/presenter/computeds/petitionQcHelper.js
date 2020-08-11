@@ -68,5 +68,9 @@ export const petitionQcHelper = (get, applicationContext) => {
     });
   }
 
-  return { documentTabsToDisplay, isPetitionFile };
+  return {
+    documentTabsToDisplay,
+    isPetitionFile,
+    showRemovePdfButton: isPaper,
+  };
 };
