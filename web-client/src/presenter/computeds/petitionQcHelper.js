@@ -26,7 +26,13 @@ export const initialFilingDocumentTabs = [
 export const petitionQcHelper = (get, applicationContext) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
-  const hasODS = get(state.hasOdsDocument);
+  const documents = get(state.caseDetail.documents);
+
+  const hasODS = !!documents.find(
+    document =>
+      document.eventCode ===
+      INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+  );
 
   let documentTabsToDisplay = [...initialFilingDocumentTabs];
 

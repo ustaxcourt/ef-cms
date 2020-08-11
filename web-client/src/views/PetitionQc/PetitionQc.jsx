@@ -4,34 +4,27 @@ import { ErrorNotification } from '../ErrorNotification';
 import { PetitionQcDocumentPreview } from './PetitionQcDocumentPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
 import React from 'react';
 
-export const PetitionQc = connect(
-  { petitionQcHelper: state.petitionQcHelper },
-  function PetitionQc({ petitionQcHelper }) {
-    return (
-      <>
-        <CaseDetailHeader />
-        <section className="usa-section grid-container DocumentDetail">
-          <h2 className="heading-1">Petition</h2>
-          <SuccessNotification />
-          <ErrorNotification />
-          <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-5">
-                <CaseDetailEdit />
-              </div>
-              <div className="grid-col-7">
-                <PetitionQcDocumentPreview
-                  documentTabs={petitionQcHelper.documentTabsToDisplay}
-                  title="Add Document(s)"
-                />
-              </div>
+export const PetitionQc = connect(function PetitionQc() {
+  return (
+    <>
+      <CaseDetailHeader />
+      <section className="usa-section grid-container DocumentDetail">
+        <h2 className="heading-1">Petition</h2>
+        <SuccessNotification />
+        <ErrorNotification />
+        <div className="grid-container padding-x-0">
+          <div className="grid-row grid-gap">
+            <div className="grid-col-5">
+              <CaseDetailEdit />
+            </div>
+            <div className="grid-col-7">
+              <PetitionQcDocumentPreview title="Add Document(s)" />
             </div>
           </div>
-        </section>
-      </>
-    );
-  },
-);
+        </div>
+      </section>
+    </>
+  );
+});
