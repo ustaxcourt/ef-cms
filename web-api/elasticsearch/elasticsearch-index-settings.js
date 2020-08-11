@@ -5,6 +5,7 @@
   const connectionClass = require('http-aws-es');
   const efcmsMessageMappings = require('./efcms-message-mappings');
   const efcmsUserCaseMappings = require('./efcms-user-case-mappings');
+  const efcmsUserMappings = require('./efcms-user-mappings');
   const elasticsearch = require('elasticsearch');
   const { mappings, settings } = require('./elasticsearch-settings');
 
@@ -50,6 +51,8 @@
         mappingsToUse = efcmsMessageMappings;
       } else if (index === 'efcms-user-case') {
         mappingsToUse = efcmsUserCaseMappings;
+      } else if (index === 'efcms-user-mappings') {
+        mappingsToUse = efcmsUserMappings;
       }
 
       try {
