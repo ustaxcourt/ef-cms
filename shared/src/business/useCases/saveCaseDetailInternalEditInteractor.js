@@ -104,7 +104,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({
       applicationContext,
-      authorizedUser,
       caseEntity,
       caseToUpdate,
     });

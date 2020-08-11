@@ -18,12 +18,15 @@ export const StartCaseInternal = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
+    validatePetitionFromPaperSequence:
+      sequences.validatePetitionFromPaperSequence,
   },
   function StartCaseInternal({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
     showModal,
     submitPetitionFromPaperSequence,
+    validatePetitionFromPaperSequence,
   }) {
     return (
       <>
@@ -86,6 +89,7 @@ export const StartCaseInternal = connect(
                   ]}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
+                  validateSequence={validatePetitionFromPaperSequence}
                 />
               </div>
             </div>
