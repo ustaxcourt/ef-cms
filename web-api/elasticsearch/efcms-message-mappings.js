@@ -7,9 +7,6 @@ module.exports = {
     'attachments.L.M.documentTitle.S': {
       type: 'text',
     },
-    'caseId.S': {
-      type: 'text',
-    },
     'caseStatus.S': {
       type: 'text',
     },
@@ -17,6 +14,9 @@ module.exports = {
       type: 'text',
     },
     'completedAt.S': {
+      type: 'text',
+    },
+    'completedBy.S': {
       type: 'text',
     },
     'completedBySection.S': {
@@ -41,6 +41,12 @@ module.exports = {
       type: 'text',
     },
     'from.S': {
+      type: 'text',
+    },
+    'fromSection.S': {
+      type: 'text',
+    },
+    'fromUserId.S': {
       type: 'text',
     },
     'gsi1pk.S': {
