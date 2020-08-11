@@ -152,6 +152,30 @@ describe('migrateCaseInteractor', () => {
         }),
       ).rejects.toThrow('The Case entity was invalid');
     });
+
+    it('should provide developer-friendly feedback when the case is invalid', async () => {
+      let error, results;
+      try {
+        results = await migrateCaseInteractor({
+          applicationContext,
+          caseMetadata: {
+            ...MOCK_CASE,
+            docketNumber: 'ABC',
+            documents: [{ ...MOCK_CASE.documents[0], documentId: 'invalid' }],
+          },
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(results).toBeUndefined();
+      expect(error.message).toContain(
+        "'docketNumber' with value 'ABC' fails to match the required pattern",
+      );
+      expect(error.message).toContain(
+        "'documents[0].documentId' must be a valid GUID",
+      );
+    });
   });
 
   describe('Practitioners via barNumber', () => {
