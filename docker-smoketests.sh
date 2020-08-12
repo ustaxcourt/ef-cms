@@ -4,7 +4,7 @@
 # rm -rf node_modules dist .elasticsearch .dynamodb
 # npm ci
 
-docker build -t efcms -f Dockerfile .
+docker build -t efcms -f Dockerfile-local .
 
 docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
            -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
