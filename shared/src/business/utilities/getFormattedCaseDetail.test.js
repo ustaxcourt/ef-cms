@@ -639,7 +639,7 @@ describe('formatDocument', () => {
 
 describe('getFilingsAndProceedings', () => {
   it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
-    const result = getFilingsAndProceedings(applicationContext, {
+    const result = getFilingsAndProceedings({
       attachments: true,
       certificateOfService: true,
       certificateOfServiceDateFormatted: '11/12/1999',
@@ -654,7 +654,7 @@ describe('getFilingsAndProceedings', () => {
   });
 
   it('returns a value based on document properties with no objections', () => {
-    const result = getFilingsAndProceedings(applicationContext, {
+    const result = getFilingsAndProceedings({
       attachments: false,
       certificateOfService: false,
       exhibits: false,

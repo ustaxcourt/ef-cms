@@ -31,7 +31,7 @@ export const generateTitlePreviewAction = ({
 
   const filingsAndProceedings = applicationContext
     .getUtilities()
-    .getFilingsAndProceedings(applicationContext, formattedDocument);
+    .getFilingsAndProceedings(formattedDocument);
 
   if (filingsAndProceedings) {
     updatedDocumentTitle += ` ${filingsAndProceedings}`;
