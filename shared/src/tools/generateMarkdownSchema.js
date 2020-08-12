@@ -55,9 +55,6 @@ const {
   getSurvivingSpouseContact,
 } = require('../business/entities/contacts/SurvivingSpouseContact');
 const {
-  InitialWorkItemMessage,
-} = require('../business/entities/InitialWorkItemMessage');
-const {
   OrderWithoutBody,
 } = require('../business/entities/orders/OrderWithoutBody');
 const {
@@ -71,15 +68,13 @@ const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { CaseExternal } = require('../business/entities/cases/CaseExternal');
 const { CaseInternal } = require('../business/entities/cases/CaseInternal');
-const { CaseMessage } = require('../business/entities/CaseMessage');
 const { Correspondence } = require('../business/entities/Correspondence');
 const { COUNTRY_TYPES } = require('../business/entities/EntityConstants');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
-const { ForwardMessage } = require('../business/entities/ForwardMessage');
 const { IrsPractitioner } = require('../business/entities/IrsPractitioner');
 const { Message } = require('../business/entities/Message');
-const { NewCaseMessage } = require('../business/entities/NewCaseMessage');
+const { NewMessage } = require('../business/entities/NewMessage');
 const { NewPractitioner } = require('../business/entities/NewPractitioner');
 const { Note } = require('../business/entities/notes/Note');
 const { Order } = require('../business/entities/orders/Order');
@@ -384,15 +379,12 @@ generateMarkdownSchema(Case, 'Case');
 generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
 generateMarkdownSchema(CaseExternal, 'CaseExternal');
 generateMarkdownSchema(CaseInternal, 'CaseInternal');
-generateMarkdownSchema(CaseMessage, 'CaseMessage');
+generateMarkdownSchema(Message, 'Message');
 generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
-generateMarkdownSchema(ForwardMessage, 'ForwardMessage');
-generateMarkdownSchema(InitialWorkItemMessage, 'InitialWorkItemMessage');
 generateMarkdownSchema(IrsPractitioner, 'IrsPractitioner');
-generateMarkdownSchema(Message, 'Message');
-generateMarkdownSchema(NewCaseMessage, 'NewCaseMessage');
+generateMarkdownSchema(NewMessage, 'NewMessage');
 generateMarkdownSchema(NewPractitioner, 'NewPractitioner');
 generateMarkdownSchema(Note, 'Note');
 generateMarkdownSchema(Order, 'Order');

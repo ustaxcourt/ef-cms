@@ -13,6 +13,7 @@ resource "aws_s3_bucket_object" "clamav_layer_object" {
   bucket = aws_s3_bucket.layer_bucket.id
   key    = "${var.environment}_clamav_lambda_layer.zip"
   source = "../../runtimes/clamav/clamav_lambda_layer.zip"
+  etag   = "${filemd5("../../runtimes/clamav/clamav_lambda_layer.zip")}"
 }
 
 resource "aws_lambda_layer_version" "clamav_layer" {
@@ -27,6 +28,7 @@ resource "aws_s3_bucket_object" "puppeteer_layer_object" {
   bucket = aws_s3_bucket.layer_bucket.id
   key    = "${var.environment}_puppeteer_lambda_layer.zip"
   source = "../../runtimes/puppeteer/puppeteer_lambda_layer.zip"
+  etag   = "${filemd5("../../runtimes/puppeteer/puppeteer_lambda_layer.zip")}"
 }
 
 resource "aws_lambda_layer_version" "puppeteer_layer" {

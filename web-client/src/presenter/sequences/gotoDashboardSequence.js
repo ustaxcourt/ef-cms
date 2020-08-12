@@ -1,7 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
-import { getInboxCaseMessagesForUserAction } from '../actions/getInboxCaseMessagesForUserAction';
+import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getOpenAndClosedCasesByUserAction } from '../actions/caseConsolidation/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -11,12 +11,12 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
-import { setCaseMessagesAction } from '../actions/setCaseMessagesAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
+import { setMessagesAction } from '../actions/setMessagesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { state } from 'cerebral';
@@ -25,10 +25,7 @@ const { USER_ROLES } = getConstants();
 
 const proceedToMessages = [navigateToMessagesAction];
 
-const getCaseMessages = [
-  getInboxCaseMessagesForUserAction,
-  setCaseMessagesAction,
-];
+const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
@@ -54,7 +51,7 @@ const goToDashboard = [
     ),
     chambers: [
       setMessageInboxPropsAction,
-      getCaseMessages,
+      getMessages,
       getJudgeForCurrentUserAction,
       setJudgeUserAction,
       getTrialSessionsAction,
@@ -71,7 +68,7 @@ const goToDashboard = [
     irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
     judge: [
       setMessageInboxPropsAction,
-      getCaseMessages,
+      getMessages,
       getTrialSessionsAction,
       setTrialSessionsAction,
       setCurrentPageAction('DashboardJudge'),

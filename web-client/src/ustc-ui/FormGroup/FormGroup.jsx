@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const FormGroup = connect(function FormGroup(props) {
-  const { children, className, errorText, id } = props;
+  const { children, className, errorText, formGroupRef, id } = props;
 
   let hasError = false;
 
@@ -37,6 +37,7 @@ export const FormGroup = connect(function FormGroup(props) {
         className,
       )}
       id={id}
+      ref={formGroupRef}
     >
       {children}
       {Array.isArray(errorText) && renderMultipleErrors()}

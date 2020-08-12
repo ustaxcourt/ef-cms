@@ -116,12 +116,12 @@ exports.updateDocketEntryInteractor = async ({
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
 
   if (editableFields.isFileAttached) {
-    const workItem = documentEntity.getQCWorkItem();
+    const { workItem } = documentEntity;
 
     if (!isSavingForLater) {
-      const workItemToDelete = currentDocument.workItems.find(
-        workItem => !workItem.document.isFileAttached,
-      );
+      const workItemToDelete =
+        currentDocument.workItem &&
+        !currentDocument.workItem.document.isFileAttached;
 
       if (workItemToDelete) {
         await applicationContext
@@ -144,7 +144,6 @@ exports.updateDocketEntryInteractor = async ({
           createdAt: documentEntity.createdAt,
         },
         inProgress: isSavingForLater,
-        isQC: true,
         section: DOCKET_SECTION,
         sentBy: user.userId,
       });
@@ -163,7 +162,7 @@ exports.updateDocketEntryInteractor = async ({
         sentByUserId: user.userId,
       });
 
-      documentEntity.addWorkItem(workItem);
+      documentEntity.setWorkItem(workItem);
 
       const servedParties = aggregatePartiesForService(caseEntity);
       documentEntity.setAsServed(servedParties.all);
@@ -224,7 +223,7 @@ exports.updateDocketEntryInteractor = async ({
         workItem: workItem.validate().toRawObject(),
       });
   } else if (!editableFields.isFileAttached && isSavingForLater) {
-    const workItem = documentEntity.getQCWorkItem();
+    const { workItem } = documentEntity;
 
     Object.assign(workItem, {
       assigneeId: null,

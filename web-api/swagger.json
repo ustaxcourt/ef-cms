@@ -2597,58 +2597,6 @@
         }
       }
     },
-    "/sections/{section}/messages/inbox": {
-      "parameters": [
-        {
-          "name": "section",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get all workitems in the sections inbox",
-        "description": "Get all workitems in the sections inbox.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/sections/{section}/document-qc/inbox": {
       "parameters": [
         {
@@ -2894,58 +2842,6 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/sections/{section}/messages/sent": {
-      "parameters": [
-        {
-          "name": "section",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get all workitems in the sections outbox",
-        "description": "Get all workitems in the sections outbox.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
             }
           }
         },
@@ -3526,110 +3422,6 @@
         "tags": ["workitems"],
         "summary": "get the served items from the users document qc section",
         "description": "get the served items from the users document qc section\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{userId}/messages/inbox": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get a users work item inbox",
-        "description": "get a users work item inbox\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{userId}/messages/sent": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get a users work item outbox",
-        "description": "get a users work item outbox\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -5556,14 +5348,14 @@
     "/messages": {
       "post": {
         "tags": ["messages"],
-        "summary": "create a case message",
+        "summary": "create a message",
         "description": "Create a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5615,7 +5407,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5667,7 +5459,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5719,7 +5511,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5771,7 +5563,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5823,7 +5615,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5875,7 +5667,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5927,7 +5719,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5979,7 +5771,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6016,14 +5808,14 @@
     "/messages/{parentMessageId}/complete": {
       "post": {
         "tags": ["messages"],
-        "summary": "complete a case message",
+        "summary": "complete a message",
         "description": "Complete a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6043,7 +5835,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -6081,14 +5873,14 @@
     "/messages/{parentMessageId}/reply": {
       "post": {
         "tags": ["messages"],
-        "summary": "reply to a case message",
+        "summary": "reply to a message",
         "description": "Reply to a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6108,7 +5900,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -6161,14 +5953,14 @@
     "/messages/{parentMessageId}/forward": {
       "post": {
         "tags": ["messages"],
-        "summary": "forward a case message",
+        "summary": "forward a message",
         "description": "Forward a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6188,7 +5980,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -6478,12 +6270,9 @@
               "documentType": {
                 "type": "string"
               },
-              "workItems": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
+              "workItem": {
+                "type": "object",
+                "properties": {}
               },
               "documentId": {
                 "type": "string"
@@ -6639,7 +6428,7 @@
       },
       "description": "a case procedural note"
     },
-    "caseMessage": {
+    "message": {
       "type": "object",
       "properties": {
         "attachments": {
@@ -6688,7 +6477,7 @@
         },
         "entityName": {
           "type": "string",
-          "description": "the name of the entity - CaseMessage"
+          "description": "the name of the entity - Message"
         },
         "from": {
           "type": "string",

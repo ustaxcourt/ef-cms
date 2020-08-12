@@ -139,7 +139,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     documentId,
   });
 
-  const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
+  const workItemToUpdate = courtIssuedDocument.workItem;
   await completeWorkItem({
     applicationContext,
     courtIssuedDocument,

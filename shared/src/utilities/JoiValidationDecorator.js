@@ -132,6 +132,15 @@ exports.joiValidationDecorator = function (
     return isEmpty(validationErrors);
   };
 
+  entityConstructor.prototype.validateForMigration = function validateForMigration() {
+    let { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    return error;
+  };
+
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
       const helpfulKeys = Object.keys(this).filter(key => key.endsWith('Id'));

@@ -3,6 +3,7 @@ const {
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
+  PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
 const {
   createCaseFromPaperInteractor,
@@ -91,34 +92,22 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
           filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
-          workItems: [
-            {
-              assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-              assigneeName: 'Alex Petitionsclerk',
-              caseStatus: CASE_STATUS_TYPES.new,
-              createdAt: RECEIVED_DATE,
-              docketNumber: '101-19',
-              docketNumberSuffix: null,
-              document: {
-                documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
-                documentType: 'Petition',
-                filedBy: 'Petr. Bob Jones',
-              },
-              isInitializeCase: true,
-              messages: [
-                {
-                  createdAt: RECEIVED_DATE,
-                  from: 'Alex Petitionsclerk',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Petr. Bob Jones is ready for review.',
-                },
-              ],
-              section: 'petitions',
-              sentBy: 'Alex Petitionsclerk',
-              sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          workItem: {
+            assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            assigneeName: 'Alex Petitionsclerk',
+            caseStatus: CASE_STATUS_TYPES.new,
+            createdAt: RECEIVED_DATE,
+            docketNumber: '101-19',
+            document: {
+              documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
+              documentType: 'Petition',
+              filedBy: 'Petr. Bob Jones',
             },
-          ],
+            isInitializeCase: true,
+            section: PETITIONS_SECTION,
+            sentBy: 'Alex Petitionsclerk',
+            sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         },
         {
           createdAt: RECEIVED_DATE,
@@ -159,21 +148,14 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Petr. Bob Jones is ready for review.',
-          },
-        ],
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
       },
     ]);
 
     const petitionsSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     expect(petitionsSectionInbox).toMatchObject([
@@ -188,14 +170,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           eventCode: 'P',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Petr. Bob Jones is ready for review.',
-          },
-        ],
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
       },
     ]);

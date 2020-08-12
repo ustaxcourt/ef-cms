@@ -1,10 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
+
+const { PETITIONS_SECTION } = applicationContext.getConstants();
+
 export const petitionsClerkAssignsWorkItemToOther = test => {
   return it('Petitions clerk assigns work item to other user', async () => {
     // find the work item that is part of an Petition upload
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -54,14 +57,13 @@ export const petitionsClerkAssignsWorkItemToOther = test => {
     );
     expect(assignedWorkItem).toMatchObject({
       assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     // the work item should be removed from the individual work queue
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
-      workQueueIsInternal: false,
     });
     const workQueue = test.getState('workQueue');
     const movedWorkItem = workQueue.find(

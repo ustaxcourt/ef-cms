@@ -21,6 +21,7 @@ export const submitOrderAdvancedSearchAction = async ({
       searchParams.docketNumber,
     );
   }
+
   const searchResults = await applicationContext
     .getUseCases()
     .orderAdvancedSearchInteractor({
