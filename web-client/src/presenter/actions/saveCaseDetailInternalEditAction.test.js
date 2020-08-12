@@ -11,13 +11,15 @@ describe('saveCaseDetailInternalEditAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafe.mockImplementation(({ documentId }) => {
-        if (documentId) {
-          return documentId;
-        } else {
-          return '999'; //generated document id from upload
-        }
-      });
+      .uploadDocumentAndMakeSafeInteractor.mockImplementation(
+        ({ documentId }) => {
+          if (documentId) {
+            return documentId;
+          } else {
+            return '999'; //generated document id from upload
+          }
+        },
+      );
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -56,7 +58,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].documentId,
     ).toEqual('123');
   });
@@ -95,7 +97,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     );
 
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].documentId,
     ).toBeUndefined();
 

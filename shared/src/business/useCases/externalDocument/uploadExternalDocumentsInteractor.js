@@ -37,7 +37,7 @@ exports.uploadExternalDocumentsInteractor = async ({
    * @param {string} documentLabel the string identifying which documentFile and progressFunction
    * @returns {Promise<string>} the documentId returned from a successful upload
    */
-  const uploadDocumentAndMakeSafe = async documentLabel => {
+  const uploadDocumentAndMakeSafeInteractor = async documentLabel => {
     const documentId = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
@@ -58,16 +58,18 @@ exports.uploadExternalDocumentsInteractor = async ({
     return documentId;
   };
 
-  uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('primary'));
+  uploadedDocumentPromises.push(uploadDocumentAndMakeSafeInteractor('primary'));
 
   if (documentFiles.secondary) {
-    uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('secondary'));
+    uploadedDocumentPromises.push(
+      uploadDocumentAndMakeSafeInteractor('secondary'),
+    );
   }
 
   if (documentMetadata.hasSupportingDocuments) {
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
       uploadedDocumentPromises.push(
-        uploadDocumentAndMakeSafe(`primarySupporting${i}`),
+        uploadDocumentAndMakeSafeInteractor(`primarySupporting${i}`),
       );
     }
   }
@@ -79,7 +81,7 @@ exports.uploadExternalDocumentsInteractor = async ({
       i++
     ) {
       uploadedDocumentPromises.push(
-        uploadDocumentAndMakeSafe(`secondarySupporting${i}`),
+        uploadDocumentAndMakeSafeInteractor(`secondarySupporting${i}`),
       );
     }
   }
