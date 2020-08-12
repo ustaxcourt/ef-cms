@@ -11,6 +11,7 @@ describe('formattedCaseDetail', () => {
   let globalUser;
   const {
     DOCUMENT_RELATIONSHIPS,
+    OBJECTIONS_OPTIONS_MAP,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -175,7 +176,7 @@ describe('formattedCaseDetail', () => {
           exhibits: false,
           hasSupportingDocuments: true,
           isFileAttached: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
@@ -226,7 +227,7 @@ describe('formattedCaseDetail', () => {
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           isFileAttached: true,
-          objections: 'Yes',
+          objections: OBJECTIONS_OPTIONS_MAP.YES,
           partyPrimary: true,
           partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

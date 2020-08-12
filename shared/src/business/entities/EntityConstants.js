@@ -190,7 +190,13 @@ const SCENARIOS = [
 
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
 
-const OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+const OBJECTIONS_OPTIONS_MAP = {
+  YES: 'Yes',
+  NO: 'No',
+  UNKNOWN: 'Unknown',
+};
+const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
 const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -971,6 +977,7 @@ module.exports = deepFreeze({
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
+  OBJECTIONS_OPTIONS_MAP,
   OPINION_DOCUMENT_TYPES,
   OPINION_EVENT_CODES,
   ORDER_EVENT_CODES,
