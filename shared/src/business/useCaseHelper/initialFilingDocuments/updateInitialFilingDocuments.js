@@ -3,6 +3,7 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
 } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
+const { omit } = require('lodash');
 
 const addNewInitialFilingToCase = ({
   applicationContext,
@@ -74,7 +75,12 @@ exports.updateInitialFilingDocuments = async ({
   caseEntity,
   caseToUpdate,
 }) => {
-  for (const key of Object.keys(INITIAL_DOCUMENT_TYPES_MAP)) {
+  const initialDocumentTypesWithoutPetition = omit(
+    INITIAL_DOCUMENT_TYPES_MAP,
+    'petitionFile',
+  );
+
+  for (const key of Object.keys(initialDocumentTypesWithoutPetition)) {
     const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
     const originalCaseDocument = caseEntity.documents.find(
       doc => doc.documentType === documentType,
