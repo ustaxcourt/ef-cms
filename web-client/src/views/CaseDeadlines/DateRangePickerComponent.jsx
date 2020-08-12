@@ -17,6 +17,7 @@ export const DateRangePickerComponent = ({
   rangePickerCls,
   showHint,
   startDateErrorText,
+  startDateOptional,
   startLabel,
   startName,
   startPickerCls,
@@ -104,7 +105,10 @@ export const DateRangePickerComponent = ({
               htmlFor={`${startName}-date-start`}
               id={`${startName}-date-start-label`}
             >
-              {startLabel || 'Start date'}
+              {startLabel || 'Start date'}{' '}
+              {startDateOptional && (
+                <span className="usa-hint">(optional)</span>
+              )}
             </label>
             {displayHint && (
               <div className="usa-hint" id={`${startName}-date-start-hint`}>
