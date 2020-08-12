@@ -8,7 +8,7 @@ export const unauthedUserInvalidSearchForOpinion = test => {
 
     expect(test.getState('validationErrors')).toEqual({
       keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
-      startDate: DocumentSearch.VALIDATION_ERROR_MESSAGES.startDate,
+      startDate: DocumentSearch.VALIDATION_ERROR_MESSAGES.startDate[1],
     });
   });
 };

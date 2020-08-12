@@ -6,9 +6,11 @@ import dateRangePicker from '../../../../node_modules/uswds/src/js/components/da
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
+  endDateOptional,
   endLabel,
   endName,
   endPickerCls,
+  endValue,
   onChangeEnd,
   onChangeStart,
   pickerSpacer,
@@ -18,6 +20,7 @@ export const DateRangePickerComponent = ({
   startLabel,
   startName,
   startPickerCls,
+  startValue,
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
@@ -39,9 +42,49 @@ export const DateRangePickerComponent = ({
   }, [dateRangePickerRef]);
 
   useEffect(() => {
+    const startInput = document.getElementById(`${startName}-date-start`);
+    const startHiddenInput = document.querySelector(
+      `input[name="${startName}-date-start"]`,
+    );
+    if (!startValue && startInput) {
+      startInput.value = '';
+      startHiddenInput.value = '';
+      const backspaceEvent = new CustomEvent('change', {
+        bubbles: true,
+        cancelable: true,
+        detail: { value: '' },
+      });
+      startInput.dispatchEvent(backspaceEvent);
+      startHiddenInput.dispatchEvent(backspaceEvent);
+    }
+  }, [startValue]);
+
+  useEffect(() => {
+    const endInput = document.getElementById(`${endName}-date-end`);
+    const endHiddenInput = document.querySelector(
+      `input[name="${endName}-date-end"]`,
+    );
+    if (!endValue && endInput) {
+      endInput.value = '';
+      endHiddenInput.value = '';
+      const backspaceEvent = new CustomEvent('change', {
+        bubbles: true,
+        cancelable: true,
+        detail: { value: '' },
+      });
+      endInput.dispatchEvent(backspaceEvent);
+      endHiddenInput.dispatchEvent(backspaceEvent);
+    }
+  }, [endValue]);
+
+  useEffect(() => {
     if (startDateInputRef.current && endDateInputRef.current) {
-      startDateInputRef.current.addEventListener('change', onChangeStart);
-      endDateInputRef.current.addEventListener('change', onChangeEnd);
+      document
+        .getElementById(`${endName}-date-end`)
+        .addEventListener('change', onChangeEnd);
+      document
+        .getElementById(`${startName}-date-start`)
+        .addEventListener('change', onChangeStart);
     }
   }, [startDateInputRef, endDateInputRef]);
 
@@ -93,7 +136,8 @@ export const DateRangePickerComponent = ({
               htmlFor={`${endName}-date-end`}
               id={`${endName}-date-end-label`}
             >
-              {endLabel || 'End date'}
+              {endLabel || 'End date'}{' '}
+              {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
             {displayHint && (
               <div className="usa-hint" id={`${endName}-date-end-hint`}>
