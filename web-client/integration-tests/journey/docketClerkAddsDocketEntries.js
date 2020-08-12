@@ -1,10 +1,13 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
-
 export const docketClerkAddsDocketEntries = (test, fakeFile) => {
+  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+  const {
+    DOCUMENT_RELATIONSHIPS,
+    OBJECTIONS_OPTIONS_MAP,
+  } = applicationContext.getConstants();
+
   return it('Docketclerk adds docket entries', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -86,7 +89,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',
-      value: 'No',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     //secondary document
