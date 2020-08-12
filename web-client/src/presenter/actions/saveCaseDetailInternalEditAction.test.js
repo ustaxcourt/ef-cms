@@ -8,6 +8,8 @@ import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAc
 const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
 describe('saveCaseDetailInternalEditAction', () => {
+  const mockUploadedDocumentId = applicationContext.getUniqueId();
+
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -16,7 +18,7 @@ describe('saveCaseDetailInternalEditAction', () => {
           if (documentId) {
             return documentId;
           } else {
-            return '999'; //generated document id from upload
+            return mockUploadedDocumentId; //generated document id from upload
           }
         },
       );
@@ -102,7 +104,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toBeUndefined();
 
     expect(uploadedDocument).toEqual({
-      documentId: '999',
+      documentId: mockUploadedDocumentId,
       documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
     });
   });
@@ -188,7 +190,12 @@ describe('saveCaseDetailInternalEditAction', () => {
       applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
         .calls[0][0].caseToUpdate.documents,
     ).toMatchObject(
-      expect.arrayContaining([{ documentType: 'Request for Place of Trial' }]),
+      expect.arrayContaining([
+        {
+          documentId: mockUploadedDocumentId,
+          documentType: 'Request for Place of Trial',
+        },
+      ]),
     );
   });
 });
