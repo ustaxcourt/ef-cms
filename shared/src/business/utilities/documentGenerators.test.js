@@ -21,6 +21,7 @@ const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
+  OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
@@ -674,7 +675,7 @@ describe('documentGenerators', () => {
             certificateOfService: true,
             certificateOfServiceDate: '02/22/20',
             documentTitle: 'Primary Document Title',
-            objections: 'No',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
           },
           filedAt: '02/22/20 2:22am ET',
           filedBy: 'Mike Wazowski',
@@ -683,7 +684,7 @@ describe('documentGenerators', () => {
             certificateOfService: true,
             certificateOfServiceDate: '02/22/20',
             documentTitle: 'Secondary Document Title',
-            objections: 'No',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
           },
           secondarySupportingDocuments: [
             {
@@ -691,14 +692,14 @@ describe('documentGenerators', () => {
               certificateOfService: false,
               certificateOfServiceDate: null,
               documentTitle: 'Secondary Supporting Document One Title',
-              objections: 'No',
+              objections: OBJECTIONS_OPTIONS_MAP.NO,
             },
             {
               attachments: false,
               certificateOfService: false,
               certificateOfServiceDate: null,
               documentTitle: 'Secondary Supporting Document Two Title',
-              objections: 'Unknown',
+              objections: OBJECTIONS_OPTIONS_MAP.UNKNOWN,
             },
           ],
           supportingDocuments: [
@@ -714,7 +715,7 @@ describe('documentGenerators', () => {
               certificateOfService: true,
               certificateOfServiceDate: '02/02/20',
               documentTitle: 'Supporting Document Two Title',
-              objections: 'No',
+              objections: OBJECTIONS_OPTIONS_MAP.NO,
             },
           ],
         },
