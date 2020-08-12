@@ -21,4 +21,15 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
   petitionsClerkRemovesAndReaddsPetitionFile(test, fakeFile);
   petitionsClerkEditsSavedPetition(test);
   petitionsClerkRemovesAndReaddsPdfFromPetition(test, fakeFile);
+  it('should be able to serve the case', async () => {
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    await test.runSequence('openConfirmServeToIrsModalSequence');
+
+    await test.runSequence('serveCaseToIrsSequence');
+
+    expect(test.getState('currentPage')).toEqual('PrintPaperPetitionReceipt');
+
+    await test.runSequence('completePrintPaperPetitionReceiptSequence');
+  });
 });
