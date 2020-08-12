@@ -1,16 +1,19 @@
 import { addCourtIssuedDocketEntryNonstandardHelper as addCourtIssuedDocketEntryNonstandardHelperComputed } from './addCourtIssuedDocketEntryNonstandardHelper';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const state = {
-  form: {},
-};
-
-const addCourtIssuedDocketEntryNonstandardHelper = withAppContextDecorator(
-  addCourtIssuedDocketEntryNonstandardHelperComputed,
-);
-
 describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
+  const state = {
+    form: {},
+  };
+
+  const addCourtIssuedDocketEntryNonstandardHelper = withAppContextDecorator(
+    addCourtIssuedDocketEntryNonstandardHelperComputed,
+  );
+
+  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
+
   beforeEach(() => {
     state.form = {};
   });
@@ -131,7 +134,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showDateLast = true and showFreeText = true when state.form.eventCode is TRAN (scenario = Type H)', () => {
-    let testState = { ...state, form: { eventCode: 'TRAN' } };
+    let testState = { ...state, form: { eventCode: TRANSCRIPT_EVENT_CODE } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,

@@ -1,4 +1,8 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
 export const practitionerFilesDocumentForOwnedCase = (test, fakeFile) => {
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   return it('Practitioner files document for owned case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -51,7 +55,7 @@ export const practitionerFilesDocumentForOwnedCase = (test, fakeFile) => {
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: 'No',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
