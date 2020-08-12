@@ -1,8 +1,10 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
+const { JUDGES_CHAMBERS } = applicationContext.getConstants();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const petitionsClerkCreatesMessageToChambers = test => {
@@ -21,7 +23,7 @@ export const petitionsClerkCreatesMessageToChambers = test => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: 'armensChambers',
+      value: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
     });
 
     await test.runSequence('updateModalFormValueSequence', {

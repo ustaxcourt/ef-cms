@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
 } = require('../../entities/EntityConstants');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
 const { omit } = require('lodash');
@@ -32,7 +33,7 @@ const MOCK_WORK_ITEM = {
       userId: 'irsPractitioner',
     },
   ],
-  section: 'docket',
+  section: DOCKET_SECTION,
   sentBy: 'irsPractitioner',
   updatedAt: '2018-12-27T18:06:02.968Z',
   workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',

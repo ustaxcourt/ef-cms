@@ -3,10 +3,14 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { gotoPrintablePendingReportForCaseSequence } from '../sequences/gotoPrintablePendingReportForCaseSequence';
 import { presenter } from '../presenter-mock';
 
+const { CHAMBERS_SECTION } = applicationContext.getConstants();
+
 describe('gotoPrintablePendingReportForCaseSequence', () => {
   let test;
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({ section: 'chambers' });
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: CHAMBERS_SECTION,
+    });
     applicationContext
       .getUseCases()
       .generatePrintablePendingReportInteractor.mockReturnValue(

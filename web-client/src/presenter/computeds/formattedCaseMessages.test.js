@@ -7,7 +7,7 @@ const formattedCaseMessages = withAppContextDecorator(
   formattedCaseMessagesComputed,
 );
 
-const { PETITIONS_SECTION } = applicationContext.getConstants();
+const { DOCKET_SECTION, PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('formattedCaseMessages', () => {
   it('returns formatted date strings and splits messages into completed and in-progress', () => {
@@ -18,7 +18,7 @@ describe('formattedCaseMessages', () => {
             {
               createdAt: '2019-01-01T17:29:13.122Z',
               from: 'Test Sender',
-              fromSection: 'docket',
+              fromSection: DOCKET_SECTION,
               fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
               isCompleted: false,
               isRepliedTo: false,
@@ -33,7 +33,7 @@ describe('formattedCaseMessages', () => {
               completedAt: '2019-05-01T17:29:13.122Z',
               createdAt: '2019-01-01T17:29:13.122Z',
               from: 'Test Sender',
-              fromSection: 'docket',
+              fromSection: DOCKET_SECTION,
               fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
               isCompleted: true,
               isRepliedTo: true,
