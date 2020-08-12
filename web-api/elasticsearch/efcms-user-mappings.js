@@ -1,5 +1,4 @@
 module.exports = {
-  dynamic: false,
   properties: {
     'additionalPhone.S': {
       type: 'text',
