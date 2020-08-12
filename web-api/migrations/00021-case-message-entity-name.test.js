@@ -1,3 +1,6 @@
+const {
+  DOCKET_SECTION,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00021-case-message-entity-name');
 
@@ -23,7 +26,7 @@ describe('update case message entity name on message records', () => {
       docketNumberWithSuffix: '105-20L',
       entityName: 'CaseMessage',
       from: 'Test Docketclerk1',
-      fromSection: 'docket',
+      fromSection: DOCKET_SECTION,
       fromUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
       gsi1pk: 'message|fd9d04b5-26ff-4416-9648-967f135e16ef',
       isCompleted: false,
@@ -35,7 +38,7 @@ describe('update case message entity name on message records', () => {
       sk: 'message|fd9d04b5-26ff-4416-9648-967f135e16ef',
       subject: 'Petition',
       to: 'Test Docketclerk1',
-      toSection: 'docket',
+      toSection: DOCKET_SECTION,
       toUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ];
