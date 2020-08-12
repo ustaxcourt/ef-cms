@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { putWorkItemInUsersOutbox } = require('./putWorkItemInUsersOutbox');
 
 describe('putWorkItemInUsersOutbox', () => {
@@ -10,14 +13,14 @@ describe('putWorkItemInUsersOutbox', () => {
   beforeEach(() => {
     putStub = jest.fn().mockReturnValue({
       promise: async () => ({
-        section: 'docket',
+        section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     });
     getStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Item: {
-          section: 'docket',
+          section: DOCKET_SECTION,
           userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         },
       }),
@@ -26,7 +29,7 @@ describe('putWorkItemInUsersOutbox', () => {
 
   it('invokes the persistence layer with pk of user-outbox|{userId} and section-outbox|{section} and other expected params', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.getDocumentClient.mockReturnValue({
@@ -35,7 +38,7 @@ describe('putWorkItemInUsersOutbox', () => {
     });
     await putWorkItemInUsersOutbox({
       applicationContext,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       workItem: {
         workItemId: '123',

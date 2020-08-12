@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { WorkItem } = require('./WorkItem');
@@ -21,7 +22,7 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          section: 'docket',
+          section: DOCKET_SECTION,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -38,7 +39,7 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          section: 'docket',
+          section: DOCKET_SECTION,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -58,7 +59,7 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
-          section: 'docket',
+          section: DOCKET_SECTION,
           sentBy: 'bob',
           workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
@@ -78,7 +79,7 @@ describe('WorkItem', () => {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
           sentBy: 'bob',
           workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         },
