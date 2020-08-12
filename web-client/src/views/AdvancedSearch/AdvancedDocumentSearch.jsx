@@ -141,6 +141,7 @@ export const AdvancedDocumentSearch = connect(
                     validationErrors.dateRangeRequired ||
                     validationErrors.startDate
                   }
+                  startDateOptional={true}
                   startName="startDate"
                   startPickerCls="grid-col-5"
                   startValue={advancedSearchForm[formType].startDate}
