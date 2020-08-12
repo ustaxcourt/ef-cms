@@ -6,6 +6,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -171,7 +172,6 @@ const formatDocketRecordWithDocument = (
       );
 
       record.filingsAndProceedings = getFilingsAndProceedings(
-        applicationContext,
         formattedDocument,
       );
 
@@ -184,11 +184,9 @@ const formatDocketRecordWithDocument = (
   });
 };
 
-const getFilingsAndProceedings = (applicationContext, formattedDocument) => {
+const getFilingsAndProceedings = formattedDocument => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   const filingsAndProceedingsArray = [
     `${
       formattedDocument.certificateOfService

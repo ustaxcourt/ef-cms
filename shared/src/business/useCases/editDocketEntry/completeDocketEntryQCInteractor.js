@@ -126,7 +126,6 @@ exports.completeDocketEntryQCInteractor = async ({
     updatedDocumentTitle += ` ${updatedDocument.additionalInfo}`;
   }
   updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    applicationContext,
     formatDocument(applicationContext, updatedDocument),
   )}`;
   if (updatedDocument.additionalInfo2) {
@@ -138,7 +137,6 @@ exports.completeDocketEntryQCInteractor = async ({
     currentDocumentTitle += ` ${currentDocument.additionalInfo}`;
   }
   currentDocumentTitle += ` ${getFilingsAndProceedings(
-    applicationContext,
     formatDocument(applicationContext, currentDocument),
   )}`;
   if (currentDocument.additionalInfo2) {
