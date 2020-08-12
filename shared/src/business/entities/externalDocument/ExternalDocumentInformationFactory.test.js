@@ -6,6 +6,7 @@ const {
   ExternalDocumentInformationFactory,
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
+const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
 
 describe('ExternalDocumentInformationFactory', () => {
   let baseDoc;
@@ -83,7 +84,7 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(errors().objections).toEqual(
           VALIDATION_ERROR_MESSAGES.objections,
         );
-        baseDoc.objections = 'Yes';
+        baseDoc.objections = OBJECTIONS_OPTIONS_MAP.YES;
         expect(errors().objections).toEqual(undefined);
       });
 
@@ -97,7 +98,7 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(errors().objections).toEqual(
           VALIDATION_ERROR_MESSAGES.objections,
         );
-        baseDoc.objections = 'No';
+        baseDoc.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(errors().objections).toEqual(undefined);
       });
     });
