@@ -136,7 +136,6 @@ DocumentSearch.schema = joi
       DocumentSearch.VALID_DATE_SEARCH_FORMATS,
     )
       .max('now')
-      .required()
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       ),
