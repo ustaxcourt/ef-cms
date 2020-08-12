@@ -36,6 +36,7 @@ exports.casePublicSearch = async ({
     'contactPrimary',
     'contactSecondary',
     'docketNumber',
+    'docketNumberSuffix',
     'docketNumberWithSuffix',
     'receivedAt',
     'sealedDate',

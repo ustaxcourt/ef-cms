@@ -48,6 +48,9 @@ module.exports = {
     'docketNumber.S': {
       type: 'text',
     },
+    'docketNumberSuffix.S': {
+      type: 'text',
+    },
     'docketNumberWithSuffix.S': {
       type: 'text',
     },
