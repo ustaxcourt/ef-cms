@@ -8,16 +8,20 @@ import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAc
 const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
 describe('saveCaseDetailInternalEditAction', () => {
+  const mockUploadedDocumentId = applicationContext.getUniqueId();
+
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafe.mockImplementation(({ documentId }) => {
-        if (documentId) {
-          return documentId;
-        } else {
-          return '999'; //generated document id from upload
-        }
-      });
+      .uploadDocumentAndMakeSafeInteractor.mockImplementation(
+        ({ documentId }) => {
+          if (documentId) {
+            return documentId;
+          } else {
+            return mockUploadedDocumentId; //generated document id from upload
+          }
+        },
+      );
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -56,7 +60,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].documentId,
     ).toEqual('123');
   });
@@ -95,12 +99,12 @@ describe('saveCaseDetailInternalEditAction', () => {
     );
 
     expect(
-      applicationContext.getUseCases().uploadDocumentAndMakeSafe.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].documentId,
     ).toBeUndefined();
 
     expect(uploadedDocument).toEqual({
-      documentId: '999',
+      documentId: mockUploadedDocumentId,
       documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
     });
   });
@@ -151,5 +155,47 @@ describe('saveCaseDetailInternalEditAction', () => {
     expect(
       applicationContext.getUseCases().updateCaseTrialSortTagsInteractor,
     ).not.toBeCalled();
+  });
+
+  it('should upload initial filing documents if they exist on the case', async () => {
+    const mockRqtFile = {
+      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      documentType: 'Request for Place of Trial',
+      eventCode: 'RQT',
+      filedBy: 'Test Petitioner',
+      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+    };
+    const caseDetail = {
+      ...MOCK_CASE,
+      documents: [],
+      requestForPlaceOfTrialFile: mockRqtFile,
+      requestForPlaceOfTrialFileSize: 2,
+    };
+
+    await runAction(saveCaseDetailInternalEditAction, {
+      modules: {
+        presenter,
+      },
+      props: { formWithComputedDates: caseDetail },
+    });
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[0][0].document,
+    ).toEqual(mockRqtFile);
+    expect(
+      applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
+        .calls[0][0].caseToUpdate.documents,
+    ).toMatchObject(
+      expect.arrayContaining([
+        {
+          documentId: mockUploadedDocumentId,
+          documentType: 'Request for Place of Trial',
+        },
+      ]),
+    );
   });
 });
