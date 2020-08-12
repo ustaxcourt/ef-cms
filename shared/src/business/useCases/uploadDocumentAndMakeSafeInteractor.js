@@ -5,7 +5,7 @@
  * @param {Function} onUploadProgress the progressFunction
  * @returns {Promise<string>} the documentId returned from a successful upload
  */
-exports.uploadDocumentAndMakeSafe = async ({
+exports.uploadDocumentAndMakeSafeInteractor = async ({
   applicationContext,
   document,
   documentId,

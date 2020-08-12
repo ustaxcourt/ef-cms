@@ -28,7 +28,7 @@ exports.filePetitionFromPaperInteractor = async ({
   if (applicationForWaiverOfFilingFeeFile) {
     applicationForWaiverOfFilingFeeUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafe({
+      .uploadDocumentAndMakeSafeInteractor({
         applicationContext,
         document: applicationForWaiverOfFilingFeeFile,
         onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
@@ -37,7 +37,7 @@ exports.filePetitionFromPaperInteractor = async ({
 
   const petitionFileUpload = applicationContext
     .getUseCases()
-    .uploadDocumentAndMakeSafe({
+    .uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: petitionFile,
       onUploadProgress: petitionUploadProgress,
@@ -47,7 +47,7 @@ exports.filePetitionFromPaperInteractor = async ({
   if (ownershipDisclosureFile) {
     ownershipDisclosureFileUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafe({
+      .uploadDocumentAndMakeSafeInteractor({
         applicationContext,
         document: ownershipDisclosureFile,
         onUploadProgress: ownershipDisclosureUploadProgress,
@@ -58,7 +58,7 @@ exports.filePetitionFromPaperInteractor = async ({
   if (stinFile) {
     stinFileUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafe({
+      .uploadDocumentAndMakeSafeInteractor({
         applicationContext,
         document: stinFile,
         onUploadProgress: stinUploadProgress,
@@ -69,7 +69,7 @@ exports.filePetitionFromPaperInteractor = async ({
   if (requestForPlaceOfTrialFile) {
     requestForPlaceOfTrialFileUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafe({
+      .uploadDocumentAndMakeSafeInteractor({
         applicationContext,
         document: requestForPlaceOfTrialFile,
         onUploadProgress: requestForPlaceOfTrialUploadProgress,
