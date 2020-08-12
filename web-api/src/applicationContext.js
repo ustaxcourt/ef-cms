@@ -263,9 +263,6 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
-  elasticsearchIndexes,
-} = require('../elasticsearch/elasticsearch-indexes');
-const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -478,12 +475,6 @@ const {
 const {
   getIndexedCasesForUser,
 } = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
-const {
-  getIndexMappingFields,
-} = require('../../shared/src/persistence/elasticsearch/getIndexMappingFields');
-const {
-  getIndexMappingLimit,
-} = require('../../shared/src/persistence/elasticsearch/getIndexMappingLimit');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -1107,7 +1098,6 @@ module.exports = appContextUser => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
-    getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
       if (process.env.CI) {
         return {
@@ -1244,8 +1234,6 @@ module.exports = appContextUser => {
         getElasticsearchReindexRecords,
         getEligibleCasesForTrialCity,
         getEligibleCasesForTrialSession,
-        getIndexMappingFields,
-        getIndexMappingLimit,
         getIndexedCasesForUser,
         getInternalUsers,
         getMessageThreadByParentId,
