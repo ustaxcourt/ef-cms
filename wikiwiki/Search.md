@@ -30,4 +30,47 @@
 
 ### Search by bar number
 * if there is exact match, navigate to Practitioner Info page (design to be implemented in 4365)
-*if there is no exact match, display "No matching results"
+* if there is no exact match, display "No matching results"
+
+## Order search
+* search is limited to Orders that have been served
+
+#### Search by keyword
+* is required for search
+* searches Order title and text content
+
+#### Filters (narrow your search)
+**Docket Number or Case Title**
+* User can filter by either a docket number or the case title/petitioner's name
+* If both fields are entered, user will receive error
+
+**Judge**
+* Filters by the judge who signed the order
+
+**Start Date - End Date**
+* Filters by the served date of the order
+* If a Start date is entered but no end date, the end date defaults to today
+
+
+
+## Opinion search
+* search is limited to Orders that have been served
+
+#### Search by keyword
+* is required for search
+* searches Opinion title and text content
+
+#### Filters (narrow your search)
+**Docket Number or Case Title**
+* User can filter by either a docket number or the case title/petitioner's name
+* If both fields are entered, user will receive error
+
+**Opinion type**
+* Filters opinion by type: T.C. Opinion, Summary Opinion, and Memorandum Opinion
+
+**Judge**
+* Filters by the judge associated with the opinion (as seen on docket entry)
+
+**Start Date - End Date**
+* Filters by the served date of the opinion
+* If a Start date is entered but no end date, the end date defaults to today

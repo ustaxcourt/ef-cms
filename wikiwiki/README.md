@@ -47,4 +47,6 @@
 
 #### [Search](./Search.md)
 
+#### [Public Access](./PublicAccess.md)
+
 #### [Practitioner Database](./Practitioner-Database.md)
