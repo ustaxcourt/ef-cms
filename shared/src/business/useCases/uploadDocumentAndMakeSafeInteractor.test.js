@@ -1,8 +1,10 @@
+const {
+  uploadDocumentAndMakeSafeInteractor,
+} = require('./uploadDocumentAndMakeSafeInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
-const { uploadDocumentAndMakeSafe } = require('./uploadDocumentAndMakeSafe');
 
-describe('uploadDocumentAndMakeSafe', () => {
+describe('uploadDocumentAndMakeSafeInteractor', () => {
   const mockDocument = MOCK_DOCUMENTS;
 
   beforeAll(() => {
@@ -11,7 +13,7 @@ describe('uploadDocumentAndMakeSafe', () => {
       .uploadDocumentFromClient.mockResolvedValue(mockDocument.documentId);
   });
   it('returns the newly created document ID', async () => {
-    const expectDocumentId = await uploadDocumentAndMakeSafe({
+    const expectDocumentId = await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       onUploadProgress: () => {},
@@ -20,7 +22,7 @@ describe('uploadDocumentAndMakeSafe', () => {
   });
 
   it('calls upload on the provided document', async () => {
-    await uploadDocumentAndMakeSafe({
+    await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       onUploadProgress: () => {},
@@ -33,7 +35,7 @@ describe('uploadDocumentAndMakeSafe', () => {
   });
 
   it('calls upload with the given documentId if set', async () => {
-    await uploadDocumentAndMakeSafe({
+    await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       documentId: '123',
@@ -47,7 +49,7 @@ describe('uploadDocumentAndMakeSafe', () => {
   });
 
   it('does a virus scan on the provided document', async () => {
-    await uploadDocumentAndMakeSafe({
+    await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       onUploadProgress: () => {},
@@ -59,7 +61,7 @@ describe('uploadDocumentAndMakeSafe', () => {
   });
 
   it('validates the provided document', async () => {
-    await uploadDocumentAndMakeSafe({
+    await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       onUploadProgress: () => {},
