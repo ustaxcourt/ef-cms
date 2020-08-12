@@ -24,7 +24,7 @@ describe('takePathForDocumentPreviewAction', () => {
     expect(presenter.providers.path.pdfInMemory).toHaveBeenCalled();
   });
 
-  it('should return path.pdfInS3 when props.documentInS3 is defined', async () => {
+  it('should return path.documentInS3 when props.documentInS3 is defined', async () => {
     await runAction(takePathForDocumentPreviewAction, {
       modules: {
         presenter,

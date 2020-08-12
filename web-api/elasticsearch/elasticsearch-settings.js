@@ -7,18 +7,6 @@ considerations:
   then search for "deja" to see if the order is returned.
 */
 module.exports = {
-  mappings: {
-    properties: {
-      'documentContents.S': {
-        analyzer: 'ustc_analyzer',
-        type: 'text',
-      },
-      'documentTitle.S': {
-        analyzer: 'ustc_analyzer',
-        type: 'text',
-      },
-    },
-  },
   settings: {
     index: {
       analysis: {
