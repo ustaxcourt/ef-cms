@@ -19,7 +19,7 @@ describe('uploadDocumentAndMakeSafe', () => {
     expect(expectDocumentId).toEqual(mockDocument.documentId);
   });
 
-  it('calls upload on a the provided document', async () => {
+  it('calls upload on the provided document', async () => {
     await uploadDocumentAndMakeSafe({
       applicationContext,
       document: mockDocument,
@@ -30,6 +30,20 @@ describe('uploadDocumentAndMakeSafe', () => {
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
         .calls[0][0].document,
     ).toEqual(mockDocument);
+  });
+
+  it('calls upload with the given documentId if set', async () => {
+    await uploadDocumentAndMakeSafe({
+      applicationContext,
+      document: mockDocument,
+      documentId: '123',
+      onUploadProgress: () => {},
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls[0][0].documentId,
+    ).toEqual('123');
   });
 
   it('does a virus scan on the provided document', async () => {

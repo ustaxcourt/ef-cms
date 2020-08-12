@@ -8,8 +8,6 @@ const {
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -142,33 +140,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
-
-  // check if the petition documentId matches petition docket entry documentId and update
-  const docketEntry = updatedCase.docketRecord.find(
-    entry => entry.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  );
-
-  const updatedPetitionDocument = updatedCase.documents.find(
-    document =>
-      document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  );
-
-  if (docketEntry.documentId !== updatedPetitionDocument.documentId) {
-    const docketRecordEntity = new DocketRecord(
-      {
-        ...docketEntry,
-        documentId: updatedPetitionDocument.documentId,
-      },
-      { applicationContext },
-    );
-
-    await applicationContext.getPersistenceGateway().updateDocketRecord({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      docketRecord: docketRecordEntity.validate().toRawObject(),
-      docketRecordId: docketRecordEntity.docketRecordId,
-    });
-  }
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
