@@ -74,7 +74,7 @@ describe('bulkDeleteRecords', () => {
       errors: true,
       items: [
         {
-          index: {
+          delete: {
             _index: 'efcms-message',
             error: {
               index: 'efcms-message',
@@ -97,10 +97,8 @@ describe('bulkDeleteRecords', () => {
     expect(applicationContext.getSearchClient().bulk).toBeCalled();
     expect(result.failedRecords).toEqual([
       {
-        delete: {
-          _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,
-          _index: 'efcms-message',
-        },
+        _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,
+        _index: 'efcms-message',
       },
     ]);
   });
