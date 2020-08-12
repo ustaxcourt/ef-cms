@@ -1,7 +1,8 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
-const { DOCKET_SECTION } = applicationContext.geetConstants();
 export const judgeViewsTrialSessionWorkingCopy = test => {
+  const { DOCKET_SECTION } = applicationContext.getConstants();
+
   return it('Judge views trial session working copy', async () => {
     await test.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: test.trialSessionId,
