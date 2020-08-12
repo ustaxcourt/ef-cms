@@ -16,6 +16,7 @@ import React from 'react';
 
 export const PrimaryDocumentForm = connect(
   {
+    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     addDocketEntryHelper: state.addDocketEntryHelper,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
@@ -29,6 +30,7 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper,
     form,
     internalTypesHelper,
+    OBJECTIONS_OPTIONS,
     updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
@@ -308,7 +310,7 @@ export const PrimaryDocumentForm = connect(
                 <legend className="usa-legend" id="objections-legend">
                   Are there any objections to the granting of this document?
                 </legend>
-                {['Yes', 'No', 'Unknown'].map(option => (
+                {OBJECTIONS_OPTIONS.map(option => (
                   <div className="usa-radio" key={option}>
                     <input
                       aria-describedby="objections-legend"

@@ -1,7 +1,10 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { clearCaseAssociationWizardDataAction } from './clearCaseAssociationWizardDataAction';
 import { runAction } from 'cerebral/test';
 
 describe('clearCaseAssociationWizardDataAction', () => {
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   it('clears certificateOfService', async () => {
     const result = await runAction(clearCaseAssociationWizardDataAction, {
       props: {
@@ -26,7 +29,7 @@ describe('clearCaseAssociationWizardDataAction', () => {
       },
       state: {
         form: {
-          objections: 'Yes',
+          objections: OBJECTIONS_OPTIONS_MAP.YES,
         },
       },
     });
