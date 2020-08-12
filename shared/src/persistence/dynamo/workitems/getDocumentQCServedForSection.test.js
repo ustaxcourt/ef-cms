@@ -2,6 +2,9 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
+const {
   getDocumentQCServedForSection,
 } = require('./getDocumentQCServedForSection');
 
@@ -14,22 +17,22 @@ describe('getDocumentQCServedForSection', () => {
         Items: [
           {
             completedAt: 'today',
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
@@ -39,7 +42,7 @@ describe('getDocumentQCServedForSection', () => {
 
   it('invokes the persistence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.getDocumentClient.mockReturnValue({
@@ -47,17 +50,17 @@ describe('getDocumentQCServedForSection', () => {
     });
     const items = await getDocumentQCServedForSection({
       applicationContext,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
     expect(items).toEqual([
       {
         completedAt: 'today',
-        section: 'docket',
+        section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
         completedAt: 'today',
-        section: 'docket',
+        section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);

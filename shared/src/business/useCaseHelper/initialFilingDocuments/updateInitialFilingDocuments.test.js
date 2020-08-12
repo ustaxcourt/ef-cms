@@ -6,6 +6,7 @@ const {
 } = require('./updateInitialFilingDocuments');
 const { Case } = require('../../../business/entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
@@ -18,6 +19,12 @@ describe('addNewInitialFilingToCase', () => {
 
   let mockOriginalCase;
   let mockCaseToUpdate;
+
+  const petitionsClerkUser = {
+    name: 'petitions clerk',
+    role: ROLES.petitionsClerk,
+    userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
+  };
 
   beforeAll(() => {});
 
@@ -34,6 +41,7 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
@@ -56,6 +64,7 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
@@ -83,6 +92,7 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });

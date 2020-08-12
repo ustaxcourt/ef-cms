@@ -1,3 +1,6 @@
+const {
+  DOCKET_SECTION,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 const { omit } = require('lodash');
@@ -18,9 +21,9 @@ describe('work items array to object', () => {
     associatedJudge: 'Judge Ashford',
     docketNumber: MOCK_CASE.docketNumber,
     document: {},
-    section: 'docket',
+    section: DOCKET_SECTION,
     sentBy: 'Test Docketclerk',
-    sentBySection: 'docket',
+    sentBySection: DOCKET_SECTION,
     workItemId: WORK_ITEM_ID_1,
   };
 

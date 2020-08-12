@@ -1,5 +1,8 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runAction } from 'cerebral/test';
 import { setCreateMessageModalForChambersSelectAction } from './setCreateMessageModalForChambersSelectAction';
+
+const { CHAMBERS_SECTION } = applicationContext.getConstants();
 
 describe('setCreateMessageModalForChambersSelectAction', () => {
   it('sets and unsets state.modal values', async () => {
@@ -10,7 +13,7 @@ describe('setCreateMessageModalForChambersSelectAction', () => {
           modal: {
             form: {
               assigneeId: 'b29540e1-94aa-4619-bae0-72d04f36dbfa',
-              toSection: 'chambers',
+              toSection: CHAMBERS_SECTION,
             },
             showChambersSelect: false,
           },
