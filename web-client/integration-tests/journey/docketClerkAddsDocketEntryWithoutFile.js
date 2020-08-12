@@ -1,8 +1,10 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 export const docketClerkAddsDocketEntryWithoutFile = test => {
+  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   return it('Docketclerk adds docket entry data without a file', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -55,7 +57,7 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',
-      value: 'No',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
