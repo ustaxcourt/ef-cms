@@ -1,6 +1,9 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 export const petitionerFilesDocumentForCase = (test, fakeFile) => {
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   return it('petitioner files document for case', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
@@ -168,7 +171,7 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: 'No',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
