@@ -25,21 +25,11 @@
     "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "isInitializeCase": true,
     "assigneeId": null,
-    "isQC": true,
     "sentBy": "Test Petitioner",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "messages": [
-      {
-        "createdAt": "2020-01-21T16:41:39.482Z",
-        "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Eve Brewer is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
@@ -100,21 +90,11 @@
     "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
     "isInitializeCase": true,
     "assigneeId": null,
-    "isQC": true,
     "sentBy": "Test Petitioner",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-01-21T16:41:39.482Z",
     "assigneeName": null,
     "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "messages": [
-      {
-        "createdAt": "2020-01-21T16:41:39.482Z",
-        "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-        "from": "Test Petitioner",
-        "message": "Petition filed by Eve Brewer is ready for review.",
-        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "pk": "section|petitions",
     "docketNumber": "102-20",
     "updatedAt": "2020-01-21T16:41:39.482Z"
@@ -251,7 +231,6 @@
     "filingDate": "2020-01-21T16:41:39.483Z",
     "practitioner": [],
     "partyPrimary": true,
-    "workItems": [],
     "pending": false,
     "receivedAt": "2020-01-21T16:41:39.483Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -272,50 +251,38 @@
     "filingDate": "2020-01-21T16:41:39.481Z",
     "practitioner": [],
     "partyPrimary": true,
-    "workItems": [
-      {
-        "associatedJudge": "Chief Judge",
-        "docketNumberSuffix": "S",
-        "caseStatus": "New",
-        "caseIsInProgress": false,
-        "document": {
-          "eventCode": "P",
-          "createdAt": "2020-01-21T16:41:39.481Z",
-          "processingStatus": "pending",
-          "documentType": "Petition",
-          "practitioner": [],
-          "filedBy": "Petr. Eve Brewer",
-          "partyPrimary": true,
-          "pending": false,
-          "partySecondary": false,
-          "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
-          "numberOfPages": 1,
-          "receivedAt": "2020-01-21T16:41:39.481Z",
-          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-        },
-        "caseTitle": "Eve Brewer",
-        "section": "petitions",
-        "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
-        "isInitializeCase": true,
-        "assigneeId": null,
-        "isQC": true,
-        "sentBy": "Test Petitioner",
-        "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "createdAt": "2020-01-21T16:41:39.482Z",
-        "assigneeName": null,
-        "messages": [
-          {
-            "createdAt": "2020-01-21T16:41:39.482Z",
-            "messageId": "28bcb357-b2c3-437b-804e-c1e00ac35d86",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Eve Brewer is ready for review.",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
-        "docketNumber": "102-20",
-        "updatedAt": "2020-01-21T16:41:39.482Z"
-      }
-    ],
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "docketNumberSuffix": "S",
+      "caseStatus": "New",
+      "caseIsInProgress": false,
+      "document": {
+        "eventCode": "P",
+        "createdAt": "2020-01-21T16:41:39.481Z",
+        "processingStatus": "pending",
+        "documentType": "Petition",
+        "practitioner": [],
+        "filedBy": "Petr. Eve Brewer",
+        "partyPrimary": true,
+        "pending": false,
+        "partySecondary": false,
+        "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+        "numberOfPages": 1,
+        "receivedAt": "2020-01-21T16:41:39.481Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      "caseTitle": "Eve Brewer",
+      "section": "petitions",
+      "workItemId": "77d8449a-ffe1-48e5-b056-a6112a819a4b",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "createdAt": "2020-01-21T16:41:39.482Z",
+      "assigneeName": null,
+      "docketNumber": "102-20",
+      "updatedAt": "2020-01-21T16:41:39.482Z"
+    },
     "pending": false,
     "receivedAt": "2020-01-21T16:41:39.481Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

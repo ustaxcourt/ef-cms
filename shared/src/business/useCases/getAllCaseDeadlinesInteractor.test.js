@@ -46,6 +46,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       docketNumber: '101-19',
       partyType: PARTY_TYPES.petitioner,
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
       associatedJudge: 'Judge Buch',
@@ -64,6 +65,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       docketNumber: '102-19',
       partyType: PARTY_TYPES.petitioner,
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
   ];
 

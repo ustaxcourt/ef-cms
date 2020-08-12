@@ -29,8 +29,6 @@ export const IndividualWorkQueueInProgress = connect(
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               {workQueueHelper.showCaseStatusColumn && <th>Case Status</th>}
-              {!workQueueHelper.hideFromColumn && <th>From</th>}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             </tr>
           </thead>
@@ -61,14 +59,6 @@ export const IndividualWorkQueueInProgress = connect(
                           item.document.documentType}
                       </a>
                     </div>
-                    {workQueueHelper.showMessageContent && (
-                      <div
-                        className="message-document-detail"
-                        id={`detail-${item.workItemId}`}
-                      >
-                        {item.currentMessage.message}
-                      </div>
-                    )}
                   </td>
                   {!workQueueHelper.hideFiledByColumn && (
                     <td className="message-queue-row">
@@ -78,14 +68,6 @@ export const IndividualWorkQueueInProgress = connect(
                   {workQueueHelper.showCaseStatusColumn && (
                     <td className="message-queue-row">{item.caseStatus}</td>
                   )}
-                  {!workQueueHelper.hideFromColumn && (
-                    <td className="message-queue-row from">
-                      {item.currentMessage.from}
-                    </td>
-                  )}
-                  {!workQueueHelper.hideSectionColumn && (
-                    <td className="message-queue-row">{item.sentBySection}</td>
-                  )}
                   {workQueueHelper.showProcessedByColumn && (
                     <td>{item.assigneeName}</td>
                   )}
@@ -94,9 +76,7 @@ export const IndividualWorkQueueInProgress = connect(
             );
           })}
         </table>
-        {formattedWorkQueue.length === 0 && (
-          <p>{workQueueHelper.queueEmptyMessage}</p>
-        )}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },

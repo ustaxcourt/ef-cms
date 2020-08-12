@@ -1,16 +1,14 @@
 export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
   return it('Petitions Clerk reviews petition and saves for later', async () => {
-    await test.runSequence('gotoMessagesSequence');
-    expect(test.getState('currentPage')).toEqual('Messages');
+    await test.runSequence('gotoWorkQueueSequence');
+    expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: false,
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
-    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
@@ -31,6 +29,6 @@ export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
 
     await test.runSequence('leaveCaseForLaterServiceSequence', {});
 
-    expect(test.getState('currentPage')).toEqual('Messages');
+    expect(test.getState('currentPage')).toEqual('WorkQueue');
   });
 };

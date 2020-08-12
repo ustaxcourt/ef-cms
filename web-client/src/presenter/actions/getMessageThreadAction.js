@@ -10,7 +10,7 @@ export const getMessageThreadAction = async ({ applicationContext, props }) => {
   const { parentMessageId } = props;
   const messageDetail = await applicationContext
     .getUseCases()
-    .getCaseMessageThreadInteractor({
+    .getMessageThreadInteractor({
       applicationContext,
       parentMessageId,
     });

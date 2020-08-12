@@ -70,11 +70,7 @@ export const SectionWorkQueueInProgress = connect(
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
-              {workQueueHelper.showAssignedToColumn && (
-                <th>{workQueueHelper.assigneeColumnTitle}</th>
-              )}
-              {!workQueueHelper.hideFromColumn && <th>From</th>}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+              {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
@@ -143,14 +139,6 @@ export const SectionWorkQueueInProgress = connect(
                         item.document.documentType}
                     </a>
                   </div>
-                  {workQueueHelper.showMessageContent && (
-                    <div
-                      className="message-document-detail"
-                      id={`detail-${item.workItemId}`}
-                    >
-                      {item.currentMessage.message}
-                    </div>
-                  )}
                 </td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
@@ -159,21 +147,11 @@ export const SectionWorkQueueInProgress = connect(
                 {workQueueHelper.showAssignedToColumn && (
                   <td className="to message-queue-row">{item.assigneeName}</td>
                 )}
-                {!workQueueHelper.hideFromColumn && (
-                  <td className="message-queue-row">
-                    {item.currentMessage.from}
-                  </td>
-                )}
-                {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row">{item.sentBySection}</td>
-                )}
               </tr>
             </tbody>
           ))}
         </table>
-        {formattedWorkQueue.length === 0 && (
-          <p>{workQueueHelper.queueEmptyMessage}</p>
-        )}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },

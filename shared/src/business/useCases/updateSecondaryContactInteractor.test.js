@@ -123,7 +123,7 @@ describe('updateSecondaryContactInteractor', () => {
   it('throws an error if the user making the request is not associated with the case', async () => {
     mockCase = {
       ...MOCK_CASE,
-      userId: '123',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
     applicationContext.getUseCases().userIsAssociated.mockReturnValue(false);
 

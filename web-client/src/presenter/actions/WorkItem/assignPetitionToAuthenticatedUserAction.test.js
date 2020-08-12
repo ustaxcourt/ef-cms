@@ -36,7 +36,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
           documents: [
             {
               documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-              workItems: [{ isQC: true, workItemId: '123' }],
+              workItem: { workItemId: '123' },
             },
           ],
         },

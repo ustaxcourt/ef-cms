@@ -9,6 +9,7 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
       applicationContext,
       opinionSearch: {
         keyword: 'Joe Exotic',
+        startDate: '2001-10-10',
       },
     });
 

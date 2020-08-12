@@ -52,6 +52,7 @@ describe('opinionPublicSearchInteractor', () => {
     await opinionPublicSearchInteractor({
       applicationContext,
       keyword: 'fish',
+      startDate: '2001-01-01',
     });
 
     expect(
@@ -66,6 +67,7 @@ describe('opinionPublicSearchInteractor', () => {
     const result = await opinionPublicSearchInteractor({
       applicationContext,
       keyword: 'memorandum',
+      startDate: '2001-01-01',
     });
 
     expect(result).toEqual(mockOpinionSearchResult);

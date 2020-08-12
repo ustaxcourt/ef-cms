@@ -52,7 +52,7 @@ describe('add docketNumber to user case notes', () => {
     };
   });
 
-  it('should not modify records that are are NOT a UserCaseNote entity', async () => {
+  it('should not modify records that are NOT a UserCaseNote entity', async () => {
     mockItems = [
       {
         pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',

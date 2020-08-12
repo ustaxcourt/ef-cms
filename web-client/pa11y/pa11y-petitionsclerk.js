@@ -421,22 +421,6 @@ module.exports = [
   /* review petition */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b/review',
 
-  /* document detail */
-  {
-    actions: [
-      'wait for #tab-pending-messages to be visible',
-      'wait for .progress-indicator to be hidden',
-      'click element #tab-pending-messages',
-      'wait for #create-message-button to be visible',
-      'wait for .progress-indicator to be hidden',
-      'click element #create-message-button',
-      'wait for .modal-dialog to be visible',
-    ],
-    notes: 'checks a11y of create message dialog',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/documents/89c781f6-71ba-4ead-93d8-c681c2183a73&info=create-message-dialog',
-  },
-
   /* trial sessions */
   {
     actions: ['wait for #trial-sessions-tabs to be visible'],
@@ -494,12 +478,12 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
-  /* case messages */
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/my/inbox&info=case-messages-inbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/my/outbox&info=case-messages-outbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/inbox&info=case-messages-section-inbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/outbox&info=case-messages-section-outbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
+  /* messages */
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/inbox&info=messages-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/outbox&info=messages-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/inbox&info=messages-section-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/outbox&info=messages-section-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
   {
     actions: [
       'wait for #button-forward to be visible',
@@ -508,7 +492,7 @@ module.exports = [
     ],
     notes: 'checks the forward modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-forward',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-forward',
   },
   {
     actions: [
@@ -518,7 +502,7 @@ module.exports = [
     ],
     notes: 'checks the reply modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-reply',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-reply',
   },
   {
     actions: [
@@ -528,6 +512,6 @@ module.exports = [
     ],
     notes: 'checks the complete modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-complete',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-complete',
   },
 ];

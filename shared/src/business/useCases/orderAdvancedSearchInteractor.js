@@ -21,14 +21,10 @@ exports.orderAdvancedSearchInteractor = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,
-  endDateDay,
-  endDateMonth,
-  endDateYear,
+  endDate,
   judge,
   keyword,
-  startDateDay,
-  startDateMonth,
-  startDateYear,
+  startDate,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -39,14 +35,10 @@ exports.orderAdvancedSearchInteractor = async ({
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,
-    endDateDay,
-    endDateMonth,
-    endDateYear,
+    endDate,
     judge,
     keyword,
-    startDateDay,
-    startDateMonth,
-    startDateYear,
+    startDate,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();

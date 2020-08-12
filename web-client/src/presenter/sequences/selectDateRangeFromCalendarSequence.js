@@ -1,5 +1,3 @@
-import { updateDateFromCalendarAction } from '../actions/CaseDeadline/updateDateFromCalendarAction';
+import { updateDateFromPickerAction } from '../actions/CaseDeadline/updateDateFromPickerAction';
 
-export const selectDateRangeFromCalendarSequence = [
-  updateDateFromCalendarAction,
-];
+export const selectDateRangeFromCalendarSequence = [updateDateFromPickerAction];

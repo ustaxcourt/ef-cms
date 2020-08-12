@@ -1,4 +1,4 @@
-# CaseMessage
+# Message
  ```
 ---
   type: "object"
@@ -101,7 +101,7 @@
         only: true
         presence: "required"
       allow: 
-        - "CaseMessage"
+        - "Message"
     from: 
       type: "string"
       flags: 

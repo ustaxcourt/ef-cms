@@ -15,3 +15,7 @@ variable "cloudfront_default_ttl" {
   type = string
   default = "86400"
 }
+
+variable "zone_name" {
+  type = string
+}
