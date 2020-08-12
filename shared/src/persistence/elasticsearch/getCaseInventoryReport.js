@@ -22,7 +22,6 @@ exports.getCaseInventoryReport = async ({
     'associatedJudge',
     'caseCaption',
     'docketNumber',
-    'docketNumberSuffix',
     'docketNumberWithSuffix',
     'status',
   ];

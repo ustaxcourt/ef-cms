@@ -21,7 +21,7 @@ exports.fetchPendingItems = async ({
     'documents',
     'caseCaption',
     'docketNumber',
-    'docketNumberSuffix',
+    'docketNumberWithSuffix',
     'status',
   ];
 

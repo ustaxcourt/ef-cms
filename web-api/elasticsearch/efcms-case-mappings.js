@@ -48,9 +48,6 @@ module.exports = {
     'docketNumber.S': {
       type: 'text',
     },
-    'docketNumberSuffix.S': {
-      type: 'text',
-    },
     'docketNumberWithSuffix.S': {
       type: 'text',
     },
@@ -90,6 +87,9 @@ module.exports = {
     'documents.L.M.receivedAt.S': {
       type: 'date',
     },
+    'documents.L.M.servedAt.S': {
+      type: 'date',
+    },
     'documents.L.M.userId.S': {
       type: 'text',
     },
@@ -102,13 +102,22 @@ module.exports = {
     'indexedTimestamp.N': {
       type: 'text',
     },
+    'irsPractitioners.L.M.userId.S': {
+      type: 'text',
+    },
     'pk.S': {
       type: 'text',
     },
     'preferredTrialCity.S': {
       type: 'text',
     },
+    'privatePractitioners.L.M.userId.S': {
+      type: 'text',
+    },
     'receivedAt.S': {
+      type: 'date',
+    },
+    'sealedDate.S': {
       type: 'date',
     },
     'sk.S': {
@@ -123,6 +132,9 @@ module.exports = {
       type: 'text',
     },
     'status.S': {
+      type: 'text',
+    },
+    'userId.S': {
       type: 'text',
     },
   },

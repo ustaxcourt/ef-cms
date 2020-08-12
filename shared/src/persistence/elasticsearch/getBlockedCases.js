@@ -22,7 +22,6 @@ exports.getBlockedCases = async ({ applicationContext, trialLocation }) => {
           'blockedReason',
           'caseCaption',
           'docketNumber',
-          'docketNumberSuffix',
           'docketNumberWithSuffix',
           'status',
         ],
