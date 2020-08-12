@@ -31,22 +31,24 @@ exports.casePublicSearch = async ({
     yearFiledMin,
   });
 
+  const source = [
+    'caseCaption',
+    'contactPrimary',
+    'contactSecondary',
+    'docketNumber',
+    'docketNumberSuffix',
+    'docketNumberWithSuffix',
+    'receivedAt',
+    'sealedDate',
+  ];
+
   let results;
 
   ({ results } = await search({
     applicationContext,
     searchParameters: {
       body: {
-        _source: [
-          'caseCaption',
-          'contactPrimary',
-          'contactSecondary',
-          'docketNumber',
-          'docketNumberSuffix',
-          'docketNumberWithSuffix',
-          'receivedAt',
-          'sealedDate',
-        ],
+        _source: source,
         query: {
           bool: {
             must: [...exactMatchesQuery, ...commonQuery],
@@ -63,14 +65,7 @@ exports.casePublicSearch = async ({
       applicationContext,
       searchParameters: {
         body: {
-          _source: [
-            'caseCaption',
-            'contactPrimary',
-            'contactSecondary',
-            'docketNumber',
-            'docketNumberSuffix',
-            'receivedAt',
-          ],
+          _source: source,
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],
