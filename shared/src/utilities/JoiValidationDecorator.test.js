@@ -41,6 +41,13 @@ const MockEntity2Schema = joi.object().keys({
   hasNickname: joi.boolean().required(),
   name: joi.string().required(),
   obj1: joi.object().keys({ foo: joi.string().required() }).required(),
+  reallyMessyNestedThing: joi
+    .alternatives()
+    .try(
+      joi.object().keys({ never: joi.string().required() }),
+      joi.object().keys({ happening: joi.string().required() }),
+    )
+    .optional(),
 });
 
 joiValidationDecorator(MockEntity2, MockEntity2Schema, {
@@ -60,14 +67,12 @@ const MockEntity3Schema = joi.object().keys({
 joiValidationDecorator(MockEntity3, MockEntity3Schema, {});
 
 const MockCase = function (raw) {
-  this.caseId = raw.caseId;
   this.docketNumber = raw.docketNumber;
   this.somethingId = raw.somethingId;
   this.title = raw.title;
 };
 
 const MockCaseSchema = joi.object().keys({
-  caseId: joi.string().required(),
   docketNumber: joi.string().required(),
   somethingId: joi.string().required(),
   title: joi.string().required(),
@@ -141,6 +146,19 @@ describe('Joi Validation Decorator', () => {
       expect(rawEntity.arry2[0]).toEqual('one');
       expect(rawEntity.arry2[1]).toEqual('two');
     });
+
+    it('should ignore formatted error messages for joi alternatives', () => {
+      const obj = new MockEntity2({
+        arry1: [{ baz: 'foz', foo: 'bar' }],
+        arry2: ['one', 'two'],
+        favoriteNumber: 13,
+        hasNickname: false,
+        name: 'Name',
+        obj1: { foo: 'bar' },
+        reallyMessyNestedThing: { will: 'not match' },
+      });
+      expect(obj.getFormattedValidationErrors()).toBe(null);
+    });
   });
 
   it('should have access to the schema', () => {
@@ -150,7 +168,6 @@ describe('Joi Validation Decorator', () => {
 
   it('should throw a detailed "InvalidEntityError" when `validate` fails including all keys ending in `Id`, `docketNumber` if it exists, and key/value pairs that failed validation', () => {
     const obj1 = new MockCase({
-      caseId: 'abc',
       docketNumber: '123-20',
       title: 'some title',
     });
@@ -162,7 +179,6 @@ describe('Joi Validation Decorator', () => {
     }
     expect(error).toBeDefined();
     expect(error.message).toContain("'somethingId' is required");
-    expect(error.message).toContain('"caseId":"abc"');
     expect(error.message).toContain('"somethingId":"<undefined>"');
     expect(error.message).toContain('"docketNumber":"123-20"');
   });

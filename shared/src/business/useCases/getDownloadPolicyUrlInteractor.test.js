@@ -4,7 +4,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+const { ROLES, TRANSCRIPT_EVENT_CODE } = require('../entities/EntityConstants');
 
 describe('getDownloadPolicyUrlInteractor', () => {
   beforeEach(() => {
@@ -65,11 +65,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
       documentId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       documentTitle: 'Transcript of [anything] on [date]',
       documentType: 'Transcript',
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       processingStatus: 'pending',
       secondaryDate: '2200-01-21T20:49:28.192Z',
       userId: 'petitioner',
-      workItems: [],
     });
     applicationContext
       .getPersistenceGateway()

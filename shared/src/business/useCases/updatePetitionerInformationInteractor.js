@@ -150,7 +150,7 @@ exports.updatePetitionerInformationInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactName}`,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
         documentId: newDocumentId,
         documentTitle: documentType.title,
         documentType: documentType.title,
@@ -170,7 +170,9 @@ exports.updatePetitionerInformationInteractor = async ({
       pdfData: changeOfAddressPdf,
     });
 
-    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+    caseEntity.addDocument(changeOfAddressDocument, {
+      applicationContext,
+    });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,

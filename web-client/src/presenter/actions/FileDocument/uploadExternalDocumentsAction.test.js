@@ -31,7 +31,6 @@ describe('uploadExternalDocumentsAction', () => {
           eventCode: 'A',
           processingStatus: 'pending',
           userId: 'petitioner',
-          workItems: [],
         },
       ],
     });
@@ -54,7 +53,6 @@ describe('uploadExternalDocumentsAction', () => {
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
@@ -77,7 +75,6 @@ describe('uploadExternalDocumentsAction', () => {
           eventCode: 'A',
           processingStatus: 'pending',
           userId: 'petitioner',
-          workItems: [],
         },
         {
           createdAt: '2018-11-21T20:49:28.192Z',
@@ -88,7 +85,6 @@ describe('uploadExternalDocumentsAction', () => {
           isFileAttached: false,
           processingStatus: 'pending',
           userId: 'petitioner',
-          workItems: [],
         },
       ],
     });
@@ -111,7 +107,6 @@ describe('uploadExternalDocumentsAction', () => {
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
@@ -171,7 +166,6 @@ describe('uploadExternalDocumentsAction', () => {
       },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,

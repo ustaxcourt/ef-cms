@@ -1,6 +1,5 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7/sign',
   {
     actions: [
       'wait for td.message-select-control>label to be visible',
@@ -38,31 +37,15 @@ module.exports = [
     actions: [
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-legend to be visible',
+      'wait for element #payment-date-waived-date to be visible',
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/edit-details&info=waived',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
   {
     actions: [
-      'wait for #tab-pending-messages to be visible',
-      'click element #tab-pending-messages',
-      "wait for .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible",
-      "click element .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2']",
-      "wait for .forward-form[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible",
-    ],
-    notes: 'checks a11y of forward form',
-    url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7&info=forwarding-form',
-  },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/complete',
-  {
-    actions: [
-      'wait for #tab-document-info to be visible',
-      'click element #tab-document-info',
       'wait for #has-other-filing-party to be visible',
       'click element label#has-other-filing-party-label',
       'wait for input#other-filing-party to be visible',
@@ -93,7 +76,7 @@ module.exports = [
     actions: [
       'wait for element #certificate-of-service to be visible',
       'click element #certificate-of-service+label',
-      'wait for element #service-date-month to be visible',
+      'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
@@ -101,9 +84,9 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #case-detail-menu-button to be visible',
+      'wait for #tab-case-information to be visible',
       'wait for .progress-indicator to be hidden',
-      'click element #case-detail-menu-button',
+      'click element #tab-case-information',
       'wait for #menu-edit-case-context-button to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #menu-edit-case-context-button',
@@ -134,6 +117,8 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to dismissal',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -147,6 +132,8 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to opinion',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -160,6 +147,8 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to meow',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for svg.iconSealed to be visible',
     ],
@@ -173,12 +162,14 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to sunglasses',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of opinion search',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result-sunglasses',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',

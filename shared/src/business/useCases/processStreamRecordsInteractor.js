@@ -37,11 +37,15 @@ const deleteDynamicAndNestedFields = record => {
     delete data.caseMetadata;
   }
   //nested data
-  data = recursivelyDeleteKey(data, 'workItems');
+  data = recursivelyDeleteKey(data, 'workItem');
   data = recursivelyDeleteKey(data, 'draftState');
 
   record.dynamodb.NewImage = data;
   return record;
+};
+
+const getRemoveRecords = ({ records }) => {
+  return records.filter(record => record.eventName === 'REMOVE');
 };
 
 /**
@@ -64,16 +68,16 @@ const filterRecords = async ({ applicationContext, records }) => {
   );
 
   for (let caseRecord of caseRecords) {
-    const caseId = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
+    const docketNumber = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
 
     const fullCase = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
 
-    if (fullCase.caseId) {
+    if (fullCase.docketNumber) {
       filteredRecords.push({
         dynamodb: {
           Keys: {
@@ -147,6 +151,37 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
+
+  const removeRecords = getRemoveRecords({ records: recordsToProcess });
+
+  if (removeRecords.length) {
+    try {
+      const {
+        failedRecords,
+      } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
+        applicationContext,
+        records: removeRecords,
+      });
+
+      if (failedRecords.length) {
+        for (const failedRecord of failedRecords) {
+          try {
+            await applicationContext.getPersistenceGateway().deleteRecord({
+              applicationContext,
+              indexName: failedRecord['_index'],
+              recordId: failedRecord['_id'],
+            });
+          } catch (e) {
+            applicationContext.logger.info('Error', e);
+            await applicationContext.notifyHoneybadger(e);
+          }
+        }
+      }
+    } catch (e) {
+      applicationContext.logger.info('Error', e);
+      await applicationContext.notifyHoneybadger(e);
+    }
+  }
 
   const filteredRecords = await filterRecords({
     applicationContext,

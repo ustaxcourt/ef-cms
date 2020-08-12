@@ -5,7 +5,6 @@ import { runAction } from 'cerebral/test';
 
 describe('completeDocketEntryQCAction', () => {
   const caseDetail = {
-    caseId: '123',
     docketNumber: '123-45',
     documents: [
       { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },

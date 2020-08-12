@@ -126,20 +126,11 @@
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-    docketNumberSuffix: 
+    docketNumberWithSuffix: 
       type: "string"
       flags: 
-        only: true
         presence: "optional"
-      allow: 
-        - "X"
-        - "R"
-        - "L"
-        - "P"
-        - "S"
-        - "SL"
-        - "W"
-        - null
+        description: "Auto-generated from docket number and the suffix."
     document: 
       type: "object"
       flags: 
@@ -167,27 +158,10 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    isQC: 
-      type: "boolean"
-      flags: 
-        presence: "required"
     isRead: 
       type: "boolean"
       flags: 
         presence: "optional"
-    messages: 
-      type: "array"
-      flags: 
-        presence: "required"
-      items: 
-        - 
-          type: "object"
-          rules: 
-            - 
-              name: "instance"
-              args: 
-                constructor: [object Function]
-                name: "Message"
     section: 
       type: "string"
       flags: 

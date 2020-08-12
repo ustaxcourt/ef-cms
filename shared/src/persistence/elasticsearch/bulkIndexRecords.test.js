@@ -3,19 +3,19 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
 } = require('../../business/entities/EntityConstants');
 const { bulkIndexRecords } = require('./bulkIndexRecords');
 
 describe('bulkIndexRecords', () => {
   const newImageRecord = {
-    caseId: { S: '6f3d97f8-1bdd-4779-a150-c076d08ad8fd' },
     caseStatus: { S: CASE_STATUS_TYPES.new },
     createdAt: { S: '2020-06-10T15:10:23.553Z' },
     docketNumber: { S: '105-19' },
     docketNumberWithSuffix: { S: '105-19' },
-    entityName: { S: 'CaseMessage' },
+    entityName: { S: 'Message' },
     from: { S: 'Test Docketclerk' },
-    fromSection: { S: 'docket' },
+    fromSection: { S: DOCKET_SECTION },
     fromUserId: { S: '1805d1ab-18d0-43ec-bafb-654e83405416' },
     gsi1pk: { S: 'message|2e30ecc2-3818-4855-ad3f-4a3ce8d29767' },
     message: { S: 'D' },
@@ -24,7 +24,7 @@ describe('bulkIndexRecords', () => {
     sk: { S: 'message|2e30ecc2-3818-4855-ad3f-4a3ce8d29767' },
     subject: { S: 'S' },
     to: { S: 'Test Docketclerk' },
-    toSection: { S: 'docket' },
+    toSection: { S: DOCKET_SECTION },
     toUserId: { S: '1805d1ab-18d0-43ec-bafb-654e83405416' },
   };
 

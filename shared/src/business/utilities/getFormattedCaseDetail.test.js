@@ -13,9 +13,11 @@ import { calculateISODate, createISODateString } from './DateHandler';
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   ROLES,
   SERVED_PARTIES_CODES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -23,7 +25,6 @@ applicationContext.getCurrentUser = () =>
   MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
 const mockCaseDetailBase = {
-  caseId: '123-456-abc-def',
   correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
@@ -74,12 +75,9 @@ describe('formatCase', () => {
           eventCode: 'P',
           isLegacySealed: true,
           servedAt: getDateISO(),
-          workItems: [
-            {
-              completedAt: getDateISO(),
-              isQC: true,
-            },
-          ],
+          workItem: {
+            completedAt: getDateISO(),
+          },
         },
         {
           createdAt: getDateISO(),
@@ -87,12 +85,9 @@ describe('formatCase', () => {
           documentType: 'Amended Answer',
           eventCode: 'ABC',
           servedAt: getDateISO(),
-          workItems: [
-            {
-              completedAt: getDateISO(),
-              isQC: false,
-            },
-          ],
+          workItem: {
+            completedAt: getDateISO(),
+          },
         },
       ],
     });
@@ -650,7 +645,7 @@ describe('getFilingsAndProceedings', () => {
       certificateOfServiceDateFormatted: '11/12/1999',
       exhibits: true,
       lodged: true,
-      objections: 'Yes',
+      objections: OBJECTIONS_OPTIONS_MAP.YES,
     });
 
     expect(result).toEqual(
@@ -664,7 +659,7 @@ describe('getFilingsAndProceedings', () => {
       certificateOfService: false,
       exhibits: false,
       lodged: false,
-      objections: 'No',
+      objections: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     expect(result).toEqual('(No Objection)');
@@ -730,8 +725,8 @@ describe('getFormattedCaseDetail', () => {
         signedAtFormatted: undefined,
       },
       {
-        editUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
-        signUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
+        editUrl: '/case-detail/123-45/edit-order/d-2-3-4',
+        signUrl: '/case-detail/123-45/edit-order/d-2-3-4/sign',
         signedAtFormatted: undefined,
       },
       {
@@ -753,7 +748,7 @@ describe('documentMeetsAgeRequirements', () => {
   });
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
     });
     expect(result).toBeTruthy();
@@ -765,7 +760,7 @@ describe('documentMeetsAgeRequirements', () => {
       units: 'hours',
     });
     const result = documentMeetsAgeRequirements({
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       secondaryDate: aShortTimeAgo,
     });
     expect(result).toBeFalsy();
@@ -971,5 +966,60 @@ describe('sortDocketRecords', () => {
     const result = sortDocketRecords();
 
     expect(result).toEqual([]);
+  });
+
+  it('should sort items that do not display a filingDate (based on createdAtFormatted) at the bottom', () => {
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            createdAtFormatted: '2019-08-04T00:10:02.000Z',
+          },
+        },
+        {
+          record: {
+            createdAtFormatted: undefined,
+          },
+        },
+        {
+          index: '1',
+          record: {
+            createdAtFormatted: '2019-08-03T00:10:02.000Z',
+          },
+        },
+        {
+          record: {
+            createdAtFormatted: undefined,
+          },
+        },
+      ],
+      'byIndexDesc',
+    );
+
+    expect(result).toEqual([
+      {
+        index: '1',
+        record: {
+          createdAtFormatted: '2019-08-03T00:10:02.000Z',
+        },
+      },
+      {
+        index: '2',
+        record: {
+          createdAtFormatted: '2019-08-04T00:10:02.000Z',
+        },
+      },
+      {
+        record: {
+          createdAtFormatted: undefined,
+        },
+      },
+      {
+        record: {
+          createdAtFormatted: undefined,
+        },
+      },
+    ]);
   });
 });

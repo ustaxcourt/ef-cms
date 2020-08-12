@@ -4,20 +4,15 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
-jest.mock('../entities/Document');
-const { Document } = require('../entities/Document');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   beforeAll(() => {
-    Document.mockImplementation(function Mockument() {
-      this.workItems = [];
-    });
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
@@ -28,7 +23,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   it('Calls the Receipt of Filing document generator', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         primaryDocumentFile: {},
       },
@@ -48,7 +43,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   it('acquires document information', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,

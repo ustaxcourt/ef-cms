@@ -4,8 +4,8 @@ const {
 const {
   getDocumentQCServedForSectionInteractor,
 } = require('./getDocumentQCServedForSectionInteractor');
+const { DOCKET_SECTION, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('getDocumentQCServedForSectionInteractor', () => {
@@ -23,18 +23,14 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
-        isQC: true,
-        messages: [],
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
-        isQC: true,
-        messages: [],
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
     ];
@@ -56,7 +52,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     await expect(
       getDocumentQCServedForSectionInteractor({
         applicationContext,
-        section: 'docket',
+        section: DOCKET_SECTION,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -64,7 +60,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
   it('successfully returns the work item for a docketclerk', async () => {
     const result = await getDocumentQCServedForSectionInteractor({
       applicationContext,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
 
     expect(result).toMatchObject([
@@ -72,8 +68,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
-        messages: [],
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
@@ -82,8 +77,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         document: {
           sentBy: 'petitioner',
         },
-        messages: [],
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
     ]);
@@ -98,7 +92,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     const result = await getDocumentQCServedForSectionInteractor({
       applicationContext,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
 
     expect(result).toMatchObject([
@@ -106,8 +100,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
-        messages: [],
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
@@ -116,8 +109,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         document: {
           sentBy: 'petitioner',
         },
-        messages: [],
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
     ]);

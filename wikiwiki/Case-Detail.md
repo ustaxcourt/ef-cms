@@ -20,6 +20,31 @@
 * The assigned judge and the trial session judge do not have to be same (although they normally will be)
 * Chief Judge role is not tied to a user login - a judge acting in the Chief Judge capacity can have cases assigned to them as their judge user login and have cases assigned to the Chief Judge role
 
+### Case Detail Menu
+**New Tab**
+* On click of New Tab, a new browser tab opens with Case Detail > Docket Record of the current case
+
+**Message**
+* On click, displays Create New Message modal
+
+**Deadline**
+* On click, displays Add Deadline modal
+
+**Order or Notice**
+* on click, displays Create Order or Notice modal
+
+**Paper Filing**
+* on click, navigates to Add Paper Filing screen
+
+**PDF Upload**
+* On click, navigates to Upload PDF screen
+
+**Correspondence**
+* on click, navigates to Add Correspondence scren
+
+**Add Case Note**
+* on click, displays Add Case Note modal
+
 ## Docket Record
 * [Docket Record](https://github.com/flexion/ef-cms/wiki/Docket-Record) is the official record for the case, and is visible to all users, including the public (with limited permissions)
 

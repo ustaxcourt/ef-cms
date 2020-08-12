@@ -23,10 +23,9 @@
     "createdAt": "2019-03-27T21:53:00.297Z",
     "receivedAt": "2019-03-27T21:53:00.297Z",
     "noticeOfAttachments": false,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseCaption": "Caryn Wall, Petitioner",
     "initialCaption": "Caryn Wall, Petitioner",
-    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "case|105-19",
     "filingType": "Individual petitioner",
     "orderForOds": false,
     "orderForRatification": false,
@@ -39,7 +38,7 @@
     "orderToShowCause": false,
     "preferredTrialCity": "Jackson, Mississippi",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case|105-19",
     "docketNumber": "105-19",
     "docketNumberWithSuffix": "105-19",
     "status": "New",
@@ -54,7 +53,7 @@
     "filedBy": "Test Practitioner",
     "index": 1,
     "docketRecordId": "8b86bf30-0118-4b85-bb4f-5bfbf7cb2baf",
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case|105-19",
     "sk": "docket-record|8b86bf30-0118-4b85-bb4f-5bfbf7cb2baf"
   },
   {
@@ -63,12 +62,12 @@
     "eventCode": "RQT",
     "index": 2,
     "docketRecordId": "89cb2500-becf-4da9-83b9-e3ca561c2622",
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case|105-19",
     "sk": "docket-record|89cb2500-becf-4da9-83b9-e3ca561c2622"
   },
   {
-    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "gsi1pk": "user-case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "case|105-19",
+    "gsi1pk": "user-case|105-19",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "caseCaption": "Caryn Wall, Petitioner",
     "createdAt": "2019-03-27T21:53:00.297Z",
@@ -78,7 +77,7 @@
     "entityName": "UserCase"
   },
   {
-    "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "sk": "case|105-19",
     "pk": "case-by-docket-number|105-19"
   },
   {
@@ -97,28 +96,16 @@
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "filedBy": "Test Practitioner",
-      "workItems": []
+      "filedBy": "Test Practitioner"
     },
     "section": "petitions",
     "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-    "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
     "sentBy": "Test Private Practitioner",
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-27T21:53:00.297Z",
     "assigneeName": null,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "messages": [
-      {
-        "createdAt": "2019-03-27T21:53:00.297Z",
-        "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-        "from": "Test Practitioner",
-        "message": "Petition filed by Caryn Wall is ready for review.",
-        "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "105-19",
     "updatedAt": "2019-03-27T21:53:00.297Z"
   },
@@ -138,34 +125,21 @@
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-      "filedBy": "Test Practitioner",
-      "workItems": []
+      "filedBy": "Test Practitioner"
     },
     "section": "petitions",
     "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-    "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
     "sentBy": "Test Private Practitioner",
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-03-27T21:53:00.297Z",
     "assigneeName": null,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "messages": [
-      {
-        "createdAt": "2019-03-27T21:53:00.297Z",
-        "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-        "from": "Test Practitioner",
-        "message": "Petition filed by Caryn Wall is ready for review.",
-        "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-      }
-    ],
     "docketNumber": "105-19",
     "updatedAt": "2019-03-27T21:53:00.297Z"
   },
   {
     "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "pk": "catalog"
   },
   {
@@ -186,7 +160,7 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "section": "privatePractitioner",
     "representingPrimary": true,
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "case|105-19",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
   },
@@ -195,44 +169,31 @@
     "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.297Z",
-    "workItems": [
-      {
-        "associatedJudge": "Chief Judge",
-        "docketNumberSuffix": null,
-        "caseStatus": "New",
-        "caseIsInProgress": false,
-        "document": {
-          "createdAt": "2019-03-27T21:53:00.297Z",
-          "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
-          "numberOfPages": 1,
-          "documentTitle": "Petition",
-          "documentType": "Petition",
-          "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-          "filedBy": "Test Practitioner"
-        },
-        "section": "petitions",
-        "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
-        "isInitializeCase": true,
-        "assigneeId": null,
-        "isQC": true,
-        "sentBy": "Test Private Practitioner",
-        "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "docketNumberSuffix": null,
+      "caseStatus": "New",
+      "caseIsInProgress": false,
+      "document": {
         "createdAt": "2019-03-27T21:53:00.297Z",
-        "assigneeName": null,
-        "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-        "messages": [
-          {
-            "createdAt": "2019-03-27T21:53:00.297Z",
-            "messageId": "231a499c-854e-4813-a665-c5ad3d49e069",
-            "from": "Test Practitioner",
-            "message": "Petition filed by Caryn Wall is ready for review.",
-            "fromUserId": "9805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
-        "docketNumber": "105-19",
-        "updatedAt": "2019-03-27T21:53:00.297Z"
-      }
-    ],
+        "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+        "numberOfPages": 1,
+        "documentTitle": "Petition",
+        "documentType": "Petition",
+        "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+        "filedBy": "Test Practitioner"
+      },
+      "section": "petitions",
+      "workItemId": "98c7130f-f924-423f-9f2c-89f0616f446a",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Private Practitioner",
+      "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+      "createdAt": "2019-03-27T21:53:00.297Z",
+      "assigneeName": null,
+      "docketNumber": "105-19",
+      "updatedAt": "2019-03-27T21:53:00.297Z"
+    },
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.309Z",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -240,18 +201,16 @@
     "processingStatus": "complete",
     "filedBy": "Test Practitioner",
     "isFileAttached": true,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "numberOfPages": 1,
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd"
+    "pk": "case|105-19"
   },
   {
     "documentType": "Statement of Taxpayer Identification",
     "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.298Z",
-    "workItems": [],
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.310Z",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -259,10 +218,9 @@
     "processingStatus": "complete",
     "filedBy": "Test Practitioner",
     "isFileAttached": true,
-    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "numberOfPages": 1,
-    "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd"
+    "pk": "case|105-19"
   }
 ]

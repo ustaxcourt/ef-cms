@@ -1,6 +1,6 @@
 import { chambersUserViewsDashboard } from './journey/chambersUserViewsDashboard';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkCreatesCaseMessageToChambers } from './journey/petitionsClerkCreatesCaseMessageToChambers';
+import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 
 const test = setupTest();
 
@@ -17,7 +17,7 @@ describe('Chambers dashboard', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesCaseMessageToChambers(test);
+  petitionsClerkCreatesMessageToChambers(test);
 
   loginAs(test, 'armensChambers@example.com');
   chambersUserViewsDashboard(test);

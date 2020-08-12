@@ -32,7 +32,6 @@ describe('getAllCaseDeadlinesInteractor', () => {
     {
       associatedJudge: 'Judge Buch',
       caseCaption: 'A caption, Petitioner',
-      caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         address1: '123 Main St',
@@ -47,11 +46,11 @@ describe('getAllCaseDeadlinesInteractor', () => {
       docketNumber: '101-19',
       partyType: PARTY_TYPES.petitioner,
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
       associatedJudge: 'Judge Buch',
       caseCaption: 'Another caption, Petitioner',
-      caseId: '92635235-52c2-445a-9aa0-2a629bb158ed',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         address1: '123 Main St',
@@ -66,6 +65,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       docketNumber: '102-19',
       partyType: PARTY_TYPES.petitioner,
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
   ];
 

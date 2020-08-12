@@ -5,8 +5,10 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 const {
   fileCourtIssuedDocketEntryInteractor,
@@ -20,7 +22,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -30,7 +32,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -108,7 +109,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           userId: mockUserId,
         },
       ],
@@ -159,7 +160,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -190,7 +191,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -234,7 +235,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -271,7 +272,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -283,7 +284,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
-        eventCode: 'TRAN',
+        eventCode: TRANSCRIPT_EVENT_CODE,
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
       },
@@ -312,7 +313,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
-        eventCode: 'TRAN',
+        eventCode: TRANSCRIPT_EVENT_CODE,
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
         isDraft: true,

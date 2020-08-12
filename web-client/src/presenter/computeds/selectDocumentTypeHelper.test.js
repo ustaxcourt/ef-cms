@@ -1,12 +1,15 @@
 import { DOCUMENT_EXTERNAL_CATEGORIES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
+import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { selectDocumentTypeHelper as selectDocumentTypeHelperComputed } from './selectDocumentTypeHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
+const CATEGORY_MAP = cloneDeep(DOCUMENT_EXTERNAL_CATEGORIES_MAP); // end-around deep-freeze of constants for purposes of test
+
 // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
-DOCUMENT_EXTERNAL_CATEGORIES_MAP['Miscellaneous'].push({
+CATEGORY_MAP['Miscellaneous'].push({
   category: 'Miscellaneous',
   documentTitle: '[First, Second, etc.] Something to [anything]',
   documentType: 'Something [anything]',
@@ -18,7 +21,7 @@ DOCUMENT_EXTERNAL_CATEGORIES_MAP['Miscellaneous'].push({
   scenario: 'Nonstandard I',
 });
 
-DOCUMENT_EXTERNAL_CATEGORIES_MAP['Decision'].push({
+CATEGORY_MAP['Decision'].push({
   category: 'Decision',
   documentTitle: 'Stipulated Decision Entered [judge] [anything]',
   documentType: 'Stipulated Decision',
@@ -37,7 +40,7 @@ const selectDocumentTypeHelper = withAppContextDecorator(
     getConstants: () => {
       return {
         ...applicationContext.getConstants(),
-        CATEGORY_MAP: DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+        CATEGORY_MAP,
       };
     },
   },
@@ -104,7 +107,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -117,7 +119,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -130,7 +131,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
         ],
         showNonstandardForm: true,
@@ -179,7 +179,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -192,7 +191,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -205,7 +203,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
         ],
         showNonstandardForm: true,
@@ -239,7 +236,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -252,7 +248,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -265,7 +260,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
         ],
         showDateFields: true,
@@ -317,7 +311,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -330,7 +323,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -343,7 +335,6 @@ describe('selectDocumentTypeHelper', () => {
             isFileAttached: true,
             processingStatus: 'pending',
             userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItems: [],
           },
         ],
         showNonstandardForm: true,

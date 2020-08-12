@@ -1,6 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getUserInteractor } = require('./getUserInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+const { PETITIONS_SECTION, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('getUserInteractor', () => {
@@ -15,13 +15,12 @@ describe('getUserInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     const user = await getUserInteractor({
       applicationContext,
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(user).toEqual({
@@ -30,7 +29,7 @@ describe('getUserInteractor', () => {
       entityName: 'User',
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -53,7 +52,6 @@ describe('getUserInteractor', () => {
 
     const user = await getUserInteractor({
       applicationContext,
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(user).toEqual({

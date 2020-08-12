@@ -139,7 +139,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     documentId,
   });
 
-  const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
+  const workItemToUpdate = courtIssuedDocument.workItem;
   await completeWorkItem({
     applicationContext,
     courtIssuedDocument,
@@ -165,7 +165,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       .getPersistenceGateway()
       .deleteCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
       });
 
     if (caseEntity.trialSessionId) {

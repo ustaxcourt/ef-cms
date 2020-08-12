@@ -4,6 +4,7 @@ const {
 } = require('../../entities/EntityConstants');
 const {
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   PAYMENT_STATUS,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -14,6 +15,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
@@ -52,12 +54,47 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   );
 
   if (stinDocument) {
-    await applicationContext.getPersistenceGateway().deleteDocument({
+    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
       applicationContext,
       key: stinDocument.documentId,
     });
 
     return stinDocument.documentId;
+  }
+};
+
+const addDocketEntries = ({ applicationContext, caseEntity }) => {
+  const initialDocumentTypesListRequiringDocketEntry = Object.values(
+    INITIAL_DOCUMENT_TYPES_MAP,
+  );
+
+  remove(
+    initialDocumentTypesListRequiringDocketEntry,
+    doc =>
+      doc === INITIAL_DOCUMENT_TYPES.petition.documentType ||
+      doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
+  );
+
+  for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
+    const foundDocument = caseEntity.documents.find(
+      caseDocument => caseDocument.documentType === documentType,
+    );
+
+    if (foundDocument) {
+      const newDocketRecord = new DocketRecord(
+        {
+          description:
+            foundDocument.documentTitle || foundDocument.documentType,
+          documentId: foundDocument.documentId,
+          eventCode: foundDocument.eventCode,
+          filedBy: foundDocument.filedBy,
+          filingDate: foundDocument.filingDate,
+          servedPartiesCode: foundDocument.servedPartiesCode,
+        },
+        { applicationContext },
+      );
+      caseEntity.addDocketRecord(newDocketRecord);
+    }
   }
 };
 
@@ -75,7 +112,7 @@ exports.serveCaseToIrsInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -151,10 +188,7 @@ exports.serveCaseToIrsInteractor = async ({
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-
-  const initializeCaseWorkItem = petitionDocument.workItems.find(
-    workItem => workItem.isInitializeCase,
-  );
+  const initializeCaseWorkItem = petitionDocument.workItem;
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
@@ -183,11 +217,6 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
   for (const doc of caseEntity.documents) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
@@ -196,6 +225,13 @@ exports.serveCaseToIrsInteractor = async ({
       replaceCoversheet: !caseEntity.isPaper,
       useInitialData: !caseEntity.isPaper,
     });
+
+    doc.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentId: doc.documentId,
+      });
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -244,15 +280,24 @@ exports.serveCaseToIrsInteractor = async ({
     s3Client.upload(params, resolve);
   });
 
+  let urlToReturn;
+
   if (caseEntity.isPaper) {
-    const {
-      url,
+    addDocketEntries({ applicationContext, caseEntity });
+
+    ({
+      url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
       documentId: caseConfirmationPdfName,
       useTempBucket: false,
-    });
-
-    return url;
+    }));
   }
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
+
+  return urlToReturn;
 };

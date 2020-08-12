@@ -1,6 +1,5 @@
 import { AccountMenu } from './AccountMenu';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
@@ -63,44 +62,12 @@ const NavigationItems = (
           <a
             className={classNames(
               'usa-nav__link',
-              headerHelper.pageIsCaseMessages && 'usa-current',
-            )}
-            href="/case-messages/my/inbox"
-            onClick={() => toggleMobileMenuSequence()}
-          >
-            Case Messages{' '}
-            {headerHelper.showMessagesIcon && (
-              <FontAwesomeIcon
-                aria-hidden="false"
-                aria-label="unread message"
-                className="iconStatusUnread"
-                icon={['fas', 'envelope']}
-                size="sm"
-              />
-            )}
-          </a>
-        </li>
-      )}
-      {headerHelper.showMessages && (
-        <li className={classNames('usa-nav__primary-item')}>
-          <a
-            className={classNames(
-              'usa-nav__link',
               headerHelper.pageIsMessages && 'usa-current',
             )}
             href="/messages/my/inbox"
             onClick={() => toggleMobileMenuSequence()}
           >
-            Messages{' '}
-            {headerHelper.showMessagesIcon && (
-              <FontAwesomeIcon
-                aria-hidden="false"
-                aria-label="unread message"
-                className="iconStatusUnread"
-                icon={['fas', 'envelope']}
-                size="sm"
-              />
-            )}
+            Messages
           </a>
         </li>
       )}

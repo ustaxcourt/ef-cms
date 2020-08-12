@@ -72,7 +72,6 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getCalendaredCasesForTrialSession.mockReturnValue([
         {
           ...MOCK_CASE,
-          caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
           docketNumber: '102-19',
           qcCompleteForTrial: {
             '6805d1ab-18d0-43ec-bafb-654e83405416': true,
@@ -118,7 +117,6 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getCalendaredCasesForTrialSession.mockReturnValue([
         {
           ...MOCK_CASE,
-          caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
           docketNumber: '102-19',
           qcCompleteForTrial: {
             '6805d1ab-18d0-43ec-bafb-654e83405416': false,
@@ -157,7 +155,6 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getCalendaredCasesForTrialSession.mockReturnValue([
         {
           ...MOCK_CASE,
-          caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
           docketNumber: '102-19',
           qcCompleteForTrial: {
             '6805d1ab-18d0-43ec-bafb-654e83405416': true,
@@ -196,7 +193,6 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
       highPriority: true,
       trialDate: '2025-12-01T00:00:00.000Z',
     });
@@ -204,7 +200,6 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
         .calls[1][0],
     ).toMatchObject({
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       highPriority: true,
       trialDate: '2025-12-01T00:00:00.000Z',
     });

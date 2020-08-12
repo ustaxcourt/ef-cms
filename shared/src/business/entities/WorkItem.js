@@ -1,9 +1,5 @@
 const joi = require('joi');
 const {
-  CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-} = require('./EntityConstants');
-const {
   CHAMBERS_SECTIONS,
   IRS_SYSTEM_SECTION,
   SECTIONS,
@@ -14,10 +10,10 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
-const { Message } = require('./Message');
-const { omit, orderBy } = require('lodash');
+const { omit } = require('lodash');
 
 /**
  * constructor
@@ -42,13 +38,12 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
-  this.document = omit(rawWorkItem.document, 'workItems');
+  this.document = omit(rawWorkItem.document, 'workItem');
   this.entityName = 'WorkItem';
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
-  this.isQC = rawWorkItem.isQC;
   this.isRead = rawWorkItem.isRead;
   this.section = rawWorkItem.section;
   this.sentBy = rawWorkItem.sentBy;
@@ -57,96 +52,64 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
-
-  this.messages = (rawWorkItem.messages || []).map(
-    message => new Message(message, { applicationContext }),
-  );
 }
 
 WorkItem.validationName = 'WorkItem';
 
-joiValidationDecorator(
-  WorkItem,
-  joi.object().keys({
-    assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
-    assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
-    associatedJudge: joi.string().max(100).required(),
-    caseIsInProgress: joi.boolean().optional(),
-    caseStatus: joi
-      .string()
-      .valid(...Object.values(CASE_STATUS_TYPES))
-      .optional(),
-    caseTitle: joi.string().max(500).optional(),
-    completedAt: JoiValidationConstants.ISO_DATE.optional(),
-    completedBy: joi.string().max(100).optional().allow(null),
-    completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
-    completedMessage: joi.string().max(100).optional().allow(null),
-    createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-      'Unique case identifier in XXXXX-YY format.',
-    ),
-    docketNumberSuffix: joi
-      .string()
-      .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
-      .allow(null)
-      .optional(),
-    document: joi.object().required(),
-    entityName: joi.string().valid('WorkItem').required(),
-    hideFromPendingMessages: joi.boolean().optional(),
-    highPriority: joi.boolean().optional(),
-    inProgress: joi.boolean().optional(),
-    isInitializeCase: joi.boolean().optional(),
-    isQC: joi.boolean().required(),
-    isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object().instance(Message)).required(),
-    section: joi
-      .string()
-      .valid(
-        ...SECTIONS,
-        ...CHAMBERS_SECTIONS,
-        ...Object.values(ROLES),
-        IRS_SYSTEM_SECTION,
-      )
-      .required(),
-    sentBy: joi
-      .string()
-      .max(100)
-      .required()
-      .description('The name of the user that sent the WorkItem'),
-    sentBySection: joi
-      .string()
-      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
-      .optional(),
-    sentByUserId: JoiValidationConstants.UUID.optional(),
-    trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
-    updatedAt: JoiValidationConstants.ISO_DATE.required(),
-    workItemId: JoiValidationConstants.UUID.required(),
-  }),
-);
+WorkItem.VALIDATION_RULES = joi.object().keys({
+  assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
+  assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
+  associatedJudge: joi.string().max(100).required(),
+  caseIsInProgress: joi.boolean().optional(),
+  caseStatus: joi
+    .string()
+    .valid(...Object.values(CASE_STATUS_TYPES))
+    .optional(),
+  caseTitle: joi.string().max(500).optional(),
+  completedAt: JoiValidationConstants.ISO_DATE.optional(),
+  completedBy: joi.string().max(100).optional().allow(null),
+  completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
+  completedMessage: joi.string().max(100).optional().allow(null),
+  createdAt: JoiValidationConstants.ISO_DATE.optional(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
+  docketNumberWithSuffix: joi
+    .string()
+    .optional()
+    .description('Auto-generated from docket number and the suffix.'),
+  document: joi.object().required(),
+  entityName: joi.string().valid('WorkItem').required(),
+  hideFromPendingMessages: joi.boolean().optional(),
+  highPriority: joi.boolean().optional(),
+  inProgress: joi.boolean().optional(),
+  isInitializeCase: joi.boolean().optional(),
+  isRead: joi.boolean().optional(),
+  section: joi
+    .string()
+    .valid(
+      ...SECTIONS,
+      ...CHAMBERS_SECTIONS,
+      ...Object.values(ROLES),
+      IRS_SYSTEM_SECTION,
+    )
+    .required(),
+  sentBy: joi
+    .string()
+    .max(100)
+    .required()
+    .description('The name of the user that sent the WorkItem'),
+  sentBySection: joi
+    .string()
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
+    .optional(),
+  sentByUserId: JoiValidationConstants.UUID.optional(),
+  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+  updatedAt: JoiValidationConstants.ISO_DATE.required(),
+  workItemId: JoiValidationConstants.UUID.required(),
+});
 
-/**
- *
- * @param {Message} message the message to add to the work item
- * @returns {WorkItem} the updated work item
- */
-WorkItem.prototype.addMessage = function (message) {
-  this.messages = [...this.messages, message];
-  return this;
-};
-
-WorkItem.prototype.setAsInternal = function () {
-  this.isQC = false;
-  return this;
-};
-
-/**
- * get the latest message (by createdAt)
- *
- * @returns {Message} the latest message entity by date
- */
-WorkItem.prototype.getLatestMessageEntity = function () {
-  return orderBy(this.messages, 'createdAt', 'desc')[0];
-};
+joiValidationDecorator(WorkItem, WorkItem.VALIDATION_RULES);
 
 /**
  * Assign to a user

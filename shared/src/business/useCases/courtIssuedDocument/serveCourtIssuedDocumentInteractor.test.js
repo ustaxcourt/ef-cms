@@ -44,7 +44,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockWorkItem = {
     docketNumber: '101-20',
-    isQC: true,
     section: DOCKET_SECTION,
     sentBy: mockUser.name,
     sentByUserId: mockUser.userId,
@@ -80,7 +79,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         signedByUserId: uuidv4(),
         signedJudgeName: 'Chief Judge',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-        workItems: [mockWorkItem],
+        workItem: mockWorkItem,
       };
     },
   );
@@ -88,7 +87,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockCases = [
     {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -130,7 +128,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         {
           documentId: mockDocumentId,
@@ -140,7 +138,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         ...documentsWithCaseClosingEventCodes,
       ],
@@ -148,10 +146,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
       caseCaption: 'Caption',
-      caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -204,7 +202,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         {
           documentId: mockDocumentId,
@@ -214,7 +212,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         ...documentsWithCaseClosingEventCodes,
       ],
@@ -224,6 +222,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
   ];
 
@@ -309,7 +308,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should throw a Not Found error if the case can not be found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
       serveCourtIssuedDocumentInteractor({

@@ -20,6 +20,10 @@ describe('validateCaseDetail', () => {
     applicationContext
       .getUseCases()
       .validateCaseDetailInteractor.mockReturnValue(null);
+
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue(null);
   });
 
   it('should call the success path when no errors are found', async () => {
@@ -29,7 +33,8 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
-          caseId: '123',
+          docketNumber: '123-45',
+          documents: [],
           irsNoticeDate: '2009-10-13',
         },
       },
@@ -39,7 +44,7 @@ describe('validateCaseDetail', () => {
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
         .calls[0][0].caseDetail,
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123-45',
       irsNoticeDate: '2009-10-13',
     });
     expect(successStub.mock.calls.length).toEqual(1);
@@ -54,9 +59,14 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
+      props: {
+        formWithComputedDates: {
+          documents: [],
+        },
+      },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
         },
         form: {
           irsDay: '13',
@@ -82,6 +92,11 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
+      props: {
+        formWithComputedDates: {
+          documents: [],
+        },
+      },
       state: {
         form: {
           statistics: [
@@ -104,5 +119,63 @@ describe('validateCaseDetail', () => {
         index: 2,
       },
     ]);
+  });
+
+  it('calls the validatePetitionFromPaperInteractor when the case is a paper filing', async () => {
+    await runAction(validateCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        formWithComputedDates: {
+          docketNumber: '123-45',
+          documents: [],
+          irsNoticeDate: '2009-10-13',
+          isPaper: true,
+        },
+      },
+      state: {},
+    });
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePetitionFromPaperInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('sets file and file size properties for initially filed documents from the documents array for paper filings', async () => {
+    await runAction(validateCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        formWithComputedDates: {
+          docketNumber: '123-45',
+          documents: [
+            { documentType: 'Petition' },
+            { documentType: 'Statement of Taxpayer Identification' },
+            { documentType: 'Application for Waiver of Filing Fee' },
+          ],
+          irsNoticeDate: '2009-10-13',
+          isPaper: true,
+        },
+      },
+      state: {},
+    });
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePetitionFromPaperInteractor.mock
+        .calls[0][0].petition,
+    ).toMatchObject({
+      applicationForWaiverOfFilingFeeFile: {},
+      applicationForWaiverOfFilingFeeFileSize: 1,
+      petitionFile: {},
+      petitionFileSize: 1,
+      stinFile: {},
+      stinFileSize: 1,
+    });
   });
 });

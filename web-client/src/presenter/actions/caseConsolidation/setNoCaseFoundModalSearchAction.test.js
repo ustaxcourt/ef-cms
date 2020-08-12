@@ -8,7 +8,7 @@ describe('setNoCaseFoundModalSearchAction', () => {
       modules: {
         presenter,
       },
-      props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+      props: { docketNumber: '123-45' },
       state: {},
     });
     expect(result.state.modal.error).toEqual('No Case Found');

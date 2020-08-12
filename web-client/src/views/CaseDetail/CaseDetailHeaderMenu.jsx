@@ -3,7 +3,7 @@ import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
-import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
+import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
 import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
@@ -27,8 +27,7 @@ export const CaseDetailHeaderMenu = connect(
       sequences.openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
-    openCreateCaseMessageModalSequence:
-      sequences.openCreateCaseMessageModalSequence,
+    openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
@@ -42,9 +41,8 @@ export const CaseDetailHeaderMenu = connect(
     isCaseDetailMenuOpen,
     openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence,
-    openCreateCaseMessageModalSequence,
+    openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
-    openUpdateCaseModalSequence,
     resetCaseMenuSequence,
     showModal,
     toggleMenuSequence,
@@ -116,21 +114,22 @@ export const CaseDetailHeaderMenu = connect(
                   >
                     New Tab
                   </Button>
+                  <hr></hr>
                 </li>
-                <hr></hr>
+
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="envelope"
                     id="menu-button-add-new-message"
                     onClick={() => {
                       resetCaseMenuSequence();
-                      openCreateCaseMessageModalSequence();
+                      openCreateMessageModalSequence();
                     }}
                   >
                     Message
                   </Button>
+                  <hr></hr>
                 </li>
-                <hr></hr>
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="calendar-alt"
@@ -142,8 +141,9 @@ export const CaseDetailHeaderMenu = connect(
                   >
                     Deadline
                   </Button>
+                  <hr></hr>
                 </li>
-                <hr></hr>
+
                 {caseDetailHeaderHelper.showCreateOrderButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -156,9 +156,9 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       Order or Notice
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
                 {caseDetailHeaderHelper.showAddDocketEntryButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -169,9 +169,10 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       Paper Filing
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
+
                 {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -184,9 +185,9 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       PDF Upload
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
 
                 {caseDetailHeaderHelper.showAddCorrespondenceButton && (
                   <li className="usa-nav__submenu-item">
@@ -200,24 +201,9 @@ export const CaseDetailHeaderMenu = connect(
                     >
                       Correspondence
                     </Button>
+                    <hr></hr>
                   </li>
                 )}
-                <hr></hr>
-                {caseDetailHeaderHelper.showEditCaseButton && (
-                  <li className="usa-nav__submenu-item">
-                    <Button
-                      icon="edit"
-                      id="menu-edit-case-context-button"
-                      onClick={() => {
-                        resetCaseMenuSequence();
-                        openUpdateCaseModalSequence();
-                      }}
-                    >
-                      Edit Case Status/Caption
-                    </Button>
-                  </li>
-                )}
-                <hr></hr>
 
                 <li className="usa-nav__submenu-item">
                   <Button
@@ -228,7 +214,7 @@ export const CaseDetailHeaderMenu = connect(
                       openAddEditCaseNoteModalSequence();
                     }}
                   >
-                    Add Case Note
+                    Case Note
                   </Button>
                 </li>
               </ul>
@@ -259,9 +245,7 @@ export const CaseDetailHeaderMenu = connect(
           <CreateOrderChooseTypeModal />
         )}
         {showModal === 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
-        {showModal === 'CreateCaseMessageModal' && (
-          <CreateCaseMessageModalDialog />
-        )}
+        {showModal === 'CreateMessageModal' && <CreateMessageModalDialog />}
       </div>
     );
   },

@@ -27,7 +27,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     caseRecords = [
       {
         caseCaption: 'Guy Fieri, Petitioner',
-        caseId: '00000000-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -49,11 +48,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
-        caseId: '11111111-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -75,11 +73,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
       {
         caseCaption: 'George Foreman, Petitioner',
-        caseId: '22222222-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -101,7 +98,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     ];
 
@@ -222,8 +219,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       record => record.docketNumber === docketNumber1,
     );
 
-    expect(lowestDocketNumberCase.documents[4].workItems.length).toEqual(1);
-    expect(nonLowestDocketNumberCase.documents[4].workItems.length).toEqual(0);
+    expect(lowestDocketNumberCase.documents[4].workItem).toBeDefined();
+    expect(nonLowestDocketNumberCase.documents[4].workItem).toBeUndefined();
   });
 
   it('should file multiple documents for each case if a secondary document is provided', async () => {

@@ -7,18 +7,6 @@ considerations:
   then search for "deja" to see if the order is returned.
 */
 module.exports = {
-  mappings: {
-    properties: {
-      'documentContents.S': {
-        analyzer: 'ustc_analyzer',
-        type: 'text',
-      },
-      'documentTitle.S': {
-        analyzer: 'ustc_analyzer',
-        type: 'text',
-      },
-    },
-  },
   settings: {
     index: {
       analysis: {
@@ -59,9 +47,9 @@ module.exports = {
           },
         },
       },
-      'mapping.total_fields.limit': '4000',
+      'mapping.total_fields.limit': '1000',
       number_of_replicas: 1,
-      number_of_shards: 5,
+      number_of_shards: 10,
     },
   },
 };

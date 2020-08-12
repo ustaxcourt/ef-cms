@@ -15,7 +15,7 @@ export const saveDocketEntryAction = async ({
   get,
   props,
 }) => {
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const { docketNumber } = get(state.caseDetail);
   const { isSavingForLater, primaryDocumentFileId } = props;
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
@@ -92,7 +92,6 @@ export const saveDocketEntryAction = async ({
 
   return {
     caseDetail,
-    caseId,
     docketNumber,
     documentId,
     overridePaperServiceAddress: true,

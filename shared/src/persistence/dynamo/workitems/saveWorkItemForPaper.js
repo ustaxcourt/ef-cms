@@ -1,6 +1,3 @@
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
@@ -14,14 +11,10 @@ const { put } = require('../../dynamodbClientService');
  * @returns {Promise} the promise for the call to persistence
  */
 exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber: workItem.docketNumber,
-  });
-
   await Promise.all([
     put({
       Item: {
+        gsi1pk: `work-item|${workItem.workItemId}`,
         pk: `work-item|${workItem.workItemId}`,
         sk: `work-item|${workItem.workItemId}`,
         ...workItem,
@@ -30,7 +23,7 @@ exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
     }),
     put({
       Item: {
-        pk: `case|${caseId}`,
+        pk: `case|${workItem.docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
       },
       applicationContext,

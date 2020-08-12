@@ -1,4 +1,5 @@
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
+const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy, without } = require('lodash');
@@ -189,7 +190,13 @@ const SCENARIOS = [
 
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
 
-const OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+const OBJECTIONS_OPTIONS_MAP = {
+  YES: 'Yes',
+  NO: 'No',
+  UNKNOWN: 'Unknown',
+};
+const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
 const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -218,14 +225,17 @@ const TRACKED_DOCUMENT_TYPES = {
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
+    documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
   },
   ownershipDisclosure: {
+    documentTitle: 'Ownership Disclosure Statement',
     documentType: 'Ownership Disclosure Statement',
     eventCode: 'DISC',
   },
   petition: {
+    documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
   },
@@ -235,6 +245,17 @@ const INITIAL_DOCUMENT_TYPES = {
     eventCode: 'RQT',
   },
   stin: STIN_DOCKET_ENTRY_TYPE,
+};
+
+const INITIAL_DOCUMENT_TYPES_MAP = {
+  applicationForWaiverOfFilingFeeFile:
+    INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  ownershipDisclosureFile:
+    INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+  petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
+  requestForPlaceOfTrialFile:
+    INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+  stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
 };
 
 // These docket entry types aren't defined anywhere else
@@ -289,6 +310,13 @@ const STANDING_PRETRIAL_NOTICE =
   SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice;
 const STANDING_PRETRIAL_ORDER =
   SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder;
+
+const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+).find(d => d.documentType === 'Proposed Stipulated Decision').eventCode;
+const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
+  d => d.documentType === 'Stipulated Decision',
+).eventCode;
 
 const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
@@ -891,7 +919,7 @@ const OTHER_FILER_TYPES = [
 
 const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
 
-module.exports = {
+module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
@@ -939,6 +967,7 @@ module.exports = {
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
   JUDGES_CHAMBERS,
@@ -948,6 +977,7 @@ module.exports = {
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
+  OBJECTIONS_OPTIONS_MAP,
   OPINION_DOCUMENT_TYPES,
   OPINION_EVENT_CODES,
   ORDER_EVENT_CODES,
@@ -960,6 +990,7 @@ module.exports = {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
+  PROPOSED_STIPULATED_DECISION_EVENT_CODE,
   ROLES,
   SCAN_MODE_LABELS,
   SCAN_MODES,
@@ -976,6 +1007,7 @@ module.exports = {
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  STIPULATED_DECISION_EVENT_CODE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
@@ -988,4 +1020,4 @@ module.exports = {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
-};
+});

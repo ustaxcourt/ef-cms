@@ -17,18 +17,18 @@ describe('updateCase', () => {
       {
         docketNumberSuffix: null,
         inProgress: false,
-        pk: 'case|123',
-        sk: 'case|123',
+        pk: 'case|101-18',
+        sk: 'case|101-18',
         status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
     secondQueryStub = [
       {
-        gsi1pk: 'user-case|123',
+        gsi1pk: 'user-case|101-18',
         leadDocketNumber: '123-20',
         pk: 'user|123',
-        sk: 'case|123',
+        sk: 'case|101-18',
         status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
@@ -60,13 +60,13 @@ describe('updateCase', () => {
   function addPrivatePractitioners() {
     firstQueryStub.push({
       name: 'Guy Fieri',
-      pk: 'case|123',
+      pk: 'case|101-18',
       sk: 'privatePractitioner|user-id-existing-123',
       userId: 'user-id-existing-123',
     });
     firstQueryStub.push({
       name: 'Rachel Ray',
-      pk: 'case|123',
+      pk: 'case|101-18',
       sk: 'privatePractitioner|user-id-existing-234',
       userId: 'user-id-existing-234',
     });
@@ -76,7 +76,6 @@ describe('updateCase', () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
-        caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
@@ -87,8 +86,8 @@ describe('updateCase', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
-      pk: 'case|123',
-      sk: 'case|123',
+      pk: 'case|101-18',
+      sk: 'case|101-18',
     });
   });
 
@@ -98,7 +97,6 @@ describe('updateCase', () => {
       caseToUpdate: {
         associatedJudge: 'Judge Buch',
         caseCaption: 'Johnny Joe Jacobson, Petitioner',
-        caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         inProgress: true,
@@ -111,8 +109,8 @@ describe('updateCase', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0].Item,
     ).toMatchObject({
-      pk: 'case|123',
-      sk: 'case|123',
+      pk: 'case|101-18',
+      sk: 'case|101-18',
     });
     expect(
       applicationContext.getDocumentClient().update.mock.calls[0][0],
@@ -163,7 +161,6 @@ describe('updateCase', () => {
       applicationContext,
       caseToUpdate: {
         associatedJudge: 'Judge Buch',
-        caseId: '123',
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
       },
@@ -182,7 +179,7 @@ describe('updateCase', () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
-        caseId: '123',
+        docketNumber: '101-18',
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
       },
@@ -191,8 +188,8 @@ describe('updateCase', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
-      pk: 'case|123',
-      sk: 'case|123',
+      pk: 'case|101-18',
+      sk: 'case|101-18',
     });
     expect(applicationContext.getDocumentClient().update).not.toBeCalled();
   });
@@ -202,7 +199,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
             { name: 'Guy Fieri', userId: 'user-id-existing-234' },
@@ -218,7 +215,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
       });
@@ -228,7 +225,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
             {
@@ -249,7 +246,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-new-321',
         userId: 'user-id-new-321',
       });
@@ -258,13 +255,13 @@ describe('updateCase', () => {
     it('updates a irsPractitioner on a case', async () => {
       firstQueryStub.push({
         name: 'Guy Fieri',
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
       firstQueryStub.push({
         name: 'Rachel Ray',
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
       });
@@ -272,7 +269,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
             {
@@ -293,7 +290,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         motto: 'Welcome to Flavortown!',
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
@@ -302,13 +299,13 @@ describe('updateCase', () => {
     it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       firstQueryStub.push({
         name: 'Guy Fieri',
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
       firstQueryStub.push({
         name: 'Rachel Ray',
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
       });
@@ -316,7 +313,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           irsPractitioners: [
             {
@@ -335,7 +332,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
       ).toMatchObject({
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-123',
       });
     });
@@ -346,7 +343,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
             { name: 'Guy Fieri', userId: 'user-id-existing-234' },
@@ -362,7 +359,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'privatePractitioner|user-id-existing-234',
         userId: 'user-id-existing-234',
       });
@@ -374,7 +371,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
             {
@@ -395,7 +392,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'privatePractitioner|user-id-new-321',
         userId: 'user-id-new-321',
       });
@@ -407,7 +404,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
             {
@@ -429,7 +426,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         motto: 'Welcome to Flavortown!',
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'privatePractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
@@ -441,7 +438,7 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
-          caseId: '123',
+          docketNumber: '101-18',
           docketNumberSuffix: null,
           privatePractitioners: [
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
@@ -457,7 +454,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
       ).toMatchObject({
-        pk: 'case|123',
+        pk: 'case|101-18',
         sk: 'privatePractitioner|user-id-existing-123',
       });
     });
@@ -479,7 +476,6 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
-          caseId: '123',
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
@@ -492,9 +488,9 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        gsi1pk: 'user-case|123',
+        gsi1pk: 'user-case|101-18',
         pk: 'user|123',
-        sk: 'case|123',
+        sk: 'case|101-18',
         status: CASE_STATUS_TYPES.calendared,
       });
     });
@@ -504,7 +500,6 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
-          caseId: '123',
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           inProgress: true,
@@ -518,9 +513,9 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        gsi1pk: 'user-case|123',
+        gsi1pk: 'user-case|101-18',
         pk: 'user|123',
-        sk: 'case|123',
+        sk: 'case|101-18',
       });
     });
 
@@ -530,7 +525,6 @@ describe('updateCase', () => {
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
           caseCaption: 'Guy Fieri, Petitioner',
-          caseId: '123',
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
@@ -544,9 +538,9 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         caseCaption: 'Guy Fieri, Petitioner',
-        gsi1pk: 'user-case|123',
+        gsi1pk: 'user-case|101-18',
         pk: 'user|123',
-        sk: 'case|123',
+        sk: 'case|101-18',
       });
     });
 
@@ -555,7 +549,6 @@ describe('updateCase', () => {
         applicationContext,
         caseToUpdate: {
           associatedJudge: 'Judge Buch',
-          caseId: '123',
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
@@ -569,10 +562,10 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        gsi1pk: 'user-case|123',
+        gsi1pk: 'user-case|101-18',
         leadDocketNumber: '123-20',
         pk: 'user|123',
-        sk: 'case|123',
+        sk: 'case|101-18',
       });
     });
   });

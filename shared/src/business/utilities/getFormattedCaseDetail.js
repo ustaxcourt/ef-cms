@@ -6,6 +6,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -67,11 +68,9 @@ const formatDocument = (applicationContext, document) => {
     !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
     result.documentType === 'Stipulated Decision';
 
-  const qcWorkItems = (result.workItems || []).filter(wi => wi.isQC);
+  const qcWorkItem = result.workItem;
 
-  result.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
-    return acc && !!wi.completedAt;
-  }, true);
+  result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
 
   result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
 
@@ -88,10 +87,7 @@ const formatDocument = (applicationContext, document) => {
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
   result.qcWorkItemsUntouched =
-    !!qcWorkItems.length &&
-    qcWorkItems.reduce((acc, wi) => {
-      return acc && !wi.isRead && !wi.completedAt;
-    }, true);
+    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
   result.servedPartiesCode = getServedPartiesCode(result.servedParties);
@@ -200,9 +196,9 @@ const getFilingsAndProceedings = formattedDocument => {
     `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
     `${
-      formattedDocument.objections === 'Yes'
+      formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
-        : formattedDocument.objections === 'No'
+        : formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.NO
         ? '(No Objection)'
         : ''
     }`,
@@ -256,15 +252,10 @@ const formatCase = (applicationContext, caseDetail) => {
     .map(document => ({
       ...document,
       editUrl:
-        document.documentType === 'Stipulated Decision'
-          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-          : document.documentType === 'Miscellaneous'
+        document.documentType === 'Miscellaneous'
           ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-      signUrl:
-        document.documentType === 'Stipulated Decision'
-          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
+      signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
       signedAtFormatted: applicationContext
         .getUtilities()
         .formatDateString(document.signedAt, 'MMDDYY'),
@@ -464,15 +455,26 @@ const getDocketRecordSortFunc = sortBy => {
   }
 };
 
+// sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
+const sortUndefined = (a, b) => {
+  if (a.record.createdAtFormatted && !b.record.createdAtFormatted) {
+    return -1;
+  }
+
+  if (!a.record.createdAtFormatted && b.record.createdAtFormatted) {
+    return 1;
+  }
+};
+
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
   const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
-    return result.reverse();
+    return result.reverse().sort(sortUndefined);
   }
-  return result;
+  return result.sort(sortUndefined);
 };
 
 const getFormattedCaseDetail = ({

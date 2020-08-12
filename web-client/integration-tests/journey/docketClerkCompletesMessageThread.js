@@ -16,7 +16,7 @@ export const docketClerkCompletesMessageThread = test => {
       value: 'Win, Win, Win, Win',
     });
 
-    await test.runSequence('completeCaseMessageSequence');
+    await test.runSequence('completeMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -30,7 +30,7 @@ export const docketClerkCompletesMessageThread = test => {
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
@@ -44,7 +44,7 @@ export const docketClerkCompletesMessageThread = test => {
     expect(foundMessage).not.toBeDefined();
 
     //message thread should be shown in completed box
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'completed',
       queue: 'my',
     });

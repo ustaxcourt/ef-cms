@@ -12,6 +12,12 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  bulkDeleteRecords,
+} = require('../../persistence/elasticsearch/bulkDeleteRecords');
+const {
+  bulkIndexRecords,
+} = require('../../persistence/elasticsearch/bulkIndexRecords');
+const {
   Case,
   getPetitionDocumentFromDocuments,
 } = require('../entities/cases/Case');
@@ -32,8 +38,8 @@ const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
-  createWorkItem: createWorkItemPersistence,
-} = require('../../persistence/dynamo/workitems/createWorkItem');
+  deleteRecord,
+} = require('../../persistence/elasticsearch/deleteRecord');
 const {
   deleteSectionOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
@@ -58,9 +64,6 @@ const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
-  getCaseByCaseId,
-} = require('../../persistence/dynamo/cases/getCaseByCaseId');
-const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
 const {
@@ -78,15 +81,6 @@ const {
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
-const {
-  getInboxMessagesForSection,
-} = require('../../persistence/dynamo/workitems/getInboxMessagesForSection');
-const {
-  getInboxMessagesForUser: getInboxMessagesForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getInboxMessagesForUser');
-const {
-  getSentMessagesForUser: getSentMessagesForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getSentMessagesForUser');
 const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
@@ -130,6 +124,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { indexRecord } = require('../../persistence/elasticsearch/indexRecord');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
@@ -307,6 +302,8 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
+    bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
+    bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createCase: jest.fn().mockImplementation(createCase),
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
@@ -314,9 +311,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(createSectionInboxRecord),
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
-    createWorkItem: createWorkItemPersistence,
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
+    deleteRecord: jest.fn().mockImplementation(deleteRecord),
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
@@ -324,7 +321,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAllCaseDeadlines: jest.fn(),
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
-    getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByDocketNumber: jest
       .fn()
@@ -338,20 +334,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
-    getInboxMessagesForSection: jest
-      .fn()
-      .mockImplementation(getInboxMessagesForSection),
-    getInboxMessagesForUser: jest
-      .fn()
-      .mockImplementation(getInboxMessagesForUserPersistence),
     getItem: jest.fn().mockImplementation(getItem),
     getRecord: jest.fn(),
-    getSentMessagesForUser: jest
-      .fn()
-      .mockImplementation(getSentMessagesForUserPersistence),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
+    indexRecord: jest.fn().mockImplementation(indexRecord),
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
@@ -463,7 +451,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
-    isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
       info: jest.fn(),

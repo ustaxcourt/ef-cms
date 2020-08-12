@@ -25,7 +25,6 @@ describe('associatePrivatePractitionerToCase', () => {
   beforeEach(() => {
     caseRecord = {
       caseCaption: 'Case Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -74,6 +73,7 @@ describe('associatePrivatePractitionerToCase', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
     applicationContext.getCurrentUser.mockReturnValue(

@@ -13,6 +13,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { cloneDeep } = require('lodash');
 
 const ContactFactory = {};
 
@@ -42,13 +43,38 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
   postalCode: 'Enter ZIP code',
 };
 
+ContactFactory.getValidationRules = contactType => {
+  const validationOptions = [];
+
+  for (const partyType in PARTY_TYPES) {
+    for (const countryType in COUNTRY_TYPES) {
+      for (const isPaper of [true, false]) {
+        const constructor = ContactFactory.getContactConstructors({
+          partyType: PARTY_TYPES[partyType],
+        })[contactType];
+
+        if (constructor) {
+          validationOptions.push(
+            constructor({
+              countryType: COUNTRY_TYPES[countryType],
+              isPaper,
+            }).VALIDATION_RULES,
+          );
+        }
+      }
+    }
+  }
+
+  return joi.alternatives().try(...validationOptions);
+};
+
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 const commonValidationRequirements = {
-  address1: joi.string().max(500).required(),
-  address2: joi.string().max(500).optional(),
-  address3: joi.string().max(500).optional(),
-  city: joi.string().max(500).required(),
+  address1: joi.string().max(100).required(),
+  address2: joi.string().max(100).optional(),
+  address3: joi.string().max(100).optional(),
+  city: joi.string().max(100).required(),
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
@@ -57,11 +83,11 @@ const commonValidationRequirements = {
     then: joi.required(),
     otherwise: joi.optional(),
   }),
-  inCareOf: joi.string().max(500).optional(),
-  name: joi.string().max(500).required(),
-  phone: joi.string().max(500).required(),
-  secondaryName: joi.string().max(500).optional(),
-  title: joi.string().max(500).optional(),
+  inCareOf: joi.string().max(100).optional(),
+  name: joi.string().max(100).required(),
+  phone: joi.string().max(100).required(),
+  secondaryName: joi.string().max(100).optional(),
+  title: joi.string().max(100).optional(),
   serviceIndicator: joi
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
@@ -110,8 +136,8 @@ ContactFactory.getValidationObject = ({
 }) => {
   const baseValidationObject =
     countryType === COUNTRY_TYPES.DOMESTIC
-      ? domesticValidationObject
-      : internationalValidationObject;
+      ? cloneDeep(domesticValidationObject)
+      : cloneDeep(internationalValidationObject);
 
   if (isPaper) {
     baseValidationObject.phone = joi.string().max(100).optional();
@@ -447,12 +473,14 @@ ContactFactory.createContactFactory = ({
       ...additionalErrorMappings,
     };
 
+    GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
+      ...ContactFactory.getValidationObject({ countryType, isPaper }),
+      ...additionalValidation,
+    });
+
     joiValidationDecorator(
       GenericContactConstructor,
-      joi.object().keys({
-        ...ContactFactory.getValidationObject({ countryType, isPaper }),
-        ...additionalValidation,
-      }),
+      GenericContactConstructor.VALIDATION_RULES,
       GenericContactConstructor.errorToMessageMap,
     );
 

@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import axios from 'axios';
 
 const test = setupTest();
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
       'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwibmFtZSI6IlRlc3QgQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI4NmMzZjg3Yi0zNTBiLTQ3N2QtOTJjMy00M2JkMDk1Y2IwMDYiLCJjdXN0b206cm9sZSI6ImFkbWluIiwic3ViIjoiODZjM2Y4N2ItMzUwYi00NzdkLTkyYzMtNDNiZDA5NWNiMDA2IiwiaWF0IjoxNTgyOTIxMTI1fQ.PBmSyb6_E_53FNG0GiEpAFqTNmooSh4rI0ApUQt3UH8',
     'Content-Type': 'application/json',
   },
-  timeout: 1000,
+  timeout: 2000,
 });
 
 const {
@@ -26,7 +26,6 @@ const firstConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The First Migrated Case',
-  caseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   docketNumber: '101-21',
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
@@ -36,18 +35,23 @@ const secondConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Second Migrated Case',
-  caseId: '116ff947-48cc-4ee5-9d9a-0bc4e0a64ba3',
   docketNumber: '102-21',
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
 };
 
+const correspondenceCaseOriginalPetitionerName = `Original ${Date.now()}`;
+const correspondenceCaseUpdatedPetitionerName = `Updated ${Date.now()}`;
+
 const correspondenceCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Third Migrated Case',
-  caseId: applicationContext.getUniqueId(),
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+    name: correspondenceCaseOriginalPetitionerName,
+  },
   correspondence: [
     {
       documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
@@ -65,7 +69,6 @@ const otherFilersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fourth Migrated Case',
-  caseId: applicationContext.getUniqueId(),
   docketNumber: '187-20',
   otherFilers: [
     {
@@ -105,7 +108,6 @@ const otherPetitionersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fifth Migrated Case',
-  caseId: applicationContext.getUniqueId(),
   docketNumber: '162-20',
   irsPractitioners: [
     {
@@ -181,8 +183,6 @@ describe('Case journey', () => {
   });
 
   it('should migrate cases', async () => {
-    jest.setTimeout(3000);
-
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       firstConsolidatedCase,
@@ -203,6 +203,8 @@ describe('Case journey', () => {
       'http://localhost:4000/migrate/case',
       otherFilersCase,
     );
+
+    await refreshElasticsearchIndex();
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -244,5 +246,102 @@ describe('Case journey', () => {
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
     ).toBe('Placeat sed dolorum');
+  });
+
+  it('Docketclerk searches for correspondence case by petitioner name and finds it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseOriginalPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseOriginalPetitionerName,
+        ),
+    ).toBeDefined();
+  });
+
+  it('should re-migrate an existing case', async () => {
+    const correspondenceCaseOverwritten = {
+      ...correspondenceCase,
+      caseCaption: 'The Third Migrated Case, Overwritten',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        name: correspondenceCaseUpdatedPetitionerName,
+      },
+      correspondence: [],
+    };
+
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      correspondenceCaseOverwritten,
+    );
+
+    await refreshElasticsearchIndex();
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+
+  it('Docketclerk views overwritten correspondence case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: correspondenceCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.correspondence').length).toBe(0);
+    expect(test.getState('caseDetail.caseCaption')).toBe(
+      'The Third Migrated Case, Overwritten',
+    );
+  });
+
+  it('Docketclerk searches for correspondence case by original petitioner name and does not find it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseOriginalPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseOriginalPetitionerName,
+        ),
+    ).not.toBeDefined();
+  });
+
+  it('Docketclerk searches for correspondence case by updated petitioner name and finds it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseUpdatedPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseUpdatedPetitionerName,
+        ),
+    ).toBeDefined();
   });
 });

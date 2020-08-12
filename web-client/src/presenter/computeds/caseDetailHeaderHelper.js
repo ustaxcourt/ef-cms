@@ -52,9 +52,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
 
-  const hasDocketEntryPermission = permissions.DOCKET_ENTRY;
-
-  const showAddDocketEntryButton = hasDocketEntryPermission;
+  const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
 
   const showNewTabLink = applicationContext
     .getUtilities()

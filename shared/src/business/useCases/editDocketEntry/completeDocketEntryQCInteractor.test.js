@@ -6,6 +6,7 @@ const {
 const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -28,7 +29,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '45678-18',
       document: {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -37,8 +37,7 @@ describe('completeDocketEntryQCInteractor', () => {
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      isQC: true,
-      section: 'docket',
+      section: DOCKET_SECTION,
       sentBy: 'Test User',
       sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       updatedAt: new Date().toISOString(),
@@ -47,7 +46,6 @@ describe('completeDocketEntryQCInteractor', () => {
 
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -79,7 +77,7 @@ describe('completeDocketEntryQCInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItems: [workItem],
+          workItem,
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
@@ -87,7 +85,7 @@ describe('completeDocketEntryQCInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItems: [workItem],
+          workItem,
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -95,7 +93,7 @@ describe('completeDocketEntryQCInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItems: [workItem],
+          workItem,
         },
       ],
       filingType: 'Myself',
@@ -112,13 +110,13 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext
@@ -388,6 +386,7 @@ describe('completeDocketEntryQCInteractor', () => {
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Petitioner',
+      phone: '123 456 1234',
       postalCode: '12345',
       state: 'AK',
     };

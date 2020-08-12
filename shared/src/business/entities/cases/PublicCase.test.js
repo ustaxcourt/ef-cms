@@ -1,4 +1,7 @@
-const { DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../EntityConstants');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 
 describe('PublicCase', () => {
@@ -138,7 +141,7 @@ describe('PublicCase', () => {
           },
           { documentId: '234', documentType: 'Order', isDraft: true },
           { documentId: '345', documentType: 'Petition' },
-          { documentId: '987', eventCode: 'TRAN' },
+          { documentId: '987', eventCode: TRANSCRIPT_EVENT_CODE },
         ],
         receivedAt: 'testing',
       },
@@ -166,7 +169,6 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          caseId: undefined,
           createdAt: undefined,
           documentId: '123',
           documentTitle: undefined,
@@ -183,7 +185,6 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          caseId: undefined,
           createdAt: undefined,
           documentId: '345',
           documentTitle: undefined,
@@ -200,12 +201,11 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          caseId: undefined,
           createdAt: undefined,
           documentId: '987',
           documentTitle: undefined,
           documentType: undefined,
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           filedBy: undefined,
           isPaper: undefined,
           processingStatus: undefined,
@@ -235,7 +235,7 @@ describe('PublicCase', () => {
       const isPrivate = isPrivateDocument(
         {
           documentId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
         },
         [{ documentId: 'db3ed57e-cfca-4228-ad5c-547484b1a801' }],
       );

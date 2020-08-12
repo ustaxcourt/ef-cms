@@ -6,18 +6,13 @@ export const workQueueHelper = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { USER_ROLES } = applicationContext.getConstants();
   const isJudge = user.role === USER_ROLES.judge;
-  const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
-  const { workQueueIsInternal } = workQueueToDisplay;
+  const { qcUnreadCount } = get(state.notifications);
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
-  const myUnreadCount = workQueueIsInternal
-    ? myInboxUnreadCount
-    : qcUnreadCount;
-  const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
-  const isDisplayingQC = !workQueueIsInternal;
+  const myUnreadCount = qcUnreadCount;
   const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
@@ -26,78 +21,43 @@ export const workQueueHelper = (get, applicationContext) => {
     USER_ROLES.petitionsClerk,
   ].includes(user.role);
   const workQueueTitle = `${
-    showIndividualWorkQueue
-      ? 'My '
-      : userIsOther && !workQueueIsInternal
-      ? ''
-      : 'Section '
-  }${workQueueType}`;
+    showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
+  }Document QC`;
   const permissions = get(state.permissions);
 
-  const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
 
-  const showStartPetitionButton =
-    permissions.START_PAPER_CASE && isDisplayingQC;
+  const showStartPetitionButton = permissions.START_PAPER_CASE;
 
   return {
-    assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
     currentBoxView: workQueueToDisplay.box,
     getQueuePath: ({ box, queue }) => {
-      return `/${
-        workQueueIsInternal ? 'messages' : 'document-qc'
-      }/${queue}/${box}`;
+      return `/document-qc/${queue}/${box}`;
     },
-    hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
-    hideFiledByColumn: !(isDisplayingQC && userIsDocketClerk),
-    hideFromColumn: isDisplayingQC,
-    hideIconColumn: !workQueueIsInternal && userIsOther,
-    hideSectionColumn: isDisplayingQC,
+    hideCaseStatusColumn: userIsPetitionsClerk,
+    hideFiledByColumn: !userIsDocketClerk,
+    hideIconColumn: userIsOther,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
-    inboxFiledColumnLabel,
-    isDisplayingQC,
-    linkToDocumentMessages: !isDisplayingQC,
     outboxFiledByColumnLabel,
-    queueEmptyMessage: workQueueIsInternal
-      ? 'There are no messages.'
-      : 'There are no documents.',
-    sentTitle: workQueueIsInternal
-      ? 'Sent'
-      : userIsDocketClerk
-      ? 'Processed'
-      : 'Served',
+    sentTitle: userIsDocketClerk ? 'Processed' : 'Served',
     showAssignedToColumn:
-      (isDisplayingQC &&
-        !showIndividualWorkQueue &&
-        (showInbox || showInProgress) &&
-        !userIsOther) ||
-      !isDisplayingQC,
+      !showIndividualWorkQueue && (showInbox || showInProgress) && !userIsOther,
     showCaseStatusColumn: isJudge || userIsChambers,
     showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge || userIsChambers,
-    showInProgressTab:
-      isDisplayingQC && (userIsDocketClerk || userIsPetitionsClerk),
+    showInProgressTab: userIsDocketClerk || userIsPetitionsClerk,
     showInbox,
     showIndividualWorkQueue,
-    showMessageContent: !isDisplayingQC,
-    showMessagesSentFromColumn: !isDisplayingQC,
-    showMyQueueToggle:
-      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
+    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
     showOutbox,
     showProcessedByColumn:
-      (isDisplayingQC && userIsDocketClerk && showOutbox) ||
+      (userIsDocketClerk && showOutbox) ||
       (userIsPetitionsClerk && showInProgress),
-    showReceivedColumn: isDisplayingQC,
-    showSectionSentTab:
-      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
+    showSectionSentTab: userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
-    showSelectColumn: isDisplayingQC && permissions.ASSIGN_WORK_ITEM,
+    showSelectColumn: permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
-    showSentColumn: !isDisplayingQC,
-    showServedColumn: userIsPetitionsClerk && isDisplayingQC,
     showStartPetitionButton,
-    workQueueIsInternal,
     workQueueTitle,
-    workQueueType,
   };
 };

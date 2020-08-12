@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the environment associated with each branch
+# Returns the domain url associated with each branch
 
 # Usage
-#   ./get-env.sh develop
+#   ./get-efcms-domain.sh develop
 
 # Arguments
 #   - $1 - the branch to check
@@ -28,6 +28,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo "${EFCMS_DOMAIN_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "${EFCMS_DOMAIN_PROD}"
+elif [[ $BRANCH == 'dawson' ]] ; then
+  echo "${EFCMS_DOMAIN_DAWSON}"
 else
   exit 1;
 fi

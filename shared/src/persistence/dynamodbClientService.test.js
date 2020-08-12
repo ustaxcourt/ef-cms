@@ -12,7 +12,7 @@ const {
 } = require('./dynamodbClientService');
 
 const MOCK_ITEM = {
-  caseId: '123',
+  docketNumber: '123-20',
 };
 
 describe('dynamodbClientService', function () {
@@ -57,7 +57,7 @@ describe('dynamodbClientService', function () {
       promise: () => {
         return Promise.resolve({
           Attributes: {
-            id: '123',
+            id: '123-20',
           },
         });
       },
@@ -67,7 +67,7 @@ describe('dynamodbClientService', function () {
       promise: () => {
         return Promise.resolve({
           Attributes: {
-            id: '123',
+            id: '123-20',
           },
         });
       },
@@ -78,7 +78,7 @@ describe('dynamodbClientService', function () {
         return Promise.resolve({
           Items: [
             {
-              caseId: '123',
+              docketNumber: '123-20',
             },
           ],
         });
@@ -99,7 +99,7 @@ describe('dynamodbClientService', function () {
   describe('updateConsistent', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
-      expect(result).toEqual('123');
+      expect(result).toEqual('123-20');
     });
   });
 
@@ -137,7 +137,7 @@ describe('dynamodbClientService', function () {
         applicationContext,
         keys: [
           {
-            pk: '123',
+            pk: '123-20',
           },
         ],
         tableName: 'a',
@@ -157,8 +157,8 @@ describe('dynamodbClientService', function () {
   describe('batchWrite', () => {
     it('should call client.batchWrite with the expected arguments', async () => {
       const item = {
-        pk: '123',
-        sk: '123',
+        pk: '123-20',
+        sk: '123-20',
         ...MOCK_ITEM,
       };
       await batchWrite({
@@ -186,6 +186,17 @@ describe('dynamodbClientService', function () {
         },
       });
     });
+
+    it('should NOT call client.batchWrite if when items is undefined', async () => {
+      await batchWrite({
+        applicationContext,
+        item: undefined,
+        tableName: 'a',
+      });
+      expect(
+        applicationContext.getDocumentClient().batchWrite,
+      ).not.toHaveBeenCalled();
+    });
   });
 
   describe('delete', () => {
@@ -193,13 +204,13 @@ describe('dynamodbClientService', function () {
       await deleteObj({
         applicationContext,
         key: {
-          pk: '123',
+          pk: '123-20',
         },
       });
       expect(
         applicationContext.getDocumentClient().delete.mock.calls[0][0],
       ).toEqual({
-        Key: { pk: '123' },
+        Key: { pk: '123-20' },
         TableName: 'efcms-local',
       });
     });

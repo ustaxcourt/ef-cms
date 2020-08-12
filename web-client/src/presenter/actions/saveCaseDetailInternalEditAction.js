@@ -1,3 +1,4 @@
+import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -13,10 +14,60 @@ export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
   get,
   props,
+  store,
 }) => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
-  const { formWithComputedDates } = props;
-  const caseToUpdate = formWithComputedDates || get(state.form);
+  const {
+    INITIAL_DOCUMENT_TYPES,
+    INITIAL_DOCUMENT_TYPES_MAP,
+    STATUS_TYPES,
+  } = applicationContext.getConstants();
+  const originalCase = get(state.caseDetail);
+  const caseToUpdate = props.formWithComputedDates;
+
+  const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
+
+  const progressFunctions = setupPercentDone(
+    {
+      applicationForWaiverOfFilingFeeFile:
+        caseToUpdate['applicationForWaiverOfFilingFeeFile'],
+      ownershipDisclosureFile: caseToUpdate['ownershipDisclosureFile'],
+      petitionFile: caseToUpdate['petitionFile'],
+      requestForPlaceOfTrialFile: caseToUpdate['requestForPlaceOfTrialFile'],
+      stinFile: caseToUpdate['stinFile'],
+    },
+    store,
+  );
+
+  for (const key of keys) {
+    if (caseToUpdate[key]) {
+      if (key === 'petitionFile') {
+        const oldPetitionDocument = originalCase.documents.find(
+          document =>
+            document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+        );
+
+        await applicationContext.getUseCases().uploadDocumentAndMakeSafe({
+          applicationContext,
+          document: caseToUpdate[key],
+          documentId: oldPetitionDocument.documentId,
+          onUploadProgress: progressFunctions[key],
+        });
+      } else {
+        const newDocumentId = await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafe({
+            applicationContext,
+            document: caseToUpdate[key],
+            onUploadProgress: progressFunctions[key],
+          });
+
+        caseToUpdate.documents.push({
+          documentId: newDocumentId,
+          documentType: INITIAL_DOCUMENT_TYPES_MAP[key],
+        });
+      }
+    }
+  }
 
   const caseDetail = await applicationContext
     .getUseCases()

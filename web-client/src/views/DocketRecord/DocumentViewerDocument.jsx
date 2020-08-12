@@ -121,6 +121,16 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
+              {documentViewerHelper.showSignStipulatedDecisionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign`}
+                  icon="pencil-alt"
+                >
+                  Sign Stipulated Decision
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"

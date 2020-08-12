@@ -14,14 +14,12 @@ exports.advancedDocumentSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'caseId',
     'contactPrimary',
     'contactSecondary',
     'docketNumber',
-    'docketNumberWithSuffix',
     'docketNumberSuffix',
+    'docketNumberWithSuffix',
     'documentContents',
-    'numberOfPages',
     'documentId',
     'documentTitle',
     'documentType',
@@ -29,6 +27,7 @@ exports.advancedDocumentSearch = async ({
     'filingDate',
     'irsPractitioners',
     'isSealed',
+    'numberOfPages',
     'privatePractitioners',
     'sealedDate',
     judgeType,

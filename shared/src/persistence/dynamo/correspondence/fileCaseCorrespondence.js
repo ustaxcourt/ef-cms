@@ -1,6 +1,3 @@
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 const { put } = require('../../dynamodbClientService');
 
 /**
@@ -17,14 +14,9 @@ exports.fileCaseCorrespondence = async ({
   correspondence,
   docketNumber,
 }) => {
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber,
-  });
-
   return await put({
     Item: {
-      pk: `case|${caseId}`,
+      pk: `case|${docketNumber}`,
       sk: `correspondence|${correspondence.documentId}`,
       ...correspondence,
     },

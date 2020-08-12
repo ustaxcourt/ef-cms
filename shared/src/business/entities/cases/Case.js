@@ -36,6 +36,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  shouldGenerateDocketRecordIndex,
+} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -167,12 +170,11 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
   if (rawCase.docketNumber) {
-    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+    this.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
   }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
@@ -253,12 +255,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   } else {
     this.irsPractitioners = [];
   }
-
-  this.documents.forEach(document => {
-    document.workItems.forEach(workItem => {
-      workItem.docketNumberSuffix = this.docketNumberSuffix;
-    });
-  });
 
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
@@ -357,9 +353,6 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'Unique case ID only used by the system.',
-  ),
   caseNote: joi
     .string()
     .max(500)
@@ -374,11 +367,14 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: joi.object().required(),
-  contactSecondary: joi.object().optional().allow(null),
+  contactPrimary: ContactFactory.getValidationRules('primary').required(),
+  contactSecondary: ContactFactory.getValidationRules('secondary')
+    .optional()
+    .allow(null),
   correspondence: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
     .description('List of Correspondence documents for the case.'),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the paper or electronic case was added to the system. This value cannot be edited.',
@@ -400,15 +396,12 @@ Case.VALIDATION_RULES = {
     .string()
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: joi
-    .array()
-    .items(joi.object().meta({ entityName: 'DocketRecord' }))
-    .required()
-    .unique((a, b) => a.index === b.index)
-    .description('List of DocketRecord Entities for the case.'),
+  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
+    DocketRecord.VALIDATION_RULES,
+  ).required(),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Document' }))
+    .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   entityName: joi.string().valid('Case').required(),
@@ -458,6 +451,7 @@ Case.VALIDATION_RULES = {
     .description('Last date that the petitioner is allowed to file before.'),
   irsPractitioners: joi
     .array()
+    .items(IrsPractitioner.VALIDATION_RULES)
     .optional()
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
@@ -524,7 +518,7 @@ Case.VALIDATION_RULES = {
     .description('Reminder for clerks to review the Order to Show Cause.'),
   otherFilers: joi
     .array()
-    .items(joi.object().meta({ entityName: 'OtherFilerContact' }))
+    .items(ContactFactory.getValidationRules('otherFilers'))
     .unique(
       (a, b) =>
         a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
@@ -534,7 +528,7 @@ Case.VALIDATION_RULES = {
     .optional(),
   otherPetitioners: joi
     .array()
-    .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
+    .items(ContactFactory.getValidationRules('otherPetitioners'))
     .description('List of OtherPetitionerContact Entities for the case.')
     .optional(),
   partyType: joi
@@ -582,6 +576,7 @@ Case.VALIDATION_RULES = {
     .description('Where the petitioner would prefer to hold the case trial.'),
   privatePractitioners: joi
     .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
@@ -610,7 +605,7 @@ Case.VALIDATION_RULES = {
     ),
   statistics: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Statistic' }))
+    .items(Statistic.VALIDATION_RULES)
     .when('hasVerifiedIrsNotice', {
       is: true,
       otherwise: joi.optional(),
@@ -654,17 +649,9 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: joi
-    .string()
-    .max(50)
-    .optional()
+  userId: JoiValidationConstants.UUID.required()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
-  workItems: joi
-    .array()
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description('List of system messages associated with this case.'),
 };
 
 joiValidationDecorator(
@@ -836,7 +823,6 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function (document, { applicationContext }) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -859,7 +845,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
@@ -961,10 +946,32 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   return this;
 };
 
+/**
+ * gets the document with id documentId from the documents or correspondence arrays
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the document to retrieve
+ * @returns {object} the retrieved document
+ */
 Case.prototype.getDocumentById = function ({ documentId }) {
   const allCaseDocuments = [...this.documents, ...this.correspondence];
 
   return allCaseDocuments.find(document => document.documentId === documentId);
+};
+
+/**
+ * deletes the document with id documentId from the documents array
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the document to remove from the documents array
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.deleteDocumentById = function ({ documentId }) {
+  this.documents = this.documents.filter(
+    item => item.documentId !== documentId,
+  );
+
+  return this;
 };
 
 const getPetitionDocumentFromDocuments = function (documents) {
@@ -1016,18 +1023,33 @@ Case.prototype.setRequestForTrialDocketRecord = function (
 };
 
 /**
+ * gets the next possible (unused) index for the docket record
+ *
+ * @returns {number} the next docket record index
+ */
+Case.prototype.generateNextDocketRecordIndex = function () {
+  const recordsWithIndex = [...this.docketRecord]
+    .filter(record => record.index !== undefined)
+    .sort((a, b) => a.index - b.index);
+  const nextIndex = recordsWithIndex.length + 1;
+  return nextIndex;
+};
+
+/**
  *
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
  * @returns {Case} the updated case entity
  */
 Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  const nextIndex =
-    this.docketRecord.reduce(
-      (maxIndex, docketRecord, currentIndex) =>
-        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
-      0,
-    ) + 1;
-  docketRecordEntity.index = docketRecordEntity.index || nextIndex;
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: docketRecordEntity,
+  });
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
@@ -1041,6 +1063,16 @@ Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
     entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
+
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: foundEntry,
+  });
+
+  if (updateIndex) {
+    updatedDocketEntry.index = this.generateNextDocketRecordIndex();
+  }
+
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
 };
@@ -1061,14 +1093,19 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 
 /**
  *
- * @param {number} docketRecordIndex the index of the docket record to update
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
+ * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function (
-  docketRecordIndex,
-  docketRecordEntity,
-) {
+Case.prototype.updateDocketRecord = function (docketRecordEntity, updateIndex) {
+  const docketRecordIndex = this.docketRecord.findIndex(
+    entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
+  );
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord[docketRecordIndex] = docketRecordEntity;
   return this;
 };
@@ -1098,19 +1135,6 @@ Case.prototype.updateDocument = function (updatedDocument) {
 Case.stripLeadingZeros = docketNumber => {
   const [number, year] = docketNumber.split('-');
   return `${parseInt(number)}-${year}`;
-};
-
-/**
- * getWorkItems
- *
- * @returns {WorkItem[]} the work items on the case
- */
-Case.prototype.getWorkItems = function () {
-  let workItems = [];
-  this.documents.forEach(
-    document => (workItems = [...workItems, ...(document.workItems || [])]),
-  );
-  return workItems;
 };
 
 /**
@@ -1171,8 +1195,8 @@ Case.prototype.generateSortableDocketNumber = function () {
  */
 Case.prototype.generateTrialSortTags = function () {
   const {
-    caseId,
     caseType,
+    docketNumber,
     highPriority,
     preferredTrialCity,
     procedureType,
@@ -1200,7 +1224,7 @@ Case.prototype.generateTrialSortTags = function () {
     caseProcedureSymbol,
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   const hybridSortKey = [
@@ -1208,7 +1232,7 @@ Case.prototype.generateTrialSortTags = function () {
     'H', // Hybrid Tag
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   return {
@@ -1587,6 +1611,18 @@ Case.sortByDocketNumber = function (cases) {
 Case.findLeadCaseForCases = function (cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
+};
+
+/**
+ * re-formats docket number with any leading zeroes removed
+ *
+ * @param {string} docketNumber the docket number to re-format
+ * @returns {string} the formatted docket Number
+ */
+Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
+  const leadingZeroes = /^0+/;
+  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
+  return formattedDocketNumber;
 };
 
 /**

@@ -502,3 +502,23 @@ label.ustc-upload {
 .input-medium {
   width: 140px;
 }
+
+.usa-date-picker {
+  * {
+    animation: none;
+  }
+
+  .usa-date-picker__button {
+    margin-top: 0;
+  }
+}
+
+.usa-date-range-picker.grid-row {
+  .usa-date-picker__button {
+    padding-left: 2rem;
+  }
+
+  .usa-form-group--error {
+    margin-bottom: 0;
+  }
+}

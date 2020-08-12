@@ -7,6 +7,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+const { DOCKET_SECTION, PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('formattedMessages', () => {
   describe('getFormattedMessages', () => {
@@ -15,20 +16,19 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             caseStatus: 'Ready for trial',
             completedAt: '2019-05-01T17:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
             docketNumber: '123-45',
             docketNumberSuffix: '',
             from: 'Test Sender',
-            fromSection: 'docket',
+            fromSection: DOCKET_SECTION,
             fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
             message: 'This is a test message',
             messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
             subject: 'Test subject...',
             to: 'Test Recipient',
-            toSection: 'petitions',
+            toSection: PETITIONS_SECTION,
             toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
           },
         ],
@@ -43,18 +43,18 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
@@ -62,13 +62,13 @@ describe('formattedMessages', () => {
 
       expect(result.messages).toMatchObject([
         {
-          caseId: '1',
+          docketNumber: '101-20',
         },
         {
-          caseId: '2',
+          docketNumber: '102-20',
         },
         {
-          caseId: '3',
+          docketNumber: '103-20',
         },
       ]);
     });
@@ -78,21 +78,21 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
             completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             isCompleted: true,
             message: 'This is a test message',
           },
@@ -101,14 +101,14 @@ describe('formattedMessages', () => {
 
       expect(result.completedMessages).toMatchObject([
         {
-          caseId: '2',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '1',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           isCompleted: true,
           message: 'This is a test message',
         },
@@ -120,23 +120,26 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
-            completedAt: '2019-01-03T16:29:13.122Z', // completed third
+            completedAt: '2019-01-03T16:29:13.122Z',
+            // completed third
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
-            completedAt: '2019-01-01T16:29:13.122Z', // completed first
+            completedAt: '2019-01-01T16:29:13.122Z',
+            // completed first
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '102-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '3',
-            completedAt: '2019-01-02T16:29:13.122Z', // completed second
+            completedAt: '2019-01-02T16:29:13.122Z',
+            // completed second
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '103-20',
             isCompleted: true,
             message: 'This is a test message',
           },
@@ -145,23 +148,23 @@ describe('formattedMessages', () => {
 
       expect(result.completedMessages).toMatchObject([
         {
-          caseId: '1',
           completedAt: '2019-01-03T16:29:13.122Z',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '3',
           completedAt: '2019-01-02T16:29:13.122Z',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '103-20',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '2',
           completedAt: '2019-01-01T16:29:13.122Z',
           createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '102-20',
           isCompleted: true,
           message: 'This is a test message',
         },
@@ -173,21 +176,21 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            caseId: '1',
             completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             isRepliedTo: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
@@ -195,40 +198,43 @@ describe('formattedMessages', () => {
 
       expect(result.inProgressMessages).toMatchObject([
         {
-          caseId: '1',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           message: 'This is a test message',
         },
         {
-          caseId: '2',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
           message: 'This is a test message',
         },
       ]);
     });
   });
 
-  it('returns filtered and sorted messages and completedMessages from state.messages', () => {
+  it('returns filtered messages sorted oldest to newest and completedMessages from state.messages when messageBoxToDisplay.box is inbox', () => {
     const result = runCompute(formattedMessages, {
       state: {
+        messageBoxToDisplay: {
+          box: 'inbox',
+        },
         messages: [
           {
-            caseId: '1',
             completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
             message: 'This is a test message',
           },
           {
-            caseId: '3',
             completedAt: '2019-01-01T16:29:13.122Z',
             createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
             message: 'This is a test message',
           },
         ],
@@ -238,32 +244,96 @@ describe('formattedMessages', () => {
     expect(result).toMatchObject({
       completedMessages: [
         {
-          caseId: '3',
           completedAt: '2019-01-01T16:29:13.122Z',
           createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
           isCompleted: true,
           message: 'This is a test message',
         },
       ],
       messages: [
         {
-          caseId: '1',
           createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
           message: 'This is a test message',
         },
         {
-          caseId: '2',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
           message: 'This is a test message',
         },
         {
-          caseId: '3',
           completedAt: '2019-01-01T16:29:13.122Z',
           createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
           isCompleted: true,
           message: 'This is a test message',
         },
       ],
+    });
+  });
+
+  it('returns filtered messages sorted newest to oldest when messageBoxToDisplay.box is outbox', () => {
+    const result = runCompute(formattedMessages, {
+      state: {
+        messageBoxToDisplay: {
+          box: 'outbox',
+        },
+        messages: [
+          {
+            completedAt: '2019-01-02T16:29:13.122Z',
+            createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
+            message: 'This is a test message',
+          },
+          {
+            completedAt: '2019-01-01T16:29:13.122Z',
+            createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
+            isCompleted: true,
+            message: 'This is a test message',
+          },
+          {
+            completedAt: '2019-01-03T16:29:13.122Z',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
+            message: 'This is a test message',
+          },
+        ],
+      },
+    });
+
+    expect(result).toMatchObject({
+      messages: [
+        {
+          completedAt: '2019-01-01T16:29:13.122Z',
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
+          isCompleted: true,
+          message: 'This is a test message',
+        },
+        {
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
+          message: 'This is a test message',
+        },
+        {
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
+          message: 'This is a test message',
+        },
+      ],
+    });
+  });
+
+  it('returns empty arrays for completedMessages and messages if state.messages is not set', () => {
+    const result = runCompute(formattedMessages, {
+      state: {},
+    });
+
+    expect(result).toMatchObject({
+      completedMessages: [],
+      messages: [],
     });
   });
 });

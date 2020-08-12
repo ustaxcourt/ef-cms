@@ -1,13 +1,21 @@
+const deepFreeze = require('deep-freeze');
 const joi = require('joi').extend(require('@hapi/joi-date'));
+
 const {
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
 } = require('../business/entities/EntityConstants');
 const { FORMATS } = require('../business/utilities/DateHandler');
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
-exports.JoiValidationConstants = {
+exports.JoiValidationConstants = deepFreeze({
   CASE_CAPTION: joi.string().max(4700),
   DOCKET_NUMBER: joi.string().regex(DOCKET_NUMBER_MATCHER),
+  DOCKET_RECORD: joi
+    .array()
+    .unique(
+      (a, b) =>
+        a.index !== undefined && b.index !== undefined && a.index === b.index,
+    ),
   DOCUMENT_TITLE: joi.string().max(3000),
   EMAIL: joi.string().email({ tlds: false }).max(100),
   // eslint-disable-next-line spellcheck/spell-checker
@@ -21,4 +29,4 @@ exports.JoiValidationConstants = {
   UUID: joi.string().uuid({
     version: ['uuidv4'],
   }),
-};
+});

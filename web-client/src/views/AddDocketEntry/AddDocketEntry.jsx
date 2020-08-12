@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
-import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -98,15 +97,10 @@ export const AddDocketEntry = connect(
               </section>
             </div>
             <div className="grid-col-7">
-              {paperDocketEntryHelper.docketEntryHasDocument && (
-                <DocumentDisplayIframe />
-              )}
-              {!paperDocketEntryHelper.docketEntryHasDocument && (
-                <ScanBatchPreviewer
-                  documentType="primaryDocumentFile"
-                  title="Add Document"
-                />
-              )}
+              <ScanBatchPreviewer
+                documentType="primaryDocumentFile"
+                title="Add Document"
+              />
             </div>
           </div>
         </section>

@@ -7,6 +7,7 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
+  PETITIONS_SECTION,
   ROLES,
 } = require('../../entities/EntityConstants');
 const {
@@ -18,7 +19,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
     caseCaption: 'Caption',
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
@@ -261,10 +261,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
     ).not.toEqual(-1);
   });
 
-  it('should add order document to most recent case message if a parentMessageId is passed in', async () => {
+  it('should add order document to most recent message if a parentMessageId is passed in', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId.mockReturnValue([
+      .getMessageThreadByParentId.mockReturnValue([
         {
           caseStatus: caseRecord.status,
           caseTitle: PARTY_TYPES.petitioner,
@@ -272,14 +272,14 @@ describe('fileCourtIssuedOrderInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           docketNumberWithSuffix: caseRecord.docketNumber,
           from: 'Test Petitionsclerk',
-          fromSection: 'petitions',
+          fromSection: PETITIONS_SECTION,
           fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
           message: 'hey there',
           messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
           parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
           subject: 'hello',
           to: 'Test Petitionsclerk2',
-          toSection: 'petitions',
+          toSection: PETITIONS_SECTION,
           toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
         },
       ]);
@@ -300,11 +300,11 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage,
+      applicationContext.getPersistenceGateway().updateMessage,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCaseMessage.mock
-        .calls[0][0].caseMessage.attachments,
+      applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
+        .message.attachments,
     ).toEqual([
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -316,7 +316,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   it('should set isDraft to true when creating a court issued document', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId.mockReturnValue([
+      .getMessageThreadByParentId.mockReturnValue([
         {
           caseStatus: caseRecord.status,
           caseTitle: PARTY_TYPES.petitioner,
@@ -324,14 +324,14 @@ describe('fileCourtIssuedOrderInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           docketNumberWithSuffix: caseRecord.docketNumber,
           from: 'Test Petitionsclerk',
-          fromSection: 'petitions',
+          fromSection: PETITIONS_SECTION,
           fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
           message: 'hey there',
           messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
           parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
           subject: 'hello',
           to: 'Test Petitionsclerk2',
-          toSection: 'petitions',
+          toSection: PETITIONS_SECTION,
           toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
         },
       ]);
