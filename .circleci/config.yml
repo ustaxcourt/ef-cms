@@ -399,7 +399,7 @@ jobs:
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER          
+            AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
@@ -464,7 +464,7 @@ jobs:
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER          
+            AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
@@ -606,13 +606,12 @@ jobs:
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
-
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
         - develop # run hourly below
-        - prod    # run with context workflow below
+        - prod # run with context workflow below
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
@@ -655,36 +654,36 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-defaults
-      - build-api:
-          <<: *build-and-deploy-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-defaults
-      - build-client-integration:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
-      - build-client-coverage:
-          <<: *build-and-deploy-defaults
-          requires:
-            - build-shared
-            - build-api
-            - build-client-unit
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-public
+      # - build-shared:
+      #     <<: *build-and-deploy-defaults
+      # - build-api:
+      #     <<: *build-and-deploy-defaults
+      # - build-client-unit:
+      #     <<: *build-and-deploy-defaults
+      # - build-client-integration:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
+      # - build-client-coverage:
+      #     <<: *build-and-deploy-defaults
+      #     requires:
+      #       - build-shared
+      #       - build-api
+      #       - build-client-unit
+      #       - build-client-integration
+      #       - e2e-pa11y
+      #       - e2e-pa11y-public
+      #       - e2e-cypress
+      #       - e2e-cypress-public
       - deploy:
-          requires:
-            - build-client-coverage
+          # requires:
+          #   - build-client-coverage
           filters:
             branches:
               only:
