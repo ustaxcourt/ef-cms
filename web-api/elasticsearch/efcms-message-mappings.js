@@ -1,11 +1,5 @@
 module.exports = {
   properties: {
-    'attachments.L.M.documentId.S': {
-      type: 'text',
-    },
-    'attachments.L.M.documentTitle.S': {
-      type: 'text',
-    },
     'caseStatus.S': {
       type: 'text',
     },
@@ -30,9 +24,6 @@ module.exports = {
     'createdAt.S': {
       type: 'date',
     },
-    'docketNumber.S': {
-      type: 'text',
-    },
     'docketNumberWithSuffix.S': {
       type: 'text',
     },
@@ -48,9 +39,6 @@ module.exports = {
     'fromUserId.S': {
       type: 'text',
     },
-    'gsi1pk.S': {
-      type: 'text',
-    },
     'indexedTimestamp.N': {
       type: 'text',
     },
@@ -63,16 +51,7 @@ module.exports = {
     'message.S': {
       type: 'text',
     },
-    'messageId.S': {
-      type: 'text',
-    },
     'parentMessageId.S': {
-      type: 'text',
-    },
-    'pk.S': {
-      type: 'text',
-    },
-    'sk.S': {
       type: 'text',
     },
     'subject.S': {
