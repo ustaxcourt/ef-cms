@@ -1,20 +1,11 @@
-const joi = require('joi');
-const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
+const joi = require('joi').extend(require('@hapi/joi-date'));
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 DeadlineSearch.validationName = 'DeadlineSearch';
 
-DeadlineSearch.VALID_DATE_SEARCH_FORMATS = [
-  'YYYY/MM/DD',
-  'YYYY/MM/D',
-  'YYYY/M/DD',
-  'YYYY/M/D',
-  'YYYY-MM-DDTHH:mm:ss.SSSZ',
-];
+DeadlineSearch.VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'];
 
 /**
  * Deadline Search entity
@@ -31,7 +22,8 @@ DeadlineSearch.VALIDATION_ERROR_MESSAGES = {
   endDate: [
     {
       contains: 'ref:startDate',
-      message: 'A start date must also be provided.',
+      message:
+        'End date cannot be prior to Start Date. Enter a valid End date.',
     },
     {
       contains: 'is required',
@@ -49,17 +41,19 @@ DeadlineSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 DeadlineSearch.schema = joi.object().keys({
-  endDate: JoiValidationConstants.ISO_DATE.format(
-    DeadlineSearch.VALID_DATE_SEARCH_FORMATS,
-  )
+  endDate: joi
+    .date()
+    .iso()
+    .format(DeadlineSearch.VALID_DATE_SEARCH_FORMATS)
     .min(joi.ref('startDate'))
     .required()
     .description(
       'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
     ),
-  startDate: JoiValidationConstants.ISO_DATE.format(
-    DeadlineSearch.VALID_DATE_SEARCH_FORMATS,
-  )
+  startDate: joi
+    .date()
+    .iso()
+    .format(DeadlineSearch.VALID_DATE_SEARCH_FORMATS)
     .required()
     .description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
