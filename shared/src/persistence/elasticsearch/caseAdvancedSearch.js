@@ -17,24 +17,23 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
     nonExactMatchesQuery,
   } = aggregateCommonQueryParams({ applicationContext, ...searchTerms });
 
+  const source = [
+    'caseCaption',
+    'contactPrimary',
+    'contactSecondary',
+    'docketNumber',
+    'docketNumberWithSuffix',
+    'receivedAt',
+    'sealedDate',
+  ];
+
   let results;
 
   ({ results } = await search({
     applicationContext,
     searchParameters: {
       body: {
-        _source: [
-          'caseCaption',
-          'contactPrimary',
-          'contactSecondary',
-          'docketNumber',
-          'docketNumberSuffix',
-          'docketNumberWithSuffix',
-          'irsPractitioners',
-          'privatePractitioners',
-          'receivedAt',
-          'sealedDate',
-        ],
+        _source: source,
         query: {
           bool: {
             must: [...exactMatchesQuery, ...commonQuery],
@@ -51,15 +50,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
       applicationContext,
       searchParameters: {
         body: {
-          _source: [
-            'caseCaption',
-            'contactPrimary',
-            'contactSecondary',
-            'docketNumber',
-            'docketNumberSuffix',
-            'receivedAt',
-            'sealedDate',
-          ],
+          _source: source,
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],
