@@ -46,16 +46,18 @@ export const saveCaseDetailInternalEditAction = async ({
             document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
         );
 
-        await applicationContext.getUseCases().uploadDocumentAndMakeSafe({
-          applicationContext,
-          document: caseToUpdate[key],
-          documentId: oldPetitionDocument.documentId,
-          onUploadProgress: progressFunctions[key],
-        });
+        await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafeInteractor({
+            applicationContext,
+            document: caseToUpdate[key],
+            documentId: oldPetitionDocument.documentId,
+            onUploadProgress: progressFunctions[key],
+          });
       } else {
         const newDocumentId = await applicationContext
           .getUseCases()
-          .uploadDocumentAndMakeSafe({
+          .uploadDocumentAndMakeSafeInteractor({
             applicationContext,
             document: caseToUpdate[key],
             onUploadProgress: progressFunctions[key],
