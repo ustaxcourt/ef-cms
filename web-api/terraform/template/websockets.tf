@@ -7,8 +7,9 @@ resource "aws_apigatewayv2_api" "websocket_api" {
 resource "aws_apigatewayv2_route" "connect" {
   api_id             = aws_apigatewayv2_api.websocket_api.id
   route_key          = "$connect"
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.websocket_authorizer.id
+  authorization_type = "NONE"
+#   authorization_type = "CUSTOM"
+#   authorizer_id      = aws_apigatewayv2_authorizer.websocket_authorizer.id
   target             = "integrations/${aws_apigatewayv2_integration.websockets_connect_integration.id}"
 }
 
@@ -172,10 +173,10 @@ resource "aws_route53_record" "websocket_east_regional_record" {
   }
 }
 
-resource "aws_apigatewayv2_authorizer" "websocket_authorizer" {
-  api_id           = aws_apigatewayv2_api.websocket_api.id
-  authorizer_type  = "REQUEST"
-  authorizer_uri   = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  identity_sources = ["route.request.querystring.token"]
-  name             = "websocket_authorizer_${var.environment}"
-}
+# resource "aws_apigatewayv2_authorizer" "websocket_authorizer" {
+#   api_id           = aws_apigatewayv2_api.websocket_api.id
+#   authorizer_type  = "REQUEST"
+#   authorizer_uri   = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+#   identity_sources = ["route.request.querystring.token"]
+#   name             = "websocket_authorizer_${var.environment}"
+# }
