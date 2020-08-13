@@ -6,6 +6,7 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { state } from 'cerebral';
 import { takePathForDocumentPreviewAction } from '../actions/takePathForDocumentPreviewAction';
+import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
 export const setDocumentForPreviewSequence = [
   getDocumentSelectedForPreviewAction,
@@ -17,10 +18,14 @@ export const setDocumentForPreviewSequence = [
       setDocumentIdAction,
       set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
-    no: [set(state.currentViewMetadata.documentUploadMode, 'scan')],
+    no: [
+      unsetDocumentIdAction,
+      set(state.currentViewMetadata.documentUploadMode, 'scan'),
+    ],
     pdfInMemory: [
       selectDocumentForPreviewAction,
       setPdfPreviewUrlAction,
+      unsetDocumentIdAction,
       set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
   },
