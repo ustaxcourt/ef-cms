@@ -115,72 +115,6 @@ describe('scanHelper', () => {
     expect(result.sources.length).toEqual(2);
   });
 
-  it('sets applicationForWaiverOfFilingFeeFileCompleted if document is on form', () => {
-    const result = runCompute(scanHelper, {
-      state: {
-        form: {
-          applicationForWaiverOfFilingFeeFile: null,
-          documents: [],
-        },
-      },
-    });
-    expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
-
-    const result2 = runCompute(scanHelper, {
-      state: {
-        form: {
-          applicationForWaiverOfFilingFeeFile: {},
-          documents: [],
-        },
-      },
-    });
-    expect(result2.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
-  });
-
-  it('sets petitionFileCompleted if document is on form', () => {
-    const result = runCompute(scanHelper, {
-      state: {
-        form: {
-          documents: [],
-          petitionFile: null,
-        },
-      },
-    });
-    expect(result.petitionFileCompleted).toBeFalsy();
-
-    const result2 = runCompute(scanHelper, {
-      state: {
-        form: {
-          documents: [],
-          petitionFile: {},
-        },
-      },
-    });
-    expect(result2.petitionFileCompleted).toBeTruthy();
-  });
-
-  it('sets ownershipDisclosureFileCompleted if document is on form', () => {
-    const result = runCompute(scanHelper, {
-      state: {
-        form: {
-          documents: [],
-          ownershipDisclosureFile: null,
-        },
-      },
-    });
-    expect(result.ownershipDisclosureFileCompleted).toBeFalsy();
-
-    const result2 = runCompute(scanHelper, {
-      state: {
-        form: {
-          documents: [],
-          ownershipDisclosureFile: {},
-        },
-      },
-    });
-    expect(result2.ownershipDisclosureFileCompleted).toBeTruthy();
-  });
-
   describe('stinFileCompleted', () => {
     it('should be true when document is on form', () => {
       const result = runCompute(scanHelper, {
@@ -195,68 +129,45 @@ describe('scanHelper', () => {
       expect(result.stinFileCompleted).toBeTruthy();
     });
 
-    // it('should be false when document is not on form', () => {
-    //   const result = runCompute(scanHelper, {
-    //     state: {
-    //       form: {
-    //         documents: [],
-    //         requestForPlaceOfTrialFile: null,
-    //       },
-    //     },
-    //   });
-    //   expect(result.requestForPlaceOfTrialFileCompleted).toBeFalsy();
-    // });
+    it('should be false when document is not on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+            stinFile: null,
+          },
+        },
+      });
+      expect(result.stinFileCompleted).toBeFalsy();
+    });
 
-    // it('should be true when document is in form.documents', () => {
-    //   const result = runCompute(scanHelper, {
-    //     state: {
-    //       form: {
-    //         documents: [
-    //           {
-    //             documentType:
-    //               INITIAL_DOCUMENT_TYPES_MAP.requestForPlaceOfTrialFile,
-    //           },
-    //         ],
-    //       },
-    //     },
-    //   });
+    it('should be true when document is in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
+              },
+            ],
+          },
+        },
+      });
 
-    //   expect(result.requestForPlaceOfTrialFileCompleted).toBeTruthy();
-    // });
+      expect(result.stinFileCompleted).toBeTruthy();
+    });
 
-    // it('should be false when document is not in form.documents', () => {
-    //   const result = runCompute(scanHelper, {
-    //     state: {
-    //       form: {
-    //         documents: [],
-    //       },
-    //     },
-    //   });
+    it('should be false when document is not in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+          },
+        },
+      });
 
-    //   expect(result.requestForPlaceOfTrialFileCompleted).toBeFalsy();
-    // });
-
-    // it('sets stinFileCompleted if document is on form', () => {
-    //   const result = runCompute(scanHelper, {
-    //     state: {
-    //       form: {
-    //         documents: [],
-    //         stinFile: null,
-    //       },
-    //     },
-    //   });
-    //   expect(result.stinFileCompleted).toBeFalsy();
-
-    //   const result2 = runCompute(scanHelper, {
-    //     state: {
-    //       form: {
-    //         documents: [],
-    //         stinFile: {},
-    //       },
-    //     },
-    //   });
-    //   expect(result2.stinFileCompleted).toBeTruthy();
-    // });
+      expect(result.stinFileCompleted).toBeFalsy();
+    });
   });
 
   describe('requestForPlaceOfTrialFileCompleted', () => {
@@ -312,6 +223,173 @@ describe('scanHelper', () => {
       });
 
       expect(result.requestForPlaceOfTrialFileCompleted).toBeFalsy();
+    });
+  });
+
+  describe('applicationForWaiverOfFilingFeeFileCompleted', () => {
+    it('should be true when document is on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            applicationForWaiverOfFilingFeeFile: {},
+            documents: [],
+          },
+        },
+      });
+
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            applicationForWaiverOfFilingFeeFile: null,
+            documents: [],
+          },
+        },
+      });
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
+    });
+
+    it('should be true when document is in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [
+              {
+                documentType:
+                  INITIAL_DOCUMENT_TYPES_MAP.applicationForWaiverOfFilingFeeFile,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+          },
+        },
+      });
+
+      expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
+    });
+  });
+
+  describe('petitionFileCompleted', () => {
+    it('should be true when document is on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+            petitionFile: {},
+          },
+        },
+      });
+
+      expect(result.petitionFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+            petitionFileCompleted: null,
+          },
+        },
+      });
+      expect(result.petitionFileCompleted).toBeFalsy();
+    });
+
+    it('should be true when document is in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.petitionFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+          },
+        },
+      });
+
+      expect(result.petitionFileCompleted).toBeFalsy();
+    });
+  });
+
+  describe('ownershipDisclosureFileCompleted', () => {
+    it('should be true when document is on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+            ownershipDisclosureFile: {},
+          },
+        },
+      });
+
+      expect(result.ownershipDisclosureFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not on form', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+            ownershipDisclosureFile: null,
+          },
+        },
+      });
+      expect(result.ownershipDisclosureFileCompleted).toBeFalsy();
+    });
+
+    it('should be true when document is in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [
+              {
+                documentType:
+                  INITIAL_DOCUMENT_TYPES_MAP.ownershipDisclosureFile,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.ownershipDisclosureFileCompleted).toBeTruthy();
+    });
+
+    it('should be false when document is not in form.documents', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            documents: [],
+          },
+        },
+      });
+
+      expect(result.ownershipDisclosureFileCompleted).toBeFalsy();
     });
   });
 });
