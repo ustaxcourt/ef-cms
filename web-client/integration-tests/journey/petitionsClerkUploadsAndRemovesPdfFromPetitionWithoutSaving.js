@@ -1,5 +1,3 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-
 export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving = (
   test,
   fakeFile,
