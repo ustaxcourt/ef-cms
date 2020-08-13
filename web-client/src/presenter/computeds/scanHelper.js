@@ -17,41 +17,49 @@ export const scanHelper = (get, applicationContext) => {
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
 
-  const applicationForWaiverOfFilingFeeFileCompleted =
-    !!get(state.form.applicationForWaiverOfFilingFeeFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType:
-        INITIAL_DOCUMENT_TYPES_MAP.applicationForWaiverOfFilingFeeFile,
-      documents: formCaseDocuments,
-    });
+  let applicationForWaiverOfFilingFeeFileCompleted;
+  let petitionFileCompleted;
+  let ownershipDisclosureFileCompleted;
+  let stinFileCompleted;
+  let requestForPlaceOfTrialFileCompleted;
 
-  const petitionFileCompleted =
-    !!get(state.form.petitionFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
-      documents: formCaseDocuments,
-    });
+  if (formCaseDocuments) {
+    applicationForWaiverOfFilingFeeFileCompleted =
+      !!get(state.form.applicationForWaiverOfFilingFeeFile) ||
+      !!getCaseDocumentByDocumentType({
+        documentType:
+          INITIAL_DOCUMENT_TYPES_MAP.applicationForWaiverOfFilingFeeFile,
+        documents: formCaseDocuments,
+      });
 
-  const ownershipDisclosureFileCompleted =
-    !!get(state.form.ownershipDisclosureFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.ownershipDisclosureFile,
-      documents: formCaseDocuments,
-    });
+    petitionFileCompleted =
+      !!get(state.form.petitionFile) ||
+      !!getCaseDocumentByDocumentType({
+        documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
+        documents: formCaseDocuments,
+      });
 
-  const stinFileCompleted =
-    !!get(state.form.stinFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
-      documents: formCaseDocuments,
-    });
+    ownershipDisclosureFileCompleted =
+      !!get(state.form.ownershipDisclosureFile) ||
+      !!getCaseDocumentByDocumentType({
+        documentType: INITIAL_DOCUMENT_TYPES_MAP.ownershipDisclosureFile,
+        documents: formCaseDocuments,
+      });
 
-  const requestForPlaceOfTrialFileCompleted =
-    !!get(state.form.requestForPlaceOfTrialFile) ||
-    !!getCaseDocumentByDocumentType({
-      documentType: INITIAL_DOCUMENT_TYPES_MAP.requestForPlaceOfTrialFile,
-      documents: formCaseDocuments,
-    });
+    stinFileCompleted =
+      !!get(state.form.stinFile) ||
+      !!getCaseDocumentByDocumentType({
+        documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
+        documents: formCaseDocuments,
+      });
+
+    requestForPlaceOfTrialFileCompleted =
+      !!get(state.form.requestForPlaceOfTrialFile) ||
+      !!getCaseDocumentByDocumentType({
+        documentType: INITIAL_DOCUMENT_TYPES_MAP.requestForPlaceOfTrialFile,
+        documents: formCaseDocuments,
+      });
+  }
 
   const scanModeOptions = Object.keys(SCAN_MODES).map(scanModeKey => {
     const scanMode = SCAN_MODES[scanModeKey];
