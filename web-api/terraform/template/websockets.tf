@@ -104,8 +104,6 @@ resource "aws_apigatewayv2_deployment" "websocket_deploy" {
   depends_on = [
     aws_apigatewayv2_route.connect,
     aws_apigatewayv2_route.disconnect,
-    aws_apigatewayv2_integration.websockets_connect_integration,
-    aws_apigatewayv2_integration.websockets_disconnect_integration,
   ]
 
   lifecycle {
