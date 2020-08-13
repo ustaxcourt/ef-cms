@@ -32,11 +32,15 @@ const addNewInitialFilingToCase = ({
 
     documentMeta = {
       ...currentCaseDocument,
+      createdAt: caseEntity.receivedAt,
       eventCode,
+      filingDate: caseEntity.receivedAt,
       isFileAttached: true,
       isPaper: true,
+      mailingDate: caseEntity.mailingDate,
       partyPrimary: true,
       partySecondary,
+      receivedAt: caseEntity.receivedAt,
       userId: authorizedUser.userId,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
