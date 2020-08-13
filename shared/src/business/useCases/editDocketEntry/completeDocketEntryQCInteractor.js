@@ -190,7 +190,7 @@ exports.completeDocketEntryQCInteractor = async ({
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(updatedDocument);
 
-  const workItemToUpdate = updatedDocument.getQCWorkItem();
+  const workItemToUpdate = updatedDocument.workItem;
 
   if (workItemToUpdate) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
@@ -317,7 +317,9 @@ exports.completeDocketEntryQCInteractor = async ({
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
-    caseEntity.addDocument(noticeUpdatedDocument, { applicationContext });
+    caseEntity.addDocument(noticeUpdatedDocument, {
+      applicationContext,
+    });
 
     const { Body: pdfData } = await applicationContext
       .getStorageClient()

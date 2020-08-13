@@ -5,8 +5,8 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
-import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
-import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
+import { createMessageAction } from '../actions/CaseDetail/createMessageAction';
+import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -16,16 +16,16 @@ import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidati
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
+import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';
 
 export const completeDocketEntryQCAndSendMessageSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validateCreateCaseMessageAction,
+  validateCreateMessageAction,
   {
     error: [setValidationErrorsByFlagAction],
     success: showProgressSequenceDecorator([
-      createCaseMessageAction,
+      createMessageAction,
       stopShowValidationAction,
       completeDocketEntryQCAction,
       clearFormAction,
@@ -37,7 +37,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
-      getCaseMessagesForCaseAction,
+      getMessagesForCaseAction,
       navigateToDocumentQCAction,
     ]),
   },

@@ -24,6 +24,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo "${CIRCLE_HONEYBADGER_API_KEY_STG}"
 elif [[ $BRANCH == 'test' ]] ; then
   echo ""
+elif [[ $BRANCH == 'dawson' ]] ; then
+  echo ""
 else
   exit 1;
 fi

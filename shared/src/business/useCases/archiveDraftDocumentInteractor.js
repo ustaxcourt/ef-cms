@@ -38,13 +38,10 @@ exports.archiveDraftDocumentInteractor = async ({
 
   documentToArchive.archive();
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const { workItem } = documentToArchive;
 
-  await Promise.all(
-    documentToArchive.workItems.map(workItem =>
+  if (workItem) {
+    await Promise.all(
       Promise.all([
         applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
           applicationContext,
@@ -61,6 +58,15 @@ exports.archiveDraftDocumentInteractor = async ({
           userId: workItem.sentByUserId,
         }),
       ]),
-    ),
-  );
+    );
+  }
+
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

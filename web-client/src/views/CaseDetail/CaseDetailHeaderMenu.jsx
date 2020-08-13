@@ -3,7 +3,7 @@ import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
-import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
+import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
 import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
@@ -27,8 +27,7 @@ export const CaseDetailHeaderMenu = connect(
       sequences.openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
-    openCreateCaseMessageModalSequence:
-      sequences.openCreateCaseMessageModalSequence,
+    openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
@@ -42,7 +41,7 @@ export const CaseDetailHeaderMenu = connect(
     isCaseDetailMenuOpen,
     openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence,
-    openCreateCaseMessageModalSequence,
+    openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     resetCaseMenuSequence,
     showModal,
@@ -124,7 +123,7 @@ export const CaseDetailHeaderMenu = connect(
                     id="menu-button-add-new-message"
                     onClick={() => {
                       resetCaseMenuSequence();
-                      openCreateCaseMessageModalSequence();
+                      openCreateMessageModalSequence();
                     }}
                   >
                     Message
@@ -246,9 +245,7 @@ export const CaseDetailHeaderMenu = connect(
           <CreateOrderChooseTypeModal />
         )}
         {showModal === 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
-        {showModal === 'CreateCaseMessageModal' && (
-          <CreateCaseMessageModalDialog />
-        )}
+        {showModal === 'CreateMessageModal' && <CreateMessageModalDialog />}
       </div>
     );
   },
