@@ -33,6 +33,8 @@ const addNewInitialFilingToCase = ({
     documentMeta = {
       ...currentCaseDocument,
       eventCode,
+      isFileAttached: true,
+      isPaper: true,
       partyPrimary: true,
       partySecondary,
       userId: authorizedUser.userId,
