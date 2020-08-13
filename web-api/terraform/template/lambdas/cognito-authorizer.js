@@ -19,12 +19,16 @@ const generatePolicy = (principalId, effect, resource) => {
     policyDocument.Statement[0] = statementOne;
     authResponse.policyDocument = policyDocument;
   }
+
+  console.log('authResponse is', JSON.stringify(authResponse));
   return authResponse;
 };
 
 const verify = (methodArn, token, keys, kid, cb) => {
   const k = keys.keys.find(k => k.kid === kid);
   const pem = jwkToPem(k);
+
+  console.log('token is', token);
 
   jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
     if (err) {
@@ -55,29 +59,13 @@ exports.handler = (event, context, cb) => {
     requestToken = event.queryStringParameters.token;
   }
 
-  console.log('request token is', requestToken);
-
   if (requestToken) {
     const { header, payload } = jwk.decode(requestToken, { complete: true });
     const { iss } = payload;
     const { kid } = header;
     if (keys) {
-      console.log('in if keys', keys);
-      console.log('event.methodArn', event.methodArn);
-      console.log('requestToken', requestToken);
-      console.log('keys', keys);
-      console.log('kid', kid);
-      console.log('cb', cb);
       verify(event.methodArn, requestToken, keys, kid, cb);
-      console.log('made it past the if');
     } else {
-      console.log('in else');
-      console.log('iss', iss);
-      console.log('event.methodArn', event.methodArn);
-      console.log('requestToken', requestToken);
-      console.log('keys', keys);
-      console.log('kid', kid);
-      console.log('cb', cb);
       request(
         { json: true, url: `${iss}/.well-known/jwks.json` },
         (error, response, body) => {
@@ -89,7 +77,6 @@ exports.handler = (event, context, cb) => {
           verify(event.methodArn, requestToken, keys, kid, cb);
         },
       );
-      console.log('made it past the else');
     }
   } else {
     console.log('No authorizationToken found in the header.');
