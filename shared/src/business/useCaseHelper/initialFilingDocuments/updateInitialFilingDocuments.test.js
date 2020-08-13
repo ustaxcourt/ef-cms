@@ -52,6 +52,31 @@ describe('addNewInitialFilingToCase', () => {
     expect(rqtFile).toBeDefined();
   });
 
+  it('should set isFileAttached and isPaper to true', async () => {
+    mockOriginalCase = new Case(
+      { ...MOCK_CASE, documents: [] },
+      { applicationContext },
+    );
+
+    mockCaseToUpdate = {
+      ...MOCK_CASE,
+      documents: [...MOCK_CASE.documents, mockRQT],
+    };
+
+    await updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser: petitionsClerkUser,
+      caseEntity: mockOriginalCase,
+      caseToUpdate: mockCaseToUpdate,
+    });
+
+    const filedDocument = mockOriginalCase.documents.find(
+      d => d.documentId === mockRQT.documentId,
+    );
+    expect(filedDocument.isFileAttached).toBeTruthy();
+    expect(filedDocument.isPaper).toBeTruthy();
+  });
+
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
     mockCaseToUpdate = { ...MOCK_CASE, documents: [] };
     mockOriginalCase = new Case(
