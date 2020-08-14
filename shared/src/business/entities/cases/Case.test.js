@@ -1231,6 +1231,59 @@ describe('Case entity', () => {
     });
   });
 
+  describe('archiveDocument', () => {
+    let caseRecord;
+    let documentToArchive;
+    beforeEach(() => {
+      documentToArchive = {
+        archived: undefined,
+        documentType: 'Order',
+        eventCode: 'O',
+        filedBy: 'Test Petitioner',
+        role: ROLES.petitioner,
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      };
+
+      caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [...MOCK_CASE.documents, documentToArchive],
+        },
+        {
+          applicationContext,
+        },
+      );
+    });
+
+    it('marks the document as archived', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+      const archivedDocument = caseRecord.documents.find(
+        d => d.documentId === documentToArchive.documentId,
+      );
+      expect(archivedDocument.archived).toBeTruthy();
+    });
+
+    it('adds the provided document to the case archivedDocuments', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+
+      expect(
+        caseRecord.archivedDocuments.find(
+          d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeDefined();
+    });
+
+    it('removes the provided document from the case documents array', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+
+      expect(
+        caseRecord.documents.find(
+          d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeUndefined();
+    });
+  });
+
   describe('addDocketRecord', () => {
     it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {

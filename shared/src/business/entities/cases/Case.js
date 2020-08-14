@@ -781,8 +781,8 @@ Case.prototype.attachIrsPractitioner = function (practitioner) {
 Case.prototype.archiveDocument = function (document, { applicationContext }) {
   const documentToArchive = new Document(document, { applicationContext });
   documentToArchive.archive();
-  this.archiveDocuments.push(documentToArchive);
-  this.deleteDocumentById(documentToArchive.documentId);
+  this.archivedDocuments.push(documentToArchive);
+  this.deleteDocumentById({ documentId: documentToArchive.documentId });
 };
 
 /**
