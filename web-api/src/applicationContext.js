@@ -1043,7 +1043,11 @@ const isValidatedDecorator = persistenceGatewayMethods => {
       console.log(JSON.stringify(argumentsAsArray));
       argumentsAsArray.forEach(argument => {
         Object.keys(argument).forEach(key => {
-          if (argument[key].entityName && !argument[key].isValidated) {
+          if (
+            argument[key] &&
+            argument[key].entityName &&
+            !argument[key].isValidated
+          ) {
             throw new Error(
               `a entity of type ${argument[key].entityName} was not validated before passed to a persistence gateway method`,
             );
