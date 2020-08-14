@@ -15,7 +15,6 @@ describe('CaseInternal entity', () => {
     it('returns the expected set of errors for an empty object', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        archivedDocuments: VALIDATION_ERROR_MESSAGES.archivedDocuments,
         caseCaption: VALIDATION_ERROR_MESSAGES.caseCaption,
         caseType: VALIDATION_ERROR_MESSAGES.caseType,
         chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
@@ -31,7 +30,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal(
         {
-                    archivedDocuments: [],
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -72,7 +71,7 @@ describe('CaseInternal entity', () => {
 
     it('creates a valid petition with partyType Corporation and an ods file', () => {
       const caseInternal = new CaseInternal(
-        {        
+        {
           archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
@@ -307,7 +306,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
       const caseInternal = new CaseInternal(
         {
-                    archivedDocuments: [],
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -345,7 +344,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
       const caseInternal = new CaseInternal(
         {
-                    archivedDocuments: [],
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
