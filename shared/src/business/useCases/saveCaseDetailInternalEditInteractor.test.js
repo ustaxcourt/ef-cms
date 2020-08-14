@@ -290,4 +290,32 @@ describe('updateCase', () => {
       applicationContext.getUseCaseHelpers().updateInitialFilingDocuments,
     ).toHaveBeenCalled();
   });
+
+  it('should update which orders are needed', async () => {
+    const caseToUpdate = Object.assign(MOCK_CASE);
+    caseToUpdate.isPaper = true;
+    caseToUpdate.orderDesignatingPlaceOfTrial = true;
+    caseToUpdate.orderForAmendedPetition = true;
+    caseToUpdate.orderForAmendedPetitionAndFilingFee = true;
+    caseToUpdate.orderForFilingFee = true;
+    caseToUpdate.orderForOds = true;
+    caseToUpdate.orderForRatification = true;
+    caseToUpdate.orderToShowCause = true;
+
+    const result = await saveCaseDetailInternalEditInteractor({
+      applicationContext,
+      caseToUpdate: {
+        ...caseToUpdate,
+      },
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+    expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
+    expect(result.orderForAmendedPetition).toBeTruthy();
+    expect(result.orderForAmendedPetitionAndFilingFee).toBeTruthy();
+    expect(result.orderForFilingFee).toBeTruthy();
+    expect(result.orderForOds).toBeTruthy();
+    expect(result.orderForRatification).toBeTruthy();
+    expect(result.orderToShowCause).toBeTruthy();
+  });
 });
