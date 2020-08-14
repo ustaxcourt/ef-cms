@@ -1040,7 +1040,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
   function decorate(method) {
     return function () {
       const argumentsAsArray = Array.prototype.slice.call(arguments);
-      console.log(JSON.stringify(argumentsAsArray));
+
       argumentsAsArray.forEach(argument => {
         Object.keys(argument).forEach(key => {
           if (
