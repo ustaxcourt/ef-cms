@@ -28,7 +28,7 @@ function CaseInternal(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-
+  this.archivedDocuments = rawCase.archivedDocuments;
   this.applicationForWaiverOfFilingFeeFile =
     rawCase.applicationForWaiverOfFilingFeeFile;
   this.applicationForWaiverOfFilingFeeFileSize =
@@ -129,6 +129,7 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
+    archivedDocuments: Case.VALIDATION_RULES.archivedDocuments,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: joi
       .string()
