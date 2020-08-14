@@ -26,6 +26,13 @@ function toRawObject(entity) {
       obj[key] = value;
     }
   }
+  if (entity.isValidated) {
+    Object.defineProperty(obj, 'isValidated', {
+      enumerable: false,
+      value: true,
+      writable: false,
+    });
+  }
   return obj;
 }
 
@@ -194,6 +201,11 @@ exports.joiValidationDecorator = function (
         JSON.stringify(stringifyTransform(this.getValidationErrors())),
       );
     }
+    Object.defineProperty(this, 'isValidated', {
+      enumerable: false,
+      value: true,
+      writable: false,
+    });
     return this;
   };
 
