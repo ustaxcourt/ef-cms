@@ -116,6 +116,18 @@ describe('scanHelper', () => {
   });
 
   describe('stinFileCompleted', () => {
+    it('should be true when document is on form and case has not been created yet', () => {
+      const result = runCompute(scanHelper, {
+        state: {
+          form: {
+            stinFile: {},
+          },
+        },
+      });
+
+      expect(result.stinFileCompleted).toBeTruthy();
+    });
+
     it('should be true when document is on form', () => {
       const result = runCompute(scanHelper, {
         state: {
