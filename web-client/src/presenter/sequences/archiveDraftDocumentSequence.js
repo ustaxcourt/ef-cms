@@ -5,7 +5,7 @@ import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDoc
 import { setCaseAction } from '../actions/setCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const removeDraftDocumentSequence = showProgressSequenceDecorator([
+export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,
   archiveDraftDocumentAction,
   setCaseAction,
