@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * DocketRecord constructor
@@ -33,6 +34,9 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.servedPartiesCode = rawDocketRecord.servedPartiesCode;
   this.isLegacy = rawDocketRecord.isLegacy;
   this.isStricken = rawDocketRecord.isStricken;
+  this.strickenBy = rawDocketRecord.strickenBy;
+  this.strickenByUserId = rawDocketRecord.strickenByUserId;
+  this.strickenAt = rawDocketRecord.strickenAt;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -112,6 +116,11 @@ DocketRecord.VALIDATION_RULES = joi.object().keys({
     .allow(null)
     .optional()
     .description('Served parties code to override system-computed code.'),
+  strickenAt: JoiValidationConstants.ISO_DATE.max('now')
+    .optional()
+    .description('Date that this Docket Record item was stricken.'),
+  strickenBy: joi.string().optional(),
+  strickenByUserId: joi.string().optional(),
 });
 
 joiValidationDecorator(
@@ -122,6 +131,20 @@ joiValidationDecorator(
 
 DocketRecord.prototype.setNumberOfPages = function (numberOfPages) {
   this.numberOfPages = numberOfPages;
+};
+
+/**
+ * strikes this docket record
+ *
+ * @param {object} obj param
+ * @param {string} obj.name user name
+ * @param {string} obj.userId user id
+ */
+DocketRecord.prototype.strikeEntry = function ({ name, userId }) {
+  this.isStricken = true;
+  this.strickenBy = name;
+  this.strickenByUserId = userId;
+  this.strickenAt = createISODateString();
 };
 
 module.exports = { DocketRecord };
