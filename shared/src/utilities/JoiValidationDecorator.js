@@ -168,7 +168,7 @@ exports.joiValidationDecorator = function (
         ),
       );
     }
-
+    setIsValidated(this);
     return this;
   };
 
