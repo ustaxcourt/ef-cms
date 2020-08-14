@@ -4,6 +4,7 @@ resource "aws_lambda_function" "api_async_lambda" {
   handler       = "api.handler"
   s3_bucket     = aws_s3_bucket.api_lambdas_bucket.id
   s3_key        = aws_s3_bucket_object.api_object.key
+  source_code_hash = data.archive_file.zip_api.output_base64sha256
   timeout       = "900"
   memory_size   = "3008"
 
@@ -82,6 +83,22 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
+
+    request_templates = {
+    "application/json" = <<EOF
+{
+"body" : $input.json('$'),
+"path" : "$context.path",
+"httpMethod" : "$context.httpMethod",
+"headers" : {
+  "Authorization": "$input.params('Authorization')",
+  "Content-Type": "$input.params('Content-Type')"
+}
+}
+EOF
+  }
+
+  passthrough_behavior = "WHEN_NO_MATCH"
 }
 
 resource "aws_api_gateway_integration" "api_async_integration_put" {
@@ -99,6 +116,22 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
+
+  request_templates = {
+    "application/json" = <<EOF
+{
+"body" : $input.json('$'),
+"path" : "$context.path",
+"httpMethod" : "$context.httpMethod",
+"headers" : {
+  "Authorization": "$input.params('Authorization')",
+  "Content-Type": "$input.params('Content-Type')"
+}
+}
+EOF
+  }
+
+  passthrough_behavior = "WHEN_NO_MATCH"
 }
 
 resource "aws_api_gateway_integration" "api_async_integration_get" {
@@ -116,6 +149,21 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   integration_http_method = "POST"
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
+
+    request_templates = {
+    "application/json" = <<EOF
+{
+"path" : "$context.path",
+"httpMethod" : "$context.httpMethod",
+"headers" : {
+  "Authorization": "$input.params('Authorization')",
+  "Content-Type": "$input.params('Content-Type')"
+}
+}
+EOF
+  }
+
+  passthrough_behavior = "WHEN_NO_MATCH"
 }
 
 resource "aws_api_gateway_integration" "api_async_integration_options" {
