@@ -1377,8 +1377,8 @@
         only: true
         presence: "optional"
       allow: 
-        - "No"
         - "Yes"
+        - "No"
         - "Unknown"
     ordinalValue: 
       type: "string"

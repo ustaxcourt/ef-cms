@@ -7,6 +7,7 @@ const {
 
 exports.MOCK_USERS = {
   '330d4b65-620a-489d-8414-6623653ebc4f': {
+    barNumber: 'BN1234',
     name: 'Private Practitioner',
     role: ROLES.privatePractitioner,
     section: 'privatePractitioner',
@@ -43,6 +44,7 @@ exports.MOCK_USERS = {
     userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'f7d90c05-f6cd-442c-a168-202db587f16f': {
+    barNumber: 'BN2345',
     contact: {},
     name: 'IRS Practitioner',
     role: ROLES.irsPractitioner,
