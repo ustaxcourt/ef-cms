@@ -15,6 +15,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Document } = require('../Document');
 const { Statistic } = require('../Statistic');
 
 /**
@@ -74,6 +75,12 @@ function CaseInternal(rawCase, { applicationContext }) {
   this.statistics = Array.isArray(rawCase.statistics)
     ? rawCase.statistics.map(
         statistic => new Statistic(statistic, { applicationContext }),
+      )
+    : [];
+
+  this.archivedDocuments = Array.isArray(rawCase.archivedDocuments)
+    ? rawCase.archivedDocuments.map(
+        doc => new Document(doc, { applicationContext }),
       )
     : [];
 
