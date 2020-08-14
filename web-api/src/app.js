@@ -803,7 +803,7 @@ app.get(
  */
 {
   app.post(
-    '/trial-sessions/:trialSessionId/generate-notices',
+    '/async/trial-sessions/:trialSessionId/generate-notices',
     lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
   );
   app.post(
@@ -831,7 +831,7 @@ app.get(
     lambdaWrapper(updateTrialSessionWorkingCopyLambda),
   );
   app.get(
-    '/trial-sessions/:trialSessionId/batch-download',
+    '/async/trial-sessions/:trialSessionId/batch-download',
     lambdaWrapper(batchDownloadTrialSessionLambda),
   );
   app.put(
@@ -881,7 +881,7 @@ app.get(
   lambdaWrapper(getDocumentQCServedForUserLambda),
 );
 app.put(
-  '/users/:userId/contact-info',
+  '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
 );
 app.get(
