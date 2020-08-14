@@ -32,15 +32,23 @@ describe('archiveDraftDocumentInteractor', () => {
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
 
+    const {
+      caseToUpdate,
+    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+
     expect(
-      applicationContext
-        .getPersistenceGateway()
-        .updateCase.mock.calls[0][0].caseToUpdate.documents.find(
-          d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        ),
+      caseToUpdate.archivedDocuments.find(
+        d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      ),
     ).toMatchObject({
       archived: true,
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
+
+    expect(
+      caseToUpdate.documents.find(
+        d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      ),
+    ).toBeFalsy();
   });
 });
