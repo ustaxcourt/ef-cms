@@ -1092,6 +1092,20 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 };
 
 /**
+ * finds a docket record by its docket record index
+ *
+ * @param {string} docketRecordId
+ * @returns {DocketRecord|undefined} the updated case entity
+ */
+Case.prototype.getDocketRecord = function (docketRecordId) {
+  const foundEntry = this.docketRecord.find(
+    entry => entry.docketRecordId === docketRecordId,
+  );
+
+  return foundEntry;
+};
+
+/**
  *
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
  * @param {boolean} updateIndex whether to update the index on the docket record entity

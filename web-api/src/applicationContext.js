@@ -801,6 +801,9 @@ const {
   setWorkItemAsReadInteractor,
 } = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
+  strikeDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/strikeDocketEntryInteractor');
+const {
   submitCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
 const {
@@ -1495,6 +1498,7 @@ module.exports = appContextUser => {
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
+        strikeDocketEntryInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,

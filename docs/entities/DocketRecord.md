@@ -503,5 +503,26 @@
         - "P"
         - "R"
         - null
+    strickenAt: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+        presence: "optional"
+        description: "Date that this Docket Record item was stricken."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            date: "now"
+    strickenBy: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    strickenByUserId: 
+      type: "string"
+      flags: 
+        presence: "optional"
 
  ```
