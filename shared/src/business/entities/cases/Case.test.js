@@ -84,10 +84,10 @@ describe('Case entity', () => {
     });
 
     it('should set archivedDocuments to the value provided', () => {
-       myCase = new Case(
+      myCase = new Case(
         {
           ...MOCK_CASE,
-          archivedDocuments: [...MOCK_DOCUMENTS]
+          archivedDocuments: [...MOCK_DOCUMENTS],
         },
         { applicationContext },
       );
