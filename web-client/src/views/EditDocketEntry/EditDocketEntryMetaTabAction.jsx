@@ -1,4 +1,6 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { StrikeDocketEntryModal } from './StrikeDocketEntryModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -6,12 +8,17 @@ import React from 'react';
 export const EditDocketEntryMetaTabAction = connect(
   {
     form: state.form,
+    openStrikeDocketEntryModalSequence:
+      sequences.openStrikeDocketEntryModalSequence,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.modal.validationErrors,
     validationSequence: sequences.validateDocketRecordSequence,
   },
   function EditDocketEntryMetaTabAction({
     form,
+    openStrikeDocketEntryModalSequence,
+    showModal,
     updateFormValueSequence,
     validationErrors,
     validationSequence,
@@ -37,6 +44,22 @@ export const EditDocketEntryMetaTabAction = connect(
               validationSequence();
             }}
           />
+        </FormGroup>
+        <FormGroup>
+          <Button
+            link
+            className="text-secondary-dark"
+            icon={['fas', 'strikethrough']}
+            iconColor="red"
+            onClick={() => {
+              openStrikeDocketEntryModalSequence();
+            }}
+          >
+            Strike Entry
+          </Button>
+          {showModal === 'StrikeDocketEntryModal' && (
+            <StrikeDocketEntryModal confirmSequence="strikeDocketEntrySequence" />
+          )}
         </FormGroup>
       </div>
     );
