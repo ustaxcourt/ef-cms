@@ -67,7 +67,7 @@ export const documentViewerHelper = (get, applicationContext) => {
     formattedDocumentToDisplay.document.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
     !formattedCaseDetail.documents.find(
-      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE,
+      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
   return {

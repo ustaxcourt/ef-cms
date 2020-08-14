@@ -1257,7 +1257,7 @@ describe('Case entity', () => {
 
     it('marks the document as archived', () => {
       caseRecord.archiveDocument(documentToArchive, { applicationContext });
-      const archivedDocument = caseRecord.documents.find(
+      const archivedDocument = caseRecord.archivedDocuments.find(
         d => d.documentId === documentToArchive.documentId,
       );
       expect(archivedDocument.archived).toBeTruthy();
