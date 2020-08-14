@@ -8,9 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.blockCaseFromTrialLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const lambdaArguments = {
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
+    };
+
     return await applicationContext.getUseCases().blockCaseFromTrialInteractor({
       applicationContext,
-      caseId: event.pathParameters.caseId,
-      reason: JSON.parse(event.body).reason,
+      ...lambdaArguments,
     });
   });

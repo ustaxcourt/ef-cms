@@ -14,10 +14,10 @@ export const petitionsClerkViewsInProgressMessagesOnCaseDetail = test => {
 
     expect(test.getState('caseDetail.messages').length).toEqual(4);
 
-    const caseMessagesFormatted = runCompute(formattedCaseMessages, {
+    const messagesFormatted = runCompute(formattedCaseMessages, {
       state: test.getState(),
     });
-    expect(caseMessagesFormatted.inProgressMessages.length).toEqual(2);
-    expect(caseMessagesFormatted.completedMessages.length).toEqual(0);
+    expect(messagesFormatted.inProgressMessages.length).toEqual(2);
+    expect(messagesFormatted.completedMessages.length).toEqual(0);
   });
 };

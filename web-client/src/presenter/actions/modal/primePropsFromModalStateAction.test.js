@@ -6,11 +6,11 @@ describe('primePropsFromModalStateAction', () => {
   it('should update the props from state', async () => {
     const result = await runAction(primePropsFromModalStateAction, {
       modules: { presenter },
-      state: { modal: { caseId: '123', name: 'Billy' } },
+      state: { modal: { docketNumber: '123-45', name: 'Billy' } },
     });
 
     expect(result.output).toEqual({
-      caseId: '123',
+      docketNumber: '123-45',
       name: 'Billy',
     });
   });

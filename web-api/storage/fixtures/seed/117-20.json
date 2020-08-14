@@ -27,8 +27,7 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Bart Simpson, Petitioner",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
-    "sk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "sk": "case|117-20",
     "filingType": "Myself",
     "orderForOds": false,
     "docketNumberWithSuffix": "117-20L",
@@ -45,7 +44,7 @@
     "hasPendingItems": false,
     "initialCaption": "Bart Simpson, Petitioner",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "pk": "case|117-20",
     "docketNumber": "117-20",
     "status": "New",
     "statistics": []
@@ -61,7 +60,7 @@
     "description": "Petition",
     "index": 1,
     "documentId": "7f43316d-dd0b-4a48-b324-60de21f178d1",
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e"
+    "pk": "case|117-20"
   },
   {
     "eventCode": "RQT",
@@ -71,7 +70,7 @@
     "sk": "docket-record|d3f8f2c5-3e1c-4471-82aa-9eb9dbf576d9",
     "description": "Request for Place of Trial at Birmingham, Alabama",
     "index": 2,
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e"
+    "pk": "case|117-20"
   },
   {
     "isSealed": true,
@@ -79,7 +78,6 @@
     "isLegacySealed": false,
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2020-06-25T20:40:13.682Z",
-    "workItems": [],
     "partyPrimary": true,
     "pending": false,
     "receivedAt": "2020-06-25T20:40:13.688Z",
@@ -94,60 +92,46 @@
     "sk": "document|5fe616a2-3839-49ec-a4be-1560b73193af",
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "pk": "case|117-20",
     "privatePractitioners": []
   },
   {
     "documentType": "Petition",
     "filingDate": "2020-06-25T20:40:13.682Z",
-    "workItems": [
-      {
-        "associatedJudge": "Chief Judge",
-        "docketNumberSuffix": "L",
-        "caseStatus": "New",
-        "document": {
-          "documentType": "Petition",
-          "filingDate": "2020-06-25T20:40:13.682Z",
-          "partyPrimary": true,
-          "pending": false,
-          "receivedAt": "2020-06-25T20:40:13.685Z",
-          "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-          "eventCode": "P",
-          "processingStatus": "pending",
-          "createdAt": "2020-06-25T20:40:13.684Z",
-          "entityName": "Document",
-          "filedBy": "Petr. Bart Simpson",
-          "partySecondary": false,
-          "documentId": "7f43316d-dd0b-4a48-b324-60de21f178d1",
-          "privatePractitioners": []
-        },
-        "caseTitle": "Bart Simpson",
-        "section": "petitions",
-        "workItemId": "883c974c-d9cd-4e3f-9f28-e63a3da0fd8e",
-        "isInitializeCase": true,
-        "assigneeId": null,
-        "isQC": true,
-        "sentBy": "Test Petitioner",
-        "createdAt": "2020-06-25T20:40:13.685Z",
-        "assigneeName": null,
-        "entityName": "WorkItem",
-        "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
-        "docketNumberWithSuffix": "117-20L",
-        "messages": [
-          {
-            "createdAt": "2020-06-25T20:40:13.686Z",
-            "messageId": "71b19b86-87eb-4477-a549-ec7883abbad9",
-            "from": "Test Petitioner",
-            "message": "Petition filed by Bart Simpson is ready for review.",
-            "entityName": "Message",
-            "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-          }
-        ],
-        "docketNumber": "117-20",
-        "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "updatedAt": "2020-06-25T20:40:13.686Z"
-      }
-    ],
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "docketNumberSuffix": "L",
+      "caseStatus": "New",
+      "document": {
+        "documentType": "Petition",
+        "filingDate": "2020-06-25T20:40:13.682Z",
+        "partyPrimary": true,
+        "pending": false,
+        "receivedAt": "2020-06-25T20:40:13.685Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "P",
+        "processingStatus": "pending",
+        "createdAt": "2020-06-25T20:40:13.684Z",
+        "entityName": "Document",
+        "filedBy": "Petr. Bart Simpson",
+        "partySecondary": false,
+        "documentId": "7f43316d-dd0b-4a48-b324-60de21f178d1",
+        "privatePractitioners": []
+      },
+      "caseTitle": "Bart Simpson",
+      "section": "petitions",
+      "workItemId": "883c974c-d9cd-4e3f-9f28-e63a3da0fd8e",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-06-25T20:40:13.685Z",
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "117-20L",
+      "docketNumber": "117-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-06-25T20:40:13.686Z"
+    },
     "partyPrimary": true,
     "pending": false,
     "receivedAt": "2020-06-25T20:40:13.685Z",
@@ -162,32 +146,30 @@
     "sk": "document|7f43316d-dd0b-4a48-b324-60de21f178d1",
     "partySecondary": false,
     "documentId": "7f43316d-dd0b-4a48-b324-60de21f178d1",
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "pk": "case|117-20",
     "privatePractitioners": []
   },
   {
     "sk": "work-item|883c974c-d9cd-4e3f-9f28-e63a3da0fd8e",
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e"
+    "pk": "case|117-20"
   },
   {
-    "sk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "sk": "case|117-20",
     "pk": "catalog"
   },
   {
     "createdAt": "2020-06-25T20:40:13.682Z",
     "entityName": "UserCase",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
     "caseCaption": "Bart Simpson, Petitioner",
-    "gsi1pk": "user-case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
-    "sk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "gsi1pk": "user-case|117-20",
+    "sk": "case|117-20",
     "docketNumberWithSuffix": "117-20L",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "117-20",
     "status": "New"
   },
   {
-    "sk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "sk": "case|117-20",
     "pk": "case-by-docket-number|117-20"
   },
   {
@@ -218,8 +200,7 @@
     "noticeOfAttachments": false,
     "entityName": "Case",
     "caseCaption": "Bart Simpson, Petitioner",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
-    "sk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "sk": "case|117-20",
     "filingType": "Myself",
     "orderForOds": false,
     "docketNumberWithSuffix": "117-20L",
@@ -236,7 +217,7 @@
     "hasPendingItems": false,
     "initialCaption": "Bart Simpson, Petitioner",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
+    "pk": "case|117-20",
     "docketNumber": "117-20",
     "status": "New",
     "statistics": []

@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
-import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
+import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -43,7 +43,9 @@ export const AddDocketEntry = connect(
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
-                {isEditingDocketEntry ? 'Edit' : 'Add'} Docket Entry
+                <span>
+                  {isEditingDocketEntry ? 'Edit' : 'Add'} Paper Filing
+                </span>
               </h1>
             </div>
 

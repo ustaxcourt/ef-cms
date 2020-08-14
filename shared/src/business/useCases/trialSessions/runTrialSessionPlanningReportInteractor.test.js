@@ -46,7 +46,9 @@ describe('run trial session planning report', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialCity.mockReturnValue([{ caseId: '123' }]);
+      .getEligibleCasesForTrialCity.mockReturnValue([
+        { docketNumber: '123-20' },
+      ]);
 
     applicationContext
       .getPersistenceGateway()
@@ -134,8 +136,8 @@ describe('run trial session planning report', () => {
       applicationContext
         .getPersistenceGateway()
         .getEligibleCasesForTrialCity.mockReturnValue([
-          { caseId: '123' },
-          { caseId: '123' },
+          { docketNumber: '123-20' },
+          { docketNumber: '234-20' },
         ]);
 
       applicationContext

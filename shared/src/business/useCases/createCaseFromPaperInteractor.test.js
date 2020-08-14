@@ -5,6 +5,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PETITIONS_SECTION,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
@@ -41,7 +42,7 @@ describe('createCaseFromPaperInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

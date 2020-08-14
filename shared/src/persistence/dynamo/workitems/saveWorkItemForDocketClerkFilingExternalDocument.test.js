@@ -39,7 +39,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
       applicationContext,
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        caseId: '456',
+        docketNumber: '456-20',
         section: 'docket',
         workItemId: '123',
       },
@@ -65,7 +65,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
     });
     expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
-        pk: 'case|456',
+        pk: 'case|456-20',
         sk: 'work-item|123',
       },
     });

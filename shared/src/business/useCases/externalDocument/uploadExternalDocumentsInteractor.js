@@ -11,7 +11,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.applicationContext the application context
  * @param {Array} providers.documentFiles array of file objects
  * @param {object} providers.documentMetadata metadata associated with the documents/cases
- * @param {string} providers.leadCaseId optional id representing the lead case in a consolidated set
+ * @param {string} providers.leadDocketNumber optional docket number representing the lead case in a consolidated set
  * @param {string} providers.progressFunctions callback functions for updating the progress indicator during file upload
  * @returns {Promise<Array>} the case(s) with the uploaded document(s) attached
  */
@@ -20,7 +20,7 @@ exports.uploadExternalDocumentsInteractor = async ({
   docketNumbersForFiling,
   documentFiles,
   documentMetadata,
-  leadCaseId,
+  leadDocketNumber,
   progressFunctions,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -86,7 +86,7 @@ exports.uploadExternalDocumentsInteractor = async ({
 
   const documentIds = await Promise.all(uploadedDocumentPromises);
 
-  if (leadCaseId) {
+  if (leadDocketNumber) {
     return await applicationContext
       .getUseCases()
       .fileExternalDocumentForConsolidatedInteractor({
@@ -94,7 +94,7 @@ exports.uploadExternalDocumentsInteractor = async ({
         docketNumbersForFiling,
         documentIds,
         documentMetadata,
-        leadCaseId,
+        leadDocketNumber,
       });
   } else {
     return await applicationContext

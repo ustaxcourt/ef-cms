@@ -16,12 +16,11 @@ npx jest --clearCache
 # if *not* CLEAN_ONLY, do this
 if [ -z "$CLEAN_ONLY" ]; then
   # removes all modules, reinstalls
-  rm -rf \
-    node_modules \
-    package-lock.json
-
-  npm i
+  rm -rf node_modules 
   npm update
-  npx npm-force-resolutions
   npm i
+
+  rm -rf web-client/pa11y/node_modules
+  npm update --prefix=web-client/pa11y/
+  npm i --prefix=web-client/pa11y/
 fi

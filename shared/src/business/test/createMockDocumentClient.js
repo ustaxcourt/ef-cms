@@ -1,4 +1,4 @@
-const { ROLES } = require('../entities/EntityConstants');
+const { PETITIONS_SECTION, ROLES } = require('../entities/EntityConstants');
 
 const mockDynamoUsers = {
   ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']: {
@@ -15,7 +15,7 @@ const mockDynamoUsers = {
     name: 'Test Petitionsclerk',
     pk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
     role: ROLES.petitionsClerk,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
   },
@@ -32,7 +32,7 @@ const mockDynamoUsers = {
     name: 'Alex Petitionsclerk',
     pk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
     role: ROLES.petitionsClerk,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     sk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
     userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
   },
@@ -135,7 +135,7 @@ const createMockDocumentClient = () => {
             if (v === 'true' || v === 'false') {
               obj[k] = v === 'true';
             } else {
-              if (k.includes('workItems[')) {
+              if (k.includes('workItem')) {
                 obj = mockDynamoUsers[`${Key.pk} ${Key.sk}`];
                 // eslint-disable-next-line security/detect-eval-with-expression
                 eval(`obj.${k} = ${JSON.stringify(v)};`);

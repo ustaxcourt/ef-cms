@@ -3,7 +3,7 @@ import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
-import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
+import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';

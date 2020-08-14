@@ -8,13 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.updateSecondaryContactLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, contactInfo } = JSON.parse(event.body);
-
     return await applicationContext
       .getUseCases()
       .updateSecondaryContactInteractor({
         applicationContext,
-        caseId,
-        contactInfo,
+        ...JSON.parse(event.body),
       });
   });

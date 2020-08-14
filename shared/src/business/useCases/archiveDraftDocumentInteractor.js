@@ -10,13 +10,13 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case on which a document will be archived
+ * @param {string} providers.docketNumber the docket number of the case on which a document will be archived
  * @param {string} providers.documentId the id of the document which will be archived
  * @returns {object} the updated case note returned from persistence
  */
 exports.archiveDraftDocumentInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -27,9 +27,9 @@ exports.archiveDraftDocumentInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -38,13 +38,10 @@ exports.archiveDraftDocumentInteractor = async ({
 
   documentToArchive.archive();
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const { workItem } = documentToArchive;
 
-  await Promise.all(
-    documentToArchive.workItems.map(workItem =>
+  if (workItem) {
+    await Promise.all(
       Promise.all([
         applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
           applicationContext,
@@ -61,6 +58,15 @@ exports.archiveDraftDocumentInteractor = async ({
           userId: workItem.sentByUserId,
         }),
       ]),
-    ),
-  );
+    );
+  }
+
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };

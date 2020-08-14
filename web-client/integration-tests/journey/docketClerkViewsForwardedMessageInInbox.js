@@ -1,6 +1,6 @@
 export const docketClerkViewsForwardedMessageInInbox = test => {
   return it('docket clerk views the forwarded message they were sent in their inbox', async () => {
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });

@@ -5,7 +5,7 @@ const { put } = require('./requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update
+ * @param {string} providers.docketNumber the docket number of the case to update
  * @param {string} providers.contactPrimary the primary contact information to update
  * @param {string} providers.contactSecondary the secondary contact information to update
  * @param {string} providers.partyType the party type to update
@@ -13,14 +13,14 @@ const { put } = require('./requests');
  */
 exports.updatePetitionerInformationInteractor = ({
   applicationContext,
-  caseId,
   contactPrimary,
   contactSecondary,
+  docketNumber,
   partyType,
 }) => {
   return put({
     applicationContext,
     body: { contactPrimary, contactSecondary, partyType },
-    endpoint: `/case-parties/${caseId}/petitioner-info`,
+    endpoint: `/case-parties/${docketNumber}/petitioner-info`,
   });
 };

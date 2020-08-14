@@ -56,7 +56,7 @@ export const DocketRecord = connect(
                       entry.isInProgress && 'in-progress',
                       entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
-                    key={entry.index}
+                    key={arrayIndex}
                   >
                     <td className="center-column hide-on-mobile">
                       {entry.index}
@@ -94,12 +94,13 @@ export const DocketRecord = connect(
                             />
                           )}
 
-                          {entry.qcWorkItemsUntouched && (
-                            <FontAwesomeIcon
-                              icon={['fa', 'star']}
-                              title="is untouched"
-                            />
-                          )}
+                          {entry.qcWorkItemsUntouched &&
+                            !entry.isInProgress && (
+                              <FontAwesomeIcon
+                                icon={['fa', 'star']}
+                                title="is untouched"
+                              />
+                            )}
 
                           {entry.showLoadingIcon && (
                             <FontAwesomeIcon

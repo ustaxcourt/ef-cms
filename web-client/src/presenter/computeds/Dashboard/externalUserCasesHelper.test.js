@@ -9,7 +9,7 @@ const externalUserCasesHelper = withAppContextDecorator(
     ...applicationContext,
     getUtilities: () => ({
       formatCase: () => ({
-        caseId: 'case-id-123',
+        docketNumber: '123-20',
       }),
     }),
   },
@@ -69,8 +69,8 @@ describe('externalUserCasesHelper', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        closedCases: [{ caseId: 'hey' }],
-        openCases: [{ caseId: 'hey' }, { caseId: 'bye' }],
+        closedCases: [{ docketNumber: '101-20' }],
+        openCases: [{ docketNumber: '102-20' }, { docketNumber: '103-20' }],
       },
     });
 

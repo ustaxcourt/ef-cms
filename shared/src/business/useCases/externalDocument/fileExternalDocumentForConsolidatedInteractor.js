@@ -9,11 +9,10 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { Message } = require('../../entities/Message');
+const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -22,7 +21,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   docketNumbersForFiling,
   documentIds,
   documentMetadata,
-  leadCaseId,
+  leadDocketNumber,
   //filingPartyNames? filingPartyMap?,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -37,25 +36,25 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   const consolidatedCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByLeadCaseId({
+    .getCasesByLeadDocketNumber({
       applicationContext,
-      leadCaseId,
+      leadDocketNumber,
     });
 
   // TODO: Return error if lead case not found?
 
   const casesForDocumentFiling = [];
-  const caseIdsForDocumentFiling = [];
+  const docketNumbersForDocumentFiling = [];
 
   const consolidatedCaseEntities = consolidatedCases.map(consolidatedCase => {
-    const { caseId } = consolidatedCase;
+    const { docketNumber } = consolidatedCase;
     const caseEntity = new Case(consolidatedCase, { applicationContext });
 
     if (docketNumbersForFiling.includes(consolidatedCase.docketNumber)) {
       // this serves the purpose of offering two different
       // look-ups to be used further down while minimizing
       // iterations over the case array
-      caseIdsForDocumentFiling.push(caseId);
+      docketNumbersForDocumentFiling.push(docketNumber);
       casesForDocumentFiling.push(caseEntity);
     }
 
@@ -78,7 +77,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     'partySecondary',
     'partyIrsPractitioner',
     'practitioner',
-    'caseId',
     'docketNumber',
   ]);
 
@@ -146,8 +144,8 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
       ).toRawObject();
 
       for (let caseEntity of consolidatedCaseEntities) {
-        const isFilingDocumentForCase = caseIdsForDocumentFiling.includes(
-          caseEntity.caseId,
+        const isFilingDocumentForCase = docketNumbersForDocumentFiling.includes(
+          caseEntity.docketNumber,
         );
 
         const documentEntity = new Document(
@@ -163,9 +161,11 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           },
         );
 
+        const isAutoServed = documentEntity.isAutoServed();
+
         if (isFilingDocumentForCase) {
           const isCaseForWorkItem =
-            caseEntity.caseId === caseWithLowestDocketNumber.caseId;
+            caseEntity.docketNumber === caseWithLowestDocketNumber.docketNumber;
 
           const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -177,7 +177,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                 assigneeId: null,
                 assigneeName: null,
                 associatedJudge: caseEntity.associatedJudge,
-                caseId: caseEntity.caseId,
                 caseIsInProgress: caseEntity.inProgress,
                 caseStatus: caseEntity.status,
                 caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
@@ -187,7 +186,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                   ...documentEntity.toRawObject(),
                   createdAt: documentEntity.createdAt,
                 },
-                isQC: true,
                 section: DOCKET_SECTION,
                 sentBy: user.name,
                 sentByUserId: user.userId,
@@ -195,19 +193,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               { applicationContext },
             );
 
-            const message = new Message(
-              {
-                from: user.name,
-                fromUserId: user.userId,
-                message: `${documentEntity.documentType} filed by ${capitalize(
-                  user.role,
-                )} is ready for review.`,
-              },
-              { applicationContext },
-            );
-
-            workItem.addMessage(message);
-            documentEntity.addWorkItem(workItem);
+            documentEntity.setWorkItem(workItem);
 
             if (metadata.isPaper) {
               workItem.setAsCompleted({
@@ -237,7 +223,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
           caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-          if (documentEntity.isAutoServed()) {
+          if (isAutoServed) {
             documentEntity.setAsServed(servedParties.all);
 
             await applicationContext
@@ -264,7 +250,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
         caseEntity.addDocketRecord(docketRecordEntity);
 
         saveCasesMap[
-          caseEntity.caseId
+          caseEntity.docketNumber
         ] = await applicationContext.getPersistenceGateway().updateCase({
           applicationContext,
           caseToUpdate: caseEntity.validate().toRawObject(),
@@ -273,7 +259,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     }
   } // documentsToAdd
   const saveCases = Object.keys(saveCasesMap).map(
-    caseId => saveCasesMap[caseId],
+    docketNumber => saveCasesMap[docketNumber],
   );
 
   const savedCases = await Promise.all(saveCases);

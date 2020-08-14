@@ -166,7 +166,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "dynamodb:DescribeStream",
         "dynamodb:GetRecords",
         "dynamodb:GetShardIterator",
-        "dynamodb:ListStreams"
+        "dynamodb:ListStreams",
+        "dynamodb:UpdateGlobalTable"
       ],
       "Resource": [
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",

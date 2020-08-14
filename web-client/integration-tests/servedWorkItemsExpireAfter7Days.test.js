@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../.././shared/src/business//test/createTestApplicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -10,6 +7,12 @@ import {
   uploadPetition,
 } from './helpers';
 import applicationContextFactory from '../../web-api/src/applicationContext';
+
+const {
+  PETITIONS_SECTION,
+  STATUS_TYPES: CASE_STATUS_TYPES,
+  USER_ROLES: ROLES,
+} = applicationContext.getConstants();
 
 const test = setupTest();
 
@@ -35,7 +38,7 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     const applicationContext = applicationContextFactory({
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -53,7 +56,6 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItem8Days = {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test petitionsclerk1',
-      caseId: 'd481929a-fb22-4800-900e-50b15ac55934',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -66,21 +68,9 @@ describe('verify old served work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      isQC: true,
-      messages: [
-        {
-          createdAt: CREATED_8_DAYS_AGO.toISOString(),
-          from: 'Test petitionsclerk1',
-          fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'Testing a Created Message',
-          messageId: 'c31368e6-8e75-4400-ad1d-a0b2bf0a4083',
-          to: 'Test petitionsclerk1',
-          toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
       section: 'irsSystem',
       sentBy: 'Test petitionsclerk1',
-      sentBySection: 'petitions',
+      sentBySection: PETITIONS_SECTION,
       sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       updatedAt: '2019-06-26T16:31:17.643Z',
       workItemId: `${workItemId8}`,
@@ -88,17 +78,17 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     workItem7Days = {
       ...workItem8Days,
+      completedAt: CREATED_7_DAYS_AGO.toISOString(),
       createdAt: CREATED_7_DAYS_AGO.toISOString(),
       workItemId: `${workItemId7}`,
     };
-    workItem7Days.messages[0].createdAt = CREATED_7_DAYS_AGO.toISOString();
 
     workItem6Days = {
       ...workItem8Days,
+      completedAt: CREATED_6_DAYS_AGO.toISOString(),
       createdAt: CREATED_6_DAYS_AGO.toISOString(),
       workItemId: `${workItemId6}`,
     };
-    workItem7Days.messages[0].createdAt = CREATED_6_DAYS_AGO.toISOString();
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,

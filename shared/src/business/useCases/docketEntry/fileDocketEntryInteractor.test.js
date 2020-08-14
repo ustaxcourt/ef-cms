@@ -22,7 +22,6 @@ describe('fileDocketEntryInteractor', () => {
   beforeAll(() => {
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -226,7 +225,9 @@ describe('fileDocketEntryInteractor', () => {
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
 
     await fileDocketEntryInteractor({
       applicationContext,

@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} params.store the cerebral store
  * @returns {object} the props with the message
  */
-export const setSuccessFromDocumentTitleAction = ({ get, store }) => {
+export const setSuccessFromDocumentTitleAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const isCreatingOrder = get(state.isCreatingOrder);
   if (isCreatingOrder) {
     store.unset(state.isCreatingOrder);
@@ -20,12 +24,22 @@ export const setSuccessFromDocumentTitleAction = ({ get, store }) => {
     };
   }
 
+  const {
+    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+  } = applicationContext.getConstants();
   const { documents } = get(state.caseDetail);
   const documentId = get(state.documentId);
   const order = documents.find(d => d.documentId === documentId);
+
+  let successMessage = `${order.documentTitle || order.documentType} updated.`;
+
+  if (order.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE) {
+    successMessage = 'Stipulated Decision signed and saved.';
+  }
+
   return {
     alertSuccess: {
-      message: `${order.documentTitle || order.documentType} updated.`,
+      message: successMessage,
     },
   };
 };

@@ -13,7 +13,7 @@ exports.updatePetitionDetailsLambda = event =>
       .getUseCases()
       .updatePetitionDetailsInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
         ...JSON.parse(event.body),
       });
   });

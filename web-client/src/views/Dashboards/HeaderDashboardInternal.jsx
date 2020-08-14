@@ -37,7 +37,7 @@ export const HeaderDashboardInternal = connect(
               }}
             >
               <FontAwesomeIcon icon={['far', 'clone']} />
-              Switch to Section {workQueueHelper.workQueueType}
+              Switch to Section Document QC
             </Button>
           )}
           {workQueueHelper.showSectionWorkQueue &&
@@ -55,7 +55,7 @@ export const HeaderDashboardInternal = connect(
                 }}
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
-                Switch to My {workQueueHelper.workQueueType}
+                Switch to My Document QC
               </Button>
             )}
         </div>

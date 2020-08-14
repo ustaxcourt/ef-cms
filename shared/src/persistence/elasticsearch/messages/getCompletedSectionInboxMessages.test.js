@@ -5,6 +5,9 @@ const {
   getCompletedSectionInboxMessages,
 } = require('./getCompletedSectionInboxMessages');
 jest.mock('../searchClient');
+const {
+  PETITIONS_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { search } = require('../searchClient');
 
 describe('getCompletedSectionInboxMessages', () => {
@@ -13,7 +16,7 @@ describe('getCompletedSectionInboxMessages', () => {
 
     const results = await getCompletedSectionInboxMessages({
       applicationContext,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     expect(search).toHaveBeenCalledTimes(1);

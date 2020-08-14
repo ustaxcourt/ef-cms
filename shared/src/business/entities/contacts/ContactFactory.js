@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -447,12 +447,14 @@ ContactFactory.createContactFactory = ({
       ...additionalErrorMappings,
     };
 
+    GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
+      ...ContactFactory.getValidationObject({ countryType, isPaper }),
+      ...additionalValidation,
+    });
+
     joiValidationDecorator(
       GenericContactConstructor,
-      joi.object().keys({
-        ...ContactFactory.getValidationObject({ countryType, isPaper }),
-        ...additionalValidation,
-      }),
+      GenericContactConstructor.VALIDATION_RULES,
       GenericContactConstructor.errorToMessageMap,
     );
 

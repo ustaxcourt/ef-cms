@@ -18,7 +18,6 @@ describe('orderAdvancedSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
-          caseId: '1',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents:
@@ -29,7 +28,6 @@ describe('orderAdvancedSearchInteractor', () => {
         },
         {
           caseCaption: 'Samson Workman, Petitioner',
-          caseId: '2',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents: 'KitKats are inferior candies',
@@ -56,12 +54,12 @@ describe('orderAdvancedSearchInteractor', () => {
     const result = await orderAdvancedSearchInteractor({
       applicationContext,
       keyword: 'candy',
+      startDate: '2001-01-01',
     });
 
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',
-        caseId: '1',
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents:
@@ -72,7 +70,6 @@ describe('orderAdvancedSearchInteractor', () => {
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
-        caseId: '2',
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents: 'KitKats are inferior candies',
@@ -89,6 +86,7 @@ describe('orderAdvancedSearchInteractor', () => {
     await orderAdvancedSearchInteractor({
       applicationContext,
       keyword,
+      startDate: '2001-01-01',
     });
 
     expect(

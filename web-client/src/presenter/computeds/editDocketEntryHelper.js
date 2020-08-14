@@ -12,17 +12,18 @@ export const editDocketEntryHelper = (get, applicationContext) => {
   let showPaperServiceWarning = false;
 
   if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument.documentType)) {
-    const qcWorkItems = (currentDocument.workItems || []).filter(wi => wi.isQC);
+    const qcWorkItem = currentDocument.workItem;
     const qcWorkItemsUntouched =
-      !!qcWorkItems.length &&
-      qcWorkItems.reduce((acc, wi) => {
-        return acc && !wi.isRead && !wi.completedAt;
-      }, true);
+      qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
 
     if (qcWorkItemsUntouched) {
       showPaperServiceWarning = true;
     }
   }
 
-  return { showPaperServiceWarning };
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, currentDocument);
+
+  return { formattedDocument, showPaperServiceWarning };
 };

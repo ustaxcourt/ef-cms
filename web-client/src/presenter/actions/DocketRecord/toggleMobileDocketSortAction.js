@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral store used for getting state.sessionMetadata.docketRecordSort
  */
 export const toggleMobileDocketSortAction = ({ get, store }) => {
-  const caseId = get(state.caseDetail.caseId);
-  const currentSort = get(state.sessionMetadata.docketRecordSort[caseId]);
+  const docketNumber = get(state.caseDetail.docketNumber);
+  const currentSort = get(state.sessionMetadata.docketRecordSort[docketNumber]);
   let newSort;
   switch (currentSort) {
     case 'byDate':
@@ -20,5 +20,5 @@ export const toggleMobileDocketSortAction = ({ get, store }) => {
       newSort = 'byDate';
       break;
   }
-  store.set(state.sessionMetadata.docketRecordSort[caseId], newSort);
+  store.set(state.sessionMetadata.docketRecordSort[docketNumber], newSort);
 };

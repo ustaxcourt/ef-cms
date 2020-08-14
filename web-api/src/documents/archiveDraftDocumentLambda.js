@@ -8,13 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.archiveDraftDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, documentId } = event.pathParameters;
-
     return await applicationContext
       .getUseCases()
       .archiveDraftDocumentInteractor({
         applicationContext,
-        caseId,
-        documentId,
+        ...event.pathParameters,
       });
   });

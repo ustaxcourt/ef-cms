@@ -16,7 +16,7 @@ export const setViewerDraftDocumentToDisplayAction = async ({
   store,
 }) => {
   const { viewerDraftDocumentToDisplay } = props;
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   store.set(state.viewerDraftDocumentToDisplay, viewerDraftDocumentToDisplay);
   if (viewerDraftDocumentToDisplay) {
@@ -26,7 +26,7 @@ export const setViewerDraftDocumentToDisplayAction = async ({
       .getUseCases()
       .getDocumentDownloadUrlInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         documentId: viewerDraftDocumentToDisplay.documentId,
         isPublic: false,
       });

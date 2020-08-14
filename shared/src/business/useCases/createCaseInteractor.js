@@ -9,7 +9,6 @@ const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
-const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/EntityConstants');
 const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -27,7 +26,6 @@ const addPetitionDocumentToCase = ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToAdd.associatedJudge,
-      caseId: caseToAdd.caseId,
       caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
@@ -38,7 +36,6 @@ const addPetitionDocumentToCase = ({
         createdAt: documentEntity.createdAt,
       },
       isInitializeCase: true,
-      isQC: true,
       section: PETITIONS_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,
@@ -46,23 +43,7 @@ const addPetitionDocumentToCase = ({
     { applicationContext },
   );
 
-  let message;
-
-  const caseTitle = Case.getCaseTitle(caseToAdd.caseCaption);
-  message = `${documentEntity.documentType} filed by ${caseTitle} is ready for review.`;
-
-  workItemEntity.addMessage(
-    new Message(
-      {
-        from: user.name,
-        fromUserId: user.userId,
-        message,
-      },
-      { applicationContext },
-    ),
-  );
-
-  documentEntity.addWorkItem(workItemEntity);
+  documentEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return workItemEntity;
@@ -228,7 +209,9 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+    });
   }
 
   await applicationContext.getPersistenceGateway().createCase({
@@ -240,7 +223,7 @@ exports.createCaseInteractor = async ({
 
   await applicationContext.getPersistenceGateway().associateUserWithCase({
     applicationContext,
-    caseId: caseToAdd.caseId,
+    docketNumber: caseToAdd.docketNumber,
     userCase: userCaseEntity.validate().toRawObject(),
     userId: user.userId,
   });

@@ -6,7 +6,7 @@ const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
 export const chambersUserAddsOrderToCase = test => {
   return it('Chambers user adds order to case', async () => {
-    await test.runSequence('openCreateMessageModalSequence');
+    await test.runSequence('openCreateOrderChooseTypeModalSequence');
 
     await test.runSequence('submitCreateOrderModalSequence');
 
@@ -26,9 +26,7 @@ export const chambersUserAddsOrderToCase = test => {
     );
 
     await test.runSequence('submitCreateOrderModalSequence');
-
     expect(test.getState('validationErrors')).toEqual({});
-
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',

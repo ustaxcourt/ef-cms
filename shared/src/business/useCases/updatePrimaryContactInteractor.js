@@ -6,11 +6,9 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../entities/EntityConstants');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -19,14 +17,14 @@ const { WorkItem } = require('../entities/WorkItem');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update the primary contact
+ * @param {string} providers.docketNumber the docket number of the case to update the primary contact
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
 exports.updatePrimaryContactInteractor = async ({
   applicationContext,
-  caseId,
   contactInfo,
+  docketNumber,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -44,13 +42,13 @@ exports.updatePrimaryContactInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseEntity = new Case(
@@ -101,7 +99,7 @@ exports.updatePrimaryContactInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
-        caseId,
+        docketNumber: caseEntity.docketNumber,
         documentId: newDocumentId,
         documentTitle: documentType.title,
         documentType: documentType.title,
@@ -133,7 +131,6 @@ exports.updatePrimaryContactInteractor = async ({
         assigneeId: null,
         assigneeName: null,
         associatedJudge: caseEntity.associatedJudge,
-        caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
@@ -143,7 +140,6 @@ exports.updatePrimaryContactInteractor = async ({
           ...changeOfAddressDocument.toRawObject(),
           createdAt: changeOfAddressDocument.createdAt,
         },
-        isQC: true,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
@@ -151,21 +147,11 @@ exports.updatePrimaryContactInteractor = async ({
       { applicationContext },
     );
 
-    const message = new Message(
-      {
-        from: user.name,
-        fromUserId: user.userId,
-        message: `${changeOfAddressDocument.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-      },
-      { applicationContext },
-    );
+    changeOfAddressDocument.setWorkItem(workItem);
 
-    workItem.addMessage(message);
-    changeOfAddressDocument.addWorkItem(workItem);
-
-    caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+    caseEntity.addDocument(changeOfAddressDocument, {
+      applicationContext,
+    });
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,

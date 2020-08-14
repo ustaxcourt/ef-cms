@@ -30,17 +30,17 @@ describe('getCasesByUser', () => {
       .fn()
       .mockReturnValueOnce([
         {
-          caseId: '123',
-          pk: 'case|123',
-          sk: 'case|123',
+          docketNumber: '123-20',
+          pk: 'case|123-20',
+          sk: 'case|123-20',
           status: CASE_STATUS_TYPES.new,
         },
       ])
       .mockReturnValueOnce([
         {
-          caseId: '123',
-          pk: 'case|123',
-          sk: 'case|123',
+          docketNumber: '123-20',
+          pk: 'case|123-20',
+          sk: 'case|123-20',
           status: CASE_STATUS_TYPES.new,
         },
       ]);
@@ -54,26 +54,26 @@ describe('getCasesByUser', () => {
 
     expect(result).toEqual([
       {
-        caseId: '123',
         correspondence: [],
+        docketNumber: '123-20',
         docketRecord: [],
         documents: [],
         irsPractitioners: [],
-        pk: 'case|123',
+        pk: 'case|123-20',
         privatePractitioners: [],
-        sk: 'case|123',
+        sk: 'case|123-20',
         status: CASE_STATUS_TYPES.new,
       },
     ]);
   });
 
-  it('should attempt to do a query using the found caseIds', async () => {
+  it('should attempt to do a query using the found docketNumbers', async () => {
     await getCasesByUser({
       applicationContext,
       user,
     });
     expect(client.query.mock.calls[1][0].ExpressionAttributeValues).toEqual({
-      ':pk': 'case|123',
+      ':pk': 'case|123-20',
     });
   });
 });

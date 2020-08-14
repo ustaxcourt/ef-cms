@@ -1,6 +1,7 @@
 # EF-CMS Migration Documentation
 
 * Cases can be added by POSTing JSON to `/migrate/case`
+* Cases Deadlines can be added by POSTing JSON to `/migrate/case-deadline`
 * PDF files can be added directly to the PDF S3 bucket, with UUIDV4s referenced as `documentId` in the Case objects.
 * Authentication is handled by AWS Cognito. An account with the admin role is required.
 * Values are validated using Hapi Joi schema definitions in the [Case](entities/Case.md), [Document](entities/Document.md) and [DocketRecord](entities/DocketRecord.md) entities.
@@ -15,7 +16,6 @@ Valid Case object example:
     "associatedJudge": "Chief Judge",
     "blocked": false,
     "caseCaption": "Iure enim vel ipsa ",
-    "caseId": "99d67c60-dcbf-4ac3-b26f-c1edd518b4f6",
     "caseType": "Declaratory Judgment (Retirement Plan)",
     "createdAt": "2020-01-27T21:09:04.167Z",
     "docketNumber": "284-80",
@@ -38,7 +38,6 @@ Valid Case object example:
     "initialTitle": "Iure enim vel ipsa v. Commissioner of Internal Revenue, Respondent",
     "documents": [
         {
-            "caseId": "99d67c60-dcbf-4ac3-b26f-c1edd518b4f6",
             "createdAt": "2020-01-27T05:00:00.000Z",
             "documentId": "a45da352-e588-404c-9cac-715a57a6cda0",
             "mailingDate": "09-Mar-1988",
@@ -66,7 +65,6 @@ Valid Case object example:
                 "scenario": "Type A",
                 "primaryDocumentFileSize": 3586249,
                 "freeText": "A Strong Opinion",
-                "caseId": "99d67c60-dcbf-4ac3-b26f-c1edd518b4f6",
                 "documentTitle": "A Strong Opinion",
                 "docketNumber": "284-80"
             },
@@ -94,7 +92,6 @@ Valid Case object example:
             "createdAt": "2020-05-13T14:50:04.929Z",
             "scenario": "Type B",
             "entityName": "Document",
-            "caseId": "99d67c60-dcbf-4ac3-b26f-c1edd518b4f6",
             "freeText": "Some very strong opinions about sunglasses",
             "signedAt": "2020-05-13T14:50:04.930Z",
             "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
@@ -185,7 +182,7 @@ Valid Case object example:
         {
             "description": "Notice Notice",
             "documentId": "42e33c93-023c-40b4-9a4d-143bb26986bb",
-            "editState": "{\"eventCode\":\"NOT\",\"documentType\":\"Notice\",\"documentTitle\":\"Notice [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Notice\",\"generatedDocumentTitle\":\"Notice Notice\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"42e33c93-023c-40b4-9a4d-143bb26986bb\"}",
+            "editState": "{\"eventCode\":\"NOT\",\"documentType\":\"Notice\",\"documentTitle\":\"Notice [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Notice\",\"generatedDocumentTitle\":\"Notice Notice\",\"documentId\":\"42e33c93-023c-40b4-9a4d-143bb26986bb\"}",
             "eventCode": "NOT",
             "filingDate": "2020-01-27T21:39:03.125Z",
             "index": 2
@@ -200,7 +197,7 @@ Valid Case object example:
         {
             "description": "Order and Decision Entered, Chief Judge Foley",
             "documentId": "a45da352-e588-404c-9cac-715a57a6cda0",
-            "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered,\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Chief Judge Foley\",\"judge\":\"Chief Judge Foley\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"a45da352-e588-404c-9cac-715a57a6cda0\"}",
+            "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered,\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Chief Judge Foley\",\"judge\":\"Chief Judge Foley\",\"documentId\":\"a45da352-e588-404c-9cac-715a57a6cda0\"}",
             "eventCode": "OAD",
             "filingDate": "2020-01-27T21:43:03.625Z",
             "index": 4
@@ -208,7 +205,7 @@ Valid Case object example:
         {
             "description": "Order and Decision Entered, Judge Halpern",
             "documentId": "f2715cf5-14ec-4a55-a28a-a7c11b04a8d2",
-            "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered,\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Judge Halpern\",\"judge\":\"Judge Halpern\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"f2715cf5-14ec-4a55-a28a-a7c11b04a8d2\"}",
+            "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered,\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Judge Halpern\",\"judge\":\"Judge Halpern\",\"documentId\":\"f2715cf5-14ec-4a55-a28a-a7c11b04a8d2\"}",
             "eventCode": "OAD",
             "filingDate": "2020-01-27T21:43:48.390Z",
             "index": 5
@@ -223,7 +220,7 @@ Valid Case object example:
         {
             "description": "Order d",
             "documentId": "771a5e82-9737-48b1-9097-56ff7ce6d6ee",
-            "editState": "{\"eventCode\":\"OSC\",\"documentType\":\"OSC - Order\",\"documentTitle\":\"Order [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order d\",\"freeText\":\"d\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"771a5e82-9737-48b1-9097-56ff7ce6d6ee\"}",
+            "editState": "{\"eventCode\":\"OSC\",\"documentType\":\"OSC - Order\",\"documentTitle\":\"Order [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order d\",\"freeText\":\"d\",\"documentId\":\"771a5e82-9737-48b1-9097-56ff7ce6d6ee\"}",
             "eventCode": "OSC",
             "filingDate": "2020-01-27T21:46:16.211Z",
             "index": 7

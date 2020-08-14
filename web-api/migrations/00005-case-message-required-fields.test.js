@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  PETITIONS_SECTION,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00005-case-message-required-fields');
@@ -19,14 +20,14 @@ describe('case messages required fields migration', () => {
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       from: 'gg',
-      fromSection: 'petitions',
+      fromSection: PETITIONS_SECTION,
       fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'hello world',
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
       sk: 'message|5a79c990-cc6c-4b99-8fca-8e31f2d9e78a',
       subject: 'hey!',
       to: 'bob',
-      toSection: 'petitions',
+      toSection: PETITIONS_SECTION,
       toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     };
 

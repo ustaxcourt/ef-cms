@@ -1,6 +1,5 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7/sign',
   {
     actions: [
       'wait for td.message-select-control>label to be visible',
@@ -45,24 +44,8 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/edit-details&info=waived',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
   {
     actions: [
-      'wait for #tab-pending-messages to be visible',
-      'click element #tab-pending-messages',
-      "wait for .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible",
-      "click element .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2']",
-      "wait for .forward-form[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible",
-    ],
-    notes: 'checks a11y of forward form',
-    url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7&info=forwarding-form',
-  },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/complete',
-  {
-    actions: [
-      'wait for #tab-document-info to be visible',
-      'click element #tab-document-info',
       'wait for #has-other-filing-party to be visible',
       'click element label#has-other-filing-party-label',
       'wait for input#other-filing-party to be visible',
@@ -71,8 +54,7 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   },
-
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing',
   'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [
@@ -98,13 +80,13 @@ module.exports = [
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry&info=show-cos-inputs',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing&info=show-cos-inputs',
   },
   {
     actions: [
-      'wait for #case-detail-menu-button to be visible',
+      'wait for #tab-case-information to be visible',
       'wait for .progress-indicator to be hidden',
-      'click element #case-detail-menu-button',
+      'click element #tab-case-information',
       'wait for #menu-edit-case-context-button to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #menu-edit-case-context-button',
@@ -135,6 +117,7 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to dismissal',
+      'set field #startDate-date to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -148,6 +131,7 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to opinion',
+      'set field #startDate-date to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -161,6 +145,7 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to meow',
+      'set field #startDate-date to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for svg.iconSealed to be visible',
     ],
@@ -174,6 +159,7 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to sunglasses',
+      'set field #startDate-date to 08/03/2001',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],

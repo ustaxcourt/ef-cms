@@ -7,18 +7,18 @@ describe('setCasesAction', () => {
       props: {
         closedCaseList: [
           {
-            caseId: '1234',
+            docketNumber: '123-45',
           },
           {
-            caseId: '2345',
+            docketNumber: '678-90',
           },
         ],
         openCaseList: [
           {
-            caseId: '1234',
+            docketNumber: '09-876',
           },
           {
-            caseId: '2345',
+            docketNumber: '543-21',
           },
         ],
       },
@@ -30,15 +30,15 @@ describe('setCasesAction', () => {
 
     expect(state.openCases).toEqual([
       {
-        caseId: '1234',
+        docketNumber: '09-876',
       },
-      { caseId: '2345' },
+      { docketNumber: '543-21' },
     ]);
     expect(state.closedCases).toEqual([
       {
-        caseId: '1234',
+        docketNumber: '123-45',
       },
-      { caseId: '2345' },
+      { docketNumber: '678-90' },
     ]);
   });
 });

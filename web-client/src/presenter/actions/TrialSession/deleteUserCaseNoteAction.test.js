@@ -14,14 +14,14 @@ describe('deleteUserCaseNoteAction', () => {
         presenter,
       },
       props: {
-        caseId: 'case-id-123',
+        docketNumber: '123-45',
         trialSessionId: 'trial-session-id-123',
       },
     });
 
     expect(result.output).toMatchObject({
       userNote: {
-        caseId: 'case-id-123',
+        docketNumber: '123-45',
         trialSessionId: 'trial-session-id-123',
       },
     });

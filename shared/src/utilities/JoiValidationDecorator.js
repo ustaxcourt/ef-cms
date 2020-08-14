@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
 const { isEmpty, pick } = require('lodash');
 
@@ -130,6 +130,15 @@ exports.joiValidationDecorator = function (
   entityConstructor.prototype.isValid = function isValid() {
     const validationErrors = this.getFormattedValidationErrors();
     return isEmpty(validationErrors);
+  };
+
+  entityConstructor.prototype.validateForMigration = function validateForMigration() {
+    let { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    return error;
   };
 
   entityConstructor.prototype.validate = function validate() {

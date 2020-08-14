@@ -9,19 +9,16 @@ describe('getConsolidatedCasesByCaseAction', () => {
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor.mockResolvedValue([
         {
-          caseId: 'case-id-123',
           docketNumber: '100-19',
-          leadCaseId: 'case-id-123',
+          leadDocketNumber: '100-19',
         },
         {
-          caseId: 'case-id-234',
           docketNumber: '102-19',
-          leadCaseId: 'case-id-123',
+          leadDocketNumber: '100-19',
         },
         {
-          caseId: 'case-id-345',
           docketNumber: '111-19',
-          leadCaseId: 'case-id-123',
+          leadDocketNumber: '100-19',
         },
       ]);
 
@@ -33,7 +30,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          leadCaseId: 'case-id-123',
+          leadDocketNumber: '100-19',
         },
       },
     });
@@ -44,19 +41,16 @@ describe('getConsolidatedCasesByCaseAction', () => {
     ).toEqual(1);
     expect(output.consolidatedCases).toEqual([
       {
-        caseId: 'case-id-123',
         docketNumber: '100-19',
-        leadCaseId: 'case-id-123',
+        leadDocketNumber: '100-19',
       },
       {
-        caseId: 'case-id-234',
         docketNumber: '102-19',
-        leadCaseId: 'case-id-123',
+        leadDocketNumber: '100-19',
       },
       {
-        caseId: 'case-id-345',
         docketNumber: '111-19',
-        leadCaseId: 'case-id-123',
+        leadDocketNumber: '100-19',
       },
     ]);
   });

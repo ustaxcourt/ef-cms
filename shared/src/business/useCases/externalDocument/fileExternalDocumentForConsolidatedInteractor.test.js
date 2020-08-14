@@ -15,9 +15,9 @@ const { MOCK_CASE } = require('../../../test/mockCase.js');
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let caseRecords;
 
-  const caseId0 = '00000000-b37b-479d-9201-067ec6e335bb';
-  const caseId1 = '11111111-b37b-479d-9201-067ec6e335bb';
-  const caseId2 = '22222222-b37b-479d-9201-067ec6e335bb';
+  const docketNumber0 = '101-19';
+  const docketNumber1 = '102-19';
+  const docketNumber2 = '103-19';
   const documentId0 = 'd0d0d0d0-b37b-479d-9201-067ec6e335bb';
   const documentId1 = 'd1d1d1d1-b37b-479d-9201-067ec6e335bb';
   const documentId2 = 'd2d2d2d2-b37b-479d-9201-067ec6e335bb';
@@ -27,7 +27,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     caseRecords = [
       {
         caseCaption: 'Guy Fieri, Petitioner',
-        caseId: caseId0,
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -40,20 +39,19 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
-        docketNumber: '123-19',
+        docketNumber: docketNumber0,
         docketRecord: MOCK_CASE.docketRecord,
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
-        leadCaseId: caseId0,
+        leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
-        caseId: caseId1,
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -66,20 +64,19 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
-        docketNumber: '234-19',
+        docketNumber: docketNumber1,
         docketRecord: MOCK_CASE.docketRecord,
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
-        leadCaseId: caseId0,
+        leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
       {
         caseCaption: 'George Foreman, Petitioner',
-        caseId: caseId2,
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -92,16 +89,16 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
-        docketNumber: '345-19',
+        docketNumber: docketNumber2,
         docketRecord: MOCK_CASE.docketRecord,
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
-        leadCaseId: caseId0,
+        leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     ];
 
@@ -119,7 +116,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId.mockReturnValue(caseRecords);
+      .getCasesByLeadDocketNumber.mockReturnValue(caseRecords);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -146,7 +143,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      docketNumbersForFiling: ['123-19', '234-19'],
+      docketNumbersForFiling: ['101-19', '102-19'],
       documentIds: [documentId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
@@ -154,7 +151,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
       },
-      leadCaseId: caseId0,
+      leadDocketNumber: docketNumber0,
     });
 
     expect(result[0].documents[4].documentId).toEqual(documentId0);
@@ -168,7 +165,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      docketNumbersForFiling: ['123-19', '234-19'],
+      docketNumbersForFiling: ['101-19', '102-19'],
       documentIds: [documentId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
@@ -176,7 +173,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
       },
-      leadCaseId: caseId0,
+      leadDocketNumber: docketNumber0,
     });
 
     expect(result[0].docketRecord[3].documentId).toEqual(documentId0);
@@ -196,14 +193,14 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         filedBy: 'Test Petitioner',
       },
       filingPartyNames: ['Guy Fieri', 'Enzo Ferrari'],
-      leadCaseId: caseId0,
+      leadDocketNumber: docketNumber0,
     });
   });
 
   it('should generate only ONE QC work item for the filing, to be found on the document of the lowest docket number case to be filed in', async () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      docketNumbersForFiling: ['123-19', '234-19'],
+      docketNumbersForFiling: ['101-19', '102-19'],
       documentIds: [documentId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
@@ -211,19 +208,19 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
       },
-      leadCaseId: caseId0,
+      leadDocketNumber: docketNumber0,
     });
 
     const lowestDocketNumberCase = result.find(
-      record => record.caseId === caseId0,
+      record => record.docketNumber === docketNumber0,
     );
 
     const nonLowestDocketNumberCase = result.find(
-      record => record.caseId === caseId1,
+      record => record.docketNumber === docketNumber1,
     );
 
-    expect(lowestDocketNumberCase.documents[4].workItems.length).toEqual(1);
-    expect(nonLowestDocketNumberCase.documents[4].workItems.length).toEqual(0);
+    expect(lowestDocketNumberCase.documents[4].workItem).toBeDefined();
+    expect(nonLowestDocketNumberCase.documents[4].workItem).toBeUndefined();
   });
 
   it('should file multiple documents for each case if a secondary document is provided', async () => {
@@ -232,7 +229,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      docketNumbersForFiling: ['123-19', '234-19'],
+      docketNumbersForFiling: ['101-19', '102-19'],
       documentIds: [documentId0, documentId1],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
@@ -246,7 +243,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           filedBy: 'Test Petitioner',
         },
       },
-      leadCaseId: caseId0,
+      leadDocketNumber: docketNumber0,
     });
 
     expect(result[0].documents.length).toEqual(6);
@@ -259,7 +256,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      docketNumbersForFiling: ['123-19', '234-19'],
+      docketNumbersForFiling: ['101-19', '102-19'],
       documentIds: [documentId0, documentId1, documentId2, documentId3],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
@@ -289,7 +286,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           },
         ],
       },
-      leadCaseId: caseId0,
+      leadDocketNumber: docketNumber0,
     });
 
     expect(result[0].documents.length).toEqual(8);

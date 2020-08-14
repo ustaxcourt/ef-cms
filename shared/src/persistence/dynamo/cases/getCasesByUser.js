@@ -1,9 +1,8 @@
 const client = require('../../dynamodbClientService');
-const { getCaseByCaseId } = require('./getCaseByCaseId');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
+const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
 
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
-  const caseIds = (
+  const docketNumbers = (
     await client.query({
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -19,13 +18,13 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
   ).map(mapping => mapping.sk.split('|')[1]);
 
   const cases = await Promise.all(
-    caseIds.map(caseId =>
-      getCaseByCaseId({
+    docketNumbers.map(docketNumber =>
+      getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       }),
     ),
   );
 
-  return stripWorkItems(cases, applicationContext.isAuthorizedForWorkItems());
+  return cases;
 };

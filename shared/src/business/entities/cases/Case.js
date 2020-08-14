@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
@@ -8,7 +8,6 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -37,6 +36,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  shouldGenerateDocketRecordIndex,
+} = require('../../utilities/shouldGenerateDocketRecordIndex');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -168,7 +170,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
@@ -181,7 +182,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
-  this.leadCaseId = rawCase.leadCaseId;
+  this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
@@ -254,12 +255,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   } else {
     this.irsPractitioners = [];
   }
-
-  this.documents.forEach(document => {
-    document.workItems.forEach(workItem => {
-      workItem.docketNumberSuffix = this.docketNumberSuffix;
-    });
-  });
 
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
@@ -358,9 +353,6 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'Unique case ID only used by the system.',
-  ),
   caseNote: joi
     .string()
     .max(500)
@@ -379,7 +371,8 @@ Case.VALIDATION_RULES = {
   contactSecondary: joi.object().optional().allow(null),
   correspondence: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
     .description('List of Correspondence documents for the case.'),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the paper or electronic case was added to the system. This value cannot be edited.',
@@ -389,11 +382,9 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Damages for the case.'),
-  docketNumber: joi
-    .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('Unique case identifier in XXXXX-YY format.'),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
   docketNumberSuffix: joi
     .string()
     .allow(null)
@@ -403,15 +394,12 @@ Case.VALIDATION_RULES = {
     .string()
     .optional()
     .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: joi
-    .array()
-    .items(joi.object().meta({ entityName: 'DocketRecord' }))
-    .required()
-    .unique((a, b) => a.index === b.index)
-    .description('List of DocketRecord Entities for the case.'),
+  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
+    DocketRecord.VALIDATION_RULES,
+  ).required(),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Document' }))
+    .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   entityName: joi.string().valid('Case').required(),
@@ -461,14 +449,15 @@ Case.VALIDATION_RULES = {
     .description('Last date that the petitioner is allowed to file before.'),
   irsPractitioners: joi
     .array()
+    .items(IrsPractitioner.VALIDATION_RULES)
     .optional()
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
-  leadCaseId: JoiValidationConstants.UUID.optional().description(
-    'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
+  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
+    'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
   litigationCosts: joi
     .number()
@@ -585,6 +574,7 @@ Case.VALIDATION_RULES = {
     .description('Where the petitioner would prefer to hold the case trial.'),
   privatePractitioners: joi
     .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
@@ -613,7 +603,7 @@ Case.VALIDATION_RULES = {
     ),
   statistics: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Statistic' }))
+    .items(Statistic.VALIDATION_RULES)
     .when('hasVerifiedIrsNotice', {
       is: true,
       otherwise: joi.optional(),
@@ -657,17 +647,9 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: joi
-    .string()
-    .max(50)
-    .optional()
+  userId: JoiValidationConstants.UUID.required()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
-  workItems: joi
-    .array()
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description('List of system messages associated with this case.'),
 };
 
 joiValidationDecorator(
@@ -839,7 +821,6 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function (document, { applicationContext }) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
   this.addDocketRecord(
@@ -862,7 +843,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
@@ -1019,18 +999,33 @@ Case.prototype.setRequestForTrialDocketRecord = function (
 };
 
 /**
+ * gets the next possible (unused) index for the docket record
+ *
+ * @returns {number} the next docket record index
+ */
+Case.prototype.generateNextDocketRecordIndex = function () {
+  const recordsWithIndex = [...this.docketRecord]
+    .filter(record => record.index !== undefined)
+    .sort((a, b) => a.index - b.index);
+  const nextIndex = recordsWithIndex.length + 1;
+  return nextIndex;
+};
+
+/**
  *
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
  * @returns {Case} the updated case entity
  */
 Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  const nextIndex =
-    this.docketRecord.reduce(
-      (maxIndex, docketRecord, currentIndex) =>
-        Math.max(docketRecord.index || 0, currentIndex, maxIndex),
-      0,
-    ) + 1;
-  docketRecordEntity.index = docketRecordEntity.index || nextIndex;
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: docketRecordEntity,
+  });
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord = [...this.docketRecord, docketRecordEntity];
   return this;
 };
@@ -1044,6 +1039,16 @@ Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
     entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
   );
+
+  const updateIndex = shouldGenerateDocketRecordIndex({
+    caseDetail: this,
+    docketRecordEntry: foundEntry,
+  });
+
+  if (updateIndex) {
+    updatedDocketEntry.index = this.generateNextDocketRecordIndex();
+  }
+
   if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
 };
@@ -1064,14 +1069,19 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 
 /**
  *
- * @param {number} docketRecordIndex the index of the docket record to update
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
+ * @param {boolean} updateIndex whether to update the index on the docket record entity
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function (
-  docketRecordIndex,
-  docketRecordEntity,
-) {
+Case.prototype.updateDocketRecord = function (docketRecordEntity, updateIndex) {
+  const docketRecordIndex = this.docketRecord.findIndex(
+    entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
+  );
+
+  if (updateIndex) {
+    docketRecordEntity.index = this.generateNextDocketRecordIndex();
+  }
+
   this.docketRecord[docketRecordIndex] = docketRecordEntity;
   return this;
 };
@@ -1101,19 +1111,6 @@ Case.prototype.updateDocument = function (updatedDocument) {
 Case.stripLeadingZeros = docketNumber => {
   const [number, year] = docketNumber.split('-');
   return `${parseInt(number)}-${year}`;
-};
-
-/**
- * getWorkItems
- *
- * @returns {WorkItem[]} the work items on the case
- */
-Case.prototype.getWorkItems = function () {
-  let workItems = [];
-  this.documents.forEach(
-    document => (workItems = [...workItems, ...(document.workItems || [])]),
-  );
-  return workItems;
 };
 
 /**
@@ -1174,8 +1171,8 @@ Case.prototype.generateSortableDocketNumber = function () {
  */
 Case.prototype.generateTrialSortTags = function () {
   const {
-    caseId,
     caseType,
+    docketNumber,
     highPriority,
     preferredTrialCity,
     procedureType,
@@ -1203,7 +1200,7 @@ Case.prototype.generateTrialSortTags = function () {
     caseProcedureSymbol,
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   const hybridSortKey = [
@@ -1211,7 +1208,7 @@ Case.prototype.generateTrialSortTags = function () {
     'H', // Hybrid Tag
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   return {
@@ -1537,23 +1534,23 @@ Case.prototype.canConsolidate = function (caseToConsolidate) {
 };
 
 /**
- * sets lead case id on the current case
+ * sets lead docket number on the current case
  *
- * @param {string} leadCaseId the caseId of the lead case for consolidation
+ * @param {string} leadDocketNumber the docketNumber of the lead case for consolidation
  * @returns {Case} the updated Case entity
  */
-Case.prototype.setLeadCase = function (leadCaseId) {
-  this.leadCaseId = leadCaseId;
+Case.prototype.setLeadCase = function (leadDocketNumber) {
+  this.leadDocketNumber = leadDocketNumber;
   return this;
 };
 
 /**
- * removes the consolidation from the case by setting leadCaseId to undefined
+ * removes the consolidation from the case by setting leadDocketNumber to undefined
  *
  * @returns {Case} the updated Case entity
  */
 Case.prototype.removeConsolidation = function () {
-  this.leadCaseId = undefined;
+  this.leadDocketNumber = undefined;
   return this;
 };
 
@@ -1582,7 +1579,7 @@ Case.sortByDocketNumber = function (cases) {
 
 /**
  * return the lead case for the given set of cases based on createdAt
- * (does NOT evaluate leadCaseId)
+ * (does NOT evaluate leadDocketNumber)
  *
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity

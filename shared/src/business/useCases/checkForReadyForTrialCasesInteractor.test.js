@@ -25,7 +25,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCatalogCases = [];
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -41,11 +41,11 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it('should not check case if no case is found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(undefined);
+      .getCaseByDocketNumber.mockReturnValue(undefined);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
+    mockCatalogCases = [{ docketNumber: '101-20' }];
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -61,11 +61,11 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it("should only check cases that are 'general docket not at issue'", async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
+    mockCatalogCases = [{ docketNumber: '101-20' }];
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -79,24 +79,25 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   });
 
   it("should not update case to 'ready for trial' if it does not have answer document", async () => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...MOCK_CASE,
-      documents: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentType: 'Petition',
-          processingStatus: 'pending',
-          userId: 'petitioner',
-          workItems: [],
-        },
-      ],
-      status: CASE_STATUS_TYPES.generalDocket,
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        documents: [
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            processingStatus: 'pending',
+            userId: 'petitioner',
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
+    mockCatalogCases = [{ docketNumber: '101-20' }];
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -116,19 +117,19 @@ describe('checkForReadyForTrialCasesInteractor', () => {
      * 2. Case has had an 'Answer' type document filed
      * 3. The cutoff(45 days) has passed since the first Answer document was submitted.
      */
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...MOCK_CASE,
-      status: CASE_STATUS_TYPES.generalDocket,
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' }];
+    mockCatalogCases = [{ docketNumber: '101-20' }];
     applicationContext
       .getPersistenceGateway()
-      .getAllCatalogCases.mockReturnValue([
-        { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
-      ]);
+      .getAllCatalogCases.mockReturnValue([{ docketNumber: '101-20' }]);
 
     await expect(
       checkForReadyForTrialCasesInteractor({
