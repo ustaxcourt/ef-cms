@@ -30,7 +30,6 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
 
   test.casesReadyForTrial = [];
 
-  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
@@ -38,7 +37,6 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
-      createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;
     });
@@ -67,7 +65,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   petitionsClerkManuallyAddsCaseToTrial(test);
   // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
-    return [createdCaseIds[1]];
+    return [createdDocketNumbers[1]];
   });
   petitionsClerkSetsATrialSessionsSchedule(test);
 

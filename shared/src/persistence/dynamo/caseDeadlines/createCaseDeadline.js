@@ -23,7 +23,7 @@ exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
 
   await client.put({
     Item: {
-      pk: `case|${caseDeadline.caseId}`,
+      pk: `case|${caseDeadline.docketNumber}`,
       sk: `case-deadline|${caseDeadlineId}`,
     },
     applicationContext,

@@ -148,24 +148,10 @@ describe('headerHelper', () => {
       state: {
         ...getBaseState({ role: ROLES.petitionsClerk }),
         currentPage: 'Messages',
-        workQueueToDisplay: {
-          workQueueIsInternal: true,
-        },
+        workQueueToDisplay: {},
       },
     });
     expect(result.pageIsMessages).toBeTruthy();
-  });
-  it('should know when the page is Case Messages', () => {
-    const result = runCompute(headerHelper, {
-      state: {
-        ...getBaseState({ role: ROLES.petitionsClerk }),
-        currentPage: 'CaseMessages',
-        workQueueToDisplay: {
-          workQueueIsInternal: true,
-        },
-      },
-    });
-    expect(result.pageIsCaseMessages).toBeTruthy();
   });
   it('should know when the page is My Cases', () => {
     const result = runCompute(headerHelper, {

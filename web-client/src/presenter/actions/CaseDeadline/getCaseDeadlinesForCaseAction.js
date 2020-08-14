@@ -13,13 +13,13 @@ export const getCaseDeadlinesForCaseAction = async ({
   get,
   store,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const caseDeadlines = await applicationContext
     .getUseCases()
     .getCaseDeadlinesForCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   store.set(state.caseDeadlines, caseDeadlines);

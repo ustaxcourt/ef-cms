@@ -4,13 +4,17 @@ import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
 import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
+  const { PETITIONS_SECTION } = applicationContext.getConstants();
   let test;
+
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({ section: 'petitions' });
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: PETITIONS_SECTION,
+    });
     applicationContext
       .getUseCases()
-      .getInboxMessagesForSectionInteractor.mockReturnValue([
-        { document: { isFileAttached: true }, isQC: false },
+      .getDocumentQCInboxForSectionInteractor.mockReturnValue([
+        { document: { isFileAttached: true } },
       ]);
     applicationContext
       .getUseCases()
@@ -21,21 +25,20 @@ describe('chooseWorkQueueSequence', () => {
     };
     test = CerebralTest(presenter);
   });
+
   it('should set the workQueueToDisplay to match the props passed in', async () => {
     test.setState('workQueueToDisplay', null);
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
       workItems: [],
-      workQueueIsInternal: true,
     });
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: true,
     });
     expect(
-      applicationContext.getUseCases().getInboxMessagesForSectionInteractor,
+      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor,
     ).toBeCalled();
   });
 });

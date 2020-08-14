@@ -42,7 +42,7 @@ describe('submitEditPrivatePractitionersModalAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         modal: form,
       },
@@ -60,32 +60,32 @@ describe('submitEditPrivatePractitionersModalAction', () => {
       applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123-20',
       userData: {
         representingPrimary: true,
         representingSecondary: false,
         userId: '1',
       },
-      userIdToUpdate: '1',
+      userId: '1',
     });
     expect(
       applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
-      caseId: '123',
-      userIdToDelete: '2',
+      docketNumber: '123-20',
+      userId: '2',
     });
     expect(
       applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
         .mock.calls[1][0],
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123-20',
       userData: {
         removeFromCase: false,
         representingSecondary: true,
         userId: '3',
       },
-      userIdToUpdate: '3',
+      userId: '3',
     });
     expect(successStub.mock.calls.length).toEqual(1);
   });

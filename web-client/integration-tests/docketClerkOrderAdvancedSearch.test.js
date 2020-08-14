@@ -31,7 +31,6 @@ const {
 
 const seedData = {
   caseCaption: 'Hanan Al Hroub, Petitioner',
-  caseId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   contactPrimary: {
     address1: '123 Teachers Way',
     city: 'Haifa',
@@ -118,6 +117,7 @@ describe('docket clerk order advanced search', () => {
 
       expect(test.getState('validationErrors')).toEqual({
         keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
+        startDate: DocumentSearch.VALIDATION_ERROR_MESSAGES.startDate,
       });
     });
 
@@ -127,6 +127,7 @@ describe('docket clerk order advanced search', () => {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
+          startDate: '2001-01-01',
         },
       });
 
@@ -147,7 +148,7 @@ describe('docket clerk order advanced search', () => {
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
       expect(test.getState('alertError')).toEqual({
-        messages: ['Enter a keyword or phrase'],
+        messages: ['Enter a keyword or phrase', 'Enter a valid start date'],
         title: 'Please correct the following errors:',
       });
 
@@ -162,6 +163,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           keyword: 'osteodontolignikeratic',
+          startDate: '2001-01-01',
         },
       });
 
@@ -178,6 +180,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           docketNumber: docketNumberNoOrders,
           keyword: 'dismissal',
+          startDate: '2001-01-01',
         },
       });
 
@@ -193,6 +196,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           caseTitleOrPetitioner: caseCaptionNoOrders,
           keyword: 'dismissal',
+          startDate: '2001-01-01',
         },
       });
 
@@ -204,13 +208,9 @@ describe('docket clerk order advanced search', () => {
     it('search for a date range that does not contain served orders', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
-          endDateDay: '03',
-          endDateMonth: '01',
-          endDateYear: '2005',
+          endDate: '2005-01-03',
           keyword: 'dismissal',
-          startDateDay: '01',
-          startDateMonth: '01',
-          startDateYear: '2005',
+          startDate: '2005-01-01',
         },
       });
 
@@ -226,6 +226,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           judge: invalidJudge,
           keyword: 'dismissal',
+          startDate: '2005-01-01',
         },
       });
 
@@ -240,6 +241,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           keyword: 'dismissal',
+          startDate: '1000-01-01',
         },
       });
 
@@ -267,6 +269,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
+          startDate: '1995-01-01',
         },
       });
 
@@ -293,6 +296,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           keyword: 'dismissal',
+          startDate: '1000-01-01',
         },
       });
 
@@ -347,13 +351,9 @@ describe('docket clerk order advanced search', () => {
 
       test.setState('advancedSearchForm', {
         orderSearch: {
-          endDateDay,
-          endDateMonth,
-          endDateYear,
+          endDate: `${endDateYear}-${endDateMonth}-${endDateDay}`,
           keyword: 'dismissal',
-          startDateDay,
-          startDateMonth,
-          startDateYear,
+          startDate: `${startDateYear}-${startDateMonth}-${startDateDay}`,
         },
       });
 
@@ -384,6 +384,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           judge: signedByJudge,
           keyword: 'dismissal',
+          startDate: '1000-01-01',
         },
       });
 
@@ -407,6 +408,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           keyword: 'Order of Dismissal Entered',
+          startDate: '1000-01-01',
         },
       });
 

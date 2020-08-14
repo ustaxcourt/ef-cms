@@ -4,6 +4,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     NOTICE_EVENT_CODES,
+    STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
@@ -27,6 +28,10 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const isNotice =
     viewerDraftDocumentToDisplay &&
     NOTICE_EVENT_CODES.includes(viewerDraftDocumentToDisplay.eventCode);
+
+  const isStipulatedDecision =
+    viewerDraftDocumentToDisplay &&
+    viewerDraftDocumentToDisplay.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
   const formattedDocumentToDisplay =
     viewerDraftDocumentToDisplay &&
@@ -58,6 +63,12 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const showEditButtonForRole = isInternalUser;
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
+  const showEditButtonSigned =
+    showEditButtonForRole &&
+    documentIsSigned &&
+    !isNotice &&
+    !isStipulatedDecision;
+
   const showAddDocketEntryButtonForDocument =
     documentIsSigned ||
     !EVENT_CODES_REQUIRING_SIGNATURE.includes(
@@ -65,7 +76,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     );
 
   const showApplySignatureButtonForDocument = !documentIsSigned;
-  const showRemoveSignatureButtonForDocument = documentIsSigned && !isNotice;
+  const showRemoveSignatureButtonForDocument =
+    documentIsSigned && !isNotice && !isStipulatedDecision;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
@@ -81,8 +93,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole && (!documentIsSigned || isNotice),
-    showEditButtonSigned:
-      showEditButtonForRole && documentIsSigned && !isNotice,
+    showEditButtonSigned,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showRemoveSignatureButtonForDocument,

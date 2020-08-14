@@ -28,7 +28,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '101-20',
           statistics: [statistic],
         },
         form: { ...statistic },
@@ -61,7 +61,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '101-20',
           statistics: [statistic],
         },
         form: { ...statistic },
@@ -100,7 +100,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '101-20',
           statistics: [statistic],
         },
         form: { ...statistic },

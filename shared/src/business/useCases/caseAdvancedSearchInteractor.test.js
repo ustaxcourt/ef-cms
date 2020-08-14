@@ -43,10 +43,10 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          caseId: '1',
+          docketNumber: '101-20',
         },
         {
-          caseId: '2',
+          docketNumber: '201-20',
         },
       ]);
 
@@ -55,7 +55,10 @@ describe('caseAdvancedSearchInteractor', () => {
       petitionerName: 'test person',
     });
 
-    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+    expect(results).toEqual([
+      { docketNumber: '101-20' },
+      { docketNumber: '201-20' },
+    ]);
   });
 
   it('filters out sealed cases for non associated, non authorized users', async () => {
@@ -67,7 +70,7 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          caseId: '1',
+          docketNumber: '101-20',
           sealedDate: 'yup',
         },
       ]);
@@ -83,17 +86,17 @@ describe('caseAdvancedSearchInteractor', () => {
   it('returns results if practitioner is associated', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsPractitioner,
-      userId: 'abc',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
     applicationContext
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          caseId: '1',
+          docketNumber: '101-20',
           irsPractitioners: [
             {
-              userId: 'abc',
+              userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
             },
           ],
           sealedDate: 'yup',
@@ -107,10 +110,10 @@ describe('caseAdvancedSearchInteractor', () => {
 
     expect(results).toEqual([
       {
-        caseId: '1',
+        docketNumber: '101-20',
         irsPractitioners: [
           {
-            userId: 'abc',
+            userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
           },
         ],
         sealedDate: 'yup',
@@ -127,7 +130,7 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          caseId: '1',
+          docketNumber: '101-20',
           sealedDate: 'yup',
         },
       ]);
@@ -139,7 +142,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     expect(results).toEqual([
       {
-        caseId: '1',
+        docketNumber: '101-20',
         sealedDate: 'yup',
       },
     ]);

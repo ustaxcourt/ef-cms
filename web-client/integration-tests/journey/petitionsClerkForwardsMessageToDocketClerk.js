@@ -14,14 +14,14 @@ export const petitionsClerkForwardsMessageToDocketClerk = test => {
       value: 'Four years of malfeasance unreported. This cannot stand.',
     });
 
-    await test.runSequence('forwardCaseMessageSequence');
+    await test.runSequence('forwardMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       toSection: expect.anything(),
       toUserId: expect.anything(),
     });
 
-    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
+    await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
       value: 'docket',
     });
@@ -31,7 +31,7 @@ export const petitionsClerkForwardsMessageToDocketClerk = test => {
       value: '1805d1ab-18d0-43ec-bafb-654e83405416', //docketclerk
     });
 
-    await test.runSequence('forwardCaseMessageSequence');
+    await test.runSequence('forwardMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -40,7 +40,7 @@ export const petitionsClerkForwardsMessageToDocketClerk = test => {
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });

@@ -36,17 +36,6 @@
           name: "max"
           args: 
             limit: 100
-    caseId: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
     caseIsInProgress: 
       type: "boolean"
       flags: 
@@ -178,27 +167,10 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    isQC: 
-      type: "boolean"
-      flags: 
-        presence: "required"
     isRead: 
       type: "boolean"
       flags: 
         presence: "optional"
-    messages: 
-      type: "array"
-      flags: 
-        presence: "required"
-      items: 
-        - 
-          type: "object"
-          rules: 
-            - 
-              name: "instance"
-              args: 
-                constructor: [object Function]
-                name: "Message"
     section: 
       type: "string"
       flags: 

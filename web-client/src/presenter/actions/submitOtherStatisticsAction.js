@@ -15,13 +15,13 @@ export const submitOtherStatisticsAction = async ({
   path,
 }) => {
   const { damages, isEditing, litigationCosts } = get(state.form);
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
     await applicationContext.getUseCases().updateOtherStatisticsInteractor({
       applicationContext,
-      caseId,
       damages,
+      docketNumber,
       litigationCosts,
     });
 

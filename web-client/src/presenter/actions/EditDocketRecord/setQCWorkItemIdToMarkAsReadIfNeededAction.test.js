@@ -13,15 +13,13 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-45',
           docketRecord: [],
           documents: [
             {
               documentId: '123-abc-123-abc',
               lodged: true,
-              workItems: [
-                { isQC: true, isRead: false, workItemId: 'ThisIsAnId' },
-              ],
+              workItem: { isRead: false, workItemId: 'ThisIsAnId' },
             },
             { documentId: '321-cba-321-cba' },
           ],

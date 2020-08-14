@@ -84,10 +84,10 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
       });
       ({ petitionFileId, stinFileId } = caseResult);
 
-      const { caseId } = caseDetail;
+      const { docketNumber } = caseDetail;
       await addCaseToTrialSession({
         applicationContext: createApplicationContext(docketClerkUser),
-        caseId,
+        docketNumber,
         trialSessionId,
       });
     } catch (e) {

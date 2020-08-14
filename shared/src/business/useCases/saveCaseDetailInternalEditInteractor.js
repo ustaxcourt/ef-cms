@@ -16,14 +16,14 @@ const { WorkItem } = require('../entities/WorkItem');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update
+ * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
 exports.saveCaseDetailInternalEditInteractor = async ({
   applicationContext,
-  caseId,
   caseToUpdate,
+  docketNumber,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -35,7 +35,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  if (!caseToUpdate || caseId !== caseToUpdate.caseId) {
+  if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();
   }
 
@@ -71,9 +71,9 @@ exports.saveCaseDetailInternalEditInteractor = async ({
 
   const theCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const fullCase = {
@@ -105,9 +105,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   if (!caseEntity.isPaper) {
     const petitionDocument = caseEntity.getPetitionDocument();
 
-    const initializeCaseWorkItem = petitionDocument.workItems.find(
-      workItem => workItem.isInitializeCase,
-    );
+    const initializeCaseWorkItem = petitionDocument.workItem;
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,

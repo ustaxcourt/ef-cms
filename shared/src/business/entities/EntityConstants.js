@@ -237,6 +237,17 @@ const INITIAL_DOCUMENT_TYPES = {
   stin: STIN_DOCKET_ENTRY_TYPE,
 };
 
+const INITIAL_DOCUMENT_TYPES_MAP = {
+  applicationForWaiverOfFilingFeeFile:
+    INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  ownershipDisclosureFile:
+    INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+  petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
+  requestForPlaceOfTrialFile:
+    INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+  stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
+};
+
 // These docket entry types aren't defined anywhere else
 const MINUTE_ENTRIES_MAP = {
   captionOfCaseIsAmended: {
@@ -289,6 +300,13 @@ const STANDING_PRETRIAL_NOTICE =
   SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice;
 const STANDING_PRETRIAL_ORDER =
   SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder;
+
+const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+).find(d => d.documentType === 'Proposed Stipulated Decision').eventCode;
+const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
+  d => d.documentType === 'Stipulated Decision',
+).eventCode;
 
 const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
@@ -939,6 +957,7 @@ module.exports = {
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
   JUDGES_CHAMBERS,
@@ -960,6 +979,7 @@ module.exports = {
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
+  PROPOSED_STIPULATED_DECISION_EVENT_CODE,
   ROLES,
   SCAN_MODE_LABELS,
   SCAN_MODES,
@@ -976,6 +996,7 @@ module.exports = {
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  STIPULATED_DECISION_EVENT_CODE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,

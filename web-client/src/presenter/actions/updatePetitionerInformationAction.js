@@ -6,13 +6,13 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {object} providers.get the cerebral store used for getting state.form
- * @returns {object} alertSuccess, caseId, tab, caseDetail
+ * @returns {object} alertSuccess, caseDetail, docketNumber, paperServiceParties, pdfUrl, tab
  */
 export const updatePetitionerInformationAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseToUpdate = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
   const {
@@ -23,9 +23,9 @@ export const updatePetitionerInformationAction = async ({
     .getUseCases()
     .updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: caseToUpdate.caseId,
       contactPrimary,
       contactSecondary,
+      docketNumber,
       partyType,
     });
 
@@ -34,7 +34,7 @@ export const updatePetitionerInformationAction = async ({
       message: 'Changes saved.',
     },
     caseDetail: updatedCase,
-    caseId: updatedCase.docketNumber,
+    docketNumber,
     paperServiceParties,
     pdfUrl: paperServicePdfUrl,
     tab: 'caseInfo',

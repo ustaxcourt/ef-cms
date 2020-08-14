@@ -5,18 +5,18 @@ const { put } = require('../../dynamodbClientService');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the associated case id
+ * @param {string} providers.docketNumber the associated case docket number
  * @param {object} providers.correspondence the correspondence data
  * @returns {Promise} the promise of the call to persistence
  */
 exports.fileCaseCorrespondence = async ({
   applicationContext,
-  caseId,
   correspondence,
+  docketNumber,
 }) => {
   return await put({
     Item: {
-      pk: `case|${caseId}`,
+      pk: `case|${docketNumber}`,
       sk: `correspondence|${correspondence.documentId}`,
       ...correspondence,
     },

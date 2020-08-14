@@ -34,7 +34,6 @@ const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
   it('should throw an error if app context is not passed in', () => {
@@ -1155,6 +1154,45 @@ describe('Case entity', () => {
     });
   });
 
+  describe('generateNextDocketRecordIndex', () => {
+    it('returns the next possible index based on the current docket record array', () => {
+      const caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [
+            {
+              index: 1,
+            },
+            {
+              index: 2,
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const nextIndex = caseRecord.generateNextDocketRecordIndex();
+      expect(nextIndex).toEqual(3);
+    });
+
+    it('returns an index of 1 if the docketRecord array is empty', () => {
+      const caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const nextIndex = caseRecord.generateNextDocketRecordIndex();
+      expect(nextIndex).toEqual(1);
+    });
+  });
+
   describe('addDocketRecord', () => {
     it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -1174,19 +1212,8 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord).toHaveLength(4);
       expect(caseRecord.docketRecord[3].description).toEqual('test');
       expect(caseRecord.docketRecord[3].index).toEqual(5);
-
-      caseRecord.addDocketRecord(
-        new DocketRecord(
-          {
-            description: 'some description',
-            filingDate: new Date().toISOString(),
-          },
-          { applicationContext },
-        ),
-      );
-
-      expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
+
     it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
@@ -1204,7 +1231,7 @@ describe('Case entity', () => {
     });
   });
   describe('updateDocketRecord', () => {
-    it('updates the docket record entity at the provided docketRecordIndex', () => {
+    it('updates the docket record entity with the provided docketRecordId', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -1218,8 +1245,7 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
-      caseRecord.updateDocketRecord(1, updatedDocketEntry);
-
+      caseRecord.updateDocketRecord(updatedDocketEntry);
       expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
       expect(caseRecord.docketRecord[1].description).toEqual(
         'second record now updated',
@@ -1227,6 +1253,7 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[1].index).toEqual(7);
     });
   });
+
   describe('updateDocketRecordEntry', () => {
     it('updates an existing docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -1530,52 +1557,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getWorkItems', () => {
-    it('should get all the work items associated with the documents in the case', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      myCase.addDocument(
-        {
-          documentId: '123',
-          documentType: 'Answer',
-          userId: 'irsPractitioner',
-        },
-        { applicationContext },
-      );
-      const workItem = new WorkItem(
-        {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketNumber: '101-18',
-          document: {},
-          isQC: true,
-          sentBy: 'bob',
-        },
-        { applicationContext },
-      );
-      myCase.documents[0].addWorkItem(workItem);
-      const workItems = myCase.getWorkItems();
-      expect(workItems.length).toEqual(1);
-      expect(workItems).toMatchObject([
-        {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketNumber: '101-18',
-          document: {},
-          isQC: true,
-          sentBy: 'bob',
-        },
-      ]);
-    });
-  });
-
   describe('checkForReadyForTrial', () => {
     it('should not change the status if no answer documents have been filed', () => {
       const caseToCheck = new Case(
@@ -1768,10 +1749,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-D-20181212000000-101-18',
       });
     });
 
@@ -1787,10 +1766,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-D-20181212000000-101-18',
       });
     });
 
@@ -1806,10 +1783,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-C-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-C-20181212000000-101-18',
       });
     });
 
@@ -1825,10 +1800,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-B-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-B-20181212000000-101-18',
       });
     });
 
@@ -1845,10 +1818,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-A-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-A-20181212000000-101-18',
       });
     });
   });
@@ -2959,8 +2930,8 @@ describe('Case entity', () => {
     });
 
     describe('setLeadCase', () => {
-      it('Should set the leadCaseId on the given case', async () => {
-        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+      it('Should set the leadDocketNumber on the given case', async () => {
+        const leadDocketNumber = '101-20';
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
@@ -2970,18 +2941,18 @@ describe('Case entity', () => {
           },
           { applicationContext },
         );
-        const result = caseEntity.setLeadCase(leadCaseId);
+        const result = caseEntity.setLeadCase(leadDocketNumber);
 
-        expect(result.leadCaseId).toEqual(leadCaseId);
+        expect(result.leadDocketNumber).toEqual(leadDocketNumber);
       });
     });
 
     describe('removeConsolidation', () => {
-      it('Should unset the leadCaseId on the given case', async () => {
+      it('Should unset the leadDocketNumber on the given case', async () => {
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
-            leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
+            leadDocketNumber: '101-20',
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
             status: CASE_STATUS_TYPES.submitted,
@@ -2990,7 +2961,7 @@ describe('Case entity', () => {
         );
         const result = caseEntity.removeConsolidation();
 
-        expect(result.leadCaseId).toBeUndefined();
+        expect(result.leadDocketNumber).toBeUndefined();
       });
     });
 
@@ -2998,30 +2969,24 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3030,38 +2995,30 @@ describe('Case entity', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
         const result = Case.sortByDocketNumber([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
         ]);
 
         expect(result).toEqual([
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '456',
             docketNumber: '120-18',
           },
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
@@ -3072,39 +3029,33 @@ describe('Case entity', () => {
       it('Should return the case with the lowest docket number for cases filed in the same year', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '110-19',
           },
           {
-            caseId: '234',
             docketNumber: '100-19',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('100-19');
       });
 
       it('Should return the case with the lowest docket number for cases filed in different years', () => {
         const result = Case.findLeadCaseForCases([
           {
-            caseId: '123',
             docketNumber: '100-19',
           },
           {
-            caseId: '234',
             docketNumber: '110-18',
           },
           {
-            caseId: '345',
             docketNumber: '120-19',
           },
         ]);
 
-        expect(result.caseId).toEqual('234');
+        expect(result.docketNumber).toEqual('110-18');
       });
     });
   });
@@ -3197,6 +3148,7 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
+      userId: '"userId" is required',
     });
   });
 
@@ -3292,42 +3244,6 @@ describe('Case entity', () => {
       });
 
       expect(isAssociated).toBeFalsy();
-    });
-  });
-
-  describe('DocketRecord indices must be unique', () => {
-    it('identifies duplicate values in docket record indices', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          docketRecord: [
-            {
-              description: 'first record',
-              documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-              eventCode: 'P',
-              filingDate: '2018-03-01T00:01:00.000Z',
-              index: 1,
-            },
-            {
-              description: 'second record',
-              documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-              filingDate: '2018-03-01T00:02:00.000Z',
-              index: 1,
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(caseEntity.getFormattedValidationErrors()).toEqual({
-        'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
-      });
     });
   });
 

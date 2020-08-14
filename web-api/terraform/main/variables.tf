@@ -10,6 +10,10 @@ variable "dns_domain" {
   type = string
 }
 
+variable "zone_name" {
+  type = string
+}
+
 variable "cognito_suffix" {
   type = string
 }
@@ -19,12 +23,12 @@ variable "ses_dmarc_rua" {
 }
 
 variable "es_instance_count" {
-  type = string
+  type    = string
   default = "1"
 }
 
 variable "honeybadger_key" {
-  type = string
+  type    = string
   default = "default_key"
 }
 

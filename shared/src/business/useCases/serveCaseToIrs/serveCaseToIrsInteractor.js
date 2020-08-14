@@ -52,7 +52,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   );
 
   if (stinDocument) {
-    await applicationContext.getPersistenceGateway().deleteDocument({
+    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
       applicationContext,
       key: stinDocument.documentId,
     });
@@ -75,7 +75,7 @@ exports.serveCaseToIrsInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -152,9 +152,7 @@ exports.serveCaseToIrsInteractor = async ({
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 
-  const initializeCaseWorkItem = petitionDocument.workItems.find(
-    workItem => workItem.isInitializeCase,
-  );
+  const initializeCaseWorkItem = petitionDocument.workItem;
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
@@ -191,7 +189,7 @@ exports.serveCaseToIrsInteractor = async ({
   for (const doc of caseEntity.documents) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
       documentId: doc.documentId,
       replaceCoversheet: !caseEntity.isPaper,
       useInitialData: !caseEntity.isPaper,

@@ -55,11 +55,11 @@ app.get(
   lambdaWrapper(getCaseForPublicDocketSearchLambda),
 );
 app.post(
-  '/public-api/cases/:caseId/generate-docket-record',
+  '/public-api/cases/:docketNumber/generate-docket-record',
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
 );
 app.get(
-  '/public-api/:caseId/:documentId/public-document-download-url',
+  '/public-api/:docketNumber/:documentId/public-document-download-url',
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 

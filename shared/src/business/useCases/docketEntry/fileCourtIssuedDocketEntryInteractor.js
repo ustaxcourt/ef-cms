@@ -6,13 +6,12 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../../entities/EntityConstants');
-const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { Message } = require('../../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { omit } = require('lodash');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -36,13 +35,13 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId, documentId } = documentMeta;
+  const { docketNumber, documentId } = documentMeta;
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -97,7 +96,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseToUpdate.associatedJudge,
-      caseId: caseId,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
@@ -109,7 +107,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       },
       hideFromPendingMessages: true,
       inProgress: true,
-      isQC: true,
       section: DOCKET_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,
@@ -121,19 +118,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     workItem.setAsCompleted({ message: 'completed', user });
   }
 
-  const message = new Message(
-    {
-      from: user.name,
-      fromUserId: user.userId,
-      message: `${documentEntity.documentType} filed by ${capitalize(
-        user.role,
-      )} is ready for review.`,
-    },
-    { applicationContext },
-  );
-
-  workItem.addMessage(message);
-  documentEntity.addWorkItem(workItem);
+  documentEntity.setWorkItem(workItem);
   caseEntity.updateDocument(documentEntity);
 
   workItem.assignToUser({

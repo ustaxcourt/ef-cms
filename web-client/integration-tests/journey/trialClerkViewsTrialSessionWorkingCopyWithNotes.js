@@ -20,10 +20,10 @@ export const trialClerkViewsTrialSessionWorkingCopyWithNotes = test => {
       state: test.getState(),
     });
 
-    const { caseId } = workingCopyHelper.formattedCases[0];
+    const { docketNumber } = workingCopyHelper.formattedCases[0];
 
     expect(
-      test.getState(`trialSessionWorkingCopy.userNotes.${caseId}.notes`),
+      test.getState(`trialSessionWorkingCopy.userNotes.${docketNumber}.notes`),
     ).toEqual('this is a note added from the modal');
   });
 };

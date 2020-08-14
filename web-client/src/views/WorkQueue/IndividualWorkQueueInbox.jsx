@@ -30,10 +30,6 @@ export const IndividualWorkQueueInbox = connect(
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case Status</th>
-              {!workQueueHelper.hideFromColumn && <th>From</th>}
-              {!workQueueHelper.hideSectionColumn && (
-                <th className="small">Section</th>
-              )}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => {
@@ -83,14 +79,6 @@ export const IndividualWorkQueueInbox = connect(
                           item.document.documentType}
                       </a>
                     </div>
-                    {workQueueHelper.showMessageContent && (
-                      <div
-                        className="message-document-detail"
-                        id={`detail-${item.workItemId}`}
-                      >
-                        {item.currentMessage.message}
-                      </div>
-                    )}
                   </td>
                   {!workQueueHelper.hideFiledByColumn && (
                     <td className="message-queue-row">
@@ -98,24 +86,12 @@ export const IndividualWorkQueueInbox = connect(
                     </td>
                   )}
                   <td className="message-queue-row">{item.caseStatus}</td>
-                  {!workQueueHelper.hideFromColumn && (
-                    <td className="message-queue-row from">
-                      {item.currentMessage.from}
-                    </td>
-                  )}
-                  {!workQueueHelper.hideSectionColumn && (
-                    <td className="message-queue-row small">
-                      {item.sentBySection}
-                    </td>
-                  )}
                 </tr>
               </tbody>
             );
           })}
         </table>
-        {formattedWorkQueue.length === 0 && (
-          <p>{workQueueHelper.queueEmptyMessage}</p>
-        )}
+        {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
   },

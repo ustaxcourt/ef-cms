@@ -18,7 +18,7 @@ export const getUserCaseNoteForCasesAction = async ({
       .getUseCases()
       .getUserCaseNoteForCasesInteractor({
         applicationContext,
-        caseIds: trialSession.caseOrder.map(entry => entry.caseId),
+        docketNumbers: trialSession.caseOrder.map(entry => entry.docketNumber),
       });
   }
 

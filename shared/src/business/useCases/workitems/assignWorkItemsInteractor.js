@@ -4,8 +4,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { cloneDeep } = require('lodash');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -42,9 +40,9 @@ exports.assignWorkItemsInteractor = async ({
 
   const caseObject = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId: fullWorkItem.caseId,
+      docketNumber: fullWorkItem.docketNumber,
     });
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
@@ -53,28 +51,14 @@ exports.assignWorkItemsInteractor = async ({
     applicationContext,
   });
 
-  const newMessage = new Message(
-    {
-      createdAt: createISODateString(),
-      from: user.name,
-      fromUserId: user.userId,
-      message: workItemEntity.getLatestMessageEntity().message,
-      to: assigneeName,
-      toUserId: assigneeId,
-    },
-    { applicationContext },
-  );
-
-  workItemEntity
-    .assignToUser({
-      assigneeId,
-      assigneeName,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    })
-    .addMessage(newMessage);
+  workItemEntity.assignToUser({
+    assigneeId,
+    assigneeName,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   // This must run BEFORE saveWorkItemForPaper
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
@@ -91,7 +75,6 @@ exports.assignWorkItemsInteractor = async ({
     }),
     applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
-      messageId: newMessage.messageId,
       workItem: workItemEntity.validate().toRawObject(),
     }),
   ]);

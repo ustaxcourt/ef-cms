@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -25,24 +25,26 @@ function PrivatePractitioner(rawUser) {
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
 
+PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
+  ...userValidation,
+  entityName: joi.string().valid('PrivatePractitioner').required(),
+  representing: joi
+    .array()
+    .items(JoiValidationConstants.UUID)
+    .optional()
+    .description('List of contact IDs of contacts'),
+  representingPrimary: joi.boolean().optional(),
+  representingSecondary: joi.boolean().optional(),
+  role: joi.string().required().valid(ROLES.privatePractitioner),
+  serviceIndicator: joi
+    .string()
+    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
+    .required(),
+});
+
 joiValidationDecorator(
   PrivatePractitioner,
-  joi.object().keys({
-    ...userValidation,
-    entityName: joi.string().valid('PrivatePractitioner').required(),
-    representing: joi
-      .array()
-      .items(JoiValidationConstants.UUID)
-      .optional()
-      .description('List of contact IDs of contacts'),
-    representingPrimary: joi.boolean().optional(),
-    representingSecondary: joi.boolean().optional(),
-    role: joi.string().required().valid(ROLES.privatePractitioner),
-    serviceIndicator: joi
-      .string()
-      .valid(...Object.values(SERVICE_INDICATOR_TYPES))
-      .required(),
-  }),
+  PrivatePractitioner.VALIDATION_RULES,
   {},
 );
 

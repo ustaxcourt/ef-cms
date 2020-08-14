@@ -15,7 +15,7 @@ export const petitionsClerk1RepliesToMessage = test => {
       value: 'Identity theft is not a joke, Jim.',
     });
 
-    await test.runSequence('replyToCaseMessageSequence');
+    await test.runSequence('replyToMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -24,7 +24,7 @@ export const petitionsClerk1RepliesToMessage = test => {
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoCaseMessagesSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });

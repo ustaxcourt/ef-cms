@@ -7,6 +7,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
     EVENT_CODES_REQUIRING_SIGNATURE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
+    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
@@ -14,14 +16,16 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
+  if (!viewerDocumentToDisplay) {
+    return null;
+  }
+
   const { correspondence, documents } = caseDetail;
 
   const caseDocument =
-    (viewerDocumentToDisplay &&
-      [...correspondence, ...documents].find(
-        d => d.documentId === viewerDocumentToDisplay.documentId,
-      )) ||
-    {};
+    [...correspondence, ...documents].find(
+      d => d.documentId === viewerDocumentToDisplay.documentId,
+    ) || {};
 
   const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 
@@ -29,7 +33,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     caseDocument.eventCode,
   );
 
-  const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
+  const documentIsSigned = !!caseDocument.signedAt;
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -44,13 +48,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
     ({ editUrl } = formattedDocument);
   }
 
-  const isNotice =
-    viewerDocumentToDisplay &&
-    NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
+  const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
 
   const isPetitionDocument =
-    caseDocument &&
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
+
+  const isStipulatedDecision =
+    caseDocument.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
   const isInternalUser = applicationContext
     .getUtilities()
@@ -68,9 +72,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
-  const showEditButtonForDocument = caseDocument.isDraft && !isCorrespondence;
+  const showEditButtonForDocument =
+    caseDocument.isDraft && !isCorrespondence && !isStipulatedDecision;
   const showRemoveSignatureButtonForDocument =
-    documentIsSigned && caseDocument.isDraft && !isNotice;
+    documentIsSigned &&
+    caseDocument.isDraft &&
+    !isNotice &&
+    !isStipulatedDecision;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
@@ -99,6 +107,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showServePetitionButton =
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
+  const showSignStipulatedDecisionButton =
+    isInternalUser &&
+    caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
+    !documents.find(d => d.eventCode === STIPULATED_DECISION_EVENT_CODE);
+
   return {
     editUrl,
     showAddDocketEntryButton:
@@ -125,5 +138,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
+    showSignStipulatedDecisionButton,
   };
 };

@@ -14,16 +14,14 @@ export const updateDocketEntryMetaAction = async ({
   get,
   path,
 }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const docketRecordEntry = get(state.form);
-  const docketRecordIndex = get(state.docketRecordIndex);
 
   try {
     await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId,
       docketEntryMeta: docketRecordEntry,
-      docketRecordIndex,
+      docketNumber,
     });
     return path.success();
   } catch (err) {

@@ -28,7 +28,7 @@ describe('setPriorityOnAllWorkItems', () => {
   it('invokes the persistence layer to update each work item', async () => {
     await setPriorityOnAllWorkItems({
       applicationContext,
-      caseId: '80f89505-f137-45f0-8e82-9f9870322efc',
+      docketNumber: '101-20',
       highPriority: true,
       trialDate: '2019-03-01T21:40:46.415Z',
     });
@@ -62,7 +62,7 @@ describe('setPriorityOnAllWorkItems', () => {
   it('invokes the persistence layer to update each work item with an undefined trialDate', async () => {
     await setPriorityOnAllWorkItems({
       applicationContext,
-      caseId: '80f89505-f137-45f0-8e82-9f9870322efc',
+      docketNumber: '101-20',
       highPriority: false,
     });
 

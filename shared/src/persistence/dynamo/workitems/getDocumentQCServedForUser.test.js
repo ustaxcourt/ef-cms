@@ -13,26 +13,22 @@ describe('getDocumentQCServedForUser', () => {
           {
             completedAt: 'today',
             completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            isQC: true,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
             completedByUserId: 'bob',
-            isQC: true,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
-            isQC: false,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            isQC: false,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -57,7 +53,6 @@ describe('getDocumentQCServedForUser', () => {
       {
         completedAt: 'today',
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        isQC: true,
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },

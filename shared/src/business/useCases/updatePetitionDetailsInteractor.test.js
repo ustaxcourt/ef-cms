@@ -27,7 +27,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -36,7 +36,7 @@ describe('updatePetitionDetailsInteractor', () => {
     await expect(
       updatePetitionDetailsInteractor({
         applicationContext,
-        caseId: mockCase.caseId,
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -45,7 +45,7 @@ describe('updatePetitionDetailsInteractor', () => {
     await expect(
       updatePetitionDetailsInteractor({
         applicationContext,
-        caseId: mockCase.caseId,
+        docketNumber: mockCase.docketNumber,
         petitionDetails: {
           caseType: undefined,
         },
@@ -56,7 +56,7 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -75,7 +75,7 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should call updateCase with the updated case payment information (when paid) and return the updated case', async () => {
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
@@ -96,7 +96,7 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -116,14 +116,16 @@ describe('updatePetitionDetailsInteractor', () => {
   });
 
   it('should create a docket entry when moved from unpaid to waived', async () => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...mockCase,
-      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      });
 
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -131,30 +133,24 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    expect(result.docketRecord).toContainEqual({
-      description: 'Filing Fee Waived',
-      docketRecordId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
-      documentId: undefined,
-      editState: undefined,
-      entityName: 'DocketRecord',
-      eventCode: 'FEEW',
-      filedBy: undefined,
-      filingDate: '2019-11-30T09:10:11.000Z',
-      index: 4,
-      signatory: undefined,
-      status: undefined,
-    });
+    const waivedDocument = result.docketRecord.find(
+      entry => entry.description === 'Filing Fee Waived',
+    );
+
+    expect(waivedDocument).toBeTruthy();
   });
 
   it('should create a docket entry when moved from unpaid to paid', async () => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...MOCK_CASE,
-      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      });
 
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
@@ -163,18 +159,10 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    expect(result.docketRecord).toContainEqual({
-      description: 'Filing Fee Paid',
-      docketRecordId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
-      documentId: undefined,
-      editState: undefined,
-      entityName: 'DocketRecord',
-      eventCode: 'FEE',
-      filedBy: undefined,
-      filingDate: '2019-11-30T09:10:11.000Z',
-      index: 4,
-      signatory: undefined,
-      status: undefined,
-    });
+    const wavedDocument = result.docketRecord.find(
+      entry => entry.description === 'Filing Fee Paid',
+    );
+
+    expect(wavedDocument).toBeTruthy();
   });
 });

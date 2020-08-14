@@ -24,15 +24,14 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
         ...MOCK_CASE,
         documents: [
           {
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: MOCK_CASE.docketNumber,
             documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentTitle: 'Answer',
             documentType: 'Answer',
             eventCode: 'A',
             processingStatus: 'pending',
             userId: 'petitioner',
-            workItems: [],
           },
         ],
       },
@@ -56,13 +55,12 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
     expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
   });
@@ -116,7 +114,6 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
       },
       documentMetadata: {
         attachments: true,
-        caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,

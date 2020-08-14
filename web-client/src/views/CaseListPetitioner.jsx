@@ -77,7 +77,7 @@ export const CaseListPetitioner = connect(
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
-                      key={item.caseId}
+                      key={item.docketNumber}
                     />
                   ))}
                 </tbody>

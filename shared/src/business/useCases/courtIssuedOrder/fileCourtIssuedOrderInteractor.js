@@ -3,9 +3,9 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { CaseMessage } = require('../../entities/CaseMessage');
 const { Document } = require('../../entities/Document');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
+const { Message } = require('../../entities/Message');
 const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -23,7 +23,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   primaryDocumentFileId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
@@ -35,9 +35,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
@@ -46,6 +46,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
+    if (documentMetadata.draftState) {
+      documentMetadata.draftState.freeText = documentMetadata.documentTitle;
+    }
   }
 
   if (shouldScrapePDFContents) {
@@ -130,24 +133,24 @@ exports.fileCourtIssuedOrderInteractor = async ({
   if (documentMetadata.parentMessageId) {
     const messages = await applicationContext
       .getPersistenceGateway()
-      .getCaseMessageThreadByParentId({
+      .getMessageThreadByParentId({
         applicationContext,
         parentMessageId: documentMetadata.parentMessageId,
       });
 
     const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-    const caseMessageEntity = new CaseMessage(mostRecentMessage, {
+    const messageEntity = new Message(mostRecentMessage, {
       applicationContext,
     }).validate();
-    caseMessageEntity.addAttachment({
+    messageEntity.addAttachment({
       documentId: documentEntity.documentId,
       documentTitle: documentEntity.documentTitle,
     });
 
-    await applicationContext.getPersistenceGateway().updateCaseMessage({
+    await applicationContext.getPersistenceGateway().updateMessage({
       applicationContext,
-      caseMessage: caseMessageEntity.validate().toRawObject(),
+      message: messageEntity.validate().toRawObject(),
     });
   }
 

@@ -403,10 +403,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/counsel/{userId}": {
+    "/case-parties/{docketNumber}/counsel/{userId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -480,10 +480,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/contact-primary": {
+    "/case-parties/{docketNumber}/contact-primary": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -532,10 +532,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/contact-secondary": {
+    "/case-parties/{docketNumber}/contact-secondary": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -628,10 +628,10 @@
         }
       }
     },
-    "/api/cases/{caseId}/generate-docket-record": {
+    "/api/cases/{docketNumber}/generate-docket-record": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1257,10 +1257,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/block": {
+    "/case-meta/{docketNumber}/block": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1328,10 +1328,10 @@
         }
       }
     },
-    "/cases/{caseId}/remove-pending/{documentId}": {
+    "/cases/{docketNumber}/remove-pending/{documentId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1386,10 +1386,10 @@
         }
       }
     },
-    "/cases/{caseId}/statistics/{statisticId}": {
+    "/cases/{docketNumber}/statistics/{statisticId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1463,10 +1463,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/high-priority": {
+    "/case-meta/{docketNumber}/high-priority": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1534,10 +1534,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/other-statistics": {
+    "/case-meta/{docketNumber}/other-statistics": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1586,10 +1586,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/statistics": {
+    "/case-meta/{docketNumber}/statistics": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1638,10 +1638,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/case-context": {
+    "/case-meta/{docketNumber}/case-context": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1691,10 +1691,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/consolidate-case": {
+    "/case-meta/{docketNumber}/consolidate-case": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1702,8 +1702,8 @@
       ],
       "put": {
         "tags": ["cases"],
-        "summary": "Consolidates two or more cases associated with the given case ids.",
-        "description": "Consolidates two or more cases associated with the given case ids.\n",
+        "summary": "Consolidates two or more cases associated with the given docket number.",
+        "description": "Consolidates two or more cases associated with the given docket number.\n",
         "produces": ["application/json"],
         "consumes": ["application/json"],
         "responses": {
@@ -1723,7 +1723,7 @@
       "delete": {
         "parameters": [
           {
-            "name": "caseIdsToRemove",
+            "name": "docketNumbersToRemove",
             "in": "query",
             "required": true,
             "type": "string"
@@ -1772,10 +1772,10 @@
         }
       }
     },
-    "/cases/{caseId}/consolidated-cases": {
+    "/cases/{docketNumber}/consolidated-cases": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1783,8 +1783,8 @@
       ],
       "get": {
         "tags": ["cases"],
-        "summary": "Returns all consolidated cases associated with the given case id.",
-        "description": "Returns all consolidated cases associated with the given case id.\n",
+        "summary": "Returns all consolidated cases associated with the given docket number.",
+        "description": "Returns all consolidated cases associated with the given docket number.\n",
         "produces": ["application/json"],
         "consumes": ["application/json"],
         "responses": {
@@ -1869,10 +1869,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/external-document": {
+    "/case-documents/{docketNumber}/external-document": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1921,10 +1921,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry": {
+    "/case-documents/{docketNumber}/docket-entry": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1992,10 +1992,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-meta": {
+    "/case-documents/{docketNumber}/docket-entry-meta": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2044,10 +2044,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-in-progress": {
+    "/case-documents/{docketNumber}/docket-entry-in-progress": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2096,10 +2096,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-complete": {
+    "/case-documents/{docketNumber}/docket-entry-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2148,10 +2148,10 @@
         }
       }
     },
-    "/cases/{caseId}/irsPetitionPackage": {
+    "/cases/{docketNumber}/irsPetitionPackage": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2185,7 +2185,7 @@
       "delete": {
         "parameters": [
           {
-            "name": "caseId",
+            "name": "docketNumber",
             "in": "path",
             "required": true,
             "type": "string"
@@ -2283,10 +2283,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/document-download-url": {
+    "/case-documents/{docketNumber}/{documentId}/document-download-url": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2336,10 +2336,10 @@
         }
       }
     },
-    "/public-api/{caseId}/{documentId}/public-document-download-url": {
+    "/public-api/{docketNumber}/{documentId}/public-document-download-url": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2389,7 +2389,7 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/download-policy-url": {
+    "/case-documents/{docketNumber}/{documentId}/download-policy-url": {
       "parameters": [
         {
           "name": "documentId",
@@ -2398,7 +2398,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2597,58 +2597,6 @@
         }
       }
     },
-    "/sections/{section}/messages/inbox": {
-      "parameters": [
-        {
-          "name": "section",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get all workitems in the sections inbox",
-        "description": "Get all workitems in the sections inbox.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/sections/{section}/document-qc/inbox": {
       "parameters": [
         {
@@ -2753,10 +2701,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/work-items": {
+    "/case-documents/{docketNumber}/{documentId}/work-items": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2811,10 +2759,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve-court-issued": {
+    "/case-documents/{docketNumber}/{documentId}/serve-court-issued": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2869,10 +2817,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve": {
+    "/case-documents/{docketNumber}/{documentId}/serve": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2894,58 +2842,6 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/sections/{section}/messages/sent": {
-      "parameters": [
-        {
-          "name": "section",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get all workitems in the sections outbox",
-        "description": "Get all workitems in the sections outbox.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
             }
           }
         },
@@ -3338,7 +3234,7 @@
         }
       }
     },
-    "/users/{userId}/case/{caseId}/pending": {
+    "/users/{userId}/case/{docketNumber}/pending": {
       "parameters": [
         {
           "name": "userId",
@@ -3347,7 +3243,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -3565,110 +3461,6 @@
         }
       }
     },
-    "/users/{userId}/messages/inbox": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get a users work item inbox",
-        "description": "get a users work item inbox\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{userId}/messages/sent": {
-      "parameters": [
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["workitems"],
-        "summary": "get a users work item outbox",
-        "description": "get a users work item outbox\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/workItem"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/work-items": {
       "put": {
         "tags": ["workitems"],
@@ -3836,10 +3628,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/coversheet": {
+    "/case-documents/{docketNumber}/{documentId}/coversheet": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -3891,10 +3683,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/sign": {
+    "/case-documents/{docketNumber}/{documentId}/sign": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4389,7 +4181,7 @@
         }
       }
     },
-    "/trial-sessions/{trialSessionId}/remove-case/{caseId}": {
+    "/trial-sessions/{trialSessionId}/remove-case/{docketNumber}": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -4398,7 +4190,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4447,7 +4239,7 @@
         }
       }
     },
-    "/trial-sessions/{trialSessionId}/cases/{caseId}": {
+    "/trial-sessions/{trialSessionId}/cases/{docketNumber}": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -4456,7 +4248,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4545,10 +4337,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-docket-entry": {
+    "/case-documents/{docketNumber}/court-issued-docket-entry": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4608,10 +4400,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-order": {
+    "/case-documents/{docketNumber}/court-issued-order": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4657,10 +4449,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-orders/{documentId}": {
+    "/case-documents/{docketNumber}/court-issued-orders/{documentId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4681,9 +4473,6 @@
               "documentMetadata": {
                 "type": "object",
                 "properties": {
-                  "caseId": {
-                    "type": "string"
-                  },
                   "docketNumber": {
                     "type": "string"
                   },
@@ -4832,10 +4621,10 @@
         }
       }
     },
-    "/case-deadlines/{caseId}": {
+    "/case-deadlines/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4903,10 +4692,10 @@
         }
       }
     },
-    "/case-deadlines/{caseId}/{caseDeadlineId}": {
+    "/case-deadlines/{docketNumber}/{caseDeadlineId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4977,10 +4766,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/petition-details": {
+    "/case-parties/{docketNumber}/petition-details": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5029,10 +4818,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/petitioner-info": {
+    "/case-parties/{docketNumber}/petitioner-info": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5081,10 +4870,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/qc-complete": {
+    "/case-meta/{docketNumber}/qc-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5149,10 +4938,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/seal": {
+    "/case-meta/{docketNumber}/seal": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5201,10 +4990,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/associate-private-practitioner": {
+    "/case-parties/{docketNumber}/associate-private-practitioner": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5253,10 +5042,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/associate-respondent": {
+    "/case-parties/{docketNumber}/associate-respondent": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5376,10 +5165,10 @@
         }
       }
     },
-    "/case-notes/{caseId}/user-notes": {
+    "/case-notes/{docketNumber}/user-notes": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5485,10 +5274,10 @@
         }
       }
     },
-    "/case-notes/{caseId}": {
+    "/case-notes/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5559,14 +5348,14 @@
     "/messages": {
       "post": {
         "tags": ["messages"],
-        "summary": "create a case message",
+        "summary": "create a message",
         "description": "Create a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5618,7 +5407,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5670,7 +5459,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5722,7 +5511,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5774,7 +5563,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5826,7 +5615,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5878,7 +5667,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5930,7 +5719,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5964,10 +5753,10 @@
         }
       }
     },
-    "/messages/case/{caseId}": {
+    "/messages/case/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5982,7 +5771,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6019,14 +5808,14 @@
     "/messages/{parentMessageId}/complete": {
       "post": {
         "tags": ["messages"],
-        "summary": "complete a case message",
+        "summary": "complete a message",
         "description": "Complete a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6046,7 +5835,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -6084,14 +5873,14 @@
     "/messages/{parentMessageId}/reply": {
       "post": {
         "tags": ["messages"],
-        "summary": "reply to a case message",
+        "summary": "reply to a message",
         "description": "Reply to a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6111,14 +5900,14 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
               "attachments": {
                 "type": "array"
               },
-              "caseId": {
+              "docketNumber": {
                 "type": "string"
               },
               "message": {
@@ -6164,14 +5953,14 @@
     "/messages/{parentMessageId}/forward": {
       "post": {
         "tags": ["messages"],
-        "summary": "forward a case message",
+        "summary": "forward a message",
         "description": "Forward a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -6191,14 +5980,14 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
               "attachments": {
                 "type": "array"
               },
-              "caseId": {
+              "docketNumber": {
                 "type": "string"
               },
               "message": {
@@ -6359,10 +6148,6 @@
           "type": "string",
           "description": "the name of the user currently assigned the work item"
         },
-        "caseId": {
-          "type": "string",
-          "description": "the case id"
-        },
         "document": {
           "type": "object",
           "properties": {
@@ -6485,22 +6270,15 @@
               "documentType": {
                 "type": "string"
               },
-              "workItems": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
+              "workItem": {
+                "type": "object",
+                "properties": {}
               },
               "documentId": {
                 "type": "string"
               }
             }
           }
-        },
-        "caseId": {
-          "type": "string",
-          "description": "id of case"
         },
         "respondent": {
           "type": "string",
@@ -6599,9 +6377,9 @@
           "type": "string",
           "description": "case deadline created time"
         },
-        "caseId": {
+        "docketNumber": {
           "type": "string",
-          "description": "id of the case"
+          "description": "docket number of the case"
         },
         "caseDeadlineId": {
           "type": "string",
@@ -6621,9 +6399,9 @@
     "userNote": {
       "type": "object",
       "properties": {
-        "caseId": {
+        "docketNumber": {
           "type": "string",
-          "description": "id of the case"
+          "description": "docket number of the case"
         },
         "userId": {
           "type": "string",
@@ -6639,9 +6417,9 @@
     "caseNote": {
       "type": "object",
       "properties": {
-        "caseId": {
+        "docketNumber": {
           "type": "string",
-          "description": "id of the case"
+          "description": "docket number of the case"
         },
         "notes": {
           "type": "string",
@@ -6650,16 +6428,12 @@
       },
       "description": "a case procedural note"
     },
-    "caseMessage": {
+    "message": {
       "type": "object",
       "properties": {
         "attachments": {
           "type": "array",
           "description": "array of document metadata objects attached to the message"
-        },
-        "caseId": {
-          "type": "string",
-          "description": "id of the associated case"
         },
         "caseStatus": {
           "type": "string",
@@ -6703,7 +6477,7 @@
         },
         "entityName": {
           "type": "string",
-          "description": "the name of the entity - CaseMessage"
+          "description": "the name of the entity - Message"
         },
         "from": {
           "type": "string",

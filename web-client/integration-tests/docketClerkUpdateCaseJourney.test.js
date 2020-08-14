@@ -31,7 +31,6 @@ describe('docket clerk update case journey', () => {
   it('create a case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
   });
 
@@ -42,7 +41,7 @@ describe('docket clerk update case journey', () => {
   docketClerkViewsEligibleCasesForTrialSession(test);
 
   loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => [test.caseId]);
+  markAllCasesAsQCed(test, () => [test.docketNumber]);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'docketclerk@example.com');

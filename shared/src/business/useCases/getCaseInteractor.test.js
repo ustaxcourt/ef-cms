@@ -31,7 +31,6 @@ describe('Get case', () => {
           filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: petitionerId,
-          workItems: [],
         },
       ],
     };
@@ -99,12 +98,11 @@ describe('Get case', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
-    const caseRecord = await getCaseInteractor({
+    await getCaseInteractor({
       applicationContext,
       docketNumber: '101-00',
     });
 
-    expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0].docketNumber,
@@ -132,7 +130,6 @@ describe('Get case', () => {
       .getCaseByDocketNumber.mockReturnValue(
         Promise.resolve([
           {
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             caseType: CASE_TYPES_MAP.other,
             createdAt: new Date().toISOString(),
             docketNumber: '101-00',
@@ -160,7 +157,6 @@ describe('Get case', () => {
           Promise.resolve({
             ...MOCK_CASE,
             caseCaption: 'a case caption',
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             caseType: CASE_TYPES_MAP.other,
             createdAt: new Date().toISOString(),
             docketNumber: '101-18',
@@ -234,7 +230,6 @@ describe('Get case', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         caseCaption: 'Caption',
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         caseType: CASE_TYPES_MAP.other,
         createdAt: new Date().toISOString(),
         partyType: PARTY_TYPES.petitioner,
