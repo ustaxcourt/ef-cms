@@ -6,7 +6,6 @@ const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { Document } = require('../entities/Document');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
-const { Message } = require('../entities/Message');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
@@ -17,8 +16,6 @@ const addPetitionDocumentWithWorkItemToCase = ({
   documentEntity,
   user,
 }) => {
-  const message = `${documentEntity.documentType} filed by ${documentEntity.filedBy} is ready for review.`;
-
   const workItemEntity = new WorkItem(
     {
       assigneeId: user.userId,
@@ -34,7 +31,6 @@ const addPetitionDocumentWithWorkItemToCase = ({
         createdAt: documentEntity.createdAt,
       },
       isInitializeCase: true,
-      isQC: true,
       section: user.section,
       sentBy: user.name,
       sentBySection: user.section,
@@ -43,20 +39,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
     { applicationContext },
   );
 
-  const newMessage = new Message(
-    {
-      from: user.name,
-      fromUserId: user.userId,
-      message,
-      to: user.name,
-      toUserId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  workItemEntity.addMessage(newMessage);
-
-  documentEntity.addWorkItem(workItemEntity);
+  documentEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return {
@@ -289,7 +272,9 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity, {
+      applicationContext,
+    });
   }
 
   await Promise.all([

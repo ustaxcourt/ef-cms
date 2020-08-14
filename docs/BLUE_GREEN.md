@@ -6,4 +6,4 @@ We do this by creating two separate stacks for each of our API services, one blu
 
 * Note that the Custom Domain Name under API Gateway will need to be deleted before deploying this to each environment that was previously deployed without blue-green. This is because of what is noted above: Serverless will not overwrite the base path mapping if the current one has a different name.
 
-We attempted to use API Gateway aliases/stages as a simpler solution, but occasionally there is an error in a deploy that requires us to delete a stack. When you delete a stack, the API Gateway record for that stack is also deleted. Because of that, we have to create two separate stacks to allow for deletion of a stack. 
+We attempted to use API Gateway aliases/stages as a simpler solution, but occasionally there is an error in a deploy that requires us to delete a stack. When you delete a stack, the API Gateway record for that stack is also deleted. Because of that, we have to create two separate stacks to allow for deletion of a stack.

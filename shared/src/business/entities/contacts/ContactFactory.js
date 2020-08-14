@@ -447,12 +447,14 @@ ContactFactory.createContactFactory = ({
       ...additionalErrorMappings,
     };
 
+    GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
+      ...ContactFactory.getValidationObject({ countryType, isPaper }),
+      ...additionalValidation,
+    });
+
     joiValidationDecorator(
       GenericContactConstructor,
-      joi.object().keys({
-        ...ContactFactory.getValidationObject({ countryType, isPaper }),
-        ...additionalValidation,
-      }),
+      GenericContactConstructor.VALIDATION_RULES,
       GenericContactConstructor.errorToMessageMap,
     );
 

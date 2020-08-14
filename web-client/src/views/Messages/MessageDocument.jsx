@@ -52,11 +52,12 @@ export const MessageDocument = connect(
           <div className="padding-2">There are no attachments to preview</div>
         )}
 
-        {messageDocumentHelper.showDocumentNotSignedAlert && (
-          <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
-            Signature required for this document.
-          </div>
-        )}
+        {viewerDocumentToDisplay &&
+          messageDocumentHelper.showDocumentNotSignedAlert && (
+            <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
+              Signature required for this document.
+            </div>
+          )}
 
         {viewerDocumentToDisplay && (
           <>
@@ -80,7 +81,7 @@ export const MessageDocument = connect(
                       docketNumber: caseDetail.docketNumber,
                       documentIdToEdit: viewerDocumentToDisplay.documentId,
                       parentMessageId,
-                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                      redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     })
                   }
                 >
@@ -140,7 +141,7 @@ export const MessageDocument = connect(
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                      redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
                 >
@@ -156,7 +157,7 @@ export const MessageDocument = connect(
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                      redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
                 >

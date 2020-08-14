@@ -237,6 +237,17 @@ const INITIAL_DOCUMENT_TYPES = {
   stin: STIN_DOCKET_ENTRY_TYPE,
 };
 
+const INITIAL_DOCUMENT_TYPES_MAP = {
+  applicationForWaiverOfFilingFeeFile:
+    INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  ownershipDisclosureFile:
+    INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+  petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
+  requestForPlaceOfTrialFile:
+    INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+  stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
+};
+
 // These docket entry types aren't defined anywhere else
 const MINUTE_ENTRIES_MAP = {
   captionOfCaseIsAmended: {
@@ -946,6 +957,7 @@ module.exports = {
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
   JUDGES_CHAMBERS,

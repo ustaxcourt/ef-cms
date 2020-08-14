@@ -68,7 +68,6 @@ describe('getCasesByLeadDocketNumber', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).not.toHaveBeenCalled();
-    expect(applicationContext.isAuthorizedForWorkItems).not.toHaveBeenCalled();
     expect(result).toEqual([]);
   });
 });

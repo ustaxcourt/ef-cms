@@ -16,7 +16,6 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
-import { caseMessageModalHelper } from './computeds/caseMessageModalHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
@@ -28,7 +27,6 @@ import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
-import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { documentViewerHelper } from './computeds/documentViewerHelper';
 import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper';
@@ -47,6 +45,7 @@ import {
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedDocument } from './computeds/formattedDocument';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
@@ -59,14 +58,17 @@ import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
+import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
+import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -108,7 +110,6 @@ const helpers = {
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
-  caseMessageModalHelper,
   caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
@@ -120,7 +121,6 @@ const helpers = {
   createPractitionerUserHelper,
   dashboardExternalHelper,
   docketRecordHelper,
-  documentDetailHelper,
   documentSigningHelper,
   documentViewerHelper,
   draftDocumentViewerHelper,
@@ -136,6 +136,7 @@ const helpers = {
   formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
+  formattedDocument,
   formattedMessageDetail,
   formattedMessages,
   formattedOpenCases,
@@ -149,14 +150,17 @@ const helpers = {
   loadingHelper,
   menuHelper,
   messageDocumentHelper,
+  messageModalHelper,
   messagesHelper,
   orderTypesHelper,
   paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
+  petitionQcHelper,
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   printPaperServiceHelper,
+  recentMessagesHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
@@ -288,7 +292,7 @@ export const baseState = {
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
 export const state = {

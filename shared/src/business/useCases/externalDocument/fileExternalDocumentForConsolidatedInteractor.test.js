@@ -48,7 +48,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
@@ -73,7 +73,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
       {
         caseCaption: 'George Foreman, Petitioner',
@@ -98,7 +98,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
-        userId: 'petitioner',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       },
     ];
 
@@ -219,8 +219,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       record => record.docketNumber === docketNumber1,
     );
 
-    expect(lowestDocketNumberCase.documents[4].workItems.length).toEqual(1);
-    expect(nonLowestDocketNumberCase.documents[4].workItems.length).toEqual(0);
+    expect(lowestDocketNumberCase.documents[4].workItem).toBeDefined();
+    expect(nonLowestDocketNumberCase.documents[4].workItem).toBeUndefined();
   });
 
   it('should file multiple documents for each case if a secondary document is provided', async () => {
