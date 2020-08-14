@@ -683,7 +683,43 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be false if the document code is PSDE and the SDEC eventCode is in the documents', () => {
+    it('should be true if the document code is PSDE and an archived SDEC eventCode is in the documents', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+              {
+                archived: true,
+                documentId: '234',
+                documentType: 'Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'SDEC',
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be false if the document code is PSDE and the SDEC eventCode is in the documents (and is not archived)', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
