@@ -18231,8 +18231,8 @@
                 only: true
                 presence: "optional"
               allow: 
-                - "No"
                 - "Yes"
+                - "No"
                 - "Unknown"
             ordinalValue: 
               type: "string"
@@ -20303,12 +20303,6 @@
         - 
           type: "object"
           keys: 
-            barNumber: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              allow: 
-                - null
             contact: 
               type: "object"
               flags: 
@@ -20694,6 +20688,16 @@
                       presence: "optional"
                     allow: 
                       - null
+            barNumber: 
+              type: "string"
+              flags: 
+                presence: "required"
+                description: "A unique identifier comprising of the practitioner initials, date, and series number."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
             serviceIndicator: 
               type: "string"
               flags: 
@@ -50514,12 +50518,6 @@
         - 
           type: "object"
           keys: 
-            barNumber: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              allow: 
-                - null
             contact: 
               type: "object"
               flags: 
@@ -50905,6 +50903,16 @@
                       presence: "optional"
                     allow: 
                       - null
+            barNumber: 
+              type: "string"
+              flags: 
+                presence: "required"
+                description: "A unique identifier comprising of the practitioner initials, date, and series number."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
             representing: 
               type: "array"
               flags: 

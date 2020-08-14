@@ -162,12 +162,20 @@ describe('Get case', () => {
             docketNumber: '101-18',
             documents,
             irsPractitioners: [
-              { role: ROLES.irsPractitioner, userId: irsPractitionerId },
+              {
+                barNumber: 'BN1234',
+                role: ROLES.irsPractitioner,
+                userId: irsPractitionerId,
+              },
             ],
             petitioners: [{ name: 'Test Petitioner' }],
             preferredTrialCity: 'Washington, District of Columbia',
             privatePractitioners: [
-              { role: ROLES.privatePractitioner, userId: practitionerId },
+              {
+                barNumber: 'BN1234',
+                role: ROLES.privatePractitioner,
+                userId: practitionerId,
+              },
             ],
             procedureType: 'Regular',
             sealedDate: new Date().toISOString(),
@@ -177,6 +185,7 @@ describe('Get case', () => {
 
     it('restricted case by inadequate permissions', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
+        barNumber: 'BN1234',
         role: ROLES.privatePractitioner,
         userId: 'practitioner2',
       });
@@ -198,6 +207,7 @@ describe('Get case', () => {
 
     it('full case access via sealed case permissions', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
+        barNumber: 'BN1234',
         role: ROLES.docketClerk,
         userId: practitioner2Id,
       });
