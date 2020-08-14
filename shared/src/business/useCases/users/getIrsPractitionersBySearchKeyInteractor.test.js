@@ -16,6 +16,7 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
 
   it('should throw an error when not authorized', async () => {
     user = {
+      barNumber: 'PT1234',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -48,16 +49,18 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
       .getPersistenceGateway()
       .getUsersBySearchKey.mockResolvedValue([
         {
-          name: 'Test Respondent',
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: ROLES.irsPractitioner,
           userId: '7d9eca44-4d10-44f2-9210-e7eed047f3c5',
         },
       ]);
 
     const result = await getIrsPractitionersBySearchKeyInteractor({
       applicationContext,
-      searchKey: 'Test Respondent',
+      searchKey: 'Test Practitioner',
     });
 
-    expect(result).toMatchObject([{ name: 'Test Respondent' }]);
+    expect(result).toMatchObject([{ name: 'Test Practitioner' }]);
   });
 });
