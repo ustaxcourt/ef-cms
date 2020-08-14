@@ -338,6 +338,10 @@ const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
+  getAddressPhoneDiff,
+  getDocumentTypeForAddressChange,
+} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
+const {
   getAllCaseDeadlines,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
 const {
@@ -442,9 +446,6 @@ const {
 const {
   getDocumentQCServedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
-const {
-  getDocumentTypeForAddressChange,
-} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
@@ -799,6 +800,9 @@ const {
 const {
   setWorkItemAsReadInteractor,
 } = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
+const {
+  strikeDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/strikeDocketEntryInteractor');
 const {
   submitCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
@@ -1494,6 +1498,7 @@ module.exports = appContextUser => {
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
+        strikeDocketEntryInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
@@ -1537,6 +1542,7 @@ module.exports = appContextUser => {
         formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
+        getAddressPhoneDiff,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,

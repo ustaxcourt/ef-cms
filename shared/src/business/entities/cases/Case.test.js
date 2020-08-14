@@ -72,6 +72,33 @@ describe('Case entity', () => {
     ]);
   });
 
+  describe('archivedDocuments', () => {
+    let myCase;
+    beforeEach(() => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+    });
+
+    it('should set archivedDocuments to the value provided', () => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocuments: [...MOCK_DOCUMENTS],
+        },
+        { applicationContext },
+      );
+      expect(myCase.archivedDocuments.length).toEqual(MOCK_DOCUMENTS.length);
+    });
+
+    it('should set archivedDocuments to an empty list when a value is not provided', () => {
+      expect(myCase.archivedDocuments).toEqual([]);
+    });
+  });
+
   describe('adding and removing practitioners', () => {
     let myCase;
     beforeEach(() => {

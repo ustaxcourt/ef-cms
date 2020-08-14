@@ -215,6 +215,7 @@ import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveF
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
+import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
@@ -286,6 +287,7 @@ import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
+import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
 import { submitAddOtherStatisticsSequence } from './sequences/submitAddOtherStatisticsSequence';
@@ -643,6 +645,7 @@ export const presenter = {
     openReplyToMessageModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
+    openStrikeDocketEntryModalSequence,
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
@@ -712,6 +715,7 @@ export const presenter = {
     signOutSequence,
     skipSigningOrderSequence,
     startScanSequence,
+    strikeDocketEntrySequence,
     submitAddConsolidatedCaseSequence,
     submitAddDeficiencyStatisticsSequence,
     submitAddOtherStatisticsSequence,
