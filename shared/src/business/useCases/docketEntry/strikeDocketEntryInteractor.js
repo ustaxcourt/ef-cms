@@ -42,7 +42,7 @@ exports.strikeDocketEntryInteractor = async ({
   const docketRecord = caseEntity.getDocketRecord(docketRecordId);
 
   if (!docketRecord) {
-    throw new NotFoundError('Document not found');
+    throw new NotFoundError('Docket Record not found');
   }
 
   const docketRecordEntity = new DocketRecord(docketRecord, {
