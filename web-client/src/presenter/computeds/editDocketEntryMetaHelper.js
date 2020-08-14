@@ -33,6 +33,10 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     categoryInformation,
   );
 
+  // const strickenAtFormatted = applicationContext
+  //   .getUtilities()
+  //   .formatDateString(strickenAt, 'MMDDYYYY');
+
   return {
     primary: optionsForCategory,
     showObjection:
