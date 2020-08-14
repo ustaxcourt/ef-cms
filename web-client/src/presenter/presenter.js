@@ -287,6 +287,7 @@ import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
+import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
 import { submitAddOtherStatisticsSequence } from './sequences/submitAddOtherStatisticsSequence';
@@ -714,6 +715,7 @@ export const presenter = {
     signOutSequence,
     skipSigningOrderSequence,
     startScanSequence,
+    strikeDocketEntrySequence,
     submitAddConsolidatedCaseSequence,
     submitAddDeficiencyStatisticsSequence,
     submitAddOtherStatisticsSequence,

@@ -260,6 +260,9 @@ const {
   setWorkItemAsReadLambda,
 } = require('./workitems/setWorkItemAsReadLambda');
 const {
+  strikeDocketEntryLambda,
+} = require('./documents/strikeDocketEntryLambda');
+const {
   unblockCaseFromTrialLambda,
 } = require('./cases/unblockCaseFromTrialLambda');
 const {
@@ -508,6 +511,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.put(
     '/case-documents/:docketNumber/:documentId',
     lambdaWrapper(archiveDraftDocumentLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/:docketRecordId/strike',
+    lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE
   app.delete(
