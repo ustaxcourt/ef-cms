@@ -33,6 +33,12 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
         'Upload or scan an Application for Waiver of Filing Fee (APW)',
     });
 
+    expect(test.getState('form.documents')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ documentType: 'Petition', eventCode: 'P' }),
+      ]),
+    );
+
     await test.runSequence('setDocumentForUploadSequence', {
       documentType: 'applicationForWaiverOfFilingFeeFile',
       documentUploadMode: 'preview',
