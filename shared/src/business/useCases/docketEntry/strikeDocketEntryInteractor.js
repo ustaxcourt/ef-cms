@@ -55,7 +55,10 @@ exports.strikeDocketEntryInteractor = async ({
 
   docketRecordEntity.strikeEntry({ name: user.name, userId: user.userId });
 
-  caseEntity.updateDocketRecord(docketRecordEntity, docketRecordId);
+  caseEntity.updateDocketRecordEntry(
+    docketRecordEntity,
+    docketRecordEntity.index,
+  );
 
   await applicationContext.getPersistenceGateway().updateDocketRecord({
     applicationContext,
