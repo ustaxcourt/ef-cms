@@ -42,9 +42,11 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
         }),
       ]),
     );
-    expect(
-      caseDetailFormatted.docketRecordWithDocument[1].record.eventCode,
-    ).toEqual('RQT');
+
+    const rqtDocument = caseDetailFormatted.docketRecordWithDocument.find(
+      entry => entry.record.eventCode === 'RQT',
+    );
+    expect(rqtDocument).toBeTruthy();
 
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
 
@@ -56,8 +58,5 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetail.highPriority).toBeUndefined();
     expect(caseDetail.highPriorityReason).toBeUndefined();
     expect(caseDetail.qcCompleteForTrial).toBeUndefined();
-    // expect(caseDetail.status).toBeUndefined();
-    // expect(caseDetail.userId).toBeUndefined();
-    expect(caseDetail.workItems).toBeUndefined();
   });
 };

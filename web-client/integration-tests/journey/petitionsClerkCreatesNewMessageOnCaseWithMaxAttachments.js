@@ -1,16 +1,17 @@
-import { NewCaseMessage } from '../../../shared/src/business/entities/NewCaseMessage';
-import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
+import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseMessageModalHelper = withAppContextDecorator(
-  caseMessageModalHelperComputed,
-);
+const { PETITIONS_SECTION } = applicationContext.getConstants();
+
+const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
   const getHelper = () => {
-    return runCompute(caseMessageModalHelper, {
+    return runCompute(messageModalHelper, {
       state: test.getState(),
     });
   };
@@ -20,11 +21,11 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openCreateCaseMessageModalSequence');
+    await test.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
+    await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: 'petitions',
+      value: PETITIONS_SECTION,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
@@ -35,7 +36,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
     const messageDocument = getHelper().documents[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
-    await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
+    await test.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: messageDocument.documentId,
     });
 
@@ -46,7 +47,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
     // Add four more attachments to reach the maximum of five.
     for (let i = 0; i < 4; i++) {
       // currently doesn't matter if we add the same document over and over
-      await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
+      await test.runSequence('updateMessageModalAttachmentsSequence', {
         documentId: messageDocument.documentId,
       });
     }
@@ -61,10 +62,10 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
       value: 'what kind of bear is best?',
     });
 
-    await test.runSequence('createCaseMessageSequence');
+    await test.runSequence('createMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      message: NewCaseMessage.VALIDATION_ERROR_MESSAGES.message,
+      message: NewMessage.VALIDATION_ERROR_MESSAGES.message,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
@@ -72,7 +73,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
       value: 'bears, beets, battlestar galactica',
     });
 
-    await test.runSequence('createCaseMessageSequence');
+    await test.runSequence('createMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

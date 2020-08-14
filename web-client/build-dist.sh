@@ -1,10 +1,10 @@
 #!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
-API_URL="https://efcms-api-${ENV}.${EFCMS_DOMAIN}"
-WS_URL="wss://efcms-websockets-${ENV}.${EFCMS_DOMAIN}"
-COGNITO_REDIRECT_URL="https%3A//ui-${ENV}.${EFCMS_DOMAIN}/log-in"
-COGNITO_REDIRECT_URI="https://ui-${ENV}.${EFCMS_DOMAIN}/log-in"
+API_URL="https://api.${EFCMS_DOMAIN}"
+WS_URL="wss://ws.${EFCMS_DOMAIN}"
+COGNITO_REDIRECT_URL="https%3A//app.${EFCMS_DOMAIN}/log-in"
+COGNITO_REDIRECT_URI="https://app.${EFCMS_DOMAIN}/log-in"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
@@ -18,7 +18,7 @@ COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazonco
 COGNITO_TOKEN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/oauth2/token"
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
-  SCANNER_RESOURCE_URI="https://dynamsoft-lib-${ENV}.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
+  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
 else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
 fi

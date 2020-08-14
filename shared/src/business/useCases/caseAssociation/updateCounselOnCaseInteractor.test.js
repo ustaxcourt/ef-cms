@@ -98,6 +98,7 @@ describe('updateCounselOnCaseInteractor', () => {
         preferredTrialCity: 'Fresno, California',
         privatePractitioners: mockPrivatePractitioners,
         procedureType: 'Regular',
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       }));
   });
 

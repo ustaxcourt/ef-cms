@@ -26,7 +26,7 @@ export const petitionsClerk1CreatesNoticeFromMessageDetail = test => {
       documentTitle: test.getState('modal.documentTitle'),
       documentType: test.getState('modal.documentType'),
       eventCode: test.getState('modal.eventCode'),
-      redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
     expect(test.getState('currentPage')).toBe('CreateOrder');

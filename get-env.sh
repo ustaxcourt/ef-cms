@@ -28,6 +28,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo 'stg'
 elif [[ $BRANCH == 'master' ]] ; then
   echo 'prod'
+elif [[ $BRANCH == 'dawson' ]] ; then
+  echo 'daw'
 elif [[ $BRANCH == 'prod' ]] ; then
   echo 'prod'
 else

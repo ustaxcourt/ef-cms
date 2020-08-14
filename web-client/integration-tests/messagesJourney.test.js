@@ -1,4 +1,4 @@
-import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
+import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAddsDocketEntryFromMessage';
 import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
 import { docketClerkCompletesMessageThread } from './journey/docketClerkCompletesMessageThread';
@@ -35,7 +35,7 @@ describe('messages journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  createNewCaseMessageOnCase(test);
+  createNewMessageOnCase(test);
   petitionsClerkViewsSentMessagesBox(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
@@ -61,7 +61,7 @@ describe('messages journey', () => {
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  createNewCaseMessageOnCase(test);
+  createNewMessageOnCase(test);
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1CreatesNoticeFromMessageDetail(test);

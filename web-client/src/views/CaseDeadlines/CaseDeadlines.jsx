@@ -1,19 +1,25 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { DateSelectCalendar } from './DateSelectCalendar';
+import { DateRangePickerComponent } from './DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDeadlines = connect(
   {
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
+    selectDateRangeFromCalendarSequence:
+      sequences.selectDateRangeFromCalendarSequence,
   },
-  function CaseDeadlines({ caseDeadlineReportHelper, judgeFilter }) {
+  function CaseDeadlines({
+    caseDeadlineReportHelper,
+    judgeFilter,
+    selectDateRangeFromCalendarSequence,
+  }) {
     return (
       <>
         <BigHeader text="Reports" />
@@ -25,7 +31,25 @@ export const CaseDeadlines = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-3">
-              <DateSelectCalendar />
+              <div className="header-with-blue-background">
+                <h3>Show Deadlines by Date(s)</h3>
+              </div>
+              <div className="blue-container">
+                <DateRangePickerComponent
+                  endName="deadlineEnd"
+                  startName="deadlineStart"
+                  onChangeEnd={e => {
+                    selectDateRangeFromCalendarSequence({
+                      endDate: e.target.value,
+                    });
+                  }}
+                  onChangeStart={e => {
+                    selectDateRangeFromCalendarSequence({
+                      startDate: e.target.value,
+                    });
+                  }}
+                />
+              </div>
             </div>
             <div className="grid-col-9">
               <div className="grid-row">

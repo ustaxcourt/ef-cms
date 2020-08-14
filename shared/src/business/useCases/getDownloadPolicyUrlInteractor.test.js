@@ -69,7 +69,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       processingStatus: 'pending',
       secondaryDate: '2200-01-21T20:49:28.192Z',
       userId: 'petitioner',
-      workItems: [],
     });
     applicationContext
       .getPersistenceGateway()

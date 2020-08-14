@@ -4,6 +4,7 @@ const {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
 const {
   getDocumentQCInboxForSectionInteractor,
@@ -73,38 +74,27 @@ describe('createCase integration test', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Petr. Rick Petitioner',
-          workItems: [
-            {
-              assigneeId: null,
-              assigneeName: null,
-              caseStatus: CASE_STATUS_TYPES.new,
-              docketNumber: '101-19',
-              docketNumberWithSuffix: '101-19S',
-              document: {
-                documentType: 'Petition',
-                filedBy: 'Petr. Rick Petitioner',
-              },
-              isInitializeCase: true,
-              messages: [
-                {
-                  from: 'Alex Petitionsclerk',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message:
-                    'Petition filed by Rick Petitioner is ready for review.',
-                },
-              ],
-              section: 'petitions',
-              sentBy: 'Alex Petitionsclerk',
-              sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          workItem: {
+            assigneeId: null,
+            assigneeName: null,
+            caseStatus: CASE_STATUS_TYPES.new,
+            docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19S',
+            document: {
+              documentType: 'Petition',
+              filedBy: 'Petr. Rick Petitioner',
             },
-          ],
+            isInitializeCase: true,
+            section: PETITIONS_SECTION,
+            sentBy: 'Alex Petitionsclerk',
+            sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         },
         {
           documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
       ],
       initialCaption: 'Rick Petitioner, Petitioner',
@@ -130,7 +120,7 @@ describe('createCase integration test', () => {
 
     const docketsSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     expect(docketsSectionInbox).toMatchObject([
@@ -146,14 +136,7 @@ describe('createCase integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
-        messages: [
-          {
-            from: 'Alex Petitionsclerk',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Rick Petitioner is ready for review.',
-          },
-        ],
-        section: 'petitions',
+        section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
         sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },

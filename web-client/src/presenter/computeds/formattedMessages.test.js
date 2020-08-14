@@ -7,6 +7,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+const PETITIONS_SECTION = applicationContext.getConstants();
 
 describe('formattedMessages', () => {
   describe('getFormattedMessages', () => {
@@ -27,7 +28,7 @@ describe('formattedMessages', () => {
             messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
             subject: 'Test subject...',
             to: 'Test Recipient',
-            toSection: 'petitions',
+            toSection: PETITIONS_SECTION,
             toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
           },
         ],

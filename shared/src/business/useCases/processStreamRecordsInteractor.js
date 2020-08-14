@@ -37,7 +37,7 @@ const deleteDynamicAndNestedFields = record => {
     delete data.caseMetadata;
   }
   //nested data
-  data = recursivelyDeleteKey(data, 'workItems');
+  data = recursivelyDeleteKey(data, 'workItem');
   data = recursivelyDeleteKey(data, 'draftState');
 
   record.dynamodb.NewImage = data;

@@ -121,12 +121,10 @@ describe('processStreamRecordsInteractor', () => {
               documentId: { S: '6' },
               pk: { S: '6' },
               sk: { S: '6' },
-              workItems: [
-                {
-                  blah: true,
-                  documents: [{ documentId: '6' }],
-                },
-              ],
+              workItem: {
+                blah: true,
+                documents: [{ documentId: '6' }],
+              },
             },
           },
           eventName: 'MODIFY',
