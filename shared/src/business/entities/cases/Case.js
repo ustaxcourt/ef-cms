@@ -153,7 +153,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
     this.damages = rawCase.damages;
-    this.archivedDocuments = rawCase.archivedDocuments;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
     this.litigationCosts = rawCase.litigationCosts;
@@ -240,9 +239,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   }
 
   if (Array.isArray(rawCase.archivedDocuments)) {
-    this.archivedDocuments = rawCase.archivedDocuments
-      .map(document => new Document(document, { applicationContext }))
-      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+    this.archivedDocuments = rawCase.archivedDocuments.map(
+      document => new Document(document, { applicationContext }),
+    );
   } else {
     this.archivedDocuments = [];
   }
