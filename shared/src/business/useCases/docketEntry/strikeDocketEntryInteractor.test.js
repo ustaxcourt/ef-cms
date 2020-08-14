@@ -79,7 +79,7 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should throw an error if the document is not found on the case', async () => {
+  it('should throw an error if the docket record is not found on the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -95,7 +95,7 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket Record not found');
   });
 
-  it('should call updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and updateDocketRecord', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
