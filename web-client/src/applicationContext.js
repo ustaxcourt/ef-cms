@@ -182,6 +182,7 @@ import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -387,6 +388,7 @@ const allUseCases = {
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
+  strikeDocketEntryInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
