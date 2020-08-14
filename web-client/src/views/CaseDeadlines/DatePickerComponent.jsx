@@ -18,7 +18,10 @@ export const DatePickerComponent = ({
 }) => {
   const datePickerRef = useRef();
   const inputRef = useRef();
-
+  // YYYY-MM-DD is indeed the format required by `data-default-value`
+  const defaultValue = values
+    ? `${values.year}-${values.month}-${values.day}`
+    : value;
   useEffect(() => {
     if (datePickerRef.current) {
       datePicker.on(datePickerRef.current);
@@ -37,10 +40,10 @@ export const DatePickerComponent = ({
   }, [value]);
 
   useEffect(() => {
+    const input = document.getElementById(`${name}-date`);
+    if (!input) return;
     if (values && values.month && values.day && values.year) {
-      document.getElementById(
-        `${name}-date`,
-      ).value = `${values.month}/${values.day}/${values.year}`;
+      input.value = `${values.month}/${values.day}/${values.year}`;
     }
   }, [values]);
 
@@ -86,13 +89,10 @@ export const DatePickerComponent = ({
       <div className="usa-hint" id={`${name}-date-hint`}>
         MM/DD/YYYY
       </div>
-      <div className="usa-date-picker">
+      <div className="usa-date-picker" data-default-value={defaultValue}>
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
           className="usa-input"
-          defaultValue={
-            values ? `${values.month}/${values.day}/${values.year}` : value
-          }
           id={`${name}-date`}
           name={`${name}-date`}
           ref={inputRef}

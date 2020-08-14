@@ -4,6 +4,7 @@ import { petitionsClerkEditsSavedPetition } from './journey/petitionsClerkEditsS
 import { petitionsClerkRemovesAndReaddsPdfFromPetition } from './journey/petitionsClerkRemovesAndReaddsPdfFromPetition';
 import { petitionsClerkRemovesAndReaddsPetitionFile } from './journey/petitionsClerkRemovesAndReaddsPetitionFile';
 import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitionsClerkReviewsPetitionAndSavesForLater';
+import { petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving } from './journey/petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
 const test = setupTest();
@@ -21,6 +22,9 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
   petitionsClerkRemovesAndReaddsPetitionFile(test, fakeFile);
   petitionsClerkEditsSavedPetition(test);
   petitionsClerkRemovesAndReaddsPdfFromPetition(test, fakeFile);
+  petitionsClerkEditsSavedPetition(test);
+  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(test, fakeFile);
+
   it('should be able to serve the case', async () => {
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
