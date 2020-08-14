@@ -513,7 +513,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(archiveDraftDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:documentId/strike',
+    '/case-documents/:docketNumber/:docketRecordId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE

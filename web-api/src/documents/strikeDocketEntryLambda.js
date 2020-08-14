@@ -11,7 +11,7 @@ exports.strikeDocketEntryLambda = event =>
     event,
     async ({ applicationContext }) => {
       const {
-        pathParameters: { docketNumber, documentId },
+        pathParameters: { docketNumber, docketRecordId },
       } = event;
 
       return await applicationContext
@@ -19,7 +19,7 @@ exports.strikeDocketEntryLambda = event =>
         .strikeDocketEntryInteractor({
           applicationContext,
           docketNumber,
-          documentId,
+          docketRecordId,
         });
     },
     {

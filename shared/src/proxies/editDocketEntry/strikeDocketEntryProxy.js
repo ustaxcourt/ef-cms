@@ -6,16 +6,16 @@ const { put } = require('../requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number for a case
- * @param {object} providers.documentId the documentId to be stricken
+ * @param {object} providers.docketRecordId the docketRecordId to be stricken
  * @returns {Promise<*>} the promise of the api call
  */
 exports.strikeDocketEntryInteractor = ({
   applicationContext,
   docketNumber,
-  documentId,
+  docketRecordId,
 }) => {
   return put({
     applicationContext,
-    endpoint: `/case-documents/${docketNumber}/${documentId}/strike`,
+    endpoint: `/case-documents/${docketNumber}/${docketRecordId}/strike`,
   });
 };
