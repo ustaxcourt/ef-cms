@@ -2,6 +2,14 @@ const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
 const { isEmpty, pick } = require('lodash');
 
+const setIsValidated = obj => {
+  Object.defineProperty(obj, 'isValidated', {
+    enumerable: false,
+    value: true,
+    writable: false,
+  });
+};
+
 /**
  *
  * @param {Entity} entity the entity to convert to a raw object
@@ -27,11 +35,7 @@ function toRawObject(entity) {
     }
   }
   if (entity.isValidated) {
-    Object.defineProperty(obj, 'isValidated', {
-      enumerable: false,
-      value: true,
-      writable: false,
-    });
+    setIsValidated(obj);
   }
   return obj;
 }
@@ -201,11 +205,7 @@ exports.joiValidationDecorator = function (
         JSON.stringify(stringifyTransform(this.getValidationErrors())),
       );
     }
-    Object.defineProperty(this, 'isValidated', {
-      enumerable: false,
-      value: true,
-      writable: false,
-    });
+    setIsValidated(this);
     return this;
   };
 
