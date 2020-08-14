@@ -38,7 +38,7 @@ describe('strikeDocketEntryAction', () => {
     expect(successMock).toHaveBeenCalled();
   });
 
-  it('returns the error path calling the interactor generates an error', async () => {
+  it('returns the error path if calling the interactor generates an error', async () => {
     applicationContext
       .getUseCases()
       .strikeDocketEntryInteractor.mockImplementation(() => {
