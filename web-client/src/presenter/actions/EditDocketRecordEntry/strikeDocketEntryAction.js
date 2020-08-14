@@ -23,7 +23,11 @@ export const strikeDocketEntryAction = async ({
       docketNumber,
       docketRecordId,
     });
-    return path.success();
+    return path.success({
+      alertSuccess: {
+        message: 'Docket entry has been stricken.',
+      },
+    });
   } catch (err) {
     return path.error({
       alertError: {

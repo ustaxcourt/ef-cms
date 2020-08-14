@@ -1,3 +1,17 @@
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { strikeDocketEntryAction } from '../actions/EditDocketRecordEntry/strikeDocketEntryAction';
 
-export const strikeDocketEntrySequence = [strikeDocketEntryAction];
+export const strikeDocketEntrySequence = [
+  strikeDocketEntryAction,
+  {
+    error: [setAlertErrorAction],
+    success: [
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      navigateToCaseDetailAction,
+    ],
+  },
+];
