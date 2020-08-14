@@ -195,7 +195,7 @@ exports.completeDocketEntryQCInteractor = async ({
   if (workItemToUpdate) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
-      workItem: workItemToUpdate,
+      workItem: workItemToUpdate.validate().toRawObject(),
     });
 
     Object.assign(workItemToUpdate, {
