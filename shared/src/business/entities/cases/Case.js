@@ -238,6 +238,14 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.documents = [];
   }
 
+  if (Array.isArray(rawCase.archivedDocuments)) {
+    this.archivedDocuments = rawCase.archivedDocuments.map(
+      document => new Document(document, { applicationContext }),
+    );
+  } else {
+    this.archivedDocuments = [];
+  }
+
   this.hasPendingItems = this.documents.some(document => document.pending);
 
   if (Array.isArray(rawCase.privatePractitioners)) {
@@ -299,6 +307,13 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 }
 
 Case.VALIDATION_RULES = {
+  archivedDocuments: joi
+    .array()
+    .items(Document.VALIDATION_RULES)
+    .required()
+    .description(
+      'List of Document Entities that were archived instead of added to the docket record.',
+    ),
   associatedJudge: joi
     .string()
     .max(50)
