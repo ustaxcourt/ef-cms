@@ -774,6 +774,18 @@ Case.prototype.attachIrsPractitioner = function (practitioner) {
 };
 
 /**
+ * archives a document and adds it to the archivedDocuments array on the case
+ *
+ * @param {string} document the document to archive
+ */
+Case.prototype.archiveDocument = function (document, { applicationContext }) {
+  const documentToArchive = new Document(document, { applicationContext });
+  documentToArchive.archive();
+  this.archivedDocuments.push(documentToArchive);
+  this.deleteDocumentById({ documentId: documentToArchive.documentId });
+};
+
+/**
  * updates an IRS practitioner on the case
  *
  * @param {string} practitionerToUpdate the irsPractitioner user object with updated info

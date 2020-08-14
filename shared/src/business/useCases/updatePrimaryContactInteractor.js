@@ -168,7 +168,7 @@ exports.updatePrimaryContactInteractor = async ({
 
     await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
       applicationContext,
-      workItem: workItem,
+      workItem: workItem.validate().toRawObject(),
     });
 
     await applicationContext.getPersistenceGateway().updateCase({
