@@ -83,7 +83,24 @@ describe('Case entity', () => {
       );
     });
 
-    it('should set archivedDocuments to the value provided', () => {
+    it('should not populate archivedDocuments when the user is an external user and filtered is true', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
+
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocuments: [...MOCK_DOCUMENTS],
+          userId: applicationContext.getCurrentUser().userId,
+        },
+        { applicationContext, filtered: true },
+      );
+
+      expect(myCase.archivedDocuments).toBeUndefined();
+    });
+
+    it('should set archivedDocuments to the value provided when the user is an internal user', () => {
       myCase = new Case(
         {
           ...MOCK_CASE,
@@ -94,7 +111,7 @@ describe('Case entity', () => {
       expect(myCase.archivedDocuments.length).toEqual(MOCK_DOCUMENTS.length);
     });
 
-    it('should set archivedDocuments to an empty list when a value is not provided', () => {
+    it('should set archivedDocuments to an empty list when a value is not provided and the user is an internal user', () => {
       expect(myCase.archivedDocuments).toEqual([]);
     });
   });
