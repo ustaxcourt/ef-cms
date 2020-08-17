@@ -335,7 +335,6 @@ const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
-const { deleteDocumentLambda } = require('./documents/deleteDocumentLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
@@ -517,10 +516,6 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE
-  app.delete(
-    '/case-documents/:docketNumber/:documentId',
-    lambdaWrapper(deleteDocumentLambda),
-  );
   app.delete(
     '/case-documents/:docketNumber/correspondence/:documentId',
     lambdaWrapper(deleteCorrespondenceDocumentLambda),
@@ -808,7 +803,7 @@ app.get(
  */
 {
   app.post(
-    '/trial-sessions/:trialSessionId/generate-notices',
+    '/async/trial-sessions/:trialSessionId/generate-notices',
     lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
   );
   app.post(
@@ -836,7 +831,7 @@ app.get(
     lambdaWrapper(updateTrialSessionWorkingCopyLambda),
   );
   app.get(
-    '/trial-sessions/:trialSessionId/batch-download',
+    '/async/trial-sessions/:trialSessionId/batch-download',
     lambdaWrapper(batchDownloadTrialSessionLambda),
   );
   app.put(
@@ -886,7 +881,7 @@ app.get(
   lambdaWrapper(getDocumentQCServedForUserLambda),
 );
 app.put(
-  '/users/:userId/contact-info',
+  '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
 );
 app.get(
