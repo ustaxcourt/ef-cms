@@ -10,7 +10,7 @@ describe('setDefaultServiceIndicatorAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.baseUrl from applicationContext', async () => {
+  it('sets the default serviceIndicator for the key', async () => {
     const { state } = await runAction(
       setDefaultServiceIndicatorAction('testKey'),
       {

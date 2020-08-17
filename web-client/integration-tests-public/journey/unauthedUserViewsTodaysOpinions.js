@@ -1,6 +1,6 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserViewsTodaysOpinions = test => {
+export const unauthedUserViewsTodaysOpinions = (test, testClient) => {
   return it('should view todays opinions', async () => {
     await refreshElasticsearchIndex();
 
@@ -14,5 +14,15 @@ export const unauthedUserViewsTodaysOpinions = test => {
         }),
       ]),
     );
+
+    await test.runSequence('openCaseDocumentDownloadUrlSequence', {
+      docketNumber: testClient.docketNumber,
+      documentId: testClient.documentId,
+      isPublic: true,
+    });
+
+    // this value is set in the mocked out window.open method in helpers.js
+    expect(testClient.getState('openedUrl')).toBeDefined();
+    testClient.setState('openedUrl', undefined);
   });
 };
