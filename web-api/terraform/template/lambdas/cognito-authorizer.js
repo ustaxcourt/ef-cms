@@ -20,15 +20,12 @@ const generatePolicy = (principalId, effect, resource) => {
     authResponse.policyDocument = policyDocument;
   }
 
-  console.log('authResponse is', JSON.stringify(authResponse));
   return authResponse;
 };
 
 const verify = (methodArn, token, keys, kid, cb) => {
   const k = keys.keys.find(k => k.kid === kid);
   const pem = jwkToPem(k);
-
-  console.log('token is', token);
 
   jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
     if (err) {
