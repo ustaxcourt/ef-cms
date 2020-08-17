@@ -6,7 +6,7 @@
     archivedDocuments: 
       type: "array"
       flags: 
-        presence: "required"
+        presence: "optional"
         description: "List of Document Entities that were archived instead of added to the docket record."
       items: 
         - 

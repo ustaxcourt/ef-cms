@@ -4,16 +4,16 @@ import { getConstants } from '../../getConstants';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const formattedMessageDetail = withAppContextDecorator(
-  formattedMessageDetailComputed,
-  {
-    ...applicationContext,
-  },
-);
-
-const { PETITIONS_SECTION } = getConstants();
-
 describe('formattedMessageDetail', () => {
+  const formattedMessageDetail = withAppContextDecorator(
+    formattedMessageDetailComputed,
+    {
+      ...applicationContext,
+    },
+  );
+
+  const { PETITIONS_SECTION } = getConstants();
+
   const mockCaseDetail = {
     documents: [
       {
@@ -124,60 +124,62 @@ describe('formattedMessageDetail', () => {
     });
   });
 
-  it('returns hasOlderMessages true if there is more than one message', () => {
-    const result = runCompute(formattedMessageDetail, {
-      state: {
-        caseDetail: mockCaseDetail,
-        messageDetail: [
-          { createdAt: '2019-03-01T21:40:46.415Z' },
-          { createdAt: '2019-04-01T21:40:46.415Z' },
-        ],
-      },
+  describe('hasOlderMessages', () => {
+    it('returns hasOlderMessages true if there is more than one message', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: mockCaseDetail,
+          messageDetail: [
+            { createdAt: '2019-03-01T21:40:46.415Z' },
+            { createdAt: '2019-04-01T21:40:46.415Z' },
+          ],
+        },
+      });
+
+      expect(result.hasOlderMessages).toEqual(true);
     });
 
-    expect(result.hasOlderMessages).toEqual(true);
-  });
+    it('returns hasOlderMessages false and showOlderMessages false if there is only one message', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: mockCaseDetail,
+          messageDetail: [{ createdAt: '2019-03-01T21:40:46.415Z' }],
+        },
+      });
 
-  it('returns hasOlderMessages false and showOlderMessages false if there is only one message', () => {
-    const result = runCompute(formattedMessageDetail, {
-      state: {
-        caseDetail: mockCaseDetail,
-        messageDetail: [{ createdAt: '2019-03-01T21:40:46.415Z' }],
-      },
+      expect(result.hasOlderMessages).toEqual(false);
+      expect(result.showOlderMessages).toEqual(false);
     });
 
-    expect(result.hasOlderMessages).toEqual(false);
-    expect(result.showOlderMessages).toEqual(false);
-  });
+    it('returns showOlderMessages true if there is more than one message and isExpanded is true', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: mockCaseDetail,
+          isExpanded: true,
+          messageDetail: [
+            { createdAt: '2019-03-01T21:40:46.415Z' },
+            { createdAt: '2019-04-01T21:40:46.415Z' },
+          ],
+        },
+      });
 
-  it('returns showOlderMessages true if there is more than one message and isExpanded is true', () => {
-    const result = runCompute(formattedMessageDetail, {
-      state: {
-        caseDetail: mockCaseDetail,
-        isExpanded: true,
-        messageDetail: [
-          { createdAt: '2019-03-01T21:40:46.415Z' },
-          { createdAt: '2019-04-01T21:40:46.415Z' },
-        ],
-      },
+      expect(result.showOlderMessages).toEqual(true);
     });
 
-    expect(result.showOlderMessages).toEqual(true);
-  });
+    it('returns showOlderMessages false if there is more than one message and isExpanded is false', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: mockCaseDetail,
+          isExpanded: false,
+          messageDetail: [
+            { createdAt: '2019-03-01T21:40:46.415Z' },
+            { createdAt: '2019-04-01T21:40:46.415Z' },
+          ],
+        },
+      });
 
-  it('returns showOlderMessages false if there is more than one message and isExpanded is false', () => {
-    const result = runCompute(formattedMessageDetail, {
-      state: {
-        caseDetail: mockCaseDetail,
-        isExpanded: false,
-        messageDetail: [
-          { createdAt: '2019-03-01T21:40:46.415Z' },
-          { createdAt: '2019-04-01T21:40:46.415Z' },
-        ],
-      },
+      expect(result.showOlderMessages).toEqual(false);
     });
-
-    expect(result.showOlderMessages).toEqual(false);
   });
 
   it('formats the attachments on the message with meta from the aggregated documents arrays', () => {
@@ -367,6 +369,75 @@ describe('formattedMessageDetail', () => {
       });
 
       expect(result.attachments[0].showNotServed).toEqual(false);
+    });
+  });
+
+  describe('archived', () => {
+    const documentId = applicationContext.getUniqueId();
+
+    it('should be true if the document has been archived', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                archived: true,
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+              },
+            ],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                {
+                  documentId,
+                  documentTitle: 'Some Stuff',
+                },
+              ],
+              createdAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+      });
+
+      expect(result.attachments[0].archived).toBeTruthy();
+    });
+
+    it('should be false if the document has not been archived', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Corrected Transcript',
+                eventCode: 'CTRA',
+              },
+            ],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                {
+                  documentId,
+                  documentTitle: 'Some Stuff',
+                },
+              ],
+              createdAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+      });
+
+      expect(result.attachments[0].archived).toBeFalsy();
     });
   });
 });
