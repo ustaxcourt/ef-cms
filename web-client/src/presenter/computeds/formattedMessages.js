@@ -1,19 +1,37 @@
 import { formatDateIfToday } from './formattedWorkQueue';
 import { state } from 'cerebral';
 
-export const getFormattedMessages = ({ applicationContext, messages }) => {
+export const getFormattedMessages = ({
+  applicationContext,
+  caseDetail,
+  messages,
+}) => {
   const formattedCaseMessages = messages
-    .map(message => ({
-      ...message,
-      completedAtFormatted: formatDateIfToday(
-        message.completedAt,
-        applicationContext,
-      ),
-      createdAtFormatted: formatDateIfToday(
-        message.createdAt,
-        applicationContext,
-      ),
-    }))
+    .map(message => {
+      let formattedAttachments;
+
+      if (caseDetail) {
+        formattedAttachments = applicationContext
+          .getUtilities()
+          .formatAttachments({
+            attachments: message.attachments || [],
+            caseDetail,
+          });
+      }
+
+      return {
+        ...message,
+        attachments: formattedAttachments || message.attachments,
+        completedAtFormatted: formatDateIfToday(
+          message.completedAt,
+          applicationContext,
+        ),
+        createdAtFormatted: formatDateIfToday(
+          message.createdAt,
+          applicationContext,
+        ),
+      };
+    })
     .sort((a, b) => {
       return a.createdAt.localeCompare(b.createdAt);
     });
