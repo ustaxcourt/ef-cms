@@ -116,6 +116,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   return {
     editUrl,
+    isArchived: caseDocument.archived,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:

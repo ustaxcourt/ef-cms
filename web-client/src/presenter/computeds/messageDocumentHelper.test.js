@@ -1384,4 +1384,57 @@ describe('messageDocumentHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(false);
     });
   });
+
+  describe('isArchived', () => {
+    it('should be true when the document is an archived document', () => {
+      const { isArchived } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                archived: true,
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(isArchived).toBeTruthy();
+    });
+
+    it('should be false when the document is not an archived document', () => {
+      const { isArchived } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(isArchived).toBeFalsy();
+    });
+  });
 });
