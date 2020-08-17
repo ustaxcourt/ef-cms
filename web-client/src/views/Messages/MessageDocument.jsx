@@ -59,13 +59,13 @@ export const MessageDocument = connect(
             </div>
           )}
 
-        {viewerDocumentToDisplay && messageDocumentHelper.isArchived && (
+        {viewerDocumentToDisplay && messageDocumentHelper.archived && (
           <div className="archived-document-frame">
             This document was deleted.
           </div>
         )}
 
-        {viewerDocumentToDisplay && !messageDocumentHelper.isArchived && (
+        {viewerDocumentToDisplay && !messageDocumentHelper.archived && (
           <>
             <div className="message-document-actions">
               {messageDocumentHelper.showEditButtonNotSigned && (

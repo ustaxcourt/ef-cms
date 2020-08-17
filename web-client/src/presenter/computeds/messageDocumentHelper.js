@@ -1,4 +1,4 @@
-import { getDocumentInformationForMessage } from './getDocumentInformationForMessage';
+import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
@@ -20,10 +20,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
     return null;
   }
 
-  const { correspondence, documents } = caseDetail;
+  const { archivedDocuments = [], correspondence, documents } = caseDetail;
 
   const caseDocument =
-    [...correspondence, ...documents].find(
+    [...correspondence, ...documents, ...archivedDocuments].find(
       d => d.documentId === viewerDocumentToDisplay.documentId,
     ) || {};
 
@@ -34,6 +34,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
   );
 
   const documentIsSigned = !!caseDocument.signedAt;
+
+  const documentIsArchived = !!caseDocument.archived;
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -82,9 +84,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
-    documentRequiresSignature && !documentIsSigned && !isArchived;
+    documentRequiresSignature && !documentIsSigned && !documentIsArchived;
 
-  const { isArchived, showNotServed } = getDocumentInformationForMessage({
+  const showNotServed = getShowNotServedForDocument({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
     documentId: caseDocument.documentId,
@@ -115,8 +117,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
     );
 
   return {
+    archived: documentIsArchived,
     editUrl,
-    isArchived,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:

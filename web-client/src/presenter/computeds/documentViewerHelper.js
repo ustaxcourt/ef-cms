@@ -1,4 +1,4 @@
-import { getDocumentInformationForMessage } from './getDocumentInformationForMessage';
+import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
@@ -39,7 +39,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const { servedAtFormatted } = formattedDocumentToDisplay.document;
   const servedLabel = servedAtFormatted ? `Served ${servedAtFormatted}` : '';
 
-  const { showNotServed } = getDocumentInformationForMessage({
+  const showNotServed = getShowNotServedForDocument({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
     documentId: formattedDocumentToDisplay.document.documentId,

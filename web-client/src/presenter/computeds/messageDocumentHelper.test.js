@@ -1394,9 +1394,9 @@ describe('messageDocumentHelper', () => {
     });
   });
 
-  describe('isArchived', () => {
+  describe('archived', () => {
     it('should be true when the document is an archived document', () => {
-      const { isArchived } = runCompute(messageDocumentHelper, {
+      const { archived } = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
@@ -1418,7 +1418,7 @@ describe('messageDocumentHelper', () => {
         },
       });
 
-      expect(isArchived).toBeTruthy();
+      expect(archived).toBeTruthy();
     });
 
     it('should be false when the document is not an archived document', () => {
