@@ -133,7 +133,7 @@ createAccount() {
   session=$(echo "${response}" | jq -r ".Session")
 
   if [ "$session" != "null" ]; then
-    $(aws cognito-idp admin-respond-to-auth-challenge \
+    response=$(aws cognito-idp admin-respond-to-auth-challenge \
       --user-pool-id  "${USER_POOL_ID}" \
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \

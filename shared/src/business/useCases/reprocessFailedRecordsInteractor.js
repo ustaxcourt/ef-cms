@@ -12,6 +12,14 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getElasticsearchReindexRecords({ applicationContext });
 
+  const setIsValidated = obj => {
+    Object.defineProperty(obj, 'isValidated', {
+      enumerable: false,
+      value: true,
+      writable: false,
+    });
+  };
+
   if (recordsToProcess.length) {
     for (const record of recordsToProcess) {
       try {
@@ -46,6 +54,9 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
               recordSk: record.recordSk,
             });
         }
+
+        setIsValidated(fullRecord);
+        setIsValidated(record);
 
         await applicationContext.getPersistenceGateway().indexRecord({
           applicationContext,
