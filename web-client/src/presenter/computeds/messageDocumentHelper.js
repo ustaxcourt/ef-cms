@@ -1,4 +1,4 @@
-import { getShowNotServedForDocument } from './getShowNotServedForDocument';
+import { getDocumentInformationForMessage } from './getDocumentInformationForMessage';
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
@@ -81,10 +81,12 @@ export const messageDocumentHelper = (get, applicationContext) => {
     !isStipulatedDecision;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
-  const showDocumentNotSignedAlert =
-    documentRequiresSignature && !documentIsSigned;
+  const isArchived = caseDocument.archived;
 
-  const showNotServed = getShowNotServedForDocument({
+  const showDocumentNotSignedAlert =
+    documentRequiresSignature && !documentIsSigned && !isArchived;
+
+  const showNotServed = getDocumentInformationForMessage({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
     documentId: caseDocument.documentId,
@@ -116,7 +118,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   return {
     editUrl,
-    isArchived: caseDocument.archived,
+    isArchived,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:

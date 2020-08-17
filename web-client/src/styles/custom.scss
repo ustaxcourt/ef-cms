@@ -1525,3 +1525,15 @@ button.change-scanner-button {
 .sealed-in-blackstone {
   color: color($theme-color-secondary-dark);
 }
+
+.attachment-information {
+  margin-right: 20px;
+  float: right;
+}
+
+.archived-document-frame {
+  width: 100%;
+  height: 945px;
+  padding: 20px;
+  border: 1px solid color($theme-color-base-lighter);
+}
