@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PublicFilingsAndProceedings = connect(
   {
@@ -39,13 +40,23 @@ export const PublicFilingsAndProceedings = connect(
           </Button>
         )}
 
-        {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+        <span
+          className={classNames(entry.isStricken && 'stricken-docket-record')}
+        >
+          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+        </span>
 
-        <span> {entry.signatory}</span>
+        <span
+          className={classNames(entry.isStricken && 'stricken-docket-record')}
+        >
+          {entry.signatory}
+        </span>
 
         <span className="filings-and-proceedings">
           {entry.filingsAndProceedingsWithAdditionalInfo}
         </span>
+
+        {entry.isStricken && <span> (STRICKEN)</span>}
       </React.Fragment>
     );
   },

@@ -12,7 +12,6 @@ let state;
 describe('todaysOpinionsHelper', () => {
   beforeEach(() => {
     state = {
-      baseUrl: 'https://www.example.com',
       todaysOpinions: [
         {
           caseCaption: 'Sauceboss, Petitioner',
@@ -32,8 +31,6 @@ describe('todaysOpinionsHelper', () => {
     expect(result.formattedOpinions).toMatchObject([
       {
         caseCaption: 'Sauceboss, Petitioner',
-        documentLink:
-          'https://www.example.com/public-api/123-20/document-id-123/public-document-download-url',
         formattedDocumentType: 'Memorandum Opinion',
         formattedFilingDate: '06/11/20',
         formattedJudgeName: 'Fieri',
