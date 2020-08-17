@@ -19,6 +19,7 @@ describe('validateUserContactInteractor', () => {
     const errors = validateUserContactInteractor({
       applicationContext,
       user: {
+        name: 'Saul Goodman',
         userId: '8675309b-18d0-43ec-bafb-654e83405411',
       },
     });
