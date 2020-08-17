@@ -3,12 +3,6 @@
 ---
   type: "object"
   keys: 
-    barNumber: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
     contact: 
       type: "object"
       flags: 

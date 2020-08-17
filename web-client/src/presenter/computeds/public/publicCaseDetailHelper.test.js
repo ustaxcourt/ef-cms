@@ -76,6 +76,13 @@ describe('publicCaseDetailHelper', () => {
         filingDate: '2018-12-25T20:49:28.192Z',
         index: 6,
       },
+      {
+        description: 'seventh record',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8009',
+        filingDate: '2019-12-24T20:49:28.192Z',
+        index: 7,
+        isStricken: true,
+      },
     ];
     state.caseDetail.documents = [
       {
@@ -137,6 +144,14 @@ describe('publicCaseDetailHelper', () => {
         eventCode: TRANSCRIPT_EVENT_CODE,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
+      },
+      {
+        createdAt: '2019-12-24T20:49:28.192Z',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8009',
+        documentType: 'Transcript',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: '2019-12-24T21:49:28.192Z',
       },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
@@ -233,6 +248,25 @@ describe('publicCaseDetailHelper', () => {
         index: 6,
         isPaper: undefined,
         servedAtFormatted: '11/27/18',
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: false,
+        showServed: true,
+        signatory: undefined,
+      },
+      {
+        createdAtFormatted: '12/24/19',
+        description: 'seventh record',
+        descriptionDisplay: 'seventh record',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8009',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        filedBy: undefined,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 7,
+        isPaper: undefined,
+        servedAtFormatted: '12/24/19',
         servedPartiesCode: '',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,

@@ -17,7 +17,6 @@ const {
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
-  obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.role = rawObj.role || ROLES.petitioner;
@@ -68,7 +67,6 @@ const baseUserValidation = {
 };
 
 const userValidation = {
-  barNumber: joi.string().optional().allow(null),
   contact: joi
     .object()
     .keys({

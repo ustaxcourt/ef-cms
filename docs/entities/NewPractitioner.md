@@ -3,12 +3,6 @@
 ---
   type: "object"
   keys: 
-    barNumber: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
     contact: 
       type: "object"
       flags: 
@@ -422,6 +416,12 @@
           name: "max"
           args: 
             limit: 100
+      allow: 
+        - null
+    barNumber: 
+      type: "string"
+      flags: 
+        presence: "optional"
       allow: 
         - null
     birthYear: 

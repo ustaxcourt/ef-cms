@@ -74,6 +74,7 @@ describe('updateUserContactInformationInteractor', () => {
         ...MOCK_CASE,
         irsPractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
@@ -96,6 +97,7 @@ describe('updateUserContactInformationInteractor', () => {
         ...MOCK_CASE,
         irsPractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.irsPractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -132,6 +134,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       irsPractitioners: [
         {
+          barNumber: 'BN8765',
           contact: contactInfo,
           role: ROLES.irsPractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -156,6 +159,7 @@ describe('updateUserContactInformationInteractor', () => {
         ...MOCK_CASE,
         privatePractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -167,6 +171,7 @@ describe('updateUserContactInformationInteractor', () => {
         closedDate: lastYear,
         privatePractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -179,6 +184,7 @@ describe('updateUserContactInformationInteractor', () => {
         closedDate: yesterday,
         privatePractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -216,6 +222,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       privatePractitioners: [
         {
+          barNumber: 'BN8765',
           contact: contactInfo,
           role: ROLES.privatePractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -228,6 +235,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       privatePractitioners: [
         {
+          barNumber: 'BN8765',
           contact: contactInfo,
           role: ROLES.privatePractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
