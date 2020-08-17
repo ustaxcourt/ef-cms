@@ -1,22 +1,22 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { deleteCaseCorrespondence } = require('./deleteCaseCorrespondence');
+const { updateCaseCorrespondence } = require('./updateCaseCorrespondence');
 
-describe('deleteCaseCorrespondence', () => {
+describe('updateCaseCorrespondence', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
   });
 
-  it('should delete the specified correspondence record', async () => {
-    await deleteCaseCorrespondence({
+  it('should update the specified correspondence record', async () => {
+    await updateCaseCorrespondence({
       applicationContext,
       docketNumber: '101-20',
       documentId: '123',
     });
 
     expect(
-      applicationContext.getDocumentClient().delete.mock.calls[0][0],
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Key: {
         pk: 'case|101-20',

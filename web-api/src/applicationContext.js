@@ -191,9 +191,6 @@ const {
   deleteCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
 const {
-  deleteCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
-const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -822,6 +819,9 @@ const {
   updateCaseContextInteractor,
 } = require('../../shared/src/business/useCases/updateCaseContextInteractor');
 const {
+  updateCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
+const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
 const {
@@ -1087,7 +1087,6 @@ const gatewayMethods = isValidatedDecorator({
   createUser,
   createUserInboxRecord,
   deleteCaseByDocketNumber,
-  deleteCaseCorrespondence,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocument,
@@ -1169,6 +1168,7 @@ const gatewayMethods = isValidatedDecorator({
   setPriorityOnAllWorkItems,
   setWorkItemAsRead,
   updateCase,
+  updateCaseCorrespondence,
   updateCaseDeadline,
   updateCaseTrialSortMappingRecords,
   updateDocketRecord,

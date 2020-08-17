@@ -52,7 +52,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteCaseCorrespondence.mock
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
       docketNumber: '101-20',
