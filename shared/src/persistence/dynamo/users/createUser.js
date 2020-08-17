@@ -67,7 +67,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   };
 };
 
-exports.createUser = async ({ applicationContext, user }) => {
+exports.createUser = async ({ applicationContext, password, user }) => {
   let userId;
   let userPoolId =
     user.role === ROLES.irsSuperuser
@@ -79,7 +79,7 @@ exports.createUser = async ({ applicationContext, user }) => {
       .getCognito()
       .adminCreateUser({
         MessageAction: 'SUPPRESS',
-        TemporaryPassword: user.password,
+        TemporaryPassword: password,
         UserAttributes: [
           {
             Name: 'email_verified',
