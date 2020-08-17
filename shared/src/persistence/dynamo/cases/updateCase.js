@@ -64,7 +64,15 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     isEqual,
   );
 
-  updatedDocuments.forEach(document => {
+  const updatedArchivedDocuments = differenceWith(
+    caseToUpdate.archivedDocuments,
+    oldCase.archivedDocuments,
+    isEqual,
+  );
+
+  const allUpdatedDocuments = updatedDocuments.concat(updatedArchivedDocuments);
+
+  allUpdatedDocuments.forEach(document => {
     requests.push(
       client.put({
         Item: {
