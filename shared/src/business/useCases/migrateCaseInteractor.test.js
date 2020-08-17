@@ -193,6 +193,7 @@ describe('migrateCaseInteractor', () => {
           privatePractitioners: [
             {
               barNumber: 'PT1234',
+              name: 'Saul Goodman',
               role: 'privatePractitioner',
             },
           ],
@@ -216,6 +217,7 @@ describe('migrateCaseInteractor', () => {
           privatePractitioners: [
             {
               barNumber: 'PT1234',
+              name: 'Saul Goodman',
               role: 'privatePractitioner',
             },
           ],
@@ -239,6 +241,7 @@ describe('migrateCaseInteractor', () => {
           irsPractitioners: [
             {
               barNumber: 'PT1234',
+              name: 'Saul Goodman',
               role: 'irsPractitioner',
             },
           ],
@@ -262,6 +265,7 @@ describe('migrateCaseInteractor', () => {
           irsPractitioners: [
             {
               barNumber: 'PT1234',
+              name: 'Saul Goodman',
               role: 'irsPractitioner',
             },
           ],

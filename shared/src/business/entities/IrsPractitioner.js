@@ -37,7 +37,7 @@ IrsPractitioner.VALIDATION_RULES = joi.object().keys({
   contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('IrsPractitioner').required(),
-  name: joi.string().max(100).optional(),
+  name: joi.string().max(100).required(),
   role: joi.string().valid(ROLES.irsPractitioner).required(),
   serviceIndicator: joi
     .string()
