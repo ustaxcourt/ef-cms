@@ -12,7 +12,10 @@ describe('validateUserContactInteractor', () => {
       user: {},
     });
 
-    expect(errors).toEqual({ userId: '"userId" is required' });
+    expect(errors).toEqual({
+      name: 'Enter name',
+      userId: '"userId" is required',
+    });
   });
 
   it('returns no errors when all fields are defined', () => {
