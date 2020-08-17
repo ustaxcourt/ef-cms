@@ -17,6 +17,7 @@ const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
  */
 function IrsPractitioner(rawUser) {
   userDecorator(this, rawUser);
+  this.barNumber = rawUser.barNumber;
   this.entityName = 'IrsPractitioner';
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
@@ -24,6 +25,13 @@ function IrsPractitioner(rawUser) {
 
 IrsPractitioner.VALIDATION_RULES = joi.object().keys({
   ...userValidation,
+  barNumber: joi
+    .string()
+    .max(100)
+    .required()
+    .description(
+      'A unique identifier comprising of the practitioner initials, date, and series number.',
+    ),
   entityName: joi.string().valid('IrsPractitioner').required(),
   role: joi.string().valid(ROLES.irsPractitioner).required(),
   serviceIndicator: joi

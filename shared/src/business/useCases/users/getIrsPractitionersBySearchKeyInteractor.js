@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * getIrsPractitionersBySearchKeyInteractor
@@ -33,5 +33,5 @@ exports.getIrsPractitionersBySearchKeyInteractor = async ({
       type: 'irsPractitioner',
     });
 
-  return User.validateRawCollection(users, { applicationContext });
+  return IrsPractitioner.validateRawCollection(users, { applicationContext });
 };
