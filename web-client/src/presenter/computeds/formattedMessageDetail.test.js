@@ -312,4 +312,73 @@ describe('formattedMessageDetail', () => {
       expect(result.attachments[0].showNotServed).toEqual(false);
     });
   });
+
+  describe('isArchived', () => {
+    const documentId = applicationContext.getUniqueId();
+
+    it('should be true if the document has been archived', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                archived: true,
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+              },
+            ],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                {
+                  documentId,
+                  documentTitle: 'Some Stuff',
+                },
+              ],
+              createdAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+      });
+
+      expect(result.attachments[0].isArchived).toBeTruthy();
+    });
+
+    it('should be false if the document has not been archived', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Corrected Transcript',
+                eventCode: 'CTRA',
+              },
+            ],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                {
+                  documentId,
+                  documentTitle: 'Some Stuff',
+                },
+              ],
+              createdAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+      });
+
+      expect(result.attachments[0].isArchived).toBeFalsy();
+    });
+  });
 });
