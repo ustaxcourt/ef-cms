@@ -81,12 +81,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
     !isStipulatedDecision;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
-  const isArchived = caseDocument.archived;
-
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned && !isArchived;
 
-  const showNotServed = getDocumentInformationForMessage({
+  const { isArchived, showNotServed } = getDocumentInformationForMessage({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
     documentId: caseDocument.documentId,
