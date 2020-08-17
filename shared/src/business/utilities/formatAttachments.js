@@ -23,7 +23,6 @@ export const formatAttachments = ({ attachments, caseDetail }) => {
         documentTitle: document.documentTitle || document.documentType,
       };
     } else {
-      // TODO:  handle broken document references (deleted, etc..)
       return {
         archived: true,
         documentId: null,
