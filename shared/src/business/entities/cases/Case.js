@@ -786,6 +786,25 @@ Case.prototype.archiveDocument = function (document, { applicationContext }) {
 };
 
 /**
+ * archives a correspondence document and adds it to the archivedDocuments array on the case
+ *
+ * @param {string} correspondence the correspondence to archive
+ */
+Case.prototype.archiveCorrespondece = function (
+  correspondence,
+  { applicationContext },
+) {
+  const correspondenceToArchive = new Correspondence(correspondence, {
+    applicationContext,
+  });
+  correspondenceToArchive.archived = true;
+  this.archivedDocuments.push(correspondenceToArchive);
+  this.deleteCorrespondenceById({
+    correspondenceId: correspondenceToArchive.documentId,
+  });
+};
+
+/**
  * updates an IRS practitioner on the case
  *
  * @param {string} practitionerToUpdate the irsPractitioner user object with updated info
@@ -996,6 +1015,21 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.deleteDocumentById = function ({ documentId }) {
   this.documents = this.documents.filter(
     item => item.documentId !== documentId,
+  );
+
+  return this;
+};
+
+/**
+ * deletes the correspondence with id documentId from the documents array
+ *
+ * @params {object} params the params object
+ * @params {string} params.correspondenceId the id of the correspondence to remove from the correspondence array
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
+  this.correspondence = this.correspondence.filter(
+    item => item.documentId !== correspondenceId,
   );
 
   return this;
