@@ -38,7 +38,7 @@ const completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
-    workItem: workItemToUpdate,
+    workItem: workItemToUpdate.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({

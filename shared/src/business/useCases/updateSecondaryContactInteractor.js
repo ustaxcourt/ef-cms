@@ -170,7 +170,7 @@ exports.updateSecondaryContactInteractor = async ({
 
     await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
       applicationContext,
-      workItem: workItem,
+      workItem: workItem.validate().toRawObject(),
     });
   }
 

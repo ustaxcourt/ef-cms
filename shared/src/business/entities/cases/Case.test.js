@@ -83,7 +83,24 @@ describe('Case entity', () => {
       );
     });
 
-    it('should set archivedDocuments to the value provided', () => {
+    it('should not populate archivedDocuments when the user is an external user and filtered is true', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
+
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocuments: [...MOCK_DOCUMENTS],
+          userId: applicationContext.getCurrentUser().userId,
+        },
+        { applicationContext, filtered: true },
+      );
+
+      expect(myCase.archivedDocuments).toBeUndefined();
+    });
+
+    it('should set archivedDocuments to the value provided when the user is an internal user', () => {
       myCase = new Case(
         {
           ...MOCK_CASE,
@@ -94,7 +111,7 @@ describe('Case entity', () => {
       expect(myCase.archivedDocuments.length).toEqual(MOCK_DOCUMENTS.length);
     });
 
-    it('should set archivedDocuments to an empty list when a value is not provided', () => {
+    it('should set archivedDocuments to an empty list when a value is not provided and the user is an internal user', () => {
       expect(myCase.archivedDocuments).toEqual([]);
     });
   });
@@ -1228,6 +1245,59 @@ describe('Case entity', () => {
 
       const nextIndex = caseRecord.generateNextDocketRecordIndex();
       expect(nextIndex).toEqual(1);
+    });
+  });
+
+  describe('archiveDocument', () => {
+    let caseRecord;
+    let documentToArchive;
+    beforeEach(() => {
+      documentToArchive = {
+        archived: undefined,
+        documentType: 'Order',
+        eventCode: 'O',
+        filedBy: 'Test Petitioner',
+        role: ROLES.petitioner,
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      };
+
+      caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [...MOCK_CASE.documents, documentToArchive],
+        },
+        {
+          applicationContext,
+        },
+      );
+    });
+
+    it('marks the document as archived', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+      const archivedDocument = caseRecord.archivedDocuments.find(
+        d => d.documentId === documentToArchive.documentId,
+      );
+      expect(archivedDocument.archived).toBeTruthy();
+    });
+
+    it('adds the provided document to the case archivedDocuments', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+
+      expect(
+        caseRecord.archivedDocuments.find(
+          d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeDefined();
+    });
+
+    it('removes the provided document from the case documents array', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+
+      expect(
+        caseRecord.documents.find(
+          d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeUndefined();
     });
   });
 

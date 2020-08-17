@@ -20178,6 +20178,27 @@
                 - "P"
                 - "R"
                 - null
+            strickenAt: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
+                presence: "optional"
+                description: "Date that this Docket Record item was stricken."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
+            strickenBy: 
+              type: "string"
+              flags: 
+                presence: "optional"
+            strickenByUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
     documents: 
       type: "array"
       flags: 
@@ -23633,12 +23654,6 @@
         - 
           type: "object"
           keys: 
-            barNumber: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              allow: 
-                - null
             contact: 
               type: "object"
               flags: 
@@ -24024,6 +24039,16 @@
                       presence: "optional"
                     allow: 
                       - null
+            barNumber: 
+              type: "string"
+              flags: 
+                presence: "required"
+                description: "A unique identifier comprising of the practitioner initials, date, and series number."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
             serviceIndicator: 
               type: "string"
               flags: 
@@ -53844,12 +53869,6 @@
         - 
           type: "object"
           keys: 
-            barNumber: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              allow: 
-                - null
             contact: 
               type: "object"
               flags: 
@@ -54235,6 +54254,16 @@
                       presence: "optional"
                     allow: 
                       - null
+            barNumber: 
+              type: "string"
+              flags: 
+                presence: "required"
+                description: "A unique identifier comprising of the practitioner initials, date, and series number."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
             representing: 
               type: "array"
               flags: 

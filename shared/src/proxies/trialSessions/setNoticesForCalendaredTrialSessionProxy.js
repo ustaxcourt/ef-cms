@@ -19,6 +19,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = ({
     body: {
       docketNumber,
     },
-    endpoint: `/trial-sessions/${trialSessionId}/generate-notices`,
+    endpoint: `/async/trial-sessions/${trialSessionId}/generate-notices`,
   });
 };
