@@ -167,6 +167,14 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     } else {
       this.statistics = [];
     }
+
+    if (Array.isArray(rawCase.archivedDocuments)) {
+      this.archivedDocuments = rawCase.archivedDocuments.map(
+        document => new Document(document, { applicationContext }),
+      );
+    } else {
+      this.archivedDocuments = [];
+    }
   }
 
   this.caseCaption = rawCase.caseCaption;
@@ -238,14 +246,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.documents = [];
   }
 
-  if (Array.isArray(rawCase.archivedDocuments)) {
-    this.archivedDocuments = rawCase.archivedDocuments.map(
-      document => new Document(document, { applicationContext }),
-    );
-  } else {
-    this.archivedDocuments = [];
-  }
-
   this.hasPendingItems = this.documents.some(document => document.pending);
 
   if (Array.isArray(rawCase.privatePractitioners)) {
@@ -310,7 +310,7 @@ Case.VALIDATION_RULES = {
   archivedDocuments: joi
     .array()
     .items(Document.VALIDATION_RULES)
-    .required()
+    .optional()
     .description(
       'List of Document Entities that were archived instead of added to the docket record.',
     ),
@@ -771,6 +771,18 @@ Case.getCaseTitle = function (caseCaption) {
  */
 Case.prototype.attachIrsPractitioner = function (practitioner) {
   this.irsPractitioners.push(practitioner);
+};
+
+/**
+ * archives a document and adds it to the archivedDocuments array on the case
+ *
+ * @param {string} document the document to archive
+ */
+Case.prototype.archiveDocument = function (document, { applicationContext }) {
+  const documentToArchive = new Document(document, { applicationContext });
+  documentToArchive.archive();
+  this.archivedDocuments.push(documentToArchive);
+  this.deleteDocumentById({ documentId: documentToArchive.documentId });
 };
 
 /**

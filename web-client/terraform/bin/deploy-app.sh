@@ -31,5 +31,15 @@ then
   IS_DYNAMSOFT_ENABLED="1"
 fi
 
+
+export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
+export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
+export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
+export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
+
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform apply --auto-approve -var "zone_name=${ZONE_NAME}" -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "dynamsoft_url=${DYNAMSOFT_URL}"  -var "dynamsoft_product_keys=${DYNAMSOFT_PRODUCT_KEYS}" -var "dynamsoft_s3_zip_path=${DYNAMSOFT_S3_ZIP_PATH}" -var "is_dynamsoft_enabled=${IS_DYNAMSOFT_ENABLED}"
+terraform plan
+terraform apply --auto-approve

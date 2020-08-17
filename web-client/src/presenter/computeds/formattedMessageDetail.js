@@ -3,9 +3,16 @@ import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
-const formatMessage = (message, applicationContext) => {
+const formatMessage = ({ applicationContext, caseDetail, message }) => {
+  const formattedAttachments = applicationContext
+    .getUtilities()
+    .formatAttachments({
+      attachments: message.attachments || [],
+      caseDetail,
+    });
   return {
     ...message,
+    attachments: formattedAttachments,
     completedAtFormatted: formatDateIfToday(
       message.completedAt,
       applicationContext,
@@ -27,7 +34,9 @@ export const formattedMessageDetail = (get, applicationContext) => {
     .formatCase(applicationContext, caseDetail);
 
   const formattedMessages = orderBy(
-    messageDetail.map(message => formatMessage(message, applicationContext)),
+    messageDetail.map(message =>
+      formatMessage({ applicationContext, caseDetail, message }),
+    ),
     'createdAt',
     'desc',
   );

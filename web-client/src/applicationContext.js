@@ -82,7 +82,6 @@ import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/dele
 import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
-import { deleteDocumentInteractor } from '../../shared/src/proxies/deleteDocumentProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
@@ -94,6 +93,7 @@ import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documen
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
   formatCase,
   formatCaseDeadlines,
@@ -298,7 +298,6 @@ const allUseCases = {
   deleteCorrespondenceDocumentInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
-  deleteDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   fetchPendingItemsInteractor,
@@ -546,6 +545,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,
+      formatAttachments,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
