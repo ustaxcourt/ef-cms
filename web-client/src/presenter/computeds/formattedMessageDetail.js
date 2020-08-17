@@ -54,13 +54,12 @@ export const formattedMessageDetail = (get, applicationContext) => {
 
   if (formattedMessages[0].attachments) {
     formattedMessages[0].attachments.map(attachment => {
-      const showNotServed = getShowNotServedForDocument({
+      attachment.showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail,
         documentId: attachment.documentId,
         draftDocuments,
       });
-      attachment.showNotServed = showNotServed;
     });
   }
 
