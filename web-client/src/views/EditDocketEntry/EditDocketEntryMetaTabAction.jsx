@@ -1,17 +1,27 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { Icon } from '../../ustc-ui/Icon/Icon';
+import { StrikeDocketEntryModal } from './StrikeDocketEntryModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const EditDocketEntryMetaTabAction = connect(
   {
+    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
+    openStrikeDocketEntryModalSequence:
+      sequences.openStrikeDocketEntryModalSequence,
+    showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.modal.validationErrors,
     validationSequence: sequences.validateDocketRecordSequence,
   },
   function EditDocketEntryMetaTabAction({
+    editDocketEntryMetaHelper,
     form,
+    openStrikeDocketEntryModalSequence,
+    showModal,
     updateFormValueSequence,
     validationErrors,
     validationSequence,
@@ -37,6 +47,36 @@ export const EditDocketEntryMetaTabAction = connect(
               validationSequence();
             }}
           />
+        </FormGroup>
+        <FormGroup>
+          {editDocketEntryMetaHelper.isStricken && (
+            <>
+              <Icon
+                aria-label="stricken docket record"
+                className="margin-right-1 icon-sealed"
+                icon="strikethrough"
+                size="1x"
+              />
+              Stricken by {editDocketEntryMetaHelper.strickenBy} on{' '}
+              {editDocketEntryMetaHelper.strickenAtFormatted}
+            </>
+          )}
+          {!editDocketEntryMetaHelper.isStricken && (
+            <Button
+              link
+              className="text-secondary-dark"
+              icon={['fas', 'strikethrough']}
+              iconColor="red"
+              onClick={() => {
+                openStrikeDocketEntryModalSequence();
+              }}
+            >
+              Strike Entry
+            </Button>
+          )}
+          {showModal === 'StrikeDocketEntryModal' && (
+            <StrikeDocketEntryModal confirmSequence="strikeDocketEntrySequence" />
+          )}
         </FormGroup>
       </div>
     );

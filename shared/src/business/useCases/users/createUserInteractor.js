@@ -49,10 +49,8 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
 
   await applicationContext.getPersistenceGateway().createUser({
     applicationContext,
-    user: {
-      ...userEntity.validate().toRawObject(),
-      password: user.password,
-    },
+    password: user.password,
+    user: userEntity.validate().toRawObject(),
   });
 
   return userEntity.validate().toRawObject();

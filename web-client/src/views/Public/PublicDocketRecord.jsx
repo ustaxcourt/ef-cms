@@ -4,6 +4,7 @@ import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PublicDocketRecord = connect(
   {
@@ -44,7 +45,14 @@ export const PublicDocketRecord = connect(
                     {entry.index}
                   </td>
                   <td>
-                    <span className="no-wrap">{entry.createdAtFormatted}</span>
+                    <span
+                      className={classNames(
+                        entry.isStricken && 'stricken-docket-record',
+                        'no-wrap',
+                      )}
+                    >
+                      {entry.createdAtFormatted}
+                    </span>
                   </td>
                   <td className="center-column hide-on-mobile">
                     {entry.eventCode}

@@ -1269,7 +1269,39 @@ describe('messageDocumentHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be false if the user is an internal user, the document code is PSDE, and the SDEC eventCode is in the documents', () => {
+    it('should be true if the user is an internal user, the document code is PSDE, and an archived SDEC eventCode is in the documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+              },
+              {
+                archived: true,
+                documentId: '234',
+                documentType: 'Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'SDEC',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be false if the user is an internal user, the document code is PSDE, and the SDEC eventCode is in the documents (and not archived)', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
