@@ -4,6 +4,7 @@ const { PrivatePractitioner } = require('./PrivatePractitioner');
 describe('PrivatePractitioner', () => {
   it('Creates a valid PrivatePractitioner', () => {
     const user = new PrivatePractitioner({
+      barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',

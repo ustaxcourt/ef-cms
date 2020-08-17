@@ -45,7 +45,9 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
       .getPersistenceGateway()
       .getUsersBySearchKey.mockResolvedValue([
         {
+          barNumber: 'PT1234',
           name: 'Test Practitioner',
+          role: ROLES.privatePractitioner,
           userId: 'f3e91236-495b-4412-b684-1cffe59ed9d9',
         },
       ]);

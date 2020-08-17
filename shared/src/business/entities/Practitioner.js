@@ -35,27 +35,28 @@ const roleMap = {
 
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
-  this.entityName = 'Practitioner';
-  this.name = Practitioner.getFullName(rawUser);
-  this.firstName = rawUser.firstName;
-  this.lastName = rawUser.lastName;
-  this.middleName = rawUser.middleName;
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus;
   this.alternateEmail = rawUser.alternateEmail;
+  this.barNumber = rawUser.barNumber;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
+  this.entityName = 'Practitioner';
   this.firmName = rawUser.firmName;
+  this.firstName = rawUser.firstName;
+  this.lastName = rawUser.lastName;
+  this.middleName = rawUser.middleName;
+  this.name = Practitioner.getFullName(rawUser);
   this.originalBarState = rawUser.originalBarState;
   this.practitionerType = rawUser.practitionerType;
+  this.section = this.role;
+  this.suffix = rawUser.suffix;
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
     this.role = ROLES.inactivePractitioner;
   }
-  this.suffix = rawUser.suffix;
-  this.section = this.role;
 };
 
 const VALIDATION_ERROR_MESSAGES = {
