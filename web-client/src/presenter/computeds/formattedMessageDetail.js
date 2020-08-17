@@ -1,5 +1,5 @@
 import { formatDateIfToday } from './formattedWorkQueue';
-import { getShowNotServedForDocument } from './getShowNotServedForDocument';
+import { getDocumentInformationForMessage } from './getDocumentInformationForMessage';
 import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -45,12 +45,14 @@ export const formattedMessageDetail = (get, applicationContext) => {
 
   if (formattedMessages[0].attachments) {
     formattedMessages[0].attachments.map(attachment => {
-      attachment.showNotServed = getShowNotServedForDocument({
+      const { isArchived, showNotServed } = getDocumentInformationForMessage({
         UNSERVABLE_EVENT_CODES,
         caseDetail,
         documentId: attachment.documentId,
         draftDocuments,
       });
+      attachment.isArchived = isArchived;
+      attachment.showNotServed = showNotServed;
     });
   }
 

@@ -1,10 +1,11 @@
-export const getShowNotServedForDocument = ({
+export const getDocumentInformationForMessage = ({
   caseDetail,
   documentId,
   draftDocuments,
   UNSERVABLE_EVENT_CODES,
 }) => {
   let showNotServed = false;
+  let isArchived = false;
 
   const caseDocument = caseDetail.documents.find(
     document => document.documentId === documentId,
@@ -20,7 +21,8 @@ export const getShowNotServedForDocument = ({
       !!draftDocuments.find(draft => draft.documentId === documentId);
 
     showNotServed = !isUnservable && !caseDocument.servedAt && !isDraftDocument;
+    isArchived = caseDocument.archived;
   }
 
-  return showNotServed;
+  return { isArchived, showNotServed };
 };
