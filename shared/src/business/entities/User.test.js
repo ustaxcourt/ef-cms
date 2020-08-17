@@ -15,8 +15,7 @@ describe('User entity', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
@@ -35,8 +34,7 @@ describe('User entity', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
@@ -53,8 +51,7 @@ describe('User entity', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
@@ -63,8 +60,7 @@ describe('User entity', () => {
 
   it('Creates a valid petitioner user', () => {
     const user = new User({
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
@@ -74,9 +70,8 @@ describe('User entity', () => {
 
   it('Creates a valid privatePractitioner user', () => {
     const user = new User({
-      barNumber: 'gg',
-      firstName: 'firstName',
-      lastName: 'bob',
+      barNumber: 'SG101',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       token: 'abc',
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
@@ -86,6 +81,7 @@ describe('User entity', () => {
 
   it('Creates a valid irsPractitioner user', () => {
     const user = new User({
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
@@ -94,8 +90,7 @@ describe('User entity', () => {
 
   it('Creates a user with default role of petitioner if not provided', () => {
     const user = new User({
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: undefined,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });

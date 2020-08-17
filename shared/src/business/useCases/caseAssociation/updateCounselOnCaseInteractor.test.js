@@ -128,6 +128,7 @@ describe('updateCounselOnCaseInteractor', () => {
       applicationContext,
       docketNumber: '123-19',
       userData: {
+        name: 'Saul Goodman',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -145,6 +146,7 @@ describe('updateCounselOnCaseInteractor', () => {
       applicationContext,
       docketNumber: '123-19',
       userData: {
+        name: 'Saul Goodman',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -163,6 +165,7 @@ describe('updateCounselOnCaseInteractor', () => {
       docketNumber: '123-19',
       userData: {
         email: 'not.editable@example.com',
+        name: 'Saul Goodman',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
