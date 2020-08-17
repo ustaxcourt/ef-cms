@@ -3,16 +3,6 @@
 ---
   type: "object"
   keys: 
-    barNumber: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "A unique identifier comprising of the practitioner initials, date, and series number."
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
     contact: 
       type: "object"
       flags: 
@@ -474,6 +464,16 @@
             limit: 100
       allow: 
         - null
+    barNumber: 
+      type: "string"
+      flags: 
+        presence: "required"
+        description: "A unique identifier comprising of the practitioner initials, date, and series number."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     birthYear: 
       type: "number"
       flags: 

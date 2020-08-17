@@ -17,16 +17,24 @@ const { userDecorator, userValidation } = require('./User');
  */
 function PrivatePractitioner(rawUser) {
   userDecorator(this, rawUser);
+  this.barNumber = rawUser.barNumber;
   this.entityName = 'PrivatePractitioner';
+  this.representing = rawUser.representing || [];
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
-  this.representing = rawUser.representing || [];
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
 
 PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
   ...userValidation,
+  barNumber: joi
+    .string()
+    .max(100)
+    .required()
+    .description(
+      'A unique identifier comprising of the practitioner initials, date, and series number.',
+    ),
   entityName: joi.string().valid('PrivatePractitioner').required(),
   representing: joi
     .array()
