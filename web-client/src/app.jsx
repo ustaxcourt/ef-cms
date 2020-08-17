@@ -115,7 +115,6 @@ const app = {
       .getItemInteractor({ applicationContext, key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
-    presenter.state.baseUrl = applicationContext.getBaseUrl();
 
     const user =
       (await applicationContext
