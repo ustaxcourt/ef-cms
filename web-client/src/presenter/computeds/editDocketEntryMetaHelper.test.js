@@ -83,5 +83,24 @@ describe('editDocketEntryMetaHelper', () => {
       });
       expect(result.showObjection).toBeFalsy();
     });
+
+    it('should show stricken information if the docket entry is stricken', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            documentId: '123',
+            documentType: 'Answer',
+            isStricken: true,
+            strickenAt: '2019-03-01T21:40:46.415Z',
+            strickenBy: 'Guy Fieri',
+          },
+        },
+      });
+
+      expect(result.strickenAtFormatted).toEqual('03/01/2019');
+    });
   });
 });
