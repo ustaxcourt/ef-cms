@@ -6,6 +6,10 @@ import { setReplyToMessageModalDialogModalStateAction } from './setReplyToMessag
 const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('setReplyToMessageModalDialogModalStateAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should set the modal state for replying to a message', async () => {
     const result = await runAction(
       setReplyToMessageModalDialogModalStateAction,
@@ -18,7 +22,6 @@ describe('setReplyToMessageModalDialogModalStateAction', () => {
             attachments: [
               {
                 documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
-                documentTitle: 'Petition',
               },
             ],
             from: 'test user 1',
@@ -28,14 +31,28 @@ describe('setReplyToMessageModalDialogModalStateAction', () => {
             subject: 'the subject',
           },
         },
-        state: {},
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
+                documentTitle: 'Petition',
+              },
+            ],
+          },
+        },
       },
     );
+
+    expect(
+      applicationContext.getUtilities().formatAttachments,
+    ).toHaveBeenCalled();
 
     expect(result.state.modal).toEqual({
       form: {
         attachments: [
           {
+            archived: false,
             documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
             documentTitle: 'Petition',
           },
