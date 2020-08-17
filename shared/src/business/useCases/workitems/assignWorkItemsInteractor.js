@@ -64,13 +64,13 @@ exports.assignWorkItemsInteractor = async ({
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
     deleteFromSection: false,
-    workItem: originalWorkItem,
+    workItem: originalWorkItem.validate().toRawObject(),
   });
 
   await Promise.all([
     applicationContext.getPersistenceGateway().updateWorkItemInCase({
       applicationContext,
-      caseToUpdate,
+      caseToUpdate: caseToUpdate.validate().toRawObject(),
       workItem: workItemEntity.validate().toRawObject(),
     }),
     applicationContext.getPersistenceGateway().saveWorkItemForPaper({

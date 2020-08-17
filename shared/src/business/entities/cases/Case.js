@@ -167,6 +167,14 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     } else {
       this.statistics = [];
     }
+
+    if (Array.isArray(rawCase.archivedDocuments)) {
+      this.archivedDocuments = rawCase.archivedDocuments.map(
+        document => new Document(document, { applicationContext }),
+      );
+    } else {
+      this.archivedDocuments = [];
+    }
   }
 
   this.caseCaption = rawCase.caseCaption;
@@ -299,6 +307,13 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 }
 
 Case.VALIDATION_RULES = {
+  archivedDocuments: joi
+    .array()
+    .items(Document.VALIDATION_RULES)
+    .optional()
+    .description(
+      'List of Document Entities that were archived instead of added to the docket record.',
+    ),
   associatedJudge: joi
     .string()
     .max(50)
@@ -759,6 +774,18 @@ Case.prototype.attachIrsPractitioner = function (practitioner) {
 };
 
 /**
+ * archives a document and adds it to the archivedDocuments array on the case
+ *
+ * @param {string} document the document to archive
+ */
+Case.prototype.archiveDocument = function (document, { applicationContext }) {
+  const documentToArchive = new Document(document, { applicationContext });
+  documentToArchive.archive();
+  this.archivedDocuments.push(documentToArchive);
+  this.deleteDocumentById({ documentId: documentToArchive.documentId });
+};
+
+/**
  * updates an IRS practitioner on the case
  *
  * @param {string} practitionerToUpdate the irsPractitioner user object with updated info
@@ -1086,6 +1113,20 @@ Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
 Case.prototype.getDocketRecordByDocumentId = function (documentId) {
   const foundEntry = this.docketRecord.find(
     entry => entry.documentId === documentId,
+  );
+
+  return foundEntry;
+};
+
+/**
+ * finds a docket record by its docket record index
+ *
+ * @param {string} docketRecordId
+ * @returns {DocketRecord|undefined} the updated case entity
+ */
+Case.prototype.getDocketRecord = function (docketRecordId) {
+  const foundEntry = this.docketRecord.find(
+    entry => entry.docketRecordId === docketRecordId,
   );
 
   return foundEntry;

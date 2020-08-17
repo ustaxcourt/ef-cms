@@ -52,7 +52,7 @@ exports.updateUserContactInformationInteractor = async ({
   const updatedCases = await generateChangeOfAddress({
     applicationContext,
     contactInfo,
-    user,
+    user: userEntity.validate().toRawObject(),
   });
 
   return updatedCases;

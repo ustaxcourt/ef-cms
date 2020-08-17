@@ -57,12 +57,14 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         hasDocument: !!document,
         index,
         isPaper: document && document.isPaper,
+        isStricken: record.isStricken,
         numberOfPages:
           (document && (record.numberOfPages || document.numberOfPages)) || 0,
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
           !document ||
+          record.isStricken ||
           (document &&
             (!document.isCourtIssuedDocument ||
               document.isNotServedDocument ||
@@ -73,6 +75,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
             DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
           document.isCourtIssuedDocument &&
           !document.isNotServedDocument &&
+          !record.isStricken &&
           !document.isTranscript,
         showNotServed: document && document.isNotServedDocument,
         showServed: document && document.isStatusServed,
