@@ -83,7 +83,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
     "lint-staged": "^10.2.11",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "madge": "^3.9.2",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
