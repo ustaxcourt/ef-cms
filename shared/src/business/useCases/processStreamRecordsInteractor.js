@@ -5,15 +5,6 @@ const getRemoveRecords = ({ records }) => {
   return records.filter(record => record.eventName === 'REMOVE');
 };
 
-const setIsValidated = obj => {
-  Object.defineProperty(obj, 'isValidated', {
-    enumerable: false,
-    value: true,
-    writable: false,
-  });
-  return obj;
-};
-
 /**
  * filters out records we do not want to index with elasticsearch
  *
@@ -168,7 +159,7 @@ exports.processStreamRecordsInteractor = async ({
           try {
             await applicationContext.getPersistenceGateway().indexRecord({
               applicationContext,
-              fullRecord: setIsValidated({ ...failedRecord }),
+              fullRecord: { ...failedRecord },
               isAlreadyMarshalled: true,
               record: {
                 recordPk: failedRecord.pk.S,
@@ -203,7 +194,7 @@ exports.processStreamRecordsInteractor = async ({
 
           await applicationContext.getPersistenceGateway().indexRecord({
             applicationContext,
-            fullRecord: setIsValidated(newImage),
+            fullRecord: newImage,
             isAlreadyMarshalled: true,
             record: {
               recordPk: record.dynamodb.Keys.pk.S,
