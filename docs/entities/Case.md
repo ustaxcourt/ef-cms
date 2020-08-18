@@ -54552,7 +54552,6 @@
     trialSessionId: 
       type: "string"
       flags: 
-        presence: "optional"
         description: "The unique ID of the trial session associated with this case."
       rules: 
         - 
@@ -54561,6 +54560,28 @@
             options: 
               version: 
                 - "uuidv4"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Calendared"
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     trialTime: 
       type: "string"
       flags: 

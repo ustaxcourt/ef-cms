@@ -664,7 +664,11 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.optional().description(
+  trialSessionId: JoiValidationConstants.UUID.when('status', {
+    is: CASE_STATUS_TYPES.calendared,
+    otherwise: joi.optional(),
+    then: joi.required(),
+  }).description(
     'The unique ID of the trial session associated with this case.',
   ),
   trialTime: joi
@@ -1169,7 +1173,7 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 /**
  * finds a docket record by its docket record index
  *
- * @param {string} docketRecordId
+ * @param {string} docketRecordId the id of the docket record to be updated
  * @returns {DocketRecord|undefined} the updated case entity
  */
 Case.prototype.getDocketRecord = function (docketRecordId) {
