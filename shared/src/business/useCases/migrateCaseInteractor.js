@@ -115,6 +115,20 @@ exports.migrateCaseInteractor = async ({
 
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
+  if (caseToAdd.trialSessionId) {
+    const trialSessionData = applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId: caseToAdd.trialSessionId,
+      });
+    if (!trialSessionData) {
+      throw new Error(
+        `Trial Session not found with id ${caseToAdd.trialSessionId}`,
+      );
+    }
+  }
+
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
     caseToCreate: caseValidatedRaw,

@@ -505,7 +505,10 @@ describe('Case entity', () => {
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(
-        { ...MOCK_CASE, otherPetitioners: undefined },
+        {
+          ...MOCK_CASE,
+          otherPetitioners: undefined,
+        },
         {
           applicationContext,
         },
@@ -530,6 +533,23 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
       expect(myCase.docketNumber).toBe('101-20');
+    });
+
+    it('Creates an invalid case if set as calendared but no trialSessionId is provided', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        trialSessionId: '"trialSessionId" is required',
+      });
     });
 
     it('Creates an invalid case with an invalid nested contact object', () => {

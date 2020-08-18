@@ -30,6 +30,7 @@ const firstConsolidatedCase = {
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 const secondConsolidatedCase = {
   ...MOCK_CASE,
@@ -39,6 +40,7 @@ const secondConsolidatedCase = {
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const correspondenceCaseOriginalPetitionerName = `Original ${Date.now()}`;
@@ -63,6 +65,7 @@ const correspondenceCase = {
   docketNumber: '106-15',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const otherFilersCase = {
@@ -102,6 +105,7 @@ const otherFilersCase = {
   ],
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const otherPetitionersCase = {
@@ -173,6 +177,7 @@ const otherPetitionersCase = {
     },
   ],
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 describe('Case journey', () => {
