@@ -121,7 +121,7 @@ exports.migrateCaseInteractor = async ({
   });
 
   for (const correspondenceEntity of caseToAdd.correspondence) {
-    await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+    await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
       docketNumber: caseToAdd.docketNumber,

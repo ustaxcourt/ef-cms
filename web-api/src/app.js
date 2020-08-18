@@ -29,6 +29,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  archiveCorrespondenceDocumentLambda,
+} = require('./correspondence/archiveCorrespondenceDocumentLambda');
+const {
   archiveDraftDocumentLambda,
 } = require('./documents/archiveDraftDocumentLambda');
 const {
@@ -70,9 +73,6 @@ const {
 const {
   deleteCaseDeadlineLambda,
 } = require('./caseDeadline/deleteCaseDeadlineLambda');
-const {
-  deleteCorrespondenceDocumentLambda,
-} = require('./correspondence/deleteCorrespondenceDocumentLambda');
 const {
   deleteCounselFromCaseLambda,
 } = require('./cases/deleteCounselFromCaseLambda');
@@ -521,7 +521,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   // DELETE
   app.delete(
     '/case-documents/:docketNumber/correspondence/:documentId',
-    lambdaWrapper(deleteCorrespondenceDocumentLambda),
+    lambdaWrapper(archiveCorrespondenceDocumentLambda),
   );
 }
 /**

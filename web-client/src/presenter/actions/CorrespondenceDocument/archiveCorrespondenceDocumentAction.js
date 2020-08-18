@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * delete correspondence document from a case.
+ * archive correspondence document from a case.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if deleting the correspondence document was successful or not
  */
-export const deleteCorrespondenceDocumentAction = async ({
+export const archiveCorrespondenceDocumentAction = async ({
   applicationContext,
   get,
   path,
@@ -20,7 +20,7 @@ export const deleteCorrespondenceDocumentAction = async ({
   try {
     await applicationContext
       .getUseCases()
-      .deleteCorrespondenceDocumentInteractor({
+      .archiveCorrespondenceDocumentInteractor({
         applicationContext,
         docketNumber,
         documentId,
