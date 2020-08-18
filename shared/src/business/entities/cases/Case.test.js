@@ -508,7 +508,6 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           otherPetitioners: undefined,
-          resumeNoticesAt: '2019-01-05T01:02:03.004Z',
         },
         {
           applicationContext,
