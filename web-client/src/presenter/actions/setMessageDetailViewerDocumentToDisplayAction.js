@@ -21,25 +21,27 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
-  const { attachments } = mostRecentMessage;
-  const formattedAttachments = formatAttachments({ attachments, caseDetail });
-  console.log(formattedAttachments);
-  const formattedAttachment = formattedAttachments.find(
-    attachment => attachment.documentId === viewerDocumentToDisplay.documentId,
-  );
+  if (viewerDocumentToDisplay) {
+    const { attachments } = mostRecentMessage;
+    const formattedAttachments = formatAttachments({ attachments, caseDetail });
+    const formattedAttachment = formattedAttachments.find(
+      attachment =>
+        attachment.documentId === viewerDocumentToDisplay.documentId,
+    );
 
-  if (viewerDocumentToDisplay && !formattedAttachment.archived) {
-    const {
-      url,
-    } = await applicationContext
-      .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
-        docketNumber,
-        documentId: viewerDocumentToDisplay.documentId,
-        isPublic: false,
-      });
+    if (!formattedAttachment.archived) {
+      const {
+        url,
+      } = await applicationContext
+        .getUseCases()
+        .getDocumentDownloadUrlInteractor({
+          applicationContext,
+          docketNumber,
+          documentId: viewerDocumentToDisplay.documentId,
+          isPublic: false,
+        });
 
-    store.set(state.iframeSrc, url);
+      store.set(state.iframeSrc, url);
+    }
   }
 };

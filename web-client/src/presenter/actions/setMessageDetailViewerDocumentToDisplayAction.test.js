@@ -21,13 +21,13 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
-          mostRecentMessage: { attachments: [] },
+          mostRecentMessage: { attachments: [{ documentId: '1234' }] },
           viewerDocumentToDisplay: { documentId: '1234' },
         },
         state: {
           caseDetail: {
             docketNumber: '123-45',
-            documents: [],
+            documents: [{ documentId: '1234' }],
           },
           viewerDocumentToDisplay: null,
         },
@@ -48,13 +48,13 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
-          mostRecentMessage: { attachments: [] },
+          mostRecentMessage: { attachments: [{ documentId: '1234' }] },
           viewerDocumentToDisplay: null,
         },
         state: {
           caseDetail: {
             docketNumber: '123-45',
-            documents: [],
+            documents: [{ documentId: '1234' }],
           },
           viewerDocumentToDisplay: null,
         },
