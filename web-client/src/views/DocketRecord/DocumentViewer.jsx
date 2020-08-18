@@ -65,7 +65,7 @@ export const DocumentViewer = connect(
                         >
                           {entry.createdAtFormatted}
                         </div>
-                        <div>
+                        <div className="grid-col-5">
                           <span
                             className={classNames(
                               entry.isStricken && 'stricken-docket-record',
