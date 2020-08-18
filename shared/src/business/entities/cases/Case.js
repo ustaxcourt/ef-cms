@@ -790,7 +790,7 @@ Case.prototype.archiveDocument = function (document, { applicationContext }) {
  *
  * @param {string} correspondence the correspondence to archive
  */
-Case.prototype.archiveCorrespondece = function (
+Case.prototype.archiveCorrespondence = function (
   correspondence,
   { applicationContext },
 ) {
