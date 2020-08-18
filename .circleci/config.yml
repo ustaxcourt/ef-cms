@@ -597,6 +597,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
           name: Setup Env
           command: |
             echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV

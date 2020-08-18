@@ -288,25 +288,41 @@ const formatCase = (applicationContext, caseDetail) => {
       counsel.representingNames = [];
 
       if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingNames.push(caseDetail.contactPrimary.name);
+        counsel.representingNames.push({
+          name: caseDetail.contactPrimary.name,
+          secondaryName: caseDetail.contactPrimary.secondaryName,
+          title: caseDetail.contactPrimary.title,
+        });
       }
 
       if (
         caseDetail.contactSecondary &&
         counsel.representing.includes(caseDetail.contactSecondary.contactId)
       ) {
-        counsel.representingNames.push(caseDetail.contactSecondary.name);
+        counsel.representingNames.push({
+          name: caseDetail.contactSecondary.name,
+          secondaryName: caseDetail.contactSecondary.secondaryName,
+          title: caseDetail.contactSecondary.title,
+        });
       }
 
       caseDetail.otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
-          counsel.representingNames.push(otherPetitioner.name);
+          counsel.representingNames.push({
+            name: otherPetitioner.name,
+            secondaryName: otherPetitioner.secondaryName,
+            title: otherPetitioner.title,
+          });
         }
       });
 
       caseDetail.otherFilers.forEach(otherFiler => {
         if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingNames.push(otherFiler.name);
+          counsel.representingNames.push({
+            name: otherFiler.name,
+            secondaryName: otherFiler.secondaryName,
+            title: otherFiler.title,
+          });
         }
       });
     }

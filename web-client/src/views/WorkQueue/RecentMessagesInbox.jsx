@@ -17,10 +17,10 @@ export const RecentMessagesInbox = connect(
         >
           <thead>
             <tr>
-              <th className="small">Received</th>
               <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket Number</span>
               </th>
+              <th className="small">Received</th>
               <th>Message</th>
               <th>Case Title</th>
               <th className="no-wrap">Case Status</th>
