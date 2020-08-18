@@ -34,6 +34,7 @@
 
 ## Order search
 * search is limited to Orders that have been served
+* Orders in sealed cases display in internal order search results but do NOT display in public order search results
 
 #### Search by keyword
 * is required for search
@@ -54,7 +55,8 @@
 
 
 ## Opinion search
-* search is limited to Orders that have been served
+* search is limited to Opinions that have been served
+* Opinions for sealed cases appear in internal and public Opinion search results
 
 #### Search by keyword
 * is required for search
