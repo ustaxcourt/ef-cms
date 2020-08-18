@@ -28,6 +28,7 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
+      archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
       docketNumber: '123-20',
@@ -79,6 +80,18 @@ describe('getCaseByDocketNumber', () => {
               pk: 'case|123-20',
               sk: 'document|124',
             },
+            {
+              archived: true,
+              documentId: 'abc-123',
+              pk: 'case|123-20',
+              sk: 'correspondence|123',
+            },
+            {
+              archived: false,
+              documentId: 'abc-124',
+              pk: 'case|123-20',
+              sk: 'correspondence|124',
+            },
           ],
         }),
     });
@@ -89,6 +102,14 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
+      archivedCorrespondences: [
+        {
+          archived: true,
+          documentId: 'abc-123',
+          pk: 'case|123-20',
+          sk: 'correspondence|123',
+        },
+      ],
       archivedDocuments: [
         {
           archived: true,
@@ -97,7 +118,14 @@ describe('getCaseByDocketNumber', () => {
           sk: 'document|123',
         },
       ],
-      correspondence: [],
+      correspondence: [
+        {
+          archived: false,
+          documentId: 'abc-124',
+          pk: 'case|123-20',
+          sk: 'correspondence|124',
+        },
+      ],
       docketNumber: '123-20',
       docketRecord: [
         {
@@ -141,6 +169,7 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
+      archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
       docketRecord: [],

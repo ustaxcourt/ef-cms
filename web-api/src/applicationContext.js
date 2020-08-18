@@ -203,9 +203,6 @@ const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
 const {
-  deleteCorrespondenceDocumentInteractor,
-} = require('../../shared/src/business/useCases/correspondence/deleteCorrespondenceDocumentInteractor');
-const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
 const {
@@ -1434,7 +1431,6 @@ module.exports = appContextUser => {
         createUserInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
-        deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
