@@ -338,7 +338,7 @@ describe('updateCase', () => {
     });
   });
 
-  describe('PrivatePractitioners', () => {
+  describe('privatePractitioners', () => {
     it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -456,6 +456,77 @@ describe('updateCase', () => {
       ).toMatchObject({
         pk: 'case|101-18',
         sk: 'privatePractitioner|user-id-existing-123',
+      });
+    });
+  });
+
+  // TODO - documents, archivedDocuments, correspondence?
+  describe('archivedCorrespondences', () => {
+    it('adds an archived correspondence to a case when archivedCorrespondences is an empty list', async () => {
+      const mockCorrespondenceId = applicationContext.getUniqueId();
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          archivedCorrespondences: [
+            {
+              archived: true,
+              documentId: mockCorrespondenceId,
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `correspondence|${mockCorrespondenceId}`,
+        userId: 'user-id-existing-234',
+      });
+    });
+
+    it('adds an archived correspondence to a case when archivedCorrespondences has entries', async () => {
+      addPrivatePractitioners();
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          archivedCorrespondences: [
+            {
+              archived: true,
+              documentId: mockCorrespondenceId,
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: 'privatePractitioner|user-id-new-321',
+        userId: 'user-id-new-321',
       });
     });
   });

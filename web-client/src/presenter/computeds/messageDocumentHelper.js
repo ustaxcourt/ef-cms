@@ -20,12 +20,20 @@ export const messageDocumentHelper = (get, applicationContext) => {
     return null;
   }
 
-  const { archivedDocuments = [], correspondence, documents } = caseDetail;
+  const {
+    archivedDocuments = [],
+    archivedCorrespondences = [],
+    correspondence,
+    documents,
+  } = caseDetail;
 
   const caseDocument =
-    [...correspondence, ...documents, ...archivedDocuments].find(
-      d => d.documentId === viewerDocumentToDisplay.documentId,
-    ) || {};
+    [
+      ...correspondence,
+      ...documents,
+      ...archivedDocuments,
+      ...archivedCorrespondences,
+    ].find(d => d.documentId === viewerDocumentToDisplay.documentId) || {};
 
   const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 

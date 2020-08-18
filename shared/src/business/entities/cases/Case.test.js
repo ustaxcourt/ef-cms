@@ -1301,7 +1301,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('archiveCorrespondece', () => {
+  describe('archiveCorrespondence', () => {
     let caseRecord;
     let correspondenceToArchive;
     beforeEach(() => {
@@ -1323,29 +1323,29 @@ describe('Case entity', () => {
     });
 
     it('marks the correspondence document as archived', () => {
-      caseRecord.archiveCorrespondece(correspondenceToArchive, {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
-      const archivedDocument = caseRecord.archivedDocuments.find(
+      const archivedDocument = caseRecord.archivedCorrespondences.find(
         d => d.documentId === correspondenceToArchive.documentId,
       );
       expect(archivedDocument.archived).toBeTruthy();
     });
 
     it('adds the provided document to the case archivedDocuments', () => {
-      caseRecord.archiveCorrespondece(correspondenceToArchive, {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
 
       expect(
-        caseRecord.archivedDocuments.find(
+        caseRecord.archivedCorrespondences.find(
           d => d.documentId === correspondenceToArchive.documentId,
         ),
       ).toBeDefined();
     });
 
     it('removes the provided document from the case documents array', () => {
-      caseRecord.archiveCorrespondece(correspondenceToArchive, {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
 

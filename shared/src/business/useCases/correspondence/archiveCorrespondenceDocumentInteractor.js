@@ -5,7 +5,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.deleteCorrespondenceDocumentInteractor = async ({
+exports.archiveCorrespondenceDocumentInteractor = async ({
   applicationContext,
   docketNumber,
   documentId,
