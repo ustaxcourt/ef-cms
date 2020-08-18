@@ -209,6 +209,9 @@ const {
   migrateCaseDeadlineLambda,
 } = require('./migrate/migrateCaseDeadlineLambda');
 const {
+  migrateTrialSessionLambda,
+} = require('./migrate/migrateTrialSessionLambda');
+const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -738,6 +741,7 @@ app.post(
  */
 app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
 app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
+app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
 
 /**
  * practitioners
