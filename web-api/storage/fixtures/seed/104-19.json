@@ -317,8 +317,7 @@
     "gsi1pk": "message|2d1191d3-4597-454a-a2b2-84e267ccf01e",
     "attachments": [
       {
-        "documentId": "8ed9bad9-db58-43c8-b03f-c2e3ad92995f",
-        "documentTitle": "Order"
+        "documentId": "8ed9bad9-db58-43c8-b03f-c2e3ad92995f"
       }
     ],
     "caseStatus": "New",

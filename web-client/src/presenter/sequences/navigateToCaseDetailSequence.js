@@ -1,7 +1,6 @@
 import { getIsOnCaseDetailAction } from '../actions/CaseDetail/getIsOnCaseDetailAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-
 import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 
 export const navigateToCaseDetailSequence = [
   getIsOnCaseDetailAction,
