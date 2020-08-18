@@ -7,7 +7,6 @@ export const formattedCaseMessages = (get, applicationContext) => {
 
   const { completedMessages, inProgressMessages } = getFormattedMessages({
     applicationContext,
-    caseDetail,
     messages,
   });
 

@@ -6,3 +6,4 @@
 
 ## Today's Opinions
 * Public users have access to all opinions served today via the Today's Opinion page
+* Opinions in sealed cases are available in the Today's Opinions list
