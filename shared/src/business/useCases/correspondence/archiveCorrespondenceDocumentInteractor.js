@@ -36,8 +36,8 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
 
   await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
     applicationContext,
+    correspondence: correspondenceToArchive,
     docketNumber,
-    documentId,
   });
 
   await applicationContext.getPersistenceGateway().updateCase({

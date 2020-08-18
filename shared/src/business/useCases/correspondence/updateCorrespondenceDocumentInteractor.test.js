@@ -101,7 +101,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
       correspondence: {
