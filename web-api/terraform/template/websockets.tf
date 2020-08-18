@@ -63,6 +63,7 @@ resource "aws_apigatewayv2_integration" "websockets_connect_integration" {
   integration_method        = "POST"
   integration_uri           = aws_lambda_function.websockets_connect_lambda.invoke_arn
   passthrough_behavior      = "WHEN_NO_MATCH"
+  credentials_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
   content_handling_strategy = "CONVERT_TO_TEXT"
 }
 
@@ -73,6 +74,7 @@ resource "aws_apigatewayv2_integration" "websockets_disconnect_integration" {
   integration_method        = "POST"
   integration_uri           = aws_lambda_function.websockets_disconnect_lambda.invoke_arn
   passthrough_behavior      = "WHEN_NO_MATCH"
+  credentials_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
   content_handling_strategy = "CONVERT_TO_TEXT"
 }
 
@@ -175,6 +177,7 @@ resource "aws_route53_record" "websocket_east_regional_record" {
 resource "aws_apigatewayv2_authorizer" "websocket_authorizer" {
   api_id           = aws_apigatewayv2_api.websocket_api.id
   authorizer_type  = "REQUEST"
+  authorizer_credentials_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
   authorizer_uri   = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
   identity_sources = ["route.request.querystring.token"]
   name             = "websocket_authorizer_${var.environment}"

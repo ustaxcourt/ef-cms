@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedMessages as formattedMessagesComputed,
   getFormattedMessages,
@@ -208,6 +208,86 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ]);
+    });
+
+    it('does not format message attachments if a caseDetail is not provided', () => {
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            attachments: [
+              { documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859' },
+            ],
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+        ],
+      });
+
+      expect(
+        applicationContext.getUtilities().formatAttachments,
+      ).not.toHaveBeenCalled();
+
+      expect(result.messages[0].attachments[0]).toMatchObject({
+        documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+      });
+    });
+
+    it('formats message attachments if a caseDetail is provided', () => {
+      const result = getFormattedMessages({
+        applicationContext,
+        caseDetail: {
+          documents: [
+            {
+              documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Test Document',
+            },
+          ],
+        },
+        messages: [
+          {
+            attachments: [
+              { documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859' },
+            ],
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+        ],
+      });
+
+      expect(
+        applicationContext.getUtilities().formatAttachments,
+      ).toHaveBeenCalled();
+
+      expect(result.messages[0].attachments[0]).toMatchObject({
+        archived: false,
+        documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+        documentTitle: 'Test Document',
+      });
     });
   });
 

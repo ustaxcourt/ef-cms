@@ -62,7 +62,10 @@ export const DocumentViewerDocument = connect(
               </div>
             )}
 
-            <h3>{documentViewerHelper.description}</h3>
+            <h3>
+              {documentViewerHelper.description}{' '}
+              {documentViewerHelper.showStricken && '(STRICKEN)'}
+            </h3>
 
             <div className="grid-row margin-bottom-1">
               <div className="grid-col-6">

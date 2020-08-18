@@ -93,6 +93,7 @@ import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documen
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
+import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
   formatCase,
   formatCaseDeadlines,
@@ -544,6 +545,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,
+      formatAttachments,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,

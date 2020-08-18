@@ -190,7 +190,7 @@ exports.processStreamRecordsInteractor = async ({
 
       for (const record of recordsToReprocess) {
         try {
-          let newImage = record.dynamodb.NewImage;
+          const newImage = record.dynamodb.NewImage;
 
           await applicationContext.getPersistenceGateway().indexRecord({
             applicationContext,
