@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * gets blocked cases by the trial location set on the form
+ * determines if the current url path is a case detail route and returns the appropriate path
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
