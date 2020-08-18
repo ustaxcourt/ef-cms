@@ -5,6 +5,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { forwardMessageAction } from '../actions/CaseDetail/forwardMessageAction';
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
+import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -22,6 +23,7 @@ export const forwardMessageSequence = showProgressSequenceDecorator([
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       forwardMessageAction,
+      getMostRecentMessageInThreadAction,
       setViewerDocumentToDisplayAction,
       stopShowValidationAction,
       setAlertSuccessAction,
