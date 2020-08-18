@@ -379,6 +379,10 @@ import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserC
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
+import { userContactUpdateCompleteSequence } from './sequences/userContactUpdateCompleteSequence';
+import { userContactUpdateErrorSequence } from './sequences/userContactUpdateErrorSequence';
+import { userContactUpdateInitialUpdateCompleteSequence } from './sequences/userContactUpdateInitialUpdateCompleteSequence';
+import { userContactUpdateProgressSequence } from './sequences/userContactUpdateProgressSequence';
 import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
@@ -808,6 +812,10 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     uploadCorrespondenceDocumentSequence,
     uploadCourtIssuedDocumentSequence,
+    userContactUpdateCompleteSequence,
+    userContactUpdateErrorSequence,
+    userContactUpdateInitialUpdateCompleteSequence,
+    userContactUpdateProgressSequence,
     validateAddDeficiencyStatisticsSequence,
     validateAddIrsPractitionerSequence,
     validateAddPractitionerSequence,
