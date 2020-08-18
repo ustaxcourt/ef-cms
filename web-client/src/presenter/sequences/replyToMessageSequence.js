@@ -8,8 +8,8 @@ import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMess
 import { replyToMessageAction } from '../actions/CaseDetail/replyToMessageAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
+import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -24,7 +24,7 @@ export const replyToMessageSequence = showProgressSequenceDecorator([
     success: showProgressSequenceDecorator([
       replyToMessageAction,
       getMostRecentMessageInThreadAction,
-      setViewerDocumentToDisplayAction,
+      setMessageDetailViewerDocumentToDisplayAction,
       stopShowValidationAction,
       setAlertSuccessAction,
       clearScreenMetadataAction,

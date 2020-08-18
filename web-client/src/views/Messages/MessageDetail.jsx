@@ -75,8 +75,8 @@ export const MessageDetail = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
-    setViewerDocumentToDisplaySequence:
-      sequences.setViewerDocumentToDisplaySequence,
+    setMessageDetailViewerDocumentToDisplaySequence:
+      sequences.setMessageDetailViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -88,7 +88,7 @@ export const MessageDetail = connect(
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
-    setViewerDocumentToDisplaySequence,
+    setMessageDetailViewerDocumentToDisplaySequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -225,7 +225,7 @@ export const MessageDetail = connect(
                         isActive={viewerDocumentToDisplay === attachment}
                         key={idx}
                         onClick={() => {
-                          setViewerDocumentToDisplaySequence({
+                          setMessageDetailViewerDocumentToDisplaySequence({
                             viewerDocumentToDisplay: attachment,
                           });
                         }}
