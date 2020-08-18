@@ -26,7 +26,7 @@ exports.deleteCorrespondenceDocumentInteractor = async ({
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
-  const correspondenceToArchive = caseEntity.correspondences.find(
+  const correspondenceToArchive = caseEntity.correspondence.find(
     c => c.documentId === documentId,
   );
 
