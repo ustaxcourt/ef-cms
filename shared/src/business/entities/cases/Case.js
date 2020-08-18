@@ -201,6 +201,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.resumeNoticesAt = rawCase.resumeNoticesAt;
   this.sealedDate = rawCase.sealedDate;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
@@ -609,6 +610,9 @@ Case.VALIDATION_RULES = {
   receivedAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
   ),
+  resumeNoticesAt: JoiValidationConstants.ISO_DATE.optional().description(
+    'Cases being migrated may set this value, otherwise undefined.  If provided, no notices will be sent for this case until after the ISO date provided.',
+  ),
   sealedDate: JoiValidationConstants.ISO_DATE.optional()
     .allow(null)
     .description('When the case was sealed from the public.'),
@@ -650,7 +654,11 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.optional().description(
+  trialSessionId: JoiValidationConstants.UUID.when('status', {
+    is: CASE_STATUS_TYPES.calendared,
+    otherwise: joi.optional(),
+    then: joi.required(),
+  }).description(
     'The unique ID of the trial session associated with this case.',
   ),
   trialTime: joi

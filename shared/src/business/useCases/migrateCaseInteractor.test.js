@@ -40,6 +40,9 @@ describe('migrateCaseInteractor', () => {
       ...adminUser,
       section: 'admin',
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(undefined);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue({
       name: 'john doe',
@@ -103,6 +106,18 @@ describe('migrateCaseInteractor', () => {
         },
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('throws an error case has a trial session id but it cannot be found in persistence', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          trialSessionId: 'cafebabe-b37b-479d-9201-067ec6e335bb',
+        },
+      }),
+    ).rejects.toThrow('Trial Session not found');
   });
 
   it('should pull the current user record from persistence', async () => {
