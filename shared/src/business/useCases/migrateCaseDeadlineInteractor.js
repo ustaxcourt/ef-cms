@@ -9,7 +9,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseMetadata the case metadata
+ * @param {object} providers.caseDeadlineMetadata the case deadline metadata
  * @returns {object} the created case deadline
  */
 exports.migrateCaseDeadlineInteractor = async ({
