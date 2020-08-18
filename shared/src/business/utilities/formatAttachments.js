@@ -41,5 +41,7 @@ export const formatAttachments = ({ attachments, caseDetail }) => {
     }
   });
 
+  console.log('formattedAttachments', formattedAttachments);
+
   return formattedAttachments;
 };

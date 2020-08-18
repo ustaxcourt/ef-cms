@@ -4,6 +4,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
+import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { replyToMessageAction } from '../actions/CaseDetail/replyToMessageAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
@@ -22,6 +23,7 @@ export const replyToMessageSequence = showProgressSequenceDecorator([
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       replyToMessageAction,
+      getMostRecentMessageInThreadAction,
       setViewerDocumentToDisplayAction,
       stopShowValidationAction,
       setAlertSuccessAction,
