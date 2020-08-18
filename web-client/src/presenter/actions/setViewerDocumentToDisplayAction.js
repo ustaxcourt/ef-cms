@@ -18,7 +18,6 @@ export const setViewerDocumentToDisplayAction = async ({
   const { mostRecentMessage, viewerDocumentToDisplay } = props;
   const caseDetail = get(state.caseDetail);
   const { attachments } = mostRecentMessage;
-
   const { docketNumber } = caseDetail;
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
@@ -28,7 +27,7 @@ export const setViewerDocumentToDisplayAction = async ({
     attachment => attachment.documentId === viewerDocumentToDisplay.documentId,
   );
 
-  if (viewerDocumentToDisplay && !formattedAttachment.archived) {
+  if (viewerDocumentToDisplay && !formattedAttachment?.archived) {
     const {
       url,
     } = await applicationContext

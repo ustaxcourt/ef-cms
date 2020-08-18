@@ -72,8 +72,8 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
+      correspondence: mockCorrespondence,
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: mockCorrespondenceDocumentId,
     });
   });
 
