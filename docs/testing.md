@@ -14,7 +14,7 @@ We maintain a extensive test suite to ensure application stability, usability, a
        ↓         ⎪
     Sequence     ⎭
        ↓
-    JSON API
+    JSON API       (REST, WebSockets)
        ↓
     Handler      ⎫
        ↓         ⎪
@@ -28,16 +28,17 @@ We maintain a extensive test suite to ensure application stability, usability, a
        💾
 ```
 
+This is a general layer diagram, representing the majority of requests and responses, to aide in the descriptions below. For a more accurate system diagram, see the [README](./README.md).
+
 ### Local application testing
 
 These tests run locally on developer machines and in CI against a locally-running application, using mocked AWS services as needed.
 
 | Type | Tool | Purpose and notes
 |------|------|------------------
-| Lint | [eslint](https://eslint.org/), [stylelint](https://stylelint.io/) | Ensures consistent formatting of code, and catches common errors in syntax.
-| Unit | [jest](https://jestjs.io/) | Ensures functions and code paths behave as expected in isolation. There are separate test runs against `web-api`, `web-client`, and `shared`.
-| Integration | [jest](https://jestjs.io/) | ?
-| Functional | [cypress](https://www.cypress.io/) | ?
+| Lint | [eslint](https://eslint.org/), [stylelint](https://stylelint.io/) | Ensures consistent formatting of code, and catches common errors in syntax. Covers all layers of the application.
+| Unit | [jest](https://jestjs.io/) | Ensures functions and code paths behave as expected in isolation. There are separate test runs against `web-api`, `web-client`, and `shared`, and cover their area of code (Event, Sequence, Handler, Interactor, Gateway, or Client).
+| Integration | [jest](https://jestjs.io/) | Covers layers from Events to Data storage and back, using a simulated browser environment. Ensures layers interact with each other and mocked data storage layers correctly.
 | Accessibility | [pa11y](https://pa11y.org/) | Scanning of web interfaces to catch common accessibility mistakes.
 | Accessibility | [Manual](#accessibility) | Manual testing of the application ensures it is accessible through common screen readers.
 
@@ -45,9 +46,9 @@ These tests run locally on developer machines and in CI against a locally-runnin
 
 | Type | Tool | Purpose and notes
 |------|------|------------------
-| Smoke (end-to-end) | [cypress](https://www.cypress.io/) | Run daily. Ensures user flows work between application components using real AWS services.
+| Smoke (end-to-end) | [cypress](https://www.cypress.io/) | Run daily. Ensures user flows work from browser down through application components using real AWS services.
 | End-to-end | [Manual](#manual-end-of-sprint-qa) | Manual testing of common user workflows happens at the end of sprints.
-| Accessibility | [pa11y](https://pa11y.org/) | Run daily. Scanning of web interfaces to catch common accessibility mistakes.
+| Smoke (security) | [pa11y](https://pa11y.org/) | Run daily. Assets security headers are appropriately configured. Would be included in the Cypress test suite, but cannot due to Cypress stripping the security headers.
 
 #### Production testing
 
