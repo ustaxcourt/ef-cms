@@ -50,7 +50,7 @@ const {
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   archiveCorrespondenceDocumentInteractor,
-} = require('../../shared/src/useCases/correspondence/archiveCorrespondenceDocumentInteractor');
+} = require('../../shared/src/business/useCases/correspondence/archiveCorrespondenceDocumentInteractor');
 const {
   archiveDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
