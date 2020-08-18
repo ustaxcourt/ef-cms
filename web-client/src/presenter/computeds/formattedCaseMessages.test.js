@@ -64,9 +64,7 @@ describe('formattedCaseMessages', () => {
         {
           attachments: [
             {
-              archived: false,
               documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
-              documentTitle: 'Test Document',
             },
           ],
           createdAtFormatted: '01/01/19',
