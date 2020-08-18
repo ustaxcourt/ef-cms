@@ -87,7 +87,7 @@ const baseUserValidation = {
       otherwise: joi.optional().allow(null),
       then: joi.optional(),
     }),
-  name: joi.string().max(100).optional(),
+  name: joi.string().max(100).required(),
   role: joi
     .string()
     .valid(...Object.values(ROLES))

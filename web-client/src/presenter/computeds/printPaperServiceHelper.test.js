@@ -18,4 +18,20 @@ describe('printPaperServiceHelper', () => {
     });
     expect(documentTitle).toEqual('Document');
   });
+
+  it('should return an empty object if documentId is not set', () => {
+    const result = runCompute(printPaperServiceHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Document',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual({});
+  });
 });
