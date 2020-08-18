@@ -10,13 +10,14 @@ const client = require('../../dynamodbClientService');
  */
 exports.updateCaseCorrespondence = async ({
   applicationContext,
+  correspondence,
   docketNumber,
-  documentId,
 }) => {
   await client.put({
     Item: {
       pk: `case|${docketNumber}`,
-      sk: `correspondence|${documentId}`,
+      sk: `correspondence|${correspondence.documentId}`,
+      ...correspondence,
     },
     applicationContext,
   });

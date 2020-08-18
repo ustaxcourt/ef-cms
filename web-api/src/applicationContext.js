@@ -266,9 +266,6 @@ const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
-  fileCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/fileCaseCorrespondence');
-const {
   fileCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor');
 const {
@@ -1087,7 +1084,6 @@ const gatewayMethods = {
     createUser,
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
-    fileCaseCorrespondence,
     incrementCounter,
     indexRecord,
     markMessageThreadRepliedTo,
