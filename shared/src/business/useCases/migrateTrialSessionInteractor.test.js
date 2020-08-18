@@ -1,6 +1,6 @@
 const {
-  migrateCaseDeadlineInteractor,
-} = require('./migrateCaseDeadlineInteractor');
+  migrateTrialSessionInteractor,
+} = require('./migrateTrialSessionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
@@ -8,10 +8,10 @@ const { User } = require('../entities/User');
 const DATE = '2018-11-21T20:49:28.192Z';
 
 let adminUser;
-let createdCaseDeadlines;
-let caseDeadlineMetadata;
+let createdTrialSessions;
+let trialSessionMetadata;
 
-describe('migrateCaseDeadlineInteractor', () => {
+describe('migrateTrialSessionInteractor', () => {
   beforeEach(() => {
     window.Date.prototype.toISOString = jest.fn(() => DATE);
 
@@ -21,7 +21,7 @@ describe('migrateCaseDeadlineInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    createdCaseDeadlines = [];
+    createdTrialSessions = [];
 
     applicationContext.environment.stage = 'local';
 
@@ -29,8 +29,8 @@ describe('migrateCaseDeadlineInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .createCaseDeadline.mockImplementation(({ caseDeadlineToCreate }) => {
-        createdCaseDeadlines.push(caseDeadlineToCreate);
+      .createTrialSession.mockImplementation(({ trialSessionToCreate }) => {
+        createdTrialSessions.push(trialSessionToCreate);
       });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...adminUser,
@@ -42,17 +42,22 @@ describe('migrateCaseDeadlineInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    caseDeadlineMetadata = {
-      deadlineDate: '2019-03-01T21:42:29.073Z',
-      description: 'One small step',
-      docketNumber: '999-96',
+    trialSessionMetadata = {
+      isCalendared: false,
+      maxCases: 100,
+      sessionType: 'Hybrid',
+      startDate: DATE,
+      term: 'Fall',
+      termYear: '2018',
+      trialLocation: 'Chicago, IL',
+      trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
     };
   });
 
   it('should get the current user from applicationContext', async () => {
-    await migrateCaseDeadlineInteractor({
+    await migrateTrialSessionInteractor({
       applicationContext,
-      caseDeadlineMetadata,
+      trialSessionMetadata,
     });
 
     expect(applicationContext.getCurrentUser).toHaveBeenCalled();
@@ -62,17 +67,17 @@ describe('migrateCaseDeadlineInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      migrateCaseDeadlineInteractor({
+      migrateTrialSessionInteractor({
         applicationContext,
-        caseDeadlineMetadata,
+        trialSessionMetadata,
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should pull the current user record from persistence', async () => {
-    await migrateCaseDeadlineInteractor({
+    await migrateTrialSessionInteractor({
       applicationContext,
-      caseDeadlineMetadata,
+      trialSessionMetadata,
     });
 
     expect(
@@ -80,41 +85,43 @@ describe('migrateCaseDeadlineInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should create a case deadline successfully', async () => {
-    expect(createdCaseDeadlines.length).toEqual(0);
+  it('should create a trial session successfully', async () => {
+    expect(createdTrialSessions.length).toEqual(0);
 
-    const result = await migrateCaseDeadlineInteractor({
+    const result = await migrateTrialSessionInteractor({
       applicationContext,
-      caseDeadlineMetadata,
+      trialSessionMetadata,
     });
 
     expect(result).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().createCaseDeadline,
+      applicationContext.getPersistenceGateway().createTrialSession,
     ).toHaveBeenCalled();
-    expect(createdCaseDeadlines.length).toEqual(1);
+    expect(createdTrialSessions.length).toEqual(1);
   });
 
   describe('validation', () => {
-    it('should fail to migrate a case deadline when the case deadline metadata is invalid', async () => {
+    it('should fail to migrate a trial session when the trial session metadata is invalid', async () => {
       await expect(
-        migrateCaseDeadlineInteractor({
+        migrateTrialSessionInteractor({
           applicationContext,
-          caseDeadlineMetadata: {},
-        }),
-      ).rejects.toThrow('The CaseDeadline entity was invalid');
-    });
-
-    it('should fail to migrate a case deadline when the description is invalid', async () => {
-      await expect(
-        migrateCaseDeadlineInteractor({
-          applicationContext,
-          caseDeadlineMetadata: {
-            ...caseDeadlineMetadata,
-            description: '',
+          trialSessionMetadata: {
+            trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
           },
         }),
-      ).rejects.toThrow('The CaseDeadline entity was invalid');
+      ).rejects.toThrow('The TrialSession entity was invalid');
+    });
+
+    it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
+      await expect(
+        migrateTrialSessionInteractor({
+          applicationContext,
+          trialSessionMetadata: {
+            ...trialSessionMetadata,
+            trialSessionId: undefined,
+          },
+        }),
+      ).rejects.toThrow('must include trialSessionId');
     });
   });
 });
