@@ -54084,14 +54084,6 @@
           - "YYYY-MM-DD"
         presence: "required"
         description: "When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited."
-    resumeNoticesAt: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
-        description: "Cases being migrated may set this value, otherwise undefined.  If provided, no notices will be sent for this case until after the ISO date provided."
     sealedDate: 
       type: "date"
       flags: 
