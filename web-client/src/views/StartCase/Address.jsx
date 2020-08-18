@@ -153,7 +153,7 @@ export const Address = connect(
               <div className="grid-col-8">
                 {validationErrors &&
                   validationErrors[type] &&
-                  validationErrors[type].state && (
+                  validationErrors[type].city && (
                     <span className="usa-error-message">
                       {validationErrors[type].city}
                     </span>
