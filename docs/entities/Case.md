@@ -54084,6 +54084,14 @@
           - "YYYY-MM-DD"
         presence: "required"
         description: "When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited."
+    resumeNoticesAt: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+        presence: "optional"
+        description: "Cases being migrated may set this value, otherwise undefined.  If provided, no notices will be sent for this case until after the ISO date provided."
     sealedDate: 
       type: "date"
       flags: 
@@ -54478,7 +54486,6 @@
     trialSessionId: 
       type: "string"
       flags: 
-        presence: "optional"
         description: "The unique ID of the trial session associated with this case."
       rules: 
         - 
@@ -54487,6 +54494,28 @@
             options: 
               version: 
                 - "uuidv4"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Calendared"
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     trialTime: 
       type: "string"
       flags: 

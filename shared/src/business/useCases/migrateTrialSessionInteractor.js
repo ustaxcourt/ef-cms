@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { calculateISODate } = require('../utilities/DateHandler');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -30,9 +31,14 @@ exports.migrateTrialSessionInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  const resumeNoticesAt = calculateISODate({
+    howMuch: 1,
+    units: 'hours',
+  });
   const trialSessionToAdd = new TrialSession(
     {
       ...trialSessionMetadata,
+      resumeNoticesAt,
       userId: user.userId,
     },
     {
