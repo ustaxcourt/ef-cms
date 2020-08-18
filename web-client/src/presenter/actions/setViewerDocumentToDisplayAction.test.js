@@ -19,15 +19,18 @@ describe('setViewerDocumentToDisplayAction', () => {
         presenter,
       },
       props: {
+        mostRecentMessage: { attachments: [] },
         viewerDocumentToDisplay: { documentId: '1234' },
       },
       state: {
         caseDetail: {
           docketNumber: '123-45',
+          documents: [],
         },
         viewerDocumentToDisplay: null,
       },
     });
+
     expect(result.state.viewerDocumentToDisplay).toEqual({
       documentId: '1234',
     });
@@ -40,15 +43,40 @@ describe('setViewerDocumentToDisplayAction', () => {
         presenter,
       },
       props: {
+        mostRecentMessage: { attachments: [] },
         viewerDocumentToDisplay: null,
       },
       state: {
         caseDetail: {
           docketNumber: '123-45',
+          documents: [],
         },
         viewerDocumentToDisplay: null,
       },
     });
+
+    expect(result.state.iframeSrc).toBeUndefined();
+  });
+
+  it('does not set iframeSrc when the document to display has been archived', async () => {
+    const result = await runAction(setViewerDocumentToDisplayAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        mostRecentMessage: { attachments: [{ documentId: '1234' }] },
+        viewerDocumentToDisplay: { documentId: '1234' },
+      },
+      state: {
+        caseDetail: {
+          archivedDocuments: [{ archived: true, documentId: '1234' }],
+          docketNumber: '123-45',
+          documents: [],
+        },
+        viewerDocumentToDisplay: null,
+      },
+    });
+
     expect(result.state.iframeSrc).toBeUndefined();
   });
 });
