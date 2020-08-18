@@ -87,7 +87,8 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
-- [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/204/head:sprint-43`), and then switch to that branch (e.g. `git checkout sprint-43`)
+- [ ] If desired, run `docker system prune` to remove any unused docker images from previous code review.
+- [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
