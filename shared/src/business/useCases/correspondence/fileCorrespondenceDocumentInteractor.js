@@ -57,7 +57,7 @@ exports.fileCorrespondenceDocumentInteractor = async ({
   caseEntity.fileCorrespondence(correspondenceEntity);
 
   if (caseEntity.validate()) {
-    await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+    await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
       docketNumber,

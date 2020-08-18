@@ -20,17 +20,25 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   const irsPractitioners = caseAndCaseItems.filter(item =>
     item.sk.startsWith('irsPractitioner|'),
   );
-  const correspondences = caseAndCaseItems.filter(item =>
-    item.sk.startsWith('correspondence|'),
+  const correspondences = caseAndCaseItems.filter(
+    item => item.sk.startsWith('correspondence|') && !item.archived,
+  );
+  const archivedCorrespondences = caseAndCaseItems.filter(
+    item => item.sk.startsWith('correspondence|') && item.archived,
   );
 
   const sortedDocketRecord = sortBy(docketRecord, 'index');
   const sortedDocuments = sortBy(documents, 'createdAt');
   const sortedArchivedDocuments = sortBy(archivedDocuments, 'createdAt');
   const sortedCorrespondences = sortBy(correspondences, 'filingDate');
+  const sortedArchivedCorrespondences = sortBy(
+    archivedCorrespondences,
+    'filingDate',
+  );
 
   return {
     ...theCase,
+    archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocuments: sortedArchivedDocuments,
     correspondence: sortedCorrespondences,
     docketRecord: sortedDocketRecord,

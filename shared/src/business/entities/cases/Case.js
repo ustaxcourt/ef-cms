@@ -175,6 +175,15 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     } else {
       this.archivedDocuments = [];
     }
+
+    if (Array.isArray(rawCase.archivedCorrespondences)) {
+      this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      );
+    } else {
+      this.archivedCorrespondences = [];
+    }
   }
 
   this.caseCaption = rawCase.caseCaption;
@@ -307,6 +316,11 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 }
 
 Case.VALIDATION_RULES = {
+  archivedCorrespondences: joi
+    .array()
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
+    .description('List of Correspondence Entities that were archived.'),
   archivedDocuments: joi
     .array()
     .items(Document.VALIDATION_RULES)
@@ -786,6 +800,25 @@ Case.prototype.archiveDocument = function (document, { applicationContext }) {
 };
 
 /**
+ * archives a correspondence document and adds it to the archivedCorrespondences array on the case
+ *
+ * @param {string} correspondence the correspondence to archive
+ */
+Case.prototype.archiveCorrespondence = function (
+  correspondence,
+  { applicationContext },
+) {
+  const correspondenceToArchive = new Correspondence(correspondence, {
+    applicationContext,
+  });
+  correspondenceToArchive.archived = true;
+  this.archivedCorrespondences.push(correspondenceToArchive);
+  this.deleteCorrespondenceById({
+    correspondenceId: correspondenceToArchive.documentId,
+  });
+};
+
+/**
  * updates an IRS practitioner on the case
  *
  * @param {string} practitionerToUpdate the irsPractitioner user object with updated info
@@ -996,6 +1029,21 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.deleteDocumentById = function ({ documentId }) {
   this.documents = this.documents.filter(
     item => item.documentId !== documentId,
+  );
+
+  return this;
+};
+
+/**
+ * deletes the correspondence with id documentId from the correspondence array
+ *
+ * @params {object} params the params object
+ * @params {string} params.correspondenceId the id of the correspondence to remove from the correspondence array
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
+  this.correspondence = this.correspondence.filter(
+    item => item.documentId !== correspondenceId,
   );
 
   return this;
