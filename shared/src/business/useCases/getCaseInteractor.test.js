@@ -74,6 +74,7 @@ describe('Get case', () => {
 
   it('failure case by case id', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Tasha Yar',
       role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
@@ -164,6 +165,7 @@ describe('Get case', () => {
             irsPractitioners: [
               {
                 barNumber: 'BN1234',
+                name: 'Wesley Crusher',
                 role: ROLES.irsPractitioner,
                 userId: irsPractitionerId,
               },
@@ -173,6 +175,7 @@ describe('Get case', () => {
             privatePractitioners: [
               {
                 barNumber: 'BN1234',
+                name: 'Katherine Pulaski',
                 role: ROLES.privatePractitioner,
                 userId: practitionerId,
               },
@@ -186,6 +189,7 @@ describe('Get case', () => {
     it('restricted case by inadequate permissions', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         barNumber: 'BN1234',
+        name: 'Beverly Crusher',
         role: ROLES.privatePractitioner,
         userId: 'practitioner2',
       });
@@ -208,6 +212,7 @@ describe('Get case', () => {
     it('full case access via sealed case permissions', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         barNumber: 'BN1234',
+        name: 'Saul Goodman',
         role: ROLES.docketClerk,
         userId: practitioner2Id,
       });

@@ -37,7 +37,7 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
   contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('PrivatePractitioner').required(),
-  name: joi.string().max(100).optional(),
+  name: joi.string().max(100).required(),
   representing: joi
     .array()
     .items(JoiValidationConstants.UUID)

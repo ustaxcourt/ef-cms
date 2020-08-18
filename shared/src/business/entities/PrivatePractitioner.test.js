@@ -16,8 +16,7 @@ describe('PrivatePractitioner', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
