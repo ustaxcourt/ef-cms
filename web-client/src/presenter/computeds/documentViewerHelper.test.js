@@ -783,4 +783,67 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(false);
     });
   });
+
+  it('should show stricken information if the associated document has been stricken', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [
+            {
+              description: 'Petition',
+              documentId: 'abc',
+              index: 1,
+              isStricken: true,
+            },
+          ],
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showStricken).toEqual(true);
+  });
+
+  it('should show stricken information if the docket entry has been stricken', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [
+            {
+              description: 'Petition',
+              documentId: 'abc',
+              index: 1,
+              isStricken: true,
+            },
+          ],
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+          isStricken: true,
+        },
+      },
+    });
+
+    expect(result.showStricken).toEqual(true);
+  });
 });
