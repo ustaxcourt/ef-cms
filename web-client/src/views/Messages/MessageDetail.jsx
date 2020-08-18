@@ -234,7 +234,7 @@ export const MessageDetail = connect(
                           <div
                             className={classNames(
                               'grid-col-8',
-                              attachment.archived && 'text-base-light',
+                              attachment.archived && 'text-base-dark',
                             )}
                           >
                             {attachment.documentTitle}
@@ -247,7 +247,7 @@ export const MessageDetail = connect(
                               </span>
                             )}
                             {attachment.archived && (
-                              <span className="text-base-light attachment-information">
+                              <span className="text-base-dark attachment-information">
                                 Deleted
                               </span>
                             )}
