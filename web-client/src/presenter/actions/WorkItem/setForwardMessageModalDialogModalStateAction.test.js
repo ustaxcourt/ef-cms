@@ -6,6 +6,10 @@ import { setForwardMessageModalDialogModalStateAction } from './setForwardMessag
 const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('setForwardMessageModalDialogModalStateAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should set the modal state for forwarding a message', async () => {
     const result = await runAction(
       setForwardMessageModalDialogModalStateAction,
@@ -18,7 +22,6 @@ describe('setForwardMessageModalDialogModalStateAction', () => {
             attachments: [
               {
                 documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
-                documentTitle: 'Petition',
               },
             ],
             from: 'test user 1',
@@ -28,14 +31,28 @@ describe('setForwardMessageModalDialogModalStateAction', () => {
             subject: 'the subject',
           },
         },
-        state: {},
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
+                documentTitle: 'Petition',
+              },
+            ],
+          },
+        },
       },
     );
+
+    expect(
+      applicationContext.getUtilities().formatAttachments,
+    ).toHaveBeenCalled();
 
     expect(result.state.modal).toEqual({
       form: {
         attachments: [
           {
+            archived: false,
             documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
             documentTitle: 'Petition',
           },

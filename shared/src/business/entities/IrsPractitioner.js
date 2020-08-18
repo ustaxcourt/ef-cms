@@ -1,10 +1,13 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
+  USER_CONTACT_VALIDATION_RULES,
   userDecorator,
-  userValidation,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
@@ -24,7 +27,6 @@ function IrsPractitioner(rawUser) {
 }
 
 IrsPractitioner.VALIDATION_RULES = joi.object().keys({
-  ...userValidation,
   barNumber: joi
     .string()
     .max(100)
@@ -32,12 +34,17 @@ IrsPractitioner.VALIDATION_RULES = joi.object().keys({
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
     ),
+  contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
+  email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('IrsPractitioner').required(),
+  name: joi.string().max(100).required(),
   role: joi.string().valid(ROLES.irsPractitioner).required(),
   serviceIndicator: joi
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .required(),
+  token: joi.string().optional(),
+  userId: JoiValidationConstants.UUID.required(),
 });
 
 joiValidationDecorator(

@@ -16,8 +16,7 @@ describe('IrsPractitioner', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
     });
