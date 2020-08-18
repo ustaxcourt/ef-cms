@@ -1,4 +1,3 @@
-import { formatAttachments } from '../../../../shared/src/business/utilities/formatAttachments';
 import { state } from 'cerebral';
 
 /**
@@ -15,25 +14,12 @@ export const setViewerDocumentToDisplayAction = async ({
   props,
   store,
 }) => {
-  const { mostRecentMessage, viewerDocumentToDisplay } = props;
-  const caseDetail = get(state.caseDetail);
-  const { docketNumber } = caseDetail;
-  let shouldGetDocumentDownloadUrl = !!viewerDocumentToDisplay;
+  const { viewerDocumentToDisplay } = props;
+  const { docketNumber } = get(state.caseDetail);
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
-  if (mostRecentMessage) {
-    const { attachments } = mostRecentMessage;
-    const formattedAttachments = formatAttachments({ attachments, caseDetail });
-    const formattedAttachment = formattedAttachments.find(
-      attachment =>
-        attachment.documentId === viewerDocumentToDisplay.documentId,
-    );
-    shouldGetDocumentDownloadUrl =
-      viewerDocumentToDisplay && !formattedAttachment.archived;
-  }
-
-  if (shouldGetDocumentDownloadUrl) {
+  if (viewerDocumentToDisplay) {
     const {
       url,
     } = await applicationContext
