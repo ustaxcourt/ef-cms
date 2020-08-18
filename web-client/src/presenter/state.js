@@ -87,6 +87,7 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
@@ -179,6 +180,7 @@ const helpers = {
   trialSessionsHelper,
   trialSessionsSummaryHelper,
   updateCaseModalHelper,
+  userContactEditProgressHelper,
   viewAllDocumentsHelper,
   workQueueHelper,
   workQueueSectionHelper,
@@ -286,6 +288,8 @@ export const baseState = {
   },
   showValidation: false,
   user: null,
+  // used for progress indicator when updating contact information for all of a user's cases
+  userContactEditProgress: {},
   users: [],
   validationErrors: {},
   workItem: {},
