@@ -49,6 +49,9 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  archiveCorrespondenceDocumentInteractor,
+} = require('../../shared/src/useCases/correspondence/archiveCorrespondenceDocumentInteractor');
+const {
   archiveDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
 const {
@@ -1408,6 +1411,7 @@ module.exports = appContextUser => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
