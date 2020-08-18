@@ -201,7 +201,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
-  this.resumeNoticesAt = rawCase.resumeNoticesAt;
   this.sealedDate = rawCase.sealedDate;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
@@ -609,9 +608,6 @@ Case.VALIDATION_RULES = {
     ),
   receivedAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
-  ),
-  resumeNoticesAt: JoiValidationConstants.ISO_DATE.optional().description(
-    'Cases being migrated may set this value, otherwise undefined.  If provided, no notices will be sent for this case until after the ISO date provided.',
   ),
   sealedDate: JoiValidationConstants.ISO_DATE.optional()
     .allow(null)
@@ -1129,7 +1125,7 @@ Case.prototype.getDocketRecordByDocumentId = function (documentId) {
 /**
  * finds a docket record by its docket record index
  *
- * @param {string} docketRecordId
+ * @param {string} docketRecordId the id of the docket record to be updated
  * @returns {DocketRecord|undefined} the updated case entity
  */
 Case.prototype.getDocketRecord = function (docketRecordId) {
