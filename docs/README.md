@@ -40,6 +40,8 @@ At the end of each sprint, the vendor files a pull request back to the U.S. Tax 
 
 ## Operating EF-CMS within AWS
 
+The infrastructure for EF-CMS is configured with Terraform — see [Terraform tips & tricks](./terraform.md) for debugging and background information on Terraform.
+
 1. [Initial environment setup](environments/setup.md)
 2. [Continuous release process with CircleCI](environments/release.md)
 3. [Environment teardown](environments/teardown.md)

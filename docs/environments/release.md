@@ -25,6 +25,8 @@ These commands are run manually as an administrator, since they provision AWS ac
   (cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh stg)
   ```
 
+- See [Terraform tips & tricks](../terraform.md) for debugging and background information on Terraform.
+
 ### What to do if you aren’t fast enough
 
 As mentioned above, this is a race condition. In order to run these commands, the code must be merged, which kicks off the automated tests and deployment. However, these commands must be run before the automated deployment starts.
