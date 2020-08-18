@@ -57,10 +57,24 @@ export const DocumentViewer = connect(
                         <div className="grid-col-2 text-align-center">
                           {entry.index}
                         </div>
-                        <div className="grid-col-3">
+                        <div
+                          className={classNames(
+                            'grid-col-3',
+                            entry.isStricken && 'stricken-docket-record',
+                          )}
+                        >
                           {entry.createdAtFormatted}
                         </div>
-                        <div className="grid-col-5">{entry.description}</div>
+                        <div className="grid-col-5">
+                          <span
+                            className={classNames(
+                              entry.isStricken && 'stricken-docket-record',
+                            )}
+                          >
+                            {entry.description}
+                          </span>
+                          {entry.isStricken && ' (STRICKEN)'}
+                        </div>
                         <div className="grid-col-2 padding-left-105">
                           {entry.showNotServed && (
                             <span className="text-semibold not-served">
