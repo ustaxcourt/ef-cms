@@ -597,20 +597,27 @@ jobs:
     steps:
       - checkout
       - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
           name: Setup Env
           command: |
             echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
-          command: docker build -t efcms -f Dockerfile .
-      - run:
           name: 'Cypress Smoke Tests'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run cypress:smoketests"
+          command: npm run cypress:smoketests
       - run:
           name: 'Pa11y Smoke Tests'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests --prefix=web-client/pa11y/"
+          command: npm run test:pa11y:smoketests --prefix=web-client/pa11y/
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
@@ -707,7 +714,7 @@ workflows:
           filters:
             branches:
               only:
-                - dev
+                - develop
                 - staging
 
   build-and-deploy-with-context:
