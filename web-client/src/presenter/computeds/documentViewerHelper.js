@@ -72,8 +72,6 @@ export const documentViewerHelper = (get, applicationContext) => {
 
   let showStricken;
 
-  console.log('viewerDocumentToDisplay', viewerDocumentToDisplay);
-
   if (viewerDocumentToDisplay.isStricken !== undefined) {
     showStricken = viewerDocumentToDisplay.isStricken;
   } else {
