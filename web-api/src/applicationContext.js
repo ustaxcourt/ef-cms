@@ -1034,9 +1034,11 @@ const entitiesByName = {
 
 const isValidatedDecorator = persistenceGatewayMethods => {
   /**
-   * decorates the function to verify any entities passed have the isValid flag
+   * Decorates the function to verify any entities passed have the isValid flag.
+   * Should be used whenever a persistence method might be called by an interactor via lambda
+   * when an entity's complete record is being created or updated.
    *
-   * @returns the original methods decorated
+   * @returns {Function} the original methods decorated
    */
   function decorate(method) {
     return function () {
@@ -1065,27 +1067,61 @@ const isValidatedDecorator = persistenceGatewayMethods => {
   return persistenceGatewayMethods;
 };
 
-const gatewayMethods = isValidatedDecorator({
-  addWorkItemToSectionInbox,
+const gatewayMethods = {
+  ...isValidatedDecorator({
+    addWorkItemToSectionInbox,
+    associateUserWithCase,
+    associateUserWithCasePending,
+    bulkDeleteRecords,
+    bulkIndexRecords,
+    createCase,
+    createCaseCatalogRecord,
+    createCaseDeadline,
+    createCaseTrialSortMappingRecords,
+    createElasticsearchReindexRecord,
+    createMessage,
+    createPractitionerUser,
+    createSectionInboxRecord,
+    createTrialSession,
+    createTrialSessionWorkingCopy,
+    createUser,
+    createUserInboxRecord,
+    fetchPendingItems: fetchPendingItemsPersistence,
+    fileCaseCorrespondence,
+    incrementCounter,
+    indexRecord,
+    markMessageThreadRepliedTo,
+    persistUser,
+    putWorkItemInOutbox,
+    putWorkItemInUsersOutbox,
+    saveDocumentFromLambda,
+    saveUserConnection,
+    saveWorkItemForDocketClerkFilingExternalDocument,
+    saveWorkItemForDocketEntryInProgress,
+    saveWorkItemForNonPaper,
+    saveWorkItemForPaper,
+    setPriorityOnAllWorkItems,
+    setWorkItemAsRead,
+    updateCase,
+    updateCaseDeadline,
+    updateCaseTrialSortMappingRecords,
+    updateDocketRecord,
+    updateDocument,
+    updateDocumentProcessingStatus,
+    updateHighPriorityCaseTrialSortMappingRecords,
+    updateMessage,
+    updatePractitionerUser,
+    updateTrialSession,
+    updateTrialSessionWorkingCopy,
+    updateUser,
+    updateUserCaseNote,
+    updateWorkItem,
+    updateWorkItemInCase,
+  }),
+  // methods below are not known to create "entity" records
   advancedDocumentSearch,
-  associateUserWithCase,
-  associateUserWithCasePending,
-  bulkDeleteRecords,
-  bulkIndexRecords,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
-  createCase,
-  createCaseCatalogRecord,
-  createCaseDeadline,
-  createCaseTrialSortMappingRecords,
-  createElasticsearchReindexRecord,
-  createMessage,
-  createPractitionerUser,
-  createSectionInboxRecord,
-  createTrialSession,
-  createTrialSessionWorkingCopy,
-  createUser,
-  createUserInboxRecord,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -1102,8 +1138,6 @@ const gatewayMethods = isValidatedDecorator({
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  fetchPendingItems: fetchPendingItemsPersistence,
-  fileCaseCorrespondence,
   getAllCaseDeadlines,
   getAllCatalogCases,
   getBlockedCases,
@@ -1152,41 +1186,12 @@ const gatewayMethods = isValidatedDecorator({
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
-  incrementCounter,
-  indexRecord,
   isFileExists,
-  markMessageThreadRepliedTo,
-  persistUser,
-  putWorkItemInOutbox,
-  putWorkItemInUsersOutbox,
-  saveDocumentFromLambda,
-  saveUserConnection,
-  saveWorkItemForDocketClerkFilingExternalDocument,
-  saveWorkItemForDocketEntryInProgress,
-  saveWorkItemForNonPaper,
-  saveWorkItemForPaper,
-  setPriorityOnAllWorkItems,
-  setWorkItemAsRead,
-  updateCase,
   updateCaseCorrespondence,
-  updateCaseDeadline,
-  updateCaseTrialSortMappingRecords,
-  updateDocketRecord,
-  updateDocument,
-  updateDocumentProcessingStatus,
-  updateHighPriorityCaseTrialSortMappingRecords,
-  updateMessage,
-  updatePractitionerUser,
-  updateTrialSession,
-  updateTrialSessionWorkingCopy,
-  updateUser,
-  updateUserCaseNote,
-  updateWorkItem,
-  updateWorkItemInCase,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
-});
+};
 
 module.exports = appContextUser => {
   if (appContextUser) setCurrentUser(appContextUser);

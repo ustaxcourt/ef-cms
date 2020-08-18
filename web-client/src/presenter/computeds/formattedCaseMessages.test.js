@@ -14,8 +14,17 @@ describe('formattedCaseMessages', () => {
     const result = runCompute(formattedCaseMessages, {
       state: {
         caseDetail: {
+          documents: [
+            {
+              documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Test Document',
+            },
+          ],
           messages: [
             {
+              attachments: [
+                { documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859' },
+              ],
               createdAt: '2019-01-01T17:29:13.122Z',
               from: 'Test Sender',
               fromSection: DOCKET_SECTION,
@@ -51,7 +60,16 @@ describe('formattedCaseMessages', () => {
 
     expect(result).toMatchObject({
       completedMessages: [{ completedAtFormatted: '05/01/19' }],
-      inProgressMessages: [{ createdAtFormatted: '01/01/19' }],
+      inProgressMessages: [
+        {
+          attachments: [
+            {
+              documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+            },
+          ],
+          createdAtFormatted: '01/01/19',
+        },
+      ],
     });
   });
 });

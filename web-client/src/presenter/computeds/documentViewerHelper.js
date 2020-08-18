@@ -70,6 +70,17 @@ export const documentViewerHelper = (get, applicationContext) => {
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  let showStricken;
+
+  if (viewerDocumentToDisplay.isStricken !== undefined) {
+    showStricken = viewerDocumentToDisplay.isStricken;
+  } else {
+    ({ isStricken: showStricken } = formattedCaseDetail.docketRecord.find(
+      docketEntry =>
+        docketEntry.documentId === viewerDocumentToDisplay.documentId,
+    ));
+  }
+
   return {
     description: formattedDocumentToDisplay.record.description,
     filedLabel,
@@ -80,5 +91,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
+    showStricken,
   };
 };

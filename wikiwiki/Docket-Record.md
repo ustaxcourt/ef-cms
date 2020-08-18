@@ -41,3 +41,9 @@ Filed By should displays in format:  [Other Filing Party Name]
 
 ## Sorting
 * Default sorting is by Filed date, then Index number  
+
+## Stricken Docket Entries
+* Docket clerks have the ability to strike a docket entry
+* Striking a docket entry adds a strikethrough to the filed date and document title, and appends the word (STRICKEN) to the filings and proceedings
+* Stricken entries remain hyperlinked for internal users
+* Stricken entries are not hyperlinked for external parties or public users, but are visible on the docket record 
