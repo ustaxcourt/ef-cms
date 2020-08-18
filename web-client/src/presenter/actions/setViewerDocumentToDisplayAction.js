@@ -17,17 +17,23 @@ export const setViewerDocumentToDisplayAction = async ({
 }) => {
   const { mostRecentMessage, viewerDocumentToDisplay } = props;
   const caseDetail = get(state.caseDetail);
-  const { attachments } = mostRecentMessage;
   const { docketNumber } = caseDetail;
+  let shouldGetDocumentDownloadUrl = !!viewerDocumentToDisplay;
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
-  const formattedAttachments = formatAttachments({ attachments, caseDetail });
-  const formattedAttachment = formattedAttachments.find(
-    attachment => attachment.documentId === viewerDocumentToDisplay.documentId,
-  );
+  if (mostRecentMessage) {
+    const { attachments } = mostRecentMessage;
+    const formattedAttachments = formatAttachments({ attachments, caseDetail });
+    const formattedAttachment = formattedAttachments.find(
+      attachment =>
+        attachment.documentId === viewerDocumentToDisplay.documentId,
+    );
+    shouldGetDocumentDownloadUrl =
+      viewerDocumentToDisplay && !formattedAttachment.archived;
+  }
 
-  if (viewerDocumentToDisplay && !formattedAttachment?.archived) {
+  if (shouldGetDocumentDownloadUrl) {
     const {
       url,
     } = await applicationContext
