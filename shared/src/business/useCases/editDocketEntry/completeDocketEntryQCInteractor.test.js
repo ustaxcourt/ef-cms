@@ -385,6 +385,7 @@ describe('completeDocketEntryQCInteractor', () => {
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Petitioner',
+      phone: '123 456 1234',
       postalCode: '12345',
       state: 'AK',
     };

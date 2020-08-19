@@ -18,7 +18,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     address2: 
       type: "string"
       flags: 
@@ -27,7 +27,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     address3: 
       type: "string"
       flags: 
@@ -36,7 +36,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     city: 
       type: "string"
       flags: 
@@ -45,7 +45,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     contactId: 
       type: "string"
       flags: 
@@ -66,7 +66,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     name: 
       type: "string"
       flags: 
@@ -75,7 +75,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     phone: 
       type: "string"
       flags: 
@@ -93,7 +93,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     title: 
       type: "string"
       flags: 
@@ -102,7 +102,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     serviceIndicator: 
       type: "string"
       flags: 

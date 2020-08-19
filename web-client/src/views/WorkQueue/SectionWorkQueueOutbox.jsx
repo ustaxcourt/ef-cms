@@ -23,12 +23,11 @@ export const SectionWorkQueueOutbox = connect(
               </th>
               <th>Case title</th>
               <th>Document</th>
-              <th>Processed By</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
               {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
-              {workQueueHelper.showProcessedByColumn && <th>QC’d By</th>}
-              {workQueueHelper.showServedColumn && <th>Served</th>}
+              <th>{workQueueHelper.sentTitle} By</th>
+              <th>{workQueueHelper.sentTitle} Date</th>
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
@@ -55,7 +54,6 @@ export const SectionWorkQueueOutbox = connect(
                     </a>
                   </div>
                 </td>
-                <td className="message-queue-row">{item.completedBy}</td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
                 )}
@@ -67,14 +65,10 @@ export const SectionWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
-                {workQueueHelper.showProcessedByColumn && (
-                  <td className="message-queue-row">{item.completedBy}</td>
-                )}
-                {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">
-                    {item.completedAtFormatted}
-                  </td>
-                )}
+                <td className="message-queue-row">{item.completedBy}</td>
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
               </tr>
             </tbody>
           ))}
