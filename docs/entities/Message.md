@@ -26,7 +26,7 @@
             documentTitle: 
               type: "string"
               flags: 
-                presence: "required"
+                presence: "optional"
               rules: 
                 - 
                   name: "max"

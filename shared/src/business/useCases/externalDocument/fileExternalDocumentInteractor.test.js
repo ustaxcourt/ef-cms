@@ -238,6 +238,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should create a high-priority work item if the case status is calendared', async () => {
     caseRecord.status = CASE_STATUS_TYPES.calendared;
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
+    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
 
     await fileExternalDocumentInteractor({
       applicationContext,

@@ -1,4 +1,8 @@
-const { PETITIONS_SECTION, ROLES } = require('../entities/EntityConstants');
+const {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+  ROLES,
+} = require('../entities/EntityConstants');
 
 const mockDynamoUsers = {
   ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']: {
@@ -6,7 +10,7 @@ const mockDynamoUsers = {
     name: 'Test Docketclerk',
     pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
     role: ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
   },

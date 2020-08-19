@@ -1,21 +1,55 @@
 const {
+  INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
 } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
+const { omit } = require('lodash');
 
 const addNewInitialFilingToCase = ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   currentCaseDocument,
+  documentType,
   originalCaseDocument,
 }) => {
-  const documentToAdd = new Document(
-    {
+  let documentMeta;
+
+  if (originalCaseDocument) {
+    documentMeta = {
       ...originalCaseDocument,
       ...currentCaseDocument,
-    },
-    { applicationContext },
-  );
+    };
+  } else {
+    const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
+      dt => dt.documentType === documentType,
+    );
+
+    let partySecondary = false;
+    if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
+      partySecondary = true;
+    }
+
+    documentMeta = {
+      ...currentCaseDocument,
+      createdAt: caseEntity.receivedAt,
+      eventCode,
+      filingDate: caseEntity.receivedAt,
+      isFileAttached: true,
+      isPaper: true,
+      mailingDate: caseEntity.mailingDate,
+      partyPrimary: true,
+      partySecondary,
+      receivedAt: caseEntity.receivedAt,
+      userId: authorizedUser.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
+    };
+  }
+
+  const documentToAdd = new Document(documentMeta, { applicationContext });
 
   caseEntity.documents.push(documentToAdd);
 };
@@ -43,10 +77,16 @@ const deleteInitialFilingFromCase = async ({
 
 exports.updateInitialFilingDocuments = async ({
   applicationContext,
+  authorizedUser,
   caseEntity,
   caseToUpdate,
 }) => {
-  for (const key of Object.keys(INITIAL_DOCUMENT_TYPES_MAP)) {
+  const initialDocumentTypesWithoutPetition = omit(
+    INITIAL_DOCUMENT_TYPES_MAP,
+    'petitionFile',
+  );
+
+  for (const key of Object.keys(initialDocumentTypesWithoutPetition)) {
     const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
     const originalCaseDocument = caseEntity.documents.find(
       doc => doc.documentType === documentType,
@@ -72,9 +112,10 @@ exports.updateInitialFilingDocuments = async ({
     } else if (!originalCaseDocument && currentCaseDocument) {
       addNewInitialFilingToCase({
         applicationContext,
+        authorizedUser,
         caseEntity,
         currentCaseDocument,
-        originalCaseDocument,
+        documentType,
       });
     } else if (originalCaseDocument && !currentCaseDocument) {
       await deleteInitialFilingFromCase({

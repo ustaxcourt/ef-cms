@@ -19,11 +19,11 @@ exports.getIndexedCasesForUser = async ({
     searchParameters: {
       body: {
         _source: [
+          'caseCaption',
+          'createdAt',
           'docketNumber',
           'docketNumberWithSuffix',
-          'caseCaption',
           'leadDocketNumber',
-          'createdAt',
           'status',
         ],
         query: {

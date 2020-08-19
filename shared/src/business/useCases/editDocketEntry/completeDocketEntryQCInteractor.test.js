@@ -6,6 +6,7 @@ const {
 const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -36,7 +37,7 @@ describe('completeDocketEntryQCInteractor', () => {
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
-      section: 'docket',
+      section: DOCKET_SECTION,
       sentBy: 'Test User',
       sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       updatedAt: new Date().toISOString(),
@@ -109,13 +110,13 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext

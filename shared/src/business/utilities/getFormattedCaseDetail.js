@@ -72,7 +72,9 @@ const formatDocument = (applicationContext, document) => {
 
   result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
 
-  result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
+  result.isUnservable =
+    UNSERVABLE_EVENT_CODES.includes(document.eventCode) ||
+    document.isLegacyServed;
 
   result.isInProgress =
     (!result.isCourtIssuedDocument &&
@@ -82,7 +84,7 @@ const formatDocument = (applicationContext, document) => {
       !result.servedAt &&
       !result.isUnservable);
 
-  result.isNotServedDocument = !result.servedAt;
+  result.isNotServedDocument = !result.servedAt && !result.isLegacyServed;
 
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
@@ -288,25 +290,41 @@ const formatCase = (applicationContext, caseDetail) => {
       counsel.representingNames = [];
 
       if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingNames.push(caseDetail.contactPrimary.name);
+        counsel.representingNames.push({
+          name: caseDetail.contactPrimary.name,
+          secondaryName: caseDetail.contactPrimary.secondaryName,
+          title: caseDetail.contactPrimary.title,
+        });
       }
 
       if (
         caseDetail.contactSecondary &&
         counsel.representing.includes(caseDetail.contactSecondary.contactId)
       ) {
-        counsel.representingNames.push(caseDetail.contactSecondary.name);
+        counsel.representingNames.push({
+          name: caseDetail.contactSecondary.name,
+          secondaryName: caseDetail.contactSecondary.secondaryName,
+          title: caseDetail.contactSecondary.title,
+        });
       }
 
       caseDetail.otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
-          counsel.representingNames.push(otherPetitioner.name);
+          counsel.representingNames.push({
+            name: otherPetitioner.name,
+            secondaryName: otherPetitioner.secondaryName,
+            title: otherPetitioner.title,
+          });
         }
       });
 
       caseDetail.otherFilers.forEach(otherFiler => {
         if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingNames.push(otherFiler.name);
+          counsel.representingNames.push({
+            name: otherFiler.name,
+            secondaryName: otherFiler.secondaryName,
+            title: otherFiler.title,
+          });
         }
       });
     }

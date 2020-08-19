@@ -1,4 +1,5 @@
 import { setupPercentDone } from './createCaseFromPaperAction';
+import { state } from 'cerebral';
 
 /**
  * takes the state.caseDetail and updates it via the updateCase use case.
@@ -11,13 +12,16 @@ import { setupPercentDone } from './createCaseFromPaperAction';
  */
 export const saveCaseDetailInternalEditAction = async ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
   const {
+    INITIAL_DOCUMENT_TYPES,
     INITIAL_DOCUMENT_TYPES_MAP,
     STATUS_TYPES,
   } = applicationContext.getConstants();
+  const originalCase = get(state.caseDetail);
   const caseToUpdate = props.formWithComputedDates;
 
   const keys = Object.keys(INITIAL_DOCUMENT_TYPES_MAP);
@@ -36,18 +40,34 @@ export const saveCaseDetailInternalEditAction = async ({
 
   for (const key of keys) {
     if (caseToUpdate[key]) {
-      const newDocumentId = await applicationContext
-        .getUseCases()
-        .uploadDocumentAndMakeSafe({
-          applicationContext,
-          document: caseToUpdate[key],
-          onUploadProgress: progressFunctions[key],
-        });
+      if (key === 'petitionFile') {
+        const oldPetitionDocument = originalCase.documents.find(
+          document =>
+            document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+        );
 
-      caseToUpdate.documents.push({
-        documentId: newDocumentId,
-        documentType: INITIAL_DOCUMENT_TYPES_MAP[key],
-      });
+        await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafeInteractor({
+            applicationContext,
+            document: caseToUpdate[key],
+            documentId: oldPetitionDocument.documentId,
+            onUploadProgress: progressFunctions[key],
+          });
+      } else {
+        const newDocumentId = await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafeInteractor({
+            applicationContext,
+            document: caseToUpdate[key],
+            onUploadProgress: progressFunctions[key],
+          });
+
+        caseToUpdate.documents.push({
+          documentId: newDocumentId,
+          documentType: INITIAL_DOCUMENT_TYPES_MAP[key],
+        });
+      }
     }
   }
 

@@ -4,6 +4,7 @@ const { PrivatePractitioner } = require('./PrivatePractitioner');
 describe('PrivatePractitioner', () => {
   it('Creates a valid PrivatePractitioner', () => {
     const user = new PrivatePractitioner({
+      barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -15,8 +16,7 @@ describe('PrivatePractitioner', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
