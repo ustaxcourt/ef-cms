@@ -11,6 +11,10 @@
 * Request for Place of Trial is listed as an event docket entry with no document link if the place of trial was entered as metadata. If a paper Request for Place of Trial document is received, the docket entry contains a document link and functions the same as any electronically filed document
 * Pages displays on docket record to inform all users on how many pages including the coversheet the documents include
 
+## Documents Waiting QC on Docket Record
+* Documents filed but not QC'd display on Docket Record as bold with a red star icon
+* Once QC is complete, the entry displays as standard
+
 ## Index
 **Petition and initial documents**
 * eFiled and paper-filed Petition and initial documents display an index number associated when filed (i.e. before they are served to IRS)
@@ -46,4 +50,4 @@ Filed By should displays in format:  [Other Filing Party Name]
 * Docket clerks have the ability to strike a docket entry
 * Striking a docket entry adds a strikethrough to the filed date and document title, and appends the word (STRICKEN) to the filings and proceedings
 * Stricken entries remain hyperlinked for internal users
-* Stricken entries are not hyperlinked for external parties or public users, but are visible on the docket record 
+* Stricken entries are not hyperlinked for external parties or public users, but are visible on the docket record
