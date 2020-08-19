@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { deleteCorrespondenceDocumentAction } from './deleteCorrespondenceDocumentAction';
+import { archiveCorrespondenceDocumentAction } from './archiveCorrespondenceDocumentAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('deleteCorrespondenceDocumentAction', () => {
+describe('archiveCorrespondenceDocumentAction', () => {
   const successStub = jest.fn();
   const errorStub = jest.fn();
 
@@ -17,7 +17,7 @@ describe('deleteCorrespondenceDocumentAction', () => {
   });
 
   it('should return the success path when the correspondence document was successfully removed from the case', async () => {
-    await runAction(deleteCorrespondenceDocumentAction, {
+    await runAction(archiveCorrespondenceDocumentAction, {
       modules: {
         presenter,
       },
@@ -39,9 +39,9 @@ describe('deleteCorrespondenceDocumentAction', () => {
   it('should return the error path when an error occurred removing the correspondence document', async () => {
     applicationContext
       .getUseCases()
-      .deleteCorrespondenceDocumentInteractor.mockRejectedValue(new Error());
+      .archiveCorrespondenceDocumentInteractor.mockRejectedValue(new Error());
 
-    await runAction(deleteCorrespondenceDocumentAction, {
+    await runAction(archiveCorrespondenceDocumentAction, {
       modules: {
         presenter,
       },

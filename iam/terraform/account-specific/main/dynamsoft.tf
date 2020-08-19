@@ -43,3 +43,8 @@ resource "aws_iam_role_policy_attachment" "allow_dynamsoft_role_access_to_dynams
   role = "${aws_iam_role.dynamsoft_s3_download_role.name}"
   policy_arn = "${aws_iam_policy.access_dynamsoft_s3_bucket.arn}"
 }
+
+resource "aws_iam_instance_profile" "dynamsoft_instance_profile" {
+  name = "dynamsoft_s3_download_role"
+  role = "${aws_iam_role.dynamsoft_s3_download_role.name}"
+}

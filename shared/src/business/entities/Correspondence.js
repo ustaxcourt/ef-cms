@@ -12,6 +12,7 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @constructor
  */
 function Correspondence(rawProps) {
+  this.archived = rawProps.archived;
   this.documentTitle = rawProps.documentTitle;
   this.documentId = rawProps.documentId;
   this.filedBy = rawProps.filedBy;
@@ -20,6 +21,10 @@ function Correspondence(rawProps) {
 }
 
 Correspondence.VALIDATION_RULES = {
+  archived: joi
+    .boolean()
+    .optional()
+    .description('A correspondence document that was archived.'),
   documentId: JoiValidationConstants.UUID.required(),
   documentTitle: joi.string().max(500).required(),
   filedBy: joi.string().max(500).allow('').optional(),

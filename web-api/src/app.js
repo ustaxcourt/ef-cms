@@ -29,6 +29,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  archiveCorrespondenceDocumentLambda,
+} = require('./correspondence/archiveCorrespondenceDocumentLambda');
+const {
   archiveDraftDocumentLambda,
 } = require('./documents/archiveDraftDocumentLambda');
 const {
@@ -70,9 +73,6 @@ const {
 const {
   deleteCaseDeadlineLambda,
 } = require('./caseDeadline/deleteCaseDeadlineLambda');
-const {
-  deleteCorrespondenceDocumentLambda,
-} = require('./correspondence/deleteCorrespondenceDocumentLambda');
 const {
   deleteCounselFromCaseLambda,
 } = require('./cases/deleteCounselFromCaseLambda');
@@ -208,6 +208,9 @@ const {
 const {
   migrateCaseDeadlineLambda,
 } = require('./migrate/migrateCaseDeadlineLambda');
+const {
+  migrateTrialSessionLambda,
+} = require('./migrate/migrateTrialSessionLambda');
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
@@ -518,7 +521,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   // DELETE
   app.delete(
     '/case-documents/:docketNumber/correspondence/:documentId',
-    lambdaWrapper(deleteCorrespondenceDocumentLambda),
+    lambdaWrapper(archiveCorrespondenceDocumentLambda),
   );
 }
 /**
@@ -738,6 +741,7 @@ app.post(
  */
 app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
 app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
+app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
 
 /**
  * practitioners

@@ -30,6 +30,7 @@ const firstConsolidatedCase = {
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 const secondConsolidatedCase = {
   ...MOCK_CASE,
@@ -39,6 +40,7 @@ const secondConsolidatedCase = {
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const correspondenceCaseOriginalPetitionerName = `Original ${Date.now()}`;
@@ -63,6 +65,7 @@ const correspondenceCase = {
   docketNumber: '106-15',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const otherFilersCase = {
@@ -102,6 +105,7 @@ const otherFilersCase = {
   ],
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const otherPetitionersCase = {
@@ -111,7 +115,6 @@ const otherPetitionersCase = {
   docketNumber: '162-20',
   irsPractitioners: [
     {
-      additionalName: 'Test Other Petitioner',
       barNumber: 'RT6789',
       contact: {
         address1: '982 Oak Boulevard',
@@ -151,7 +154,6 @@ const otherPetitionersCase = {
   preferredTrialCity: 'Washington, District of Columbia',
   privatePractitioners: [
     {
-      additionalName: 'Test Other Petitioner',
       barNumber: 'PT1234',
       contact: {
         address1: '982 Oak Boulevard',
@@ -175,6 +177,7 @@ const otherPetitionersCase = {
     },
   ],
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 describe('Case journey', () => {
@@ -243,9 +246,37 @@ describe('Case journey', () => {
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing.0'),
     ).toBe('dd0ac156-aa2d-46e7-8b5a-902f1d16f199');
+    // override contact data with what's already in the database
+    expect(test.getState('caseDetail.irsPractitioners.0.contact.city')).toBe(
+      'Chicago',
+    );
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
-    ).toBe('Placeat sed dolorum');
+    ).toBe('Chicago');
+  });
+
+  loginAs(test, 'privatePractitioner@example.com');
+
+  it('private practitioner sees migrated case on their dashboard', async () => {
+    expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
+
+    const openCases = test.getState('openCases');
+    const foundCase = openCases.find(
+      c => c.docketNumber === otherPetitionersCase.docketNumber,
+    );
+    expect(foundCase).toBeDefined();
+  });
+
+  loginAs(test, 'irsPractitioner@example.com');
+
+  it('IRS practitioner sees migrated case on their dashboard', async () => {
+    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
+
+    const openCases = test.getState('openCases');
+    const foundCase = openCases.find(
+      c => c.docketNumber === otherPetitionersCase.docketNumber,
+    );
+    expect(foundCase).toBeDefined();
   });
 
   it('Docketclerk searches for correspondence case by petitioner name and finds it', async () => {

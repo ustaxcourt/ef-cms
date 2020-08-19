@@ -36,14 +36,29 @@ describe('formatAttachments', () => {
     },
   ];
 
-  it('formats documents in the attachments array based on meta from documents in the documents, correspondence, and archivedDocuments arrays', () => {
+  const mockArchivedCorrespondenceDocuments = [
+    {
+      archived: true,
+      documentId: '7',
+      documentTitle: 'Test Archived Correspondence One',
+    },
+    {
+      archived: true,
+      documentId: '8',
+      documentType: 'Test Archived Correspondence Two',
+    },
+  ];
+
+  it('formats documents in the attachments array based on meta from documents in the documents, correspondence, archivedDocuments, and archivedCorrespondences arrays', () => {
     const result = formatAttachments({
       attachments: [
         { documentId: '1' },
         { documentId: '3' },
         { documentId: '5' },
+        { documentId: '7' },
       ],
       caseDetail: {
+        archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
         documents: mockDocuments,
@@ -58,6 +73,11 @@ describe('formatAttachments', () => {
         documentTitle: 'Test Correspondence One',
       },
       { archived: true, documentId: '5', documentTitle: 'Test Archived One' },
+      {
+        archived: true,
+        documentId: '7',
+        documentTitle: 'Test Archived Correspondence One',
+      },
     ]);
   });
 
@@ -67,8 +87,10 @@ describe('formatAttachments', () => {
         { documentId: '2' },
         { documentId: '4' },
         { documentId: '6' },
+        { documentId: '8' },
       ],
       caseDetail: {
+        archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
         documents: mockDocuments,
@@ -83,10 +105,15 @@ describe('formatAttachments', () => {
         documentTitle: 'Test Correspondence Two',
       },
       { archived: true, documentId: '6', documentTitle: 'Test Archived Two' },
+      {
+        archived: true,
+        documentId: '8',
+        documentTitle: 'Test Archived Correspondence Two',
+      },
     ]);
   });
 
-  it('defaults the archivedDocuments and correspondence arrays to empty arrays if they are not on caseDetail', () => {
+  it('defaults the archivedDocuments, archivedCorrespondences, and correspondence arrays to empty arrays if they are not on caseDetail', () => {
     const result = formatAttachments({
       attachments: [{ documentId: '1' }],
       caseDetail: {
@@ -103,6 +130,7 @@ describe('formatAttachments', () => {
     const result = formatAttachments({
       attachments: [{ documentId: '999' }],
       caseDetail: {
+        archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
         documents: mockDocuments,
@@ -122,6 +150,7 @@ describe('formatAttachments', () => {
     const result = formatAttachments({
       attachments: [],
       caseDetail: {
+        archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
         documents: mockDocuments,

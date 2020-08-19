@@ -28,8 +28,8 @@ elif [[ $BRANCH == 'staging' ]] ; then
   echo "${EFCMS_DOMAIN_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "${EFCMS_DOMAIN_PROD}"
-elif [[ $BRANCH == 'dawson' ]] ; then
-  echo "${EFCMS_DOMAIN_DAWSON}"
+elif [[ $BRANCH == 'prod' ]] ; then
+  echo "${EFCMS_DOMAIN_PROD}"
 else
   exit 1;
 fi
