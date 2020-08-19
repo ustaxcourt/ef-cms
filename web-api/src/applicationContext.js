@@ -648,6 +648,9 @@ const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
+  migrateTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/migrateTrialSessionInteractor');
+const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
 const {
@@ -1085,7 +1088,6 @@ const gatewayMethods = {
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
     incrementCounter,
-    indexRecord,
     markMessageThreadRepliedTo,
     persistUser,
     putWorkItemInOutbox,
@@ -1182,6 +1184,7 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  indexRecord,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1297,6 +1300,7 @@ module.exports = appContextUser => {
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,
       migrateCaseInteractor,
+      migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.

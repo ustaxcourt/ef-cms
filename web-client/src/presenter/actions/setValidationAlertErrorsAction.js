@@ -6,14 +6,12 @@ import { state } from 'cerebral';
  * displaying a list of bullet point alerts in a red error alert at the top of the page.
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object used for getting the props.errors
  * @param {object} providers.store the cerebral store used for setting state.alertError
  * @returns {undefined} doesn't return anything
  */
-export const setValidationAlertErrorsAction = ({ get, props, store }) => {
+export const setValidationAlertErrorsAction = ({ props, store }) => {
   let errorKeys = Object.keys(props.errors);
-  const fieldOrder = get(state.fieldOrder);
 
   const getErrorKeys = keys => {
     const filteredErrorKeys = [];
@@ -45,8 +43,6 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
 
   if (props.errorDisplayOrder) {
     errorKeys = getErrorKeys(props.errorDisplayOrder);
-  } else if (Array.isArray(fieldOrder) && fieldOrder.length) {
-    errorKeys = getErrorKeys(fieldOrder);
   }
 
   const alertError = {
@@ -76,7 +72,13 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
               });
             });
           } else if (typeof error === 'object') {
-            return Object.keys(error).map(k => error[k]);
+            let subErrorKeys = Object.keys(error);
+            if (props.errorDisplayOrder) {
+              subErrorKeys = props.errorDisplayOrder.filter(
+                subKey => error[subKey] !== undefined,
+              );
+            }
+            return subErrorKeys.map(subErrorKey => error[subErrorKey]);
           } else {
             return error;
           }
