@@ -40,7 +40,7 @@ const calendaredCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-describe('Case migration journey', () => {
+describe('Trial session migration journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
