@@ -119,7 +119,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
     });
     expect(
-      applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
       correspondence: {

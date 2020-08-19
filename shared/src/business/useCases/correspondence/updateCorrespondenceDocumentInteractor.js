@@ -49,7 +49,7 @@ exports.updateCorrespondenceDocumentInteractor = async ({
 
   const caseEntityRaw = caseEntity.validate().toRawObject();
 
-  await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+  await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
     applicationContext,
     correspondence: updatedCorrespondenceEntity.validate().toRawObject(),
     docketNumber,

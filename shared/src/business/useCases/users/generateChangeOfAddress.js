@@ -31,6 +31,17 @@ exports.generateChangeOfAddress = async ({
       userId: user.userId,
     });
 
+  let completedCases = 0;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'user_contact_update_progress',
+      completedCases,
+      totalCases: userCases.length,
+    },
+    userId: user.userId,
+  });
+
   const updatedCases = [];
   for (let userCase of userCases) {
     try {
@@ -218,6 +229,17 @@ exports.generateChangeOfAddress = async ({
     } catch (error) {
       applicationContext.notifyHoneybadger(error);
     }
+
+    completedCases++;
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_update_progress',
+        completedCases,
+        totalCases: userCases.length,
+      },
+      userId: user.userId,
+    });
   }
 
   return updatedCases;
