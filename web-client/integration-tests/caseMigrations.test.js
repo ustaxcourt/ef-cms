@@ -180,7 +180,7 @@ const otherPetitionersCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-describe('Case journey', () => {
+describe('Case migration journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
