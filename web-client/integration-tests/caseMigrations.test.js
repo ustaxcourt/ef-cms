@@ -195,7 +195,7 @@ const legacyServedDocumentCase = {
   docketRecord: [
     ...MOCK_CASE.docketRecord,
     {
-      description: 'fourth record',
+      description: 'Answer',
       docketRecordId: 'c48eac57-8249-4e48-a66b-3e23f76fa418',
       documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
       eventCode: 'A',
@@ -214,6 +214,7 @@ const legacyServedDocumentCase = {
       eventCode: 'A',
       filedBy: 'Test Petitioner',
       isLegacyServed: true,
+      processingStatus: 'complete',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ],
