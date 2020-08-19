@@ -4,9 +4,8 @@ import { state } from 'cerebral';
  * updates user contact information (for practitioners)
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting the getUser use case
+ * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @returns {object} alertSuccess
  */
 export const updateUserContactInformationAction = async ({
   applicationContext,
