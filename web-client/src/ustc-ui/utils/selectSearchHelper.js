@@ -39,7 +39,7 @@ const getSelectSearchSortFunction = searchText => {
  * @param {string} inputText the text being searched for
  * @returns {Array} options sorted according to input text
  */
-export const getSortedOptions = function sortedOptions(options, inputText) {
+export const getSortedOptions = (options, inputText) => {
   const sortedOptions = cloneDeep(options);
   if (inputText && inputText.length > 0) {
     return sortedOptions.sort(getSelectSearchSortFunction(inputText));
