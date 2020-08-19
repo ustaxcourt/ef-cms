@@ -18,7 +18,6 @@ const axiosInstance = axios.create({
 const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
 
 const calendaredTrialSession = {
-  caseOrder: [{ docketNumber: '111-21' }],
   isCalendared: true,
   maxCases: 100,
   sessionType: 'Hybrid',
@@ -26,18 +25,18 @@ const calendaredTrialSession = {
   term: 'Summer',
   termYear: '2020',
   trialLocation: 'Memphis, Tennessee',
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
 };
 
 const calendaredCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'Calendared Case w/ Trial Session',
-  docketNumber: '111-21',
+  docketNumber: '121-21',
   preferredTrialCity: 'Memphis, Tennessee',
   status: STATUS_TYPES.calendared,
   trialLocation: 'Memphis, Tennessee',
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
 };
 
 describe('Trial session migration journey', () => {
@@ -69,7 +68,6 @@ describe('Trial session migration journey', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: calendaredCase.docketNumber,
     });
-
     expect(test.getState('caseDetail.trialSessionId')).toEqual(
       calendaredCase.trialSessionId,
     );

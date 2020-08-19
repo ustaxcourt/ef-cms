@@ -311,11 +311,8 @@ Valid Case object example:
 
 Valid Trial Session object example:
 
-* Note: `caseOrder` is an array of all cases within a Trial Session. See [the TrialSession entity](./entities/TrialSession.md).
-
 ```
 {
-  "caseOrder": [{ "docketNumber": "111-21" }],
   "isCalendared": true,
   "maxCases": 100,
   "sessionType": "Hybrid",

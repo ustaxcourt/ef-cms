@@ -109,6 +109,13 @@ exports.migrateCaseInteractor = async ({
       applicationContext,
     });
 
+    trialSessionEntity.addCaseToCalendar(caseToAdd);
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+
     caseToAdd.setAsCalendared(trialSessionEntity);
   }
 
