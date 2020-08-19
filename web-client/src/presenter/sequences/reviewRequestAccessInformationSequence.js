@@ -4,8 +4,8 @@ import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRe
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setFileDocumentValidationAlertErrorsAction } from '../actions/FileDocument/setFileDocumentValidationAlertErrorsAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -21,7 +21,7 @@ export const reviewRequestAccessInformationSequence = [
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
-      setFileDocumentValidationAlertErrorsAction,
+      setValidationAlertErrorsAction,
     ],
     success: [
       generateCaseAssociationTitleAction,
