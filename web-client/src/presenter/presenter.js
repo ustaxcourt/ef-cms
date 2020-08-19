@@ -268,6 +268,7 @@ import { setFieldOrderSequence } from './sequences/setFieldOrderSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
@@ -378,6 +379,10 @@ import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserC
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
+import { userContactUpdateCompleteSequence } from './sequences/userContactUpdateCompleteSequence';
+import { userContactUpdateErrorSequence } from './sequences/userContactUpdateErrorSequence';
+import { userContactUpdateInitialUpdateCompleteSequence } from './sequences/userContactUpdateInitialUpdateCompleteSequence';
+import { userContactUpdateProgressSequence } from './sequences/userContactUpdateProgressSequence';
 import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
@@ -697,6 +702,7 @@ export const presenter = {
     setFocusedWorkItemSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
+    setMessageDetailViewerDocumentToDisplaySequence,
     setPDFPageForSigningSequence,
     setPDFSignatureDataSequence,
     setPageSequence,
@@ -806,6 +812,10 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     uploadCorrespondenceDocumentSequence,
     uploadCourtIssuedDocumentSequence,
+    userContactUpdateCompleteSequence,
+    userContactUpdateErrorSequence,
+    userContactUpdateInitialUpdateCompleteSequence,
+    userContactUpdateProgressSequence,
     validateAddDeficiencyStatisticsSequence,
     validateAddIrsPractitionerSequence,
     validateAddPractitionerSequence,
