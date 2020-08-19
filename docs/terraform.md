@@ -84,7 +84,7 @@ Here are a few debugging tricks to help with commonly encountered situations.
 
 ### Manually unlock the state file
 
-Cancelling a terraform run before it complete often results in a locked state file. First, double-check that no other person or process is currently applying changes — verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
+Cancelling a terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes — verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
 
 Then, use `terraform force-unlock` — see the [Terraform documentation](https://www.terraform.io/docs/commands/force-unlock.html).
 
