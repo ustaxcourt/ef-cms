@@ -30,7 +30,6 @@ describe('createMessageInteractor', () => {
       attachments: [
         {
           documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
-          documentTitle: 'Petition',
         },
       ],
       docketNumber: '101-20',
