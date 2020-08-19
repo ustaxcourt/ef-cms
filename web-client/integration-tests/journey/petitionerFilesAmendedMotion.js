@@ -1,9 +1,12 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionerFilesAmendedMotion = (test, fakeFile) => {
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   return it('petitioner files amended motion', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -75,7 +78,7 @@ export const petitionerFilesAmendedMotion = (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: 'No',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');

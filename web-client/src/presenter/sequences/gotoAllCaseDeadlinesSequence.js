@@ -10,9 +10,11 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultDateOnCalendarAction } from '../actions/CaseDeadline/setDefaultDateOnCalendarAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoAllCaseDeadlines = [
   setCurrentPageAction('Interstitial'),
+  stopShowValidationAction,
   clearScreenMetadataAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,

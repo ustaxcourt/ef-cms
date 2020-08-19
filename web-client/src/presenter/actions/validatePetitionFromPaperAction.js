@@ -3,6 +3,11 @@ import { state } from 'cerebral';
 export const aggregateStatisticsErrors = ({ errors, get }) => {
   let newErrorStatistics;
 
+  Object.keys(errors).forEach(key => {
+    if (/statistics\[\d+\]/.test(errors[key])) {
+      delete errors[key];
+    }
+  });
   if (errors.statistics) {
     newErrorStatistics = [];
     const formStatistics = get(state.form.statistics);

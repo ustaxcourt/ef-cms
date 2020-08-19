@@ -3,6 +3,7 @@ const {
   createISODateString,
 } = require('../../utilities/DateHandler');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
+const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
@@ -179,7 +180,7 @@ describe('DocketEntryFactory', () => {
         expect(errors().objections).toEqual(
           VALIDATION_ERROR_MESSAGES.objections,
         );
-        rawEntity.objections = 'No';
+        rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(errors().objections).toEqual(undefined);
       });
 
@@ -193,7 +194,7 @@ describe('DocketEntryFactory', () => {
         expect(errors().objections).toEqual(
           VALIDATION_ERROR_MESSAGES.objections,
         );
-        rawEntity.objections = 'No';
+        rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(errors().objections).toEqual(undefined);
       });
     });

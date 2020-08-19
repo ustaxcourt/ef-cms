@@ -4,6 +4,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
   docketEntryOnChange,
@@ -12,10 +13,10 @@ import {
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 
 export const PrimaryDocumentForm = connect(
   {
+    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     addDocketEntryHelper: state.addDocketEntryHelper,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
@@ -29,6 +30,7 @@ export const PrimaryDocumentForm = connect(
     addDocketEntryHelper,
     form,
     internalTypesHelper,
+    OBJECTIONS_OPTIONS,
     updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
@@ -121,15 +123,11 @@ export const PrimaryDocumentForm = connect(
               or use the dropdown to select your document type.
             </span>
 
-            <Select
-              aria-describedby="document-type-label"
-              className="select-react-element"
-              classNamePrefix="select-react-element"
+            <SelectSearch
+              aria-label="document-type-label"
               id="document-type"
-              isClearable={true}
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-              placeholder="- Select -"
               value={reactSelectValue({
                 documentTypes:
                   internalTypesHelper.internalDocumentTypesForSelectSorted,
@@ -172,17 +170,14 @@ export const PrimaryDocumentForm = connect(
                   docket entry for it.
                 </span>
               </label>
-              <Select
-                aria-describedby="secondary-document-type-label"
-                className="select-react-element"
-                classNamePrefix="select-react-element"
+              <SelectSearch
+                aria-label="secondary-document-type-label"
                 id="secondary-document-type"
                 isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
-                placeholder="- Select -"
                 value={reactSelectValue({
                   documentTypes:
                     internalTypesHelper.internalDocumentTypesForSelectSorted,
@@ -315,7 +310,7 @@ export const PrimaryDocumentForm = connect(
                 <legend className="usa-legend" id="objections-legend">
                   Are there any objections to the granting of this document?
                 </legend>
-                {['Yes', 'No', 'Unknown'].map(option => (
+                {OBJECTIONS_OPTIONS.map(option => (
                   <div className="usa-radio" key={option}>
                     <input
                       aria-describedby="objections-legend"

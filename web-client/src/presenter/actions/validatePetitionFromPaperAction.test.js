@@ -53,14 +53,19 @@ describe('validatePetitionFromPaperAction', () => {
   });
 
   it('aggregates statistics errors', async () => {
+    const mockError = {
+      caseCaption: 'Enter a case caption',
+      irsDeficiencyAmount: '"statistics[0].irsDeficiencyAmount" is required',
+      statistics: [
+        { deficiency: 'enter deficiency amount', index: 1 },
+        { index: 2, irsTotalPenalties: 'enter total penalties' },
+      ],
+      year: '"statistics[0].year" is required',
+    };
+
     applicationContext
       .getUseCases()
-      .validatePetitionFromPaperInteractor.mockReturnValue({
-        statistics: [
-          { deficiency: 'enter deficiency amount', index: 1 },
-          { index: 2, irsTotalPenalties: 'enter total penalties' },
-        ],
-      });
+      .validatePetitionFromPaperInteractor.mockReturnValue(mockError);
 
     await runAction(validatePetitionFromPaperAction, {
       modules: {
@@ -77,16 +82,20 @@ describe('validatePetitionFromPaperAction', () => {
       },
     });
 
-    expect(errorStub.mock.calls[0][0].errors.statistics).toEqual([
-      {},
-      {
-        enterAllValues: 'Enter period, deficiency amount, and total penalties',
-        index: 1,
-      },
-      {
-        enterAllValues: 'Enter year, deficiency amount, and total penalties',
-        index: 2,
-      },
-    ]);
+    expect(errorStub.mock.calls[0][0].errors).toEqual({
+      caseCaption: expect.anything(),
+      statistics: [
+        {},
+        {
+          enterAllValues:
+            'Enter period, deficiency amount, and total penalties',
+          index: 1,
+        },
+        {
+          enterAllValues: 'Enter year, deficiency amount, and total penalties',
+          index: 2,
+        },
+      ],
+    });
   });
 });

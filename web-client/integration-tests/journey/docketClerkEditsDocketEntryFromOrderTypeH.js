@@ -1,4 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -7,6 +8,8 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
   test,
   draftOrderIndex,
 ) => {
+  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
+
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type H`, async () => {
     let caseDetailFormatted;
 
@@ -33,7 +36,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     // Type H
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'TRAN',
+      value: TRANSCRIPT_EVENT_CODE,
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
@@ -105,7 +108,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       date: '2018-01-01',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
       documentType: 'Transcript',
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       freeText: 'this is free text',
     });
 
@@ -119,7 +122,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       day: '1',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
       documentType: 'Transcript',
-      eventCode: 'TRAN',
+      eventCode: TRANSCRIPT_EVENT_CODE,
       freeText: 'this is free text',
       generatedDocumentTitle: 'Transcript of this is free text on 01-01-2018',
       month: '1',

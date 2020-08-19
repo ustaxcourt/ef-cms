@@ -1,5 +1,6 @@
 const React = require('react');
 const { mount, shallow } = require('enzyme');
+const { OBJECTIONS_OPTIONS_MAP } = require('../../../entities/EntityConstants');
 const { ReceiptOfFiling } = require('./ReceiptOfFiling.jsx');
 
 describe('ReceiptOfFiling', () => {
@@ -253,7 +254,7 @@ describe('ReceiptOfFiling', () => {
   });
 
   it('displays the value of objections if it is either No or Unknown', () => {
-    document.objections = 'No';
+    document.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
     const wrapper = mount(
       <ReceiptOfFiling
