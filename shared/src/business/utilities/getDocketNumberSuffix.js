@@ -13,6 +13,8 @@ const {
  */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
   switch (caseType) {
+    case CASE_TYPES_MAP.disclosure:
+      return DOCKET_NUMBER_SUFFIXES.DISCLOSURE;
     case CASE_TYPES_MAP.whistleblower:
       return DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
     case CASE_TYPES_MAP.passport:
