@@ -15,6 +15,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { Document } = require('../Document');
 const { Statistic } = require('../Statistic');
 
@@ -83,6 +84,13 @@ function CaseInternal(rawCase, { applicationContext }) {
       )
     : [];
 
+  this.archivedCorrespondences = Array.isArray(rawCase.archivedCorrespondences)
+    ? rawCase.archivedCorrespondences.map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      )
+    : [];
+
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -135,6 +143,7 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
+    archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
     archivedDocuments: Case.VALIDATION_RULES.archivedDocuments,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: joi

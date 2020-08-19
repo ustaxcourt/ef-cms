@@ -49,6 +49,9 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  archiveCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/archiveCorrespondenceDocumentInteractor');
+const {
   archiveDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
 const {
@@ -191,9 +194,6 @@ const {
   deleteCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
 const {
-  deleteCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
-const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -205,9 +205,6 @@ const {
 const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
-const {
-  deleteCorrespondenceDocumentInteractor,
-} = require('../../shared/src/business/useCases/correspondence/deleteCorrespondenceDocumentInteractor');
 const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
@@ -268,9 +265,6 @@ const {
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
-const {
-  fileCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/fileCaseCorrespondence');
 const {
   fileCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor');
@@ -654,6 +648,9 @@ const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
+  migrateTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/migrateTrialSessionInteractor');
+const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
 const {
@@ -821,6 +818,9 @@ const {
 const {
   updateCaseContextInteractor,
 } = require('../../shared/src/business/useCases/updateCaseContextInteractor');
+const {
+  updateCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
 const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
@@ -1087,7 +1087,6 @@ const gatewayMethods = {
     createUser,
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
-    fileCaseCorrespondence,
     incrementCounter,
     indexRecord,
     markMessageThreadRepliedTo,
@@ -1123,7 +1122,6 @@ const gatewayMethods = {
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   deleteCaseByDocketNumber,
-  deleteCaseCorrespondence,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocument,
@@ -1188,6 +1186,7 @@ const gatewayMethods = {
   getWebSocketConnectionsByUserId,
   getWorkItemById,
   isFileExists,
+  updateCaseCorrespondence,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
@@ -1301,6 +1300,7 @@ module.exports = appContextUser => {
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,
       migrateCaseInteractor,
+      migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
@@ -1416,6 +1416,7 @@ module.exports = appContextUser => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
@@ -1439,7 +1440,6 @@ module.exports = appContextUser => {
         createUserInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
-        deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,

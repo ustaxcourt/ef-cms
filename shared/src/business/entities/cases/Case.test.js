@@ -505,7 +505,10 @@ describe('Case entity', () => {
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(
-        { ...MOCK_CASE, otherPetitioners: undefined },
+        {
+          ...MOCK_CASE,
+          otherPetitioners: undefined,
+        },
         {
           applicationContext,
         },
@@ -530,6 +533,23 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
       expect(myCase.docketNumber).toBe('101-20');
+    });
+
+    it('Creates an invalid case if set as calendared but no trialSessionId is provided', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        trialSessionId: '"trialSessionId" is required',
+      });
     });
 
     it('Creates an invalid case with an invalid nested contact object', () => {
@@ -1296,6 +1316,62 @@ describe('Case entity', () => {
       expect(
         caseRecord.documents.find(
           d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeUndefined();
+    });
+  });
+
+  describe('archiveCorrespondence', () => {
+    let caseRecord;
+    let correspondenceToArchive;
+    beforeEach(() => {
+      correspondenceToArchive = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+
+      caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          correspondence: [correspondenceToArchive],
+        },
+        {
+          applicationContext,
+        },
+      );
+    });
+
+    it('marks the correspondence document as archived', () => {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
+        applicationContext,
+      });
+      const archivedDocument = caseRecord.archivedCorrespondences.find(
+        d => d.documentId === correspondenceToArchive.documentId,
+      );
+      expect(archivedDocument.archived).toBeTruthy();
+    });
+
+    it('adds the provided document to the case archivedDocuments', () => {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
+        applicationContext,
+      });
+
+      expect(
+        caseRecord.archivedCorrespondences.find(
+          d => d.documentId === correspondenceToArchive.documentId,
+        ),
+      ).toBeDefined();
+    });
+
+    it('removes the provided document from the case documents array', () => {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
+        applicationContext,
+      });
+
+      expect(
+        caseRecord.documents.find(
+          d => d.documentId === correspondenceToArchive.documentId,
         ),
       ).toBeUndefined();
     });
@@ -2099,6 +2175,47 @@ describe('Case entity', () => {
         documentId: documentIdToDelete,
       });
       expect(myCase.documents.length).toEqual(4);
+    });
+  });
+
+  describe('deleteCorrespondenceById', () => {
+    const mockCorrespondence = new Correspondence({
+      documentTitle: 'A correpsondence',
+      filingDate: '2025-03-01T00:00:00.000Z',
+      userId: MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'].userId,
+    });
+
+    it('should delete the correspondence document with the given id', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.correspondence.length).toEqual(1);
+      myCase.deleteCorrespondenceById({
+        correspondenceId: mockCorrespondence.documentId,
+      });
+      expect(myCase.correspondence.length).toEqual(0);
+      expect(
+        myCase.correspondence.find(
+          d => d.documentId === mockCorrespondence.documentId,
+        ),
+      ).toBeUndefined();
+    });
+
+    it('should not delete a document if a document with the given id does not exist', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.correspondence.length).toEqual(1);
+      myCase.deleteCorrespondenceById({
+        correspondenceId: '1234',
+      });
+      expect(myCase.correspondence.length).toEqual(1);
     });
   });
 

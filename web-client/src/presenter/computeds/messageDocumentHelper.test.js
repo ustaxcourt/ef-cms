@@ -1400,9 +1400,7 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            archivedDocuments: [
               {
                 archived: true,
                 documentId: '123',
@@ -1411,6 +1409,9 @@ describe('messageDocumentHelper', () => {
                 eventCode: 'A',
               },
             ],
+            correspondence: [],
+            docketRecord: [],
+            documents: [],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -1419,6 +1420,57 @@ describe('messageDocumentHelper', () => {
       });
 
       expect(archived).toBeTruthy();
+    });
+
+    it('should be true when the document is an archived correspondence', () => {
+      const { archived } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            archivedCorrespondences: [
+              {
+                archived: true,
+                documentId: '123',
+                documentTitle: 'My Correspondence',
+                filedBy: 'Docket Clerk',
+              },
+            ],
+            correspondence: [],
+            docketRecord: [],
+            documents: [],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(archived).toBeTruthy();
+    });
+
+    it('should be false when the document is not an archived correspondence', () => {
+      const { archived } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            archivedCorrespondences: [
+              {
+                documentId: '123',
+                documentTitle: 'My Correspondence',
+                filedBy: 'Docket Clerk',
+              },
+            ],
+            correspondence: [],
+            docketRecord: [],
+            documents: [],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(archived).toBeFalsy();
     });
 
     it('should be false when the document is not an archived document', () => {
