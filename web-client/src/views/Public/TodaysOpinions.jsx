@@ -1,14 +1,20 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const TodaysOpinions = connect(
   {
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     todaysOpinionsHelper: state.todaysOpinionsHelper,
   },
-  function TodaysOpinions({ todaysOpinionsHelper }) {
+  function TodaysOpinions({
+    openCaseDocumentDownloadUrlSequence,
+    todaysOpinionsHelper,
+  }) {
     return (
       <>
         <BigHeader text="Today’s Opinions" />
@@ -47,13 +53,19 @@ export const TodaysOpinions = connect(
                     </td>
                     <td>{opinion.caseCaption}</td>
                     <td>
-                      <a
-                        href={opinion.documentLink}
-                        rel="noopener noreferrer"
-                        target="_blank"
+                      <Button
+                        link
+                        aria-label={`View PDF: ${opinion.description}`}
+                        onClick={() => {
+                          openCaseDocumentDownloadUrlSequence({
+                            docketNumber: opinion.docketNumber,
+                            documentId: opinion.documentId,
+                            isPublic: true,
+                          });
+                        }}
                       >
                         {opinion.formattedDocumentType}
-                      </a>
+                      </Button>
                     </td>
                     <td>{opinion.numberOfPages}</td>
                     <td>{opinion.formattedFilingDate}</td>

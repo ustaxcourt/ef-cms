@@ -12,6 +12,24 @@ describe('publicAlertHelper', () => {
     });
     expect(result).toMatchObject({
       showErrorAlert: true,
+      showMultipleMessages: false,
+      showSingleMessage: true,
+      showTitleOnly: false,
+    });
+  });
+
+  it('multiple messages error alert', () => {
+    const result = runCompute(publicAlertHelper, {
+      state: {
+        alertError: {
+          messages: ['abc', 'def', 'ghi'],
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showErrorAlert: true,
+      showMultipleMessages: true,
+      showSingleMessage: false,
       showTitleOnly: false,
     });
   });
@@ -24,6 +42,8 @@ describe('publicAlertHelper', () => {
     });
     expect(result).toMatchObject({
       showErrorAlert: true,
+      showMultipleMessages: false,
+      showSingleMessage: false,
       showTitleOnly: true,
     });
   });

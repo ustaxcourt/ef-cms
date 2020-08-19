@@ -28,6 +28,9 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
           caseDescription =
             'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015';
           break;
+        case CASE_TYPES_MAP.disclosure:
+          caseDescription = 'Notice of Intention to Disclose';
+          break;
         case CASE_TYPES_MAP.partnershipSection6226:
           caseDescription =
             'Readjustment of Partnership Items Code Section 6226';
@@ -66,6 +69,15 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
         });
       }
     });
+    if (
+      caseTypesWithDescriptions.find(x => x.type === CASE_TYPES_MAP.disclosure)
+    ) {
+      caseTypesWithDescriptions.push({
+        description:
+          'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+        type: CASE_TYPES_MAP.disclosure,
+      });
+    }
   } else {
     CASE_TYPES.forEach(caseType => {
       let caseDescription = '';
@@ -88,6 +100,9 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
         case CASE_TYPES_MAP.djExemptOrg:
           caseDescription = 'Declaratory Judgment (Exempt Organization)';
           break;
+        case CASE_TYPES_MAP.disclosure:
+          caseDescription = 'Disclosure';
+          break;
         case CASE_TYPES_MAP.interestAbatement:
           caseDescription =
             'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement';
@@ -106,5 +121,6 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
       }
     });
   }
+
   return { caseTypes: caseTypesWithDescriptions };
 };

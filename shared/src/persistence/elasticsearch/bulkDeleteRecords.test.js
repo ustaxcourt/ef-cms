@@ -3,6 +3,7 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
 } = require('../../business/entities/EntityConstants');
 const { bulkDeleteRecords } = require('./bulkDeleteRecords');
 
@@ -14,7 +15,7 @@ describe('bulkDeleteRecords', () => {
     docketNumberWithSuffix: { S: '105-19' },
     entityName: { S: 'Message' },
     from: { S: 'Test Docketclerk' },
-    fromSection: { S: 'docket' },
+    fromSection: { S: DOCKET_SECTION },
     fromUserId: { S: '1805d1ab-18d0-43ec-bafb-654e83405416' },
     gsi1pk: { S: 'message|2e30ecc2-3818-4855-ad3f-4a3ce8d29767' },
     message: { S: 'D' },
@@ -23,7 +24,7 @@ describe('bulkDeleteRecords', () => {
     sk: { S: 'message|2e30ecc2-3818-4855-ad3f-4a3ce8d29767' },
     subject: { S: 'S' },
     to: { S: 'Test Docketclerk' },
-    toSection: { S: 'docket' },
+    toSection: { S: DOCKET_SECTION },
     toUserId: { S: '1805d1ab-18d0-43ec-bafb-654e83405416' },
   };
 
@@ -73,7 +74,7 @@ describe('bulkDeleteRecords', () => {
       errors: true,
       items: [
         {
-          index: {
+          delete: {
             _index: 'efcms-message',
             error: {
               index: 'efcms-message',
@@ -96,10 +97,8 @@ describe('bulkDeleteRecords', () => {
     expect(applicationContext.getSearchClient().bulk).toBeCalled();
     expect(result.failedRecords).toEqual([
       {
-        delete: {
-          _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,
-          _index: 'efcms-message',
-        },
+        _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,
+        _index: 'efcms-message',
       },
     ]);
   });

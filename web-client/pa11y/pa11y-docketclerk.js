@@ -172,6 +172,7 @@ module.exports = [
       'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result-sunglasses',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-deadlines',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/111-19?openModal=UnconsolidateCasesModal',
@@ -179,4 +180,5 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/document-view?documentId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/document-view?documentId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
+  'http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
 ];

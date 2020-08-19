@@ -3,7 +3,7 @@ import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from 'cerebral';
 
 export const editDocketEntryMetaHelper = (get, applicationContext) => {
-  const { eventCode } = get(state.form);
+  const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
@@ -33,11 +33,18 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     categoryInformation,
   );
 
+  const strickenAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(strickenAt, 'MMDDYYYY');
+
   return {
+    isStricken,
     primary: optionsForCategory,
     showObjection:
       objectionDocumentTypes.includes(form.documentType) ||
       (amendmentEventCodes.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
+    strickenAtFormatted,
+    strickenBy,
   };
 };

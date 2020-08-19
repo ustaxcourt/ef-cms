@@ -7,7 +7,7 @@ export const ArchiveDraftDocumentModal = connect(
   {
     archiveDraftDocument: state.archiveDraftDocument,
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.removeDraftDocumentSequence,
+    confirmSequence: sequences.archiveDraftDocumentSequence,
   },
   function ArchiveDraftDocumentModal({
     archiveDraftDocument,

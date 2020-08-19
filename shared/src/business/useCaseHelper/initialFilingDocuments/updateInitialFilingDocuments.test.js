@@ -6,6 +6,7 @@ const {
 } = require('./updateInitialFilingDocuments');
 const { Case } = require('../../../business/entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
@@ -18,6 +19,12 @@ describe('addNewInitialFilingToCase', () => {
 
   let mockOriginalCase;
   let mockCaseToUpdate;
+
+  const petitionsClerkUser = {
+    name: 'petitions clerk',
+    role: ROLES.petitionsClerk,
+    userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
+  };
 
   beforeAll(() => {});
 
@@ -34,6 +41,7 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
@@ -42,6 +50,31 @@ describe('addNewInitialFilingToCase', () => {
       d => d.documentId === mockRQT.documentId,
     );
     expect(rqtFile).toBeDefined();
+  });
+
+  it('should set isFileAttached and isPaper to true', async () => {
+    mockOriginalCase = new Case(
+      { ...MOCK_CASE, documents: [] },
+      { applicationContext },
+    );
+
+    mockCaseToUpdate = {
+      ...MOCK_CASE,
+      documents: [...MOCK_CASE.documents, mockRQT],
+    };
+
+    await updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser: petitionsClerkUser,
+      caseEntity: mockOriginalCase,
+      caseToUpdate: mockCaseToUpdate,
+    });
+
+    const filedDocument = mockOriginalCase.documents.find(
+      d => d.documentId === mockRQT.documentId,
+    );
+    expect(filedDocument.isFileAttached).toBeTruthy();
+    expect(filedDocument.isPaper).toBeTruthy();
   });
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
@@ -56,6 +89,7 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });
@@ -83,6 +117,7 @@ describe('addNewInitialFilingToCase', () => {
 
     await updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser: petitionsClerkUser,
       caseEntity: mockOriginalCase,
       caseToUpdate: mockCaseToUpdate,
     });

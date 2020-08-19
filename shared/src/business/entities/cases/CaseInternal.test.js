@@ -8,6 +8,7 @@ const {
   PAYMENT_STATUS,
 } = require('../EntityConstants');
 const { CaseInternal } = require('./CaseInternal');
+const { Correspondence } = require('../Correspondence');
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 describe('CaseInternal entity', () => {
@@ -30,6 +31,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal(
         {
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -71,6 +73,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with partyType Corporation and an ods file', () => {
       const caseInternal = new CaseInternal(
         {
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -105,6 +108,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with partyType Corporation and an order for ods instead of an ods file', () => {
       const caseInternal = new CaseInternal(
         {
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -303,6 +307,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
       const caseInternal = new CaseInternal(
         {
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -340,6 +345,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
       const caseInternal = new CaseInternal(
         {
+          archivedDocuments: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -374,5 +380,57 @@ describe('CaseInternal entity', () => {
         chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
+  });
+
+  it('should populate archivedCorrespondences', () => {
+    const mockGuid = applicationContext.getUniqueId();
+    const mockCorrespondence = new Correspondence({
+      documentId: mockGuid,
+      documentTitle: 'My Correspondence',
+      filedBy: 'Docket clerk',
+      userId: mockGuid,
+    });
+
+    const caseInternal = new CaseInternal(
+      {
+        archivedCorrespondences: [mockCorrespondence],
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        mailingDate: 'test',
+        partyType: PARTY_TYPES.petitioner,
+        petitionFile: { anObject: true },
+        petitionFileSize: 1,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+        preferredTrialCity: 'Boise, Idaho',
+        procedureType: 'Small',
+        receivedAt: new Date().toISOString(),
+        requestForPlaceOfTrialFile: { anObject: true },
+        requestForPlaceOfTrialFileSize: 1,
+        statistics: [
+          {
+            irsDeficiencyAmount: 1,
+            irsTotalPenalties: 1,
+            year: '2001',
+            yearOrPeriod: 'Year',
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+    expect(caseInternal.isValid()).toEqual(true);
+    expect(caseInternal.archivedCorrespondences.length).toBe(1);
   });
 });

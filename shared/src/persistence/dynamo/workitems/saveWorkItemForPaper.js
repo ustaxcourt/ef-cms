@@ -14,6 +14,7 @@ exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
   await Promise.all([
     put({
       Item: {
+        gsi1pk: `work-item|${workItem.workItemId}`,
         pk: `work-item|${workItem.workItemId}`,
         sk: `work-item|${workItem.workItemId}`,
         ...workItem,

@@ -25,11 +25,13 @@ node_modules/
 parcel-debug-*
 proxy-request-times.json
 puppeteer_lambda_layer.tar.gz
+puppeteer_lambda_layer.zip
 reports/test-reporter.xml
 shared/coverage
 shared/pdf-tests/*.html
 web-api/runtimes/clamav/bin
 web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
+web-api/runtimes/clamav/clamav_lambda_layer.zip
 web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
