@@ -70,7 +70,22 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     isEqual,
   );
 
+  const updatedCorrespondence = differenceWith(
+    caseToUpdate.correspondence,
+    oldCase.correspondence,
+    isEqual,
+  );
+
+  const updatedArchivedCorrespondences = differenceWith(
+    caseToUpdate.archivedCorrespondences,
+    oldCase.archivedCorrespondences,
+    isEqual,
+  );
+
   const allUpdatedDocuments = updatedDocuments.concat(updatedArchivedDocuments);
+  const allUpdatedCorrespondences = updatedCorrespondence.concat(
+    updatedArchivedCorrespondences,
+  );
 
   allUpdatedDocuments.forEach(document => {
     requests.push(
@@ -79,6 +94,19 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           pk: `case|${caseToUpdate.docketNumber}`,
           sk: `document|${document.documentId}`,
           ...document,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
+  allUpdatedCorrespondences.forEach(correspondence => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.docketNumber}`,
+          sk: `correspondence|${correspondence.documentId}`,
+          ...correspondence,
         },
         applicationContext,
       }),
