@@ -231,8 +231,6 @@ export const baseState = {
   docketRecordIndex: 0,
   // needs its own object because it's present when other forms are on screen
   documentId: null,
-  fieldOrder: [],
-  // TODO: related to errors
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     isUploading: false,
