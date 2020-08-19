@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 const { UserCase } = require('../entities/UserCase');
 
@@ -113,21 +114,28 @@ exports.migrateCaseInteractor = async ({
     }
   }
 
-  const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
-
   if (caseToAdd.trialSessionId) {
-    const trialSessionData = applicationContext
+    const trialSessionData = await applicationContext
       .getPersistenceGateway()
       .getTrialSessionById({
         applicationContext,
         trialSessionId: caseToAdd.trialSessionId,
       });
+
     if (!trialSessionData) {
       throw new Error(
         `Trial Session not found with id ${caseToAdd.trialSessionId}`,
       );
     }
+
+    const trialSessionEntity = new TrialSession(trialSessionData, {
+      applicationContext,
+    });
+
+    caseToAdd.setAsCalendared(trialSessionEntity);
   }
+
+  const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
