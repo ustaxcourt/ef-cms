@@ -1,10 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SpousePermissionConfirmModal } from './SpousePermissionConfirmModal';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -294,11 +294,9 @@ export const StartCaseStep3 = connect(
             )}
           {startCaseHelper.showOtherFilingTypeOptions &&
             startCaseHelper.showMinorIncompetentFilingOptions && (
-              <div
-                className={classNames(
-                  'ustc-secondary-question',
-                  validationErrors.partyType && 'usa-form-group--error',
-                )}
+              <FormGroup
+                className="ustc-secondary-question"
+                errorText={validationErrors.partyType}
               >
                 <fieldset
                   className="usa-fieldset"
@@ -346,9 +344,8 @@ export const StartCaseStep3 = connect(
                     </div>
                   ))}
                 </fieldset>
-              </div>
+              </FormGroup>
             )}
-          <ValidationText field="partyType" />
         </div>
 
         <Contacts
@@ -372,44 +369,49 @@ export const StartCaseStep3 = connect(
               Statement (ODS).
             </Hint>
             <div className="blue-container">
-              <label
-                className={classNames(
-                  'ustc-upload-ods usa-label with-hint',
-                  startCaseHelper.showOwnershipDisclosureValid && 'validated',
-                )}
-                htmlFor="ownership-disclosure-file"
-                id="ownership-disclosure-file-label"
+              <FormGroup
+                errorText={
+                  validationErrors.ownershipDisclosureFile ||
+                  validationErrors.ownershipDisclosureFileSize
+                }
               >
-                Upload your Ownership Disclosure Statement
-              </label>
-              <span className="usa-hint">
-                File must be in PDF format (.pdf). Max file size{' '}
-                {constants.MAX_FILE_SIZE_MB}MB.
-              </span>
-              <p className="margin-top-0">
-                <Button
-                  link
-                  className="usa-link--external text-left  mobile-text-wrap"
-                  href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
-                  icon="file-pdf"
-                  iconColor="blue"
-                  overrideMargin="margin-right-1"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                <label
+                  className={classNames(
+                    'ustc-upload-ods usa-label with-hint',
+                    startCaseHelper.showOwnershipDisclosureValid && 'validated',
+                  )}
+                  htmlFor="ownership-disclosure-file"
+                  id="ownership-disclosure-file-label"
                 >
-                  Download Ownership Disclosure Statement (T.C. Form 6)
-                </Button>
-                <p className="margin-top-0">if you haven’t already done so</p>
-              </p>
-              <StateDrivenFileInput
-                aria-describedby="ownership-disclosure-file-label"
-                id="ownership-disclosure-file"
-                name="ownershipDisclosureFile"
-                updateFormValueSequence="updateStartCaseFormValueSequence"
-                validationSequence="validateStartCaseWizardSequence"
-              />
-              <ValidationText field="ownershipDisclosureFile" />
-              <ValidationText field="ownershipDisclosureFileSize" />
+                  Upload your Ownership Disclosure Statement
+                </label>
+                <span className="usa-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
+                <p className="margin-top-0">
+                  <Button
+                    link
+                    className="usa-link--external text-left  mobile-text-wrap"
+                    href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                    icon="file-pdf"
+                    iconColor="blue"
+                    overrideMargin="margin-right-1"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Download Ownership Disclosure Statement (T.C. Form 6)
+                  </Button>
+                  <p className="margin-top-0">if you haven’t already done so</p>
+                </p>
+                <StateDrivenFileInput
+                  aria-describedby="ownership-disclosure-file-label"
+                  id="ownership-disclosure-file"
+                  name="ownershipDisclosureFile"
+                  updateFormValueSequence="updateStartCaseFormValueSequence"
+                  validationSequence="validateStartCaseWizardSequence"
+                />
+              </FormGroup>
             </div>
           </>
         )}

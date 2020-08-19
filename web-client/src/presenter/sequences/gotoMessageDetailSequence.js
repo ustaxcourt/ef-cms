@@ -10,8 +10,8 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
 import { setMessageAction } from '../actions/setMessageAction';
+import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
-import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 const gotoMessageDetail = showProgressSequenceDecorator([
@@ -25,7 +25,7 @@ const gotoMessageDetail = showProgressSequenceDecorator([
   setMessageAction,
   getMostRecentMessageInThreadAction,
   getDefaultAttachmentViewerDocumentToDisplayAction,
-  setViewerDocumentToDisplayAction,
+  setMessageDetailViewerDocumentToDisplayAction,
   setDefaultIsExpandedAction,
   setCurrentPageAction('MessageDetail'),
 ]);

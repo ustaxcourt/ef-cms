@@ -58,6 +58,7 @@ describe('getCalendaredCasesForTrialSession', () => {
     });
     expect(result).toEqual([
       {
+        archivedCorrespondences: [],
         archivedDocuments: [],
         correspondence: [],
         disposition: 'something',

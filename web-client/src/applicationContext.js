@@ -37,6 +37,7 @@ import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConso
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
+import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/archiveCorrespondenceDocumentProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
@@ -79,7 +80,6 @@ import { createPractitionerUserInteractor } from '../../shared/src/proxies/pract
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
-import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
@@ -273,6 +273,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,
@@ -295,7 +296,6 @@ const allUseCases = {
   createTrialSessionInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
-  deleteCorrespondenceDocumentInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
   deleteTrialSessionInteractor,
