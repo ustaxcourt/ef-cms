@@ -1371,6 +1371,11 @@
                     type: "any"
                     flags: 
                       presence: "optional"
+            isLegacyServed: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+                description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
             isPaper: 
               type: "boolean"
               flags: 
