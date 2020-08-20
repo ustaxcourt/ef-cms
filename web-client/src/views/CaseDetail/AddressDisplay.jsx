@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
@@ -11,6 +12,7 @@ export const AddressDisplay = connect(
     nameOverride: props.nameOverride || {},
     noMargin: props.noMargin || false,
     showEmail: props.showEmail || false,
+    showSealAddressLink: props.showSealAddressLink || false,
   },
   function AddressDisplay({
     constants,
@@ -18,6 +20,7 @@ export const AddressDisplay = connect(
     nameOverride,
     noMargin,
     showEmail,
+    showSealAddressLink,
   }) {
     return (
       <>
@@ -74,6 +77,13 @@ export const AddressDisplay = connect(
                   size="1x"
                 />
               )}
+            </span>
+          )}
+          {showSealAddressLink && (
+            <span className="sealed-address">
+              <Button link className="red-warning" icon="lock" iconColor="red">
+                Seal Address
+              </Button>
             </span>
           )}
         </p>

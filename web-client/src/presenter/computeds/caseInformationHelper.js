@@ -25,12 +25,15 @@ export const caseInformationHelper = get => {
     ? otherPetitioners || []
     : otherPetitioners.slice(0, 4);
 
+  const showSealAddressLink = permissions.SEAL_ADDRESS;
+
   return {
     formattedOtherPetitioners,
     showAddCounsel,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showOtherPetitioners,
+    showSealAddressLink,
     showSealCaseButton,
     toggleAdditionalPetitionersDisplay,
   };

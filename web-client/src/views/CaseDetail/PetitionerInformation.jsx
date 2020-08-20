@@ -83,6 +83,9 @@ const PetitionerInformation = connect(
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
                         showEmail={true}
+                        showSealAddressLink={
+                          caseInformationHelper.showSealAddressLink
+                        }
                       />
                     </address>
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
@@ -124,6 +127,9 @@ const PetitionerInformation = connect(
                       {formattedCaseDetail.contactSecondary.name && (
                         <AddressDisplay
                           contact={formattedCaseDetail.contactSecondary}
+                          showSealAddressLink={
+                            caseInformationHelper.showSealAddressLink
+                          }
                         />
                       )}
                     </address>
@@ -225,6 +231,9 @@ const PetitionerInformation = connect(
                           ...practitioner.contact,
                         }}
                         nameOverride={practitioner.name}
+                        showSealAddressLink={
+                          caseInformationHelper.showSealAddressLink
+                        }
                       />
                     )}
                   </address>
