@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { NonstandardForm } from './NonstandardForm';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
   fileDocumentSecondaryOnChange,
@@ -12,7 +13,6 @@ import {
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 
 export const CompleteDocumentTypeSectionRemainder = connect(
   {
@@ -77,13 +77,10 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 or use the dropdown to select your document type.
               </span>
 
-              <Select
+              <SelectSearch
                 aria-describedby="secondary-document-type-label"
                 aria-labelledby="secondary-document-type-label"
-                className="select-react-element"
-                classNamePrefix="select-react-element"
                 id="secondary-doc-secondary-document-type"
-                isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
                   completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted

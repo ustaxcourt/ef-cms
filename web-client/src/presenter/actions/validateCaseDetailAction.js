@@ -20,11 +20,40 @@ export const validateCaseDetailAction = ({
   store,
 }) => {
   const { formWithComputedDates } = props;
+  const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
 
-  const errors = applicationContext.getUseCases().validateCaseDetailInteractor({
-    applicationContext,
-    caseDetail: formWithComputedDates,
+  const findDocumentByType = type => {
+    return formWithComputedDates.documents.find(
+      document => document.documentType === type,
+    );
+  };
+
+  const initialDocumentFormFiles = {};
+  Object.keys(INITIAL_DOCUMENT_TYPES_MAP).forEach(key => {
+    const foundDocument = findDocumentByType(INITIAL_DOCUMENT_TYPES_MAP[key]);
+    if (foundDocument) {
+      initialDocumentFormFiles[key] = {};
+      initialDocumentFormFiles[`${key}Size`] = 1;
+    }
   });
+
+  let errors;
+  if (formWithComputedDates.isPaper) {
+    errors = applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor({
+        applicationContext,
+        petition: {
+          ...formWithComputedDates,
+          ...initialDocumentFormFiles,
+        },
+      });
+  } else {
+    errors = applicationContext.getUseCases().validateCaseDetailInteractor({
+      applicationContext,
+      caseDetail: formWithComputedDates,
+    });
+  }
 
   store.set(state.validationErrors, errors || {});
 

@@ -46,8 +46,10 @@ import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/tr
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
   calculateISODate,
+  createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
+  createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
   formatDateString,
@@ -207,6 +209,7 @@ import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxie
 import { updateUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateUserCaseNoteProxy';
 import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
+import { uploadDocumentAndMakeSafe } from '../../shared/src/business/useCases/uploadDocumentAndMakeSafe';
 import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
@@ -235,6 +238,7 @@ import { validatePetitionFromPaperInteractor } from '../../shared/src/business/u
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
+import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
 import { validateSecondaryContactInteractor } from '../../shared/src/business/useCases/validateSecondaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -409,6 +413,7 @@ const allUseCases = {
   updateUserCaseNoteInteractor,
   updateUserContactInformationInteractor,
   uploadCorrespondenceDocumentInteractor,
+  uploadDocumentAndMakeSafe,
   uploadDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
@@ -436,6 +441,7 @@ const allUseCases = {
   validatePetitionInteractor,
   validatePetitionerInformationFormInteractor,
   validatePrimaryContactInteractor,
+  validateSearchDeadlinesInteractor,
   validateSecondaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
@@ -531,8 +537,10 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
+      createEndOfDayISO,
       createISODateString,
       createISODateStringFromObject,
+      createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,

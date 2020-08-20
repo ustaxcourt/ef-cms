@@ -18,7 +18,6 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
-  wait,
 } from './helpers';
 
 const test = setupTest();
@@ -117,7 +116,6 @@ describe('docket clerk order advanced search', () => {
 
       expect(test.getState('validationErrors')).toEqual({
         keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
-        startDate: DocumentSearch.VALIDATION_ERROR_MESSAGES.startDate,
       });
     });
 
@@ -148,7 +146,7 @@ describe('docket clerk order advanced search', () => {
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
       expect(test.getState('alertError')).toEqual({
-        messages: ['Enter a keyword or phrase', 'Enter a valid start date'],
+        messages: ['Enter a keyword or phrase'],
         title: 'Please correct the following errors:',
       });
 
@@ -360,8 +358,6 @@ describe('docket clerk order advanced search', () => {
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
       await refreshElasticsearchIndex();
-
-      await wait(5000);
 
       expect(test.getState('searchResults')).toEqual(
         expect.arrayContaining([

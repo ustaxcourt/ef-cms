@@ -6,6 +6,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -195,9 +196,9 @@ const getFilingsAndProceedings = formattedDocument => {
     `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
     `${
-      formattedDocument.objections === 'Yes'
+      formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
-        : formattedDocument.objections === 'No'
+        : formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.NO
         ? '(No Objection)'
         : ''
     }`,
