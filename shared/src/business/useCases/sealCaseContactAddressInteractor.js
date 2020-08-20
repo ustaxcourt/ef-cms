@@ -13,8 +13,8 @@ const { Case } = require('../entities/cases/Case');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.contactId the id of the contact address to be sealed
  * @param {string} providers.docketNumber the docket number of the case to update
- * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
 exports.sealCaseContactAddressInteractor = async ({
