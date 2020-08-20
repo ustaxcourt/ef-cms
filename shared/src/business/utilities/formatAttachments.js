@@ -22,9 +22,7 @@ export const formatAttachments = ({ attachments, caseDetail }) => {
   ];
 
   const formattedAttachments = attachments.map(({ documentId }) => {
-    const document = allDocuments.find(
-      document => document.documentId === documentId,
-    );
+    const document = allDocuments.find(d => d.documentId === documentId);
 
     if (document) {
       return {

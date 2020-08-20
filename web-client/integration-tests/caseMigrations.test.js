@@ -1,7 +1,14 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const test = setupTest();
 
@@ -180,6 +187,42 @@ const otherPetitionersCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
+const legacyServedDocumentCase = {
+  ...MOCK_CASE,
+  associatedJudge: CHIEF_JUDGE,
+  caseCaption: 'The Sixth Migrated Case',
+  docketNumber: '156-21',
+  docketRecord: [
+    ...MOCK_CASE.docketRecord,
+    {
+      description: 'Answer',
+      docketRecordId: 'c48eac57-8249-4e48-a66b-3e23f76fa418',
+      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+      eventCode: 'A',
+      filingDate: '2018-11-21T20:49:28.192Z',
+      index: 4,
+    },
+  ],
+  documents: [
+    ...MOCK_CASE.documents,
+    {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketNumber: '101-21',
+      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+      documentTitle: 'Answer',
+      documentType: 'Answer',
+      eventCode: 'A',
+      filedBy: 'Test Petitioner',
+      isLegacyServed: true,
+      processingStatus: 'complete',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ],
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+};
+
 describe('Case migration journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -205,6 +248,10 @@ describe('Case migration journey', () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       otherFilersCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      legacyServedDocumentCase,
     );
 
     await refreshElasticsearchIndex();
@@ -253,6 +300,23 @@ describe('Case migration journey', () => {
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
     ).toBe('Chicago');
+  });
+
+  it('Docketclerk views case with legacy served documents', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: legacyServedDocumentCase.docketNumber,
+    });
+    const caseDocuments = test.getState('caseDetail.documents');
+    expect(caseDocuments.length).toBe(5);
+
+    const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);
+    expect(legacyServedDocument.servedAt).toBeUndefined();
+
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+    expect(formattedCase.formattedDocketEntries[3].showNotServed).toBe(false);
+    expect(formattedCase.formattedDocketEntries[3].isInProgress).toBe(false);
   });
 
   loginAs(test, 'privatePractitioner@example.com');

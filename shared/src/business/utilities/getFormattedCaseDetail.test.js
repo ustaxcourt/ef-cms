@@ -107,6 +107,46 @@ describe('formatCase', () => {
     expect(result.documents[1].qcWorkItemsUntouched).toEqual(false);
   });
 
+  it('should correctly format legacy served documents', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          documentId: 'd-1-2-3',
+          hi: 'there',
+          index: '1',
+        },
+        {
+          documentId: 'd-1-4-3',
+          hi: 'there',
+          index: '2',
+        },
+      ],
+      documents: [
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-2-3',
+          documentType: 'Petition',
+          eventCode: 'P',
+          isLegacyServed: true,
+        },
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-4-3',
+          documentType: 'Amended Answer',
+          eventCode: 'ABC',
+          isLegacyServed: true,
+        },
+      ],
+    });
+
+    expect(result.documents[0].isNotServedDocument).toBeFalsy();
+    expect(result.documents[0].isUnservable).toBeTruthy();
+
+    expect(result.documents[1].isNotServedDocument).toBeFalsy();
+    expect(result.documents[1].isUnservable).toBeTruthy();
+  });
+
   it('should format the filing date of all correspondence documents', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
