@@ -245,6 +245,9 @@ const {
   saveSignedDocumentLambda,
 } = require('./documents/saveSignedDocumentLambda');
 const {
+  sealCaseContactAddressLambda,
+} = require('./cases/sealCaseContactAddressLambda');
+const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
 const {
@@ -565,6 +568,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateQcCompleteForTrialLambda),
   );
   app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
+  app.put(
+    '/case-meta/:docketNumber/seal-address/:contactId',
+    lambdaWrapper(sealCaseContactAddressLambda),
+  );
   app.post(
     '/case-meta/:docketNumber/other-statistics',
     lambdaWrapper(updateOtherStatisticsLambda),
