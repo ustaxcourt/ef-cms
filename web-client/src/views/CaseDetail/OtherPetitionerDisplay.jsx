@@ -1,18 +1,20 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 const OtherPetitionerDisplay = connect(
   {
     caseInformationHelper: state.caseInformationHelper,
     constants: state.constants,
+    openSealAddressModalSequence: sequences.openSealAddressModalSequence,
     petitioner: props.petitioner,
   },
   function OtherPetitionerDisplay({
     caseInformationHelper,
     constants,
+    openSealAddressModalSequence,
     petitioner,
   }) {
     return (
@@ -61,7 +63,13 @@ const OtherPetitionerDisplay = connect(
           )}
           {caseInformationHelper.showSealAddressLink && (
             <span className="sealed-address">
-              <Button link className="red-warning" icon="lock" iconColor="red">
+              <Button
+                link
+                className="red-warning"
+                icon="lock"
+                iconColor="red"
+                onClick={() => openSealAddressModalSequence()}
+              >
                 Seal Address
               </Button>
             </span>

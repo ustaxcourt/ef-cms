@@ -1,5 +1,6 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { SealAddressModal } from '../CaseDetail/SealAddressModal';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -9,10 +10,12 @@ export const OtherFilerInformation = connect(
   {
     caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    showModal: state.showModal,
   },
   function OtherFilerInformation({
     caseInformationHelper,
     formattedCaseDetail,
+    showModal,
   }) {
     return (
       <>
@@ -109,6 +112,7 @@ export const OtherFilerInformation = connect(
             </div>{' '}
           </div>
         )}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },

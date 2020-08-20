@@ -214,6 +214,7 @@ import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequ
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
+import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
@@ -648,6 +649,7 @@ export const presenter = {
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openReplyToMessageModalSequence,
+    openSealAddressModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     openStrikeDocketEntryModalSequence,
