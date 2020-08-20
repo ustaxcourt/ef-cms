@@ -389,8 +389,6 @@ const CASE_TYPES_MAP = {
   djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
   djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
   disclosure: 'Disclosure',
-  disclosure1: 'Disclosure1',
-  disclosure2: 'Disclosure2',
   innocentSpouse: 'Innocent Spouse',
   interestAbatement: 'Interest Abatement',
   other: 'Other',
