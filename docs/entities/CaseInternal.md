@@ -3434,6 +3434,8 @@
         - "Declaratory Judgment (Exempt Organization)"
         - "Declaratory Judgment (Retirement Plan)"
         - "Disclosure"
+        - "Disclosure1"
+        - "Disclosure2"
         - "Innocent Spouse"
         - "Interest Abatement"
         - "Other"
