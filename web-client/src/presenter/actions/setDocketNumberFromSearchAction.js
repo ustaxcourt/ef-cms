@@ -1,6 +1,10 @@
 import { state } from 'cerebral';
 
-export const trimDocketNumberSearch = (applicationContext, searchTerm) => {
+export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
+  if (searchTerm === '') {
+    return '';
+  }
+
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const suffixes = Object.values(DOCKET_NUMBER_SUFFIXES).join('|');
   // eslint-disable-next-line security/detect-non-literal-regexp
@@ -9,9 +13,6 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm) => {
     'i',
   );
 
-  if (!searchTerm) {
-    return '';
-  }
   const match = docketNumberMatcher.exec(searchTerm.trim());
   const docketNumber = match && match.length > 1 ? match[1] : searchTerm;
   return docketNumber;
