@@ -174,7 +174,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
   if (rawCase.docketNumber) {
-    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+    this.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
   }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
@@ -367,8 +367,10 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: joi.object().required(),
-  contactSecondary: joi.object().optional().allow(null),
+  contactPrimary: ContactFactory.getValidationRules('primary').required(),
+  contactSecondary: ContactFactory.getValidationRules('secondary')
+    .optional()
+    .allow(null),
   correspondence: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -516,7 +518,7 @@ Case.VALIDATION_RULES = {
     .description('Reminder for clerks to review the Order to Show Cause.'),
   otherFilers: joi
     .array()
-    .items(joi.object().meta({ entityName: 'OtherFilerContact' }))
+    .items(ContactFactory.getValidationRules('otherFilers'))
     .unique(
       (a, b) =>
         a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
@@ -526,7 +528,7 @@ Case.VALIDATION_RULES = {
     .optional(),
   otherPetitioners: joi
     .array()
-    .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
+    .items(ContactFactory.getValidationRules('otherPetitioners'))
     .description('List of OtherPetitionerContact Entities for the case.')
     .optional(),
   partyType: joi
@@ -944,10 +946,32 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   return this;
 };
 
+/**
+ * gets the document with id documentId from the documents or correspondence arrays
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the document to retrieve
+ * @returns {object} the retrieved document
+ */
 Case.prototype.getDocumentById = function ({ documentId }) {
   const allCaseDocuments = [...this.documents, ...this.correspondence];
 
   return allCaseDocuments.find(document => document.documentId === documentId);
+};
+
+/**
+ * deletes the document with id documentId from the documents array
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the document to remove from the documents array
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.deleteDocumentById = function ({ documentId }) {
+  this.documents = this.documents.filter(
+    item => item.documentId !== documentId,
+  );
+
+  return this;
 };
 
 const getPetitionDocumentFromDocuments = function (documents) {
@@ -1587,6 +1611,18 @@ Case.sortByDocketNumber = function (cases) {
 Case.findLeadCaseForCases = function (cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
+};
+
+/**
+ * re-formats docket number with any leading zeroes removed
+ *
+ * @param {string} docketNumber the docket number to re-format
+ * @returns {string} the formatted docket Number
+ */
+Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
+  const leadingZeroes = /^0+/;
+  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
+  return formattedDocketNumber;
 };
 
 /**

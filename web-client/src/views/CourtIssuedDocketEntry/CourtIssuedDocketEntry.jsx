@@ -7,6 +7,7 @@ import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import {
@@ -16,7 +17,6 @@ import {
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import Select from 'react-select';
 
 export const CourtIssuedDocketEntry = connect(
   {
@@ -90,15 +90,11 @@ export const CourtIssuedDocketEntry = connect(
                   >
                     Document type
                   </label>
-                  <Select
+                  <SelectSearch
                     aria-labelledby="document-type-label"
-                    className="select-react-element"
-                    classNamePrefix="select-react-element"
                     id="document-type"
-                    isClearable={true}
                     name="eventCode"
                     options={addCourtIssuedDocketEntryHelper.documentTypes}
-                    placeholder="- Select -"
                     value={reactSelectValue({
                       documentTypes:
                         addCourtIssuedDocketEntryHelper.documentTypes,

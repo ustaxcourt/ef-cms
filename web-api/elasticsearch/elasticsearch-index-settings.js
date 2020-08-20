@@ -4,7 +4,8 @@
   AWS.config.region = 'us-east-1';
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
-  const { mappings, settings } = require('./elasticsearch-settings');
+  const mappings = require('./elasticsearch-mappings');
+  const { settings } = require('./elasticsearch-settings');
 
   AWS.config.httpOptions.timeout = 300000;
   const { EnvironmentCredentials } = AWS;
@@ -49,14 +50,12 @@
         if (!indexExists) {
           searchClientCache.indices.create({
             body: {
-              mappings,
+              mappings: {
+                dynamic: false,
+                ...mappings[index],
+              },
               settings,
             },
-            index,
-          });
-        } else {
-          searchClientCache.indices.putSettings({
-            body: { 'index.mapping.total_fields.limit': '1000' },
             index,
           });
         }

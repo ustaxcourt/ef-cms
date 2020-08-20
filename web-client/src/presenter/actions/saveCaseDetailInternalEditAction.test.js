@@ -24,7 +24,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: {},
+      props: { formWithComputedDates: caseDetail },
       state: {
         caseDetail,
       },
@@ -48,7 +48,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: {},
+      props: { formWithComputedDates: caseDetail },
       state: {
         caseDetail,
       },

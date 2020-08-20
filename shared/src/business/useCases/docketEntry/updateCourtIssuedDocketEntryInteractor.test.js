@@ -7,8 +7,10 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   ROLES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
@@ -93,7 +95,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           userId: mockUserId,
           workItem: {
             assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -212,7 +214,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
-        eventCode: 'TRAN',
+        eventCode: TRANSCRIPT_EVENT_CODE,
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
       },
@@ -243,7 +245,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',
-        objections: 'No',
+        objections: OBJECTIONS_OPTIONS_MAP.NO,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
         signedJudgeName: 'Dredd',

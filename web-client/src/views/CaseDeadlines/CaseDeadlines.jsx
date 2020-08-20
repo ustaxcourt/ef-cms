@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from './DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -12,13 +13,20 @@ export const CaseDeadlines = connect(
   {
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
+    screenMetadata: state.screenMetadata,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
+    updateDateRangeForDeadlinesSequence:
+      sequences.updateDateRangeForDeadlinesSequence,
+    validationErrors: state.validationErrors,
   },
   function CaseDeadlines({
     caseDeadlineReportHelper,
     judgeFilter,
+    screenMetadata,
     selectDateRangeFromCalendarSequence,
+    updateDateRangeForDeadlinesSequence,
+    validationErrors,
   }) {
     return (
       <>
@@ -36,8 +44,12 @@ export const CaseDeadlines = connect(
               </div>
               <div className="blue-container">
                 <DateRangePickerComponent
+                  endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
+                  endValue={screenMetadata.filterEndDateState}
+                  startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
+                  startValue={screenMetadata.filterStartDateState}
                   onChangeEnd={e => {
                     selectDateRangeFromCalendarSequence({
                       endDate: e.target.value,
@@ -49,6 +61,13 @@ export const CaseDeadlines = connect(
                     });
                   }}
                 />
+                <Button
+                  onClick={() => {
+                    updateDateRangeForDeadlinesSequence();
+                  }}
+                >
+                  Show Deadlines
+                </Button>
               </div>
             </div>
             <div className="grid-col-9">
