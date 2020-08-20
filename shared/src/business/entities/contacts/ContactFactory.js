@@ -84,6 +84,7 @@ const commonValidationRequirements = {
     otherwise: joi.optional(),
   }),
   inCareOf: joi.string().max(100).optional(),
+  isAddressSealed: joi.boolean().optional(),
   name: joi.string().max(100).required(),
   phone: joi.string().max(100).required(),
   secondaryName: joi.string().max(100).optional(),
@@ -444,7 +445,6 @@ ContactFactory.createContactFactory = ({
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
-
       this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
       this.address2 = rawContact.address2 || undefined;
@@ -454,6 +454,7 @@ ContactFactory.createContactFactory = ({
       this.countryType = rawContact.countryType;
       this.email = rawContact.email;
       this.inCareOf = rawContact.inCareOf;
+      this.isAddressSealed = rawContact.isAddressSealed || false;
       this.name = rawContact.name;
       this.phone = rawContact.phone;
       this.postalCode = rawContact.postalCode;
