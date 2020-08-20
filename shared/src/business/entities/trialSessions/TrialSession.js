@@ -211,7 +211,15 @@ TrialSession.prototype.setAsCalendared = function () {
  */
 TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
   const { docketNumber } = caseEntity;
-  this.caseOrder.push({ docketNumber });
+
+  const caseExists = this.caseOrder.find(
+    _caseOrder => _caseOrder.docketNumber === docketNumber,
+  );
+
+  if (!caseExists) {
+    this.caseOrder.push({ docketNumber });
+  }
+
   return this;
 };
 
