@@ -4,6 +4,7 @@ import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -20,6 +21,7 @@ export const updatePetitionDetailsSequence = [
     error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
       setCurrentPageAction('Interstitial'),
+      setCaseTypeAction,
       updatePetitionDetailsAction,
       setCaseAction,
       set(state.currentViewMetadata.caseDetail.showEditPetition, false),

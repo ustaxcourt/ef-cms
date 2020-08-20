@@ -402,4 +402,34 @@ describe('migrateCaseInteractor', () => {
       expect(createdCases.length).toEqual(1);
     });
   });
+
+  it("adds the case to a trial session's calendar if the case has a trialSessionId", async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        isCalendared: true,
+        maxCases: 100,
+        sessionType: 'Hybrid',
+        startDate: '2020-08-10',
+        term: 'Summer',
+        termYear: '2020',
+        trialLocation: 'Memphis, Tennessee',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
+      });
+
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+  });
 });
