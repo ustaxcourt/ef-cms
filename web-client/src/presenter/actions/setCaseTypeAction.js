@@ -11,10 +11,7 @@ export const setCaseTypeAction = async ({ applicationContext, get, store }) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const caseType = get(state.form.caseType);
 
-  const disclosureCaseTypes = [
-    CASE_TYPES_MAP.disclosure1,
-    CASE_TYPES_MAP.disclosure2,
-  ];
+  const disclosureCaseTypes = ['Disclosure1', 'Disclosure2'];
 
   if (disclosureCaseTypes.includes(caseType)) {
     store.set(state.form.caseType, CASE_TYPES_MAP.disclosure);
