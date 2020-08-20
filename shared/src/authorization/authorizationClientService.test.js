@@ -70,6 +70,15 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
+  it('should authorize a docket clerk for sealing addresses', () => {
+    expect(
+      isAuthorized(
+        { role: ROLES.docketClerk, userId: 'docketclerk' },
+        ROLE_PERMISSIONS.SEAL_ADDRESS,
+      ),
+    ).toBeTruthy();
+  });
+
   it('should authorize an adc user for work items', () => {
     expect(
       isAuthorized(
