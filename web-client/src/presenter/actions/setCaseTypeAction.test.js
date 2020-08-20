@@ -9,26 +9,26 @@ describe('setCaseTypeAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it(`sets state.form.caseType to ${CASE_TYPES_MAP.disclosure} when state.form.caseType is ${CASE_TYPES_MAP.disclosure1}`, async () => {
+  it(`sets state.form.caseType to ${CASE_TYPES_MAP.disclosure} when state.form.caseType is "Disclosure1"`, async () => {
     const { state } = await runAction(setCaseTypeAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { caseType: CASE_TYPES_MAP.disclosure1 },
+        form: { caseType: 'Disclosure1' },
       },
     });
 
     expect(state.form.caseType).toEqual(CASE_TYPES_MAP.disclosure);
   });
 
-  it(`sets state.form.caseType to ${CASE_TYPES_MAP.disclosure} when state.form.caseType is ${CASE_TYPES_MAP.disclosure2}`, async () => {
+  it(`sets state.form.caseType to ${CASE_TYPES_MAP.disclosure} when state.form.caseType is "Disclosure2"`, async () => {
     const { state } = await runAction(setCaseTypeAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { caseType: CASE_TYPES_MAP.disclosure2 },
+        form: { caseType: 'Disclosure2' },
       },
     });
 
