@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
@@ -5,10 +6,15 @@ import React from 'react';
 
 const OtherPetitionerDisplay = connect(
   {
+    caseInformationHelper: state.caseInformationHelper,
     constants: state.constants,
     petitioner: props.petitioner,
   },
-  function OtherPetitionerDisplay({ constants, petitioner }) {
+  function OtherPetitionerDisplay({
+    caseInformationHelper,
+    constants,
+    petitioner,
+  }) {
     return (
       <>
         <p className="no-margin address-name">
@@ -51,6 +57,13 @@ const OtherPetitionerDisplay = connect(
                   size="1x"
                 />
               )}
+            </span>
+          )}
+          {caseInformationHelper.showSealAddressLink && (
+            <span className="sealed-address">
+              <Button link className="red-warning" icon="lock" iconColor="red">
+                Seal Address
+              </Button>
             </span>
           )}
         </p>
