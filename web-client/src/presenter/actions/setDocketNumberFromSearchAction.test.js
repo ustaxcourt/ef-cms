@@ -1,9 +1,18 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketNumberFromSearchAction } from './setDocketNumberFromSearchAction';
 
 describe('setDocketNumberFromSearchAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('matches a docket number', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18',
@@ -14,6 +23,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with S suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18S',
@@ -24,6 +36,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with S suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18S',
@@ -34,6 +49,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with R suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18R',
@@ -44,6 +62,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with P suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18P',
@@ -54,6 +75,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with W suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18W',
@@ -64,6 +88,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with X suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18X',
@@ -74,6 +101,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with L suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18L',
@@ -84,6 +114,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('matches a docket number with SL suffix', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18SL',
@@ -92,8 +125,24 @@ describe('setDocketNumberFromSearchAction', () => {
     });
     expect(output.docketNumber).toEqual('101-18');
   });
+  it('matches a docket number with D suffix', async () => {
+    const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        header: {
+          searchTerm: '101-20D',
+        },
+      },
+    });
+    expect(output.docketNumber).toEqual('101-20');
+  });
   it('does not match a docket number in invalid format', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '101-18SX',
@@ -104,6 +153,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('does not match a non-docket number', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: 'XY101-18',
@@ -114,6 +166,9 @@ describe('setDocketNumberFromSearchAction', () => {
   });
   it('trims the search term', async () => {
     const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         header: {
           searchTerm: '  101-18SL  ',
