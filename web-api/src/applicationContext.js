@@ -73,6 +73,9 @@ const {
   blockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
+  bulkDeleteRecords,
+} = require('../../shared/src/persistence/elasticsearch/bulkDeleteRecords');
+const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
@@ -185,6 +188,9 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
+  deleteCaseByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
+const {
   deleteCaseCorrespondence,
 } = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
 const {
@@ -220,6 +226,9 @@ const {
 const {
   deleteElasticsearchReindexRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
+const {
+  deleteRecord,
+} = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
@@ -866,6 +875,9 @@ const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
 const {
+  updateInitialFilingDocuments,
+} = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
+const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
 const {
@@ -1175,6 +1187,7 @@ module.exports = appContextUser => {
         advancedDocumentSearch,
         associateUserWithCase,
         associateUserWithCasePending,
+        bulkDeleteRecords,
         bulkIndexRecords,
         caseAdvancedSearch,
         casePublicSearch: casePublicSearchPersistence,
@@ -1190,12 +1203,14 @@ module.exports = appContextUser => {
         createTrialSessionWorkingCopy,
         createUser,
         createUserInboxRecord,
+        deleteCaseByDocketNumber,
         deleteCaseCorrespondence,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteDocumentFromS3,
         deleteElasticsearchReindexRecord,
+        deleteRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
         deleteTrialSessionWorkingCopy,
@@ -1363,6 +1378,7 @@ module.exports = appContextUser => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
+        updateInitialFilingDocuments,
       };
     },
     getUseCases: () => {
