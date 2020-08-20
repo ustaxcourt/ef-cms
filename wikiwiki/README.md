@@ -15,7 +15,8 @@
    * [Review and Serve Petition](./Review-and-Serve-Petition.md)
    * Electronic QC
 
-* [Docket (General)](./Docket-(General).md)
+
+* [Docket Document QC](./DocketDocumentQC.md)
    * [Docket Document QC Process](./Docket-Document-QC-Process.md)
    * [Edit Docket Entry](./Edit-Docket-Record.md)
    * [Add Docket Entry - Externally Filed Documents](./Add-Docket-Entry---Externally-Filed-Documents.md)
