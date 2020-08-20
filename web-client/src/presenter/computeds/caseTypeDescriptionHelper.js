@@ -28,8 +28,12 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
           caseDescription =
             'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015';
           break;
-        case CASE_TYPES_MAP.disclosure:
+        case CASE_TYPES_MAP.disclosure1:
           caseDescription = 'Notice of Intention to Disclose';
+          break;
+        case CASE_TYPES_MAP.disclosure2:
+          caseDescription =
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection';
           break;
         case CASE_TYPES_MAP.partnershipSection6226:
           caseDescription =
@@ -69,15 +73,6 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
         });
       }
     });
-    if (
-      caseTypesWithDescriptions.find(x => x.type === CASE_TYPES_MAP.disclosure)
-    ) {
-      caseTypesWithDescriptions.push({
-        description:
-          'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
-        type: CASE_TYPES_MAP.disclosure,
-      });
-    }
   } else {
     CASE_TYPES.forEach(caseType => {
       let caseDescription = '';

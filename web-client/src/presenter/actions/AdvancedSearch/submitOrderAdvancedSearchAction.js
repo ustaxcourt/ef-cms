@@ -18,6 +18,7 @@ export const submitOrderAdvancedSearchAction = async ({
 
   if (searchParams.docketNumber) {
     searchParams.docketNumber = trimDocketNumberSearch(
+      applicationContext,
       searchParams.docketNumber,
     );
   }

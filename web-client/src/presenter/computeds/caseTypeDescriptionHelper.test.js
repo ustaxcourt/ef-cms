@@ -28,7 +28,13 @@ describe('caseTypeDescriptionHelper', () => {
         },
         {
           description: 'Notice of Intention to Disclose',
-          type: CASE_TYPES_MAP.disclosure,
+          type: CASE_TYPES_MAP.disclosure1,
+        },
+
+        {
+          description:
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          type: CASE_TYPES_MAP.disclosure2,
         },
         {
           description:
@@ -69,11 +75,6 @@ describe('caseTypeDescriptionHelper', () => {
         {
           description: 'Notice of Determination of Worker Classification',
           type: CASE_TYPES_MAP.workerClassification,
-        },
-        {
-          description:
-            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
-          type: CASE_TYPES_MAP.disclosure,
         },
       ],
     });
