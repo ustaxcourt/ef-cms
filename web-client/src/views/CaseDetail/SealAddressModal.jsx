@@ -5,19 +5,18 @@ import React from 'react';
 
 export const SealAddressModal = connect(
   {
-    petitionerName: state.petitionerName,
+    contactToSeal: state.contactToSeal,
   },
-  function SealAddressModal() {
+  function SealAddressModal({ contactToSeal }) {
     return (
       <ConfirmModal
         cancelLabel="No, Cancel"
         confirmLabel="Yes, Seal Address"
         preventCancelOnBlur={true}
         title="Are you sure you want to seal this address?"
-        // onCancelSequence="clearModalFormSequence"
-        // onConfirmSequence="replyToMessageSequence"
+        onCancelSequence="clearModalFormSequence"
       >
-        Hello
+        {contactToSeal.name}
       </ConfirmModal>
     );
   },

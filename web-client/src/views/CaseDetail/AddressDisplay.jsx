@@ -88,7 +88,7 @@ export const AddressDisplay = connect(
                 className="red-warning"
                 icon="lock"
                 iconColor="red"
-                onClick={() => openSealAddressModalSequence()}
+                onClick={() => openSealAddressModalSequence({ contact })}
               >
                 Seal Address
               </Button>

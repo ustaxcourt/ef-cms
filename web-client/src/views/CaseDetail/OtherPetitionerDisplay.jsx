@@ -68,7 +68,9 @@ const OtherPetitionerDisplay = connect(
                 className="red-warning"
                 icon="lock"
                 iconColor="red"
-                onClick={() => openSealAddressModalSequence()}
+                onClick={() =>
+                  openSealAddressModalSequence({ contact: petitioner })
+                }
               >
                 Seal Address
               </Button>
