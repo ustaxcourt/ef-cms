@@ -14,8 +14,7 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
   const { CASE_TYPES, CASE_TYPES_MAP } = applicationContext.getConstants();
 
   let caseTypesWithDisclosure = cloneDeep(CASE_TYPES);
-  caseTypesWithDisclosure.push('Disclosure1');
-  caseTypesWithDisclosure.push('Disclosure2');
+  caseTypesWithDisclosure.push('Disclosure1', 'Disclosure2');
 
   let caseTypesMapWithDisclosure = cloneDeep(CASE_TYPES_MAP);
   caseTypesMapWithDisclosure.disclosure1 = 'Disclosure1';
