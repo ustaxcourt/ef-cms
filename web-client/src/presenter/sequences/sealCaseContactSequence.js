@@ -6,7 +6,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const sealAddressSequence = [
+export const sealCaseContactSequence = [
   showProgressSequenceDecorator([
     sealAddressAction,
     clearModalAction,
