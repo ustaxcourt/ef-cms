@@ -183,16 +183,16 @@ describe('Get case', () => {
         docketNumber: '101-18',
       });
       expect(result.contactPrimary.city).toBeDefined();
-      expect(result.contactPrimary.sealedAndUnavailable).toBeUndefined();
+      expect(result.contactPrimary.sealedAndUnavailable).toBe(false);
       expect(result.contactSecondary.city).toBeDefined();
-      expect(result.contactSecondary.sealedAndUnavailable).toBeUndefined();
+      expect(result.contactSecondary.sealedAndUnavailable).toBe(false);
       result.otherFilers.forEach(filer => {
         expect(filer.city).toBeDefined();
-        expect(filer.sealedAndUnavailable).toBeUndefined();
+        expect(filer.sealedAndUnavailable).toBe(false);
       });
       result.otherPetitioners.forEach(filer => {
         expect(filer.city).toBeDefined();
-        expect(filer.sealedAndUnavailable).toBeUndefined();
+        expect(filer.sealedAndUnavailable).toBe(false);
       });
     });
 
