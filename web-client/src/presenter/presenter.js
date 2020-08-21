@@ -246,7 +246,7 @@ import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessi
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
-import { sealCaseContactSequence } from './sequences/sealCaseContactSequence';
+import { sealAddressSequence } from './sequences/sealAddressSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
@@ -682,7 +682,7 @@ export const presenter = {
     saveDocumentSigningSequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
-    sealCaseContactSequence,
+    sealAddressSequence,
     sealCaseSequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,

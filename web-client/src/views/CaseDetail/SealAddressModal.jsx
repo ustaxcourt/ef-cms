@@ -15,7 +15,7 @@ export const SealAddressModal = connect(
         preventCancelOnBlur={true}
         title="Are you sure you want to seal this address?"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="sealCaseContactSequence"
+        onConfirmSequence="sealAddressSequence"
       >
         {contactToSeal.name}
       </ConfirmModal>
