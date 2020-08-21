@@ -10,7 +10,7 @@ exports.sealCaseContactAddressLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .saveCaseDetailInternalEditInteractor({
+      .sealCaseContactAddressInteractor({
         applicationContext,
         ...event.pathParameters,
       });

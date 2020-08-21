@@ -750,6 +750,9 @@ const {
   scrapePdfContents,
 } = require('../../shared/src/business/utilities/scrapePdfContents');
 const {
+  sealCaseContactAddressInteractor,
+} = require('../../shared/src/business/useCases/sealCaseContactAddressInteractor');
+const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
@@ -1458,6 +1461,7 @@ module.exports = appContextUser => {
         generatePdfFromHtmlInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
+        sealCaseContactAddressInteractor,
         generatePrintablePendingReportInteractor,
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
