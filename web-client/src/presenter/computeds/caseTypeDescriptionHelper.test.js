@@ -27,16 +27,6 @@ describe('caseTypeDescriptionHelper', () => {
           type: CASE_TYPES_MAP.deficiency,
         },
         {
-          description: 'Notice of Intention to Disclose',
-          type: CASE_TYPES_MAP.disclosure1,
-        },
-
-        {
-          description:
-            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
-          type: CASE_TYPES_MAP.disclosure2,
-        },
-        {
           description:
             'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
           type: CASE_TYPES_MAP.innocentSpouse,
@@ -75,6 +65,16 @@ describe('caseTypeDescriptionHelper', () => {
         {
           description: 'Notice of Determination of Worker Classification',
           type: CASE_TYPES_MAP.workerClassification,
+        },
+        {
+          description: 'Notice of Intention to Disclose',
+          type: 'Disclosure1',
+        },
+
+        {
+          description:
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          type: 'Disclosure2',
         },
       ],
     });

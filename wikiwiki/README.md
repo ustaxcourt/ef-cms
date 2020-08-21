@@ -10,10 +10,10 @@
 * [Site Access](./Site-Access.md)
 * [Messages](./Messages.md)
 * [Messages Queues](./Message-Queues.md)
-* [Petitions](./Petitions.md)
+* [Petitions (General)](./Petitions-QC.md)
    * [Create Case from Paper Petition](./Create-Case-From-Paper-Petition.md)
    * [Review and Serve Petition](./Review-and-Serve-Petition.md)
-   * Electronic QC
+   * [eFiled Petition QC](./eFiledPetitionQC.md)
 
 
 * [Docket Document QC](./DocketDocumentQC.md)
