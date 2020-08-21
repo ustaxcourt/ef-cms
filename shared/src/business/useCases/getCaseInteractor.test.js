@@ -164,6 +164,9 @@ describe('Get case', () => {
       mockCaseWithSealed.otherFilers.forEach(
         filer => (filer.isAddressSealed = true),
       );
+      mockCaseWithSealed.otherPetitioners.forEach(
+        filer => (filer.isAddressSealed = true),
+      );
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
@@ -187,6 +190,10 @@ describe('Get case', () => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBeUndefined();
       });
+      result.otherPetitioners.forEach(filer => {
+        expect(filer.city).toBeDefined();
+        expect(filer.sealedAndUnavailable).toBeUndefined();
+      });
     });
 
     it('returns limited contact address information if address is sealed and requesting user is not docket clerk', async () => {
@@ -204,6 +211,10 @@ describe('Get case', () => {
       expect(result.contactSecondary.city).toBeUndefined();
       expect(result.contactSecondary.sealedAndUnavailable).toBe(true);
       result.otherFilers.forEach(filer => {
+        expect(filer.city).toBeUndefined();
+        expect(filer.sealedAndUnavailable).toBe(true);
+      });
+      result.otherPetitioners.forEach(filer => {
         expect(filer.city).toBeUndefined();
         expect(filer.sealedAndUnavailable).toBe(true);
       });
