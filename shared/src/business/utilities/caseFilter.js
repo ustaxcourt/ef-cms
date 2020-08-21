@@ -11,9 +11,12 @@ const CASE_ATTRIBUTE_WHITELIST = [
 ];
 
 const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
+  'additionalName',
   'contactId',
+  'inCareOf',
   'isAddressSealed',
   'name',
+  'otherFilerType',
   'secondaryName',
   'title',
 ];
@@ -23,7 +26,9 @@ const caseSealedFormatter = caseRaw => {
 };
 
 const caseContactAddressSealedFormatter = contactRaw => {
-  return pick(contactRaw, CASE_CONTACT_ATTRIBUTE_WHITELIST);
+  const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_WHITELIST);
+  result.sealedAndUnavailable = true;
+  return result;
 };
 
 const caseSearchFilter = (cases, currentUser) => {
