@@ -14,6 +14,7 @@ import classNames from 'classnames';
 
 export const RequestAccessDocumentForm = connect(
   {
+    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     constants: state.constants,
     form: state.form,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -28,6 +29,7 @@ export const RequestAccessDocumentForm = connect(
   function RequestAccessDocumentForm({
     constants,
     form,
+    OBJECTIONS_OPTIONS,
     openCleanModalSequence,
     requestAccessHelper,
     showModal,
@@ -167,7 +169,7 @@ export const RequestAccessDocumentForm = connect(
                 <legend id="objections-legend">
                   Are there any objections to this document?
                 </legend>
-                {['Yes', 'No', 'Unknown'].map(option => (
+                {OBJECTIONS_OPTIONS.map(option => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
                       aria-describedby="objections-legend"

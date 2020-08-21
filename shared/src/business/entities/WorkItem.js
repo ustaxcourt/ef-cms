@@ -1,9 +1,5 @@
 const joi = require('joi');
 const {
-  CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-} = require('./EntityConstants');
-const {
   CHAMBERS_SECTIONS,
   IRS_SYSTEM_SECTION,
   SECTIONS,
@@ -14,6 +10,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
@@ -77,11 +74,10 @@ WorkItem.VALIDATION_RULES = joi.object().keys({
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberSuffix: joi
+  docketNumberWithSuffix: joi
     .string()
-    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
-    .allow(null)
-    .optional(),
+    .optional()
+    .description('Auto-generated from docket number and the suffix.'),
   document: joi.object().required(),
   entityName: joi.string().valid('WorkItem').required(),
   hideFromPendingMessages: joi.boolean().optional(),

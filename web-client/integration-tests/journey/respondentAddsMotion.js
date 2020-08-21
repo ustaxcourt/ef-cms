@@ -1,6 +1,9 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 export const respondentAddsMotion = (test, fakeFile) => {
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   return it('Respondent adds Motion with supporting Brief', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
@@ -112,7 +115,7 @@ export const respondentAddsMotion = (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: 'Yes',
+      value: OBJECTIONS_OPTIONS_MAP.YES,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {

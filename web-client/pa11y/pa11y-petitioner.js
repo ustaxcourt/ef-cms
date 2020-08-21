@@ -330,6 +330,7 @@ module.exports = [
       'wait for element #add-supporting-document-button to be visible',
       'click element #add-supporting-document-button',
       'wait for element #supporting-document-0-label to be visible',
+      'set field #supporting-document-0-label to Brief',
       'wait for element #secondary-document to be visible',
       'wait for element #secondaryDocument-certificateOfService-label to be visible',
       'click #secondaryDocument-certificateOfService-label',

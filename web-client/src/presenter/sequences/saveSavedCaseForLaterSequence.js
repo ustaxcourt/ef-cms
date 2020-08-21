@@ -5,6 +5,7 @@ import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/n
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -32,6 +33,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       stopShowValidationAction,
       saveCaseDetailInternalEditAction,
       setCaseAction,
+      setCaseOnFormAction,
       setPetitionIdAction,
       setDocumentIdAction,
       navigateToReviewSavedPetitionAction,

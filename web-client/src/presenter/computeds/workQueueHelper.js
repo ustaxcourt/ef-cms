@@ -57,7 +57,6 @@ export const workQueueHelper = (get, applicationContext) => {
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSelectColumn: permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
-    showServedColumn: userIsPetitionsClerk,
     showStartPetitionButton,
     workQueueTitle,
   };

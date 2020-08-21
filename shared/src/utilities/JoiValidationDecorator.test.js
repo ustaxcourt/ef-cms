@@ -41,6 +41,13 @@ const MockEntity2Schema = joi.object().keys({
   hasNickname: joi.boolean().required(),
   name: joi.string().required(),
   obj1: joi.object().keys({ foo: joi.string().required() }).required(),
+  reallyMessyNestedThing: joi
+    .alternatives()
+    .try(
+      joi.object().keys({ never: joi.string().required() }),
+      joi.object().keys({ happening: joi.string().required() }),
+    )
+    .optional(),
 });
 
 joiValidationDecorator(MockEntity2, MockEntity2Schema, {
@@ -138,6 +145,19 @@ describe('Joi Validation Decorator', () => {
       const rawEntity = obj.toRawObject();
       expect(rawEntity.arry2[0]).toEqual('one');
       expect(rawEntity.arry2[1]).toEqual('two');
+    });
+
+    it('should ignore formatted error messages for joi alternatives', () => {
+      const obj = new MockEntity2({
+        arry1: [{ baz: 'foz', foo: 'bar' }],
+        arry2: ['one', 'two'],
+        favoriteNumber: 13,
+        hasNickname: false,
+        name: 'Name',
+        obj1: { foo: 'bar' },
+        reallyMessyNestedThing: { will: 'not match' },
+      });
+      expect(obj.getFormattedValidationErrors()).toBe(null);
     });
   });
 
