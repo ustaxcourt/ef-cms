@@ -1,8 +1,12 @@
 const {
+  caseContactAddressSealedFormatter,
+  caseSealedFormatter,
+  caseSearchFilter,
+} = require('./caseFilter');
+const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const { caseSealedFormatter, caseSearchFilter } = require('./caseFilter');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -19,6 +23,26 @@ describe('caseFilter', () => {
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
+  });
+
+  it('caseContactAddressSealedFormatter', () => {
+    const result = caseContactAddressSealedFormatter({
+      bananas: '12',
+      city: 'Los Angeles',
+      contactId: '42-universe-everything',
+      isAddressSealed: 'maybe',
+      name: 'Joe Dirt',
+      secondaryName: 'Cheeseburgers',
+      title: 'Emperor',
+      transmission: 'manual',
+    });
+    expect(Object.keys(result)).toMatchObject([
+      'contactId',
+      'isAddressSealed',
+      'name',
+      'secondaryName',
+      'title',
+    ]);
   });
 
   describe('caseSearchFilter', () => {
