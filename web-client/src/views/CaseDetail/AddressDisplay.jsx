@@ -25,10 +25,10 @@ export const AddressDisplay = connect(
     showSealAddressLink,
   }) {
     return (
-      <>
-        <p className="no-margin">
+      <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
+        <p className="no-margin position-relative">
           {contact.isAddressSealed && (
-            <span className="sealed-address">
+            <span className="sealed-address sealed-contact-icon">
               <FontAwesomeIcon
                 className="margin-right-05"
                 icon={['fas', 'lock']}
@@ -111,7 +111,7 @@ export const AddressDisplay = connect(
             </span>
           )}
         </p>
-      </>
+      </div>
     );
   },
 );

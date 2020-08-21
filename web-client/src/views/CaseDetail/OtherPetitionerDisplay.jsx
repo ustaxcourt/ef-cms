@@ -19,10 +19,12 @@ const OtherPetitionerDisplay = connect(
     petitioner,
   }) {
     return (
-      <>
-        <p className="no-margin address-name">
+      <div
+        className={classNames(petitioner.isAddressSealed && 'margin-left-205')}
+      >
+        <p className="no-margin address-name position-relative">
           {petitioner.isAddressSealed && (
-            <span className="sealed-address">
+            <span className="sealed-address sealed-contact-icon">
               <FontAwesomeIcon
                 className="margin-right-05"
                 icon={['fas', 'lock']}
@@ -95,7 +97,7 @@ const OtherPetitionerDisplay = connect(
               </span>
             )}
         </p>
-      </>
+      </div>
     );
   },
 );
