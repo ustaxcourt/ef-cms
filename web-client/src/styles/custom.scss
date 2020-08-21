@@ -1541,3 +1541,12 @@ button.change-scanner-button {
 .sealed-address {
   color: color($theme-color-secondary-dark);
 }
+
+.sealed-contact-icon {
+  position: absolute;
+  margin-left: -20px;
+}
+
+.position-relative {
+  position: relative;
+}

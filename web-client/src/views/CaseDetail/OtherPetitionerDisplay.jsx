@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 const OtherPetitionerDisplay = connect(
   {
@@ -18,8 +19,19 @@ const OtherPetitionerDisplay = connect(
     petitioner,
   }) {
     return (
-      <>
-        <p className="no-margin address-name">
+      <div
+        className={classNames(petitioner.isAddressSealed && 'margin-left-205')}
+      >
+        <p className="no-margin address-name position-relative">
+          {petitioner.isAddressSealed && (
+            <span className="sealed-address sealed-contact-icon">
+              <FontAwesomeIcon
+                className="margin-right-05"
+                icon={['fas', 'lock']}
+                size="sm"
+              />
+            </span>
+          )}
           {petitioner.name}
           {petitioner.secondaryName && (
             <>
@@ -29,8 +41,17 @@ const OtherPetitionerDisplay = connect(
             </>
           )}
         </p>
-        <p className="margin-top-0">
-          <span className="address-line">{petitioner.address1}</span>
+        <p
+          className={classNames(
+            'margin-top-0',
+            caseInformationHelper.showSealAddressLink &&
+              petitioner.isAddressSealed &&
+              'sealed-address',
+          )}
+        >
+          {petitioner.address1 && (
+            <span className="address-line">{petitioner.address1}</span>
+          )}
           {petitioner.address2 && (
             <span className="address-line">{petitioner.address2}</span>
           )}
@@ -61,23 +82,24 @@ const OtherPetitionerDisplay = connect(
               )}
             </span>
           )}
-          {caseInformationHelper.showSealAddressLink && (
-            <span className="sealed-address">
-              <Button
-                link
-                className="red-warning"
-                icon="lock"
-                iconColor="red"
-                onClick={() =>
-                  openSealAddressModalSequence({ contactToSeal: petitioner })
-                }
-              >
-                Seal Address
-              </Button>
-            </span>
-          )}
+          {caseInformationHelper.showSealAddressLink &&
+            !petitioner.isAddressSealed && (
+              <span className="sealed-address">
+                <Button
+                  link
+                  className="red-warning"
+                  icon="lock"
+                  iconColor="red"
+                  onClick={() =>
+                    openSealAddressModalSequence({ contactToSeal: petitioner })
+                  }
+                >
+                  Seal Address
+                </Button>
+              </span>
+            )}
         </p>
-      </>
+      </div>
     );
   },
 );
