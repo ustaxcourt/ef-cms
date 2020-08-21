@@ -27,7 +27,7 @@ export const AddressDisplay = connect(
     return (
       <>
         <p className="no-margin">
-          {showSealAddressLink && contact.isAddressSealed && (
+          {contact.isAddressSealed && (
             <span className="sealed-address">
               <FontAwesomeIcon
                 className="margin-right-05"
@@ -95,7 +95,7 @@ export const AddressDisplay = connect(
               )}
             </span>
           )}
-          {showSealAddressLink && (
+          {showSealAddressLink && !contact.isAddressSealed && (
             <span className="sealed-address">
               <Button
                 link

@@ -21,16 +21,15 @@ const OtherPetitionerDisplay = connect(
     return (
       <>
         <p className="no-margin address-name">
-          {caseInformationHelper.showSealAddressLink &&
-            petitioner.isAddressSealed && (
-              <span className="sealed-address">
-                <FontAwesomeIcon
-                  className="margin-right-05"
-                  icon={['fas', 'lock']}
-                  size="sm"
-                />
-              </span>
-            )}
+          {petitioner.isAddressSealed && (
+            <span className="sealed-address">
+              <FontAwesomeIcon
+                className="margin-right-05"
+                icon={['fas', 'lock']}
+                size="sm"
+              />
+            </span>
+          )}
           {petitioner.name}
           {petitioner.secondaryName && (
             <>
@@ -79,21 +78,22 @@ const OtherPetitionerDisplay = connect(
               )}
             </span>
           )}
-          {caseInformationHelper.showSealAddressLink && (
-            <span className="sealed-address">
-              <Button
-                link
-                className="red-warning"
-                icon="lock"
-                iconColor="red"
-                onClick={() =>
-                  openSealAddressModalSequence({ contactToSeal: petitioner })
-                }
-              >
-                Seal Address
-              </Button>
-            </span>
-          )}
+          {caseInformationHelper.showSealAddressLink &&
+            !petitioner.isAddressSealed && (
+              <span className="sealed-address">
+                <Button
+                  link
+                  className="red-warning"
+                  icon="lock"
+                  iconColor="red"
+                  onClick={() =>
+                    openSealAddressModalSequence({ contactToSeal: petitioner })
+                  }
+                >
+                  Seal Address
+                </Button>
+              </span>
+            )}
         </p>
       </>
     );
