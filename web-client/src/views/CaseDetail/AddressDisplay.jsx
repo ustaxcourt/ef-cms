@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -11,6 +11,7 @@ export const AddressDisplay = connect(
     contact: props.contact,
     nameOverride: props.nameOverride || {},
     noMargin: props.noMargin || false,
+    openSealAddressModalSequence: sequences.openSealAddressModalSequence,
     showEmail: props.showEmail || false,
     showSealAddressLink: props.showSealAddressLink || false,
   },
@@ -19,6 +20,7 @@ export const AddressDisplay = connect(
     contact,
     nameOverride,
     noMargin,
+    openSealAddressModalSequence,
     showEmail,
     showSealAddressLink,
   }) {
@@ -81,7 +83,15 @@ export const AddressDisplay = connect(
           )}
           {showSealAddressLink && (
             <span className="sealed-address">
-              <Button link className="red-warning" icon="lock" iconColor="red">
+              <Button
+                link
+                className="red-warning"
+                icon="lock"
+                iconColor="red"
+                onClick={() =>
+                  openSealAddressModalSequence({ contactToSeal: contact })
+                }
+              >
                 Seal Address
               </Button>
             </span>
