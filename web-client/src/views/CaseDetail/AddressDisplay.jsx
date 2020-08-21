@@ -59,7 +59,9 @@ export const AddressDisplay = connect(
             showSealAddressLink && contact.isAddressSealed && 'sealed-address',
           )}
         >
-          <span className="address-line">{contact.address1}</span>
+          {contact.address1 && (
+            <span className="address-line">{contact.address1}</span>
+          )}
           {contact.address2 && (
             <span className="address-line">{contact.address2}</span>
           )}
