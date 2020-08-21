@@ -153,6 +153,15 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
           : contact,
       );
     }
+
+    if (Array.isArray(caseDetailRaw.otherPetitioners)) {
+      caseDetailRaw.otherPetitioners = caseDetailRaw.otherPetitioners.map(
+        petitioner =>
+          petitioner.isAddressSealed
+            ? caseContactAddressSealedFormatter(petitioner)
+            : petitioner,
+      );
+    }
   }
 
   return caseDetailRaw;
