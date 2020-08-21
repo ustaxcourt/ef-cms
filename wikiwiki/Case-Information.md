@@ -37,3 +37,9 @@
 * When there is no Other filers in the case default message displays “There are no other filers in this case”
 * Other Filer Info mapping: MAPPING: [otherFilername], [title] title displayed (Intervenor or Tax Matters Partner) [address1] [address2] [address3] [city], [state] [postalCode] [phone number]  [Service email] [Service Preference]
 * Cannot be more than one intervenor, but there could be more than one participant.
+
+## Sealed Address
+* Docket clerks have the ability to seal a petitioner's contact information
+* Sealed addresses are only visible to docket clerks
+* Sealed addresses display with a lock icon and message "Address sealed" for all other internal Court users and external parties
+* Sealed addresses do not display on the Printable Docket Record 
