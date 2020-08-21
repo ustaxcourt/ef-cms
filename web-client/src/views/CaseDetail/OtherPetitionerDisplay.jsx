@@ -49,7 +49,9 @@ const OtherPetitionerDisplay = connect(
               'sealed-address',
           )}
         >
-          <span className="address-line">{petitioner.address1}</span>
+          {petitioner.address1 && (
+            <span className="address-line">{petitioner.address1}</span>
+          )}
           {petitioner.address2 && (
             <span className="address-line">{petitioner.address2}</span>
           )}
