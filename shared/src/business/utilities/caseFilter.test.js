@@ -27,19 +27,26 @@ describe('caseFilter', () => {
 
   it('caseContactAddressSealedFormatter', () => {
     const result = caseContactAddressSealedFormatter({
-      bananas: '12',
+      additionalName: 'Bob',
+      bananas: '8-foot bunch',
       city: 'Los Angeles',
       contactId: '42-universe-everything',
+      inCareOf: 'Friendship is Magic',
       isAddressSealed: 'maybe',
       name: 'Joe Dirt',
+      otherFilerType: 'Nail File',
       secondaryName: 'Cheeseburgers',
       title: 'Emperor',
       transmission: 'manual',
     });
-    expect(Object.keys(result)).toMatchObject([
+    expect(Object.keys(result).sort()).toMatchObject([
+      'additionalName',
       'contactId',
+      'inCareOf',
       'isAddressSealed',
       'name',
+      'otherFilerType',
+      'sealedAndUnavailable',
       'secondaryName',
       'title',
     ]);

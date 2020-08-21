@@ -180,8 +180,13 @@ describe('Get case', () => {
         docketNumber: '101-18',
       });
       expect(result.contactPrimary.city).toBeDefined();
+      expect(result.contactPrimary.sealedAndUnavailable).toBeUndefined();
       expect(result.contactSecondary.city).toBeDefined();
-      result.otherFilers.forEach(filer => expect(filer.city).toBeDefined());
+      expect(result.contactSecondary.sealedAndUnavailable).toBeUndefined();
+      result.otherFilers.forEach(filer => {
+        expect(filer.city).toBeDefined();
+        expect(filer.sealedAndUnavailable).toBeUndefined();
+      });
     });
 
     it('returns limited contact address information if address is sealed and requesting user is not docket clerk', async () => {
@@ -195,8 +200,13 @@ describe('Get case', () => {
         docketNumber: '101-18',
       });
       expect(result.contactPrimary.city).toBeUndefined();
+      expect(result.contactPrimary.sealedAndUnavailable).toBe(true);
       expect(result.contactSecondary.city).toBeUndefined();
-      result.otherFilers.forEach(filer => expect(filer.city).toBeUndefined());
+      expect(result.contactSecondary.sealedAndUnavailable).toBe(true);
+      result.otherFilers.forEach(filer => {
+        expect(filer.city).toBeUndefined();
+        expect(filer.sealedAndUnavailable).toBe(true);
+      });
     });
   });
 
