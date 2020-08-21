@@ -27,6 +27,15 @@ export const AddressDisplay = connect(
     return (
       <>
         <p className="no-margin">
+          {showSealAddressLink && contact.isAddressSealed && (
+            <span className="sealed-address">
+              <FontAwesomeIcon
+                className="margin-right-05"
+                icon={['fas', 'lock']}
+                size="sm"
+              />
+            </span>
+          )}
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
           {contact.secondaryName && (
@@ -44,7 +53,12 @@ export const AddressDisplay = connect(
             </span>
           )}
         </p>
-        <p className="no-margin">
+        <p
+          className={classNames(
+            'no-margin',
+            showSealAddressLink && contact.isAddressSealed && 'sealed-address',
+          )}
+        >
           <span className="address-line">{contact.address1}</span>
           {contact.address2 && (
             <span className="address-line">{contact.address2}</span>

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 const OtherPetitionerDisplay = connect(
   {
@@ -20,6 +21,16 @@ const OtherPetitionerDisplay = connect(
     return (
       <>
         <p className="no-margin address-name">
+          {caseInformationHelper.showSealAddressLink &&
+            petitioner.isAddressSealed && (
+              <span className="sealed-address">
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon={['fas', 'lock']}
+                  size="sm"
+                />
+              </span>
+            )}
           {petitioner.name}
           {petitioner.secondaryName && (
             <>
@@ -29,7 +40,14 @@ const OtherPetitionerDisplay = connect(
             </>
           )}
         </p>
-        <p className="margin-top-0">
+        <p
+          className={classNames(
+            'margin-top-0',
+            caseInformationHelper.showSealAddressLink &&
+              petitioner.isAddressSealed &&
+              'sealed-address',
+          )}
+        >
           <span className="address-line">{petitioner.address1}</span>
           {petitioner.address2 && (
             <span className="address-line">{petitioner.address2}</span>
