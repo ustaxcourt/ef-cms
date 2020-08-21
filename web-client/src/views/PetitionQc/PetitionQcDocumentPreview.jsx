@@ -7,33 +7,16 @@ export const PetitionQcDocumentPreview = connect(
   {
     documentSelectedForPreview:
       state.currentViewMetadata.documentSelectedForPreview,
+    petitionQcHelper: state.petitionQcHelper,
   },
-  function PetitionQcDocumentPreview({ documentSelectedForPreview }) {
+  function PetitionQcDocumentPreview({
+    documentSelectedForPreview,
+    petitionQcHelper,
+  }) {
     return (
       <>
         <PetitionQcScanBatchPreviewer
-          documentTabs={[
-            {
-              documentType: 'petitionFile',
-              title: 'Petition',
-            },
-            {
-              documentType: 'stinFile',
-              title: 'STIN',
-            },
-            {
-              documentType: 'requestForPlaceOfTrialFile',
-              title: 'RQT',
-            },
-            {
-              documentType: 'ownershipDisclosureFile',
-              title: 'ODS',
-            },
-            {
-              documentType: 'applicationForWaiverOfFilingFeeFile',
-              title: 'APW',
-            },
-          ]}
+          documentTabs={petitionQcHelper.documentTabsToDisplay}
           documentType={documentSelectedForPreview}
           title="Add Document(s)"
         />

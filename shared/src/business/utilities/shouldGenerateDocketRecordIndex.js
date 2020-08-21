@@ -70,28 +70,19 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
       return true;
     } else {
       const petitionDocument = caseDetail.documents.find(
-        document =>
-          document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+        d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
       );
       // if the petition has a servedAt, then this non-petition initial document is being added after the fact (not filed at the same time)
       if (petitionDocument.servedAt) {
         // if this initial document is being served, it should have an index
-        if (document && document.servedAt) {
-          return true;
-        } else {
-          return false;
-        }
+        return document && !!document.servedAt;
       } else {
         return true;
       }
     }
   }
 
-  if (isUnservable || isMinuteEntry || (document && document.servedAt)) {
-    return true;
-  } else {
-    return false;
-  }
+  return isUnservable || isMinuteEntry || (document && !!document.servedAt);
 };
 
 exports.shouldGenerateDocketRecordIndex = shouldGenerateDocketRecordIndex;

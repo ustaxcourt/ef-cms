@@ -152,6 +152,30 @@ describe('migrateCaseInteractor', () => {
         }),
       ).rejects.toThrow('The Case entity was invalid');
     });
+
+    it('should provide developer-friendly feedback when the case is invalid', async () => {
+      let error, results;
+      try {
+        results = await migrateCaseInteractor({
+          applicationContext,
+          caseMetadata: {
+            ...MOCK_CASE,
+            docketNumber: 'ABC',
+            documents: [{ ...MOCK_CASE.documents[0], documentId: 'invalid' }],
+          },
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(results).toBeUndefined();
+      expect(error.message).toContain(
+        "'docketNumber' with value 'ABC' fails to match the required pattern",
+      );
+      expect(error.message).toContain(
+        "'documents[0].documentId' must be a valid GUID",
+      );
+    });
   });
 
   describe('Practitioners via barNumber', () => {
@@ -245,6 +269,33 @@ describe('migrateCaseInteractor', () => {
       });
 
       expect(applicationContext.getUniqueId).toHaveBeenCalled();
+    });
+  });
+
+  describe('migrate existing case', () => {
+    it('should call persistence to delete old case records and documents if a case was retrieved for caseMetadata.docketNumber and then continue to recreate the case', async () => {
+      expect(createdCases.length).toEqual(0);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+      const result = await migrateCaseInteractor({
+        applicationContext,
+        caseMetadata,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().deleteCaseByDocketNumber,
+      ).toBeCalled();
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      ).toBeCalledTimes(4); // MOCK_CASE has 4 documents
+      expect(result).toBeDefined();
+      expect(
+        applicationContext.getPersistenceGateway().createCase,
+      ).toHaveBeenCalled();
+      expect(createdCases.length).toEqual(1);
     });
   });
 });

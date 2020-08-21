@@ -13,6 +13,7 @@ describe('publicCaseDetailHelper', () => {
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     INITIAL_DOCUMENT_TYPES,
+    TRANSCRIPT_EVENT_CODE,
   } = applicationContextPublic.getConstants();
 
   beforeEach(() => {
@@ -133,7 +134,7 @@ describe('publicCaseDetailHelper', () => {
         createdAt: '2018-12-25T20:49:28.192Z',
         documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
         documentType: 'Transcript',
-        eventCode: 'TRAN',
+        eventCode: TRANSCRIPT_EVENT_CODE,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
       },
@@ -225,7 +226,7 @@ describe('publicCaseDetailHelper', () => {
         description: 'sixth record',
         descriptionDisplay: 'sixth record',
         documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
-        eventCode: 'TRAN',
+        eventCode: TRANSCRIPT_EVENT_CODE,
         filedBy: undefined,
         filingsAndProceedingsWithAdditionalInfo: '',
         hasDocument: true,
