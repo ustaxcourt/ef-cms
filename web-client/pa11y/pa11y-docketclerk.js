@@ -13,6 +13,27 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19',
   {
     actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes: 'checks a11y of seal address button',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/case-information&info=sealed-address-button',
+  },
+  {
+    actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes:
+      'checks a11y of sealed address display for primary and secondary contact',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
+  },
+  {
+    actions: [
       'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
       'click element .usa-radio__label[for=payment-status-paid]',
       'wait for element #petition-payment-method to be visible',
