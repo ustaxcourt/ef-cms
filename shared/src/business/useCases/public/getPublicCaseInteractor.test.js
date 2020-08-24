@@ -57,6 +57,18 @@ describe('getPublicCaseInteractor', () => {
     });
   });
 
+  it('should return minimal information when the requested case has been sealed', async () => {
+    const docketNumber = '102-20';
+    const result = await getPublicCaseInteractor({
+      applicationContext,
+      docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketNumber: '102-20',
+    });
+  });
+
   it('should return minimal information when the requested case contact address has been sealed', async () => {
     const docketNumber = '102-20';
     mockCases[docketNumber] = cloneDeep({
