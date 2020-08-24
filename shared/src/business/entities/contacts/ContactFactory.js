@@ -84,7 +84,7 @@ const commonValidationRequirements = {
     otherwise: joi.optional(),
   }),
   inCareOf: joi.string().max(100).optional(),
-  isAddressSealed: joi.boolean().optional(),
+  isAddressSealed: joi.boolean().required(),
   sealedAndUnavailable: joi.boolean().optional(),
   name: joi.string().max(100).required(),
   phone: joi.string().max(100).required(),

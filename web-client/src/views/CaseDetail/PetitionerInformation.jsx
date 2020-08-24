@@ -232,9 +232,6 @@ const PetitionerInformation = connect(
                           ...practitioner.contact,
                         }}
                         nameOverride={practitioner.name}
-                        showSealAddressLink={
-                          caseInformationHelper.showSealAddressLink
-                        }
                       />
                     )}
                   </address>
