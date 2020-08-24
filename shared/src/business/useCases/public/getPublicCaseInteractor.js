@@ -34,10 +34,7 @@ exports.getPublicCaseInteractor = async ({
   if (caseRecord.sealedDate) {
     caseRecord = caseSealedFormatter(caseRecord);
   }
-  caseRecord = caseContactAddressSealedFormatter(
-    caseRecord,
-    applicationContext.getCurrentUser(),
-  );
+  caseRecord = caseContactAddressSealedFormatter(caseRecord, {});
 
   const publicCaseDetail = new PublicCase(caseRecord, {
     applicationContext,
