@@ -156,6 +156,7 @@
         "country": "USA",
         "countryType": "domestic",
         "email": "testUser@example.com",
+        "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0g",
         "name": "Guy Fieri",
         "otherFilerType": "Tax Matters Partner",
         "phone": "1234567890",
