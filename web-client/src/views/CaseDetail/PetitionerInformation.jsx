@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { OtherPetitionerDisplay } from './OtherPetitionerDisplay';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
-import { SealAddressModal } from './SealAddressModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -232,9 +231,6 @@ const PetitionerInformation = connect(
                           ...practitioner.contact,
                         }}
                         nameOverride={practitioner.name}
-                        showSealAddressLink={
-                          caseInformationHelper.showSealAddressLink
-                        }
                       />
                     )}
                   </address>
@@ -420,7 +416,6 @@ const PetitionerInformation = connect(
           <EditPrivatePractitionersModal />
         )}
         {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
-        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },

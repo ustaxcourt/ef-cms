@@ -41,64 +41,72 @@ const OtherPetitionerDisplay = connect(
             </>
           )}
         </p>
-        <p
-          className={classNames(
-            'margin-top-0',
-            caseInformationHelper.showSealAddressLink &&
-              petitioner.isAddressSealed &&
-              'sealed-address',
-          )}
-        >
-          {petitioner.address1 && (
-            <span className="address-line">{petitioner.address1}</span>
-          )}
-          {petitioner.address2 && (
-            <span className="address-line">{petitioner.address2}</span>
-          )}
-          {petitioner.address3 && (
-            <span className="address-line">{petitioner.address3}</span>
-          )}
-          <span className="address-line">
-            {petitioner.city && `${petitioner.city}, `}
-            {petitioner.state} {petitioner.postalCode}
-          </span>
-          {petitioner.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-            <span className="address-line">{petitioner.country}</span>
-          )}
-          {petitioner.phone && (
-            <span className="address-line margin-top-1">
-              {petitioner.phone}
-            </span>
-          )}
-          {petitioner.email && (
+        {!petitioner.sealedAndUnavailable && (
+          <p
+            className={classNames(
+              'margin-top-0',
+              caseInformationHelper.showSealAddressLink &&
+                petitioner.isAddressSealed &&
+                'sealed-address',
+            )}
+          >
+            {petitioner.address1 && (
+              <span className="address-line">{petitioner.address1}</span>
+            )}
+            {petitioner.address2 && (
+              <span className="address-line">{petitioner.address2}</span>
+            )}
+            {petitioner.address3 && (
+              <span className="address-line">{petitioner.address3}</span>
+            )}
             <span className="address-line">
-              {petitioner.email}
-              {petitioner.showEAccessFlag && (
-                <FontAwesomeIcon
-                  className="margin-left-05 fa-icon-blue"
-                  icon="flag"
-                  size="1x"
-                />
-              )}
+              {petitioner.city && `${petitioner.city}, `}
+              {petitioner.state} {petitioner.postalCode}
             </span>
-          )}
-          {caseInformationHelper.showSealAddressLink &&
-            !petitioner.isAddressSealed && (
-              <span className="sealed-address">
-                <Button
-                  link
-                  className="red-warning"
-                  icon="lock"
-                  iconColor="red"
-                  onClick={() =>
-                    openSealAddressModalSequence({ contactToSeal: petitioner })
-                  }
-                >
-                  Seal Address
-                </Button>
+            {petitioner.countryType ===
+              constants.COUNTRY_TYPES.INTERNATIONAL && (
+              <span className="address-line">{petitioner.country}</span>
+            )}
+            {petitioner.phone && (
+              <span className="address-line margin-top-1">
+                {petitioner.phone}
               </span>
             )}
-        </p>
+            {petitioner.email && (
+              <span className="address-line">
+                {petitioner.email}
+                {petitioner.showEAccessFlag && (
+                  <FontAwesomeIcon
+                    className="margin-left-05 fa-icon-blue"
+                    icon="flag"
+                    size="1x"
+                  />
+                )}
+              </span>
+            )}
+            {caseInformationHelper.showSealAddressLink &&
+              !petitioner.isAddressSealed && (
+                <span className="sealed-address">
+                  <Button
+                    link
+                    className="red-warning"
+                    icon="lock"
+                    iconColor="red"
+                    onClick={() =>
+                      openSealAddressModalSequence({
+                        contactToSeal: petitioner,
+                      })
+                    }
+                  >
+                    Seal Address
+                  </Button>
+                </span>
+              )}
+          </p>
+        )}
+        {petitioner.sealedAndUnavailable && (
+          <div className="sealed-address">Address Sealed</div>
+        )}
       </div>
     );
   },

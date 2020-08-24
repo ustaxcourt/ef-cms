@@ -16,6 +16,7 @@ import { OtherFilerInformation } from './OtherFilerInformation';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
+import { SealAddressModal } from './SealAddressModal';
 import { SealCaseModal } from './SealCaseModal';
 import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
@@ -159,6 +160,7 @@ export const CaseDetailInternal = connect(
           <PaperServiceConfirmModal />
         )}
         {showModal === 'SealCaseModal' && <SealCaseModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },
