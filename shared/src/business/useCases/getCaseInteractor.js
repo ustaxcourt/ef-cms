@@ -123,46 +123,10 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     });
   }
 
-  if (
-    !isAuthorized(
-      applicationContext.getCurrentUser(),
-      ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
-    )
-  ) {
-    if (
-      caseDetailRaw.contactPrimary &&
-      caseDetailRaw.contactPrimary.isAddressSealed
-    ) {
-      caseDetailRaw.contactPrimary = caseContactAddressSealedFormatter(
-        caseDetailRaw.contactPrimary,
-      );
-    }
-    if (
-      caseDetailRaw.contactSecondary &&
-      caseDetailRaw.contactSecondary.isAddressSealed
-    ) {
-      caseDetailRaw.contactSecondary = caseContactAddressSealedFormatter(
-        caseDetailRaw.contactSecondary,
-      );
-    }
-
-    if (Array.isArray(caseDetailRaw.otherFilers)) {
-      caseDetailRaw.otherFilers = caseDetailRaw.otherFilers.map(contact =>
-        contact.isAddressSealed
-          ? caseContactAddressSealedFormatter(contact)
-          : contact,
-      );
-    }
-
-    if (Array.isArray(caseDetailRaw.otherPetitioners)) {
-      caseDetailRaw.otherPetitioners = caseDetailRaw.otherPetitioners.map(
-        petitioner =>
-          petitioner.isAddressSealed
-            ? caseContactAddressSealedFormatter(petitioner)
-            : petitioner,
-      );
-    }
-  }
+  caseDetailRaw = caseContactAddressSealedFormatter(
+    caseDetailRaw,
+    applicationContext.getCurrentUser(),
+  );
 
   return caseDetailRaw;
 };
