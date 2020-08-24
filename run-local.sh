@@ -55,6 +55,8 @@ fi
 echo "creating elasticsearch index"
 npm run seed:elasticsearch
 
+npm run dynamo:migrate:local
+
 if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
