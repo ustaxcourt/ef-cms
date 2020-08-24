@@ -73,7 +73,11 @@ const caseSearchFilter = (cases, currentUser) => {
       ROLE_PERMISSIONS.VIEW_SEALED_CASE,
       caseRaw.userId,
     );
-  return cases.filter(caseSearchFilterConditionals);
+  return cases
+    .filter(caseSearchFilterConditionals)
+    .map(filteredCase =>
+      caseContactAddressSealedFormatter(filteredCase, currentUser),
+    );
 };
 
 module.exports = {
