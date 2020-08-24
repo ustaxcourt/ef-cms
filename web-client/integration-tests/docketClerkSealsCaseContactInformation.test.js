@@ -1,12 +1,16 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkSealsContactPrimaryInformation } from './journey/docketClerkSealsContactPrimaryInformation';
+import { docketClerkSealsContactInformation } from './journey/docketClerkSealsContactInformation';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkViewsCaseWithSealedContact } from './journey/petitionsClerkViewsCaseWithSealedContact';
 
 const test = setupTest();
 test.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+const seedCaseWithOtherPetitioners = '108-19';
+const seedCaseWithOtherFilers = '107-19';
 
 describe('Docket Clerk seals a case contact information', () => {
+  let contactType;
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -30,9 +34,47 @@ describe('Docket Clerk seals a case contact information', () => {
     test.contactId = caseDetail.contactPrimary.contactId;
   });
 
+  // loginAs(test, 'docketclerk@example.com');
+  // contactType = 'contactPrimary';
+  // docketClerkSealsContactInformation(test, contactType);
+
+  // loginAs(test, 'petitionsclerk@example.com');
+  // petitionsClerkViewsCaseWithSealedContact(test, contactType);
+
+  // loginAs(test, 'docketclerk@example.com');
+  // contactType = 'contactSecondary';
+  // docketClerkSealsContactInformation(test, contactType);
+
+  // loginAs(test, 'petitionsclerk@example.com');
+  // petitionsClerkViewsCaseWithSealedContact(test, contactType);
+
   loginAs(test, 'docketclerk@example.com');
-  docketClerkSealsContactPrimaryInformation(test);
+  contactType = 'otherPetitioners';
+  docketClerkSealsContactInformation(
+    test,
+    contactType,
+    seedCaseWithOtherPetitioners,
+  );
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerViewsCaseWithSealedContactInformation(test);
+  petitionsClerkViewsCaseWithSealedContact(
+    test,
+    contactType,
+    seedCaseWithOtherPetitioners,
+  );
+
+  loginAs(test, 'docketclerk@example.com');
+  contactType = 'otherFilers';
+  docketClerkSealsContactInformation(
+    test,
+    contactType,
+    seedCaseWithOtherFilers,
+  );
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseWithSealedContact(
+    test,
+    contactType,
+    seedCaseWithOtherFilers,
+  );
 });
