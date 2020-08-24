@@ -15,7 +15,9 @@ export const petitionsClerkViewsCaseWithSealedContact = (
     ) {
       sealedContact = test.getState(`caseDetail.${contactType}`);
     } else {
-      sealedContact = test.getState(`caseDetail.${contactType}`)[0];
+      sealedContact = test
+        .getState(`caseDetail.${contactType}`)
+        .find(c => c.isAddressSealed === true);
     }
 
     expect(sealedContact.isAddressSealed).toBe(true);
