@@ -34,7 +34,7 @@ const otherFilersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fourth Migrated Case',
-  docketNumber: '187-20',
+  docketNumber: '199-20',
   otherFilers: [
     {
       address1: '42 Lamb Sauce Blvd',
@@ -76,7 +76,7 @@ const otherPetitionersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fifth Migrated Case',
-  docketNumber: '162-20',
+  docketNumber: '198-20',
   irsPractitioners: [
     {
       barNumber: 'RT6789',
