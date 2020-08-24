@@ -86,7 +86,7 @@ describe('fileUploadStatusHelper', () => {
         fileUploadProgress: {
           isUploading: true,
           // prettier-ignore
-          timeRemaining: (3600 * 4) + (60 * 21)
+          timeRemaining: (3600 * 4) + (60 * 21),
         },
       },
     });
