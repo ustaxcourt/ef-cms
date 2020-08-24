@@ -11,7 +11,8 @@
       "postalCode": "64929",
       "name": "Cairo Harris",
       "state": "CO",
-      "countryType": "international"
+      "countryType": "international",
+      "isAddressSealed": true
     },
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
     "partyType": "Petitioner & spouse",
@@ -29,7 +30,8 @@
       "name": "Selma Horn",
       "state": "DE",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "isAddressSealed": true
     },
     "createdAt": "2019-03-01T21:42:29.073Z",
     "receivedAt": "2019-03-01T21:42:29.073Z",
