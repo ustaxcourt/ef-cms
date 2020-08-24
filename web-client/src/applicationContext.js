@@ -171,6 +171,7 @@ import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxie
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
 import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents/saveSignedDocumentProxy';
+import { sealCaseContactAddressInteractor } from '../../shared/src/proxies/sealCaseContactAddressProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
@@ -378,6 +379,7 @@ const allUseCases = {
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
   saveSignedDocumentInteractor,
+  sealCaseContactAddressInteractor,
   sealCaseInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
