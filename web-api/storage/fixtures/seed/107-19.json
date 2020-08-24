@@ -143,6 +143,7 @@
         "countryType": "domestic",
         "email": "testUser@example.com",
         "name": "Gordon Ramsay",
+        "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0f",
         "otherFilerType": "Intervenor",
         "phone": "1234567890",
         "postalCode": "05198",

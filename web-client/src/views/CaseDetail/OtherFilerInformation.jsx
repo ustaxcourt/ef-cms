@@ -109,10 +109,9 @@ export const OtherFilerInformation = connect(
                   </div>
                 </div>
               </div>
-            </div>{' '}
+            </div>
           </div>
         )}
-        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },

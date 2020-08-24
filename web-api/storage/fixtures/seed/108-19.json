@@ -57,11 +57,13 @@
       "name": "Garrett Carpenter",
       "state": "MD",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0c"
     },
     "otherPetitioners": [
       {
         "address3": "Nisi quisquam ea har",
+        "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0d",
         "secondaryName": "Leslie Bullock",
         "address2": "104 West 120th Street ",
         "city": "Ut similique id erro",
@@ -78,6 +80,7 @@
       },
       {
         "address3": "Nisi quisquam ea har",
+        "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0e",
         "secondaryName": "Leslie Bullock",
         "address2": "104 West 120th Street ",
         "city": "Ut similique id erro",
@@ -94,6 +97,7 @@
       },
       {
         "address3": "Nisi quisquam ea har",
+        "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0f",
         "secondaryName": "Leslie Bullock",
         "address2": "104 West 120th Street ",
         "city": "Ut similique id erro",
