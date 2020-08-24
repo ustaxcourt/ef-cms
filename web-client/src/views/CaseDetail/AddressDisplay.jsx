@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -11,6 +11,7 @@ export const AddressDisplay = connect(
     contact: props.contact,
     nameOverride: props.nameOverride || {},
     noMargin: props.noMargin || false,
+    openSealAddressModalSequence: sequences.openSealAddressModalSequence,
     showEmail: props.showEmail || false,
     showSealAddressLink: props.showSealAddressLink || false,
   },
@@ -19,12 +20,22 @@ export const AddressDisplay = connect(
     contact,
     nameOverride,
     noMargin,
+    openSealAddressModalSequence,
     showEmail,
     showSealAddressLink,
   }) {
     return (
-      <>
-        <p className="no-margin">
+      <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
+        <p className="no-margin position-relative">
+          {contact.isAddressSealed && (
+            <span className="sealed-address sealed-contact-icon">
+              <FontAwesomeIcon
+                className="margin-right-05"
+                icon={['fas', 'lock']}
+                size="sm"
+              />
+            </span>
+          )}
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
           {contact.secondaryName && (
@@ -42,8 +53,15 @@ export const AddressDisplay = connect(
             </span>
           )}
         </p>
-        <p className="no-margin">
-          <span className="address-line">{contact.address1}</span>
+        <p
+          className={classNames(
+            'no-margin',
+            showSealAddressLink && contact.isAddressSealed && 'sealed-address',
+          )}
+        >
+          {contact.address1 && (
+            <span className="address-line">{contact.address1}</span>
+          )}
           {contact.address2 && (
             <span className="address-line">{contact.address2}</span>
           )}
@@ -79,15 +97,23 @@ export const AddressDisplay = connect(
               )}
             </span>
           )}
-          {showSealAddressLink && (
+          {showSealAddressLink && !contact.isAddressSealed && (
             <span className="sealed-address">
-              <Button link className="red-warning" icon="lock" iconColor="red">
+              <Button
+                link
+                className="red-warning"
+                icon="lock"
+                iconColor="red"
+                onClick={() =>
+                  openSealAddressModalSequence({ contactToSeal: contact })
+                }
+              >
                 Seal Address
               </Button>
             </span>
           )}
         </p>
-      </>
+      </div>
     );
   },
 );
