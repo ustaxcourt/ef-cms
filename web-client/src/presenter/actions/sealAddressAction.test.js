@@ -4,14 +4,20 @@ import { runAction } from 'cerebral/test';
 import { sealAddressAction } from './sealAddressAction';
 
 describe('sealAddressAction', () => {
+  const caseDetail = { docketNumber: '123-20' };
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+
+    applicationContext
+      .getUseCases()
+      .sealCaseContactAddressInteractor.mockReturnValue(caseDetail);
   });
 
-  it('makes a call to seal the case contact using state.contactId', async () => {
+  it('makes a call to seal the case contact using state.contactId and returns the updated case detail and success message', async () => {
     const mockContactId = '123456';
     const mockDocketNumber = '999-99';
-    await runAction(sealAddressAction, {
+    const result = await runAction(sealAddressAction, {
       modules: {
         presenter,
       },
@@ -21,6 +27,7 @@ describe('sealAddressAction', () => {
         },
         contactToSeal: {
           contactId: mockContactId,
+          name: 'Bob Barker',
         },
       },
     });
@@ -35,6 +42,11 @@ describe('sealAddressAction', () => {
     ).toMatchObject({
       contactId: mockContactId,
       docketNumber: mockDocketNumber,
+    });
+
+    expect(result.output).toEqual({
+      alertSuccess: { message: 'Address sealed for Bob Barker.' },
+      caseDetail,
     });
   });
 });
