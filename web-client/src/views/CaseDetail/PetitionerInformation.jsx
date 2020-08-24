@@ -5,7 +5,6 @@ import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { OtherPetitionerDisplay } from './OtherPetitionerDisplay';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -173,7 +172,13 @@ const PetitionerInformation = connect(
                   >
                     <address aria-labelledby="secondary-label">
                       {otherPetitioner.name && (
-                        <OtherPetitionerDisplay petitioner={otherPetitioner} />
+                        <AddressDisplay
+                          contact={otherPetitioner}
+                          showEmail={true}
+                          showSealAddressLink={
+                            caseInformationHelper.showSealAddressLink
+                          }
+                        />
                       )}
                     </address>
                     {otherPetitioner.serviceIndicator && (

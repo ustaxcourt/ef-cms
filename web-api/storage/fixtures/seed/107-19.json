@@ -148,6 +148,7 @@
         "phone": "1234567890",
         "postalCode": "05198",
         "state": "AK",
+        "isAddressSealed": false,
         "title": "Intervenor"
       },
       {
@@ -161,6 +162,7 @@
         "otherFilerType": "Partner Other Than Tax Matters Partner",
         "phone": "1234567890",
         "postalCode": "05198",
+        "isAddressSealed": false,
         "state": "AK",
         "title": "Partner Other Than Tax Matters Partner"
       }
