@@ -6,7 +6,7 @@ const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '1000kb' }));
+app.use(bodyParser.json({ limit: '1200kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
