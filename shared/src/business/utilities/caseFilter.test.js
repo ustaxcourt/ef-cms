@@ -25,31 +25,49 @@ describe('caseFilter', () => {
     });
   });
 
-  it('caseContactAddressSealedFormatter', () => {
-    const result = caseContactAddressSealedFormatter({
-      additionalName: 'Bob',
-      bananas: '8-foot bunch',
-      city: 'Los Angeles',
-      contactId: '42-universe-everything',
-      inCareOf: 'Friendship is Magic',
-      isAddressSealed: 'maybe',
-      name: 'Joe Dirt',
-      otherFilerType: 'Nail File',
-      secondaryName: 'Cheeseburgers',
-      title: 'Emperor',
-      transmission: 'manual',
+  describe('caseContactAddressSealedFormatter', () => {
+    it('returns contact info with ONLY the whitelisted attributes present', () => {
+      const createContactInfo = () => ({
+        additionalName: 'Bob',
+        bananas: '8-foot bunch',
+        city: 'Los Angeles',
+        contactId: '42-universe-everything',
+        inCareOf: 'Friendship is Magic',
+        isAddressSealed: true,
+        name: 'Joe Dirt',
+        otherFilerType: 'Nail File',
+        secondaryName: 'Cheeseburgers',
+        title: 'Emperor',
+        transmission: 'manual',
+      });
+      const caseDetail = {};
+      caseDetail.contactPrimary = createContactInfo();
+      caseDetail.contactSecondary = createContactInfo();
+      caseDetail.otherFilers = [createContactInfo(), createContactInfo()];
+      caseDetail.otherPetitioners = [createContactInfo(), createContactInfo()];
+
+      const result = caseContactAddressSealedFormatter(caseDetail, {
+        role: ROLES.petitioner,
+      });
+      [
+        result.contactPrimary,
+        result.contactSecondary,
+        ...result.otherFilers,
+        ...result.otherPetitioners,
+      ].forEach(party => {
+        expect(Object.keys(party).sort()).toMatchObject([
+          'additionalName',
+          'contactId',
+          'inCareOf',
+          'isAddressSealed',
+          'name',
+          'otherFilerType',
+          'sealedAndUnavailable',
+          'secondaryName',
+          'title',
+        ]);
+      });
     });
-    expect(Object.keys(result).sort()).toMatchObject([
-      'additionalName',
-      'contactId',
-      'inCareOf',
-      'isAddressSealed',
-      'name',
-      'otherFilerType',
-      'sealedAndUnavailable',
-      'secondaryName',
-      'title',
-    ]);
   });
 
   describe('caseSearchFilter', () => {
