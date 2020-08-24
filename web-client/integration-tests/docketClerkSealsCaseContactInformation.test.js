@@ -34,20 +34,21 @@ describe('Docket Clerk seals a case contact information', () => {
     test.contactId = caseDetail.contactPrimary.contactId;
   });
 
-  // loginAs(test, 'docketclerk@example.com');
-  // contactType = 'contactPrimary';
-  // docketClerkSealsContactInformation(test, contactType);
+  loginAs(test, 'docketclerk@example.com');
+  contactType = 'contactPrimary';
+  docketClerkSealsContactInformation(test, contactType);
 
-  // loginAs(test, 'petitionsclerk@example.com');
-  // petitionsClerkViewsCaseWithSealedContact(test, contactType);
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseWithSealedContact(test, contactType);
 
-  // loginAs(test, 'docketclerk@example.com');
-  // contactType = 'contactSecondary';
-  // docketClerkSealsContactInformation(test, contactType);
+  loginAs(test, 'docketclerk@example.com');
+  contactType = 'contactSecondary';
+  docketClerkSealsContactInformation(test, contactType);
 
-  // loginAs(test, 'petitionsclerk@example.com');
-  // petitionsClerkViewsCaseWithSealedContact(test, contactType);
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseWithSealedContact(test, contactType);
 
+  //the next few tests rely on seed data. If these tests are failing, try restarting the api before re-running the tests
   loginAs(test, 'docketclerk@example.com');
   contactType = 'otherPetitioners';
   docketClerkSealsContactInformation(

@@ -15,7 +15,9 @@ export const docketClerkSealsContactInformation = (
     ) {
       contactToSeal = test.getState(`caseDetail.${contactType}`);
     } else {
-      contactToSeal = test.getState(`caseDetail.${contactType}`)[0];
+      contactToSeal = test
+        .getState(`caseDetail.${contactType}`)
+        .find(contact => contact.isAddressSealed === false);
     }
 
     expect(contactToSeal.isAddressSealed).toBe(false);
@@ -38,7 +40,9 @@ export const docketClerkSealsContactInformation = (
     ) {
       contactToSeal = test.getState(`caseDetail.${contactType}`);
     } else {
-      contactToSeal = test.getState(`caseDetail.${contactType}`)[0];
+      contactToSeal = test
+        .getState(`caseDetail.${contactType}`)
+        .find(c => c.contactId === contactToSeal.contactId);
     }
 
     expect(contactToSeal.isAddressSealed).toBe(true);
