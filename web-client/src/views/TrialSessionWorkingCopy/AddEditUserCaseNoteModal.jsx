@@ -7,13 +7,11 @@ import React from 'react';
 
 export const AddEditUserCaseNoteModal = connect(
   {
-    addEditUserCaseNoteModalHelper: state.addEditUserCaseNoteModalHelper,
     modal: state.modal,
     validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditUserCaseNoteModal({
-    addEditUserCaseNoteModalHelper,
     modal,
     onConfirmSequence,
     validateNoteSequence,
@@ -37,7 +35,7 @@ export const AddEditUserCaseNoteModal = connect(
           errorText={validationErrors.notes}
         >
           <label className="usa-label" htmlFor="case-notes">
-            {addEditUserCaseNoteModalHelper.notesLabel}
+            {modal.notesLabel}
           </label>
           <BindedTextarea
             ariaLabel="notes"
