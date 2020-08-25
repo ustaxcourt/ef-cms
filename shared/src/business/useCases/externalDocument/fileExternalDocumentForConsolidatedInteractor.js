@@ -19,7 +19,6 @@ const { WorkItem } = require('../../entities/WorkItem');
 exports.fileExternalDocumentForConsolidatedInteractor = async ({
   applicationContext,
   docketNumbersForFiling,
-  documentIds,
   documentMetadata,
   leadDocketNumber,
   //filingPartyNames? filingPartyMap?,
@@ -91,7 +90,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   const documentsToAdd = [
     [
-      documentIds.shift(),
+      primaryDocumentMetadata.documentId,
       primaryDocumentMetadata,
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
@@ -100,7 +99,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        supportingDocuments[i].documentId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
@@ -108,7 +107,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   }
 
   documentsToAdd.push([
-    documentIds.shift(),
+    secondaryDocument.documentId,
     secondaryDocument,
     DOCUMENT_RELATIONSHIPS.SECONDARY,
   ]);
@@ -116,7 +115,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        secondarySupportingDocuments[i].documentId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
