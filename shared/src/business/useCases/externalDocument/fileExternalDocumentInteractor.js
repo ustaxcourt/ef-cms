@@ -21,14 +21,11 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {Array<string>} providers.documentIds the document ids for the primary, supporting,
- * secondary, and secondary supporting documents
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
 exports.fileExternalDocumentInteractor = async ({
   applicationContext,
-  documentIds,
   documentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -65,6 +62,7 @@ exports.fileExternalDocumentInteractor = async ({
     'partyIrsPractitioner',
     'practitioner',
     'docketNumber',
+    'documentId',
   ]);
 
   if (secondaryDocument) {
@@ -78,7 +76,7 @@ exports.fileExternalDocumentInteractor = async ({
 
   const documentsToAdd = [
     [
-      documentIds.shift(),
+      primaryDocumentMetadata.documentId,
       { ...primaryDocumentMetadata, secondaryDocument },
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
@@ -87,7 +85,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        supportingDocuments[i].documentId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
@@ -95,7 +93,7 @@ exports.fileExternalDocumentInteractor = async ({
   }
 
   documentsToAdd.push([
-    documentIds.shift(),
+    secondaryDocument.documentId,
     secondaryDocument,
     DOCUMENT_RELATIONSHIPS.SECONDARY,
   ]);
@@ -103,7 +101,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        secondarySupportingDocuments[i].documentId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
