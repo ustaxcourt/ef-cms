@@ -1,25 +1,17 @@
-const fs = require('fs');
-const path = require('path');
 const {
   addCoversheetInteractor,
   generateCoverSheetData,
 } = require('./addCoversheetInteractor.js');
 const {
+  applicationContext,
+  testPdfDoc,
+} = require('../test/createTestApplicationContext');
+const {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('addCoversheetInteractor', () => {
-  const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-
-  const testPdfDocBytes = () => {
-    // sample.pdf is a 1 page document
-    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-  };
-
-  const testPdfDoc = testPdfDocBytes();
-
   const testingCaseData = {
     contactPrimary: {
       name: 'Daenerys Stormborn',

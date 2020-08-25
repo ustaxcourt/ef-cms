@@ -1,23 +1,14 @@
 jest.mock('pdf-lib');
 jest.mock('../generateSignedDocumentInteractor');
-
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const { addServedStampToDocument } = require('./addServedStampToDocument.js');
 const { getPageDimensions } = require('../generateSignedDocumentInteractor');
 const { PDFDocument } = require('pdf-lib');
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
-const testPdfDocBytes = () => {
-  // sample.pdf is a 1 page document
-  return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-};
 
 describe('addServedStampToDocument', () => {
-  let testPdfDoc;
   let drawTextMock;
   let saveMock;
 
@@ -44,8 +35,6 @@ describe('addServedStampToDocument', () => {
         save: saveMock,
       }),
     );
-
-    testPdfDoc = testPdfDocBytes();
   });
 
   it('adds a served stamp to a pdf document', async () => {
