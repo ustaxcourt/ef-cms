@@ -91,7 +91,7 @@ const PetitionerInformation = connect(
                     {caseDetailHelper.showEditContacts &&
                       formattedCaseDetail.contactPrimary.isAddressSealed && (
                         <div>
-                          <p className="text-italic sealed-address-notice">
+                          <p className="text-italic">
                             Call the Tax Court at (202) 521-0700 if you need to
                             update your contact information
                           </p>
@@ -145,7 +145,7 @@ const PetitionerInformation = connect(
                     </address>
                     {caseDetailHelper.showEditContacts &&
                       formattedCaseDetail.contactSecondary.isAddressSealed && (
-                        <div className="max-width-30">
+                        <div className="max-width-50">
                           <p className="text-italic">
                             Call the Tax Court at (202) 521-0700 if you need to
                             update your contact information
