@@ -143,11 +143,13 @@
         "countryType": "domestic",
         "email": "testUser@example.com",
         "name": "Gordon Ramsay",
+        "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
         "otherFilerType": "Intervenor",
         "phone": "1234567890",
         "postalCode": "05198",
         "state": "AK",
-        "title": "Tax Matters Partner"
+        "isAddressSealed": false,
+        "title": "Intervenor"
       },
       {
         "address1": "1337 12th Ave",
@@ -155,12 +157,14 @@
         "country": "USA",
         "countryType": "domestic",
         "email": "testUser@example.com",
+        "contactId": "277ca24a-7be3-49e9-80d3-529a19a1a841",
         "name": "Guy Fieri",
-        "otherFilerType": "Tax Matters Partner",
+        "otherFilerType": "Partner Other Than Tax Matters Partner",
         "phone": "1234567890",
         "postalCode": "05198",
+        "isAddressSealed": false,
         "state": "AK",
-        "title": "Intervenor"
+        "title": "Partner Other Than Tax Matters Partner"
       }
     ],
     "createdAt": "2019-08-16T17:29:10.132Z",

@@ -29,8 +29,20 @@ const RenderAddress = ({ contact, countryTypes }) => {
 const RenderContact = ({ contact, countryTypes }) => {
   return (
     <div className="party-details">
-      <p className="margin-bottom-0">{contact.name}</p>
-      <RenderAddress contact={contact} countryTypes={countryTypes} />
+      <div>
+        {contact.isAddressSealed && (
+          <div className="sealed-icon-container">
+            <div className="sealed-icon" />
+          </div>
+        )}
+        <p className="margin-bottom-0">{contact.name}</p>
+        {!contact.isAddressSealed && (
+          <RenderAddress contact={contact} countryTypes={countryTypes} />
+        )}
+        {contact.isAddressSealed && (
+          <p className="address-sealed-text">Address sealed</p>
+        )}
+      </div>
     </div>
   );
 };

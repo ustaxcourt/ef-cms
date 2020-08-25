@@ -57,16 +57,19 @@
       "name": "Garrett Carpenter",
       "state": "MD",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0c"
     },
     "otherPetitioners": [
       {
         "address3": "Nisi quisquam ea har",
+        "contactId": "9a45147f-7859-4dcd-8a00-fecb72dee4b1",
         "secondaryName": "Leslie Bullock",
         "address2": "104 West 120th Street ",
         "city": "Ut similique id erro",
         "phone": "+1 (241) 924-9153",
         "serviceIndicator": "None",
+        "isAddressSealed": false,
         "address1": "907 West Rocky Cowley Parkway",
         "postalCode": "26371",
         "name": "Coralie Carpenter",
@@ -78,7 +81,9 @@
       },
       {
         "address3": "Nisi quisquam ea har",
+        "contactId": "8b1cc7b5-ecee-4d5d-b065-f39911a16e4f",
         "secondaryName": "Leslie Bullock",
+        "isAddressSealed": false,
         "address2": "104 West 120th Street ",
         "city": "Ut similique id erro",
         "phone": "+1 (241) 924-9153",
@@ -94,11 +99,13 @@
       },
       {
         "address3": "Nisi quisquam ea har",
+        "contactId": "f6a1e0df-f893-4b2b-ab47-ac1c874da34d",
         "secondaryName": "Leslie Bullock",
         "address2": "104 West 120th Street ",
         "city": "Ut similique id erro",
         "phone": "+1 (241) 924-9153",
         "serviceIndicator": "None",
+        "isAddressSealed": false,
         "address1": "907 West Rocky Cowley Parkway",
         "postalCode": "26371",
         "name": "Chinju Carpenter",

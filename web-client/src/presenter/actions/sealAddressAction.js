@@ -9,14 +9,21 @@ import { state } from 'cerebral';
  *  @returns {Promise} async action
  */
 export const sealAddressAction = async ({ applicationContext, get }) => {
-  const { contactId } = get(state.contactToSeal);
+  const { contactId, name } = get(state.contactToSeal);
   const { docketNumber } = get(state.caseDetail);
 
-  return await applicationContext
+  const updatedCase = await applicationContext
     .getUseCases()
     .sealCaseContactAddressInteractor({
       applicationContext,
       contactId,
       docketNumber,
     });
+
+  return {
+    alertSuccess: {
+      message: `Address sealed for ${name}.`,
+    },
+    caseDetail: updatedCase,
+  };
 };

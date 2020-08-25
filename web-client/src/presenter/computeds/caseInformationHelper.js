@@ -22,7 +22,7 @@ export const caseInformationHelper = get => {
   const otherPetitioners = [...(caseDetail.otherPetitioners || [])];
   const showOtherPetitioners = !!otherPetitioners.length;
   const formattedOtherPetitioners = showingAdditionalPetitioners
-    ? otherPetitioners || []
+    ? otherPetitioners
     : otherPetitioners.slice(0, 4);
 
   const showSealAddressLink = permissions.SEAL_ADDRESS;
