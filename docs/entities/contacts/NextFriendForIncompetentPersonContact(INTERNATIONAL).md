@@ -79,6 +79,10 @@
     isAddressSealed: 
       type: "boolean"
       flags: 
+        presence: "required"
+    sealedAndUnavailable: 
+      type: "boolean"
+      flags: 
         presence: "optional"
     name: 
       type: "string"

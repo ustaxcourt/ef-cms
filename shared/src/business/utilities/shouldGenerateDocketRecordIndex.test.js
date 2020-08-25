@@ -162,6 +162,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
         {
           documentId: '123',
           isPaper: true,
+          servedAt: '2019-03-02T21:40:46.415Z',
         },
       ],
     };
@@ -170,14 +171,12 @@ describe('shouldGenerateDocketRecordIndex', () => {
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:57.415Z',
-      servedAt: '2019-03-02T21:40:46.415Z',
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
       docketRecordEntry,
     });
-
-    expect(result).toEqual(false);
+    expect(result).toEqual(true);
   });
 
   it('returns false for initial document types filed after the petition if the document is NOT being served', () => {

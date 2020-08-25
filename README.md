@@ -135,34 +135,34 @@ You can log in using the following accounts.
 #### External Users
 
 ```
-petitioner
-privatePractitioner
-privatePractitioner1 - privatePractitioner4
-irsPractitioner
-irsPractitioner1 - irsPractitioner4
-irsSuperuser
+petitioner@example.com
+privatePractitioner@example.com
+privatePractitioner1 - privatePractitioner4@example.com
+irsPractitioner@example.com
+irsPractitioner1 - irsPractitioner4@example.com
+irsSuperuser@example.com
 ```
 
 #### Internal Users
 ```
-adc
-admissionsclerk
-clerkofcourt
-docketclerk
-docketclerk1
-petitionsclerk
-petitionsclerk1
-trialclerk
-judgeArmen
-armensChambers
-judgeAshford
-ashfordsChambers
-judgeBuch
-buchsChambers
-judgeCarluzzo
-carluzzosChambers
-judgeCohen
-cohensChambers
+adc@example.com
+admissionsclerk@example.com
+clerkofcourt@example.com
+docketclerk@example.com
+docketclerk1@example.com
+petitionsclerk@example.com
+petitionsclerk1@example.com
+trialclerk@example.com
+judgeArmen@example.com
+armensChambers@example.com
+judgeAshford@example.com
+ashfordsChambers@example.com
+judgeBuch@example.com
+buchsChambers@example.com
+judgeCarluzzo@example.com
+carluzzosChambers@example.com
+judgeCohen@example.com
+cohensChambers@example.com
 ```
 
 No password is required.
