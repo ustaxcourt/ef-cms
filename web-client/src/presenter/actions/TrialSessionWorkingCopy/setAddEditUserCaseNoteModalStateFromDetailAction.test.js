@@ -27,9 +27,12 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
       },
     );
 
-    expect(result.state.modal.caseTitle).toEqual('Sisqo');
-    expect(result.state.modal.docketNumber).toEqual('101-19L');
-    expect(result.state.modal.notes).toEqual('i got some notes');
+    expect(result.state.modal).toMatchObject({
+      caseTitle: 'Sisqo',
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19L',
+      notes: 'i got some notes',
+    });
   });
 
   it('should set the modal state when caseCaption and docketNumberSuffix do not exist', async () => {
@@ -48,9 +51,11 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         },
       },
     );
-
-    expect(result.state.modal.caseTitle).toEqual('');
-    expect(result.state.modal.docketNumber).toEqual('101-19');
-    expect(result.state.modal.notes).toEqual('i got some notes');
+    expect(result.state.modal).toMatchObject({
+      caseTitle: '',
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19',
+      notes: 'i got some notes',
+    });
   });
 });

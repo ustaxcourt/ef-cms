@@ -20,8 +20,9 @@ export const setAddEditUserCaseNoteModalStateFromDetailAction = ({
   );
   const caseTitle = applicationContext.getCaseTitle(caseCaption || '');
 
+  store.set(state.modal.docketNumber, docketNumber);
   store.set(
-    state.modal.docketNumber,
+    state.modal.docketNumberWithSuffix,
     `${docketNumber}${docketNumberSuffix ? docketNumberSuffix : ''}`,
   );
   store.set(state.modal.caseTitle, caseTitle);
