@@ -40,7 +40,7 @@ const RenderContact = ({ contact, countryTypes }) => {
           <RenderAddress contact={contact} countryTypes={countryTypes} />
         )}
         {contact.isAddressSealed && (
-          <p className="address-sealed-text">Address Sealed</p>
+          <p className="address-sealed-text">Address sealed</p>
         )}
       </div>
     </div>
