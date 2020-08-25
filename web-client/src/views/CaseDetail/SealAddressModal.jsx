@@ -13,7 +13,7 @@ export const SealAddressModal = connect(
         cancelLabel="No, Cancel"
         confirmLabel="Yes, Seal Address"
         preventCancelOnBlur={true}
-        title="Are you sure you want to seal this address?"
+        title="Are You Sure You Want to Seal This Address?"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="sealAddressSequence"
       >
