@@ -19,6 +19,8 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 
 - Install [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html), which is used to automatically configure AWS.
 
+  - See [Terraform tips & tricks](../terraform.md) for debugging and background information on Terraform.
+
 - Clone this repository.
 
 - Set the `EFCMS_DOMAIN` environment variable to the domain you’ll be hosting EF-CMS at. You may want to set this in your `~/.zshrc` file for ease of use:
