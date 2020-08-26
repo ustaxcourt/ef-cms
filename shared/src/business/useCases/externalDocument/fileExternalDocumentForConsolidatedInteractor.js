@@ -79,9 +79,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     'docketNumber',
   ]);
 
-  if (secondaryDocument) {
-    secondaryDocument.lodged = true;
-  }
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
@@ -90,7 +87,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   const documentsToAdd = [
     [
-      primaryDocumentMetadata.documentId,
+      documentMetadata.primaryDocumentFile.documentId,
       primaryDocumentMetadata,
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
@@ -106,11 +103,15 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     }
   }
 
-  documentsToAdd.push([
-    secondaryDocument.documentId,
-    secondaryDocument,
-    DOCUMENT_RELATIONSHIPS.SECONDARY,
-  ]);
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.documentId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
+  }
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {

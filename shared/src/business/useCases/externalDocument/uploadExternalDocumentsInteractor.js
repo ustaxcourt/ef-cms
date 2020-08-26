@@ -56,12 +56,12 @@ exports.uploadExternalDocumentsInteractor = async ({
     return documentId;
   };
 
-  documentFiles.primary.documentId = await uploadDocumentAndMakeSafeInteractor(
+  documentMetadata.primaryDocumentFile.documentId = await uploadDocumentAndMakeSafeInteractor(
     'primary',
   );
 
   if (documentFiles.secondary) {
-    documentFiles.secondary.documentId = await uploadDocumentAndMakeSafeInteractor(
+    documentMetadata.secondaryDocument.documentId = await uploadDocumentAndMakeSafeInteractor(
       'secondary',
     );
   }
