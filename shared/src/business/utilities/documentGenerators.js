@@ -140,6 +140,7 @@ const docketRecord = async ({ applicationContext, data }) => {
     caseTitle,
     docketNumberWithSuffix,
     entries,
+    includePartyDetail,
   } = data;
 
   const docketRecordTemplate = reactTemplateGenerator({
@@ -152,6 +153,7 @@ const docketRecord = async ({ applicationContext, data }) => {
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
+        includePartyDetail,
       },
     },
   });
