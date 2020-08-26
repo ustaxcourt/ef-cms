@@ -62,25 +62,31 @@ exports.fileExternalDocumentInteractor = async ({
     'partyIrsPractitioner',
     'practitioner',
     'docketNumber',
-    'documentId',
   ]);
+
+  const documentsToAdd = [
+    [
+      documentMetadata.primaryDocumentFile.documentId,
+      { ...primaryDocumentMetadata, secondaryDocument },
+      DOCUMENT_RELATIONSHIPS.PRIMARY,
+    ],
+  ];
 
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.documentId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
   }
+
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
     });
   }
-
-  const documentsToAdd = [
-    [
-      primaryDocumentMetadata.documentId,
-      { ...primaryDocumentMetadata, secondaryDocument },
-      DOCUMENT_RELATIONSHIPS.PRIMARY,
-    ],
-  ];
 
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
@@ -91,12 +97,6 @@ exports.fileExternalDocumentInteractor = async ({
       ]);
     }
   }
-
-  documentsToAdd.push([
-    secondaryDocument.documentId,
-    secondaryDocument,
-    DOCUMENT_RELATIONSHIPS.SECONDARY,
-  ]);
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {

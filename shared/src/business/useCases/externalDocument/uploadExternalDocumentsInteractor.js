@@ -100,16 +100,11 @@ exports.uploadExternalDocumentsInteractor = async ({
         leadDocketNumber,
       });
   } else {
-    const updatedCase = await applicationContext
+    return await applicationContext
       .getUseCases()
       .fileExternalDocumentInteractor({
         applicationContext,
         documentMetadata,
       });
-
-    // FIXME
-    return {
-      updatedCase,
-    };
   }
 };
