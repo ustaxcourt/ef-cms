@@ -122,6 +122,18 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
   this.trialLocation = rawDocument.trialLocation;
+  this.action = rawDocument.action;
+  this.description =
+    rawDocument.description ||
+    rawDocument.documentTitle ||
+    rawDocument.documentType;
+  this.isStricken = rawDocument.isStricken || false;
+  this.strickenAt = rawDocument.strickenAt;
+  this.strickenBy = rawDocument.strickenBy;
+  this.strickenByUserId = rawDocument.strickenByUserId;
+  this.index = rawDocument.index;
+  this.servedPartiesCode = rawDocument.servedPartiesCode;
+  this.isOnDocketRecord = rawDocument.isOnDocketRecord || false;
 
   // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
@@ -300,6 +312,7 @@ Document.VALIDATION_RULES = joi.object().keys({
     .description(
       'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
+  isOnDocketRecord: joi.boolean().optional(),
   isPaper: joi.boolean().optional(),
   isSealed: joi
     .boolean()
@@ -651,6 +664,29 @@ Document.prototype.setNumberOfPages = function (numberOfPages) {
  */
 Document.getFormattedType = function (documentType) {
   return documentType.split('-').slice(-1).join('').trim();
+};
+
+/**
+ * sets the number of pages for the docket entry
+ *
+ * @param {Number} numberOfPages the number of pages
+ */
+Document.prototype.setNumberOfPages = function (numberOfPages) {
+  this.numberOfPages = numberOfPages;
+};
+
+/**
+ * strikes this docket record
+ *
+ * @param {object} obj param
+ * @param {string} obj.name user name
+ * @param {string} obj.userId user id
+ */
+Document.prototype.strikeEntry = function ({ name, userId }) {
+  this.isStricken = true;
+  this.strickenBy = name;
+  this.strickenByUserId = userId;
+  this.strickenAt = createISODateString();
 };
 
 exports.Document = Document;
