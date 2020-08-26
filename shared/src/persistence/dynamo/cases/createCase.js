@@ -20,6 +20,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
           'irsPractitioners',
           'privatePractitioners',
           'docketRecord',
+          'docketEntries',
         ]),
       },
       applicationContext,
@@ -29,6 +30,16 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         Item: {
           pk: `case|${caseToCreate.docketNumber}`,
           sk: `docket-record|${docketEntry.docketRecordId}`,
+          ...docketEntry,
+        },
+        applicationContext,
+      }),
+    ),
+    ...caseToCreate.docketEntries.map(docketEntry =>
+      client.put({
+        Item: {
+          pk: `case|${caseToCreate.docketNumber}`,
+          sk: `docket-entry|${docketEntry.docketEntryId}`,
           ...docketEntry,
         },
         applicationContext,
