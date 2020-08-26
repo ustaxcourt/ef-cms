@@ -139,7 +139,7 @@ describe('add to trial session modal helper', () => {
       Alabama: [
         {
           optionText: 'Birmingham, Alabama 01/01/19 (SP)',
-          trialLocationState: US_STATES.showAllLocations,
+          trialLocationState: US_STATES.AL,
           trialSessionId: '3',
         },
         {
