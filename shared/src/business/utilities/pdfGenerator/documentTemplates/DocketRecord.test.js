@@ -21,7 +21,7 @@ describe('DocketRecord', () => {
       caseCaptionExtension: 'Petitioner(s)',
       caseTitle: 'Test Case Title',
       docketNumberWithSuffix: '123-45S',
-      includePartyInfo: true,
+      includePartyDetail: true,
     };
 
     contactPrimary = {
@@ -109,7 +109,7 @@ describe('DocketRecord', () => {
     ];
   });
 
-  it('renders the primary contact information when options.includePartyInfo is true', () => {
+  it('renders the primary contact information when options.includePartyDetail is true', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
@@ -142,8 +142,8 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).not.toContain(contactPrimary.country);
   });
 
-  it('does not render the primary contact information when options.includePartyInfo is false', () => {
-    options.includePartyInfo = false;
+  it('does not render the primary contact information when options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
 
     const wrapper = mount(
       <DocketRecord
@@ -155,14 +155,7 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      PARTY_TYPES.petitioner,
-    );
-    expect(contacts.find('.party-details').length).toEqual(1);
-
-    const contactPrimaryEl = contacts.find('.party-details');
-
-    expect(contactPrimaryEl).toBeUndefined();
+    expect(contacts).toEqual({});
   });
 
   it("displays a party's country if international", () => {
