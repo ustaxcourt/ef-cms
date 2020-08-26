@@ -11,7 +11,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -120,6 +119,7 @@ exports.fileExternalDocumentInteractor = async ({
           ...metadata,
           documentId,
           documentType: metadata.documentType,
+          isOnDocketRecord: true,
           partyPrimary:
             baseMetadata.partyPrimary || documentMetadata.representingPrimary,
           partySecondary:
@@ -166,19 +166,7 @@ exports.fileExternalDocumentInteractor = async ({
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-      const docketRecordEntity = new DocketRecord(
-        {
-          description: metadata.documentTitle,
-          documentId: documentEntity.documentId,
-          eventCode: documentEntity.eventCode,
-          filingDate: documentEntity.receivedAt,
-        },
-        { applicationContext },
-      );
-
       const isAutoServed = documentEntity.isAutoServed();
-
-      caseEntity.addDocketRecord(docketRecordEntity);
 
       if (isAutoServed) {
         documentEntity.setAsServed(servedParties.all);

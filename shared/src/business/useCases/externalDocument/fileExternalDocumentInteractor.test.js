@@ -34,17 +34,19 @@ describe('fileExternalDocumentInteractor', () => {
       },
       createdAt: '',
       docketNumber: '45678-18',
-      docketRecord: [
+      documents: [
         {
           description: 'first record',
           docketNumber: '45678-18',
           documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+          documentType: 'Petition',
           eventCode: 'P',
+          filedBy: 'Test Petitioner',
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
+          isOnDocketRecord: true,
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
-      ],
-      documents: [
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -134,7 +136,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase.documents[3].servedAt).toBeDefined();
+    expect(updatedCase.documents[4].servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -179,48 +181,48 @@ describe('fileExternalDocumentInteractor', () => {
     });
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(updatedCase.documents).toMatchObject([
-      {}, // first 3 docs were already on the case
+      {}, // first 4 docs were already on the case
+      {},
       {},
       {},
       {
-        eventCode: 'M115', // primary document
+        eventCode: 'M115',
+        isOnDocketRecord: true,
+        // primary document
         lodged: undefined,
       },
       {
-        eventCode: 'CIVP', // supporting document
+        eventCode: 'CIVP',
+        isOnDocketRecord: true,
+        // supporting document
         lodged: undefined,
       },
       {
         eventCode: 'M121', //secondary document
+        isOnDocketRecord: true,
         lodged: true,
       },
       {
         eventCode: 'M135', // secondary supporting document
+        isOnDocketRecord: true,
         lodged: true,
       },
     ]);
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
-    let error;
+    const updatedCase = await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Simultaneous Memoranda of Law',
+        documentType: 'Simultaneous Memoranda of Law',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+      },
+    });
 
-    let updatedCase;
-    try {
-      updatedCase = await fileExternalDocumentInteractor({
-        applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();

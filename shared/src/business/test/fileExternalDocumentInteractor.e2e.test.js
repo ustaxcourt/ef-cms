@@ -148,32 +148,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       contactSecondary: {},
       docketNumber,
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      docketRecord: [
-        {
-          description: 'Petition',
-          documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
-          filedBy: 'Petr. Test Petitioner',
-        },
-        {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
-        },
-        {
-          description: 'Motion for Leave to File Brief in Support of Petition',
-          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-        },
-        {
-          description: 'Brief in Support of Amended Answer',
-          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
-        },
-        {
-          description: 'Brief in Support of Petition',
-          documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-        },
-        {
-          description: 'Brief in Support of Amended Answer',
-          documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-        },
-      ],
       documents: [
         {
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
@@ -214,6 +188,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentType: 'Motion for Leave to File',
           filedBy: 'Petr. Test Petitioner',
           hasSupportingDocuments: true,
+          isOnDocketRecord: true,
           partyPrimary: true,
           scenario: 'Nonstandard H',
           supportingDocument: 'Brief in Support',
@@ -247,6 +222,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
+          isOnDocketRecord: true,
           partyPrimary: true,
           previousDocument: {
             documentTitle: 'Amended Answer',
@@ -281,6 +257,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
+          isOnDocketRecord: true,
           lodged: true,
           partyPrimary: true,
           previousDocument: { documentType: 'Petition' },
@@ -311,6 +288,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
+          isOnDocketRecord: true,
           lodged: true,
           partyPrimary: true,
           previousDocument: {
