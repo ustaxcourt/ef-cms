@@ -7,13 +7,11 @@ import React from 'react';
 
 export const AddEditUserCaseNoteModal = connect(
   {
-    addEditUserCaseNoteModalHelper: state.addEditUserCaseNoteModalHelper,
     modal: state.modal,
     validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditUserCaseNoteModal({
-    addEditUserCaseNoteModalHelper,
     modal,
     onConfirmSequence,
     validateNoteSequence,
@@ -30,14 +28,14 @@ export const AddEditUserCaseNoteModal = connect(
         onConfirmSequence={onConfirmSequence}
       >
         <h5 className="margin-bottom-4">
-          Docket {modal.docketNumber}: {modal.caseTitle}
+          Docket {modal.docketNumberWithSuffix}: {modal.caseTitle}
         </h5>
         <FormGroup
           className="margin-bottom-2"
           errorText={validationErrors.notes}
         >
           <label className="usa-label" htmlFor="case-notes">
-            {addEditUserCaseNoteModalHelper.notesLabel}
+            {modal.notesLabel}
           </label>
           <BindedTextarea
             ariaLabel="notes"
