@@ -6,6 +6,8 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
+  const mockPrimaryDocumentId = MOCK_CASE.documents[0].documentId;
+
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
@@ -20,12 +22,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       });
   });
 
-  it('Calls the Receipt of Filing document generator', async () => {
+  it('should call the Receipt of Filing document generator', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
-        primaryDocumentFile: {},
+        primaryDocumentFile: {
+          documentId: mockPrimaryDocumentId,
+        },
       },
     });
 
@@ -47,7 +51,9 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
-        primaryDocumentFile: {},
+        primaryDocumentFile: {
+          documentId: mockPrimaryDocumentId,
+        },
         secondaryDocument: { documentId: 4 },
         secondaryDocumentFile: { fakeDocument: true },
         secondarySupportingDocuments: [

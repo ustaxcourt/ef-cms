@@ -72,18 +72,6 @@ exports.fileExternalDocumentInteractor = async ({
     ],
   ];
 
-  console.log('documents to add ------', documentsToAdd);
-
-  if (secondaryDocument) {
-    secondaryDocument.lodged = true;
-
-    documentsToAdd.push([
-      secondaryDocument.documentId,
-      secondaryDocument,
-      DOCUMENT_RELATIONSHIPS.SECONDARY,
-    ]);
-  }
-
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
@@ -98,6 +86,16 @@ exports.fileExternalDocumentInteractor = async ({
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
     }
+  }
+
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.documentId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
   }
 
   if (secondarySupportingDocuments) {
@@ -192,8 +190,6 @@ exports.fileExternalDocumentInteractor = async ({
       }
     }
   }
-
-  console.log('case entity ------', caseEntity);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
