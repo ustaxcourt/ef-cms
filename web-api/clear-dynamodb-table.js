@@ -32,10 +32,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
 
-        const chunks = chunk(
-          results.Items.filter(i => i.length > 0),
-          CHUNK_SIZE,
-        );
+        const chunks = chunk(results.Items, CHUNK_SIZE);
         for (let c of chunks) {
           count += CHUNK_SIZE;
           console.log(`deleting chunk: ${count} total deleted`);

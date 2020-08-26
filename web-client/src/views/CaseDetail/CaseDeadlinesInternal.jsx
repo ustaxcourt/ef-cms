@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -44,24 +43,20 @@ export const CaseDeadlinesInternal = connect(
                     {item.deadlineDateFormatted}
                   </td>
                   <td className="overdue smaller-column center-column semi-bold">
-                    {item.overdue ? 'Overdue' : ''}
+                    {item.overdue && 'Overdue'}
                   </td>
                   <td className="padding-extra">{item.description}</td>
                   <td className="smaller-column center-column">
                     <Button
                       link
                       className="margin-right-0 padding-0"
+                      icon="edit"
                       onClick={() => {
                         openEditCaseDeadlineModalSequence({
                           caseDeadlineId: item.caseDeadlineId,
                         });
                       }}
                     >
-                      <FontAwesomeIcon
-                        className="margin-right-05"
-                        icon="edit"
-                        size="1x"
-                      />
                       Edit
                     </Button>
                   </td>

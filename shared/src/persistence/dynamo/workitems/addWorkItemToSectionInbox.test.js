@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { addWorkItemToSectionInbox } = require('./addWorkItemToSectionInbox');
 
 describe('addWorkItemToSectionInbox', () => {
@@ -20,7 +23,7 @@ describe('addWorkItemToSectionInbox', () => {
     await addWorkItemToSectionInbox({
       applicationContext,
       workItem: {
-        section: 'docket',
+        section: DOCKET_SECTION,
         workItemId: '123',
       },
     });

@@ -28,6 +28,8 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
+      archivedCorrespondences: [],
+      archivedDocuments: [],
       correspondence: [],
       docketNumber: '123-20',
       docketRecord: [],
@@ -67,9 +69,28 @@ describe('getCaseByDocketNumber', () => {
               sk: 'docket-record|123',
             },
             {
+              archived: true,
               documentId: 'abc-123',
               pk: 'case|123-20',
               sk: 'document|123',
+            },
+            {
+              archived: false,
+              documentId: 'abc-124',
+              pk: 'case|123-20',
+              sk: 'document|124',
+            },
+            {
+              archived: true,
+              documentId: 'abc-123',
+              pk: 'case|123-20',
+              sk: 'correspondence|123',
+            },
+            {
+              archived: false,
+              documentId: 'abc-124',
+              pk: 'case|123-20',
+              sk: 'correspondence|124',
             },
           ],
         }),
@@ -81,7 +102,30 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
-      correspondence: [],
+      archivedCorrespondences: [
+        {
+          archived: true,
+          documentId: 'abc-123',
+          pk: 'case|123-20',
+          sk: 'correspondence|123',
+        },
+      ],
+      archivedDocuments: [
+        {
+          archived: true,
+          documentId: 'abc-123',
+          pk: 'case|123-20',
+          sk: 'document|123',
+        },
+      ],
+      correspondence: [
+        {
+          archived: false,
+          documentId: 'abc-124',
+          pk: 'case|123-20',
+          sk: 'correspondence|124',
+        },
+      ],
       docketNumber: '123-20',
       docketRecord: [
         {
@@ -92,9 +136,10 @@ describe('getCaseByDocketNumber', () => {
       ],
       documents: [
         {
-          documentId: 'abc-123',
+          archived: false,
+          documentId: 'abc-124',
           pk: 'case|123-20',
-          sk: 'document|123',
+          sk: 'document|124',
         },
       ],
       irsPractitioners: [
@@ -124,6 +169,8 @@ describe('getCaseByDocketNumber', () => {
     });
 
     expect(result).toEqual({
+      archivedCorrespondences: [],
+      archivedDocuments: [],
       correspondence: [],
       docketRecord: [],
       documents: [],

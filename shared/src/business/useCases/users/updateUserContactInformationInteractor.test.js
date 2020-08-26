@@ -53,6 +53,9 @@ describe('updateUserContactInformationInteractor', () => {
       .getUserById.mockImplementation(async () => user);
     applicationContext
       .getPersistenceGateway()
+      .updateUser.mockImplementation(() => {});
+    applicationContext
+      .getPersistenceGateway()
       .updateCase.mockImplementation(v => v.caseToUpdate);
     applicationContext.getUniqueId.mockReturnValue(
       'a7d90c05-f6cd-442c-a168-202db587f16f',
@@ -68,12 +71,13 @@ describe('updateUserContactInformationInteractor', () => {
       });
   });
 
-  it("should throw an error when the user's contact information has not changed", async () => {
+  it('should return without updating user or cases if contact info has not changed', async () => {
     mockCase = [
       {
         ...MOCK_CASE,
         irsPractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
@@ -81,13 +85,25 @@ describe('updateUserContactInformationInteractor', () => {
       },
     ];
 
-    await expect(
-      updateUserContactInformationInteractor({
-        applicationContext,
-        contactInfo: {},
-        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-      }),
-    ).rejects.toThrow('there were no changes found needing to be updated');
+    await updateUserContactInformationInteractor({
+      applicationContext,
+      contactInfo: {},
+      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    expect(applicationContext.getUseCases().updateUser).not.toBeCalled();
+    expect(applicationContext.getUseCases().updateCase).not.toBeCalled();
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toBeCalledTimes(2);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('user_contact_initial_update_complete');
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[1][0].message.action,
+    ).toEqual('user_contact_full_update_complete');
   });
 
   it('updates the user and irsPractitioners in the case', async () => {
@@ -96,6 +112,7 @@ describe('updateUserContactInformationInteractor', () => {
         ...MOCK_CASE,
         irsPractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.irsPractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -132,6 +149,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       irsPractitioners: [
         {
+          barNumber: 'BN8765',
           contact: contactInfo,
           role: ROLES.irsPractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -156,6 +174,7 @@ describe('updateUserContactInformationInteractor', () => {
         ...MOCK_CASE,
         privatePractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -167,6 +186,7 @@ describe('updateUserContactInformationInteractor', () => {
         closedDate: lastYear,
         privatePractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -179,6 +199,7 @@ describe('updateUserContactInformationInteractor', () => {
         closedDate: yesterday,
         privatePractitioners: [
           {
+            barNumber: 'BN8765',
             contact: {},
             role: ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -216,6 +237,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       privatePractitioners: [
         {
+          barNumber: 'BN8765',
           contact: contactInfo,
           role: ROLES.privatePractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -228,6 +250,7 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       privatePractitioners: [
         {
+          barNumber: 'BN8765',
           contact: contactInfo,
           role: ROLES.privatePractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
@@ -259,6 +282,28 @@ describe('updateUserContactInformationInteractor', () => {
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('returns an error notification to user if updateUser throws an error', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .updateUser.mockImplementation(() => {
+        throw new Error('something wicked');
+      });
+
+    await updateUserContactInformationInteractor({
+      applicationContext,
+      contactInfo,
+      userId: user.userId,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toBeCalledTimes(1);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('user_contact_update_error');
   });
 
   it('includes the practitioner name in the change of address document when the practitioner changes their address', async () => {

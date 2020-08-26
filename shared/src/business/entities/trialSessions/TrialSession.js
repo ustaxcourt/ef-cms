@@ -158,7 +158,6 @@ joiValidationDecorator(
         ),
       }),
     ),
-    isCalendared: joi.boolean().required(),
   }),
   TrialSession.VALIDATION_ERROR_MESSAGES,
 );

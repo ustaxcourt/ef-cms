@@ -101,6 +101,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.isLegacy = rawDocument.isLegacy;
   this.isSealed = rawDocument.isSealed;
   this.isLegacySealed = rawDocument.isLegacySealed;
+  this.isLegacyServed = rawDocument.isLegacyServed;
   this.lodged = rawDocument.lodged;
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
@@ -292,6 +293,12 @@ Document.VALIDATION_RULES = joi.object().keys({
     .optional()
     .description(
       'Indicates whether or not the legacy document was sealed prior to being migrated to the new system.',
+    ),
+  isLegacyServed: joi
+    .boolean()
+    .optional()
+    .description(
+      'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi

@@ -8,6 +8,7 @@ describe('PublicDocketRecordEntry', () => {
       filedBy: 'testing',
       filingDate: '2020-05-27T09:23:43.007Z',
       index: 1,
+      isStricken: false,
     });
 
     expect(entity.validate().toRawObject()).toEqual({
@@ -16,6 +17,7 @@ describe('PublicDocketRecordEntry', () => {
       filedBy: 'testing',
       filingDate: '2020-05-27T09:23:43.007Z',
       index: 1,
+      isStricken: false,
     });
   });
 });

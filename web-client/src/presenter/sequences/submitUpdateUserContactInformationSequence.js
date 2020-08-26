@@ -1,12 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
 
@@ -17,16 +14,8 @@ export const submitUpdateUserContactInformationSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
+      startWebSocketConnectionAction,
       updateUserContactInformationAction,
-      {
-        noChange: [navigateToDashboardAction],
-        success: [
-          setAlertSuccessAction,
-          setSaveAlertsForNavigationAction,
-          setCurrentPageAction('Interstitial'),
-          navigateToDashboardAction,
-        ],
-      },
     ]),
   },
 ];

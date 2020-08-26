@@ -381,8 +381,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:4000';
-
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext = applicationContext;
@@ -427,6 +425,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
       setItem: () => null,
     },
     location: {},
+    open: url => {
+      test.setState('openedUrl', url);
+    },
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
     },

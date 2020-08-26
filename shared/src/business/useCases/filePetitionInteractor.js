@@ -27,7 +27,10 @@ exports.filePetitionInteractor = async ({
    * @param {Function} onUploadProgress the progressFunction
    * @returns {Promise<string>} the documentId returned from a successful upload
    */
-  const uploadDocumentAndMakeSafe = async (document, onUploadProgress) => {
+  const uploadDocumentAndMakeSafeInteractor = async (
+    document,
+    onUploadProgress,
+  ) => {
     const documentId = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
@@ -48,14 +51,14 @@ exports.filePetitionInteractor = async ({
     return documentId;
   };
 
-  const petitionFileUpload = uploadDocumentAndMakeSafe(
+  const petitionFileUpload = uploadDocumentAndMakeSafeInteractor(
     petitionFile,
     petitionUploadProgress,
   );
 
   let ownershipDisclosureFileUpload;
   if (ownershipDisclosureFile) {
-    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafe(
+    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafeInteractor(
       ownershipDisclosureFile,
       ownershipDisclosureUploadProgress,
     );
@@ -63,7 +66,10 @@ exports.filePetitionInteractor = async ({
 
   let stinFileUpload;
   if (stinFile) {
-    stinFileUpload = uploadDocumentAndMakeSafe(stinFile, stinUploadProgress);
+    stinFileUpload = uploadDocumentAndMakeSafeInteractor(
+      stinFile,
+      stinUploadProgress,
+    );
   }
 
   await Promise.all([
