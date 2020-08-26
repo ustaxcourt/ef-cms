@@ -36,7 +36,7 @@ describe('createCaseAction', () => {
           ownershipDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
-          trialCities: [{ city: 'Birmingham', state: 'Alabama' }],
+          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
         },
       },
