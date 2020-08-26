@@ -101,20 +101,14 @@ describe('fileExternalDocumentInteractor', () => {
     await expect(
       fileExternalDocumentInteractor({
         applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentType: 'Memorandum in Support',
-          filedBy: 'Test Petitioner',
-        },
+        documentMetadata: {},
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
+  it.only('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
