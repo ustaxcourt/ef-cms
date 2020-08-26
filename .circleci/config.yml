@@ -399,7 +399,7 @@ jobs:
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER          
+            AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
@@ -464,7 +464,7 @@ jobs:
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER          
+            AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
@@ -517,9 +517,6 @@ jobs:
       - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
-      # - run:
-      #     name: 'Deploy - Switch environment color'
-      #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
           command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
@@ -577,22 +574,6 @@ jobs:
               echo "skipping…"
             fi
       - run:
-          name: 'Deploy - Cypress Smoke Tests'
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run cypress:smoketests"
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: 'Deploy - Pa11y Smoke Tests'
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests --prefix=web-client/pa11y/"
-            else
-              echo "skipping…"
-            fi
-      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
@@ -607,6 +588,37 @@ jobs:
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
+  smoketests:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: 'Cypress Smoke Tests'
+          command: npm run cypress:smoketests
+      - run:
+          name: 'Pa11y Smoke Tests'
+          command: npm run test:pa11y:smoketests --prefix=web-client/pa11y/
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
@@ -697,6 +709,14 @@ workflows:
                 - experimental1
                 - experimental2
                 - dawson
+      - smoketests:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only:
+                - develop
+                - staging
 
   build-and-deploy-with-context:
     jobs:

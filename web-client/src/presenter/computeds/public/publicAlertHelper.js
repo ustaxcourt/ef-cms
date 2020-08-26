@@ -8,6 +8,8 @@ export const publicAlertHelper = get => {
     messagesDeduped: uniq(alertError.messages),
     showErrorAlert:
       !!alertError.title || !!alertError.message || !!alertError.messages,
+    showMultipleMessages: !!alertError.messages,
+    showSingleMessage: !!alertError.message,
     showTitleOnly:
       !!alertError.title && !alertError.message && !alertError.messages,
   };

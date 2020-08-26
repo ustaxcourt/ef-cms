@@ -1,4 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
@@ -7,10 +9,13 @@ import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 
-export const setTrialSessionCalendarSequence = showProgressSequenceDecorator([
+export const setTrialSessionCalendarSequence = [
+  clearModalStateAction,
+  clearModalAction,
+  setWaitingForResponseAction,
   clearAlertsAction,
   clearScreenMetadataAction,
   setTrialSessionCalendarAction,
@@ -21,4 +26,4 @@ export const setTrialSessionCalendarSequence = showProgressSequenceDecorator([
   mergeCaseOrderIntoCalendaredCasesAction,
   startWebSocketConnectionAction,
   setNoticesForCalendaredTrialSessionAction,
-]);
+];

@@ -2,6 +2,9 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
+const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('./saveWorkItemForDocketClerkFilingExternalDocument');
 
@@ -12,14 +15,14 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
   beforeEach(() => {
     putStub = jest.fn().mockReturnValue({
       promise: async () => ({
-        section: 'docket',
+        section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     });
     getStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Item: {
-          section: 'docket',
+          section: DOCKET_SECTION,
           userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         },
       }),
@@ -28,7 +31,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
 
   it('invokes the persistence layer 4 times to store the work item, user and section outbox records, and work item mapping record', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.getDocumentClient.mockReturnValue({
@@ -40,7 +43,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: '456-20',
-        section: 'docket',
+        section: DOCKET_SECTION,
         workItemId: '123',
       },
     });

@@ -60,6 +60,16 @@ describe('getDocumentTypeForAddressChange', () => {
 
     expect(result).toBeUndefined();
   });
+
+  it('Returns undefined when inCareOf has been changed', () => {
+    const result = getDocumentTypeForAddressChange({
+      newData: { ...caseDetail.contactPrimary, inCareOf: 'Andy Dwyer' },
+      oldData: caseDetail.contactPrimary,
+    });
+
+    expect(result).toBeUndefined();
+  });
+
   it('Returns Notice of Change of Address when address 2 fields differ', () => {
     const result = getDocumentTypeForAddressChange({
       newData: caseDetail.contactPrimary,

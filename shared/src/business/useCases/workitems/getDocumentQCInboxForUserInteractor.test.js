@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
   ROLES,
 } = require('../../entities/EntityConstants');
 const {
@@ -18,7 +19,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       sentBy: 'petitioner',
     },
     messages: [],
-    section: 'docket',
+    section: DOCKET_SECTION,
     sentBy: 'docketclerk',
   };
 
@@ -34,7 +35,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
     try {
       await getDocumentQCInboxForUserInteractor({
         applicationContext,
-        section: 'docket',
+        section: DOCKET_SECTION,
       });
     } catch (e) {
       error = e;

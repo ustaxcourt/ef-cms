@@ -2,5 +2,15 @@
 
 # Sealed Cases
 * Docket clerk / clerk of court roles only have access to seal a case
-* Sealed case is not visible in public search by name
-* Sealed case is visible by public docket number search - with only docket number displayed
+
+
+### Searching for sealed cases
+**Case Search**
+* Sealed cases are not visible in public search by name; will receive "No matching results"
+* Sealed cases are visible by public docket number search - display docket number only and no additional case information
+
+**Order Search**
+* Orders from sealed cases appear in internal order search results but do not display in public search results
+
+**Opinion Search**
+* Opinions from sealed cases appear in internal and public search results

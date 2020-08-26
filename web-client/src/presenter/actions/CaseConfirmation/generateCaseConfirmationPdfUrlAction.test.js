@@ -19,7 +19,6 @@ describe('generateCaseConfirmationPdfUrlAction', () => {
         presenter,
       },
       state: {
-        baseUrl: 'http://www.example.com',
         caseDetail: {
           docketNumber: '123-45',
         },

@@ -1,6 +1,5 @@
 const faker = require('faker');
 const {
-  CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
   OTHER_FILER_TYPES,
@@ -10,9 +9,8 @@ const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 exports.BASE_CASE = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
-  caseCaption: 'A Migrated Casee',
+  caseCaption: 'A Migrated Case',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: CASE_STATUS_TYPES.calendared,
 };
 
 exports.CASE_WITH_OTHER_PETITIONERS = {

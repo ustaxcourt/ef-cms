@@ -17,6 +17,6 @@ exports.updateUserContactInformationInteractor = ({
   return put({
     applicationContext,
     body: contactInfo,
-    endpoint: `/users/${userId}/contact-info`,
+    endpoint: `/async/users/${userId}/contact-info`,
   });
 };
