@@ -16,6 +16,8 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
+  const mockDocumentId = applicationContext.getUniqueId();
+
   let caseRecord;
 
   beforeEach(() => {
@@ -106,7 +108,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it.only('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
+  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
       documentMetadata: {
@@ -115,6 +117,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        primaryDocumentFile: { documentId: mockDocumentId },
       },
     });
 
@@ -131,21 +134,23 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
-  it('should set secondary document and secondary supporting documents to lodged', async () => {
+  it.only('should set secondary document and secondary supporting documents to lodged', async () => {
+    //
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: [
-        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-        'c54ba5a9-b37b-479d-9201-067ec6e335be',
-      ],
+      // documentIds: [
+      //   'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      //   'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      //   'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+      //   'c54ba5a9-b37b-479d-9201-067ec6e335be',
+      // ],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Motion for Leave to File',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
         filedBy: 'Test Petitioner',
+        primaryDocumentFile: { documentId: mockDocumentId },
         scenario: 'Nonstandard H',
         secondaryDocument: {
           documentTitle: 'Motion for Judgment on the Pleadings',
