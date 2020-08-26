@@ -72,6 +72,8 @@ exports.fileExternalDocumentInteractor = async ({
     ],
   ];
 
+  console.log('documents to add ------', documentsToAdd);
+
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
 
@@ -190,6 +192,8 @@ exports.fileExternalDocumentInteractor = async ({
       }
     }
   }
+
+  console.log('case entity ------', caseEntity);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
