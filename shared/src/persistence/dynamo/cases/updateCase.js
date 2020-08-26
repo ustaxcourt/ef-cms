@@ -58,6 +58,25 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     );
   });
 
+  const updatedDocketEntries = differenceWith(
+    caseToUpdate.docketEntries,
+    oldCase.docketEntries,
+    isEqual,
+  );
+
+  updatedDocketEntries.forEach(docketEntry => {
+    requests.push(
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.docketNumber}`,
+          sk: `docket-entry|${docketEntry.docketEntryId}`,
+          ...docketEntry,
+        },
+        applicationContext,
+      }),
+    );
+  });
+
   const updatedDocuments = differenceWith(
     caseToUpdate.documents,
     oldCase.documents,

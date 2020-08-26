@@ -1,7 +1,6 @@
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
-import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
@@ -13,6 +12,7 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseDetailPractitionerSearchHelper } from './computeds/caseDetailPractitionerSearchHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
@@ -96,7 +96,6 @@ const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
-  addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
@@ -108,6 +107,7 @@ const helpers = {
   caseDetailEditHelper,
   caseDetailHeaderHelper,
   caseDetailHelper,
+  caseDetailPractitionerSearchHelper,
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
