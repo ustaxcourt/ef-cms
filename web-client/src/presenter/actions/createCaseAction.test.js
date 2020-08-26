@@ -4,26 +4,28 @@ import { createCaseAction } from './createCaseAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
-const {
-  addCoversheetInteractor,
-  filePetitionInteractor,
-} = applicationContext.getUseCases();
-
-applicationContext.getCurrentUser.mockReturnValue({
-  email: 'petitioner1@example.com',
-});
-
-const errorStub = jest.fn();
-const successStub = jest.fn();
-
-presenter.providers.path = {
-  error: errorStub,
-  success: successStub,
-};
-
 describe('createCaseAction', () => {
+  const errorStub = jest.fn();
+  const successStub = jest.fn();
+
+  presenter.providers.applicationContext = applicationContext;
+
+  presenter.providers.path = {
+    error: errorStub,
+    success: successStub,
+  };
+
+  const { US_STATES } = applicationContext.getConstants();
+
+  const {
+    addCoversheetInteractor,
+    filePetitionInteractor,
+  } = applicationContext.getUseCases();
+
+  applicationContext.getCurrentUser.mockReturnValue({
+    email: 'petitioner1@example.com',
+  });
+
   it('should call filePetitionInteractor and addCoversheetInteractor with the petition metadata and files and call the success path when finished', async () => {
     filePetitionInteractor.mockReturnValue(MOCK_CASE);
 
