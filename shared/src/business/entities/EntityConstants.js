@@ -28,6 +28,7 @@ const CHIEF_JUDGE = 'Chief Judge';
 const DOCKET_NUMBER_SUFFIXES = {
   DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS: 'X',
   DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION: 'R',
+  DISCLOSURE: 'D',
   LIEN_LEVY: 'L',
   PASSPORT: 'P',
   SMALL: 'S',
@@ -387,6 +388,7 @@ const CASE_TYPES_MAP = {
   deficiency: 'Deficiency',
   djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
   djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  disclosure: 'Disclosure',
   innocentSpouse: 'Innocent Spouse',
   interestAbatement: 'Interest Abatement',
   other: 'Other',

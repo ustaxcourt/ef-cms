@@ -20,12 +20,20 @@ export const messageDocumentHelper = (get, applicationContext) => {
     return null;
   }
 
-  const { correspondence, documents } = caseDetail;
+  const {
+    archivedDocuments = [],
+    archivedCorrespondences = [],
+    correspondence,
+    documents,
+  } = caseDetail;
 
   const caseDocument =
-    [...correspondence, ...documents].find(
-      d => d.documentId === viewerDocumentToDisplay.documentId,
-    ) || {};
+    [
+      ...correspondence,
+      ...documents,
+      ...archivedDocuments,
+      ...archivedCorrespondences,
+    ].find(d => d.documentId === viewerDocumentToDisplay.documentId) || {};
 
   const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 
@@ -34,6 +42,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
   );
 
   const documentIsSigned = !!caseDocument.signedAt;
+
+  const documentIsArchived = !!caseDocument.archived;
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -82,7 +92,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
-    documentRequiresSignature && !documentIsSigned;
+    documentRequiresSignature && !documentIsSigned && !documentIsArchived;
 
   const showNotServed = getShowNotServedForDocument({
     UNSERVABLE_EVENT_CODES,
@@ -110,9 +120,12 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     isInternalUser &&
     caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    !documents.find(d => d.eventCode === STIPULATED_DECISION_EVENT_CODE);
+    !documents.find(
+      d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
+    );
 
   return {
+    archived: documentIsArchived,
     editUrl,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,

@@ -29,6 +29,26 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'user_contact_initial_update_complete':
+        await app.getSequence(
+          'userContactUpdateInitialUpdateCompleteSequence',
+        )({ ...message });
+        break;
+      case 'user_contact_full_update_complete':
+        await app.getSequence('userContactUpdateCompleteSequence')({
+          ...message,
+        });
+        break;
+      case 'user_contact_update_progress':
+        await app.getSequence('userContactUpdateProgressSequence')({
+          ...message,
+        });
+        break;
+      case 'user_contact_update_error':
+        await app.getSequence('userContactUpdateErrorSequence')({
+          ...message,
+        });
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);

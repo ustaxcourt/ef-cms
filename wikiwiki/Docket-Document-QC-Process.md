@@ -1,13 +1,5 @@
 [Return to Directory](./README.md)
 
-## Document QC Inbox and Assignment
-* All new external filings after the Petition is served to IRS appear in the Docket Section Document QC as unassigned
-* Document gets assigned to clerk, shows up in clerk’s Inbox and in Section Inbox as assigned to clerk
-
-## Documents Waiting QC on Docket Record
-* Documents filed but not QC'd display on Docket Record as bold with a red star icon
-* Once QC is complete, the entry displays as standard
-
 
 ## Edits to Document During QC
 

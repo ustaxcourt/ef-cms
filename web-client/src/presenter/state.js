@@ -87,6 +87,7 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
@@ -179,6 +180,7 @@ const helpers = {
   trialSessionsHelper,
   trialSessionsSummaryHelper,
   updateCaseModalHelper,
+  userContactEditProgressHelper,
   viewAllDocumentsHelper,
   workQueueHelper,
   workQueueSectionHelper,
@@ -229,8 +231,6 @@ export const baseState = {
   docketRecordIndex: 0,
   // needs its own object because it's present when other forms are on screen
   documentId: null,
-  fieldOrder: [],
-  // TODO: related to errors
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     isUploading: false,
@@ -286,6 +286,8 @@ export const baseState = {
   },
   showValidation: false,
   user: null,
+  // used for progress indicator when updating contact information for all of a user's cases
+  userContactEditProgress: {},
   users: [],
   validationErrors: {},
   workItem: {},

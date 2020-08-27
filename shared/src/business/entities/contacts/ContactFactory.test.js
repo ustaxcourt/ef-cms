@@ -20,6 +20,7 @@ describe('ContactFactory', () => {
     it('should not validate without contact', () => {
       caseExternal = new CaseExternal(
         {
+          archivedDocuments: [],
           caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
           hasIrsNotice: true,
@@ -657,6 +658,7 @@ describe('ContactFactory', () => {
   it('does not require phone number for internal cases', () => {
     const caseInternal = new CaseInternal(
       {
+        archivedDocuments: [],
         caseCaption: 'Sisqo',
         caseType: CASE_TYPES_MAP.other,
         contactPrimary: {

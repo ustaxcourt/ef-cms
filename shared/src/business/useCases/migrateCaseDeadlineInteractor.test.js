@@ -96,7 +96,7 @@ describe('migrateCaseDeadlineInteractor', () => {
   });
 
   describe('validation', () => {
-    it('should fail to migrate a case deadline when the case is invalid', async () => {
+    it('should fail to migrate a case deadline when the case deadline metadata is invalid', async () => {
       await expect(
         migrateCaseDeadlineInteractor({
           applicationContext,

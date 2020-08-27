@@ -12,8 +12,7 @@ exports.updateUserContactInformationLambda = event =>
       .getUseCases()
       .updateUserContactInformationInteractor({
         applicationContext,
-        contactInfo:
-          typeof event.body === 'string' ? JSON.parse(event.body) : event.body,
+        contactInfo: JSON.parse(event.body),
         userId: (event.pathParameters || event.path).userId,
       });
   });

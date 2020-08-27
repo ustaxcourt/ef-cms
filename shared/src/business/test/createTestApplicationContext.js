@@ -50,6 +50,9 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  formatAttachments,
+} = require('../../../src/business/utilities/formatAttachments');
+const {
   formatCase,
   formatCaseDeadlines,
   formatDocketRecordWithDocument,
@@ -198,6 +201,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
     formatDateString: jest
@@ -421,7 +425,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
-    getElasticsearchIndexes: () => ['efcms-case'],
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),

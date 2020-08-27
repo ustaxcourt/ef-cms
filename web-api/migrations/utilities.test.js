@@ -8,6 +8,7 @@ const {
   isNewUserCaseMappingRecord,
   isTrialSessionRecord,
   isUserCaseMappingRecord,
+  isWorkItemRecord,
   upGenerator,
 } = require('./utilities');
 
@@ -117,6 +118,26 @@ describe('utilities', () => {
 
     it('should return false if the record is not a new user-case mapping record (no gsi1pk)', () => {
       const result = isNewUserCaseMappingRecord({});
+
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isWorkItemRecord', () => {
+    it('should return true if the item is a work item record', () => {
+      const result = isWorkItemRecord({
+        pk: 'work-item|123',
+        sk: 'work-item|123',
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if the item is not a work item record', () => {
+      const result = isWorkItemRecord({
+        pk: 'case|123',
+        sk: 'case|123',
+      });
 
       expect(result).toEqual(false);
     });

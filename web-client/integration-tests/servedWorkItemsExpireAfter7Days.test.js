@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../.././shared/src/business//test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business//test/createTestApplicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -9,6 +9,7 @@ import {
 import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const {
+  IRS_SYSTEM_SECTION,
   PETITIONS_SECTION,
   STATUS_TYPES: CASE_STATUS_TYPES,
   USER_ROLES: ROLES,
@@ -68,7 +69,7 @@ describe('verify old served work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      section: 'irsSystem',
+      section: IRS_SYSTEM_SECTION,
       sentBy: 'Test petitionsclerk1',
       sentBySection: PETITIONS_SECTION,
       sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
