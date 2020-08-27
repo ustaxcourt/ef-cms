@@ -1,5 +1,8 @@
 const joi = require('joi');
-const { joiValidationDecorator } = require('./JoiValidationDecorator');
+const {
+  joiValidationDecorator,
+  validEntityDecorator,
+} = require('./JoiValidationDecorator');
 
 /**
  * fake entity constructor
@@ -233,5 +236,48 @@ describe('Joi Validation Decorator', () => {
 
   it('should return an empty array when calling validateRawCollection with an empty collection', () => {
     expect(MockEntity1.validateRawCollection([], {})).toEqual([]);
+  });
+});
+
+describe('validEntityConstructor', () => {
+  it('throws an exception if the provided argument is not a function', () => {
+    expect(() => validEntityDecorator()).toThrow("has no 'init'");
+  });
+  it('throws an exception if the function prototype does not have an "init" function', () => {
+    /**
+     * @returns {string} a simple string
+     */
+    function someFunction() {
+      return 'hello, world';
+    }
+    expect(() => validEntityDecorator(someFunction)).toThrow("has no 'init'");
+  });
+  it('successfully creates a new factory function which invokes the original\'s "init" function and trims all string assignments', () => {
+    /**
+     * A factory function
+     */
+    function HelloFactory(rawHello) {
+      this.hello = true;
+      this.helloMessage = rawHello.helloMessage;
+      this.audience = '   The whole world   ';
+    }
+    /**
+     * all assignments upon construction should be done within 'init'
+     */
+    HelloFactory.prototype.init = function init(rawHello) {
+      this.helloMessage = rawHello.helloMessage;
+      this.yeehaws = rawHello.yeehaws;
+    };
+    const ValidHello = validEntityDecorator(HelloFactory);
+    const sayHello = new ValidHello({
+      helloMessage: "  What's up, dawg?   ",
+      yeehaws: 4,
+    });
+    sayHello.title = '    Sir    ';
+    expect(sayHello.hello).toBe(true);
+    expect(sayHello.title).toBe('Sir');
+    expect(sayHello.yeehaws).toBe(4);
+    expect(sayHello.audience).toBe('   The whole world   '); // not set in `init` and not subject to string trimming proxy
+    expect(sayHello.helloMessage).toBe("What's up, dawg?");
   });
 });
