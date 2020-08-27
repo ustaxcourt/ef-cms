@@ -3,16 +3,105 @@
 ---
   type: "object"
   keys: 
-    barNumber: 
+    name: 
       type: "string"
       flags: 
         presence: "required"
-        description: "A unique identifier comprising of the practitioner initials, date, and series number."
       rules: 
         - 
           name: "max"
           args: 
             limit: 100
+    role: 
+      type: "alternatives"
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "admissionsStatus"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+            allow: 
+              - "Active"
+          then: 
+            type: "string"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - "irsPractitioner"
+              - "privatePractitioner"
+          otherwise: 
+            type: "string"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - "inactivePractitioner"
+    judgeFullName: 
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "role"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "judge"
+          then: 
+            type: "any"
+            flags: 
+              presence: "optional"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    judgeTitle: 
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "role"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "judge"
+          then: 
+            type: "any"
+            flags: 
+              presence: "optional"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     contact: 
       type: "object"
       flags: 
@@ -320,105 +409,6 @@
             options: 
               version: 
                 - "uuidv4"
-    name: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    role: 
-      type: "alternatives"
-      matches: 
-        - 
-          ref: 
-            path: 
-              - "admissionsStatus"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-            allow: 
-              - "Active"
-          then: 
-            type: "string"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - "irsPractitioner"
-              - "privatePractitioner"
-          otherwise: 
-            type: "string"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - "inactivePractitioner"
-    judgeFullName: 
-      type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    judgeTitle: 
-      type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
     additionalPhone: 
       type: "string"
       flags: 
@@ -474,6 +464,16 @@
             limit: 100
       allow: 
         - null
+    barNumber: 
+      type: "string"
+      flags: 
+        presence: "required"
+        description: "A unique identifier comprising of the practitioner initials, date, and series number."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     birthYear: 
       type: "number"
       flags: 

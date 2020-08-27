@@ -32,10 +32,24 @@ export const validateStartCaseWizardAction = ({
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayOrder = [
+      'petitionFile',
+      'hasIrsNotice',
+      'name',
+      'address1',
+      'city',
+      'state',
+      'postalCode',
+      'phone',
+      'procedureType',
+      'preferredTrialLocation',
+    ];
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayOrder,
       errors,
     });
   }

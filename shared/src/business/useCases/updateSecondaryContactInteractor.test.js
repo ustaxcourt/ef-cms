@@ -140,6 +140,7 @@ describe('updateSecondaryContactInteractor', () => {
     applicationContext
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
+    applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue({});
 
     await updateSecondaryContactInteractor({
       applicationContext,
@@ -196,5 +197,37 @@ describe('updateSecondaryContactInteractor', () => {
     expect(caseDetail.contactSecondary.name).toBe(mockContactSecondary.name);
     expect(caseDetail.contactSecondary.email).not.toBe('hello123@example.com');
     expect(caseDetail.contactSecondary.email).toBe(mockContactSecondary.email);
+  });
+
+  it('does not generate a change of address when inCareOf is updated', async () => {
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue(undefined);
+    applicationContext
+      .getUtilities()
+      .getAddressPhoneDiff.mockReturnValue({ inCareOf: {} });
+
+    await updateSecondaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: 'nothing',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'secondary@example.com',
+        inCareOf: 'Andy Dwyer',
+        name: 'Secondary Party',
+        phone: '9876543210',
+        postalCode: '12345',
+        state: 'TN',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
   });
 });

@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { deleteWorkItemFromInbox } = require('./deleteWorkItemFromInbox');
 
 describe('deleteWorkItemFromInbox', () => {
@@ -15,7 +18,7 @@ describe('deleteWorkItemFromInbox', () => {
       applicationContext,
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        section: 'docket',
+        section: DOCKET_SECTION,
         workItemId: '123',
       },
     });
@@ -41,7 +44,7 @@ describe('deleteWorkItemFromInbox', () => {
     await deleteWorkItemFromInbox({
       applicationContext,
       workItem: {
-        section: 'docket',
+        section: DOCKET_SECTION,
         workItemId: '123',
       },
     });

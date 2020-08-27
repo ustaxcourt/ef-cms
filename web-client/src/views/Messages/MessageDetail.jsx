@@ -75,8 +75,8 @@ export const MessageDetail = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
-    setViewerDocumentToDisplaySequence:
-      sequences.setViewerDocumentToDisplaySequence,
+    setMessageDetailViewerDocumentToDisplaySequence:
+      sequences.setMessageDetailViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -88,7 +88,7 @@ export const MessageDetail = connect(
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
-    setViewerDocumentToDisplaySequence,
+    setMessageDetailViewerDocumentToDisplaySequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -225,19 +225,30 @@ export const MessageDetail = connect(
                         isActive={viewerDocumentToDisplay === attachment}
                         key={idx}
                         onClick={() => {
-                          setViewerDocumentToDisplaySequence({
+                          setMessageDetailViewerDocumentToDisplaySequence({
                             viewerDocumentToDisplay: attachment,
                           });
                         }}
                       >
                         <div className="grid-row margin-left-205">
-                          <div className="grid-col-8">
+                          <div
+                            className={classNames(
+                              'grid-col-8',
+                              attachment.archived && 'text-base-dark',
+                            )}
+                          >
                             {attachment.documentTitle}
                           </div>
+
                           <div className="grid-col-4 padding-left-105">
                             {attachment.showNotServed && (
-                              <span className="text-semibold not-served">
+                              <span className="text-semibold not-served attachment-information">
                                 Not served
+                              </span>
+                            )}
+                            {attachment.archived && (
+                              <span className="text-base-dark attachment-information">
+                                Deleted
                               </span>
                             )}
                           </div>

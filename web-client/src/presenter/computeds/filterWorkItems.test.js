@@ -51,13 +51,13 @@ const petitionsClerk2 = {
 
 const docketClerk1 = {
   role: ROLES.docketClerk,
-  section: 'docket',
+  section: DOCKET_SECTION,
   userId: 'd1',
 };
 
 const docketClerk2 = {
   role: ROLES.docketClerk,
-  section: 'docket',
+  section: DOCKET_SECTION,
   userId: 'd2',
 };
 
@@ -80,7 +80,7 @@ const generateWorkItem = (data, document) => {
       documentType: 'Answer',
       ...document,
     },
-    section: 'docket',
+    section: DOCKET_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
     workItemId: 'abc',
@@ -88,43 +88,6 @@ const generateWorkItem = (data, document) => {
 
   return { ...baseWorkItem, ...data };
 };
-
-// My DocumentQC Inbox
-// - isInternal === false
-// - item.assigneeId == user.userId
-// - item.section == user role section
-// - !item.completedAt
-
-// My Document QC Served
-// - isInternal === false
-// - item.section === 'irsBatchSection'
-// - item.completedByUserId === user.userId
-// - !!item.completedAt
-
-// My Document QC Processed (Docket)
-// - isInternal === true
-// - item.completedByUserId == user.userId
-// - item.section === 'docket'
-
-// Section Document QC Inbox
-// - isInternal === false
-// - item.section === user role section
-// - !item.completedAt
-
-// Section Document QC Served
-// - isInternal = false
-// - item.section === 'irsBatchSection'
-// - !!item.completedAt
-
-// Section Document QC Processed (Docket)
-// - isInternal === false
-// - !!item.completedAt
-// - item.section === 'docket'
-
-// ADC Document QC Inbox
-// - item.section == 'docket'
-// - isInternal === false
-// - !item.completedAt
 
 describe('filterWorkItems', () => {
   // Petitions

@@ -15,6 +15,7 @@ describe('create user', () => {
       userId: 'petitionsclerk1@example.com',
     };
     applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Admin',
       role: ROLES.admin,
       userId: 'admin',
     });
@@ -23,6 +24,7 @@ describe('create user', () => {
       .createUser.mockReturnValue(mockUser);
 
     const userToCreate = {
+      name: 'Jesse Pinkman',
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk1@example.com',
     };
@@ -40,6 +42,7 @@ describe('create user', () => {
       userId: 'petitioner1@example.com',
     };
     applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Admin',
       role: ROLES.petitioner,
       userId: 'admin',
     });
@@ -58,6 +61,7 @@ describe('create user', () => {
 
   it('should create a practitioner user when the user role is privatePractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Admin',
       role: ROLES.admin,
       userId: 'admin',
     });

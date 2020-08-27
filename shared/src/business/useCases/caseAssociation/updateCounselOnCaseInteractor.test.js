@@ -18,14 +18,20 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
     new PrivatePractitioner({
+      barNumber: 'BN1234',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
     }),
     new PrivatePractitioner({
+      barNumber: 'BN1234',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
     }),
     new PrivatePractitioner({
+      barNumber: 'BN1234',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '4cae261f-3653-4d2f-8d8c-31f03df62e54',
     }),
@@ -33,14 +39,20 @@ describe('updateCounselOnCaseInteractor', () => {
 
   const mockIrsPractitioners = [
     new IrsPractitioner({
+      barNumber: 'BN1234',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '9a4390b3-9d1a-4987-b918-312675956bcc',
     }),
     new IrsPractitioner({
+      barNumber: 'BN5678',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     }),
     new IrsPractitioner({
+      barNumber: 'BN5432',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: 'dd60c66f-2f82-4f8f-824a-d15a3e8e49a3',
     }),
@@ -48,6 +60,7 @@ describe('updateCounselOnCaseInteractor', () => {
 
   const mockPetitioners = [
     {
+      name: 'Saul Goodman',
       role: ROLES.petitioner,
       userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
     },
@@ -55,6 +68,7 @@ describe('updateCounselOnCaseInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Saul Goodman',
       role: ROLES.docketClerk,
       userId: '001',
     });
@@ -122,6 +136,7 @@ describe('updateCounselOnCaseInteractor', () => {
       applicationContext,
       docketNumber: '123-19',
       userData: {
+        name: 'Saul Goodman',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -139,6 +154,7 @@ describe('updateCounselOnCaseInteractor', () => {
       applicationContext,
       docketNumber: '123-19',
       userData: {
+        name: 'Saul Goodman',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -157,6 +173,7 @@ describe('updateCounselOnCaseInteractor', () => {
       docketNumber: '123-19',
       userData: {
         email: 'not.editable@example.com',
+        name: 'Saul Goodman',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

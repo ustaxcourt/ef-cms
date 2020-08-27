@@ -87,8 +87,8 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
-- [ ] begin by deleting any existing copy of the Git repository, running `docker system prune` to remove any cached artifacts from any prior code review
-- [ ] clone a fresh copy of the Git repository (`git clone https://github.com/ustaxcourt/ef-cms.git`), fetch the pull request and name it for the sprint (e.g., `git fetch origin pull/204/head:sprint-43`), and then switch to that branch (e.g. `git checkout sprint-43`)
+- [ ] If desired, run `docker system prune` to remove any unused docker images from previous code review.
+- [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
@@ -96,8 +96,8 @@ We use this list when performing a code review to ensure that all tasks have bee
 - [ ] stand up the site locally, with `./docker-run.sh`
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
 		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
-		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/), including Internet Explorer 11
-		- [ ] test in Mobile Safari and Mobile Chrome, with the caveat that not all internal Court functionality will be necessary on these platforms
+		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/)
+		- [ ] test in Mobile Safari and Mobile Chrome (or an emulator like Chrome DevTools), with the caveat that not all internal Court functionality will be necessary on these platforms
 	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
 		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
 	- [ ] review for accessibility

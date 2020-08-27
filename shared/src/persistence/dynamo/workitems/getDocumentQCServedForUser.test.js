@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { getDocumentQCServedForUser } = require('./getDocumentQCServedForUser');
 
 describe('getDocumentQCServedForUser', () => {
@@ -13,23 +16,23 @@ describe('getDocumentQCServedForUser', () => {
           {
             completedAt: 'today',
             completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
             completedByUserId: 'bob',
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            section: 'docket',
+            section: DOCKET_SECTION,
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
@@ -39,7 +42,7 @@ describe('getDocumentQCServedForUser', () => {
 
   it('should filter out the work items returned from persistence to only have served documents', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.getDocumentClient.mockReturnValue({
@@ -53,7 +56,7 @@ describe('getDocumentQCServedForUser', () => {
       {
         completedAt: 'today',
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        section: 'docket',
+        section: DOCKET_SECTION,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
