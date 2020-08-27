@@ -1240,6 +1240,8 @@ Case.prototype.updateDocument = function (updatedDocument) {
     document => document.documentId === updatedDocument.documentId,
   );
 
+  if (foundDocument) Object.assign(foundDocument, updatedDocument);
+
   if (updatedDocument.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
