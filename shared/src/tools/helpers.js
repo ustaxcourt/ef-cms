@@ -6,7 +6,6 @@ const gatherRecords = function gatherRecords(exportColumns, output) {
     while ((record = this.read())) {
       record = pick(record, exportColumns);
       Object.keys(record).forEach(key => {
-        console.log('key:', key, 'value', record[key]);
         record[key] = whitespaceCleanup(record[key]);
       });
       output.push(record);
