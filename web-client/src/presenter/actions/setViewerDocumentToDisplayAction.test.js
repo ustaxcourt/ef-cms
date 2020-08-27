@@ -24,10 +24,12 @@ describe('setViewerDocumentToDisplayAction', () => {
       state: {
         caseDetail: {
           docketNumber: '123-45',
+          documents: [{ documentId: '1234' }],
         },
         viewerDocumentToDisplay: null,
       },
     });
+
     expect(result.state.viewerDocumentToDisplay).toEqual({
       documentId: '1234',
     });
@@ -45,10 +47,12 @@ describe('setViewerDocumentToDisplayAction', () => {
       state: {
         caseDetail: {
           docketNumber: '123-45',
+          documents: [{ documentId: '1234' }],
         },
         viewerDocumentToDisplay: null,
       },
     });
+
     expect(result.state.iframeSrc).toBeUndefined();
   });
 });

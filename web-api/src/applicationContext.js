@@ -49,6 +49,9 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  archiveCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/archiveCorrespondenceDocumentInteractor');
+const {
   archiveDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
 const {
@@ -191,9 +194,6 @@ const {
   deleteCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
 const {
-  deleteCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
-const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -206,9 +206,6 @@ const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
 const {
-  deleteCorrespondenceDocumentInteractor,
-} = require('../../shared/src/business/useCases/correspondence/deleteCorrespondenceDocumentInteractor');
-const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
 const {
@@ -220,9 +217,6 @@ const {
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
-const {
-  deleteDocumentInteractor,
-} = require('../../shared/src/business/useCases/deleteDocumentInteractor');
 const {
   deleteElasticsearchReindexRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
@@ -263,9 +257,6 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
-  elasticsearchIndexes,
-} = require('../elasticsearch/elasticsearch-indexes');
-const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -274,9 +265,6 @@ const {
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
-const {
-  fileCaseCorrespondence,
-} = require('../../shared/src/persistence/dynamo/correspondence/fileCaseCorrespondence');
 const {
   fileCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor');
@@ -340,6 +328,10 @@ const {
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
+const {
+  getAddressPhoneDiff,
+  getDocumentTypeForAddressChange,
+} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
   getAllCaseDeadlines,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
@@ -446,9 +438,6 @@ const {
   getDocumentQCServedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
 const {
-  getDocumentTypeForAddressChange,
-} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
-const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
@@ -478,12 +467,6 @@ const {
 const {
   getIndexedCasesForUser,
 } = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
-const {
-  getIndexMappingFields,
-} = require('../../shared/src/persistence/elasticsearch/getIndexMappingFields');
-const {
-  getIndexMappingLimit,
-} = require('../../shared/src/persistence/elasticsearch/getIndexMappingLimit');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -665,6 +648,9 @@ const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
+  migrateTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/migrateTrialSessionInteractor');
+const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
 const {
@@ -809,6 +795,9 @@ const {
   setWorkItemAsReadInteractor,
 } = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
+  strikeDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/strikeDocketEntryInteractor');
+const {
   submitCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
 const {
@@ -829,6 +818,9 @@ const {
 const {
   updateCaseContextInteractor,
 } = require('../../shared/src/business/useCases/updateCaseContextInteractor');
+const {
+  updateCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
 const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
@@ -1040,6 +1032,166 @@ const entitiesByName = {
   User,
 };
 
+const isValidatedDecorator = persistenceGatewayMethods => {
+  /**
+   * Decorates the function to verify any entities passed have the isValid flag.
+   * Should be used whenever a persistence method might be called by an interactor via lambda
+   * when an entity's complete record is being created or updated.
+   *
+   * @returns {Function} the original methods decorated
+   */
+  function decorate(method) {
+    return function () {
+      const argumentsAsArray = Array.prototype.slice.call(arguments);
+
+      argumentsAsArray.forEach(argument => {
+        Object.keys(argument).forEach(key => {
+          if (
+            argument[key] &&
+            argument[key].entityName &&
+            !argument[key].isValidated
+          ) {
+            throw new Error(
+              `a entity of type ${argument[key].entityName} was not validated before passed to a persistence gateway method`,
+            );
+          }
+        });
+      });
+      return method.apply(null, argumentsAsArray);
+    };
+  }
+
+  Object.keys(persistenceGatewayMethods).forEach(key => {
+    persistenceGatewayMethods[key] = decorate(persistenceGatewayMethods[key]);
+  });
+  return persistenceGatewayMethods;
+};
+
+const gatewayMethods = {
+  ...isValidatedDecorator({
+    addWorkItemToSectionInbox,
+    associateUserWithCase,
+    associateUserWithCasePending,
+    bulkDeleteRecords,
+    bulkIndexRecords,
+    createCase,
+    createCaseCatalogRecord,
+    createCaseDeadline,
+    createCaseTrialSortMappingRecords,
+    createElasticsearchReindexRecord,
+    createMessage,
+    createPractitionerUser,
+    createSectionInboxRecord,
+    createTrialSession,
+    createTrialSessionWorkingCopy,
+    createUser,
+    createUserInboxRecord,
+    fetchPendingItems: fetchPendingItemsPersistence,
+    incrementCounter,
+    markMessageThreadRepliedTo,
+    persistUser,
+    putWorkItemInOutbox,
+    putWorkItemInUsersOutbox,
+    saveDocumentFromLambda,
+    saveUserConnection,
+    saveWorkItemForDocketClerkFilingExternalDocument,
+    saveWorkItemForDocketEntryInProgress,
+    saveWorkItemForNonPaper,
+    saveWorkItemForPaper,
+    setPriorityOnAllWorkItems,
+    setWorkItemAsRead,
+    updateCase,
+    updateCaseDeadline,
+    updateCaseTrialSortMappingRecords,
+    updateDocketRecord,
+    updateDocument,
+    updateDocumentProcessingStatus,
+    updateHighPriorityCaseTrialSortMappingRecords,
+    updateMessage,
+    updatePractitionerUser,
+    updateTrialSession,
+    updateTrialSessionWorkingCopy,
+    updateUser,
+    updateUserCaseNote,
+    updateWorkItem,
+    updateWorkItemInCase,
+  }),
+  // methods below are not known to create "entity" records
+  advancedDocumentSearch,
+  caseAdvancedSearch,
+  casePublicSearch: casePublicSearchPersistence,
+  deleteCaseByDocketNumber,
+  deleteCaseDeadline,
+  deleteCaseTrialSortMappingRecords,
+  deleteDocument,
+  deleteDocumentFromS3,
+  deleteElasticsearchReindexRecord,
+  deleteRecord,
+  deleteSectionOutboxRecord,
+  deleteTrialSession,
+  deleteTrialSessionWorkingCopy,
+  deleteUserCaseNote,
+  deleteUserConnection,
+  deleteUserFromCase,
+  deleteUserOutboxRecord,
+  deleteWorkItemFromInbox,
+  deleteWorkItemFromSection,
+  getAllCaseDeadlines,
+  getAllCatalogCases,
+  getBlockedCases,
+  getCalendaredCasesForTrialSession,
+  getCaseByDocketNumber,
+  getCaseDeadlinesByDocketNumber,
+  getCaseInventoryReport,
+  getCasesByDocketNumbers,
+  getCasesByLeadDocketNumber,
+  getCasesByUser,
+  getClosedCasesByUser,
+  getCompletedSectionInboxMessages,
+  getCompletedUserInboxMessages,
+  getDocument,
+  getDocumentQCInboxForSection,
+  getDocumentQCInboxForUser,
+  getDocumentQCServedForSection,
+  getDocumentQCServedForUser,
+  getDownloadPolicyUrl,
+  getElasticsearchReindexRecords,
+  getEligibleCasesForTrialCity,
+  getEligibleCasesForTrialSession,
+  getIndexedCasesForUser,
+  getInternalUsers,
+  getMessageThreadByParentId,
+  getMessagesByDocketNumber,
+  getOpenCasesByUser,
+  getPractitionerByBarNumber,
+  getPractitionersByName,
+  getPublicDownloadPolicyUrl,
+  getRecord,
+  getSectionInboxMessages,
+  getSectionOutboxMessages,
+  getTrialSessionById,
+  getTrialSessionWorkingCopy,
+  getTrialSessions,
+  getUploadPolicy,
+  getUserById,
+  getUserCaseNote,
+  getUserCaseNoteForCases,
+  getUserCases,
+  getUserInboxMessages,
+  getUserOutboxMessages,
+  getUsersBySearchKey,
+  getUsersInSection,
+  getWebSocketConnectionByConnectionId,
+  getWebSocketConnectionsByUserId,
+  getWorkItemById,
+  indexRecord,
+  isFileExists,
+  updateCaseCorrespondence,
+  verifyCaseForUser,
+  verifyPendingCaseForUser,
+  zipDocuments,
+};
+
 module.exports = appContextUser => {
   if (appContextUser) setCurrentUser(appContextUser);
 
@@ -1107,7 +1259,6 @@ module.exports = appContextUser => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
-    getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
       if (process.env.CI) {
         return {
@@ -1149,6 +1300,7 @@ module.exports = appContextUser => {
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,
       migrateCaseInteractor,
+      migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
@@ -1182,130 +1334,7 @@ module.exports = appContextUser => {
       return pdfLib;
     },
     getPersistenceGateway: () => {
-      return {
-        addWorkItemToSectionInbox,
-        advancedDocumentSearch,
-        associateUserWithCase,
-        associateUserWithCasePending,
-        bulkDeleteRecords,
-        bulkIndexRecords,
-        caseAdvancedSearch,
-        casePublicSearch: casePublicSearchPersistence,
-        createCase,
-        createCaseCatalogRecord,
-        createCaseDeadline,
-        createCaseTrialSortMappingRecords,
-        createElasticsearchReindexRecord,
-        createMessage,
-        createPractitionerUser,
-        createSectionInboxRecord,
-        createTrialSession,
-        createTrialSessionWorkingCopy,
-        createUser,
-        createUserInboxRecord,
-        deleteCaseByDocketNumber,
-        deleteCaseCorrespondence,
-        deleteCaseDeadline,
-        deleteCaseTrialSortMappingRecords,
-        deleteDocument,
-        deleteDocumentFromS3,
-        deleteElasticsearchReindexRecord,
-        deleteRecord,
-        deleteSectionOutboxRecord,
-        deleteTrialSession,
-        deleteTrialSessionWorkingCopy,
-        deleteUserCaseNote,
-        deleteUserConnection,
-        deleteUserFromCase,
-        deleteUserOutboxRecord,
-        deleteWorkItemFromInbox,
-        deleteWorkItemFromSection,
-        fetchPendingItems: fetchPendingItemsPersistence,
-        fileCaseCorrespondence,
-        getAllCaseDeadlines,
-        getAllCatalogCases,
-        getBlockedCases,
-        getCalendaredCasesForTrialSession,
-        getCaseByDocketNumber,
-        getCaseDeadlinesByDocketNumber,
-        getCaseInventoryReport,
-        getCasesByDocketNumbers,
-        getCasesByLeadDocketNumber,
-        getCasesByUser,
-        getClosedCasesByUser,
-        getCompletedSectionInboxMessages,
-        getCompletedUserInboxMessages,
-        getDocument,
-        getDocumentQCInboxForSection,
-        getDocumentQCInboxForUser,
-        getDocumentQCServedForSection,
-        getDocumentQCServedForUser,
-        getDownloadPolicyUrl,
-        getElasticsearchReindexRecords,
-        getEligibleCasesForTrialCity,
-        getEligibleCasesForTrialSession,
-        getIndexMappingFields,
-        getIndexMappingLimit,
-        getIndexedCasesForUser,
-        getInternalUsers,
-        getMessageThreadByParentId,
-        getMessagesByDocketNumber,
-        getOpenCasesByUser,
-        getPractitionerByBarNumber,
-        getPractitionersByName,
-        getPublicDownloadPolicyUrl,
-        getRecord,
-        getSectionInboxMessages,
-        getSectionOutboxMessages,
-        getTrialSessionById,
-        getTrialSessionWorkingCopy,
-        getTrialSessions,
-        getUploadPolicy,
-        getUserById,
-        getUserCaseNote,
-        getUserCaseNoteForCases,
-        getUserCases,
-        getUserInboxMessages,
-        getUserOutboxMessages,
-        getUsersBySearchKey,
-        getUsersInSection,
-        getWebSocketConnectionByConnectionId,
-        getWebSocketConnectionsByUserId,
-        getWorkItemById,
-        incrementCounter,
-        indexRecord,
-        isFileExists,
-        markMessageThreadRepliedTo,
-        persistUser,
-        putWorkItemInOutbox,
-        putWorkItemInUsersOutbox,
-        saveDocumentFromLambda,
-        saveUserConnection,
-        saveWorkItemForDocketClerkFilingExternalDocument,
-        saveWorkItemForDocketEntryInProgress,
-        saveWorkItemForNonPaper,
-        saveWorkItemForPaper,
-        setPriorityOnAllWorkItems,
-        setWorkItemAsRead,
-        updateCase,
-        updateCaseDeadline,
-        updateCaseTrialSortMappingRecords,
-        updateDocketRecord,
-        updateDocument,
-        updateDocumentProcessingStatus,
-        updateHighPriorityCaseTrialSortMappingRecords,
-        updateMessage,
-        updatePractitionerUser,
-        updateTrialSession,
-        updateTrialSessionWorkingCopy,
-        updateUser,
-        updateUserCaseNote,
-        updateWorkItem,
-        updateWorkItemInCase,
-        verifyCaseForUser,
-        verifyPendingCaseForUser,
-        zipDocuments,
-      };
+      return gatewayMethods;
     },
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
@@ -1387,6 +1416,7 @@ module.exports = appContextUser => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
@@ -1410,10 +1440,8 @@ module.exports = appContextUser => {
         createUserInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
-        deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
-        deleteDocumentInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
@@ -1506,6 +1534,7 @@ module.exports = appContextUser => {
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
+        strikeDocketEntryInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
@@ -1549,6 +1578,7 @@ module.exports = appContextUser => {
         formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
+        getAddressPhoneDiff,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,

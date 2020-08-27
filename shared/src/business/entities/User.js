@@ -16,12 +16,9 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 const userDecorator = (obj, rawObj) => {
-  obj.entityName = 'User';
-  obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.role = rawObj.role || ROLES.petitioner;
-  obj.section = rawObj.section;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
   if (rawObj.contact) {
@@ -43,6 +40,36 @@ const userDecorator = (obj, rawObj) => {
   }
 };
 
+const USER_CONTACT_VALIDATION_RULES = {
+  address1: joi.string().max(100).required(),
+  address2: joi.string().max(100).optional().allow(null),
+  address3: joi.string().max(100).optional().allow(null),
+  city: joi.string().max(100).required(),
+  country: joi.string().when('countryType', {
+    is: COUNTRY_TYPES.INTERNATIONAL,
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }),
+  countryType: joi
+    .string()
+    .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
+    .required(),
+  phone: joi.string().max(100).required(),
+  postalCode: joi.when('countryType', {
+    is: COUNTRY_TYPES.INTERNATIONAL,
+    otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
+    then: joi.string().max(100).required(),
+  }),
+  state: joi
+    .string()
+    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER, STATE_NOT_AVAILABLE)
+    .when('countryType', {
+      is: COUNTRY_TYPES.INTERNATIONAL,
+      otherwise: joi.required(),
+      then: joi.optional().allow(null),
+    }),
+};
+
 const baseUserValidation = {
   judgeFullName: joi
     .string()
@@ -60,7 +87,7 @@ const baseUserValidation = {
       otherwise: joi.optional().allow(null),
       then: joi.optional(),
     }),
-  name: joi.string().max(100).optional(),
+  name: joi.string().max(100).required(),
   role: joi
     .string()
     .valid(...Object.values(ROLES))
@@ -68,43 +95,8 @@ const baseUserValidation = {
 };
 
 const userValidation = {
-  barNumber: joi.string().optional().allow(null),
-  contact: joi
-    .object()
-    .keys({
-      address1: joi.string().max(100).required(),
-      address2: joi.string().max(100).optional().allow(null),
-      address3: joi.string().max(100).optional().allow(null),
-      city: joi.string().max(100).required(),
-      country: joi.string().when('countryType', {
-        is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
-      countryType: joi
-        .string()
-        .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
-        .required(),
-      phone: joi.string().max(100).required(),
-      postalCode: joi.when('countryType', {
-        is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
-        then: joi.string().max(100).required(),
-      }),
-      state: joi
-        .string()
-        .valid(
-          ...Object.keys(US_STATES),
-          ...US_STATES_OTHER,
-          STATE_NOT_AVAILABLE,
-        )
-        .when('countryType', {
-          is: COUNTRY_TYPES.INTERNATIONAL,
-          otherwise: joi.required(),
-          then: joi.optional().allow(null),
-        }),
-    })
-    .optional(),
+  ...baseUserValidation,
+  contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('User').required(),
   section: joi
@@ -113,7 +105,6 @@ const userValidation = {
     .optional(),
   token: joi.string().optional(),
   userId: JoiValidationConstants.UUID.required(),
-  ...baseUserValidation,
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -141,6 +132,8 @@ const VALIDATION_ERROR_MESSAGES = {
  */
 function User(rawUser) {
   userDecorator(this, rawUser);
+  this.entityName = 'User';
+  this.section = rawUser.section;
 }
 
 User.validationName = 'User';
@@ -177,6 +170,7 @@ User.isInternalUser = function (role) {
 };
 
 module.exports = {
+  USER_CONTACT_VALIDATION_RULES,
   User,
   VALIDATION_ERROR_MESSAGES,
   baseUserValidation,

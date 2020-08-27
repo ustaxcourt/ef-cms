@@ -33,6 +33,7 @@ describe('Modify Petitioner Contact Information', () => {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
         countryType: COUNTRY_TYPES.DOMESTIC,
+        inCareOf: 'Andy Dwyer',
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',

@@ -9,16 +9,17 @@ const getTermHeaders = (termData, idx) => {
 const parseTermData = data =>
   data && data.map((datum, idx) => <div key={`datum-${idx}`}>{datum}</div>);
 
-const getLocationData = parentIndex => (termData, idx) => {
-  const hasData = Array.isArray(termData) && termData.length > 0;
+const getLocationData = parentIndex =>
+  function getLocationData(termData, idx) {
+    const hasData = Array.isArray(termData) && termData.length > 0;
 
-  return (
-    <td key={`${parentIndex}-${idx}`}>
-      {hasData && parseTermData(termData)}
-      {!hasData && <div className="calendar-icon"></div>}
-    </td>
-  );
-};
+    return (
+      <td key={`${parentIndex}-${idx}`}>
+        {hasData && parseTermData(termData)}
+        {!hasData && <div className="calendar-icon" />}
+      </td>
+    );
+  };
 
 export const TrialSessionPlanningReport = ({
   locationData,

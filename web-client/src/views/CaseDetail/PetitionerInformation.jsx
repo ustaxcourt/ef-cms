@@ -240,17 +240,58 @@ const PetitionerInformation = connect(
                     Representing
                   </p>
                   {practitioner.representingPrimary && (
-                    <p>{formattedCaseDetail.contactPrimary.name}</p>
+                    <p>
+                      <span>{formattedCaseDetail.contactPrimary.name}</span>
+                      {formattedCaseDetail.contactPrimary.secondaryName && (
+                        <span>
+                          <br />
+                          {formattedCaseDetail.contactPrimary.secondaryName}
+                        </span>
+                      )}
+                      {formattedCaseDetail.contactPrimary.title && (
+                        <span>
+                          <br />
+                          {formattedCaseDetail.contactPrimary.title}
+                        </span>
+                      )}
+                    </p>
                   )}
 
                   {practitioner.representingSecondary &&
-                    formattedCaseDetail.contactSecondary &&
-                    formattedCaseDetail.contactSecondary.name && (
-                      <p>{formattedCaseDetail.contactSecondary.name}</p>
+                    formattedCaseDetail.contactSecondary && (
+                      <p>
+                        <span>{formattedCaseDetail.contactSecondary.name}</span>
+                        {formattedCaseDetail.contactSecondary.secondaryName && (
+                          <span>
+                            <br />
+                            {formattedCaseDetail.contactSecondary.secondaryName}
+                          </span>
+                        )}
+                        {formattedCaseDetail.contactSecondary.title && (
+                          <span>
+                            <br />
+                            {formattedCaseDetail.contactSecondary.title}
+                          </span>
+                        )}
+                      </p>
                     )}
 
-                  {practitioner.representingNames.map(name => (
-                    <p key={name}>{name}</p>
+                  {practitioner.representingNames.map((item, index) => (
+                    <p key={index}>
+                      <span>{item.name}</span>
+                      {item.secondaryName && (
+                        <span>
+                          <br />
+                          {item.secondaryName}
+                        </span>
+                      )}
+                      {item.title && (
+                        <span>
+                          <br />
+                          {item.title}
+                        </span>
+                      )}
+                    </p>
                   ))}
                 </div>
               ),

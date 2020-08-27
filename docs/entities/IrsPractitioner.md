@@ -6,9 +6,13 @@
     barNumber: 
       type: "string"
       flags: 
-        presence: "optional"
-      allow: 
-        - null
+        presence: "required"
+        description: "A unique identifier comprising of the practitioner initials, date, and series number."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     contact: 
       type: "object"
       flags: 
@@ -244,63 +248,31 @@
         presence: "required"
       allow: 
         - "IrsPractitioner"
-    section: 
+    name: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
+    role: 
       type: "string"
       flags: 
         only: true
-        presence: "optional"
+        presence: "required"
       allow: 
-        - "adc"
-        - "admissions"
-        - "chambers"
-        - "clerkofcourt"
-        - "docket"
-        - "petitions"
-        - "trialClerks"
-        - "armensChambers"
-        - "ashfordsChambers"
-        - "buchsChambers"
-        - "carluzzosChambers"
-        - "cohensChambers"
-        - "colvinsChambers"
-        - "copelandsChambers"
-        - "foleysChambers"
-        - "galesChambers"
-        - "gerbersChambers"
-        - "goekesChambers"
-        - "gustafsonsChambers"
-        - "guysChambers"
-        - "halpernsChambers"
-        - "holmesChambers"
-        - "jacobsChambers"
-        - "jonesChambers"
-        - "kerrigansChambers"
-        - "laubersChambers"
-        - "leydensChambers"
-        - "marvelsChambers"
-        - "morrisonsChambers"
-        - "negasChambers"
-        - "panuthosChambers"
-        - "parisChambers"
-        - "pughsChambers"
-        - "ruwesChambers"
-        - "thorntonsChambers"
-        - "torosChambers"
-        - "urdasChambers"
-        - "vasquezsChambers"
-        - "wellsChambers"
-        - "admin"
-        - "admissionsclerk"
-        - "docketclerk"
-        - "floater"
-        - "inactivePractitioner"
         - "irsPractitioner"
-        - "irsSuperuser"
-        - "judge"
-        - "petitioner"
-        - "petitionsclerk"
-        - "privatePractitioner"
-        - "trialclerk"
+    serviceIndicator: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+      allow: 
+        - "Electronic"
+        - "None"
+        - "Paper"
     token: 
       type: "string"
       flags: 
@@ -316,92 +288,5 @@
             options: 
               version: 
                 - "uuidv4"
-    name: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    role: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "required"
-      allow: 
-        - "irsPractitioner"
-    judgeFullName: 
-      type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    judgeTitle: 
-      type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    serviceIndicator: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "required"
-      allow: 
-        - "Electronic"
-        - "None"
-        - "Paper"
 
  ```

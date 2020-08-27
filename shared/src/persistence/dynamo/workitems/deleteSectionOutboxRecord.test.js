@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  DOCKET_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { deleteSectionOutboxRecord } = require('./deleteSectionOutboxRecord');
 
 describe('deleteSectionOutboxRecord', () => {
@@ -19,7 +22,7 @@ describe('deleteSectionOutboxRecord', () => {
     await deleteSectionOutboxRecord({
       applicationContext,
       createdAt: '2020-01-02T16:05:45.979Z',
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
     expect(deleteStub.mock.calls[0][0]).toMatchObject({
       Key: {

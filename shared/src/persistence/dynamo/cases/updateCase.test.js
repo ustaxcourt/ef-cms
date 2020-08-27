@@ -6,11 +6,15 @@ const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
 } = require('../../../business/entities/EntityConstants');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
+  const mockCorrespondenceId = applicationContext.getUniqueId();
   let firstQueryStub;
   let secondQueryStub;
+
+  let mockCase;
 
   beforeEach(() => {
     firstQueryStub = [
@@ -52,6 +56,17 @@ describe('updateCase', () => {
       ]);
 
     client.query = applicationContext.getDocumentClient().query;
+
+    mockCase = {
+      docketNumberSuffix: null,
+      docketRecord: [],
+      inProgress: false,
+      irsPractitioners: [],
+      pk: 'case|101-18',
+      privatePractitioners: [],
+      sk: 'case|101-18',
+      status: 'General Docket - Not at Issue',
+    };
   });
 
   /**
@@ -69,6 +84,46 @@ describe('updateCase', () => {
       pk: 'case|101-18',
       sk: 'privatePractitioner|user-id-existing-234',
       userId: 'user-id-existing-234',
+    });
+  }
+
+  /**
+   * Adds mock archived correspondences to test fixture
+   */
+  function addArchivedCorrespondences() {
+    firstQueryStub.push({
+      archived: true,
+      documentId: 'archived-correspondence-id-existing-123',
+      documentTitle: 'My Correspondence',
+      filedBy: 'Docket clerk',
+      pk: 'case|101-18',
+      sk: 'correspondence|archived-correspondence-id-existing-123',
+      userId: 'user-id-existing-234',
+    });
+    firstQueryStub.push({
+      archived: true,
+      documentId: mockCorrespondenceId,
+      documentTitle: 'My Correspondence',
+      filedBy: 'Docket clerk',
+      pk: 'case|101-18',
+      sk: 'correspondence|archived-correspondence-id-456',
+      userId: 'user-id-existing-234',
+    });
+  }
+
+  /**
+   * Adds mock documents to test fixture
+   */
+  function addDocuments() {
+    firstQueryStub.push({
+      ...MOCK_DOCUMENTS[0],
+      pk: 'case|101-18',
+      sk: 'document|a-document-id-123',
+    });
+    firstQueryStub.push({
+      ...MOCK_DOCUMENTS[1],
+      pk: 'case|101-18',
+      sk: 'document|a-document-id-456',
     });
   }
 
@@ -338,7 +393,7 @@ describe('updateCase', () => {
     });
   });
 
-  describe('PrivatePractitioners', () => {
+  describe('privatePractitioners', () => {
     it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
       await updateCase({
         applicationContext,
@@ -456,6 +511,229 @@ describe('updateCase', () => {
       ).toMatchObject({
         pk: 'case|101-18',
         sk: 'privatePractitioner|user-id-existing-123',
+      });
+    });
+  });
+
+  describe('archivedCorrespondences', () => {
+    it('adds an archived correspondence to a case when archivedCorrespondences is an empty list', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...mockCase,
+          archivedCorrespondences: [],
+        });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          archivedCorrespondences: [
+            {
+              archived: true,
+              documentId: mockCorrespondenceId,
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `correspondence|${mockCorrespondenceId}`,
+        userId: 'user-id-existing-234',
+      });
+    });
+
+    it('adds an archived correspondence to a case when archivedCorrespondences has entries', async () => {
+      addArchivedCorrespondences();
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          archivedCorrespondences: [
+            {
+              archived: true,
+              documentId: mockCorrespondenceId,
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+            {
+              archived: true,
+              documentId: 'archived-correspondence-id-existing-123',
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `correspondence|${mockCorrespondenceId}`,
+        userId: 'user-id-existing-234',
+      });
+    });
+  });
+
+  describe('correspondence', () => {
+    it('adds a correspondence to a case when correspondence is an empty list', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...mockCase,
+          correspondence: [],
+        });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          correspondence: [
+            {
+              archived: true,
+              documentId: mockCorrespondenceId,
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `correspondence|${mockCorrespondenceId}`,
+        userId: 'user-id-existing-234',
+      });
+    });
+
+    it('adds a correspondence to a case when correspondence has entries', async () => {
+      addArchivedCorrespondences();
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          correspondence: [
+            {
+              archived: true,
+              documentId: mockCorrespondenceId,
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+            {
+              archived: true,
+              documentId: 'archived-correspondence-id-existing-123',
+              documentTitle: 'My Correspondence',
+              filedBy: 'Docket clerk',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `correspondence|${mockCorrespondenceId}`,
+        userId: 'user-id-existing-234',
+      });
+    });
+  });
+
+  describe('documents', () => {
+    it('adds a document to a case when documents is an empty list', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...mockCase,
+          documents: [],
+        });
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          documents: [MOCK_DOCUMENTS[0]],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `document|${MOCK_DOCUMENTS[0].documentId}`,
+        userId: MOCK_DOCUMENTS[0].userId,
+      });
+    });
+
+    it('adds an archived correspondence to a case when archivedCorrespondences has entries', async () => {
+      addDocuments();
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          documents: [MOCK_DOCUMENTS[0], MOCK_DOCUMENTS[1]],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: `document|${MOCK_DOCUMENTS[0].documentId}`,
+        userId: MOCK_DOCUMENTS[0].userId,
       });
     });
   });

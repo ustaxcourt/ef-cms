@@ -1,5 +1,4 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -93,7 +92,13 @@ export const InternationalAddress = connect(
             }}
           />
         </div>
-        <div className="usa-form-group">
+        <FormGroup
+          errorText={
+            validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].state
+          }
+        >
           <label className="usa-label" htmlFor={`${type}.state`}>
             State/Province/Region <span className="usa-hint">(optional)</span>
           </label>
@@ -114,8 +119,7 @@ export const InternationalAddress = connect(
               });
             }}
           />
-          <ValidationText field={`${type}.state`} />
-        </div>
+        </FormGroup>
         <FormGroup
           errorText={
             validationErrors &&

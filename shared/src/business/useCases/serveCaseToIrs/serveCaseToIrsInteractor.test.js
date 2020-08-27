@@ -8,6 +8,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -45,7 +46,7 @@ describe('serveCaseToIrsInteractor', () => {
         to: null,
       },
     ],
-    section: 'docket',
+    section: DOCKET_SECTION,
     sentBy: 'petitioner',
     updatedAt: '2018-12-27T18:06:02.968Z',
     workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',

@@ -10,7 +10,7 @@ describe('removePdfFromCaseAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should delete the pdf specified in props', async () => {
+  it('should delete the pdf associated with state.documentId when state.documentId is defined', async () => {
     const { output } = await runAction(removePdfFromCaseAction, {
       modules: {
         presenter,
@@ -36,6 +36,34 @@ describe('removePdfFromCaseAction', () => {
         documentId: '123',
       },
     ]);
+  });
+
+  it('should delete the pdf from the form when state.currentViewMetadata.documentSelectedForPreview is defined', async () => {
+    const { state } = await runAction(removePdfFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        currentViewMetadata: {
+          documentSelectedForPreview: 'applicationForWaiverOfFilingFeeFile',
+        },
+        form: {
+          applicationForWaiverOfFilingFeeFile: {},
+          applicationForWaiverOfFilingFeeFileSize: 2,
+          docketNumber: '101-19',
+          documents: [
+            {
+              documentId: mockDocumentId,
+            },
+            {
+              documentId: '123',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(state.form.applicationForWaiverOfFilingFeeFile).toBeUndefined();
   });
 
   it('return the updated case detail', async () => {

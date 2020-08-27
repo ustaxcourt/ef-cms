@@ -92,7 +92,7 @@ describe('setValidationAlertErrors', () => {
     });
   });
 
-  it('maps nested error message text using errorDisplayMap', async () => {
+  it('maps nested error message text for an array using errorDisplayMap', async () => {
     const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {
         presenter,
@@ -119,67 +119,25 @@ describe('setValidationAlertErrors', () => {
     });
   });
 
-  it('orders errors by state.fieldOrder', async () => {
+  it('maps nested error message text for an object using errorDisplayMap', async () => {
     const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {
         presenter,
       },
       props: {
+        errorDisplayMap: { something: 'Nicer Something' },
+        errorDisplayOrder: ['nested2', 'nested1'],
         errors: {
-          a: 'First issue occurred',
-          b: 'Second issue occurred',
+          something: {
+            index: 0,
+            nested1: 'first nested',
+            nested2: 'second nested',
+          },
         },
       },
-      state: { fieldOrder: ['b', 'a'] },
     });
     expect(state.alertError).toMatchObject({
-      messages: ['Second issue occurred', 'First issue occurred'],
-    });
-  });
-
-  it('does not skip errors if they are not defined in state.fieldOrder', async () => {
-    const { state } = await runAction(setValidationAlertErrorsAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        errors: {
-          a: 'First issue occurred',
-          b: 'Second issue occurred',
-          c: 'Third issue occurred',
-        },
-      },
-      state: { fieldOrder: ['b', 'a'] },
-    });
-    expect(state.alertError).toMatchObject({
-      messages: [
-        'Second issue occurred',
-        'First issue occurred',
-        'Third issue occurred',
-      ],
-    });
-  });
-
-  it('correctly retrieves nested errors when state.fieldOrder contains reference to a nested object', async () => {
-    const { state } = await runAction(setValidationAlertErrorsAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        errors: {
-          a: { something: 'First issue occurred' },
-          b: 'Second issue occurred',
-          c: 'Third issue occurred',
-        },
-      },
-      state: { fieldOrder: ['b', 'a.something', 'd.somethingElse'] },
-    });
-    expect(state.alertError).toMatchObject({
-      messages: [
-        'Second issue occurred',
-        'First issue occurred',
-        'Third issue occurred',
-      ],
+      messages: ['second nested', 'first nested'],
     });
   });
 });

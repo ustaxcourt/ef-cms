@@ -53,6 +53,7 @@ import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
+import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
@@ -74,6 +75,7 @@ import { UploadCorrespondenceDocument } from './Correspondence/UploadCorresponde
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
+import { UserContactEditProgress } from './UserContactEditProgress';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -130,6 +132,7 @@ const pages = {
   PrimaryContactEdit,
   PrintPaperPetitionReceipt,
   PrintPaperService,
+  PrintPaperTrialNotices,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
@@ -149,6 +152,7 @@ const pages = {
   UploadCorrespondenceDocument,
   UploadCourtIssuedDocument,
   UserContactEdit,
+  UserContactEditProgress,
   WorkQueue,
 };
 
@@ -159,9 +163,15 @@ export const AppComponent = connect(
   {
     currentPage: state.currentPage,
     showModal: state.modal.showModal,
+    userContactEditInProgress: state.userContactEditProgress.inProgress,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
-  function AppComponent({ currentPage, showModal, zipInProgress }) {
+  function AppComponent({
+    currentPage,
+    showModal,
+    userContactEditInProgress,
+    zipInProgress,
+  }) {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
@@ -189,6 +199,7 @@ export const AppComponent = connect(
         <main id="main-content" role="main">
           <CurrentPage />
           {zipInProgress && <BatchDownloadProgress />}
+          {userContactEditInProgress && <UserContactEditProgress />}
         </main>
         <Footer />
         <Loading />

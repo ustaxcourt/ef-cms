@@ -5,6 +5,7 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
@@ -21,7 +22,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -159,7 +160,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -190,7 +191,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -234,7 +235,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -271,7 +272,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
