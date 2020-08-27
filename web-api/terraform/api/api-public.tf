@@ -1,13 +1,13 @@
 data "archive_file" "zip_api_public" {
   type        = "zip"
-  output_path = "${path.module}/lambdas/api-public.js.zip"
-  source_file = "${path.module}/lambdas/dist/api-public.js"
+  output_path = "${path.module}/../template/lambdas/api-public.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/api-public.js"
 }
 
 resource "aws_lambda_function" "api_public_lambda" {
   filename         = data.archive_file.zip_api_public.output_path
   function_name    = "api_public_${var.environment}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "api-public.handler"
   source_code_hash = data.archive_file.zip_api_public.output_base64sha256
   timeout          = "10"
@@ -20,7 +20,7 @@ resource "aws_lambda_function" "api_public_lambda" {
   runtime = "nodejs12.x"
 
   environment {
-    variables = data.null_data_source.locals.outputs
+    variables = var.lambda_environment
   }
 }
 
@@ -77,7 +77,7 @@ resource "aws_api_gateway_deployment" "api_public_deployment" {
   }
 }
 
-resource "aws_acm_certificate" "api_gateway_east_cert_public" {
+resource "aws_acm_certificate" "api_gateway_cert_public" {
   domain_name       = "public-api.${var.dns_domain}"
   validation_method = "DNS"
 
@@ -90,35 +90,38 @@ resource "aws_acm_certificate" "api_gateway_east_cert_public" {
   }
 }
 
-resource "aws_acm_certificate_validation" "validate_api_gateway_east_cert_public" {
-  certificate_arn         = aws_acm_certificate.api_gateway_east_cert_public.arn
-  validation_record_fqdns = [aws_route53_record.api_public_route53_east_record.fqdn]
+resource "aws_acm_certificate_validation" "validate_api_gateway_cert_public" {
+  certificate_arn         = aws_acm_certificate.api_gateway_cert_public.arn
+  validation_record_fqdns = [aws_route53_record.api_public_route53_record.0.fqdn]
+  count                   = var.validate
 }
 
-resource "aws_route53_record" "api_public_route53_east_record" {
-  name    = aws_acm_certificate.api_gateway_east_cert_public.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.api_gateway_east_cert_public.domain_validation_options.0.resource_record_type
-  zone_id = data.aws_route53_zone.zone.id
+resource "aws_route53_record" "api_public_route53_record" {
+  name    = aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_name
+  type    = aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_type
+  zone_id = var.zone_id
+  count   = var.validate
   records = [
-    aws_acm_certificate.api_gateway_east_cert_public.domain_validation_options.0.resource_record_value,
+    aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_value,
   ]
   ttl = 60
 }
 
 resource "aws_api_gateway_domain_name" "api_public_custom" {
-  regional_certificate_arn = aws_acm_certificate_validation.validate_api_gateway_east_cert_public.certificate_arn
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_public.arn
   domain_name              = "public-api.${var.dns_domain}"
-  security_policy          = "TLS_1_2"
+
+  security_policy = "TLS_1_2"
   endpoint_configuration {
     types = ["REGIONAL"]
   }
 }
 
 
-resource "aws_route53_record" "api_public_route53_east_regional_record" {
+resource "aws_route53_record" "api_public_route53_regional_record" {
   name    = aws_api_gateway_domain_name.api_public_custom.domain_name
   type    = "A"
-  zone_id = data.aws_route53_zone.zone.id
+  zone_id = var.zone_id
 
   alias {
     evaluate_target_health = true
