@@ -117,9 +117,10 @@ const isPrivateDocument = function (document, docketRecord) {
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
-  const isDocumentOnDocketRecord = docketRecord.find(
-    docketEntry => docketEntry.documentId === document.documentId,
-  );
+  const isDocumentOnDocketRecord =
+    docketRecord.find(
+      docketEntry => docketEntry.documentId === document.documentId,
+    ) || document.isOnDocketRecord;
 
   const isPublicDocumentType =
     (isStipDecision || isOrder || isCourtIssuedDocument) && !isTranscript;

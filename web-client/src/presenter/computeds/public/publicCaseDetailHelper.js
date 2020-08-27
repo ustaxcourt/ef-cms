@@ -11,10 +11,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
-  const formattedDocketRecord = [
-    ...publicCase.docketRecord,
-    ...publicCase.documents.filter(d => d.isOnDocketRecord),
-  ].map(d =>
+  const formattedDocketRecord = publicCase.docketRecord.map(d =>
     applicationContext.getUtilities().formatDocketRecord(applicationContext, d),
   );
 
