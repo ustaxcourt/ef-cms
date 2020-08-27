@@ -13,6 +13,7 @@ describe('deleteTrialSessionInteractor', () => {
     caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
     isCalendared: false,
     judge: {
+      name: 'Judge Yggdrasil',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },
     maxCases: 100,

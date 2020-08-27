@@ -5,9 +5,14 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  SESSION_TERMS,
+  SESSION_TYPES,
+  US_STATES,
+  US_STATES_OTHER,
+} = require('../EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
-const { SESSION_TERMS, SESSION_TYPES } = require('../EntityConstants');
 
 TrialSession.validationName = 'TrialSession';
 
@@ -42,7 +47,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.createdAt = rawSession.createdAt || createISODateString();
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
-  this.judge = rawSession.judge;
   this.maxCases = rawSession.maxCases;
   this.notes = rawSession.notes;
   this.noticeIssuedDate = rawSession.noticeIssuedDate;
@@ -55,10 +59,23 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
-  this.trialClerk = rawSession.trialClerk;
   this.trialLocation = rawSession.trialLocation;
   this.trialSessionId =
     rawSession.trialSessionId || applicationContext.getUniqueId();
+
+  if (rawSession.judge && rawSession.judge.name) {
+    this.judge = {
+      name: rawSession.judge.name,
+      userId: rawSession.judge.userId,
+    };
+  }
+
+  if (rawSession.trialClerk && rawSession.trialClerk.name) {
+    this.trialClerk = {
+      name: rawSession.trialClerk.name,
+      userId: rawSession.trialClerk.userId,
+    };
+  }
 };
 
 TrialSession.VALIDATION_ERROR_MESSAGES = {
@@ -94,16 +111,21 @@ TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = [
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: joi.string().allow('').optional(),
-    address2: joi.string().allow('').optional(),
-    city: joi.string().allow('').optional(),
-    courtReporter: joi.string().optional(),
-    courthouseName: joi.string().allow('').optional(),
+    address1: joi.string().max(100).allow('').optional(),
+    address2: joi.string().max(100).allow('').optional(),
+    city: joi.string().max(100).allow('').optional(),
+    courtReporter: joi.string().max(100).optional(),
+    courthouseName: joi.string().max(100).allow('').optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
     entityName: joi.string().valid('TrialSession').required(),
-    irsCalendarAdministrator: joi.string().optional(),
+    irsCalendarAdministrator: joi.string().max(100).optional(),
     isCalendared: joi.boolean().required(),
-    judge: joi.object().optional(),
+    judge: joi
+      .object({
+        name: joi.string().max(100).required(),
+        userId: JoiValidationConstants.UUID.required(),
+      })
+      .optional(),
     maxCases: joi.number().greater(0).integer().required(),
     notes: joi.string().max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
@@ -114,7 +136,10 @@ TrialSession.validationRules = {
       .required(),
     startDate: JoiValidationConstants.ISO_DATE.required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-    state: joi.string().allow('').optional(),
+    state: joi
+      .string()
+      .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+      .optional(),
     swingSession: joi.boolean().optional(),
     swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
       is: true,
@@ -125,9 +150,14 @@ TrialSession.validationRules = {
       .string()
       .valid(...SESSION_TERMS)
       .required(),
-    termYear: joi.string().required(),
-    trialClerk: joi.object().optional(),
-    trialLocation: joi.string().required(),
+    termYear: joi.string().max(4).required(),
+    trialClerk: joi
+      .object({
+        name: joi.string().max(100).required(),
+        userId: JoiValidationConstants.UUID.required(),
+      })
+      .optional(),
+    trialLocation: joi.string().max(100).required(),
     trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
@@ -138,11 +168,14 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
-        disposition: joi.string().when('removedFromTrial', {
-          is: true,
-          otherwise: joi.optional().allow(null),
-          then: joi.required(),
-        }),
+        disposition: joi
+          .string()
+          .max(100)
+          .when('removedFromTrial', {
+            is: true,
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          }),
         docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
           'Docket number of the case.',
         ),
