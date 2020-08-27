@@ -63,10 +63,9 @@ exports.fileExternalDocumentInteractor = async ({
     'practitioner',
     'docketNumber',
   ]);
-
   const documentsToAdd = [
     [
-      documentMetadata.primaryDocumentFile.documentId,
+      documentMetadata.primaryDocumentId,
       { ...primaryDocumentMetadata, secondaryDocument },
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],

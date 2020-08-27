@@ -46,7 +46,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
   });
 
   const primaryDocumentRecord = caseEntity.documents.find(
-    doc => doc.documentId === documentsFiled.primaryDocumentFile.documentId,
+    doc => doc.documentId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
 
