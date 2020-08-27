@@ -125,13 +125,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await expect(
       fileExternalDocumentForConsolidatedInteractor({
         applicationContext,
-        documentIds: ['dddddddd-1111-dddd-1111-dddddddddddd'],
-        documentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-        },
+        documentMetadata: {},
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -144,12 +138,12 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       docketNumbersForFiling: ['101-19', '102-19'],
-      documentIds: [documentId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: documentId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -166,12 +160,12 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       docketNumbersForFiling: ['101-19', '102-19'],
-      documentIds: [documentId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: documentId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -201,12 +195,12 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       docketNumbersForFiling: ['101-19', '102-19'],
-      documentIds: [documentId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: documentId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -230,13 +224,14 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       docketNumbersForFiling: ['101-19', '102-19'],
-      documentIds: [documentId0, documentId1],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: documentId0,
         secondaryDocument: {
+          documentId: documentId1,
           documentTitle: 'Redacted',
           documentType: 'Redacted',
           eventCode: 'REDC',
@@ -250,20 +245,21 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[1].documents.length).toEqual(6);
   });
 
-  it('should file multiple documents for each case if supporting documents are provided', async () => {
+  it('should file multiple documents for each case when supporting documents are provided', async () => {
     expect(caseRecords[0].documents.length).toEqual(4);
     expect(caseRecords[1].documents.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       docketNumbersForFiling: ['101-19', '102-19'],
-      documentIds: [documentId0, documentId1, documentId2, documentId3],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: documentId0,
         secondaryDocument: {
+          documentId: documentId1,
           documentTitle: 'Redacted',
           documentType: 'Redacted',
           eventCode: 'REDC',
@@ -271,6 +267,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         secondarySupportingDocuments: [
           {
+            documentId: documentId2,
             documentTitle: 'Redacted',
             documentType: 'Redacted',
             eventCode: 'REDC',
@@ -279,6 +276,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         ],
         supportingDocuments: [
           {
+            documentId: documentId3,
             documentTitle: 'Redacted',
             documentType: 'Redacted',
             eventCode: 'REDC',

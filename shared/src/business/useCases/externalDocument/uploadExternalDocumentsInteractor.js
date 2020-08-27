@@ -29,8 +29,6 @@ exports.uploadExternalDocumentsInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const uploadedDocumentPromises = [];
-
   /**
    * uploads a document and then immediately processes it to scan for viruses and validate the document
    *
@@ -57,19 +55,22 @@ exports.uploadExternalDocumentsInteractor = async ({
 
     return documentId;
   };
-
-  uploadedDocumentPromises.push(uploadDocumentAndMakeSafeInteractor('primary'));
+  documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
+    'primary',
+  );
 
   if (documentFiles.secondary) {
-    uploadedDocumentPromises.push(
-      uploadDocumentAndMakeSafeInteractor('secondary'),
+    documentMetadata.secondaryDocument.documentId = await uploadDocumentAndMakeSafeInteractor(
+      'secondary',
     );
   }
 
   if (documentMetadata.hasSupportingDocuments) {
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
-      uploadedDocumentPromises.push(
-        uploadDocumentAndMakeSafeInteractor(`primarySupporting${i}`),
+      documentMetadata.supportingDocuments[
+        i
+      ].documentId = await uploadDocumentAndMakeSafeInteractor(
+        `primarySupporting${i}`,
       );
     }
   }
@@ -80,13 +81,13 @@ exports.uploadExternalDocumentsInteractor = async ({
       i < documentMetadata.secondarySupportingDocuments.length;
       i++
     ) {
-      uploadedDocumentPromises.push(
-        uploadDocumentAndMakeSafeInteractor(`secondarySupporting${i}`),
+      documentMetadata.secondarySupportingDocuments[
+        i
+      ].documentId = await uploadDocumentAndMakeSafeInteractor(
+        `secondarySupporting${i}`,
       );
     }
   }
-
-  const documentIds = await Promise.all(uploadedDocumentPromises);
 
   if (leadDocketNumber) {
     return await applicationContext
@@ -94,7 +95,6 @@ exports.uploadExternalDocumentsInteractor = async ({
       .fileExternalDocumentForConsolidatedInteractor({
         applicationContext,
         docketNumbersForFiling,
-        documentIds,
         documentMetadata,
         leadDocketNumber,
       });
@@ -103,7 +103,6 @@ exports.uploadExternalDocumentsInteractor = async ({
       .getUseCases()
       .fileExternalDocumentInteractor({
         applicationContext,
-        documentIds,
         documentMetadata,
       });
   }
