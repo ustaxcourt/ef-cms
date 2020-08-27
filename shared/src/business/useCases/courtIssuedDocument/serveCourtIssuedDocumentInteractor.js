@@ -97,6 +97,8 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       documentId,
     });
 
+  const document = caseEntity.getDocumentById({ documentId });
+
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -145,17 +147,18 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocument = new Document(
+  const updatedDocumentEntity = new Document(
     {
-      ...courtIssuedDocument,
+      ...document,
       filingDate: createISODateString(),
       isOnDocketRecord: true,
     },
     { applicationContext },
   );
-  updatedDocument.validate();
 
-  caseEntity.updateDocument(updatedDocument);
+  updatedDocumentEntity.validate();
+
+  caseEntity.updateDocument(updatedDocumentEntity);
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
