@@ -55,8 +55,7 @@ exports.uploadExternalDocumentsInteractor = async ({
 
     return documentId;
   };
-
-  documentMetadata.primaryDocumentFile.documentId = await uploadDocumentAndMakeSafeInteractor(
+  documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
     'primary',
   );
 

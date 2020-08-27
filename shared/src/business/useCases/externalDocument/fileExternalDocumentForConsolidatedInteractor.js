@@ -87,7 +87,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   const documentsToAdd = [
     [
-      documentMetadata.primaryDocumentFile.documentId,
+      documentMetadata.primaryDocumentId,
       primaryDocumentMetadata,
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
