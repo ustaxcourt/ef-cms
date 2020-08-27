@@ -117,7 +117,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: { documentId: mockDocumentId },
+        primaryDocumentId: mockDocumentId,
       },
     });
 
@@ -143,9 +143,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         scenario: 'Nonstandard H',
         secondaryDocument: {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -211,9 +209,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Simultaneous Memoranda of Law',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          primaryDocumentFile: {
-            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          },
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       });
     } catch (err) {
@@ -247,9 +243,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -275,9 +269,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
         filedBy: 'test Petitioner',
-        primaryDocumentFile: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -302,9 +294,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -341,9 +331,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 

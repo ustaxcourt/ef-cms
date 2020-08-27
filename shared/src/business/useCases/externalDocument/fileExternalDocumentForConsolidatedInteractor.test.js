@@ -143,9 +143,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: documentId0,
-        },
+        primaryDocumentId: documentId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -167,9 +165,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: documentId0,
-        },
+        primaryDocumentId: documentId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -204,9 +200,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: documentId0,
-        },
+        primaryDocumentId: documentId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -235,9 +229,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: documentId0,
-        },
+        primaryDocumentId: documentId0,
         secondaryDocument: {
           documentId: documentId1,
           documentTitle: 'Redacted',
@@ -253,7 +245,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[1].documents.length).toEqual(6);
   });
 
-  it('should file multiple documents for each case if supporting documents are provided', async () => {
+  it('should file multiple documents for each case when supporting documents are provided', async () => {
     expect(caseRecords[0].documents.length).toEqual(4);
     expect(caseRecords[1].documents.length).toEqual(4);
 
@@ -265,9 +257,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentFile: {
-          documentId: documentId0,
-        },
+        primaryDocumentId: documentId0,
         secondaryDocument: {
           documentId: documentId1,
           documentTitle: 'Redacted',

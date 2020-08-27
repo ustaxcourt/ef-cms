@@ -27,9 +27,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
-        primaryDocumentFile: {
-          documentId: mockPrimaryDocumentId,
-        },
+        primaryDocumentId: mockPrimaryDocumentId,
       },
     });
 
@@ -44,17 +42,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it.only('should add a filedBy tot he primary document to file', async () => {
+  it('should populate filedBy on the receipt of filing', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
-        primaryDocumentFile: {
-          documentId: mockPrimaryDocumentId,
-        },
-        //fixme make this be primaryDocumentId
+        primaryDocumentId: mockPrimaryDocumentId,
         secondaryDocument: { documentId: 4 },
         secondaryDocumentFile: { fakeDocument: true },
         secondarySupportingDocuments: [
@@ -67,9 +62,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const receiptMockCall = applicationContext.getDocumentGenerators()
       .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
-    expect(receiptMockCall.primaryDocument.filedBy).toBe(
-      MOCK_CASE.contactPrimary.name,
-    );
+    expect(receiptMockCall.filedBy).toBe(MOCK_CASE.contactPrimary.name);
   });
 
   it('acquires document information', async () => {
@@ -79,9 +72,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
-        primaryDocumentFile: {
-          documentId: mockPrimaryDocumentId,
-        },
+        primaryDocumentId: mockPrimaryDocumentId,
         secondaryDocument: { documentId: 4 },
         secondaryDocumentFile: { fakeDocument: true },
         secondarySupportingDocuments: [
