@@ -136,22 +136,24 @@ export const DocketRecord = ({
         h3="Printable Docket Record"
       />
 
-      <div className="party-info" id="petitioner-contacts">
-        <div className="party-info-header">{caseDetail.partyType}</div>
-        <div className="party-info-content">
-          <RenderContact
-            caseTitle={options.caseTitle}
-            contact={caseDetail.contactPrimary}
-            countryTypes={countryTypes}
-          />
-          {caseDetail.contactSecondary && (
+      {options.includePartyDetail && (
+        <div className="party-info" id="petitioner-contacts">
+          <div className="party-info-header">{caseDetail.partyType}</div>
+          <div className="party-info-content">
             <RenderContact
-              contact={caseDetail.contactSecondary}
+              caseTitle={options.caseTitle}
+              contact={caseDetail.contactPrimary}
               countryTypes={countryTypes}
             />
-          )}
+            {caseDetail.contactSecondary && (
+              <RenderContact
+                contact={caseDetail.contactSecondary}
+                countryTypes={countryTypes}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {caseDetail.privatePractitioners.length > 0 && (
         <div className="party-info" id="private-practitioner-contacts">
