@@ -75,12 +75,11 @@ export const documentViewerHelper = (get, applicationContext) => {
   if (viewerDocumentToDisplay.isStricken !== undefined) {
     showStricken = viewerDocumentToDisplay.isStricken;
   } else {
-    ({
-      isStricken: showStricken,
-    } = formattedCaseDetail.docketRecordWithDocument.find(
+    const entry = formattedCaseDetail.docketRecordWithDocument.find(
       docketEntry =>
-        docketEntry.documentId === viewerDocumentToDisplay.documentId,
-    ));
+        docketEntry.record.documentId === viewerDocumentToDisplay.documentId,
+    );
+    showStricken = entry.document.isStricken || entry.record.isStricken;
   }
 
   return {
