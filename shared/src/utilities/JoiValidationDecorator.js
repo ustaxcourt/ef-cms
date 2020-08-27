@@ -254,4 +254,42 @@ exports.joiValidationDecorator = function (
   };
 };
 
+/**
+ * Creates a new Proxy object from the provided entity constructor.
+ * When the returned function is invoked with the 'new' keyword, a proxy
+ * instance of the original entity is returned which trims incoming string values.
+ *
+ * @param {Function} entityConstructor the entity constructor
+ * @returns {Function} a factory function with proxy trap for 'construct' and
+ *   proxy trap for 'set' on the returned instances
+ */
+exports.validEntityDecorator = entityFactoryFunction => {
+  const hasInitFunction =
+    typeof entityFactoryFunction === 'function' &&
+    typeof entityFactoryFunction.prototype.init === 'function';
+
+  if (!hasInitFunction) {
+    throw new Error("Factory function prototype has no 'init' function");
+  }
+
+  const instanceHandler = {
+    set(target, prop, value) {
+      if (typeof value === 'string') {
+        value = value.trim();
+      }
+      target[prop] = value;
+      return true;
+    },
+  };
+  const factoryHandler = {
+    construct(target, args) {
+      const entityInstance = new target(...args);
+      const proxied = new Proxy(entityInstance, instanceHandler);
+      proxied.init(...args);
+      return proxied;
+    },
+  };
+  return new Proxy(entityFactoryFunction, factoryHandler);
+};
+
 exports.getFormattedValidationErrorsHelper = getFormattedValidationErrorsHelper;
