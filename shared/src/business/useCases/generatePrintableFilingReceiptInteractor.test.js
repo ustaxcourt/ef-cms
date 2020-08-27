@@ -44,6 +44,34 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it.only('should add a filedBy tot he primary document to file', async () => {
+    await generatePrintableFilingReceiptInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+      documentsFiled: {
+        hasSecondarySupportingDocuments: true,
+        hasSupportingDocuments: true,
+        primaryDocumentFile: {
+          documentId: mockPrimaryDocumentId,
+        },
+        //fixme make this be primaryDocumentId
+        secondaryDocument: { documentId: 4 },
+        secondaryDocumentFile: { fakeDocument: true },
+        secondarySupportingDocuments: [
+          { documentId: '3' },
+          { documentId: '7' },
+        ],
+        supportingDocuments: [{ documentId: '1' }, { documentId: '2' }],
+      },
+    });
+
+    const receiptMockCall = applicationContext.getDocumentGenerators()
+      .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
+    expect(receiptMockCall.primaryDocument.filedBy).toBe(
+      MOCK_CASE.contactPrimary.name,
+    );
+  });
+
   it('acquires document information', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
