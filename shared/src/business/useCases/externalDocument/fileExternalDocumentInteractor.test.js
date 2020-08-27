@@ -16,6 +16,8 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
+  const mockDocumentId = applicationContext.getUniqueId();
+
   let caseRecord;
 
   beforeEach(() => {
@@ -103,12 +105,7 @@ describe('fileExternalDocumentInteractor', () => {
     await expect(
       fileExternalDocumentInteractor({
         applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentType: 'Memorandum in Support',
-          filedBy: 'Test Petitioner',
-        },
+        documentMetadata: {},
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -116,13 +113,13 @@ describe('fileExternalDocumentInteractor', () => {
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: mockDocumentId,
       },
     });
 
@@ -142,20 +139,16 @@ describe('fileExternalDocumentInteractor', () => {
   it('should set secondary document and secondary supporting documents to lodged', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: [
-        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-        'c54ba5a9-b37b-479d-9201-067ec6e335be',
-      ],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Motion for Leave to File',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         scenario: 'Nonstandard H',
         secondaryDocument: {
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentTitle: 'Motion for Judgment on the Pleadings',
           documentType: 'Motion for Judgment on the Pleadings',
           eventCode: 'M121',
@@ -163,6 +156,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
         secondarySupportingDocuments: [
           {
+            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
             documentTitle: 'Motion for in Camera Review',
             documentType: 'Motion for in Camera Review',
             eventCode: 'M135',
@@ -171,6 +165,7 @@ describe('fileExternalDocumentInteractor', () => {
         ],
         supportingDocuments: [
           {
+            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
             documentTitle: 'Civil Penalty Approval Form',
             documentType: 'Civil Penalty Approval Form',
             eventCode: 'CIVP',
@@ -220,6 +215,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -244,13 +240,13 @@ describe('fileExternalDocumentInteractor', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -270,13 +266,13 @@ describe('fileExternalDocumentInteractor', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
         filedBy: 'test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -294,7 +290,6 @@ describe('fileExternalDocumentInteractor', () => {
   it('should automatically block the case if the document filed is a tracked document', async () => {
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -302,6 +297,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
@@ -330,7 +326,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      documentIds: [],
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -338,6 +334,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
         filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     });
 
