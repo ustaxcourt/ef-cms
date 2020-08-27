@@ -42,6 +42,7 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
+const { DocketEntry } = require('../DocketEntry');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
@@ -273,6 +274,14 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.irsPractitioners = [];
   }
 
+  if (Array.isArray(rawCase.docketEntries)) {
+    this.docketEntries = rawCase.docketEntries.map(
+      docketEntry => new DocketEntry(docketEntry, { applicationContext }),
+    );
+  } else {
+    this.docketEntries = [];
+  }
+
   if (Array.isArray(rawCase.docketRecord)) {
     this.docketRecord = rawCase.docketRecord.map(
       docketRecord => new DocketRecord(docketRecord, { applicationContext }),
@@ -413,6 +422,9 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Damages for the case.'),
+  docketEntries: JoiValidationConstants.DOCKET_ENTRY.items(
+    DocketEntry.VALIDATION_RULES,
+  ).required(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
