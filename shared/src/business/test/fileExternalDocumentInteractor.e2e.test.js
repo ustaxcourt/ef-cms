@@ -73,12 +73,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: [
-        '12de0fac-f63c-464f-ac71-0f54fd248484',
-        '22de0fac-f63c-464f-ac71-0f54fd248484',
-        '32de0fac-f63c-464f-ac71-0f54fd248484',
-        '42de0fac-f63c-464f-ac71-0f54fd248484',
-      ],
       documentMetadata: {
         attachments: false,
         certificateOfService: false,
@@ -89,8 +83,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
         eventCode: 'M115',
         hasSupportingDocuments: true,
         partyPrimary: true,
+        primaryDocumentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         scenario: 'Nonstandard H',
         secondaryDocument: {
+          documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           eventCode: 'BRF',
@@ -99,6 +95,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
+            documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -112,6 +109,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
           {
+            documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -487,12 +485,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: [
-        '12de0fac-f63c-464f-ac71-0f54fd248484',
-        '22de0fac-f63c-464f-ac71-0f54fd248484',
-        '32de0fac-f63c-464f-ac71-0f54fd248484',
-        '42de0fac-f63c-464f-ac71-0f54fd248484',
-      ],
       documentMetadata: {
         attachments: false,
         certificateOfService: false,
@@ -502,9 +494,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
         hasSupportingDocuments: true,
+        primaryDocumentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         representingPrimary: true,
         scenario: 'Nonstandard H',
         secondaryDocument: {
+          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           eventCode: 'BRF',
@@ -513,6 +507,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
+            documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -526,6 +521,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
           {
+            documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
