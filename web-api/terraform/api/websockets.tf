@@ -134,13 +134,13 @@ resource "aws_acm_certificate" "websockets" {
 resource "aws_acm_certificate_validation" "validate_websockets" {
   certificate_arn         = aws_acm_certificate.websockets.arn
   validation_record_fqdns = [aws_route53_record.websockets_route53.0.fqdn]
-  count = var.validate
+  count                   = var.validate
 }
 
 resource "aws_route53_record" "websockets_route53" {
   name    = aws_acm_certificate.websockets.domain_validation_options.0.resource_record_name
   type    = aws_acm_certificate.websockets.domain_validation_options.0.resource_record_type
-  count = var.validate
+  count   = var.validate
   zone_id = var.zone_id
   records = [
     aws_acm_certificate.websockets.domain_validation_options.0.resource_record_value,
@@ -165,14 +165,19 @@ resource "aws_apigatewayv2_api_mapping" "websocket_mapping" {
 }
 
 resource "aws_route53_record" "websocket_regional_record" {
-  name    = aws_apigatewayv2_domain_name.websockets_domain.domain_name
-  type    = "A"
-  zone_id = var.zone_id
+  name           = aws_apigatewayv2_domain_name.websockets_domain.domain_name
+  type           = "A"
+  zone_id        = var.zone_id
+  set_identifier = "ws_${var.region}"
 
   alias {
-    evaluate_target_health = true
     name                   = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.target_domain_name
     zone_id                = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.hosted_zone_id
+    evaluate_target_health = false
+  }
+
+  latency_routing_policy {
+    region = var.region
   }
 }
 
