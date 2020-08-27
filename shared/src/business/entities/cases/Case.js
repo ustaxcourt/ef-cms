@@ -396,7 +396,7 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: ContactFactory.getValidationRules('primary').required(),
+  contactPrimary: ContactFactory.getValidationRules('primary'),
   contactSecondary: ContactFactory.getValidationRules('secondary')
     .optional()
     .allow(null),
