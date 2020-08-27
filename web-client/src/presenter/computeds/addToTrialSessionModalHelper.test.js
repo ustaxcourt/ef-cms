@@ -1,4 +1,5 @@
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from './addToTrialSessionModalHelper';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -7,6 +8,8 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
 );
 
 describe('add to trial session modal helper', () => {
+  const { US_STATES } = applicationContext.getConstants();
+
   const trialSessions = [
     {
       sessionType: 'Small',
@@ -136,7 +139,7 @@ describe('add to trial session modal helper', () => {
       Alabama: [
         {
           optionText: 'Birmingham, Alabama 01/01/19 (SP)',
-          trialLocationState: 'Alabama',
+          trialLocationState: US_STATES.AL,
           trialSessionId: '3',
         },
         {
@@ -159,7 +162,10 @@ describe('add to trial session modal helper', () => {
         },
       ],
     });
-    expect(result.trialSessionStatesSorted).toEqual(['Alabama', 'Idaho']);
+    expect(result.trialSessionStatesSorted).toEqual([
+      US_STATES.AL,
+      US_STATES.ID,
+    ]);
   });
 
   it('should format optionText for each trial session and sort by date when showAllLocations is false', () => {
