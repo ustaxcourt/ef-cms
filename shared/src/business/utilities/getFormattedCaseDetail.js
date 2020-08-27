@@ -150,6 +150,7 @@ const formatDocketRecordWithDocument = (
     return acc;
   }, {});
 
+  // TODO 636
   return [
     ...docketRecords,
     ...documents.filter(d => d.isOnDocketRecord === true),

@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -40,11 +39,8 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocketEntry = caseEntity.docketRecord.find(
-    record => record.docketRecordId === docketEntryMeta.docketRecordId,
-  );
   const originalDocument = caseEntity.getDocumentById({
-    documentId: originalDocketEntry.documentId,
+    documentId: docketEntryMeta.documentId,
   });
 
   const editableFields = {
@@ -80,34 +76,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     trialLocation: docketEntryMeta.trialLocation,
   };
 
-  const documentEntityForFiledBy = new Document(
-    {
-      ...docketEntryMeta,
-      filedBy: undefined, // allow constructor to re-generate
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
-    },
-    { applicationContext },
-  );
-  const newFiledBy = documentEntityForFiledBy.filedBy;
-
-  const docketRecordEntity = new DocketRecord(
-    {
-      ...originalDocketEntry,
-      ...editableFields,
-      description:
-        editableFields.documentTitle ||
-        editableFields.description ||
-        originalDocketEntry.description,
-      filedBy: newFiledBy || originalDocketEntry.filedBy,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(docketRecordEntity);
-
   if (originalDocument) {
     const servedAtUpdated =
       editableFields.servedAt &&
@@ -121,7 +89,15 @@ exports.updateDocketEntryMetaInteractor = async ({
       {
         ...originalDocument,
         ...editableFields,
-        filedBy: newFiledBy || originalDocketEntry.filedBy,
+        description:
+          editableFields.documentTitle ||
+          editableFields.description ||
+          originalDocument.description,
+        filedBy: undefined, // allow constructor to re-generate
+        ...caseEntity.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
