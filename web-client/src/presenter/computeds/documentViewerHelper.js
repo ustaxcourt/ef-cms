@@ -75,7 +75,9 @@ export const documentViewerHelper = (get, applicationContext) => {
   if (viewerDocumentToDisplay.isStricken !== undefined) {
     showStricken = viewerDocumentToDisplay.isStricken;
   } else {
-    ({ isStricken: showStricken } = formattedCaseDetail.docketRecord.find(
+    ({
+      isStricken: showStricken,
+    } = formattedCaseDetail.docketRecordWithDocument.find(
       docketEntry =>
         docketEntry.documentId === viewerDocumentToDisplay.documentId,
     ));
