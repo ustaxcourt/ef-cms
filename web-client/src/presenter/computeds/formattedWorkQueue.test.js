@@ -17,8 +17,10 @@ describe('formatted work queue computed', () => {
   const {
     CHIEF_JUDGE,
     DOCKET_NUMBER_SUFFIXES,
+    DOCKET_SECTION,
     DOCUMENT_RELATIONSHIPS,
     PETITIONS_SECTION,
+    SESSION_STATUS_GROUPS,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -31,7 +33,7 @@ describe('formatted work queue computed', () => {
 
   const docketClerkUser = {
     role: USER_ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     userId: 'abc',
   };
 
@@ -101,7 +103,7 @@ describe('formatted work queue computed', () => {
   };
   const qcWorkItem = {
     ...workItem,
-    section: 'docket',
+    section: DOCKET_SECTION,
   };
 
   it('filters the workitems for section QC inbox', () => {
@@ -119,7 +121,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -138,7 +140,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -157,7 +159,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -176,7 +178,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -215,7 +217,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -246,7 +248,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -547,7 +549,7 @@ describe('formatted work queue computed', () => {
       assigneeId: null,
       assigneeName: null,
       caseCaption: 'Ori Petersen',
-      caseStatus: 'New',
+      caseStatus: SESSION_STATUS_GROUPS.new,
       createdAt: '2019-12-16T16:48:02.889Z',
       docketNumber: '114-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
@@ -635,7 +637,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -668,7 +670,7 @@ describe('formatted work queue computed', () => {
           },
           inProgress: true,
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inProgress',
@@ -704,7 +706,7 @@ describe('formatted work queue computed', () => {
           inProgress: false,
           isInitializeCase: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'outbox',
@@ -741,7 +743,7 @@ describe('formatted work queue computed', () => {
           inProgress: true,
           isInitializeCase: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'outbox',
@@ -775,7 +777,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inProgress',
@@ -805,7 +807,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -835,7 +837,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',

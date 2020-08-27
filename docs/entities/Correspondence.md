@@ -3,6 +3,11 @@
 ---
   type: "object"
   keys: 
+    archived: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "A correspondence document that was archived."
     documentId: 
       type: "string"
       flags: 

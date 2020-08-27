@@ -7,7 +7,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { ROLES } = require('./EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
-const { userDecorator, userValidation } = require('./User');
+const { USER_CONTACT_VALIDATION_RULES, userDecorator } = require('./User');
 
 /**
  * constructor
@@ -17,17 +17,27 @@ const { userDecorator, userValidation } = require('./User');
  */
 function PrivatePractitioner(rawUser) {
   userDecorator(this, rawUser);
+  this.barNumber = rawUser.barNumber;
   this.entityName = 'PrivatePractitioner';
+  this.representing = rawUser.representing || [];
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
-  this.representing = rawUser.representing || [];
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
 
 PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
-  ...userValidation,
+  barNumber: joi
+    .string()
+    .max(100)
+    .required()
+    .description(
+      'A unique identifier comprising of the practitioner initials, date, and series number.',
+    ),
+  contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
+  email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('PrivatePractitioner').required(),
+  name: joi.string().max(100).required(),
   representing: joi
     .array()
     .items(JoiValidationConstants.UUID)
@@ -40,6 +50,8 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .required(),
+  token: joi.string().optional(),
+  userId: JoiValidationConstants.UUID.required(),
 });
 
 joiValidationDecorator(

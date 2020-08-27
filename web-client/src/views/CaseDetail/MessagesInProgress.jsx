@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { MessagesRowAttachments } from '../Messages/MessagesRowAttachments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -22,7 +21,6 @@ export const MessagesInProgress = connect(
                 <th className="header-fixed-width">From</th>
                 <th className="header-fixed-width">Received</th>
                 <th>Message</th>
-                <th></th>
               </tr>
             </thead>
 
@@ -52,17 +50,6 @@ export const MessagesInProgress = connect(
                     <div className="message-document-detail">
                       {message.message}
                     </div>
-                  </td>
-                  <td>
-                    {message.attachments.length === 0 && (
-                      <span>No attachments</span>
-                    )}
-                    {message.attachments.length > 0 && (
-                      <MessagesRowAttachments
-                        attachments={message.attachments}
-                        docketNumber={message.docketNumber}
-                      />
-                    )}
                   </td>
                 </tr>
               ))}

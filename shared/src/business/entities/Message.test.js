@@ -103,7 +103,6 @@ describe('Message', () => {
       expect(message.attachments).toEqual([
         {
           documentId: 'b5533197-01c7-40e6-abf2-1a705fd6ed27',
-          documentTitle: 'Petition',
         },
       ]);
     });

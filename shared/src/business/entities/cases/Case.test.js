@@ -72,6 +72,50 @@ describe('Case entity', () => {
     ]);
   });
 
+  describe('archivedDocuments', () => {
+    let myCase;
+    beforeEach(() => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+    });
+
+    it('should not populate archivedDocuments when the user is an external user and filtered is true', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
+
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocuments: [...MOCK_DOCUMENTS],
+          userId: applicationContext.getCurrentUser().userId,
+        },
+        { applicationContext, filtered: true },
+      );
+
+      expect(myCase.archivedDocuments).toBeUndefined();
+    });
+
+    it('should set archivedDocuments to the value provided when the user is an internal user', () => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocuments: [...MOCK_DOCUMENTS],
+        },
+        { applicationContext },
+      );
+      expect(myCase.archivedDocuments.length).toEqual(MOCK_DOCUMENTS.length);
+    });
+
+    it('should set archivedDocuments to an empty list when a value is not provided and the user is an internal user', () => {
+      expect(myCase.archivedDocuments).toEqual([]);
+    });
+  });
+
   describe('adding and removing practitioners', () => {
     let myCase;
     beforeEach(() => {
@@ -461,7 +505,10 @@ describe('Case entity', () => {
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(
-        { ...MOCK_CASE, otherPetitioners: undefined },
+        {
+          ...MOCK_CASE,
+          otherPetitioners: undefined,
+        },
         {
           applicationContext,
         },
@@ -486,6 +533,23 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
       expect(myCase.docketNumber).toBe('101-20');
+    });
+
+    it('Creates an invalid case if set as calendared but no trialSessionId is provided', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        trialSessionId: '"trialSessionId" is required',
+      });
     });
 
     it('Creates an invalid case with an invalid nested contact object', () => {
@@ -1201,6 +1265,115 @@ describe('Case entity', () => {
 
       const nextIndex = caseRecord.generateNextDocketRecordIndex();
       expect(nextIndex).toEqual(1);
+    });
+  });
+
+  describe('archiveDocument', () => {
+    let caseRecord;
+    let documentToArchive;
+    beforeEach(() => {
+      documentToArchive = {
+        archived: undefined,
+        documentType: 'Order',
+        eventCode: 'O',
+        filedBy: 'Test Petitioner',
+        role: ROLES.petitioner,
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      };
+
+      caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [...MOCK_CASE.documents, documentToArchive],
+        },
+        {
+          applicationContext,
+        },
+      );
+    });
+
+    it('marks the document as archived', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+      const archivedDocument = caseRecord.archivedDocuments.find(
+        d => d.documentId === documentToArchive.documentId,
+      );
+      expect(archivedDocument.archived).toBeTruthy();
+    });
+
+    it('adds the provided document to the case archivedDocuments', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+
+      expect(
+        caseRecord.archivedDocuments.find(
+          d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeDefined();
+    });
+
+    it('removes the provided document from the case documents array', () => {
+      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+
+      expect(
+        caseRecord.documents.find(
+          d => d.documentId === documentToArchive.documentId,
+        ),
+      ).toBeUndefined();
+    });
+  });
+
+  describe('archiveCorrespondence', () => {
+    let caseRecord;
+    let correspondenceToArchive;
+    beforeEach(() => {
+      correspondenceToArchive = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+
+      caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          correspondence: [correspondenceToArchive],
+        },
+        {
+          applicationContext,
+        },
+      );
+    });
+
+    it('marks the correspondence document as archived', () => {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
+        applicationContext,
+      });
+      const archivedDocument = caseRecord.archivedCorrespondences.find(
+        d => d.documentId === correspondenceToArchive.documentId,
+      );
+      expect(archivedDocument.archived).toBeTruthy();
+    });
+
+    it('adds the provided document to the case archivedDocuments', () => {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
+        applicationContext,
+      });
+
+      expect(
+        caseRecord.archivedCorrespondences.find(
+          d => d.documentId === correspondenceToArchive.documentId,
+        ),
+      ).toBeDefined();
+    });
+
+    it('removes the provided document from the case documents array', () => {
+      caseRecord.archiveCorrespondence(correspondenceToArchive, {
+        applicationContext,
+      });
+
+      expect(
+        caseRecord.documents.find(
+          d => d.documentId === correspondenceToArchive.documentId,
+        ),
+      ).toBeUndefined();
     });
   });
 
@@ -2002,6 +2175,47 @@ describe('Case entity', () => {
         documentId: documentIdToDelete,
       });
       expect(myCase.documents.length).toEqual(4);
+    });
+  });
+
+  describe('deleteCorrespondenceById', () => {
+    const mockCorrespondence = new Correspondence({
+      documentTitle: 'A correpsondence',
+      filingDate: '2025-03-01T00:00:00.000Z',
+      userId: MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'].userId,
+    });
+
+    it('should delete the correspondence document with the given id', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.correspondence.length).toEqual(1);
+      myCase.deleteCorrespondenceById({
+        correspondenceId: mockCorrespondence.documentId,
+      });
+      expect(myCase.correspondence.length).toEqual(0);
+      expect(
+        myCase.correspondence.find(
+          d => d.documentId === mockCorrespondence.documentId,
+        ),
+      ).toBeUndefined();
+    });
+
+    it('should not delete a document if a document with the given id does not exist', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.correspondence.length).toEqual(1);
+      myCase.deleteCorrespondenceById({
+        correspondenceId: '1234',
+      });
+      expect(myCase.correspondence.length).toEqual(1);
     });
   });
 

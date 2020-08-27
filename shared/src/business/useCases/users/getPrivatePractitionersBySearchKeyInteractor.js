@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * getPrivatePractitionersBySearchKeyInteractor
@@ -33,5 +33,7 @@ exports.getPrivatePractitionersBySearchKeyInteractor = async ({
       type: 'privatePractitioner',
     });
 
-  return User.validateRawCollection(users, { applicationContext });
+  return PrivatePractitioner.validateRawCollection(users, {
+    applicationContext,
+  });
 };

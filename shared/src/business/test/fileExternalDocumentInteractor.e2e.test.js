@@ -3,6 +3,7 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
@@ -238,7 +239,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               supportingDocument: 'Brief in Support',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
-            section: 'docket',
+            section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
           },
         },
@@ -271,7 +272,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               scenario: 'Nonstandard A',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
-            section: 'docket',
+            section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },
@@ -301,7 +302,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               scenario: 'Nonstandard A',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
-            section: 'docket',
+            section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },
@@ -337,7 +338,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               scenario: 'Nonstandard A',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
-            section: 'docket',
+            section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },
@@ -372,7 +373,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     const workItems = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
 
     expect(workItems.length).toEqual(4);
@@ -398,7 +399,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           supportingDocument: 'Brief in Support',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
       },
       {
@@ -419,7 +420,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
       },
@@ -439,7 +440,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
       },
@@ -462,7 +463,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
-        section: 'docket',
+        section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
       },
     ]);

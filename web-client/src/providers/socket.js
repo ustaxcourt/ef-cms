@@ -24,8 +24,12 @@ export const socketProvider = ({ socketRouter }) => {
       stop();
     }
 
-    socket = createWebSocketClient(token);
-    socket.onmessage = socketRouter(app);
+    return new Promise((resolve, reject) => {
+      socket = createWebSocketClient(token);
+      socket.onmessage = socketRouter(app);
+      socket.onopen = resolve;
+      socket.onerror = reject;
+    });
   };
 
   const initialize = _app => {

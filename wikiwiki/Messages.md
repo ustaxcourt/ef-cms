@@ -112,3 +112,8 @@ Users can take any of the  following actions on a Draft Document directly from t
 **Add Docket Entry**
 * Visible only for docket / petitions / clerk of the court
 * Allows user to add docket entry for the draft, save or serve the entry and return to the Message  
+
+#### Deleted documents attached to Message
+* A draft document or correspondence document can be deleted while attached to a messages
+* Once deleted, the document title still displays in the message attachments list with the indicator "Deleted"
+* PDFs for deleted documents do not display in the PDF preview

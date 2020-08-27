@@ -7,6 +7,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
+const { omit } = require('lodash');
 const { User } = require('../entities/User');
 
 const DATE = '2018-11-21T20:49:28.192Z';
@@ -40,6 +41,9 @@ describe('migrateCaseInteractor', () => {
       ...adminUser,
       section: 'admin',
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(undefined);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue({
       name: 'john doe',
@@ -103,6 +107,18 @@ describe('migrateCaseInteractor', () => {
         },
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('throws an error case has a trial session id but it cannot be found in persistence', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          trialSessionId: 'cafebabe-b37b-479d-9201-067ec6e335bb',
+        },
+      }),
+    ).rejects.toThrow('Trial Session not found');
   });
 
   it('should pull the current user record from persistence', async () => {
@@ -179,12 +195,27 @@ describe('migrateCaseInteractor', () => {
   });
 
   describe('Practitioners via barNumber', () => {
-    it('finds an associated privatePractitioner with a barNumber to migrate', async () => {
+    const practitionerData = {
+      barNumber: 'PT1234',
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
+      name: 'Keelie Bruce',
+      role: 'privatePractitioner',
+      userId: '26e21f82-d029-4603-a954-544d8123ea04',
+    };
+
+    it('finds an associated privatePractitioner with a barNumber to migrate and overrides the contact information provided with the contact information from persistence', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockResolvedValueOnce({
-          userId: '26e21f82-d029-4603-a954-544d8123ea04',
-        });
+        .getPractitionerByBarNumber.mockResolvedValueOnce(practitionerData);
 
       await migrateCaseInteractor({
         applicationContext,
@@ -193,6 +224,9 @@ describe('migrateCaseInteractor', () => {
           privatePractitioners: [
             {
               barNumber: 'PT1234',
+              contact: { address1: '123 Main St' },
+              name: 'Saul Goodman',
+              representingPrimary: true,
               role: 'privatePractitioner',
             },
           ],
@@ -202,9 +236,37 @@ describe('migrateCaseInteractor', () => {
       expect(
         applicationContext.getPersistenceGateway().getPractitionerByBarNumber,
       ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase.mock.calls[0][0]
+          .caseToCreate.privatePractitioners[0],
+      ).toMatchObject({ ...practitionerData, representingPrimary: true });
     });
 
-    it('does not find an associated privatePractitioner with a barNumber to migrate', async () => {
+    it('throws a validation error if the privatePractitioner is not found in the database and valid data is not sent', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockResolvedValueOnce(null);
+
+      await expect(
+        migrateCaseInteractor({
+          applicationContext,
+          caseMetadata: {
+            ...caseMetadata,
+            privatePractitioners: [
+              {
+                barNumber: 'PT1234',
+                role: 'privatePractitioner',
+              },
+            ],
+          },
+        }),
+      ).rejects.toThrow('The Case entity was invalid');
+    });
+
+    it('adds a user id for the privatePractitioner if the practitioner is not found in the database and valid data is sent', async () => {
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockResolvedValueOnce(null);
@@ -213,23 +275,28 @@ describe('migrateCaseInteractor', () => {
         applicationContext,
         caseMetadata: {
           ...caseMetadata,
-          privatePractitioners: [
-            {
-              barNumber: 'PT1234',
-              role: 'privatePractitioner',
-            },
-          ],
+          privatePractitioners: [{ ...omit(practitionerData, 'userId') }],
         },
       });
 
       expect(applicationContext.getUniqueId).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase.mock.calls[0][0]
+          .caseToCreate.privatePractitioners[0],
+      ).toMatchObject({
+        ...omit(practitionerData, 'userId'),
+      });
     });
 
-    it('finds an associated irsPractitioner with a barNumber to migrate', async () => {
+    it('finds an associated irsPractitioner with a barNumber to migrate and overrides the contact information provided with the contact information from persistence', async () => {
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockResolvedValueOnce({
-          userId: '26e21f82-d029-4603-a954-544d8123ea04',
+          ...practitionerData,
+          role: 'irsPractitioner',
         });
 
       await migrateCaseInteractor({
@@ -239,6 +306,8 @@ describe('migrateCaseInteractor', () => {
           irsPractitioners: [
             {
               barNumber: 'PT1234',
+              contact: { address1: '123 Main St' },
+              name: 'Saul Goodman',
               role: 'irsPractitioner',
             },
           ],
@@ -248,9 +317,37 @@ describe('migrateCaseInteractor', () => {
       expect(
         applicationContext.getPersistenceGateway().getPractitionerByBarNumber,
       ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase.mock.calls[0][0]
+          .caseToCreate.irsPractitioners[0],
+      ).toMatchObject({ ...practitionerData, role: 'irsPractitioner' });
     });
 
-    it('does not find an associated irsPractitioner with a barNumber to migrate', async () => {
+    it('throws a validation error if the irsPractitioner is not found in the database and valid data is not sent', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockResolvedValueOnce(null);
+
+      await expect(
+        migrateCaseInteractor({
+          applicationContext,
+          caseMetadata: {
+            ...caseMetadata,
+            irsPractitioners: [
+              {
+                barNumber: 'PT1234',
+                role: 'irsPractitioner',
+              },
+            ],
+          },
+        }),
+      ).rejects.toThrow('The Case entity was invalid');
+    });
+
+    it('adds a user id for the irsPractitioner if the practitioner is not found in the database and valid data is sent', async () => {
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockResolvedValueOnce(null);
@@ -260,15 +357,22 @@ describe('migrateCaseInteractor', () => {
         caseMetadata: {
           ...caseMetadata,
           irsPractitioners: [
-            {
-              barNumber: 'PT1234',
-              role: 'irsPractitioner',
-            },
+            { ...omit(practitionerData, 'userId'), role: 'irsPractitioner' },
           ],
         },
       });
 
       expect(applicationContext.getUniqueId).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCase.mock.calls[0][0]
+          .caseToCreate.irsPractitioners[0],
+      ).toMatchObject({
+        ...omit(practitionerData, 'userId'),
+        role: 'irsPractitioner',
+      });
     });
   });
 

@@ -58,6 +58,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     irsNoticeDate: caseToUpdate.irsNoticeDate,
     mailingDate: caseToUpdate.mailingDate,
     noticeOfAttachments: caseToUpdate.noticeOfAttachments,
+    orderDesignatingPlaceOfTrial: caseToUpdate.orderDesignatingPlaceOfTrial,
     orderForAmendedPetition: caseToUpdate.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
       caseToUpdate.orderForAmendedPetitionAndFilingFee,
@@ -104,6 +105,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({
       applicationContext,
+      authorizedUser,
       caseEntity,
       caseToUpdate,
     });

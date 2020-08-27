@@ -10,14 +10,20 @@ const { ROLES } = require('../../entities/EntityConstants');
 describe('deleteCounselFromCaseInteractor', () => {
   const mockPrivatePractitioners = [
     {
+      barNumber: 'BN1234',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '02f8a9cf-3bc8-4c91-a765-2f19013cd004',
     },
     {
+      barNumber: 'BN2345',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
     },
     {
+      barNumber: 'BN3456',
+      name: 'Saul Goodman',
       role: ROLES.privatePractitioner,
       userId: '6de95584-fbf2-42d7-bd81-bf9e10633404',
     },
@@ -25,14 +31,20 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   const mockIrsPractitioners = [
     {
+      barNumber: 'BN9876',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '547f2148-3bb8-408b-bbaa-40d53f14f924',
     },
     {
+      barNumber: 'BN8765',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: 'bfd97089-cda0-45e0-8454-dd879023d0af',
     },
     {
+      barNumber: 'BN7654',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '55c50d5d-b2eb-466e-9775-d0e1b464472d',
     },

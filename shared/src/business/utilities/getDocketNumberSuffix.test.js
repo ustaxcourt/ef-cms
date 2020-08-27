@@ -37,6 +37,16 @@ describe('getDocketNumberSuffix', () => {
     );
   });
 
+  it('returns D for "Disclosure" caseType', () => {
+    const suffix = getDocketNumberSuffix({
+      caseType: CASE_TYPES_MAP.disclosure,
+      docketNumber: '101-18',
+      procedureType: 'Small',
+    });
+
+    expect(suffix).toEqual(DOCKET_NUMBER_SUFFIXES.DISCLOSURE);
+  });
+
   it('returns R for "Retirement Plan" caseType', () => {
     const suffix = getDocketNumberSuffix({
       caseType: CASE_TYPES_MAP.djRetirementPlan,

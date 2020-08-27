@@ -6,7 +6,7 @@
     name: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
       rules: 
         - 
           name: "max"

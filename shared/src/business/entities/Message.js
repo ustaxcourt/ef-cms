@@ -24,7 +24,6 @@ function Message(rawMessage, { applicationContext }) {
 
   this.attachments = (rawMessage.attachments || []).map(attachment => ({
     documentId: attachment.documentId,
-    documentTitle: attachment.documentTitle,
   }));
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
@@ -66,7 +65,7 @@ Message.VALIDATION_RULES = {
     .items(
       joi.object().keys({
         documentId: JoiValidationConstants.UUID.required(),
-        documentTitle: joi.string().max(500).required(),
+        documentTitle: joi.string().max(500).optional(),
       }),
     )
     .optional()
