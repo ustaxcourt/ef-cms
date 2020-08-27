@@ -44,28 +44,43 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
 };
 
 ContactFactory.getValidationRules = contactType => {
-  const validationOptions = [];
+  let results = joi;
 
   for (const partyType in PARTY_TYPES) {
-    for (const countryType in COUNTRY_TYPES) {
-      for (const isPaper of [true, false]) {
-        const constructor = ContactFactory.getContactConstructors({
-          partyType: PARTY_TYPES[partyType],
-        })[contactType];
+    const constructor = ContactFactory.getContactConstructors({
+      partyType: PARTY_TYPES[partyType],
+    })[contactType];
 
-        if (constructor) {
-          validationOptions.push(
+    if (constructor) {
+      results = results.when('partyType', {
+        is: PARTY_TYPES[partyType],
+        then: joi
+          .alternatives(
             constructor({
-              countryType: COUNTRY_TYPES[countryType],
-              isPaper,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              isPaper: true,
             }).VALIDATION_RULES,
-          );
-        }
-      }
+            constructor({
+              countryType: COUNTRY_TYPES.INTERNATIONAL,
+              isPaper: true,
+            }).VALIDATION_RULES,
+            constructor({
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              isPaper: false,
+            }).VALIDATION_RULES,
+            constructor({
+              countryType: COUNTRY_TYPES.INTERNATIONAL,
+              isPaper: false,
+            }).VALIDATION_RULES,
+          )
+          .required(),
+      });
+    } else {
+      results = results.forbidden();
     }
   }
 
-  return joi.alternatives().try(...validationOptions);
+  return results;
 };
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
