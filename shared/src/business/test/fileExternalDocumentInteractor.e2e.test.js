@@ -83,9 +83,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         eventCode: 'M115',
         hasSupportingDocuments: true,
         partyPrimary: true,
-        primaryDocumentFile: {
-          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-        },
+        primaryDocumentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         scenario: 'Nonstandard H',
         secondaryDocument: {
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
@@ -518,9 +516,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
         hasSupportingDocuments: true,
-        primaryDocumentFile: {
-          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-        },
+        primaryDocumentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         representingPrimary: true,
         scenario: 'Nonstandard H',
         secondaryDocument: {
