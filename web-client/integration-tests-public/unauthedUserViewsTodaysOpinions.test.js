@@ -1,10 +1,10 @@
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConvertsAnOrderToAnOpinion } from '../integration-tests/journey/docketClerkConvertsAnOrderToAnOpinion';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
+import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
-
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -45,5 +45,11 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkConvertsAnOrderToAnOpinion(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
-  unauthedUserViewsTodaysOpinions(test);
+  unauthedUserViewsTodaysOpinions(test, testClient);
+
+  // opinions for sealed cases should still be public
+  loginAs(testClient, 'docketclerk@example.com');
+  docketClerkSealsCase(testClient);
+
+  unauthedUserViewsTodaysOpinions(test, testClient);
 });

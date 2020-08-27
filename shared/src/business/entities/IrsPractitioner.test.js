@@ -4,6 +4,7 @@ const { IrsPractitioner } = require('./IrsPractitioner');
 describe('IrsPractitioner', () => {
   it('Creates a valid IrsPractitioner', () => {
     const user = new IrsPractitioner({
+      barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -15,8 +16,7 @@ describe('IrsPractitioner', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      firstName: 'firstName',
-      lastName: 'lastName',
+      name: 'Saul Goodman',
       role: ROLES.irsPractitioner,
       userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
     });

@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -18,7 +19,7 @@ describe('completeWorkItemInteractor', () => {
       sentBy: 'petitioner',
     },
     messages: [],
-    section: 'docket',
+    section: DOCKET_SECTION,
     sentBy: 'docketclerk',
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };

@@ -90,6 +90,7 @@ describe('associateIrsPractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     const user = {
+      barNumber: 'BN1234',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -7,18 +7,27 @@ const formattedCaseMessages = withAppContextDecorator(
   formattedCaseMessagesComputed,
 );
 
-const { PETITIONS_SECTION } = applicationContext.getConstants();
+const { DOCKET_SECTION, PETITIONS_SECTION } = applicationContext.getConstants();
 
 describe('formattedCaseMessages', () => {
   it('returns formatted date strings and splits messages into completed and in-progress', () => {
     const result = runCompute(formattedCaseMessages, {
       state: {
         caseDetail: {
+          documents: [
+            {
+              documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Test Document',
+            },
+          ],
           messages: [
             {
+              attachments: [
+                { documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859' },
+              ],
               createdAt: '2019-01-01T17:29:13.122Z',
               from: 'Test Sender',
-              fromSection: 'docket',
+              fromSection: DOCKET_SECTION,
               fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
               isCompleted: false,
               isRepliedTo: false,
@@ -33,7 +42,7 @@ describe('formattedCaseMessages', () => {
               completedAt: '2019-05-01T17:29:13.122Z',
               createdAt: '2019-01-01T17:29:13.122Z',
               from: 'Test Sender',
-              fromSection: 'docket',
+              fromSection: DOCKET_SECTION,
               fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
               isCompleted: true,
               isRepliedTo: true,
@@ -51,7 +60,16 @@ describe('formattedCaseMessages', () => {
 
     expect(result).toMatchObject({
       completedMessages: [{ completedAtFormatted: '05/01/19' }],
-      inProgressMessages: [{ createdAtFormatted: '01/01/19' }],
+      inProgressMessages: [
+        {
+          attachments: [
+            {
+              documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3859',
+            },
+          ],
+          createdAtFormatted: '01/01/19',
+        },
+      ],
     });
   });
 });

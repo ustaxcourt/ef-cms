@@ -84,6 +84,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStepBackward } from '@fortawesome/free-solid-svg-icons/faStepBackward';
 import { faStepForward } from '@fortawesome/free-solid-svg-icons/faStepForward';
 import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
+import { faStrikethrough } from '@fortawesome/free-solid-svg-icons/faStrikethrough';
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
@@ -114,7 +115,6 @@ const app = {
       .getItemInteractor({ applicationContext, key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
-    presenter.state.baseUrl = applicationContext.getBaseUrl();
 
     const user =
       (await applicationContext
@@ -221,6 +221,7 @@ const app = {
       faStepBackward,
       faStepForward,
       faStickyNote,
+      faStrikethrough,
       faSync,
       faThumbtack,
       faTimesCircle,

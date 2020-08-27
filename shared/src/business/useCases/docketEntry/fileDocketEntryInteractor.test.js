@@ -5,6 +5,7 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -14,7 +15,7 @@ describe('fileDocketEntryInteractor', () => {
   const user = {
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
   let caseRecord;

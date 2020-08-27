@@ -167,6 +167,23 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     } else {
       this.statistics = [];
     }
+
+    if (Array.isArray(rawCase.archivedDocuments)) {
+      this.archivedDocuments = rawCase.archivedDocuments.map(
+        document => new Document(document, { applicationContext }),
+      );
+    } else {
+      this.archivedDocuments = [];
+    }
+
+    if (Array.isArray(rawCase.archivedCorrespondences)) {
+      this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      );
+    } else {
+      this.archivedCorrespondences = [];
+    }
   }
 
   this.caseCaption = rawCase.caseCaption;
@@ -299,6 +316,18 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 }
 
 Case.VALIDATION_RULES = {
+  archivedCorrespondences: joi
+    .array()
+    .items(Correspondence.VALIDATION_RULES)
+    .optional()
+    .description('List of Correspondence Entities that were archived.'),
+  archivedDocuments: joi
+    .array()
+    .items(Document.VALIDATION_RULES)
+    .optional()
+    .description(
+      'List of Document Entities that were archived instead of added to the docket record.',
+    ),
   associatedJudge: joi
     .string()
     .max(50)
@@ -635,7 +664,11 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.optional().description(
+  trialSessionId: JoiValidationConstants.UUID.when('status', {
+    is: CASE_STATUS_TYPES.calendared,
+    otherwise: joi.optional(),
+    then: joi.required(),
+  }).description(
     'The unique ID of the trial session associated with this case.',
   ),
   trialTime: joi
@@ -756,6 +789,37 @@ Case.getCaseTitle = function (caseCaption) {
  */
 Case.prototype.attachIrsPractitioner = function (practitioner) {
   this.irsPractitioners.push(practitioner);
+};
+
+/**
+ * archives a document and adds it to the archivedDocuments array on the case
+ *
+ * @param {string} document the document to archive
+ */
+Case.prototype.archiveDocument = function (document, { applicationContext }) {
+  const documentToArchive = new Document(document, { applicationContext });
+  documentToArchive.archive();
+  this.archivedDocuments.push(documentToArchive);
+  this.deleteDocumentById({ documentId: documentToArchive.documentId });
+};
+
+/**
+ * archives a correspondence document and adds it to the archivedCorrespondences array on the case
+ *
+ * @param {string} correspondence the correspondence to archive
+ */
+Case.prototype.archiveCorrespondence = function (
+  correspondence,
+  { applicationContext },
+) {
+  const correspondenceToArchive = new Correspondence(correspondence, {
+    applicationContext,
+  });
+  correspondenceToArchive.archived = true;
+  this.archivedCorrespondences.push(correspondenceToArchive);
+  this.deleteCorrespondenceById({
+    correspondenceId: correspondenceToArchive.documentId,
+  });
 };
 
 /**
@@ -974,6 +1038,21 @@ Case.prototype.deleteDocumentById = function ({ documentId }) {
   return this;
 };
 
+/**
+ * deletes the correspondence with id documentId from the correspondence array
+ *
+ * @params {object} params the params object
+ * @params {string} params.correspondenceId the id of the correspondence to remove from the correspondence array
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
+  this.correspondence = this.correspondence.filter(
+    item => item.documentId !== correspondenceId,
+  );
+
+  return this;
+};
+
 const getPetitionDocumentFromDocuments = function (documents) {
   return documents.find(
     document =>
@@ -1086,6 +1165,20 @@ Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
 Case.prototype.getDocketRecordByDocumentId = function (documentId) {
   const foundEntry = this.docketRecord.find(
     entry => entry.documentId === documentId,
+  );
+
+  return foundEntry;
+};
+
+/**
+ * finds a docket record by its docket record index
+ *
+ * @param {string} docketRecordId the id of the docket record to be updated
+ * @returns {DocketRecord|undefined} the updated case entity
+ */
+Case.prototype.getDocketRecord = function (docketRecordId) {
+  const foundEntry = this.docketRecord.find(
+    entry => entry.docketRecordId === docketRecordId,
   );
 
   return foundEntry;
