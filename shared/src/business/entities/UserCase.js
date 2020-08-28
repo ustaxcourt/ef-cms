@@ -29,7 +29,7 @@ UserCase.prototype.init = function init(rawUserCase) {
 UserCase.validationName = 'UserCase';
 
 joiValidationDecorator(
-  UserCase,
+  validEntityDecorator(UserCase),
   joi.object().keys({
     caseCaption: Case.VALIDATION_RULES.caseCaption,
     createdAt: Case.VALIDATION_RULES.createdAt,
