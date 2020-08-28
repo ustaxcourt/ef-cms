@@ -6,7 +6,7 @@ const {
 } = require('./CourtIssuedDocumentConstants');
 const {
   JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+} = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
