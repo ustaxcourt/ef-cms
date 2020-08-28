@@ -143,7 +143,7 @@ const VALIDATION_ERROR_MESSAGES = {
 };
 
 joiValidationDecorator(
-  User,
+  validEntityDecorator(User),
   joi.object().keys(userValidation),
   VALIDATION_ERROR_MESSAGES,
 );
