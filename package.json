@@ -18,7 +18,7 @@
     "@hapi/joi-date": "^2.0.1",
     "archiver": "3.1.1",
     "autoprefixer": "^9.8.6",
-    "aws-sdk": "^2.741.0",
+    "aws-sdk": "^2.742.0",
     "aws-sdk-mock": "^5.0.0",
     "aws-serverless-express": "^3.3.8",
     "axios": "^0.19.2",
@@ -129,7 +129,7 @@
     "uswds": "^2.8.1",
     "uuid": "^8.3.0",
     "webpack": "^4.44.1",
-    "websocket": "^1.0.31",
+    "websocket": "^1.0.32",
     "wicg-inert": "^3.0.3"
   },
   "husky": {
