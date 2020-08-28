@@ -9,6 +9,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -19,6 +23,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -31,6 +39,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -42,6 +54,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -50,6 +66,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -68,6 +88,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "TrialSession"
     irsCalendarAdministrator: 
@@ -75,6 +100,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -93,6 +122,10 @@
           flags: 
             presence: "required"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "max"
               args: 
@@ -129,6 +162,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 400
@@ -157,6 +194,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Regular"
         - "Small"
@@ -186,6 +228,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "AK"
         - "AL"
@@ -288,11 +335,21 @@
             type: "string"
             flags: 
               presence: "optional"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
     term: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Winter"
         - "Fall"
@@ -303,6 +360,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -317,6 +378,10 @@
           flags: 
             presence: "required"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "max"
               args: 
@@ -337,14 +402,108 @@
                   version: 
                     - "uuidv4"
     trialLocation: 
-      type: "string"
+      type: "alternatives"
       flags: 
         presence: "required"
-      rules: 
+      matches: 
         - 
-          name: "max"
-          args: 
-            limit: 100
+          schema: 
+            type: "string"
+            flags: 
+              only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+            allow: 
+              - "Fresno, California"
+              - "Tallahassee, Florida"
+              - "Pocatello, Idaho"
+              - "Peoria, Illinois"
+              - "Wichita, Kansas"
+              - "Shreveport, Louisiana"
+              - "Portland, Maine"
+              - "Billings, Montana"
+              - "Albany, New York"
+              - "Syracuse, New York"
+              - "Bismarck, North Dakota"
+              - "Aberdeen, South Dakota"
+              - "Burlington, Vermont"
+              - "Roanoke, Virginia"
+              - "Cheyenne, Wyoming"
+              - "Birmingham, Alabama"
+              - "Mobile, Alabama"
+              - "Anchorage, Alaska"
+              - "Phoenix, Arizona"
+              - "Little Rock, Arkansas"
+              - "Los Angeles, California"
+              - "San Diego, California"
+              - "San Francisco, California"
+              - "Denver, Colorado"
+              - "Hartford, Connecticut"
+              - "Washington, District of Columbia"
+              - "Jacksonville, Florida"
+              - "Miami, Florida"
+              - "Tampa, Florida"
+              - "Atlanta, Georgia"
+              - "Honolulu, Hawaii"
+              - "Boise, Idaho"
+              - "Chicago, Illinois"
+              - "Indianapolis, Indiana"
+              - "Des Moines, Iowa"
+              - "Louisville, Kentucky"
+              - "New Orleans, Louisiana"
+              - "Baltimore, Maryland"
+              - "Boston, Massachusetts"
+              - "Detroit, Michigan"
+              - "St. Paul, Minnesota"
+              - "Jackson, Mississippi"
+              - "Kansas City, Missouri"
+              - "St. Louis, Missouri"
+              - "Helena, Montana"
+              - "Omaha, Nebraska"
+              - "Las Vegas, Nevada"
+              - "Reno, Nevada"
+              - "Albuquerque, New Mexico"
+              - "Buffalo, New York"
+              - "New York City, New York"
+              - "Winston-Salem, North Carolina"
+              - "Cincinnati, Ohio"
+              - "Cleveland, Ohio"
+              - "Columbus, Ohio"
+              - "Oklahoma City, Oklahoma"
+              - "Portland, Oregon"
+              - "Philadelphia, Pennsylvania"
+              - "Pittsburgh, Pennsylvania"
+              - "Columbia, South Carolina"
+              - "Knoxville, Tennessee"
+              - "Memphis, Tennessee"
+              - "Nashville, Tennessee"
+              - "Dallas, Texas"
+              - "El Paso, Texas"
+              - "Houston, Texas"
+              - "Lubbock, Texas"
+              - "San Antonio, Texas"
+              - "Salt Lake City, Utah"
+              - "Richmond, Virginia"
+              - "Seattle, Washington"
+              - "Spokane, Washington"
+              - "Charleston, West Virginia"
+              - "Milwaukee, Wisconsin"
+              - null
+        - 
+          schema: 
+            type: "string"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "pattern"
+                args: 
+                  regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
     trialSessionId: 
       type: "string"
       flags: 
@@ -391,6 +550,10 @@
             disposition: 
               type: "string"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 

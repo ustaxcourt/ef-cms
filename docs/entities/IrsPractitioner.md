@@ -10,6 +10,10 @@
         description: "A unique identifier comprising of the practitioner initials, date, and series number."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -24,6 +28,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -32,6 +40,10 @@
           flags: 
             presence: "optional"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "max"
               args: 
@@ -44,6 +56,10 @@
             presence: "optional"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -55,6 +71,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -63,11 +83,21 @@
           flags: 
             only: true
             presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "domestic"
             - "international"
         country: 
           type: "string"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           whens: 
             - 
               ref: 
@@ -98,6 +128,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -123,6 +157,10 @@
                   presence: "required"
                 rules: 
                   - 
+                    name: "min"
+                    args: 
+                      limit: 1
+                  - 
                     name: "max"
                     args: 
                       limit: 100
@@ -143,6 +181,11 @@
           type: "string"
           flags: 
             only: true
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "AK"
             - "AL"
@@ -254,6 +297,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "IrsPractitioner"
     name: 
@@ -261,6 +309,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -270,6 +322,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "irsPractitioner"
     serviceIndicator: 
@@ -277,6 +334,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Electronic"
         - "None"
@@ -285,6 +347,11 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     userId: 
       type: "string"
       flags: 

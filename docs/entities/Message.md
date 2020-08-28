@@ -33,6 +33,10 @@
                 presence: "optional"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 500
@@ -42,6 +46,11 @@
         only: true
         presence: "required"
         description: "The status of the associated case."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Assigned - Case"
         - "Assigned - Motion"
@@ -60,12 +69,21 @@
       flags: 
         presence: "required"
         description: "The case title for the associated cases."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     completedMessage: 
       type: "string"
       flags: 
         presence: "optional"
         description: "The message entered when completing the message thread."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -100,6 +118,10 @@
         description: "The docket number and suffix for the associated case."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 20
@@ -108,6 +130,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Message"
     from: 
@@ -116,6 +143,10 @@
         presence: "required"
         description: "The name of the user who sent the message."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -126,6 +157,11 @@
         only: true
         presence: "required"
         description: "The section of the user who sent the message."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admissions"
@@ -224,6 +260,10 @@
         description: "The name of the user who completed the message thread"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -256,6 +296,11 @@
       flags: 
         only: true
         description: "The section of the user who completed the message thread"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admissions"
@@ -371,6 +416,10 @@
         description: "The message text."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -413,6 +462,10 @@
         description: "The subject line of the message."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 250
@@ -422,6 +475,10 @@
         presence: "required"
         description: "The name of the user who is the recipient of the message."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -434,6 +491,11 @@
         only: true
         presence: "required"
         description: "The section of the user who is the recipient of the message."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admissions"

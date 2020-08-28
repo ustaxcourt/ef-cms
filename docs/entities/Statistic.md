@@ -58,6 +58,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Statistic"
     irsDeficiencyAmount: 
@@ -92,6 +97,11 @@
         presence: "required"
         only: true
         description: "Whether the statistics are for a year or period."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Year"
         - "Period"

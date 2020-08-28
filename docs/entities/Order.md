@@ -9,6 +9,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -17,6 +21,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Administrative Record"
         - "Affidavit in Support"
@@ -56,6 +65,8 @@
         - "Entry of Appearance"
         - "Evidence"
         - "Exhibit(s)"
+        - "Filing Fee Paid"
+        - "Filing Fee Waived"
         - "Further Trial before"
         - "Hearing Exhibits"
         - "Hearing before"
@@ -358,6 +369,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "A"
         - "AAAP"
@@ -702,6 +718,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 

@@ -38,7 +38,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     // verify that the user was given a link to their receipt
     expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
 
-    expect(caseDetail.documents.length).toEqual(6);
+    expect(caseDetail.documents.length).toEqual(7); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
 
     //verify that the documents were added and served
     expect(caseDetail.documents).toEqual(

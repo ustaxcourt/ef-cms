@@ -8,6 +8,8 @@ const {
 const {
   SESSION_TERMS,
   SESSION_TYPES,
+  TRIAL_CITY_STRINGS,
+  TRIAL_LOCATION_MATCHER,
   US_STATES,
   US_STATES_OTHER,
 } = require('../EntityConstants');
@@ -111,53 +113,55 @@ TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = [
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: joi.string().max(100).allow('').optional(),
-    address2: joi.string().max(100).allow('').optional(),
-    city: joi.string().max(100).allow('').optional(),
-    courtReporter: joi.string().max(100).optional(),
-    courthouseName: joi.string().max(100).allow('').optional(),
+    address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
+    address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
+    city: JoiValidationConstants.STRING.max(100).allow('').optional(),
+    courtReporter: JoiValidationConstants.STRING.max(100).optional(),
+    courthouseName: JoiValidationConstants.STRING.max(100).allow('').optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    entityName: joi.string().valid('TrialSession').required(),
-    irsCalendarAdministrator: joi.string().max(100).optional(),
+    entityName: JoiValidationConstants.STRING.valid('TrialSession').required(),
+    irsCalendarAdministrator: JoiValidationConstants.STRING.max(100).optional(),
     isCalendared: joi.boolean().required(),
     judge: joi
       .object({
-        name: joi.string().max(100).required(),
+        name: JoiValidationConstants.STRING.max(100).required(),
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
     maxCases: joi.number().greater(0).integer().required(),
-    notes: joi.string().max(400).optional(),
+    notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
-    sessionType: joi
-      .string()
-      .valid(...SESSION_TYPES)
-      .required(),
+    sessionType: JoiValidationConstants.STRING.valid(
+      ...SESSION_TYPES,
+    ).required(),
     startDate: JoiValidationConstants.ISO_DATE.required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-    state: joi
-      .string()
-      .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
-      .optional(),
+    state: JoiValidationConstants.STRING.valid(
+      ...Object.keys(US_STATES),
+      ...US_STATES_OTHER,
+    ).optional(),
     swingSession: joi.boolean().optional(),
     swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
       is: true,
-      otherwise: joi.string().optional(),
+      otherwise: JoiValidationConstants.STRING.optional(),
       then: joi.required(),
     }),
-    term: joi
-      .string()
-      .valid(...SESSION_TERMS)
-      .required(),
-    termYear: joi.string().max(4).required(),
+    term: JoiValidationConstants.STRING.valid(...SESSION_TERMS).required(),
+    termYear: JoiValidationConstants.STRING.max(4).required(),
     trialClerk: joi
       .object({
-        name: joi.string().max(100).required(),
+        name: JoiValidationConstants.STRING.max(100).required(),
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
-    trialLocation: joi.string().max(100).required(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      )
+      .required(),
     trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
@@ -168,14 +172,14 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
-        disposition: joi
-          .string()
-          .max(100)
-          .when('removedFromTrial', {
+        disposition: JoiValidationConstants.STRING.max(100).when(
+          'removedFromTrial',
+          {
             is: true,
             otherwise: joi.optional().allow(null),
             then: joi.required(),
-          }),
+          },
+        ),
         docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
           'Docket number of the case.',
         ),

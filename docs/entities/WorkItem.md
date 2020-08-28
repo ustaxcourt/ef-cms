@@ -26,6 +26,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -36,6 +40,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -49,6 +57,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Assigned - Case"
         - "Assigned - Motion"
@@ -68,6 +81,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -83,6 +100,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -111,6 +132,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -143,6 +168,11 @@
       flags: 
         presence: "optional"
         description: "Auto-generated from docket number and the suffix."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     document: 
       type: "object"
       flags: 
@@ -152,6 +182,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "WorkItem"
     hideFromPendingMessages: 
@@ -179,6 +214,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admissions"
@@ -239,6 +279,10 @@
         description: "The name of the user that sent the WorkItem"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -247,6 +291,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admissions"
