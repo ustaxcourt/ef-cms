@@ -9,7 +9,8 @@ export const petitionsClerkViewsCaseDetailAfterAddingNotice = test => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    // expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(4);
     expect(
       test
         .getState('caseDetail.documents')
