@@ -1,6 +1,7 @@
 const joi = require('joi');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
 
@@ -8,11 +9,13 @@ const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
  * @param {object} rawOrder the raw order data
  * @constructor
  */
-function Order(rawOrder) {
+function Order() {}
+
+Order.prototype.init = function init(rawOrder) {
   this.documentTitle = rawOrder.documentTitle;
   this.documentType = rawOrder.documentType;
   this.orderBody = rawOrder.orderBody;
-}
+};
 
 Order.VALIDATION_ERROR_MESSAGES = {
   documentTitle: 'Enter the title of this order',
@@ -40,4 +43,4 @@ joiValidationDecorator(
   Order.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { Order };
+module.exports = { Order: validEntityDecorator(Order) };

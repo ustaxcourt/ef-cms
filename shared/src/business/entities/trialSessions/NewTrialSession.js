@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { TrialSession } = require('./TrialSession');
 
@@ -15,9 +16,14 @@ NewTrialSession.validationName = 'TrialSession';
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function NewTrialSession(rawSession, { applicationContext }) {
+function NewTrialSession() {}
+
+NewTrialSession.prototype.init = function init(
+  rawSession,
+  { applicationContext },
+) {
   TrialSession.prototype.init.call(this, rawSession, { applicationContext });
-}
+};
 
 NewTrialSession.VALIDATION_ERROR_MESSAGES = {
   ...TrialSession.VALIDATION_ERROR_MESSAGES,
@@ -32,4 +38,4 @@ joiValidationDecorator(
   NewTrialSession.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { NewTrialSession };
+module.exports = { NewTrialSession: validEntityDecorator(NewTrialSession) };
