@@ -1,3 +1,4 @@
+const { INITIAL_DOCUMENT_TYPES } = require('../EntityConstants');
 const { PublicDocument } = require('./PublicDocument');
 
 describe('PublicDocument', () => {
@@ -31,6 +32,22 @@ describe('PublicDocument', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
+    });
+  });
+
+  describe('minute entries', () => {
+    it('creates minute entry', () => {
+      const document = new PublicDocument({
+        description: 'Request for Place of Trial at Flavortown, TN',
+        documentType:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      });
+
+      expect(document.isValid()).toBe(true);
     });
   });
 });

@@ -26,10 +26,10 @@ describe('Chambers dashboard', () => {
   petitionerViewsDashboard(test);
 
   loginAs(test, 'armensChambers@example.com');
-  chambersUserViewsCaseDetail(test);
+  chambersUserViewsCaseDetail(test, 3); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   chambersUserViewsDraftDocuments(test);
   chambersUserAddsOrderToCase(test);
-  chambersUserViewsCaseDetailAfterAddingOrder(test);
+  chambersUserViewsCaseDetailAfterAddingOrder(test, 4);
   chambersUserViewsDraftDocuments(test, 1);
   chambersUserViewsSignDraftDocument(test);
   chambersUserAppliesSignatureToDraftDocument(test);
