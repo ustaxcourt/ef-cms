@@ -50,23 +50,19 @@ describe('completeDocketEntryQCInteractor', () => {
       },
       createdAt: '',
       docketNumber: '45678-18',
-      docketRecord: [
-        {
-          description: 'Answer Docket Record Entry',
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          eventCode: 'A',
-          index: 42,
-        },
-      ],
+      docketRecord: [],
       documents: [
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
+          description: 'Answer Docket Record Entry',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          index: 42,
+          isOnDocketRecord: true,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItem,
         },
@@ -153,7 +149,6 @@ describe('completeDocketEntryQCInteractor', () => {
       completeDocketEntryQCInteractor({
         applicationContext,
         entryMetadata: {
-          description: 'Memorandum in Support',
           docketNumber: caseRecord.docketNumber,
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Document Title',
@@ -192,7 +187,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
@@ -223,7 +217,6 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         additionalInfo: '123',
         additionalInfo2: 'abc',
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
@@ -250,7 +243,6 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
@@ -305,7 +297,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
@@ -345,7 +336,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Notice of Change of Address',
@@ -385,7 +375,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Notice of Change of Address',
@@ -414,7 +403,6 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        description: 'Memorandum in Support',
         docketNumber: caseRecord.docketNumber,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'My Edited Document',

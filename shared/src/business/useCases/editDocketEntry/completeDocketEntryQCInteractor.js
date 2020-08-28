@@ -23,11 +23,9 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { omit } = require('lodash');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -69,9 +67,10 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
-  const { index: docketRecordIndexUpdated } = caseEntity.docketRecord.find(
-    record => record.documentId === documentId,
-  );
+  const { index: docketRecordIndexUpdated } = [
+    ...caseEntity.docketRecord,
+    ...caseEntity.documents.filter(d => d.isOnDocketRecord),
+  ].find(record => record.documentId === documentId);
 
   const currentDocument = caseEntity.getDocumentById({
     documentId,
@@ -110,6 +109,8 @@ exports.completeDocketEntryQCInteractor = async ({
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
+      description: editableFields.documentTitle,
+      editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
@@ -171,23 +172,6 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
-  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
-    updatedDocument.documentId,
-  );
-
-  const docketRecordEntry = new DocketRecord(
-    {
-      ...existingDocketRecordEntry,
-      description: updatedDocumentTitle,
-      documentId: updatedDocument.documentId,
-      editState: '{}',
-      eventCode: updatedDocument.eventCode,
-      filingDate: updatedDocument.receivedAt,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(updatedDocument);
 
   const workItemToUpdate = updatedDocument.workItem;
