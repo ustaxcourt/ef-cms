@@ -113,7 +113,10 @@ WorkItem.VALIDATION_RULES = joi.object().keys({
   workItemId: JoiValidationConstants.UUID.required(),
 });
 
-joiValidationDecorator(WorkItem, WorkItem.VALIDATION_RULES);
+joiValidationDecorator(
+  validEntityDecorator(WorkItem),
+  WorkItem.VALIDATION_RULES,
+);
 
 /**
  * Assign to a user

@@ -12,9 +12,7 @@ const { ROLES } = require('./EntityConstants');
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function PublicUser() {
-  this.entityName = 'PublicUser';
-}
+function PublicUser() {}
 
 PublicUser.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
@@ -36,7 +34,7 @@ const VALIDATION_ERROR_MESSAGES = {
 };
 
 joiValidationDecorator(
-  PublicUser,
+  validEntityDecorator(PublicUser),
   joi.object().keys(userValidation),
   VALIDATION_ERROR_MESSAGES,
 );
