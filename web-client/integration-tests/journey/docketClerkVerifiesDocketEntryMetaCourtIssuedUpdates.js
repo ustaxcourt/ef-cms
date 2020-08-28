@@ -10,7 +10,7 @@ export const docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDetail = test.getState('caseDetail');
-    const docketRecordEntry = caseDetail.docketRecord.find(
+    const docketRecordEntry = caseDetail.documents.find(
       entry => entry.index === docketRecordIndex,
     );
 

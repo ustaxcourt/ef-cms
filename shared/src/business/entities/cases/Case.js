@@ -920,8 +920,19 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  this.documents = [...this.documents, document];
+Case.prototype.addDocumentWithoutDocketRecord = function (documentEntity) {
+  if (documentEntity.isOnDocketRecord) {
+    const updateIndex = shouldGenerateDocketRecordIndex({
+      caseDetail: this,
+      documentEntity,
+    });
+
+    if (updateIndex) {
+      documentEntity.index = this.generateNextDocketRecordIndex();
+    }
+  }
+
+  this.documents = [...this.documents, documentEntity];
 };
 
 Case.prototype.closeCase = function () {
@@ -1119,7 +1130,10 @@ Case.prototype.setRequestForTrialDocketRecord = function (
  * @returns {number} the next docket record index
  */
 Case.prototype.generateNextDocketRecordIndex = function () {
-  const recordsWithIndex = [...this.docketRecord]
+  const recordsWithIndex = [
+    ...this.docketRecord,
+    ...this.documents.filter(d => d.isOnDocketRecord),
+  ]
     .filter(record => record.index !== undefined)
     .sort((a, b) => a.index - b.index);
   const nextIndex = recordsWithIndex.length + 1;
@@ -1225,6 +1239,19 @@ Case.prototype.updateDocument = function (updatedDocument) {
   const foundDocument = allCaseDocuments.find(
     document => document.documentId === updatedDocument.documentId,
   );
+
+  if (foundDocument) Object.assign(foundDocument, updatedDocument);
+
+  if (updatedDocument.isOnDocketRecord) {
+    const updateIndex = shouldGenerateDocketRecordIndex({
+      caseDetail: this,
+      documentEntity: foundDocument,
+    });
+
+    if (updateIndex) {
+      updatedDocument.index = this.generateNextDocketRecordIndex();
+    }
+  }
 
   if (foundDocument) Object.assign(foundDocument, updatedDocument);
 

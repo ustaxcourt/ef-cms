@@ -21,6 +21,7 @@ describe('publicCaseDetailHelper', () => {
       caseDetail: {
         docketNumber: '123-45',
         docketRecord: [],
+        documents: [],
       },
     };
   });

@@ -37,9 +37,10 @@ export const setDocketEntryMetaFormForEditAction = ({
     return deconstructedDate;
   };
 
-  const docketRecordEntry = docketRecord.find(
-    ({ index }) => index === docketRecordIndex,
-  );
+  const docketRecordEntry = [
+    ...docketRecord,
+    ...documents.filter(d => d.isOnDocketRecord),
+  ].find(({ index }) => index === docketRecordIndex);
 
   store.set(state.docketRecordIndex, docketRecordIndex);
 
