@@ -1249,7 +1249,7 @@ describe('Case entity', () => {
       );
 
       const nextIndex = caseRecord.generateNextDocketRecordIndex();
-      expect(nextIndex).toEqual(3);
+      expect(nextIndex).toEqual(4); // because there is one document with isOnDocketRecord = true
     });
 
     it('returns an index of 1 if the docketRecord array is empty', () => {
@@ -1264,7 +1264,7 @@ describe('Case entity', () => {
       );
 
       const nextIndex = caseRecord.generateNextDocketRecordIndex();
-      expect(nextIndex).toEqual(1);
+      expect(nextIndex).toEqual(2); // because there is one document with isOnDocketRecord = true
     });
   });
 
