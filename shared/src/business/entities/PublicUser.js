@@ -1,11 +1,22 @@
 const joi = require('joi');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { baseUserValidation: userValidation } = require('./User');
 const { ROLES } = require('./EntityConstants');
 
-PublicUser.validationName = 'PublicUser';
+/**
+ * constructor
+ *
+ * @param {object} rawUser the raw user data
+ * @constructor
+ */
+function PublicUser() {}
+
+PublicUser.prototype.init = function init(rawUser) {
+  userDecorator(this, rawUser);
+};
 
 const userDecorator = (obj, rawObj) => {
   obj.name = rawObj.name;
@@ -16,28 +27,20 @@ const userDecorator = (obj, rawObj) => {
   }
 };
 
+PublicUser.validationName = 'PublicUser';
+
 const VALIDATION_ERROR_MESSAGES = {
   role: 'Role is required',
 };
 
-/**
- * constructor
- *
- * @param {object} rawUser the raw user data
- * @constructor
- */
-function PublicUser(rawUser) {
-  userDecorator(this, rawUser);
-}
-
 joiValidationDecorator(
-  PublicUser,
+  validEntityDecorator(PublicUser),
   joi.object().keys(userValidation),
   VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = {
-  PublicUser,
+  PublicUser: validEntityDecorator(PublicUser),
   VALIDATION_ERROR_MESSAGES,
   userDecorator,
   userValidation,

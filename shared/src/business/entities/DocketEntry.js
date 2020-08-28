@@ -25,12 +25,11 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
-
-DocketEntry.validationName = 'DocketEntry';
 
 /**
  * constructor
@@ -38,12 +37,17 @@ DocketEntry.validationName = 'DocketEntry';
  * @param {object} rawDocketEntry the raw document data
  * @constructor
  */
-function DocketEntry(rawDocketEntry, { applicationContext, filtered = false }) {
+function DocketEntry() {
+  this.entityName = 'DocketEntry';
+}
+
+DocketEntry.prototype.init = function init(
+  rawDocketEntry,
+  { applicationContext, filtered = false },
+) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-
-  this.entityName = 'DocketEntry';
 
   if (
     !filtered ||
@@ -170,7 +174,7 @@ function DocketEntry(rawDocketEntry, { applicationContext, filtered = false }) {
   }
 
   this.generateFiledBy(rawDocketEntry);
-}
+};
 
 DocketEntry.isPendingOnCreation = rawDocketEntry => {
   const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
@@ -183,6 +187,8 @@ DocketEntry.isPendingOnCreation = rawDocketEntry => {
   });
   return isPending;
 };
+
+DocketEntry.validationName = 'DocketEntry';
 
 DocketEntry.VALIDATION_RULES = joi.object().keys({
   action: joi
@@ -745,4 +751,4 @@ DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
   this.strickenAt = createISODateString();
 };
 
-exports.DocketEntry = DocketEntry;
+exports.DocketEntry = validEntityDecorator(DocketEntry);
