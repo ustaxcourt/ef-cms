@@ -7,28 +7,53 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     address2: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     city: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     courtReporter: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     courthouseName: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     createdAt: 
@@ -49,6 +74,11 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     isCalendared: 
       type: "boolean"
       flags: 
@@ -57,6 +87,27 @@
       type: "object"
       flags: 
         presence: "optional"
+      keys: 
+        name: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "max"
+              args: 
+                limit: 100
+        userId: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
     maxCases: 
       type: "number"
       flags: 
@@ -121,9 +172,71 @@
     state: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
       allow: 
-        - ""
+        - "AK"
+        - "AL"
+        - "AR"
+        - "AZ"
+        - "CA"
+        - "CO"
+        - "CT"
+        - "DC"
+        - "DE"
+        - "FL"
+        - "GA"
+        - "HI"
+        - "IA"
+        - "ID"
+        - "IL"
+        - "IN"
+        - "KS"
+        - "KY"
+        - "LA"
+        - "MA"
+        - "MD"
+        - "ME"
+        - "MI"
+        - "MN"
+        - "MO"
+        - "MS"
+        - "MT"
+        - "NC"
+        - "ND"
+        - "NE"
+        - "NH"
+        - "NJ"
+        - "NM"
+        - "NV"
+        - "NY"
+        - "OH"
+        - "OK"
+        - "OR"
+        - "PA"
+        - "RI"
+        - "SC"
+        - "SD"
+        - "TN"
+        - "TX"
+        - "UT"
+        - "VA"
+        - "VT"
+        - "WA"
+        - "WI"
+        - "WV"
+        - "WY"
+        - "AA"
+        - "AE"
+        - "AP"
+        - "AS"
+        - "FM"
+        - "GU"
+        - "MH"
+        - "MP"
+        - "PR"
+        - "PW"
+        - "VI"
     swingSession: 
       type: "boolean"
       flags: 
@@ -173,14 +286,45 @@
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 4
     trialClerk: 
       type: "object"
       flags: 
         presence: "optional"
+      keys: 
+        name: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "max"
+              args: 
+                limit: 100
+        userId: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
     trialLocation: 
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     trialSessionId: 
       type: "string"
       flags: 
@@ -218,6 +362,11 @@
                 presence: "optional"
             disposition: 
               type: "string"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
               whens: 
                 - 
                   ref: 

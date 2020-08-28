@@ -2,6 +2,7 @@ import { isEmpty, isEqual, sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const addToTrialSessionModalHelper = (get, applicationContext) => {
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { showAllLocations, trialSessionId, trialSessions } = get(state.modal);
 
@@ -41,17 +42,19 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
         );
 
         if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-          trialSession.computedStatus = 'Closed';
+          trialSession.computedStatus = SESSION_STATUS_GROUPS.closed;
         } else if (trialSession.isCalendared) {
-          trialSession.computedStatus = 'Open';
+          trialSession.computedStatus = SESSION_STATUS_GROUPS.open;
         } else {
-          trialSession.computedStatus = 'New';
+          trialSession.computedStatus = SESSION_STATUS_GROUPS.new;
         }
 
         return trialSession;
       })
       .filter(trialSession =>
-        ['New', 'Open'].includes(trialSession.computedStatus),
+        [SESSION_STATUS_GROUPS.new, SESSION_STATUS_GROUPS.open].includes(
+          trialSession.computedStatus,
+        ),
       );
 
     if (showAllLocations) {
