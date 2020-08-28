@@ -10,6 +10,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   userDecorator,
@@ -23,17 +24,11 @@ const {
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function Practitioner(rawUser) {
-  this.init(rawUser);
+function Practitioner() {
+  this.entityName = 'Practitioner';
 }
 
-const roleMap = {
-  DOJ: ROLES.irsPractitioner,
-  IRS: ROLES.irsPractitioner,
-  Private: ROLES.privatePractitioner,
-};
-
-Practitioner.prototype.init = function (rawUser) {
+Practitioner.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
@@ -42,7 +37,6 @@ Practitioner.prototype.init = function (rawUser) {
   this.barNumber = rawUser.barNumber;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
-  this.entityName = 'Practitioner';
   this.firmName = rawUser.firmName;
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
@@ -57,6 +51,12 @@ Practitioner.prototype.init = function (rawUser) {
   } else {
     this.role = ROLES.inactivePractitioner;
   }
+};
+
+const roleMap = {
+  DOJ: ROLES.irsPractitioner,
+  IRS: ROLES.irsPractitioner,
+  Private: ROLES.privatePractitioner,
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -182,7 +182,9 @@ joiValidationDecorator(
 );
 
 Practitioner.validationName = 'Practitioner';
+
 Practitioner.validationRules = practitionerValidation;
+
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
 
 /**
@@ -201,6 +203,4 @@ Practitioner.getFullName = function (practitionerData) {
   return `${firstName}${middleName} ${lastName}${suffix}`;
 };
 
-module.exports = {
-  Practitioner,
-};
+exports.Practitioner = validEntityDecorator(Practitioner);

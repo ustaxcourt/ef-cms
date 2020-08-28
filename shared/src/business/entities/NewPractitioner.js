@@ -1,6 +1,7 @@
 const joi = require('joi');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { Practitioner } = require('./Practitioner');
 
@@ -10,11 +11,17 @@ const { Practitioner } = require('./Practitioner');
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function NewPractitioner(rawUser) {
+function NewPractitioner() {
+  this.entityName = 'Practitioner';
+}
+
+NewPractitioner.prototype.init = function init(rawUser) {
   Practitioner.prototype.init.call(this, rawUser);
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
-}
+};
+
+NewPractitioner.validationName = 'Practitioner';
 
 const VALIDATION_ERROR_MESSAGES = {
   ...Practitioner.VALIDATION_ERROR_MESSAGES,
@@ -38,6 +45,4 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-NewPractitioner.validationName = 'Practitioner';
-
-module.exports = { NewPractitioner };
+exports.NewPractitioner = validEntityDecorator(NewPractitioner);
