@@ -315,8 +315,8 @@ describe('Case migration journey', () => {
     const formattedCase = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    expect(formattedCase.formattedDocketEntries[3].showNotServed).toBe(false);
-    expect(formattedCase.formattedDocketEntries[3].isInProgress).toBe(false);
+    expect(formattedCase.formattedDocketEntries[4].showNotServed).toBe(false);
+    expect(formattedCase.formattedDocketEntries[4].isInProgress).toBe(false);
   });
 
   loginAs(test, 'privatePractitioner@example.com');
