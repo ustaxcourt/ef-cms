@@ -13,7 +13,25 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+
+User.validationName = 'User';
+
+/**
+ * constructor
+ *
+ * @param {object} rawUser the raw user data
+ * @constructor
+ */
+function User() {
+  this.entityName = 'User';
+}
+
+User.prototype.init = function init(rawUser) {
+  userDecorator(this, rawUser);
+  this.section = rawUser.section;
+};
 
 const userDecorator = (obj, rawObj) => {
   obj.email = rawObj.email;
@@ -124,20 +142,6 @@ const VALIDATION_ERROR_MESSAGES = {
   state: 'Enter state',
 };
 
-/**
- * constructor
- *
- * @param {object} rawUser the raw user data
- * @constructor
- */
-function User(rawUser) {
-  userDecorator(this, rawUser);
-  this.entityName = 'User';
-  this.section = rawUser.section;
-}
-
-User.validationName = 'User';
-
 joiValidationDecorator(
   User,
   joi.object().keys(userValidation),
@@ -171,7 +175,7 @@ User.isInternalUser = function (role) {
 
 module.exports = {
   USER_CONTACT_VALIDATION_RULES,
-  User,
+  User: validEntityDecorator(User),
   VALIDATION_ERROR_MESSAGES,
   baseUserValidation,
   userDecorator,
