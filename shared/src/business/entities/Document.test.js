@@ -3,6 +3,7 @@ const {
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_DOCUMENT_TYPES,
@@ -1690,6 +1691,25 @@ describe('Document entity', () => {
       expect(createdDocument.getFormattedValidationErrors()).toEqual({
         servedParties: '"servedParties" must be an array',
       });
+    });
+  });
+
+  describe('minute entries', () => {
+    it('creates minute entry', () => {
+      const document = new Document(
+        {
+          description: 'Request for Place of Trial at Flavortown, TN',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBe(true);
     });
   });
 });

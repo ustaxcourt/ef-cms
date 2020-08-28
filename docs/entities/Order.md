@@ -65,6 +65,8 @@
         - "Entry of Appearance"
         - "Evidence"
         - "Exhibit(s)"
+        - "Filing Fee Paid"
+        - "Filing Fee Waived"
         - "Further Trial before"
         - "Hearing Exhibits"
         - "Hearing before"

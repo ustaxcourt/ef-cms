@@ -30,7 +30,7 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   docketClerkUploadsACourtIssuedDocument(test, fakeFile);
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 3);
+  petitionsClerkViewsCaseDetail(test, 4); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   petitionsClerkViewsDraftOrder(test, 0);
 
   loginAs(test, 'docketclerk@example.com');
@@ -43,5 +43,5 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   docketClerkAddsDocketEntryFromDraft(test, 0);
 
   loginAs(test, 'petitioner@example.com');
-  petitionerViewsCaseDetail(test, { documentCount: 3 });
+  petitionerViewsCaseDetail(test, { documentCount: 4 }); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
 });

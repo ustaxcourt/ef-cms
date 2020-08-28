@@ -48,7 +48,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 5);
+  petitionsClerkViewsCaseDetail(test, 6); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   petitionsClerkViewsDraftOrder(test, 0);
   petitionsClerkPrioritizesCase(test);
 

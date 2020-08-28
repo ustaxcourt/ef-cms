@@ -26,9 +26,31 @@ describe('publicCaseDetailHelper', () => {
     };
   });
 
-  it('should return the formattedDocketEntries as an array', () => {
-    const result = runCompute(publicCaseDetailHelper, { state });
-    expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
+  describe('formattedDocketEntries', () => {
+    it('should return the formattedDocketEntries as an array', () => {
+      const result = runCompute(publicCaseDetailHelper, { state });
+      expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
+    });
+
+    it('should return hasDocument false if the document is a minute entry', () => {
+      state.caseDetail.documents = [
+        {
+          description: 'Request for Place of Trial at Flavortown, TN',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+      expect(result.formattedDocketEntries[0]).toMatchObject({
+        description: 'Request for Place of Trial at Flavortown, TN',
+        hasDocument: false,
+      });
+    });
   });
 
   it('should indicate when a case is sealed', () => {
