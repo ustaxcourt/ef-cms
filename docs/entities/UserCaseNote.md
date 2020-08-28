@@ -9,6 +9,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -28,6 +32,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 

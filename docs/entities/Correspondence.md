@@ -14,6 +14,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -57,6 +61,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 

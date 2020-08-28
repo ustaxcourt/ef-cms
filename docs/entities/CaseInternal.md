@@ -30,6 +30,10 @@
                 presence: "required"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -73,6 +77,10 @@
               flags: 
                 presence: "required"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -178,6 +186,10 @@
                 description: "Docket Number of the associated Case in XXXXX-YY format."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "pattern"
                   args: 
                     regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -198,6 +210,10 @@
                 description: "The S3 ID containing the text contents of the document."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -209,6 +225,10 @@
                 presence: "required"
                 description: "ID of the associated PDF document in the S3 bucket."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -222,6 +242,10 @@
                 description: "The id for the original document that was uploaded."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -233,6 +257,10 @@
                 presence: "optional"
                 description: "The title of this document."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -1535,6 +1563,10 @@
                     description: "The ID of the previous document."
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -1546,6 +1578,10 @@
                     presence: "optional"
                     description: "The title of the previous document."
                   rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                     - 
                       name: "max"
                       args: 
@@ -1930,6 +1966,10 @@
               flags: 
                 presence: "optional"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -2778,6 +2818,10 @@
                         presence: "optional"
                       rules: 
                         - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                        - 
                           name: "email"
                           args: 
                             options: 
@@ -3040,6 +3084,10 @@
                       presence: "required"
                     rules: 
                       - 
+                        name: "min"
+                        args: 
+                          limit: 1
+                      - 
                         name: "guid"
                         args: 
                           options: 
@@ -3050,6 +3098,10 @@
                     flags: 
                       presence: "optional"
                     rules: 
+                      - 
+                        name: "min"
+                        args: 
+                          limit: 1
                       - 
                         name: "guid"
                         args: 
@@ -3087,6 +3139,10 @@
                 presence: "required"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -3102,6 +3158,10 @@
                   flags: 
                     presence: "optional"
                   rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                     - 
                       name: "guid"
                       args: 
@@ -3185,6 +3245,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -3216,6 +3280,10 @@
                     presence: "required"
                     description: "Unique case identifier in XXXXX-YY format."
                   rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                     - 
                       name: "pattern"
                       args: 
@@ -3387,6 +3455,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -3414,6 +3486,10 @@
                     presence: "required"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -3425,6 +3501,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 4700
@@ -3433,6 +3513,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "CDP (Lien/Levy)"
         - "Deficiency"
@@ -3463,6 +3548,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Myself"
         - "Myself and my spouse"
@@ -3494,6 +3584,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -3543,6 +3637,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Conservator"
         - "Corporation"
@@ -3684,6 +3783,11 @@
         only: true
         presence: "required"
         description: "Status of the case fee payment."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Paid"
         - "Not Paid"
@@ -3789,6 +3893,10 @@
         description: "How the petitioner paid the case fee."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 50
@@ -3864,6 +3972,11 @@
             type: "string"
             flags: 
               presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
           otherwise: 
             type: "any"
             flags: 
@@ -3875,6 +3988,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Regular"
         - "Small"
@@ -4073,6 +4191,10 @@
                 presence: "required"
                 description: "Unique statistic ID only used by the system."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 

@@ -10,6 +10,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { map } = require('lodash');
@@ -24,7 +25,8 @@ const { PublicDocument } = require('./PublicDocument');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function PublicCase(rawCase, { applicationContext }) {
+function PublicCase() {}
+PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
@@ -51,7 +53,7 @@ function PublicCase(rawCase, { applicationContext }) {
     .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
-}
+};
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
@@ -61,15 +63,12 @@ const publicCaseSchema = {
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberSuffix: joi
-    .string()
-    .allow(null)
+  docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
-  docketNumberWithSuffix: joi
-    .string()
-    .optional()
-    .description('Auto-generated from docket number and the suffix.'),
+  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
+    'Auto-generated from docket number and the suffix.',
+  ),
   docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
     joi.object().meta({ entityName: 'PublicDocketRecord' }),
   )
@@ -90,10 +89,9 @@ const sealedCaseSchemaRestricted = {
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-  docketNumberSuffix: joi
-    .string()
-    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
-    .optional(),
+  docketNumberSuffix: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCKET_NUMBER_SUFFIXES),
+  ).optional(),
   docketRecord: joi.array().max(0),
   documents: joi.array().max(0),
   isSealed: joi.boolean(),
@@ -129,4 +127,7 @@ const isPrivateDocument = function (document, docketRecord) {
   );
 };
 
-module.exports = { PublicCase, isPrivateDocument };
+module.exports = {
+  PublicCase: validEntityDecorator(PublicCase),
+  isPrivateDocument,
+};
