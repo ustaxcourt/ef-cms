@@ -1,4 +1,6 @@
-const joi = require('joi');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -18,8 +20,8 @@ CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentDefault.schema = {
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
 };
 
 joiValidationDecorator(

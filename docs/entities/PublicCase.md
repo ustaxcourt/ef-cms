@@ -42,6 +42,10 @@
               presence: "required"
             rules: 
               - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
                 name: "pattern"
                 args: 
                   regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -50,6 +54,11 @@
             flags: 
               only: true
               presence: "optional"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "X"
               - "R"
@@ -86,6 +95,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 4700
@@ -113,6 +126,10 @@
         description: "Unique case identifier in XXXXX-YY format."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -121,6 +138,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - null
         - "X"
@@ -136,6 +158,11 @@
       flags: 
         presence: "optional"
         description: "Auto-generated from docket number and the suffix."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     docketRecord: 
       type: "array"
       flags: 

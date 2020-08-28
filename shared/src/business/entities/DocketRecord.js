@@ -55,15 +55,11 @@ DocketRecord.VALIDATION_ERROR_MESSAGES = {
 };
 
 DocketRecord.VALIDATION_RULES = joi.object().keys({
-  action: joi
-    .string()
-    .max(100)
+  action: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
     .description('Action taken in response to this Docket Record item.'),
-  description: joi
-    .string()
-    .max(500)
+  description: JoiValidationConstants.STRING.max(500)
     .required()
     .description(
       'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
@@ -72,24 +68,18 @@ DocketRecord.VALIDATION_RULES = joi.object().keys({
   documentId: JoiValidationConstants.UUID.allow(null)
     .optional()
     .description('ID of the associated PDF document in the S3 bucket.'),
-  editState: joi
-    .string()
-    .max(4000)
+  editState: JoiValidationConstants.STRING.max(4000)
     .allow(null)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('JSON representation of the in-progress edit of this item.'),
-  entityName: joi.string().valid('DocketRecord').required(),
-  eventCode: joi
-    .string()
-    .valid(...ALL_EVENT_CODES)
+  entityName: JoiValidationConstants.STRING.valid('DocketRecord').required(),
+  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
     .required()
     .description(
       'Code associated with the event that resulted in this item being added to the Docket Record.',
     ),
-  filedBy: joi
-    .string()
-    .max(500)
+  filedBy: JoiValidationConstants.STRING.max(500)
     .optional()
     .allow(null)
     .meta({ tags: ['Restricted'] })
@@ -117,17 +107,17 @@ DocketRecord.VALIDATION_RULES = joi.object().keys({
     })
     .description('Indicates the item has been removed from the docket record.'),
   numberOfPages: joi.number().optional().allow(null),
-  servedPartiesCode: joi
-    .string()
-    .valid(...Object.values(SERVED_PARTIES_CODES))
+  servedPartiesCode: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVED_PARTIES_CODES),
+  )
     .allow(null)
     .optional()
     .description('Served parties code to override system-computed code.'),
   strickenAt: JoiValidationConstants.ISO_DATE.max('now')
     .optional()
     .description('Date that this Docket Record item was stricken.'),
-  strickenBy: joi.string().optional(),
-  strickenByUserId: joi.string().optional(),
+  strickenBy: JoiValidationConstants.STRING.optional(),
+  strickenByUserId: JoiValidationConstants.STRING.optional(),
 });
 
 joiValidationDecorator(

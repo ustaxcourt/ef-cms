@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
+const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 /**
  * fake entity constructor
@@ -25,7 +26,7 @@ joiValidationDecorator(
   joi.object().keys({
     favoriteNumber: joi.number().required(),
     hasNickname: joi.boolean().required(),
-    name: joi.string().required(),
+    name: JoiValidationConstants.STRING.required(),
   }),
   MockEntity1.errorToMessageMap,
 );
@@ -37,18 +38,23 @@ const MockEntity2 = function (raw) {
 const MockEntity2Schema = joi.object().keys({
   arry1: joi
     .array()
-    .items(joi.object().keys({ foo: joi.string().required() }))
+    .items(joi.object().keys({ foo: JoiValidationConstants.STRING.required() }))
     .required(),
-  arry2: joi.array().items(joi.string()).optional(),
+  arry2: joi.array().items(JoiValidationConstants.STRING).optional(),
   favoriteNumber: joi.number().required(),
   hasNickname: joi.boolean().required(),
-  name: joi.string().required(),
-  obj1: joi.object().keys({ foo: joi.string().required() }).required(),
+  name: JoiValidationConstants.STRING.required(),
+  obj1: joi
+    .object()
+    .keys({ foo: JoiValidationConstants.STRING.required() })
+    .required(),
   reallyMessyNestedThing: joi
     .alternatives()
     .try(
-      joi.object().keys({ never: joi.string().required() }),
-      joi.object().keys({ happening: joi.string().required() }),
+      joi.object().keys({ never: JoiValidationConstants.STRING.required() }),
+      joi
+        .object()
+        .keys({ happening: JoiValidationConstants.STRING.required() }),
     )
     .optional(),
 });
@@ -64,7 +70,7 @@ const MockEntity3 = function (raw) {
 };
 
 const MockEntity3Schema = joi.object().keys({
-  anotherItem: joi.string().required(),
+  anotherItem: JoiValidationConstants.STRING.required(),
 });
 
 joiValidationDecorator(MockEntity3, MockEntity3Schema, {});
@@ -76,9 +82,9 @@ const MockCase = function (raw) {
 };
 
 const MockCaseSchema = joi.object().keys({
-  docketNumber: joi.string().required(),
-  somethingId: joi.string().required(),
-  title: joi.string().required(),
+  docketNumber: JoiValidationConstants.STRING.required(),
+  somethingId: JoiValidationConstants.STRING.required(),
+  title: JoiValidationConstants.STRING.required(),
 });
 
 joiValidationDecorator(MockCase, MockCaseSchema, {

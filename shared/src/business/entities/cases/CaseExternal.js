@@ -10,6 +10,9 @@ const {
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
@@ -67,26 +70,23 @@ CaseExternal.prototype.init = function (rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi
-    .string()
-    .valid(...Object.values(BUSINESS_TYPES))
+  businessType: JoiValidationConstants.STRING.valid(
+    ...Object.values(BUSINESS_TYPES),
+  )
     .optional()
     .allow(null),
-  caseType: joi.string().when('hasIrsNotice', {
+  caseType: JoiValidationConstants.STRING.when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
   contactPrimary: joi.object().optional(), // validated with the ContactFactory
   contactSecondary: joi.object().optional(), // validated with the ContactFactory
-  countryType: joi.string().optional(),
-  filingType: joi
-    .string()
-    .valid(
-      ...FILING_TYPES[ROLES.petitioner],
-      ...FILING_TYPES[ROLES.privatePractitioner],
-    )
-    .required(),
+  countryType: JoiValidationConstants.STRING.optional(),
+  filingType: JoiValidationConstants.STRING.valid(
+    ...FILING_TYPES[ROLES.petitioner],
+    ...FILING_TYPES[ROLES.privatePractitioner],
+  ).required(),
   hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {
     is: 'A business',
@@ -103,10 +103,9 @@ CaseExternal.commonRequirements = {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
-  partyType: joi
-    .string()
-    .valid(...Object.values(PARTY_TYPES))
-    .required(),
+  partyType: JoiValidationConstants.STRING.valid(
+    ...Object.values(PARTY_TYPES),
+  ).required(),
   petitionFile: joi.object().required(), // object of type File
   petitionFileSize: joi
     .number()
@@ -121,14 +120,13 @@ CaseExternal.commonRequirements = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      joi.string().valid(...TRIAL_CITY_STRINGS, null),
-      joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .required(),
-  procedureType: joi
-    .string()
-    .valid(...PROCEDURE_TYPES)
-    .required(),
+  procedureType: JoiValidationConstants.STRING.valid(
+    ...PROCEDURE_TYPES,
+  ).required(),
   stinFile: joi.object().required(), // object of type File
   stinFileSize: joi
     .number()

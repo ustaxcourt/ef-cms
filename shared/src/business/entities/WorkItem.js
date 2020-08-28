@@ -62,51 +62,47 @@ WorkItem.validationName = 'WorkItem';
 
 WorkItem.VALIDATION_RULES = joi.object().keys({
   assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
-  assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
-  associatedJudge: joi.string().max(100).required(),
+  assigneeName: JoiValidationConstants.STRING.max(100).allow(null).optional(), // should be a Message entity at some point
+  associatedJudge: JoiValidationConstants.STRING.max(100).required(),
   caseIsInProgress: joi.boolean().optional(),
-  caseStatus: joi
-    .string()
-    .valid(...Object.values(CASE_STATUS_TYPES))
-    .optional(),
-  caseTitle: joi.string().max(500).optional(),
+  caseStatus: JoiValidationConstants.STRING.valid(
+    ...Object.values(CASE_STATUS_TYPES),
+  ).optional(),
+  caseTitle: JoiValidationConstants.STRING.max(500).optional(),
   completedAt: JoiValidationConstants.ISO_DATE.optional(),
-  completedBy: joi.string().max(100).optional().allow(null),
+  completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
   completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
-  completedMessage: joi.string().max(100).optional().allow(null),
+  completedMessage: JoiValidationConstants.STRING.max(100)
+    .optional()
+    .allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberWithSuffix: joi
-    .string()
-    .optional()
-    .description('Auto-generated from docket number and the suffix.'),
+  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
+    'Auto-generated from docket number and the suffix.',
+  ),
   document: joi.object().required(),
-  entityName: joi.string().valid('WorkItem').required(),
+  entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
   hideFromPendingMessages: joi.boolean().optional(),
   highPriority: joi.boolean().optional(),
   inProgress: joi.boolean().optional(),
   isInitializeCase: joi.boolean().optional(),
   isRead: joi.boolean().optional(),
-  section: joi
-    .string()
-    .valid(
-      ...SECTIONS,
-      ...CHAMBERS_SECTIONS,
-      ...Object.values(ROLES),
-      IRS_SYSTEM_SECTION,
-    )
-    .required(),
-  sentBy: joi
-    .string()
-    .max(100)
+  section: JoiValidationConstants.STRING.valid(
+    ...SECTIONS,
+    ...CHAMBERS_SECTIONS,
+    ...Object.values(ROLES),
+    IRS_SYSTEM_SECTION,
+  ).required(),
+  sentBy: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The name of the user that sent the WorkItem'),
-  sentBySection: joi
-    .string()
-    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
-    .optional(),
+  sentBySection: JoiValidationConstants.STRING.valid(
+    ...SECTIONS,
+    ...CHAMBERS_SECTIONS,
+    ...Object.values(ROLES),
+  ).optional(),
   sentByUserId: JoiValidationConstants.UUID.optional(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
   updatedAt: JoiValidationConstants.ISO_DATE.required(),

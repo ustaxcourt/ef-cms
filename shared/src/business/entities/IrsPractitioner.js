@@ -33,23 +33,20 @@ IrsPractitioner.prototype.init = function init(rawUser) {
 IrsPractitioner.validationName = 'IrsPractitioner';
 
 IrsPractitioner.VALIDATION_RULES = joi.object().keys({
-  barNumber: joi
-    .string()
-    .max(100)
+  barNumber: JoiValidationConstants.STRING.max(100)
     .required()
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
     ),
   contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
-  entityName: joi.string().valid('IrsPractitioner').required(),
-  name: joi.string().max(100).required(),
-  role: joi.string().valid(ROLES.irsPractitioner).required(),
-  serviceIndicator: joi
-    .string()
-    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
-    .required(),
-  token: joi.string().optional(),
+  entityName: JoiValidationConstants.STRING.valid('IrsPractitioner').required(),
+  name: JoiValidationConstants.STRING.max(100).required(),
+  role: JoiValidationConstants.STRING.valid(ROLES.irsPractitioner).required(),
+  serviceIndicator: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVICE_INDICATOR_TYPES),
+  ).required(),
+  token: JoiValidationConstants.STRING.optional(),
   userId: JoiValidationConstants.UUID.required(),
 });
 

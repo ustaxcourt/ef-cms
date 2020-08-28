@@ -5,6 +5,9 @@ const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -27,21 +30,20 @@ CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeA.schema = {
   attachments: joi.boolean().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
-  freeText: joi.string().when('documentType', {
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
+  freeText: JoiValidationConstants.STRING.when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  serviceStamp: joi
-    .string()
-    .valid(...SERVICE_STAMP_OPTIONS)
-    .when('documentType', {
-      is: GENERIC_ORDER_DOCUMENT_TYPE,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
+  serviceStamp: JoiValidationConstants.STRING.valid(
+    ...SERVICE_STAMP_OPTIONS,
+  ).when('documentType', {
+    is: GENERIC_ORDER_DOCUMENT_TYPE,
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }),
 };
 
 joiValidationDecorator(
