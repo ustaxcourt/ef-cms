@@ -24,6 +24,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
@@ -36,13 +37,17 @@ Document.validationName = 'Document';
  * @param {object} rawDocument the raw document data
  * @constructor
  */
-function Document(rawDocument, { applicationContext, filtered = false }) {
+function Document() {
+  this.entityName = 'Document';
+}
+
+Document.prototype.init = function init(
+  rawDocument,
+  { applicationContext, filtered = false },
+) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-
-  this.entityName = 'Document';
-
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
@@ -167,7 +172,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   }
 
   this.generateFiledBy(rawDocument);
-}
+};
 
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
@@ -396,10 +401,9 @@ Document.VALIDATION_RULES = joi.object().keys({
   qcAt: JoiValidationConstants.ISO_DATE.optional(),
   qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-  relationship: joi
-    .string()
-    .valid(...Object.values(DOCUMENT_RELATIONSHIPS))
-    .optional(),
+  relationship: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCUMENT_RELATIONSHIPS),
+  ).optional(),
   scenario: joi
     .string()
     .valid(...SCENARIOS)
@@ -689,4 +693,4 @@ Document.prototype.strikeEntry = function ({ name, userId }) {
   this.strickenAt = createISODateString();
 };
 
-exports.Document = Document;
+exports.Document = validEntityDecorator(Document);

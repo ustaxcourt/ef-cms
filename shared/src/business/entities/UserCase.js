@@ -1,11 +1,10 @@
 const joi = require('joi');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
-
-UserCase.validationName = 'UserCase';
 
 /**
  * UserCase Entity
@@ -14,18 +13,23 @@ UserCase.validationName = 'UserCase';
  * @param {object} rawUserCase the raw user-case data
  * @constructor
  */
-function UserCase(rawUserCase) {
+function UserCase() {
   this.entityName = 'UserCase';
+}
+
+UserCase.prototype.init = function init(rawUserCase) {
   this.caseCaption = rawUserCase.caseCaption;
   this.createdAt = rawUserCase.createdAt || createISODateString();
   this.docketNumber = rawUserCase.docketNumber;
   this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
   this.leadDocketNumber = rawUserCase.leadDocketNumber;
   this.status = rawUserCase.status;
-}
+};
+
+UserCase.validationName = 'UserCase';
 
 joiValidationDecorator(
-  UserCase,
+  validEntityDecorator(UserCase),
   joi.object().keys({
     caseCaption: Case.VALIDATION_RULES.caseCaption,
     createdAt: Case.VALIDATION_RULES.createdAt,
@@ -38,4 +42,4 @@ joiValidationDecorator(
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
-exports.UserCase = UserCase;
+exports.UserCase = validEntityDecorator(UserCase);
