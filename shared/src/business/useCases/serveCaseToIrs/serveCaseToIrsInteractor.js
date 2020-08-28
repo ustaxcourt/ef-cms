@@ -63,7 +63,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   }
 };
 
-const addDocketEntries = ({ applicationContext, caseEntity }) => {
+const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
   );
@@ -81,19 +81,8 @@ const addDocketEntries = ({ applicationContext, caseEntity }) => {
     );
 
     if (foundDocument) {
-      const newDocketRecord = new DocketRecord(
-        {
-          description:
-            foundDocument.documentTitle || foundDocument.documentType,
-          documentId: foundDocument.documentId,
-          eventCode: foundDocument.eventCode,
-          filedBy: foundDocument.filedBy,
-          filingDate: foundDocument.filingDate,
-          servedPartiesCode: foundDocument.servedPartiesCode,
-        },
-        { applicationContext },
-      );
-      caseEntity.addDocketRecord(newDocketRecord);
+      foundDocument.isOnDocketRecord = true;
+      caseEntity.updateDocument(foundDocument);
     }
   }
 };
@@ -283,7 +272,7 @@ exports.serveCaseToIrsInteractor = async ({
   let urlToReturn;
 
   if (caseEntity.isPaper) {
-    addDocketEntries({ applicationContext, caseEntity });
+    addDocketEntries({ caseEntity });
 
     ({
       url: urlToReturn,
