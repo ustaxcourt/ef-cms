@@ -144,6 +144,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         ...record,
         ...document,
         createdAtFormatted: record.createdAtFormatted,
+        description: record.description,
         descriptionDisplay: record.description,
         index,
       };

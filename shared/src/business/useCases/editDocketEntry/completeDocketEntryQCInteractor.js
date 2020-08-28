@@ -69,9 +69,10 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
-  const { index: docketRecordIndexUpdated } = caseEntity.docketRecord.find(
-    record => record.documentId === documentId,
-  );
+  const { index: docketRecordIndexUpdated } = [
+    ...caseEntity.docketRecord,
+    ...caseEntity.documents.filter(d => d.isOnDocketRecord),
+  ].find(record => record.documentId === documentId);
 
   const currentDocument = caseEntity.getDocumentById({
     documentId,
