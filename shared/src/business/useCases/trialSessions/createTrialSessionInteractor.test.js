@@ -89,7 +89,10 @@ describe('createTrialSessionInteractor', () => {
       applicationContext,
       trialSession: {
         ...MOCK_TRIAL,
-        judge: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' },
+        judge: {
+          name: 'Judge Valhalla',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        },
       },
     });
 
@@ -106,7 +109,10 @@ describe('createTrialSessionInteractor', () => {
       applicationContext,
       trialSession: {
         ...MOCK_TRIAL,
-        trialClerk: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' },
+        trialClerk: {
+          name: 'Clerk Bifrost',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        },
       },
     });
 
@@ -123,8 +129,14 @@ describe('createTrialSessionInteractor', () => {
       applicationContext,
       trialSession: {
         ...MOCK_TRIAL,
-        judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
-        trialClerk: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' },
+        judge: {
+          name: 'Judge Magni',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+        trialClerk: {
+          name: 'Clerk Modi',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        },
       },
     });
 
