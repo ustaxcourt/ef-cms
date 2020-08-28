@@ -10,7 +10,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -135,8 +134,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
+          description: metadata.documentTitle,
           documentId,
           documentType: metadata.documentType,
+          isOnDocketRecord: true,
           relationship,
           userId: user.userId,
         },
@@ -236,18 +237,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               });
           }
         }
-
-        const docketRecordEntity = new DocketRecord(
-          {
-            description: metadata.documentTitle,
-            documentId: documentEntity.documentId,
-            eventCode: documentEntity.eventCode,
-            filingDate: documentEntity.receivedAt,
-          },
-          { applicationContext },
-        );
-
-        caseEntity.addDocketRecord(docketRecordEntity);
 
         saveCasesMap[
           caseEntity.docketNumber
