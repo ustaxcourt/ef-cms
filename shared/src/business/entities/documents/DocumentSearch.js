@@ -92,14 +92,12 @@ DocumentSearch.VALIDATION_ERROR_MESSAGES = {
 DocumentSearch.schema = joi
   .object()
   .keys({
-    caseTitleOrPetitioner: joi
-      .string()
-      .description(
-        'The case title or petitioner name to filter the search results by',
-      ),
-    docketNumber: joi
-      .string()
-      .description('The docket number to filter the search results by'),
+    caseTitleOrPetitioner: JoiValidationConstants.STRING.description(
+      'The case title or petitioner name to filter the search results by',
+    ),
+    docketNumber: JoiValidationConstants.STRING.description(
+      'The docket number to filter the search results by',
+    ),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: JoiValidationConstants.ISO_DATE.format(
@@ -120,18 +118,15 @@ DocumentSearch.schema = joi
           'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
         ),
     }),
-    judge: joi
-      .string()
-      .optional()
-      .description('The name of the judge to filter the search results by'),
-    keyword: joi
-      .string()
-      .required()
-      .description('The only required field to filter the search by'),
-    opinionType: joi
-      .string()
-      .optional()
-      .description('The opinion document type to filter the search results by'),
+    judge: JoiValidationConstants.STRING.optional().description(
+      'The name of the judge to filter the search results by',
+    ),
+    keyword: JoiValidationConstants.STRING.required().description(
+      'The only required field to filter the search by',
+    ),
+    opinionType: JoiValidationConstants.STRING.optional().description(
+      'The opinion document type to filter the search results by',
+    ),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
       otherwise: JoiValidationConstants.ISO_DATE.format(

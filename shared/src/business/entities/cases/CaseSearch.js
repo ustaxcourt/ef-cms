@@ -6,6 +6,9 @@ const {
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
@@ -38,15 +41,15 @@ CaseSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseSearch.schema = joi.object().keys({
-  countryType: joi
-    .string()
-    .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
-    .optional(),
-  petitionerName: joi.string().max(500).required(),
-  petitionerState: joi
-    .string()
-    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
-    .optional(),
+  countryType: JoiValidationConstants.STRING.valid(
+    COUNTRY_TYPES.DOMESTIC,
+    COUNTRY_TYPES.INTERNATIONAL,
+  ).optional(),
+  petitionerName: JoiValidationConstants.STRING.max(500).required(),
+  petitionerState: JoiValidationConstants.STRING.valid(
+    ...Object.keys(US_STATES),
+    ...US_STATES_OTHER,
+  ).optional(),
   yearFiledMax: joi
     .number()
     .integer()

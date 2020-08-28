@@ -1,4 +1,6 @@
-const joi = require('joi');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('./ContactFactory');
 
 /**
@@ -10,7 +12,7 @@ exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createC
       secondaryName: 'Enter Tax Matters Partner name',
     },
     additionalValidation: {
-      secondaryName: joi.string().max(500).required(),
+      secondaryName: JoiValidationConstants.STRING.max(500).required(),
     },
     contactName: 'PartnershipAsTaxMattersPartnerPrimaryContact',
   },

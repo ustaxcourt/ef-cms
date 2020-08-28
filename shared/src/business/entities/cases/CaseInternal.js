@@ -146,22 +146,16 @@ const paperRequirements = joi
     archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
     archivedDocuments: Case.VALIDATION_RULES.archivedDocuments,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
-    caseType: joi
-      .string()
-      .valid(...CASE_TYPES)
-      .required(),
+    caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
     contactPrimary: joi.object().required(),
     contactSecondary: joi.object().optional().allow(null),
-    filingType: joi
-      .string()
-      .valid(
-        ...FILING_TYPES[ROLES.petitioner],
-        ...FILING_TYPES[ROLES.privatePractitioner],
-      )
-      .optional(),
+    filingType: JoiValidationConstants.STRING.valid(
+      ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
+    ).optional(),
     hasVerifiedIrsNotice: joi.boolean().required(),
     irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
-    mailingDate: joi.string().max(25).required(),
+    mailingDate: JoiValidationConstants.STRING.max(25).required(),
     noticeOfAttachments: Case.VALIDATION_RULES.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
       Case.VALIDATION_RULES.orderDesignatingPlaceOfTrial,
@@ -196,10 +190,9 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    partyType: joi
-      .string()
-      .valid(...Object.values(PARTY_TYPES))
-      .required(),
+    partyType: JoiValidationConstants.STRING.valid(
+      ...Object.values(PARTY_TYPES),
+    ).required(),
     petitionFile: joi.object().required(), // object of type File
     petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'petitionFile',
@@ -225,12 +218,11 @@ const paperRequirements = joi
       .conditional('requestForPlaceOfTrialFile', {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
-        then: joi.string().required(),
+        then: JoiValidationConstants.STRING.required(),
       }),
-    procedureType: joi
-      .string()
-      .valid(...PROCEDURE_TYPES)
-      .required(),
+    procedureType: JoiValidationConstants.STRING.valid(
+      ...PROCEDURE_TYPES,
+    ).required(),
     receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()

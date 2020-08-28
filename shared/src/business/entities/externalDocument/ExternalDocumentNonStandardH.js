@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
@@ -34,9 +37,9 @@ ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardH.schema = {
-  category: joi.string().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  category: JoiValidationConstants.STRING.required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
   secondaryDocument: joi.object().required(),
 };
 
