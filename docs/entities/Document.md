@@ -1865,6 +1865,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "primaryDocument"
         - "primarySupportingDocument"
