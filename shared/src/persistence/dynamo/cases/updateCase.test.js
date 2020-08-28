@@ -14,6 +14,8 @@ describe('updateCase', () => {
   let firstQueryStub;
   let secondQueryStub;
 
+  let mockCase;
+
   beforeEach(() => {
     firstQueryStub = [
       {
@@ -54,6 +56,17 @@ describe('updateCase', () => {
       ]);
 
     client.query = applicationContext.getDocumentClient().query;
+
+    mockCase = {
+      docketNumberSuffix: null,
+      docketRecord: [],
+      inProgress: false,
+      irsPractitioners: [],
+      pk: 'case|101-18',
+      privatePractitioners: [],
+      sk: 'case|101-18',
+      status: 'General Docket - Not at Issue',
+    };
   });
 
   /**
@@ -504,6 +517,13 @@ describe('updateCase', () => {
 
   describe('archivedCorrespondences', () => {
     it('adds an archived correspondence to a case when archivedCorrespondences is an empty list', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...mockCase,
+          archivedCorrespondences: [],
+        });
+
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -579,6 +599,13 @@ describe('updateCase', () => {
 
   describe('correspondence', () => {
     it('adds a correspondence to a case when correspondence is an empty list', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...mockCase,
+          correspondence: [],
+        });
+
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -652,8 +679,42 @@ describe('updateCase', () => {
     });
   });
 
+  describe('docketEntries', () => {
+    it('adds a docketEntry to a case when docketEntries is an empty list', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketEntries: [
+            { docketEntryId: 'e69dabd1-80bc-4cdf-8503-81d886a4947e' },
+          ],
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).not.toHaveBeenCalled();
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: 'docket-entry|e69dabd1-80bc-4cdf-8503-81d886a4947e',
+      });
+    });
+  });
+
   describe('documents', () => {
     it('adds a document to a case when documents is an empty list', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue({
+          ...mockCase,
+          documents: [],
+        });
+
       await updateCase({
         applicationContext,
         caseToUpdate: {

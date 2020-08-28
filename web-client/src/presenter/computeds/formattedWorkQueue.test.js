@@ -20,6 +20,7 @@ describe('formatted work queue computed', () => {
     DOCKET_SECTION,
     DOCUMENT_RELATIONSHIPS,
     PETITIONS_SECTION,
+    SESSION_STATUS_GROUPS,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -548,7 +549,7 @@ describe('formatted work queue computed', () => {
       assigneeId: null,
       assigneeName: null,
       caseCaption: 'Ori Petersen',
-      caseStatus: 'New',
+      caseStatus: SESSION_STATUS_GROUPS.new,
       createdAt: '2019-12-16T16:48:02.889Z',
       docketNumber: '114-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
