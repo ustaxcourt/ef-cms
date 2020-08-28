@@ -29,8 +29,8 @@ Correspondence.VALIDATION_RULES = {
     .optional()
     .description('A correspondence document that was archived.'),
   documentId: JoiValidationConstants.UUID.required(),
-  documentTitle: joi.string().max(500).required(),
-  filedBy: joi.string().max(500).allow('').optional(),
+  documentTitle: JoiValidationConstants.STRING.max(500).required(),
+  filedBy: JoiValidationConstants.STRING.max(500).allow('').optional(),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),

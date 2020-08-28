@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -34,13 +37,13 @@ joiValidationDecorator(
   NewPractitioner,
   joi.object().keys({
     ...Practitioner.validationRules,
-    admissionsStatus: joi.string().required(),
-    barNumber: joi.string().optional().allow(null),
-    email: joi.string().required(),
-    firstName: joi.string().required(),
-    lastName: joi.string().required(),
-    role: joi.string().optional().allow(null),
-    userId: joi.string().optional().allow(null),
+    admissionsStatus: JoiValidationConstants.STRING.required(),
+    barNumber: JoiValidationConstants.STRING.optional().allow(null),
+    email: JoiValidationConstants.STRING.required(),
+    firstName: JoiValidationConstants.STRING.required(),
+    lastName: JoiValidationConstants.STRING.required(),
+    role: JoiValidationConstants.STRING.optional().allow(null),
+    userId: JoiValidationConstants.STRING.optional().allow(null),
   }),
   VALIDATION_ERROR_MESSAGES,
 );

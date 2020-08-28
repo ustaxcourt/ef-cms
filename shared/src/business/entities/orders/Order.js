@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -25,16 +28,12 @@ Order.VALIDATION_ERROR_MESSAGES = {
 };
 
 Order.VALIDATION_RULES = {
-  documentTitle: joi.string().max(100).required(),
-  documentType: joi
-    .string()
-    .valid(...ALL_DOCUMENT_TYPES)
-    .required(),
-  eventCode: joi
-    .string()
-    .valid(...ALL_EVENT_CODES)
-    .optional(),
-  orderBody: joi.string().max(500).required(),
+  documentTitle: JoiValidationConstants.STRING.max(100).required(),
+  documentType: JoiValidationConstants.STRING.valid(
+    ...ALL_DOCUMENT_TYPES,
+  ).required(),
+  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
+  orderBody: JoiValidationConstants.STRING.max(500).required(),
 };
 
 joiValidationDecorator(

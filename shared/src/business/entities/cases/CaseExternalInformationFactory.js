@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
@@ -74,7 +77,12 @@ const wizardStep4 = atWizardStep(4, {
 });
 
 const schema = {
-  wizardStep: joi.string().valid('1', '2', '3', '4').required(),
+  wizardStep: JoiValidationConstants.STRING.valid(
+    '1',
+    '2',
+    '3',
+    '4',
+  ).required(),
   ...wizardStep1,
   ...wizardStep2,
   ...wizardStep3,
