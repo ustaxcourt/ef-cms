@@ -8,6 +8,8 @@ const {
 const {
   SESSION_TERMS,
   SESSION_TYPES,
+  TRIAL_CITY_STRINGS,
+  TRIAL_LOCATION_MATCHER,
   US_STATES,
   US_STATES_OTHER,
 } = require('../EntityConstants');
@@ -157,7 +159,13 @@ TrialSession.validationRules = {
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
-    trialLocation: joi.string().max(100).required(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TRIAL_CITY_STRINGS, null),
+        joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      )
+      .required(),
     trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
