@@ -272,7 +272,7 @@ exports.validEntityDecorator = entityFactoryFunction => {
     typeof entityFactoryFunction.prototype.init === 'function';
 
   if (!hasInitFunction) {
-    console.trace(
+    console.warn(
       `WARNING: ${entityFactoryFunction.name} prototype has no 'init' function`,
     );
   }
