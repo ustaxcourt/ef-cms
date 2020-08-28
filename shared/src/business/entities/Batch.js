@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 /**
@@ -14,12 +15,14 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} providers.rawBatch the raw batch data
  * @constructor
  */
-function Batch({ applicationContext, rawBatch }) {
+function Batch() {}
+
+Batch.prototype.init = function init({ applicationContext, rawBatch }) {
   this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
   this.batchIndex = rawBatch.batchIndex || 0;
   this.createdAt = rawBatch.createdAt || createISODateString();
   this.pages = rawBatch.pages || [];
-}
+};
 
 Batch.validationName = 'Batch';
 
@@ -59,4 +62,4 @@ Batch.schema = joi.object().keys({
 
 joiValidationDecorator(Batch, Batch.schema, Batch.VALIDATION_ERROR_MESSAGES);
 
-module.exports = { Batch };
+module.exports = { Batch: validEntityDecorator(Batch) };
