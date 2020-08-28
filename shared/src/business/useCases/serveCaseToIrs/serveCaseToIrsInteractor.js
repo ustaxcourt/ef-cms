@@ -5,6 +5,7 @@ const {
 const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
+  MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -13,7 +14,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
+const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -21,25 +22,30 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
+  user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocketRecord(
-      new DocketRecord(
+    caseEntity.addDocumentWithoutDocketRecord(
+      new Document(
         {
           description: 'Filing Fee Paid',
-          eventCode: 'FEE',
+          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
           filingDate: caseEntity.petitionPaymentDate,
+          userId: user.userId,
         },
         { applicationContext },
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocketRecord(
-      new DocketRecord(
+    caseEntity.addDocumentWithoutDocketRecord(
+      new Document(
         {
           description: 'Filing Fee Waived',
-          eventCode: 'FEEW',
+          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
           filingDate: caseEntity.petitionPaymentWaivedDate,
+          userId: user.userId,
         },
         { applicationContext },
       ),
@@ -157,7 +163,11 @@ exports.serveCaseToIrsInteractor = async ({
     }
   }
 
-  exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+  exports.addDocketEntryForPaymentStatus({
+    applicationContext,
+    caseEntity,
+    user,
+  });
 
   caseEntity
     .updateCaseCaptionDocketRecord({ applicationContext })
