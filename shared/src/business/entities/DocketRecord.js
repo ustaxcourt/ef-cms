@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
@@ -14,11 +15,17 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawDocketRecord the raw docket record data
  * @constructor
  */
-function DocketRecord(rawDocketRecord, { applicationContext }) {
+function DocketRecord() {
+  this.entityName = 'DocketRecord';
+}
+
+DocketRecord.prototype.init = function init(
+  rawDocketRecord,
+  { applicationContext },
+) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'DocketRecord';
 
   this.docketRecordId =
     rawDocketRecord.docketRecordId || applicationContext.getUniqueId();
@@ -37,7 +44,7 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.strickenBy = rawDocketRecord.strickenBy;
   this.strickenByUserId = rawDocketRecord.strickenByUserId;
   this.strickenAt = rawDocketRecord.strickenAt;
-}
+};
 
 DocketRecord.validationName = 'DocketRecord';
 
@@ -147,4 +154,4 @@ DocketRecord.prototype.strikeEntry = function ({ name, userId }) {
   this.strickenAt = createISODateString();
 };
 
-module.exports = { DocketRecord };
+exports.DocketRecord = validEntityDecorator(DocketRecord);

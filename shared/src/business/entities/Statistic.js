@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
@@ -12,11 +13,14 @@ const {
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-function Statistic(rawStatistic, { applicationContext }) {
+function Statistic() {
+  this.entityName = 'Statistic';
+}
+
+Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'Statistic';
 
   this.determinationDeficiencyAmount =
     rawStatistic.determinationDeficiencyAmount;
@@ -28,7 +32,7 @@ function Statistic(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
-}
+};
 
 Statistic.validationName = 'Statistic';
 
@@ -111,4 +115,4 @@ joiValidationDecorator(
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { Statistic };
+exports.Statistic = validEntityDecorator(Statistic);
