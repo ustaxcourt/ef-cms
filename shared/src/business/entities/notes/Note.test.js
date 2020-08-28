@@ -13,9 +13,12 @@ describe('Note', () => {
 
     it('should be valid when all fields are present', () => {
       const entity = new Note({
-        notes: 'some notes',
+        notes: '  some notes   ', // with spaces all around it
       });
+      entity.something = '    baz';
       expect(entity.getFormattedValidationErrors()).toEqual(null);
+      expect(entity.notes).toEqual('some notes');
+      expect(entity.something).toEqual('baz');
     });
   });
 });
