@@ -29,23 +29,15 @@ describe('strikeDocketEntryInteractor', () => {
       },
       createdAt: '',
       docketNumber: '45678-18',
-      docketRecord: [
-        {
-          description: 'first record',
-          docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-          eventCode: 'P',
-          filingDate: '2018-03-01T00:01:00.000Z',
-          index: 1,
-        },
-      ],
       documents: [
         {
+          description: 'first record',
           docketNumber: '45678-18',
           documentId: '8675309b-18d0-43ec-bafb-654e83405411',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          index: 1,
           userId: mockUserId,
         },
       ],
@@ -74,7 +66,7 @@ describe('strikeDocketEntryInteractor', () => {
       strikeDocketEntryInteractor({
         applicationContext,
         docketNumber: caseRecord.docketNumber,
-        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -92,10 +84,10 @@ describe('strikeDocketEntryInteractor', () => {
         docketNumber: caseRecord.docketNumber,
         docketRecordId: 'does-not-exist',
       }),
-    ).rejects.toThrow('Docket Record not found');
+    ).rejects.toThrow('Document not found');
   });
 
-  it('should call getCaseByDocketNumber, getUserById, and updateDocketRecord', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and updateDocument', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -105,7 +97,7 @@ describe('strikeDocketEntryInteractor', () => {
     await strikeDocketEntryInteractor({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
+      documentId: '8675309b-18d0-43ec-bafb-654e83405411',
     });
 
     expect(
@@ -115,7 +107,7 @@ describe('strikeDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getUserById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateDocketRecord,
+      applicationContext.getPersistenceGateway().updateDocument,
     ).toHaveBeenCalled();
   });
 });

@@ -32,6 +32,13 @@ function PublicDocument(rawDocument) {
   this.receivedAt = rawDocument.receivedAt;
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
+
+  this.isOnDocketRecord = rawDocument.isOnDocketRecord;
+  this.description = rawDocument.description;
+  this.index = rawDocument.index;
+  this.filingDate = rawDocument.filingDate;
+  this.numberOfPages = rawDocument.numberOfPages;
+  this.isStricken = rawDocument.isStricken;
 }
 
 joiValidationDecorator(
