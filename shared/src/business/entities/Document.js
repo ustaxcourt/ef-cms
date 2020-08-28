@@ -134,6 +134,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.index = rawDocument.index;
   this.servedPartiesCode = rawDocument.servedPartiesCode;
   this.isOnDocketRecord = rawDocument.isOnDocketRecord || false;
+  this.isMinuteEntry = rawDocument.isMinuteEntry;
 
   // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
