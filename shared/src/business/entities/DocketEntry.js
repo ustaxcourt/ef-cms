@@ -25,12 +25,11 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
-
-DocketEntry.validationName = 'DocketEntry';
 
 /**
  * constructor
@@ -183,6 +182,8 @@ DocketEntry.isPendingOnCreation = rawDocketEntry => {
   });
   return isPending;
 };
+
+DocketEntry.validationName = 'DocketEntry';
 
 DocketEntry.VALIDATION_RULES = joi.object().keys({
   action: joi
@@ -745,4 +746,4 @@ DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
   this.strickenAt = createISODateString();
 };
 
-exports.DocketEntry = DocketEntry;
+exports.DocketEntry = validEntityDecorator(DocketEntry);

@@ -9,6 +9,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 /**
@@ -17,7 +18,11 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawMessage the raw message data
  * @constructor
  */
-function Message(rawMessage, { applicationContext }) {
+function Message() {
+  this.entityName = 'Message';
+}
+
+Message.prototype.init = function init(rawMessage, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -35,7 +40,6 @@ function Message(rawMessage, { applicationContext }) {
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
-  this.entityName = 'Message';
   this.from = rawMessage.from;
   this.fromSection = rawMessage.fromSection;
   this.fromUserId = rawMessage.fromUserId;
@@ -48,7 +52,7 @@ function Message(rawMessage, { applicationContext }) {
   this.to = rawMessage.to;
   this.toSection = rawMessage.toSection;
   this.toUserId = rawMessage.toUserId;
-}
+};
 
 Message.validationName = 'Message';
 
@@ -210,4 +214,4 @@ Message.prototype.addAttachment = function (attachmentToAdd) {
   return this;
 };
 
-module.exports = { Message };
+exports.Message = validEntityDecorator(Message);

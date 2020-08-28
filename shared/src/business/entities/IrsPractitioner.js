@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   USER_CONTACT_VALIDATION_RULES,
@@ -18,13 +19,18 @@ const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function IrsPractitioner(rawUser) {
+function IrsPractitioner() {
+  this.entityName = 'IrsPractitioner';
+}
+
+IrsPractitioner.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
   this.barNumber = rawUser.barNumber;
-  this.entityName = 'IrsPractitioner';
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-}
+};
+
+IrsPractitioner.validationName = 'IrsPractitioner';
 
 IrsPractitioner.VALIDATION_RULES = joi.object().keys({
   barNumber: joi
@@ -53,8 +59,4 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-IrsPractitioner.validationName = 'IrsPractitioner';
-
-module.exports = {
-  IrsPractitioner,
-};
+exports.IrsPractitioner = validEntityDecorator(IrsPractitioner);
