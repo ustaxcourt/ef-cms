@@ -50,13 +50,13 @@ const formatRecord = record => {
   returnData.practitionerType = record.practitionerType;
 
   returnData.contact = {
-    address1: record.address1,
-    address2: record.address2,
-    city: record.city,
+    address1: record['contact/address1'],
+    address2: record['contact/address2'],
+    city: record['contact/city'],
     countryType: COUNTRY_TYPES.DOMESTIC,
-    phone: record.phone,
-    postalCode: record.postalCode,
-    state: record.state,
+    phone: record['contact/phone'],
+    postalCode: record['contact/postalCode'],
+    state: record['contact/state'],
   };
 
   return returnData;
@@ -73,28 +73,32 @@ const formatRecord = record => {
   });
 
   const csvColumns = [
-    'barNumber',
-    'lastName',
-    'firstName',
-    'middleName',
-    'suffix',
-    'firmName',
-    'address1',
-    'address2',
-    'city',
-    'state',
-    'postalCode',
-    'unformattedAdmissionsDate',
-    'originalBarState',
-    'birthYear',
-    'practitionerType',
+    'role',
+    'admissionsDate',
     'admissionsStatus',
+    'birthYear',
+    'employer',
+    'practitionerType',
+    'name',
+    'firstName',
+    'lastName',
+    'suffix',
+    'section',
+    'userId',
+    'entityName',
     'email',
+    'firmName',
     'alternateEmail',
-    'phone',
     'additionalPhone',
-    'isIrsEmployee',
-    'isDojEmployee',
+    'originalBarState',
+    'barNumber',
+    'contact/address1',
+    'contact/address2',
+    'contact/city',
+    'contact/countryType',
+    'contact/phone',
+    'contact/postalCode',
+    'contact/state',
   ];
 
   const csvOptions = getCsvOptions(csvColumns);
@@ -118,7 +122,7 @@ const formatRecord = record => {
     .reduce((obj, api) => {
       obj[
         api.name.replace(`_${process.env.ENV}`, '')
-      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}/users`;
+      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
       return obj;
     }, {});
 
@@ -142,7 +146,7 @@ const formatRecord = record => {
 
       try {
         const result = await axios.post(
-          `${services['gateway_api']}/users/practitioner`,
+          `${services['gateway_api']}/practitioners`,
           { user: record },
           {
             headers: {
