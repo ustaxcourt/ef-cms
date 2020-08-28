@@ -24,9 +24,7 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision = test => 
     const documents = test
       .getState('caseDetail.documents')
       .filter(d => d.isOnDocketRecord);
-    // expect(documents.length).toEqual(3);
-    // TODO 636 -- lowered count because we didn't put Petition.isOnDocketRecord = true
-    expect(documents.length).toEqual(2);
+    expect(documents.length).toEqual(3);
     const stipDecisionDocument = test
       .getState('caseDetail.documents')
       .find(d => d.documentType === 'Stipulated Decision');

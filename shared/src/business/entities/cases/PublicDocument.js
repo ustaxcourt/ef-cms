@@ -39,6 +39,7 @@ function PublicDocument(rawDocument) {
   this.filingDate = rawDocument.filingDate;
   this.numberOfPages = rawDocument.numberOfPages;
   this.isStricken = rawDocument.isStricken;
+  this.isMinuteEntry = rawDocument.isMinuteEntry;
 }
 
 joiValidationDecorator(
@@ -50,13 +51,16 @@ joiValidationDecorator(
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
     documentId: JoiValidationConstants.UUID.optional(),
     documentTitle: JoiValidationConstants.STRING.max(500).optional(),
-    documentType: JoiValidationConstants.STRING.valid(
-      ...ALL_DOCUMENT_TYPES,
-    ).optional(),
-    eventCode: JoiValidationConstants.STRING.valid(
-      ...ALL_EVENT_CODES,
-    ).optional(),
+    documentType: joi
+      .string()
+      .valid(...ALL_DOCUMENT_TYPES)
+      .optional(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .optional(),
     filedBy: JoiValidationConstants.STRING.max(500).optional(),
+    isMinuteEntry: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
