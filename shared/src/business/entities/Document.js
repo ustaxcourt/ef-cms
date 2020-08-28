@@ -84,7 +84,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
   this.docketNumbers = rawDocument.docketNumbers;
-  this.documentId = rawDocument.documentId;
+  this.documentId = rawDocument.documentId || applicationContext.getUniqueId();
   this.documentContentsId = rawDocument.documentContentsId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
@@ -312,6 +312,7 @@ Document.VALIDATION_RULES = joi.object().keys({
     .description(
       'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
+  isMinuteEntry: joi.boolean().optional(),
   isOnDocketRecord: joi.boolean().optional(),
   isPaper: joi.boolean().optional(),
   isSealed: joi
