@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -39,7 +42,7 @@ NewMessage.VALIDATION_ERROR_MESSAGES = {
 joiValidationDecorator(
   NewMessage,
   joi.object().keys({
-    entityName: joi.string().valid('NewMessage').required(),
+    entityName: JoiValidationConstants.STRING.valid('NewMessage').required(),
     message: Message.VALIDATION_RULES.message,
     subject: Message.VALIDATION_RULES.subject,
     toSection: Message.VALIDATION_RULES.toSection,

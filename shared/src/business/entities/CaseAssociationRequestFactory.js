@@ -120,23 +120,18 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let schema = {
     certificateOfService: joi.boolean().required(),
-    documentTitle: joi.string().max(500).optional(),
-    documentTitleTemplate: joi.string().max(500).required(),
-    documentType: joi
-      .string()
-      .valid(...ALL_DOCUMENT_TYPES)
-      .required(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .required(),
+    documentTitle: JoiValidationConstants.STRING.max(500).optional(),
+    documentTitleTemplate: JoiValidationConstants.STRING.max(500).required(),
+    documentType: JoiValidationConstants.STRING.valid(
+      ...ALL_DOCUMENT_TYPES,
+    ).required(),
+    eventCode: JoiValidationConstants.STRING.valid(
+      ...ALL_EVENT_CODES,
+    ).required(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(), // object of type File
-    scenario: joi
-      .string()
-      .valid(...SCENARIOS)
-      .required(),
+    scenario: JoiValidationConstants.STRING.valid(...SCENARIOS).required(),
   };
 
   let schemaOptionalItems = {
@@ -146,10 +141,9 @@ function CaseAssociationRequestFactory(rawProps) {
     ).required(),
     exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
-    objections: joi
-      .string()
-      .valid(...OBJECTIONS_OPTIONS)
-      .required(),
+    objections: JoiValidationConstants.STRING.valid(
+      ...OBJECTIONS_OPTIONS,
+    ).required(),
     representingPrimary: joi.boolean().invalid(false).required(),
     representingSecondary: joi.boolean().invalid(false).required(),
     supportingDocuments: joi.array().optional(), // validated with SupportingDocumentInformationFactory

@@ -70,7 +70,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
     .description(
       'The total amount of penalties for the period or year determined by the Court.',
     ),
-  entityName: joi.string().valid('Statistic').required(),
+  entityName: JoiValidationConstants.STRING.valid('Statistic').required(),
   irsDeficiencyAmount: joi
     .number()
     .required()
@@ -102,9 +102,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
       then: joi.required(),
     })
     .description('The year of the statistics period.'),
-  yearOrPeriod: joi
-    .string()
-    .required()
+  yearOrPeriod: JoiValidationConstants.STRING.required()
     .valid('Year', 'Period')
     .description('Whether the statistics are for a year or period.'),
 });

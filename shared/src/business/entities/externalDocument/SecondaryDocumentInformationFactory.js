@@ -40,7 +40,7 @@ SecondaryDocumentInformationFactory.get = (
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    objections: joi.string(),
+    objections: JoiValidationConstants.STRING,
   };
 
   const makeRequired = itemName => {

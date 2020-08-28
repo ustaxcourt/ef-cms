@@ -58,6 +58,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Statistic"
     irsDeficiencyAmount: 
@@ -77,6 +82,10 @@
         description: "Unique statistic ID only used by the system."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -88,6 +97,11 @@
         presence: "required"
         only: true
         description: "Whether the statistics are for a year or period."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Year"
         - "Period"

@@ -1,4 +1,6 @@
-const joi = require('joi');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('./ContactFactory');
 /**
  * returns the constructor used for creating the PetitionerGuardianContact entity
@@ -8,7 +10,7 @@ exports.getPetitionerGuardianContact = ContactFactory.createContactFactory({
     secondaryName: 'Enter name of guardian',
   },
   additionalValidation: {
-    secondaryName: joi.string().max(500).required(),
+    secondaryName: JoiValidationConstants.STRING.max(500).required(),
   },
   contactName: 'PetitionerGuardianContact',
 });

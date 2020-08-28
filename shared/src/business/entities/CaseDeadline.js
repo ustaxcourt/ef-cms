@@ -55,16 +55,14 @@ CaseDeadline.schema = joi.object().keys({
   deadlineDate: JoiValidationConstants.ISO_DATE.required().description(
     'When the Case Deadline expires.',
   ),
-  description: joi
-    .string()
-    .max(120)
+  description: JoiValidationConstants.STRING.max(120)
     .min(1)
     .required()
     .description('User provided description of the Case Deadline.'),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Docket number of the case containing the Case Deadline.',
   ),
-  entityName: joi.string().valid('CaseDeadline').required(),
+  entityName: JoiValidationConstants.STRING.valid('CaseDeadline').required(),
 });
 
 joiValidationDecorator(

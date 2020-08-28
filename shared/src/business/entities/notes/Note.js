@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -22,7 +25,7 @@ Note.VALIDATION_ERROR_MESSAGES = {
 };
 
 Note.schema = joi.object().keys({
-  notes: joi.string().required(),
+  notes: JoiValidationConstants.STRING.required(),
 });
 
 joiValidationDecorator(Note, Note.schema, Note.VALIDATION_ERROR_MESSAGES);

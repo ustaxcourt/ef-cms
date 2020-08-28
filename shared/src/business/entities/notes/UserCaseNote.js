@@ -31,8 +31,8 @@ UserCaseNote.VALIDATION_ERROR_MESSAGES = {
 
 UserCaseNote.schema = joi.object().keys({
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-  entityName: joi.string().valid('UserCaseNote').required(),
-  notes: joi.string().required(),
+  entityName: JoiValidationConstants.STRING.valid('UserCaseNote').required(),
+  notes: JoiValidationConstants.STRING.required(),
   userId: JoiValidationConstants.UUID.required(),
 });
 

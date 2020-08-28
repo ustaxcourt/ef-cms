@@ -38,7 +38,7 @@ SupportingDocumentInformationFactory.get = (
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
-    supportingDocument: joi.string().required(),
+    supportingDocument: JoiValidationConstants.STRING.required(),
   };
 
   let schemaOptionalItems = {
@@ -50,7 +50,7 @@ SupportingDocumentInformationFactory.get = (
       .min(1)
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
-    supportingDocumentFreeText: joi.string(),
+    supportingDocumentFreeText: JoiValidationConstants.STRING,
   };
 
   const makeRequired = itemName => {
