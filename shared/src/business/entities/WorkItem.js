@@ -9,11 +9,14 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
+
+WorkItem.validationName = 'WorkItem';
 
 /**
  * constructor
@@ -21,7 +24,11 @@ const { omit } = require('lodash');
  * @param {object} rawWorkItem the raw work item data
  * @constructor
  */
-function WorkItem(rawWorkItem, { applicationContext }) {
+function WorkItem() {
+  this.entityName = 'WorkItem';
+}
+
+WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -39,7 +46,6 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.document = omit(rawWorkItem.document, 'workItem');
-  this.entityName = 'WorkItem';
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
@@ -52,9 +58,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
-}
-
-WorkItem.validationName = 'WorkItem';
+};
 
 WorkItem.VALIDATION_RULES = joi.object().keys({
   assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
@@ -162,4 +166,4 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
   return this;
 };
 
-module.exports = { WorkItem };
+exports.WorkItem = validEntityDecorator(WorkItem);
