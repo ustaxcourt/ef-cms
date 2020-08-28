@@ -16,8 +16,6 @@ const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
 
-WorkItem.validationName = 'WorkItem';
-
 /**
  * constructor
  *
@@ -59,6 +57,8 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
 };
+
+WorkItem.validationName = 'WorkItem';
 
 WorkItem.VALIDATION_RULES = joi.object().keys({
   assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
