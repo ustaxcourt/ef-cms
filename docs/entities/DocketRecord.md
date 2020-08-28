@@ -31,6 +31,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -42,6 +46,10 @@
         presence: "optional"
         description: "ID of the associated PDF document in the S3 bucket."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 

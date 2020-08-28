@@ -93,6 +93,10 @@
         description: "Docket Number of the associated Case in XXXXX-YY format."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -113,6 +117,10 @@
         description: "The S3 ID containing the text contents of the document."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -124,6 +132,10 @@
         presence: "required"
         description: "ID of the associated PDF document in the S3 bucket."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -137,6 +149,10 @@
         description: "The id for the original document that was uploaded."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -148,6 +164,10 @@
         presence: "optional"
         description: "The title of this document."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -1450,6 +1470,10 @@
             description: "The ID of the previous document."
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "guid"
               args: 
                 options: 
@@ -1461,6 +1485,10 @@
             presence: "optional"
             description: "The title of the previous document."
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "max"
               args: 
@@ -1845,6 +1873,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -2693,6 +2725,10 @@
                 presence: "optional"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "email"
                   args: 
                     options: 
@@ -2955,6 +2991,10 @@
               presence: "required"
             rules: 
               - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
                 name: "guid"
                 args: 
                   options: 
@@ -2965,6 +3005,10 @@
             flags: 
               presence: "optional"
             rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
               - 
                 name: "guid"
                 args: 
@@ -3002,6 +3046,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -3017,6 +3065,10 @@
           flags: 
             presence: "optional"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "guid"
               args: 
@@ -3100,6 +3152,10 @@
             presence: "optional"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "guid"
               args: 
                 options: 
@@ -3131,6 +3187,10 @@
             presence: "required"
             description: "Unique case identifier in XXXXX-YY format."
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "pattern"
               args: 
@@ -3302,6 +3362,10 @@
             presence: "optional"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "guid"
               args: 
                 options: 
@@ -3328,6 +3392,10 @@
           flags: 
             presence: "required"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "guid"
               args: 

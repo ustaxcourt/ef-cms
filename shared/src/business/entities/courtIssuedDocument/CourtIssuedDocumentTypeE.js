@@ -10,6 +10,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
@@ -25,12 +26,13 @@ const yesterdayFormatted = formatDateString(
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function CourtIssuedDocumentTypeE(rawProps) {
+function CourtIssuedDocumentTypeE() {}
+CourtIssuedDocumentTypeE.prototype.init = function init(rawProps) {
   this.attachments = rawProps.attachments;
   this.date = rawProps.date;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
-}
+};
 
 CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
   return replaceBracketed(
@@ -42,8 +44,8 @@ CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
 CourtIssuedDocumentTypeE.schema = {
   attachments: joi.boolean().required(),
   date: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
 };
 
 joiValidationDecorator(
@@ -52,4 +54,6 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CourtIssuedDocumentTypeE };
+module.exports = {
+  CourtIssuedDocumentTypeE: validEntityDecorator(CourtIssuedDocumentTypeE),
+};

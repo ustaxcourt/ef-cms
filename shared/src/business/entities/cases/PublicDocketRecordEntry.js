@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
@@ -12,7 +13,8 @@ const {
  * @param {object} rawDocketEntry the raw docket entry
  * @constructor
  */
-function PublicDocketRecordEntry(rawDocketEntry) {
+function PublicDocketRecordEntry() {}
+PublicDocketRecordEntry.prototype.init = function init(rawDocketEntry) {
   this.description = rawDocketEntry.description;
   this.documentId = rawDocketEntry.documentId;
   this.filedBy = rawDocketEntry.filedBy;
@@ -20,14 +22,14 @@ function PublicDocketRecordEntry(rawDocketEntry) {
   this.filingDate = rawDocketEntry.filingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.isStricken = rawDocketEntry.isStricken;
-}
+};
 
 joiValidationDecorator(
   PublicDocketRecordEntry,
   joi.object().keys({
-    description: joi.string().max(500).optional(),
+    description: JoiValidationConstants.STRING.max(500).optional(),
     documentId: JoiValidationConstants.UUID.optional(),
-    filedBy: joi.string().max(500).optional(),
+    filedBy: JoiValidationConstants.STRING.max(500).optional(),
     filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),
     isStricken: joi.boolean().optional(),
@@ -36,4 +38,6 @@ joiValidationDecorator(
   {},
 );
 
-module.exports = { PublicDocketRecordEntry };
+module.exports = {
+  PublicDocketRecordEntry: validEntityDecorator(PublicDocketRecordEntry),
+};

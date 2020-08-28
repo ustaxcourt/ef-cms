@@ -83,6 +83,10 @@
         description: "The ID of the user who is the recipient of the message."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 

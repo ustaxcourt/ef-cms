@@ -221,6 +221,10 @@
                   presence: "required"
                 rules: 
                   - 
+                    name: "min"
+                    args: 
+                      limit: 1
+                  - 
                     name: "pattern"
                     args: 
                       regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
@@ -322,6 +326,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "email"
           args: 
             options: 
@@ -404,6 +412,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -453,6 +465,10 @@
         presence: "optional"
         description: "An alternate email address for the practitioner."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "email"
           args: 

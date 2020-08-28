@@ -90,6 +90,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
@@ -115,6 +119,10 @@
       type: "string"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/"
@@ -131,6 +139,10 @@
     swingSessionId: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -187,6 +199,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -204,6 +220,10 @@
                 presence: "required"
                 description: "Docket number of the case."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "pattern"
                   args: 
