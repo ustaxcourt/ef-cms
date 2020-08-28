@@ -44,31 +44,28 @@ function PublicDocument(rawDocument) {
 joiValidationDecorator(
   PublicDocument,
   joi.object().keys({
-    additionalInfo: joi.string().max(500).optional(),
-    additionalInfo2: joi.string().max(500).optional(),
+    additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
+    additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
     documentId: JoiValidationConstants.UUID.optional(),
-    documentTitle: joi.string().max(500).optional(),
-    documentType: joi
-      .string()
-      .valid(...ALL_DOCUMENT_TYPES)
-      .optional(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .optional(),
-    filedBy: joi.string().max(500).optional(),
+    documentTitle: JoiValidationConstants.STRING.max(500).optional(),
+    documentType: JoiValidationConstants.STRING.valid(
+      ...ALL_DOCUMENT_TYPES,
+    ).optional(),
+    eventCode: JoiValidationConstants.STRING.valid(
+      ...ALL_EVENT_CODES,
+    ).optional(),
+    filedBy: JoiValidationConstants.STRING.max(500).optional(),
     isPaper: joi.boolean().optional(),
-    processingStatus: joi
-      .string()
-      .valid(...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS))
-      .optional(),
+    processingStatus: JoiValidationConstants.STRING.valid(
+      ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
+    ).optional(),
     receivedAt: JoiValidationConstants.ISO_DATE.optional(),
     servedAt: JoiValidationConstants.ISO_DATE.optional(),
     servedParties: joi
       .array()
-      .items({ name: joi.string().max(500).required() })
+      .items({ name: JoiValidationConstants.STRING.max(500).required() })
       .optional(),
   }),
   {},

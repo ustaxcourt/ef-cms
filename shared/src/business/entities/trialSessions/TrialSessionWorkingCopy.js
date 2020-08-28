@@ -50,11 +50,13 @@ TrialSessionWorkingCopy.validationRules = {
     .pattern(
       DOCKET_NUMBER_MATCHER, // keys are docket numbers
       joi.object().keys({
-        trialStatus: joi.string().optional(),
+        trialStatus: JoiValidationConstants.STRING.optional(),
       }),
     )
     .optional(),
-  entityName: joi.string().valid('TrialSessionWorkingCopy').required(),
+  entityName: JoiValidationConstants.STRING.valid(
+    'TrialSessionWorkingCopy',
+  ).required(),
   filters: joi
     .object()
     .keys({
@@ -70,9 +72,9 @@ TrialSessionWorkingCopy.validationRules = {
       takenUnderAdvisement: joi.boolean().required(),
     })
     .required(),
-  sessionNotes: joi.string().optional(),
-  sort: joi.string().optional(),
-  sortOrder: joi.string().optional(),
+  sessionNotes: JoiValidationConstants.STRING.optional(),
+  sort: JoiValidationConstants.STRING.optional(),
+  sortOrder: JoiValidationConstants.STRING.optional(),
   trialSessionId: JoiValidationConstants.UUID.required(),
   userId: JoiValidationConstants.UUID.required(),
 };

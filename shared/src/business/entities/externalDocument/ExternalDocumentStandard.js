@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
@@ -27,16 +30,13 @@ ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentStandard.schema = joi.object({
-  category: joi.string().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi
-    .string()
-    .required()
-    .when('selectedCases', {
-      is: joi.array().min(1).required(),
-      then: joi.string().invalid('Proposed Stipulated Decision'),
-    }),
-  selectedCases: joi.array().items(joi.string()).optional(),
+  category: JoiValidationConstants.STRING.required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required().when('selectedCases', {
+    is: joi.array().min(1).required(),
+    then: JoiValidationConstants.STRING.invalid('Proposed Stipulated Decision'),
+  }),
+  selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
 });
 
 joiValidationDecorator(

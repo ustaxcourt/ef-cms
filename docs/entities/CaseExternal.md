@@ -8,6 +8,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Corporation"
         - "Partnership (as the Tax Matters Partner)"
@@ -26,11 +31,21 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     filingType: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Myself"
         - "Myself and my spouse"
@@ -44,6 +59,11 @@
         presence: "required"
     caseType: 
       type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       whens: 
         - 
           ref: 
@@ -126,6 +146,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Conservator"
         - "Corporation"
@@ -191,6 +216,11 @@
             type: "string"
             flags: 
               only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "Fresno, California"
               - "Tallahassee, Florida"
@@ -272,6 +302,10 @@
             type: "string"
             rules: 
               - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
                 name: "pattern"
                 args: 
                   regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
@@ -280,6 +314,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Regular"
         - "Small"

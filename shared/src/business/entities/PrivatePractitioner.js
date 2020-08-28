@@ -33,17 +33,17 @@ PrivatePractitioner.prototype.init = function init(rawUser) {
 PrivatePractitioner.validationName = 'PrivatePractitioner';
 
 PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
-  barNumber: joi
-    .string()
-    .max(100)
+  barNumber: JoiValidationConstants.STRING.max(100)
     .required()
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
     ),
   contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
-  entityName: joi.string().valid('PrivatePractitioner').required(),
-  name: joi.string().max(100).required(),
+  entityName: JoiValidationConstants.STRING.valid(
+    'PrivatePractitioner',
+  ).required(),
+  name: JoiValidationConstants.STRING.max(100).required(),
   representing: joi
     .array()
     .items(JoiValidationConstants.UUID)
@@ -51,12 +51,13 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
     .description('List of contact IDs of contacts'),
   representingPrimary: joi.boolean().optional(),
   representingSecondary: joi.boolean().optional(),
-  role: joi.string().required().valid(ROLES.privatePractitioner),
-  serviceIndicator: joi
-    .string()
-    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
-    .required(),
-  token: joi.string().optional(),
+  role: JoiValidationConstants.STRING.required().valid(
+    ROLES.privatePractitioner,
+  ),
+  serviceIndicator: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVICE_INDICATOR_TYPES),
+  ).required(),
+  token: JoiValidationConstants.STRING.optional(),
   userId: JoiValidationConstants.UUID.required(),
 });
 

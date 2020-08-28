@@ -9,6 +9,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -30,6 +34,11 @@
             flags: 
               only: true
               presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "irsPractitioner"
               - "privatePractitioner"
@@ -38,11 +47,20 @@
             flags: 
               only: true
               presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "inactivePractitioner"
     judgeFullName: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -74,6 +92,10 @@
     judgeTitle: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -113,6 +135,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -121,6 +147,10 @@
           flags: 
             presence: "optional"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "max"
               args: 
@@ -133,6 +163,10 @@
             presence: "optional"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -144,6 +178,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -152,11 +190,21 @@
           flags: 
             only: true
             presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "domestic"
             - "international"
         country: 
           type: "string"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           whens: 
             - 
               ref: 
@@ -187,6 +235,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -212,6 +264,10 @@
                   presence: "required"
                 rules: 
                   - 
+                    name: "min"
+                    args: 
+                      limit: 1
+                  - 
                     name: "max"
                     args: 
                       limit: 100
@@ -221,6 +277,10 @@
                   presence: "required"
                 rules: 
                   - 
+                    name: "min"
+                    args: 
+                      limit: 1
+                  - 
                     name: "pattern"
                     args: 
                       regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
@@ -228,6 +288,11 @@
           type: "string"
           flags: 
             only: true
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "AK"
             - "AL"
@@ -322,6 +387,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "email"
           args: 
             options: 
@@ -335,6 +404,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Practitioner"
     section: 
@@ -342,6 +416,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admissions"
@@ -398,11 +477,20 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     userId: 
       type: "string"
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -415,6 +503,10 @@
         presence: "optional"
         description: "An alternate phone number for the practitioner."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -440,6 +532,11 @@
         only: true
         presence: "required"
         description: "The Tax Court bar admission status for the practitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Active"
         - "Suspended"
@@ -453,6 +550,10 @@
         presence: "optional"
         description: "An alternate email address for the practitioner."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "email"
           args: 
@@ -470,6 +571,10 @@
         presence: "required"
         description: "A unique identifier comprising of the practitioner initials, date, and series number."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -496,6 +601,11 @@
         only: true
         presence: "required"
         description: "The employer designation for the practitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "IRS"
         - "DOJ"
@@ -506,6 +616,10 @@
         presence: "optional"
         description: "The firm name for the practitioner."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -519,6 +633,10 @@
         description: "The first name of the practitioner."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -529,6 +647,10 @@
         description: "The last name of the practitioner."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -538,6 +660,10 @@
         presence: "optional"
         description: "The optional middle name of the practitioner."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -551,6 +677,10 @@
         description: "The state in which the practitioner passed their bar examination."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -560,6 +690,11 @@
         only: true
         presence: "required"
         description: "The type of practitioner - either Attorney or Non-Attorney."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Attorney"
         - "Non-Attorney"
@@ -569,6 +704,10 @@
         presence: "optional"
         description: "The name suffix of the practitioner."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
