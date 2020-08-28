@@ -22,7 +22,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
-      userId: 'docketClerk',
+      userId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
     });
 
     applicationContext
@@ -133,7 +133,8 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    const waivedDocument = result.docketRecord.find(
+    // TODO 636
+    const waivedDocument = [...result.docketRecord, ...result.documents].find(
       entry => entry.description === 'Filing Fee Waived',
     );
 
@@ -159,7 +160,8 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    const wavedDocument = result.docketRecord.find(
+    // TODO 636
+    const wavedDocument = [...result.docketRecord, ...result.documents].find(
       entry => entry.description === 'Filing Fee Paid',
     );
 

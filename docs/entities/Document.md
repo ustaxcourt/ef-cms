@@ -197,6 +197,8 @@
         - "Entry of Appearance"
         - "Evidence"
         - "Exhibit(s)"
+        - "Filing Fee Paid"
+        - "Filing Fee Waived"
         - "Further Trial before"
         - "Hearing Exhibits"
         - "Hearing before"
@@ -1291,6 +1293,10 @@
       flags: 
         presence: "optional"
         description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
+    isMinuteEntry: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     isOnDocketRecord: 
       type: "boolean"
       flags: 
@@ -1514,6 +1520,8 @@
             - "Entry of Appearance"
             - "Evidence"
             - "Exhibit(s)"
+            - "Filing Fee Paid"
+            - "Filing Fee Waived"
             - "Further Trial before"
             - "Hearing Exhibits"
             - "Hearing before"
@@ -1993,6 +2001,8 @@
             - "Entry of Appearance"
             - "Evidence"
             - "Exhibit(s)"
+            - "Filing Fee Paid"
+            - "Filing Fee Waived"
             - "Further Trial before"
             - "Hearing Exhibits"
             - "Hearing before"

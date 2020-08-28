@@ -6,7 +6,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { PETITIONS_SECTION } = require('../entities/EntityConstants');
@@ -157,12 +156,19 @@ exports.createCaseInteractor = async ({
     user,
   });
 
-  caseToAdd.addDocketRecord(
-    new DocketRecord(
+  caseToAdd.addDocumentWithoutDocketRecord(
+    new Document(
       {
         description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+        documentType:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         filingDate: caseToAdd.createdAt,
+        isFileAttached: false,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+        processingStatus: 'complete',
+        userId: user.userId,
       },
       { applicationContext },
     ),
