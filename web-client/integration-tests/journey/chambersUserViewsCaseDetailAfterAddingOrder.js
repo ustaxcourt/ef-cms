@@ -1,6 +1,9 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const chambersUserViewsCaseDetailAfterAddingOrder = test => {
+export const chambersUserViewsCaseDetailAfterAddingOrder = (
+  test,
+  expectedDocumentCount = 2,
+) => {
   return it('Chambers user views case detail after adding order', async () => {
     test.setState('caseDetail', {});
 
@@ -11,7 +14,9 @@ export const chambersUserViewsCaseDetailAfterAddingOrder = test => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(
+      expectedDocumentCount,
+    );
     expect(
       test
         .getState('caseDetail.documents')

@@ -35,7 +35,7 @@ export const unauthedUserViewsCaseDetail = test => {
         description: 'Request for Place of Trial at Seattle, Washington',
         hasDocument: false,
         showDocumentDescriptionWithoutLink: true,
-        showLinkToDocument: undefined,
+        showLinkToDocument: false,
       },
       {
         description: 'Order of Dismissal Entered, Judge Buch for Something',
@@ -53,7 +53,7 @@ export const unauthedUserViewsCaseDetail = test => {
       },
     ]);
 
-    expect(helper.formattedCaseDetail.documents.length).toEqual(4);
+    expect(helper.formattedCaseDetail.documents.length).toEqual(5); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
     expect(helper.formattedCaseDetail.documents).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
