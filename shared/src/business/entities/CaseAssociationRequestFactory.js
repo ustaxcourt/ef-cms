@@ -10,25 +10,15 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
-
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./externalDocument/ExternalDocumentInformationFactory');
-
-CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-  documentTitleTemplate: 'Select a document',
-  eventCode: 'Select a document',
-  exhibits: 'Enter selection for Exhibits.',
-  representingPrimary: 'Select a party',
-  representingSecondary: 'Select a party',
-  scenario: 'Select a document',
-};
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 /**
  * Case Association Request Factory entity
@@ -37,7 +27,11 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function CaseAssociationRequestFactory(rawProps) {
-  let entityConstructor = function (rawPropsParam) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawPropsParam) {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
@@ -194,12 +188,22 @@ function CaseAssociationRequestFactory(rawProps) {
   }
 
   joiValidationDecorator(
-    entityConstructor,
+    validEntityDecorator(entityConstructor),
     schema,
     CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new entityConstructor(rawProps);
+  return new (validEntityDecorator(entityConstructor))(rawProps);
 }
+
+CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
+  ...VALIDATION_ERROR_MESSAGES,
+  documentTitleTemplate: 'Select a document',
+  eventCode: 'Select a document',
+  exhibits: 'Enter selection for Exhibits.',
+  representingPrimary: 'Select a party',
+  representingSecondary: 'Select a party',
+  scenario: 'Select a document',
+};
 
 module.exports = { CaseAssociationRequestFactory };
