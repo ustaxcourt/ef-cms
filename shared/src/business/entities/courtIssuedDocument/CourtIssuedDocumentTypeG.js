@@ -33,9 +33,9 @@ CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
 CourtIssuedDocumentTypeG.schema = {
   attachments: joi.boolean().required(),
   date: JoiValidationConstants.ISO_DATE.required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
-  trialLocation: joi.string().required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
+  trialLocation: JoiValidationConstants.STRING.required(),
 };
 
 joiValidationDecorator(

@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -35,7 +38,7 @@ joiValidationDecorator(
     createdAt: Case.VALIDATION_RULES.createdAt,
     docketNumber: Case.VALIDATION_RULES.docketNumber,
     docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
-    entityName: joi.string().valid('UserCase').required(),
+    entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
     leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
     status: Case.VALIDATION_RULES.status,
   }),

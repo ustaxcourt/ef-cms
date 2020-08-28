@@ -1,5 +1,8 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -24,10 +27,10 @@ CourtIssuedDocumentTypeB.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeB.schema = {
   attachments: joi.boolean().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
-  freeText: joi.string().optional(),
-  judge: joi.string().required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
+  freeText: JoiValidationConstants.STRING.optional(),
+  judge: JoiValidationConstants.STRING.required(),
 };
 
 joiValidationDecorator(

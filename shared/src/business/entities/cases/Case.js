@@ -337,9 +337,7 @@ Case.VALIDATION_RULES = {
     .description(
       'List of Document Entities that were archived instead of added to the docket record.',
     ),
-  associatedJudge: joi
-    .string()
-    .max(50)
+  associatedJudge: JoiValidationConstants.STRING.max(50)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Judge assigned to this case. Defaults to Chief Judge.'),
@@ -357,9 +355,9 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     },
   ),
-  automaticBlockedReason: joi
-    .string()
-    .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
+  automaticBlockedReason: JoiValidationConstants.STRING.valid(
+    ...Object.values(AUTOMATIC_BLOCKED_REASONS),
+  )
     .description('The reason the case was automatically blocked from trial.')
     .when('automaticBlocked', {
       is: true,
@@ -376,9 +374,7 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }).meta({ tags: ['Restricted'] }),
-  blockedReason: joi
-    .string()
-    .max(250)
+  blockedReason: JoiValidationConstants.STRING.max(250)
     .description(
       'Open text field for describing reason for blocking this case from trial.',
     )
@@ -391,15 +387,10 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseNote: joi
-    .string()
-    .max(500)
+  caseNote: JoiValidationConstants.STRING.max(500)
     .optional()
     .meta({ tags: ['Restricted'] }),
-  caseType: joi
-    .string()
-    .valid(...CASE_TYPES)
-    .required(),
+  caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: CASE_STATUS_TYPES.closed,
     otherwise: joi.optional().allow(null),
@@ -428,15 +419,12 @@ Case.VALIDATION_RULES = {
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberSuffix: joi
-    .string()
-    .allow(null)
+  docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
-  docketNumberWithSuffix: joi
-    .string()
-    .optional()
-    .description('Auto-generated from docket number and the suffix.'),
+  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
+    'Auto-generated from docket number and the suffix.',
+  ),
   docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
     DocketRecord.VALIDATION_RULES,
   ).required(),
@@ -445,14 +433,11 @@ Case.VALIDATION_RULES = {
     .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
-  entityName: joi.string().valid('Case').required(),
-  filingType: joi
-    .string()
-    .valid(
-      ...FILING_TYPES[ROLES.petitioner],
-      ...FILING_TYPES[ROLES.privatePractitioner],
-    )
-    .optional(),
+  entityName: JoiValidationConstants.STRING.valid('Case').required(),
+  filingType: JoiValidationConstants.STRING.valid(
+    ...FILING_TYPES[ROLES.petitioner],
+    ...FILING_TYPES[ROLES.privatePractitioner],
+  ).optional(),
   hasPendingItems: joi.boolean().optional(),
   hasVerifiedIrsNotice: joi
     .boolean()
@@ -465,24 +450,21 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .meta({ tags: ['Restricted'] }),
-  highPriorityReason: joi
-    .string()
-    .max(250)
+  highPriorityReason: JoiValidationConstants.STRING.max(250)
     .when('highPriority', {
       is: true,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
-  initialCaption: joi
-    .string()
-    .max(500)
+  initialCaption: JoiValidationConstants.STRING.max(500)
     .allow(null)
     .optional()
     .description('Case caption before modification.'),
-  initialDocketNumberSuffix: joi
-    .string()
-    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES), '_')
+  initialDocketNumberSuffix: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCKET_NUMBER_SUFFIXES),
+    '_',
+  )
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
@@ -507,9 +489,7 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Litigation costs for the case.'),
-  mailingDate: joi
-    .string()
-    .max(25)
+  mailingDate: JoiValidationConstants.STRING.max(25)
     .when('isPaper', {
       is: true,
       otherwise: joi.allow(null).optional(),
@@ -572,9 +552,7 @@ Case.VALIDATION_RULES = {
     .items(ContactFactory.getValidationRules('otherPetitioners'))
     .description('List of OtherPetitionerContact Entities for the case.')
     .optional(),
-  partyType: joi
-    .string()
-    .valid(...Object.values(PARTY_TYPES))
+  partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
   petitionPaymentDate: JoiValidationConstants.ISO_DATE.when(
@@ -585,18 +563,16 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     },
   ).description('When the petitioner paid the case fee.'),
-  petitionPaymentMethod: joi
-    .string()
-    .max(50)
+  petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
     .when('petitionPaymentStatus', {
       is: PAYMENT_STATUS.PAID,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     })
     .description('How the petitioner paid the case fee.'),
-  petitionPaymentStatus: joi
-    .string()
-    .valid(...Object.values(PAYMENT_STATUS))
+  petitionPaymentStatus: JoiValidationConstants.STRING.valid(
+    ...Object.values(PAYMENT_STATUS),
+  )
     .required()
     .description('Status of the case fee payment.'),
   petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
@@ -610,8 +586,8 @@ Case.VALIDATION_RULES = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      joi.string().valid(...TRIAL_CITY_STRINGS, null),
-      joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
     .description('Where the petitioner would prefer to hold the case trial.'),
@@ -620,9 +596,7 @@ Case.VALIDATION_RULES = {
     .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
-  procedureType: joi
-    .string()
-    .valid(...PROCEDURE_TYPES)
+  procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
     .required()
     .description('Procedure type of the case.'),
   qcCompleteForTrial: joi
@@ -657,9 +631,9 @@ Case.VALIDATION_RULES = {
       }),
     })
     .description('List of Statistic Entities for the case.'),
-  status: joi
-    .string()
-    .valid(...Object.values(CASE_STATUS_TYPES))
+  status: JoiValidationConstants.STRING.valid(
+    ...Object.values(CASE_STATUS_TYPES),
+  )
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
@@ -669,8 +643,8 @@ Case.VALIDATION_RULES = {
   trialLocation: joi
     .alternatives()
     .try(
-      joi.string().valid(...TRIAL_CITY_STRINGS, null),
-      joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
     .description(
@@ -683,9 +657,7 @@ Case.VALIDATION_RULES = {
   }).description(
     'The unique ID of the trial session associated with this case.',
   ),
-  trialTime: joi
-    .string()
-    .pattern(PATTERNS['H:MM'])
+  trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
   useSameAsPrimary: joi
