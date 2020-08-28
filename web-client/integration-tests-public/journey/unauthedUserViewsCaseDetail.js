@@ -22,6 +22,7 @@ export const unauthedUserViewsCaseDetail = test => {
       state: test.getState(),
     });
 
+    expect(helper.formattedDocketEntries.length).toEqual(4);
     expect(helper.formattedDocketEntries).toMatchObject([
       {
         description: 'Petition',
@@ -51,22 +52,6 @@ export const unauthedUserViewsCaseDetail = test => {
         showServed: true,
       },
     ]);
-
-    expect(helper.formattedCaseDetail.docketRecord.length).toEqual(4);
-    expect(helper.formattedCaseDetail.docketRecord).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ description: 'Petition' }),
-        expect.objectContaining({
-          description: 'Request for Place of Trial at Seattle, Washington',
-        }),
-        expect.objectContaining({
-          description: 'Order of Dismissal Entered, Judge Buch for Something',
-        }),
-        expect.objectContaining({
-          description: 'Transcript of Anything on 01-01-2019',
-        }),
-      ]),
-    );
 
     expect(helper.formattedCaseDetail.documents.length).toEqual(4);
     expect(helper.formattedCaseDetail.documents).toEqual(

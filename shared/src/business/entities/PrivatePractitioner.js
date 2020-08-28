@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { ROLES } = require('./EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
@@ -15,16 +16,21 @@ const { USER_CONTACT_VALIDATION_RULES, userDecorator } = require('./User');
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function PrivatePractitioner(rawUser) {
+function PrivatePractitioner() {
+  this.entityName = 'PrivatePractitioner';
+}
+
+PrivatePractitioner.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
   this.barNumber = rawUser.barNumber;
-  this.entityName = 'PrivatePractitioner';
   this.representing = rawUser.representing || [];
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-}
+};
+
+PrivatePractitioner.validationName = 'PrivatePractitioner';
 
 PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
   barNumber: joi
@@ -55,11 +61,9 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
 });
 
 joiValidationDecorator(
-  PrivatePractitioner,
+  validEntityDecorator(PrivatePractitioner),
   PrivatePractitioner.VALIDATION_RULES,
   {},
 );
 
-PrivatePractitioner.validationName = 'PrivatePractitioner';
-
-module.exports = { PrivatePractitioner };
+exports.PrivatePractitioner = validEntityDecorator(PrivatePractitioner);

@@ -40,7 +40,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: docketNumber0,
-        docketRecord: MOCK_CASE.docketRecord,
+        docketRecord: [],
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
@@ -65,7 +65,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: docketNumber1,
-        docketRecord: MOCK_CASE.docketRecord,
+        docketRecord: [],
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
@@ -90,7 +90,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: docketNumber2,
-        docketRecord: MOCK_CASE.docketRecord,
+        docketRecord: [],
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
@@ -150,29 +150,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(result[0].documents[4].documentId).toEqual(documentId0);
     expect(result[1].documents[4].documentId).toEqual(documentId0);
+    expect(result[0].documents[4].isOnDocketRecord).toEqual(true);
+    expect(result[1].documents[4].isOnDocketRecord).toEqual(true);
     expect(result[2].documents.length).toEqual(4);
-  });
-
-  it('should generate a docket record entry on each case in the consolidated set', async () => {
-    expect(caseRecords[0].docketRecord.length).toEqual(3);
-    expect(caseRecords[1].docketRecord.length).toEqual(3);
-
-    const result = await fileExternalDocumentForConsolidatedInteractor({
-      applicationContext,
-      docketNumbersForFiling: ['101-19', '102-19'],
-      documentMetadata: {
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: documentId0,
-      },
-      leadDocketNumber: docketNumber0,
-    });
-
-    expect(result[0].docketRecord[3].documentId).toEqual(documentId0);
-    expect(result[1].docketRecord[3].documentId).toEqual(documentId0);
-    expect(result[2].docketRecord[3].documentId).toEqual(documentId0);
   });
 
   // skipping this test until we have better acceptance criteria about consolidated cases

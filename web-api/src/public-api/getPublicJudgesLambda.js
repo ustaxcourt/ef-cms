@@ -6,8 +6,8 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getPublicJudgesLambda = event =>
-  genericHandler(
+exports.getPublicJudgesLambda = event => {
+  return genericHandler(
     event,
     async ({ applicationContext }) => {
       return await applicationContext
@@ -21,3 +21,4 @@ exports.getPublicJudgesLambda = event =>
       user: {},
     },
   );
+};

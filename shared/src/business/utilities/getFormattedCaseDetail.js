@@ -150,7 +150,11 @@ const formatDocketRecordWithDocument = (
     return acc;
   }, {});
 
-  return docketRecords.map(record => {
+  // TODO 636
+  return [
+    ...docketRecords,
+    ...documents.filter(d => d.isOnDocketRecord === true),
+  ].map(record => {
     let formattedDocument;
 
     const { index } = record;
