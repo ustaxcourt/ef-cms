@@ -273,10 +273,12 @@ const MINUTE_ENTRIES_MAP = {
   },
   filingFeePaid: {
     description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
     eventCode: 'FEE',
   },
   filingFeeWaived: {
     description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
     eventCode: 'FEEW',
   },
 };
@@ -900,6 +902,10 @@ const ALL_DOCUMENT_TYPES = (() => {
     t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
   );
 
+  const minuteEntryTypes = Object.keys(MINUTE_ENTRIES_MAP)
+    .map(t => MINUTE_ENTRIES_MAP[t].documentType)
+    .filter(t => t);
+
   const documentTypes = [
     ...initialTypes,
     ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
@@ -908,6 +914,7 @@ const ALL_DOCUMENT_TYPES = (() => {
     ...COURT_ISSUED_DOCUMENT_TYPES,
     ...signedTypes,
     ...systemGeneratedTypes,
+    ...minuteEntryTypes,
   ];
   return documentTypes.sort();
 })();

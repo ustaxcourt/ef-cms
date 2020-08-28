@@ -49,7 +49,7 @@ describe('migrateTrialSessionInteractor', () => {
       startDate: DATE,
       term: 'Fall',
       termYear: '2018',
-      trialLocation: 'Chicago, IL',
+      trialLocation: 'Chicago, Illinois',
       trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
     };
   });

@@ -37,14 +37,14 @@ ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardD.schema = {
-  category: joi.string().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  category: JoiValidationConstants.STRING.required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
   previousDocument: joi
     .object()
     .keys({
-      documentTitle: joi.string().optional(),
-      documentType: joi.string().required(),
+      documentTitle: JoiValidationConstants.STRING.optional(),
+      documentType: JoiValidationConstants.STRING.required(),
     })
     .required(),
   serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),

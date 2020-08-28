@@ -50,7 +50,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 4);
+  petitionsClerkViewsCaseDetail(test, 5); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   petitionsClerkViewsDraftOrder(test, 0);
 
   loginAs(test, 'docketclerk@example.com');
@@ -85,6 +85,6 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-    documentCount: 5,
+    documentCount: 6, // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   });
 });

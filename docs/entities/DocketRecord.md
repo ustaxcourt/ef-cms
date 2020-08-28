@@ -10,6 +10,10 @@
         description: "Action taken in response to this Docket Record item."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -21,6 +25,10 @@
         presence: "required"
         description: "Text that describes this Docket Record item, which may be part of the Filings and Proceedings value."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -65,6 +73,10 @@
         description: "JSON representation of the in-progress edit of this item."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 4000
@@ -79,6 +91,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "DocketRecord"
     eventCode: 
@@ -87,6 +104,11 @@
         only: true
         presence: "required"
         description: "Code associated with the event that resulted in this item being added to the Docket Record."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "A"
         - "AAAP"
@@ -433,6 +455,10 @@
         description: "User that filed this Docket Record item."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -506,6 +532,11 @@
         only: true
         presence: "optional"
         description: "Served parties code to override system-computed code."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "B"
         - "P"
@@ -528,9 +559,19 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     strickenByUserId: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
 
  ```

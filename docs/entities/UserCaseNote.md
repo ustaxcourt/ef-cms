@@ -21,12 +21,22 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "UserCaseNote"
     notes: 
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     userId: 
       type: "string"
       flags: 

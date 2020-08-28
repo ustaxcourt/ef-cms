@@ -54,7 +54,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         eventCode: record.eventCode || (document && document.eventCode),
         filedBy: document && document.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
-        hasDocument: !!document,
+        hasDocument: !!document && !document.isMinuteEntry,
         index,
         isPaper: document && document.isPaper,
         isStricken: record.isStricken,
