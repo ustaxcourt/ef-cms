@@ -225,20 +225,22 @@ exports.serveCaseToIrsInteractor = async ({
   });
 
   for (const doc of caseEntity.documents) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      documentId: doc.documentId,
-      replaceCoversheet: !caseEntity.isPaper,
-      useInitialData: !caseEntity.isPaper,
-    });
-
-    doc.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
+    if (doc.isFileAttached) {
+      await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketNumber: caseEntity.docketNumber,
         documentId: doc.documentId,
+        replaceCoversheet: !caseEntity.isPaper,
+        useInitialData: !caseEntity.isPaper,
       });
+
+      doc.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentId: doc.documentId,
+        });
+    }
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
