@@ -27,6 +27,7 @@ describe('NewPractitioner', () => {
       practitionerType: 'Attorney',
       role: ROLES.NewPractitioner,
     });
+
     expect(user.isValid()).toBeTruthy();
   });
 
