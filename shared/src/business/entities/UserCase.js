@@ -6,8 +6,6 @@ const {
 const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
 
-UserCase.validationName = 'UserCase';
-
 /**
  * UserCase Entity
  * represents a user-to-case mapping record
@@ -27,6 +25,8 @@ UserCase.prototype.init = function init(rawUserCase) {
   this.leadDocketNumber = rawUserCase.leadDocketNumber;
   this.status = rawUserCase.status;
 };
+
+UserCase.validationName = 'UserCase';
 
 joiValidationDecorator(
   UserCase,
