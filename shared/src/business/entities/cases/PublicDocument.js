@@ -39,6 +39,7 @@ function PublicDocument(rawDocument) {
   this.filingDate = rawDocument.filingDate;
   this.numberOfPages = rawDocument.numberOfPages;
   this.isStricken = rawDocument.isStricken;
+  this.isMinuteEntry = rawDocument.isMinuteEntry;
 }
 
 joiValidationDecorator(
@@ -59,6 +60,7 @@ joiValidationDecorator(
       .valid(...ALL_EVENT_CODES)
       .optional(),
     filedBy: joi.string().max(500).optional(),
+    isMinuteEntry: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: joi
       .string()

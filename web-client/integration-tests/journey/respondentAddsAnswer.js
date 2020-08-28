@@ -77,6 +77,6 @@ export const respondentAddsAnswer = (test, fakeFile) => {
 
     await test.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.documents').length).toEqual(3);
+    expect(test.getState('caseDetail.documents').length).toEqual(5);
   });
 };

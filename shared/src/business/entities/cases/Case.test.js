@@ -1274,6 +1274,7 @@ describe('Case entity', () => {
     beforeEach(() => {
       documentToArchive = {
         archived: undefined,
+        documentId: '79c29d3f-d292-482c-b722-388577154664',
         documentType: 'Order',
         eventCode: 'O',
         filedBy: 'Test Petitioner',
