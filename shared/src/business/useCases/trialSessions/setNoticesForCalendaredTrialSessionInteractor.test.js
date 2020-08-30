@@ -214,7 +214,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.docketRecord.find(
+      return caseRecord.documents.find(
         entry => entry.description === NOTICE_OF_TRIAL.documentType,
       );
     };
@@ -354,7 +354,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.docketRecord.find(
+      return caseRecord.documents.find(
         entry => entry.description === NOTICE_OF_TRIAL.documentType,
       );
     };

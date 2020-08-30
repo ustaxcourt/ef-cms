@@ -1710,6 +1710,7 @@ describe('Document entity', () => {
       );
 
       expect(document.isValid()).toBe(true);
+      expect(document.isMinuteEntry).toBe(true);
     });
   });
 });

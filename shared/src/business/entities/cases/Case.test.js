@@ -1528,7 +1528,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.addDocument(
+      caseToVerify.addDocumentWithoutDocketRecord(
         {
           documentId: '123',
           documentType: 'Answer',

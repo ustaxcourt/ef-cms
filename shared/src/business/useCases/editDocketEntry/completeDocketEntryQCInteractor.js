@@ -301,9 +301,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
-    caseEntity.addDocument(noticeUpdatedDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocumentWithoutDocketRecord(noticeUpdatedDocument);
 
     const { Body: pdfData } = await applicationContext
       .getStorageClient()

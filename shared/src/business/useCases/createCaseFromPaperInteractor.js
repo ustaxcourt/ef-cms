@@ -40,7 +40,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
   );
 
   documentEntity.setWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity, { applicationContext });
+  caseToAdd.addDocumentWithoutDocketRecord(documentEntity);
 
   return {
     workItem: workItemEntity,
@@ -250,9 +250,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
   }
 
   if (ownershipDisclosureFileId) {
@@ -278,9 +276,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(odsDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocumentWithoutDocketRecord(odsDocumentEntity);
   }
 
   await Promise.all([
