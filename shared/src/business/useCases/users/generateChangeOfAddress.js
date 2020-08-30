@@ -188,7 +188,7 @@ exports.generateChangeOfAddress = async ({
 
         changeOfAddressDocument.setWorkItem(workItem);
 
-        caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
+        caseEntity.addDocumentWithoutDocketRecord(changeOfAddressDocument);
 
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
