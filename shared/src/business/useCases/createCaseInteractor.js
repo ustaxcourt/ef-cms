@@ -132,11 +132,13 @@ exports.createCaseInteractor = async ({
 
   const petitionDocumentEntity = new Document(
     {
+      description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.createdAt,
       isFileAttached: true,
+      isOnDocketRecord: true,
       partyPrimary: true,
       partySecondary,
       privatePractitioners,
@@ -198,11 +200,13 @@ exports.createCaseInteractor = async ({
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document(
       {
+        description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
+        isOnDocketRecord: true,
         partyPrimary: true,
         partySecondary,
         privatePractitioners,
