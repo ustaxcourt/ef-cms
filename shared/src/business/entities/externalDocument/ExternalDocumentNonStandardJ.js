@@ -42,7 +42,7 @@ ExternalDocumentNonStandardJ.schema = {
 };
 
 joiValidationDecorator(
-  ExternalDocumentNonStandardJ,
+  validEntityDecorator(ExternalDocumentNonStandardJ),
   ExternalDocumentNonStandardJ.schema,
   ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES,
 );
