@@ -107,7 +107,7 @@ SupportingDocumentInformationFactory.get = (
     VALIDATION_ERROR_MESSAGES,
   );
 
-  return new entityConstructor(documentMetadata);
+  return new (validEntityDecorator(entityConstructor))(documentMetadata);
 };
 
 module.exports = { SupportingDocumentInformationFactory };
