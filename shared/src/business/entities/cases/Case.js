@@ -35,6 +35,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   shouldGenerateDocketRecordIndex,
@@ -135,7 +136,11 @@ Case.validationName = 'Case';
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase, { applicationContext, filtered = false }) {
+function Case() {}
+Case.prototype.init = function init(
+  rawCase,
+  { applicationContext, filtered = false },
+) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -322,7 +327,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
-}
+};
 
 Case.VALIDATION_RULES = {
   archivedCorrespondences: joi
@@ -1838,7 +1843,7 @@ Case.prototype.deleteStatistic = function (statisticId) {
 };
 
 module.exports = {
-  Case,
+  Case: validEntityDecorator(Case),
   getPetitionDocumentFromDocuments,
   isAssociatedUser,
 };

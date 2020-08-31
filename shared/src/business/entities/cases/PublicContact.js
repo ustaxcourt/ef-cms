@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   STATE_NOT_AVAILABLE,
@@ -18,10 +19,11 @@ const {
  * @param {object} rawContact the raw case data
  * @constructor
  */
-function PublicContact(rawContact) {
+function PublicContact() {}
+PublicContact.prototype.init = function init(rawContact) {
   this.name = rawContact.name;
   this.state = rawContact.state;
-}
+};
 
 joiValidationDecorator(
   PublicContact,
@@ -36,4 +38,4 @@ joiValidationDecorator(
   {},
 );
 
-module.exports = { PublicContact };
+module.exports = { PublicContact: validEntityDecorator(PublicContact) };
