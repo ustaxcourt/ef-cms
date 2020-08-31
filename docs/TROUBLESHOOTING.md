@@ -102,3 +102,21 @@ An error occurred (NotAuthorizedException) when calling the AdminConfirmSignUp o
 curl: (3) URL using bad/illegal format or missing URL```
 
 This happened when duplicate API gateways (i.e., `gateway_api_$ENV`) were created due to a Terraform state sync problem.
+
+### Cognito Authorizer Error
+
+```
+{
+    "errorType": "TypeError",
+    "errorMessage": "Expected \"jwk\" to be an Object",
+    "stack": [
+        "TypeError: Expected \"jwk\" to be an Object",
+        "    at t (/var/task/cognito-authorizer.js:172:109)",
+        "    at i (/var/task/cognito-authorizer.js:524:485)",
+        "    at Runtime.exports.handler (/var/task/cognito-authorizer.js:524:942)",
+        "    at Runtime.handleOnce (/var/runtime/Runtime.js:66:25)"
+    ]
+}
+```
+
+The fix was to just modify the cognito_authorizer_lambda_$ENV and resave.  We had to add a random console log and save the lambda and it fixed the issue.  Destroying the lambd in the AWS console and then recreating the lambda via terraform might also fix the issue.
