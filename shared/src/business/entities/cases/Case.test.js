@@ -1391,14 +1391,11 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.addDocument(
-        {
-          documentId: '123',
-          documentType: 'Answer',
-          userId: 'irsPractitioner',
-        },
-        { applicationContext },
-      );
+      caseToVerify.addDocument({
+        documentId: '123',
+        documentType: 'Answer',
+        userId: 'irsPractitioner',
+      });
       expect(caseToVerify.documents.length).toEqual(1);
       expect(caseToVerify.documents[0]).toMatchObject({
         documentId: '123',
