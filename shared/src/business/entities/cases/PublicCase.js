@@ -10,6 +10,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { map } = require('lodash');
@@ -24,7 +25,8 @@ const { PublicDocument } = require('./PublicDocument');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function PublicCase(rawCase, { applicationContext }) {
+function PublicCase() {}
+PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
@@ -51,7 +53,7 @@ function PublicCase(rawCase, { applicationContext }) {
     .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
-}
+};
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
@@ -126,4 +128,7 @@ const isPrivateDocument = function (document, docketRecord) {
   );
 };
 
-module.exports = { PublicCase, isPrivateDocument };
+module.exports = {
+  PublicCase: validEntityDecorator(PublicCase),
+  isPrivateDocument,
+};
