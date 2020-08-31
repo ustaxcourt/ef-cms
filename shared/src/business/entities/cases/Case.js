@@ -864,7 +864,7 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocumentWithoutDocketRecord = function (documentEntity) {
+Case.prototype.addDocument = function (documentEntity) {
   if (documentEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
@@ -922,7 +922,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   if (needsCaptionChangedRecord) {
     const { userId } = applicationContext.getCurrentUser();
 
-    this.addDocumentWithoutDocketRecord(
+    this.addDocument(
       new Document(
         {
           description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
@@ -972,7 +972,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   if (needsDocketNumberChangeRecord) {
     const { userId } = applicationContext.getCurrentUser();
 
-    this.addDocumentWithoutDocketRecord(
+    this.addDocument(
       new Document(
         {
           description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,

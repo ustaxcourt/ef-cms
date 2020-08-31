@@ -25,7 +25,7 @@ exports.addDocketEntryForPaymentStatus = ({
   user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocumentWithoutDocketRecord(
+    caseEntity.addDocument(
       new Document(
         {
           description: 'Filing Fee Paid',
@@ -42,7 +42,7 @@ exports.addDocketEntryForPaymentStatus = ({
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocumentWithoutDocketRecord(
+    caseEntity.addDocument(
       new Document(
         {
           description: 'Filing Fee Waived',
