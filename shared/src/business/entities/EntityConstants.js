@@ -265,11 +265,13 @@ const MINUTE_ENTRIES_MAP = {
     description:
       'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
     eventCode: 'MINC',
+    documentType: 'Caption of case is amended',
   },
   dockedNumberIsAmended: {
     description:
       'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
     eventCode: 'MIND',
+    documentType: 'Docket Number is amended',
   },
   filingFeePaid: {
     description: 'Filing Fee Paid',

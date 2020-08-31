@@ -26,7 +26,6 @@ const {
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketRecord } = require('../DocketRecord');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -1195,40 +1194,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('setRequestForTrialDocketRecord', () => {
-    it('sets request for trial docket record when it does not already exist', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const preferredTrialCity = 'Mobile, Alabama';
-      const initialDocketLength =
-        (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
-      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity, {
-        applicationContext,
-      });
-      const docketLength = caseRecord.docketRecord.length;
-      expect(docketLength).toEqual(initialDocketLength + 1);
-    });
-
-    it('should only set docket record once for request for trial', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const preferredTrialCity = 'Mobile, Alabama';
-      caseRecord.setRequestForTrialDocketRecord(preferredTrialCity, {
-        applicationContext,
-      });
-      const docketLength = caseRecord.docketRecord.length;
-      caseRecord.setRequestForTrialDocketRecord('Birmingham, Alabama', {
-        applicationContext,
-      });
-      caseRecord.setRequestForTrialDocketRecord('Some city, USA', {
-        applicationContext,
-      });
-      expect(docketLength).toEqual(caseRecord.docketRecord.length);
-    });
-  });
-
   describe('generateNextDocketRecordIndex', () => {
     it('returns the next possible index based on the current docket record array', () => {
       const caseRecord = new Case(
@@ -1378,108 +1343,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('addDocketRecord', () => {
-    it('adds a new docket record', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.addDocketRecord(
-        new DocketRecord(
-          {
-            description: 'test',
-            filingDate: new Date().toISOString(),
-            index: 5,
-          },
-          { applicationContext },
-        ),
-      );
-
-      expect(caseRecord.docketRecord).toHaveLength(4);
-      expect(caseRecord.docketRecord[3].description).toEqual('test');
-      expect(caseRecord.docketRecord[3].index).toEqual(5);
-    });
-
-    it('validates the docket record', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.addDocketRecord(
-        new DocketRecord({ description: 'test' }, { applicationContext }),
-      );
-      let error;
-      try {
-        caseRecord.validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).toBeTruthy();
-    });
-  });
-  describe('updateDocketRecord', () => {
-    it('updates the docket record entity with the provided docketRecordId', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const updatedDocketEntry = new DocketRecord(
-        {
-          description: 'second record now updated',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-          index: 7,
-        },
-        { applicationContext },
-      );
-      caseRecord.updateDocketRecord(updatedDocketEntry);
-      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
-      expect(caseRecord.docketRecord[1].description).toEqual(
-        'second record now updated',
-      );
-      expect(caseRecord.docketRecord[1].index).toEqual(7);
-    });
-  });
-
-  describe('updateDocketRecordEntry', () => {
-    it('updates an existing docket record', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const updatedDocketEntry = new DocketRecord(
-        {
-          description: 'second record now updated',
-          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
-          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-          filingDate: '2018-03-02T22:22:00.000Z',
-          index: 7,
-        },
-        { applicationContext },
-      );
-      caseRecord.updateDocketRecordEntry(updatedDocketEntry);
-
-      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
-      expect(caseRecord.docketRecord[1].description).toEqual(
-        'second record now updated',
-      );
-      expect(caseRecord.docketRecord[1].index).toEqual(7);
-    });
-
-    it('validates the docket record', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.addDocketRecord(
-        new DocketRecord({ description: 'test' }, { applicationContext }),
-      );
-      let error;
-      try {
-        caseRecord.validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).toBeTruthy();
-    });
-  });
-
   describe('attachIrsPractitioner', () => {
     it('adds the user to the irsPractitioners', () => {
       const caseToVerify = new Case(
@@ -1546,7 +1409,7 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketNumberRecord records suffix changes', () => {
-    it('should create a docket record when the suffix updates for an electronically created case', () => {
+    it('should create a notice of docket number change document when the suffix updates for an electronically created case', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
@@ -1563,10 +1426,15 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(1);
+      expect(caseToVerify.documents.length).toEqual(1);
+      expect(caseToVerify.documents[0]).toMatchObject({
+        index: 1,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+      });
     });
 
-    it('should not create a docket record when the suffix updates but the case was created from paper', () => {
+    it('should not create a notice of docket number change document when the suffix updates but the case was created from paper', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
@@ -1581,10 +1449,10 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(0);
+      expect(caseToVerify.documents.length).toEqual(0);
     });
 
-    it('should not create a docket record if suffix has not changed', () => {
+    it('should not create a notice of docket number change document if suffix has not changed', () => {
       const caseToVerify = new Case(
         { docketNumber: '123-19' },
         {
@@ -1595,22 +1463,26 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(0);
+      expect(caseToVerify.documents.length).toEqual(0);
     });
 
-    it('should add to the docket record when the docket number changes from the last updated docket number', () => {
+    it('should add notice of docket number change document when the docket number changes from the last updated docket number', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very Berry New Caption',
           docketNumber: '123-19',
-          docketRecord: [
+          documents: [
             {
               description:
                 "Docket Number is amended from '123-19A' to '123-19B'",
+              index: 1,
+              isOnDocketRecord: true,
             },
             {
               description:
                 "Docket Number is amended from '123-19B' to '123-19P'",
+              index: 2,
+              isOnDocketRecord: true,
             },
           ],
           status: CASE_STATUS_TYPES.generalDocket,
@@ -1623,16 +1495,17 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(3);
-      expect(caseToVerify.docketRecord[2].description).toEqual(
+      expect(caseToVerify.documents.length).toEqual(3);
+      expect(caseToVerify.documents[2].description).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
-      expect(caseToVerify.docketRecord[2].eventCode).toEqual('MIND');
+      expect(caseToVerify.documents[2].eventCode).toEqual('MIND');
+      expect(caseToVerify.documents[2].index).toEqual(3);
     });
   });
 
   describe('updateCaseCaptionDocketRecord', () => {
-    it('should not add to the docket record when the caption is not set', () => {
+    it('should not add a notice of caption changed document when the caption is not set', () => {
       const caseToVerify = new Case(
         {},
         {
@@ -1641,10 +1514,10 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(0);
+      expect(caseToVerify.documents.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption is initially being set', () => {
+    it('should not add a notice of caption changed document when the caption is initially being set', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'Caption',
@@ -1655,10 +1528,10 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(0);
+      expect(caseToVerify.documents.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption is equivalent to the initial caption', () => {
+    it('should not add a notice of caption changed document when the caption is equivalent to the initial caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'Caption',
@@ -1670,10 +1543,10 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(0);
+      expect(caseToVerify.documents.length).toEqual(0);
     });
 
-    it('should add to the docket record with event code MINC when the caption changes from the initial caption', () => {
+    it('should add a notice of caption changed document with event code MINC when the caption changes from the initial caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A New Caption',
@@ -1686,22 +1559,26 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(1);
-      expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
+      expect(caseToVerify.documents.length).toEqual(1);
+      expect(caseToVerify.documents[0].eventCode).toEqual('MINC');
     });
 
-    it('should not add to the docket record when the caption is equivalent to the last updated caption', () => {
+    it('should not add a notice of caption changed document when the caption is equivalent to the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very New Caption',
-          docketRecord: [
+          documents: [
             {
               description:
                 "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
+              index: 1,
+              isOnDocketRecord: true,
             },
             {
               description:
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
+              index: 2,
+              isOnDocketRecord: true,
             },
           ],
           initialCaption: 'Caption',
@@ -1712,21 +1589,25 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(2);
+      expect(caseToVerify.documents.length).toEqual(2);
     });
 
-    it('should add to the docket record when the caption changes from the last updated caption', () => {
+    it('should add a notice of caption changed document when the caption changes from the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very Berry New Caption',
-          docketRecord: [
+          documents: [
             {
               description:
                 "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
+              index: 1,
+              isOnDocketRecord: true,
             },
             {
               description:
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
+              index: 2,
+              isOnDocketRecord: true,
             },
           ],
           initialCaption: 'Caption',
@@ -1738,7 +1619,11 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.docketRecord.length).toEqual(3);
+      expect(caseToVerify.documents.length).toEqual(3);
+      expect(caseToVerify.documents[2]).toMatchObject({
+        index: 3,
+        isOnDocketRecord: true,
+      });
     });
   });
 
