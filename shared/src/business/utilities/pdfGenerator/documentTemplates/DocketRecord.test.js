@@ -197,7 +197,8 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
   });
 
-  it('renders private practitioner contact information if present', () => {
+  it('renders private practitioner contact information when present and options.includePartyDetail is true', () => {
+    options.includePartyDetail = true;
     caseDetail.privatePractitioners = []; // No private practitioners
 
     let wrapper = mount(
@@ -241,6 +242,22 @@ describe('DocketRecord', () => {
     expect(contactEl.text()).not.toContain('Representing');
   });
 
+  it('does not render private practitioner contact information when present and options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+    caseDetail.privatePractitioners = []; // No private practitioners
+
+    let wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('#private-practitioner-contacts')).toEqual({});
+  });
+
   it('displays represented parties with each practitioner', () => {
     const privatePractitioner2 = {
       ...privatePractitioner,
@@ -280,7 +297,8 @@ describe('DocketRecord', () => {
     expect(practitioner2El.text()).toContain(contactSecondary.name);
   });
 
-  it('renders irs practitioner contact information if present', () => {
+  it('renders irs practitioner contact information when present and options.includePartyDetail is true', () => {
+    options.includePartyDetail = true;
     caseDetail.irsPractitioners = []; // No irs practitioners
 
     let wrapper = mount(
@@ -322,6 +340,22 @@ describe('DocketRecord', () => {
     expect(contactEl.text()).toContain(irsPractitioner.contact.phone);
 
     expect(contactEl.text()).not.toContain('Representing');
+  });
+
+  it('does not render irs practitioner contact information when present and options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+    caseDetail.irsPractitioners = []; // No irs practitioners
+
+    let wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('#irs-practitioner-contacts')).toEqual({});
   });
 
   it('renders a table with docket record data', () => {
