@@ -324,7 +324,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: 'Another Petitioner',
         docketNumberWithSuffix: '101-18W',
         formattedFiledDate: '04/01/18',
-        fullStateNamePrimary: 'California',
+        fullStateNamePrimary: US_STATES.CA,
         fullStateNameSecondary: US_STATES.TN,
       },
       {
