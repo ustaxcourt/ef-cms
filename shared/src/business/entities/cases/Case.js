@@ -44,7 +44,6 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketEntry } = require('../DocketEntry');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { includes, isEmpty } = require('lodash');
@@ -278,14 +277,6 @@ Case.prototype.init = function init(
     );
   } else {
     this.irsPractitioners = [];
-  }
-
-  if (Array.isArray(rawCase.docketEntries)) {
-    this.docketEntries = rawCase.docketEntries.map(
-      docketEntry => new DocketEntry(docketEntry, { applicationContext }),
-    );
-  } else {
-    this.docketEntries = [];
   }
 
   if (Array.isArray(rawCase.docketRecord)) {
