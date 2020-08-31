@@ -1391,7 +1391,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.addDocumentWithoutDocketRecord(
+      caseToVerify.addDocument(
         {
           documentId: '123',
           documentType: 'Answer',
@@ -2169,19 +2169,6 @@ describe('Case entity', () => {
     it('should remove leading zeros', () => {
       const result = Case.stripLeadingZeros('000101-19');
       expect(result).toEqual('101-19');
-    });
-  });
-
-  describe('addDocumentWithoutDocketRecord', () => {
-    it('should add the document without a docket record change', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const docketRecordLength = myCase.docketRecord.length;
-      myCase.addDocumentWithoutDocketRecord({
-        documentId: 'mock-document-id',
-      });
-      expect(myCase.docketRecord.length).toEqual(docketRecordLength);
     });
   });
 
