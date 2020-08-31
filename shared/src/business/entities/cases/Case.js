@@ -413,9 +413,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Damages for the case.'),
-  docketEntries: JoiValidationConstants.DOCKET_ENTRY.items(
-    DocketEntry.VALIDATION_RULES,
-  ).required(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
