@@ -182,9 +182,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
   }
 
   if (requestForPlaceOfTrialFileId) {
@@ -221,9 +219,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
   }
 
   if (stinFileId) {
