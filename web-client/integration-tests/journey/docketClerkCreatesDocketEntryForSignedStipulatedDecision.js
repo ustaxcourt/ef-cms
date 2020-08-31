@@ -24,7 +24,7 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision = test => 
     const documents = test
       .getState('caseDetail.documents')
       .filter(d => d.isOnDocketRecord);
-    expect(documents.length).toEqual(3);
+    expect(documents.length).toEqual(4);
     const stipDecisionDocument = test
       .getState('caseDetail.documents')
       .find(d => d.documentType === 'Stipulated Decision');
