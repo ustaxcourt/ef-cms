@@ -446,7 +446,7 @@ describe('migrateCaseInteractor', () => {
             city: 'Landrychester',
             contactId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
             country: 'U.S.A.',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Griffith, Moore and Freeman (f.k.a Herring-Benitez)',
             postalCode: '73301',
             state: 'TX',
