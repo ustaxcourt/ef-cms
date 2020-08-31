@@ -4,6 +4,8 @@ import { runCompute } from 'cerebral/test';
 import { trialCitiesHelper as trialCitiesHelperComputed } from './trialCitiesHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
+const { US_STATES } = applicationContext.getConstants();
+
 const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
   ...applicationContext,
   getConstants: () => {
@@ -12,7 +14,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
         ALL: [
           {
             city: 'Chattanooga',
-            state: 'Tennessee',
+            state: US_STATES.TN,
           },
         ],
         REGULAR: [
@@ -24,7 +26,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
         SMALL: [
           {
             city: 'Chattanooga',
-            state: 'Tennessee',
+            state: US_STATES.TN,
           },
         ],
       },
