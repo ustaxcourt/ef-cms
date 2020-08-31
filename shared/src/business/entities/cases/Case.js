@@ -12,6 +12,7 @@ const {
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   MAX_FILE_SIZE_MB,
+  MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -46,7 +47,7 @@ const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
-const { find, includes, isEmpty } = require('lodash');
+const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -872,28 +873,6 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function (document, { applicationContext }) {
-  this.documents = [...this.documents, document];
-
-  this.addDocketRecord(
-    new DocketRecord(
-      {
-        description: document.documentType,
-        documentId: document.documentId,
-        eventCode: document.eventCode,
-        filedBy: document.filedBy,
-        filingDate: document.receivedAt || document.createdAt,
-        numberOfPages: document.numberOfPages,
-      },
-      { applicationContext },
-    ),
-  );
-};
-
-/**
- *
- * @param {object} document the document to add to the case
- */
 Case.prototype.addDocumentWithoutDocketRecord = function (documentEntity) {
   if (documentEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
@@ -938,8 +917,8 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   const caseCaptionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastCaption = this.initialCaption;
 
-  this.docketRecord.forEach(docketRecord => {
-    const result = caseCaptionRegex.exec(docketRecord.description);
+  this.documents.forEach(document => {
+    const result = caseCaptionRegex.exec(document.description);
     if (result) {
       const [, , changedCaption] = result;
       lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
@@ -950,12 +929,20 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
 
   if (needsCaptionChangedRecord) {
-    this.addDocketRecord(
-      new DocketRecord(
+    const { userId } = applicationContext.getCurrentUser();
+
+    this.addDocumentWithoutDocketRecord(
+      new Document(
         {
           description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
-          eventCode: 'MINC',
+          documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
           filingDate: createISODateString(),
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId,
         },
         { applicationContext },
       ),
@@ -980,8 +967,8 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  this.docketRecord.forEach(docketRecord => {
-    const result = docketNumberRegex.exec(docketRecord.description);
+  this.documents.forEach(document => {
+    const result = docketNumberRegex.exec(document.description);
     if (result) {
       const [, , changedDocketNumber] = result;
       lastDocketNumber = changedDocketNumber;
@@ -992,12 +979,20 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
     lastDocketNumber !== newDocketNumber && !this.isPaper;
 
   if (needsDocketNumberChangeRecord) {
-    this.addDocketRecord(
-      new DocketRecord(
+    const { userId } = applicationContext.getCurrentUser();
+
+    this.addDocumentWithoutDocketRecord(
+      new Document(
         {
           description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-          eventCode: 'MIND',
+          documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
           filingDate: createISODateString(),
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId,
         },
         { applicationContext },
       ),
@@ -1069,36 +1064,6 @@ Case.prototype.getIrsSendDate = function () {
 };
 
 /**
- *
- * @param {string} preferredTrialCity the preferred trial city
- * @returns {Case} the updated case entity
- */
-Case.prototype.setRequestForTrialDocketRecord = function (
-  preferredTrialCity,
-  { applicationContext },
-) {
-  this.preferredTrialCity = preferredTrialCity;
-
-  const found = find(this.docketRecord, item =>
-    item.description.includes('Request for Place of Trial'),
-  );
-
-  if (preferredTrialCity && !found) {
-    this.addDocketRecord(
-      new DocketRecord(
-        {
-          description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-          filingDate: this.receivedAt,
-        },
-        { applicationContext },
-      ),
-    );
-  }
-  return this;
-};
-
-/**
  * gets the next possible (unused) index for the docket record
  *
  * @returns {number} the next docket record index
@@ -1112,95 +1077,6 @@ Case.prototype.generateNextDocketRecordIndex = function () {
     .sort((a, b) => a.index - b.index);
   const nextIndex = recordsWithIndex.length + 1;
   return nextIndex;
-};
-
-/**
- *
- * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
- * @returns {Case} the updated case entity
- */
-Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  const updateIndex = shouldGenerateDocketRecordIndex({
-    caseDetail: this,
-    docketRecordEntry: docketRecordEntity,
-  });
-
-  if (updateIndex) {
-    docketRecordEntity.index = this.generateNextDocketRecordIndex();
-  }
-
-  this.docketRecord = [...this.docketRecord, docketRecordEntity];
-  return this;
-};
-
-/**
- *
- * @param {DocketRecord} updatedDocketEntry the update docket entry data
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
-  const foundEntry = this.docketRecord.find(
-    entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
-  );
-
-  const updateIndex = shouldGenerateDocketRecordIndex({
-    caseDetail: this,
-    docketRecordEntry: foundEntry,
-  });
-
-  if (updateIndex) {
-    updatedDocketEntry.index = this.generateNextDocketRecordIndex();
-  }
-
-  if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
-  return this;
-};
-
-/**
- * finds a docket record by its documentId
- *
- * @param {string} documentId the document id
- * @returns {DocketRecord|undefined} the updated case entity
- */
-Case.prototype.getDocketRecordByDocumentId = function (documentId) {
-  const foundEntry = this.docketRecord.find(
-    entry => entry.documentId === documentId,
-  );
-
-  return foundEntry;
-};
-
-/**
- * finds a docket record by its docket record index
- *
- * @param {string} docketRecordId the id of the docket record to be updated
- * @returns {DocketRecord|undefined} the updated case entity
- */
-Case.prototype.getDocketRecord = function (docketRecordId) {
-  const foundEntry = this.docketRecord.find(
-    entry => entry.docketRecordId === docketRecordId,
-  );
-
-  return foundEntry;
-};
-
-/**
- *
- * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
- * @param {boolean} updateIndex whether to update the index on the docket record entity
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateDocketRecord = function (docketRecordEntity, updateIndex) {
-  const docketRecordIndex = this.docketRecord.findIndex(
-    entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
-  );
-
-  if (updateIndex) {
-    docketRecordEntity.index = this.generateNextDocketRecordIndex();
-  }
-
-  this.docketRecord[docketRecordIndex] = docketRecordEntity;
-  return this;
 };
 
 /**
