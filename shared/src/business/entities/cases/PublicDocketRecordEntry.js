@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
@@ -12,7 +13,8 @@ const {
  * @param {object} rawDocketEntry the raw docket entry
  * @constructor
  */
-function PublicDocketRecordEntry(rawDocketEntry) {
+function PublicDocketRecordEntry() {}
+PublicDocketRecordEntry.prototype.init = function init(rawDocketEntry) {
   this.description = rawDocketEntry.description;
   this.documentId = rawDocketEntry.documentId;
   this.filedBy = rawDocketEntry.filedBy;
@@ -20,7 +22,7 @@ function PublicDocketRecordEntry(rawDocketEntry) {
   this.filingDate = rawDocketEntry.filingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.isStricken = rawDocketEntry.isStricken;
-}
+};
 
 PublicDocketRecordEntry.validationName = 'PublicDocketRecordEntry';
 
@@ -40,4 +42,6 @@ joiValidationDecorator(
   {},
 );
 
-module.exports = { PublicDocketRecordEntry };
+module.exports = {
+  PublicDocketRecordEntry: validEntityDecorator(PublicDocketRecordEntry),
+};

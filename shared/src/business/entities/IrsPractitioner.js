@@ -51,7 +51,7 @@ IrsPractitioner.VALIDATION_RULES = joi.object().keys({
 });
 
 joiValidationDecorator(
-  validEntityDecorator(IrsPractitioner),
+  IrsPractitioner,
   IrsPractitioner.VALIDATION_RULES,
   VALIDATION_ERROR_MESSAGES,
 );

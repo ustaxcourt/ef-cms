@@ -514,6 +514,11 @@
               flags: 
                 only: true
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "Administrative Record"
                 - "Affidavit in Support"
@@ -542,6 +547,7 @@
                 - "Bond"
                 - "Bounced Electronic Service"
                 - "Brief in Support"
+                - "Caption of case is amended"
                 - "Certificate as to the Genuineness of the Administrative Record"
                 - "Certificate of Service"
                 - "Civil Penalty Approval Form"
@@ -550,6 +556,7 @@
                 - "Decision"
                 - "Declaration in Support"
                 - "Designation of Counsel to Receive Service"
+                - "Docket Number is amended"
                 - "Entry of Appearance"
                 - "Evidence"
                 - "Exhibit(s)"
@@ -857,6 +864,11 @@
               flags: 
                 only: true
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "A"
                 - "AAAP"

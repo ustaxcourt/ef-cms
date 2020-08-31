@@ -3,6 +3,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -14,12 +15,14 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function ExternalDocumentNonStandardB(rawProps) {
+function ExternalDocumentNonStandardB() {}
+
+ExternalDocumentNonStandardB.prototype.init = function init(rawProps) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.freeText = rawProps.freeText;
-}
+};
 
 ExternalDocumentNonStandardB.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.freeText);
@@ -42,4 +45,8 @@ joiValidationDecorator(
   ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { ExternalDocumentNonStandardB };
+module.exports = {
+  ExternalDocumentNonStandardB: validEntityDecorator(
+    ExternalDocumentNonStandardB,
+  ),
+};

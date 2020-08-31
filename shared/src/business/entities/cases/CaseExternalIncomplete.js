@@ -1,6 +1,7 @@
 const joi = require('joi');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { CaseExternal } = require('./CaseExternal');
@@ -14,18 +15,23 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternalIncomplete(rawCase, { applicationContext }) {
-  this.businessType = rawCase.businessType;
-  this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
-  this.countryType = rawCase.countryType;
-  this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.partyType = rawCase.partyType;
-  this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.procedureType = rawCase.procedureType;
+function CaseExternalIncomplete() {}
+CaseExternalIncomplete.prototype.init = function init(
+  rawCase,
+  { applicationContext },
+) {
+  CaseExternalIncomplete.prototype.initSelf.call(this, rawCase, {
+    applicationContext,
+  });
+  CaseExternalIncomplete.prototype.initContacts.call(this, rawCase, {
+    applicationContext,
+  });
+};
 
+CaseExternalIncomplete.prototype.initContacts = function (
+  rawCase,
+  { applicationContext },
+) {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -36,7 +42,20 @@ function CaseExternalIncomplete(rawCase, { applicationContext }) {
   });
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
-}
+};
+
+CaseExternalIncomplete.prototype.initSelf = function (rawCase) {
+  this.businessType = rawCase.businessType;
+  this.caseType = rawCase.caseType;
+  this.contactPrimary = rawCase.contactPrimary;
+  this.contactSecondary = rawCase.contactSecondary;
+  this.countryType = rawCase.countryType;
+  this.filingType = rawCase.filingType;
+  this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.partyType = rawCase.partyType;
+  this.preferredTrialCity = rawCase.preferredTrialCity;
+  this.procedureType = rawCase.procedureType;
+};
 
 CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES =
   Case.VALIDATION_ERROR_MESSAGES;
@@ -58,4 +77,6 @@ joiValidationDecorator(
   CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CaseExternalIncomplete };
+module.exports = {
+  CaseExternalIncomplete: validEntityDecorator(CaseExternalIncomplete),
+};

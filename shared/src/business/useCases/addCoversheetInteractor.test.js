@@ -162,9 +162,6 @@ describe('addCoversheetInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateDocument,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketRecord,
-    ).toHaveBeenCalled();
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
