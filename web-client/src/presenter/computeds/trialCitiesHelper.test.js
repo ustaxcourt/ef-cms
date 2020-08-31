@@ -20,7 +20,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
         REGULAR: [
           {
             city: 'Chicago',
-            state: 'Illinois',
+            state: US_STATES.IL,
           },
         ],
         SMALL: [
