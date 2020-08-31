@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { DOCKET_NUMBER_MATCHER } = require('../EntityConstants');
 
@@ -15,11 +16,9 @@ TrialSessionWorkingCopy.validationName = 'TrialSessionWorkingCopy';
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function TrialSessionWorkingCopy(rawSession) {
-  this.init(rawSession);
-}
+function TrialSessionWorkingCopy() {}
 
-TrialSessionWorkingCopy.prototype.init = function (rawSession) {
+TrialSessionWorkingCopy.prototype.init = function init(rawSession) {
   this.entityName = 'TrialSessionWorkingCopy';
 
   this.caseMetadata = rawSession.caseMetadata || {};
@@ -85,4 +84,6 @@ joiValidationDecorator(
   TrialSessionWorkingCopy.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { TrialSessionWorkingCopy };
+module.exports = {
+  TrialSessionWorkingCopy: validEntityDecorator(TrialSessionWorkingCopy),
+};
