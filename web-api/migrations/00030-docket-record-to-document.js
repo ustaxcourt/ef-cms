@@ -7,7 +7,7 @@ const {
   MINUTE_ENTRIES_MAP,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { Document } = require('../../shared/src/business/entities/Document');
-const { upGenerator } = require('./utilities');
+const { isCaseRecord, upGenerator } = require('./utilities');
 
 const documentTypesMap = [
   ...Object.values(MINUTE_ENTRIES_MAP),
@@ -17,7 +17,7 @@ const documentTypesMap = [
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async (item, documentClient, tableName) => {
-  if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+  if (isCaseRecord(item)) {
     const caseRecords = await documentClient
       .query({
         ExpressionAttributeNames: {
