@@ -120,10 +120,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocument = new Document(
       {
+        description: noticeOfTrialDocumentTitle,
         documentId: newNoticeOfTrialIssuedDocumentId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
+        isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
         userId: user.userId,
@@ -131,9 +133,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(noticeOfTrialDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocumentWithoutDocketRecord(noticeOfTrialDocument);
     caseEntity.setNoticeOfTrialDate();
 
     // Standing Pretrial Notice/Order
@@ -177,19 +177,19 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocument = new Document(
       {
+        description: standingPretrialDocumentTitle,
         documentId: newStandingPretrialDocumentId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
+        isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
     );
 
-    caseEntity.addDocument(standingPretrialDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocumentWithoutDocketRecord(standingPretrialDocument);
 
     // Serve notice
     const servedParties = await serveNoticesForCase({
@@ -202,6 +202,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     noticeOfTrialDocument.setAsServed(servedParties.all);
     standingPretrialDocument.setAsServed(servedParties.all);
+
+    caseEntity.updateDocument(noticeOfTrialDocument); // to generate an index
+    caseEntity.updateDocument(standingPretrialDocument); // to generate an index
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
