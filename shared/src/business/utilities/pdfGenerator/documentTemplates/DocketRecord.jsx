@@ -155,28 +155,29 @@ export const DocketRecord = ({
         </div>
       )}
 
-      {caseDetail.privatePractitioners.length > 0 && (
-        <div className="party-info" id="private-practitioner-contacts">
-          <div className="party-info-header">Petitioner Counsel</div>
-          <div className="party-info-content">
-            {caseDetail.privatePractitioners.map(practitioner => {
-              if (practitioner.formattedName) {
-                return (
-                  <RenderPractitioner
-                    contactPrimary={caseDetail.contactPrimary}
-                    contactSecondary={caseDetail.contactSecondary}
-                    countryTypes={countryTypes}
-                    key={practitioner.barNumber}
-                    practitioner={practitioner}
-                  />
-                );
-              }
-            })}
+      {caseDetail.privatePractitioners.length > 0 &&
+        options.includePartyDetail && (
+          <div className="party-info" id="private-practitioner-contacts">
+            <div className="party-info-header">Petitioner Counsel</div>
+            <div className="party-info-content">
+              {caseDetail.privatePractitioners.map(practitioner => {
+                if (practitioner.formattedName) {
+                  return (
+                    <RenderPractitioner
+                      contactPrimary={caseDetail.contactPrimary}
+                      contactSecondary={caseDetail.contactSecondary}
+                      countryTypes={countryTypes}
+                      key={practitioner.barNumber}
+                      practitioner={practitioner}
+                    />
+                  );
+                }
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {caseDetail.irsPractitioners.length > 0 && (
+      {caseDetail.irsPractitioners.length > 0 && options.includePartyDetail && (
         <div className="party-info" id="irs-practitioner-contacts">
           <div className="party-info-header">Respondent Counsel</div>
           <div className="party-info-content">
