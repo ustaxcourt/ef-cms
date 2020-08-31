@@ -182,7 +182,7 @@ function CaseAssociationRequestFactory(rawProps) {
   }
 
   joiValidationDecorator(
-    validEntityDecorator(entityConstructor),
+    entityConstructor,
     schema,
     CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
   );

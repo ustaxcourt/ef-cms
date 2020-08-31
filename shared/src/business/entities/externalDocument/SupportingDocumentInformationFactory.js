@@ -101,11 +101,7 @@ SupportingDocumentInformationFactory.get = (
     makeRequired('supportingDocumentFile');
   }
 
-  joiValidationDecorator(
-    validEntityDecorator(entityConstructor),
-    schema,
-    VALIDATION_ERROR_MESSAGES,
-  );
+  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new (validEntityDecorator(entityConstructor))(documentMetadata);
 };
