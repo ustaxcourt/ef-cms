@@ -62,7 +62,7 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
 });
 
 joiValidationDecorator(
-  validEntityDecorator(PrivatePractitioner),
+  PrivatePractitioner,
   PrivatePractitioner.VALIDATION_RULES,
   {},
 );
