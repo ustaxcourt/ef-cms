@@ -40,6 +40,7 @@ PublicDocument.prototype.init = function init(rawDocument) {
   this.receivedAt = rawDocument.receivedAt;
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
+  this.isMinuteEntry = rawDocument.isMinuteEntry;
 };
 
 joiValidationDecorator(
@@ -58,6 +59,7 @@ joiValidationDecorator(
       ...ALL_EVENT_CODES,
     ).optional(),
     filedBy: JoiValidationConstants.STRING.max(500).optional(),
+    isMinuteEntry: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
