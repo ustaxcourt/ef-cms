@@ -215,12 +215,18 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.documents.find(
-        entry => entry.description === NOTICE_OF_TRIAL.documentType,
+        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
       );
     };
 
-    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeTruthy();
-    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
+      index: expect.anything(),
+      isOnDocketRecord: true,
+    });
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toMatchObject({
+      index: expect.anything(),
+      isOnDocketRecord: true,
+    });
   });
 
   it('Should set the status of the Notice of Trial as served for each case', async () => {
@@ -355,7 +361,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.documents.find(
-        entry => entry.description === NOTICE_OF_TRIAL.documentType,
+        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
       );
     };
 

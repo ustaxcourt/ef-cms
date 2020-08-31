@@ -289,6 +289,7 @@ exports.completeDocketEntryQCInteractor = async ({
       {
         ...NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
+        isOnDocketRecord: true,
         userId: user.userId,
       },
       { applicationContext },
@@ -298,6 +299,7 @@ exports.completeDocketEntryQCInteractor = async ({
       NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
+    noticeUpdatedDocument.description = noticeUpdatedDocument.documentTitle; // TODO 636 clean this up
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 

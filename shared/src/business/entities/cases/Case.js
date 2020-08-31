@@ -890,7 +890,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
  * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function (documentEntity) {
-  console.log('adding new document entity yeeyee', documentEntity);
   if (documentEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
