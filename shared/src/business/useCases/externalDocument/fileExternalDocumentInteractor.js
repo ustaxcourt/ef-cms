@@ -161,7 +161,7 @@ exports.fileExternalDocumentInteractor = async ({
       documentEntity.setWorkItem(workItem);
 
       workItems.push(workItem);
-      caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+      caseEntity.addDocument(documentEntity);
 
       const isAutoServed = documentEntity.isAutoServed();
 
