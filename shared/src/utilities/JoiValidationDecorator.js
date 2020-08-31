@@ -131,6 +131,9 @@ exports.joiValidationDecorator = function (
   schema,
   errorToMessageMap = {},
 ) {
+  if (!entityConstructor['__proxy__']) {
+    entityConstructor = exports.validEntityDecorator(entityConstructor);
+  }
   if (!schema.validate && typeof schema === 'object') {
     schema = joi.object().keys({ ...schema });
   }
@@ -242,11 +245,11 @@ exports.joiValidationDecorator = function (
     collection,
     { applicationContext },
   ) {
-    return (collection || []).map(entity =>
+    const validRawEntity = entity =>
       new entityConstructor(entity, { applicationContext })
         .validate()
-        .toRawObject(),
-    );
+        .toRawObject();
+    return (collection || []).map(validRawEntity);
   };
 
   entityConstructor.validateCollection = function (collection) {
@@ -269,7 +272,9 @@ exports.validEntityDecorator = entityFactoryFunction => {
     typeof entityFactoryFunction.prototype.init === 'function';
 
   if (!hasInitFunction) {
-    throw new Error("Factory function prototype has no 'init' function");
+    console.warn(
+      `WARNING: ${entityFactoryFunction.name} prototype has no 'init' function`,
+    );
   }
 
   const instanceHandler = {
@@ -285,11 +290,17 @@ exports.validEntityDecorator = entityFactoryFunction => {
     construct(target, args) {
       const entityInstance = new target(...args);
       const proxied = new Proxy(entityInstance, instanceHandler);
-      proxied.init(...args);
+      proxied.init && proxied.init(...args);
       return proxied;
     },
   };
-  return new Proxy(entityFactoryFunction, factoryHandler);
+  const ValidEntityProxy = new Proxy(entityFactoryFunction, factoryHandler);
+  Object.defineProperty(ValidEntityProxy, '__proxy__', {
+    iterable: false,
+    value: true,
+    writable: false,
+  });
+  return ValidEntityProxy;
 };
 
 exports.getFormattedValidationErrorsHelper = getFormattedValidationErrorsHelper;

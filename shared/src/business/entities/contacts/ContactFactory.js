@@ -12,6 +12,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { cloneDeep } = require('lodash');
 
@@ -463,7 +464,11 @@ ContactFactory.createContactFactory = ({
      *
      * @param {object} rawContact the options object
      */
-    function GenericContactConstructor(rawContact, { applicationContext }) {
+    function GenericContactConstructor() {}
+    GenericContactConstructor.prototype.init = function init(
+      rawContact,
+      { applicationContext },
+    ) {
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
@@ -488,7 +493,7 @@ ContactFactory.createContactFactory = ({
       this.additionalName = rawContact.additionalName;
       this.otherFilerType = rawContact.otherFilerType;
       this.hasEAccess = rawContact.hasEAccess || undefined;
-    }
+    };
 
     GenericContactConstructor.contactName = () => contactName;
 
@@ -508,7 +513,7 @@ ContactFactory.createContactFactory = ({
       GenericContactConstructor.errorToMessageMap,
     );
 
-    return GenericContactConstructor;
+    return validEntityDecorator(GenericContactConstructor);
   };
 
   ContactFactoryConstructor.contactName = contactName;

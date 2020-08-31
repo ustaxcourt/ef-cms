@@ -10,8 +10,8 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-
 CaseSearch.validationName = 'CaseSearch';
 
 /**
@@ -20,13 +20,14 @@ CaseSearch.validationName = 'CaseSearch';
  * @param {object} rawProps the raw case search data
  * @constructor
  */
-function CaseSearch(rawProps) {
+function CaseSearch() {}
+CaseSearch.prototype.init = function init(rawProps) {
   this.petitionerName = rawProps.petitionerName;
   this.yearFiledMin = rawProps.yearFiledMin || CASE_SEARCH_MIN_YEAR;
   this.yearFiledMax = rawProps.yearFiledMax || undefined;
   this.petitionerState = rawProps.petitionerState || undefined;
   this.countryType = rawProps.countryType || undefined;
-}
+};
 
 CaseSearch.VALIDATION_ERROR_MESSAGES = {
   petitionerName: 'Enter a name',
@@ -69,4 +70,4 @@ joiValidationDecorator(
   CaseSearch.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CaseSearch };
+module.exports = { CaseSearch: validEntityDecorator(CaseSearch) };

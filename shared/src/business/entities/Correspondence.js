@@ -13,7 +13,6 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @constructor
  */
 function Correspondence() {}
-
 Correspondence.prototype.init = function init(rawProps) {
   this.archived = rawProps.archived;
   this.documentTitle = rawProps.documentTitle;
