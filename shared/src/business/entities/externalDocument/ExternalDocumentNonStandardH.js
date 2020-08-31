@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -16,14 +17,18 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {ExternalDocumentFactory} ExternalDocumentFactory the factory for the secondary document
  * @constructor
  */
-function ExternalDocumentNonStandardH(rawProps, ExternalDocumentFactory) {
+function ExternalDocumentNonStandardH() {}
+ExternalDocumentNonStandardH.prototype.init = function init(
+  rawProps,
+  ExternalDocumentFactory,
+) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
 
   const { secondaryDocument } = rawProps;
   this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument || {});
-}
+};
 
 ExternalDocumentNonStandardH.prototype.getDocumentTitle = function () {
   return replaceBracketed(
@@ -49,4 +54,8 @@ joiValidationDecorator(
   ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { ExternalDocumentNonStandardH };
+module.exports = {
+  ExternalDocumentNonStandardH: validEntityDecorator(
+    ExternalDocumentNonStandardH,
+  ),
+};

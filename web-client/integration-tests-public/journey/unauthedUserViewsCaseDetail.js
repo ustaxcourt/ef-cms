@@ -3,13 +3,13 @@ import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const publicCaseDetailHelper = withAppContextDecorator(
-  publicCaseDetailHelperComputed,
-  applicationContextPublic,
-);
-const { INITIAL_DOCUMENT_TYPES } = applicationContextPublic.getConstants();
-
 export const unauthedUserViewsCaseDetail = test => {
+  const publicCaseDetailHelper = withAppContextDecorator(
+    publicCaseDetailHelperComputed,
+    applicationContextPublic,
+  );
+  const { INITIAL_DOCUMENT_TYPES } = applicationContextPublic.getConstants();
+
   return it('View case detail', async () => {
     await test.runSequence('gotoPublicCaseDetailSequence', {
       docketNumber: test.docketNumber,

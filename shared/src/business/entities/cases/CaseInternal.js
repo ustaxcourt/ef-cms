@@ -12,6 +12,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
@@ -26,7 +27,8 @@ const { Statistic } = require('../Statistic');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseInternal(rawCase, { applicationContext }) {
+function CaseInternal() {}
+CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -102,7 +104,7 @@ function CaseInternal(rawCase, { applicationContext }) {
   });
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
-}
+};
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
   ...Case.VALIDATION_ERROR_MESSAGES,
@@ -274,4 +276,4 @@ CaseInternal.prototype.getValidationErrors = function () {
   return validationErrors;
 };
 
-module.exports = { CaseInternal };
+module.exports = { CaseInternal: validEntityDecorator(CaseInternal) };

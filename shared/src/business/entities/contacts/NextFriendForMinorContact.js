@@ -2,7 +2,6 @@ const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('./ContactFactory');
-
 /**
  * returns the constructor used for creating the NextFriendForMinorContact entity
  */

@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
@@ -13,12 +14,13 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function CourtIssuedDocumentTypeC(rawProps) {
+function CourtIssuedDocumentTypeC() {}
+CourtIssuedDocumentTypeC.prototype.init = function init(rawProps) {
   this.attachments = rawProps.attachments;
   this.documentTitle = rawProps.documentTitle;
   this.docketNumbers = rawProps.docketNumbers;
   this.documentType = rawProps.documentType;
-}
+};
 
 CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
   return replaceBracketed(this.documentTitle, this.docketNumbers);
@@ -37,4 +39,6 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CourtIssuedDocumentTypeC };
+module.exports = {
+  CourtIssuedDocumentTypeC: validEntityDecorator(CourtIssuedDocumentTypeC),
+};
