@@ -244,7 +244,7 @@ describe('DocketRecord', () => {
 
   it('does not render private practitioner contact information when present and options.includePartyDetail is false', () => {
     options.includePartyDetail = false;
-    caseDetail.privatePractitioners = []; // No private practitioners
+    caseDetail.privatePractitioners = [privatePractitioner];
 
     let wrapper = mount(
       <DocketRecord
@@ -344,7 +344,7 @@ describe('DocketRecord', () => {
 
   it('does not render irs practitioner contact information when present and options.includePartyDetail is false', () => {
     options.includePartyDetail = false;
-    caseDetail.irsPractitioners = []; // No irs practitioners
+    caseDetail.irsPractitioners = [irsPractitioner];
 
     let wrapper = mount(
       <DocketRecord
