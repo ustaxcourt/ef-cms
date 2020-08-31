@@ -36,7 +36,8 @@ describe('utilities', () => {
   describe('isCaseRecord', () => {
     it('should return true if the item is a case record', () => {
       const result = isCaseRecord({
-        caseType: CASE_TYPES_MAP.cdp,
+        pk: 'case|101-20',
+        sk: 'case|101-20',
       });
 
       expect(result).toEqual(true);
@@ -45,6 +46,8 @@ describe('utilities', () => {
     it('should return false if the item is not a case record', () => {
       const result = isCaseRecord({
         contactPrimary: { name: 'Guy Fieri' },
+        pk: 'case|101-20',
+        sk: 'document|101-20',
       });
 
       expect(result).toEqual(false);
