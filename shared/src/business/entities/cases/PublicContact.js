@@ -23,17 +23,17 @@ function PublicContact(rawContact) {
   this.state = rawContact.state;
 }
 
-joiValidationDecorator(
-  PublicContact,
-  joi.object().keys({
-    name: JoiValidationConstants.STRING.max(500).optional(),
-    state: JoiValidationConstants.STRING.valid(
-      ...Object.keys(US_STATES),
-      ...US_STATES_OTHER,
-      STATE_NOT_AVAILABLE,
-    ).optional(),
-  }),
-  {},
-);
+PublicContact.validationName = 'PublicContact';
+
+PublicContact.VALIDATION_RULES = joi.object().keys({
+  name: JoiValidationConstants.STRING.max(500).optional(),
+  state: JoiValidationConstants.STRING.valid(
+    ...Object.keys(US_STATES),
+    ...US_STATES_OTHER,
+    STATE_NOT_AVAILABLE,
+  ).optional(),
+});
+
+joiValidationDecorator(PublicContact, PublicContact.VALIDATION_RULES, {});
 
 module.exports = { PublicContact };

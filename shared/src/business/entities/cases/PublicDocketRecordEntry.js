@@ -22,17 +22,21 @@ function PublicDocketRecordEntry(rawDocketEntry) {
   this.isStricken = rawDocketEntry.isStricken;
 }
 
+PublicDocketRecordEntry.validationName = 'PublicDocketRecordEntry';
+
+PublicDocketRecordEntry.VALIDATION_RULES = joi.object().keys({
+  description: JoiValidationConstants.STRING.max(500).optional(),
+  documentId: JoiValidationConstants.UUID.optional(),
+  filedBy: JoiValidationConstants.STRING.max(500).optional().allow(null),
+  filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(), // Required on DocketRecord so probably should be required here.
+  index: joi.number().integer().optional(),
+  isStricken: joi.boolean().optional(),
+  numberOfPages: joi.number().integer().optional(),
+});
+
 joiValidationDecorator(
   PublicDocketRecordEntry,
-  joi.object().keys({
-    description: JoiValidationConstants.STRING.max(500).optional(),
-    documentId: JoiValidationConstants.UUID.optional(),
-    filedBy: JoiValidationConstants.STRING.max(500).optional(),
-    filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(), // Required on DocketRecord so probably should be required here.
-    index: joi.number().integer().optional(),
-    isStricken: joi.boolean().optional(),
-    numberOfPages: joi.number().integer().optional(),
-  }),
+  PublicDocketRecordEntry.VALIDATION_RULES,
   {},
 );
 

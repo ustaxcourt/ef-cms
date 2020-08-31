@@ -53,10 +53,12 @@ function PublicCase(rawCase, { applicationContext }) {
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 }
 
+PublicCase.validationName = 'PublicCase';
+
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  contactPrimary: joi.object().required(),
-  contactSecondary: joi.object().optional().allow(null),
+  contactPrimary: PublicContact.VALIDATION_RULES.required(),
+  contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
@@ -68,13 +70,13 @@ const publicCaseSchema = {
     'Auto-generated from docket number and the suffix.',
   ),
   docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    joi.object().meta({ entityName: 'PublicDocketRecord' }),
+    PublicDocketRecordEntry.VALIDATION_RULES,
   )
     .required()
     .description('List of DocketRecord Entities for the case.'),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'PublicDocument' }))
+    .items(PublicDocument.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   isSealed: joi.boolean(),

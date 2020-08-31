@@ -42,37 +42,37 @@ function PublicDocument(rawDocument) {
   this.isMinuteEntry = rawDocument.isMinuteEntry;
 }
 
-joiValidationDecorator(
-  PublicDocument,
-  joi.object().keys({
-    additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
-    additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
-    createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
-    documentId: JoiValidationConstants.UUID.optional(),
-    documentTitle: JoiValidationConstants.STRING.max(500).optional(),
-    documentType: joi
-      .string()
-      .valid(...ALL_DOCUMENT_TYPES)
-      .optional(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .optional(),
-    filedBy: JoiValidationConstants.STRING.max(500).optional(),
-    isMinuteEntry: joi.boolean().optional(),
-    isPaper: joi.boolean().optional(),
-    processingStatus: JoiValidationConstants.STRING.valid(
-      ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
-    ).optional(),
-    receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-    servedAt: JoiValidationConstants.ISO_DATE.optional(),
-    servedParties: joi
-      .array()
-      .items({ name: JoiValidationConstants.STRING.max(500).required() })
-      .optional(),
-  }),
-  {},
-);
+PublicDocument.validationName = 'PublicDocument';
+
+PublicDocument.VALIDATION_RULES = joi.object().keys({
+  additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
+  additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
+  createdAt: JoiValidationConstants.ISO_DATE.optional(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
+  documentId: JoiValidationConstants.UUID.optional(),
+  documentTitle: JoiValidationConstants.STRING.max(500).optional(),
+  documentType: joi
+    .string()
+    .valid(...ALL_DOCUMENT_TYPES)
+    .optional(),
+  eventCode: joi
+    .string()
+    .valid(...ALL_EVENT_CODES)
+    .optional(),
+  filedBy: JoiValidationConstants.STRING.max(500).optional().allow(null),
+  isMinuteEntry: joi.boolean().optional(),
+  isPaper: joi.boolean().optional(),
+  processingStatus: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
+  ).optional(),
+  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+  servedAt: JoiValidationConstants.ISO_DATE.optional(),
+  servedParties: joi
+    .array()
+    .items({ name: JoiValidationConstants.STRING.max(500).required() })
+    .optional(),
+});
+
+joiValidationDecorator(PublicDocument, PublicDocument.VALIDATION_RULES, {});
 
 module.exports = { PublicDocument };
