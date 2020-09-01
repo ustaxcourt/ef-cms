@@ -1056,10 +1056,10 @@ Case.prototype.getIrsSendDate = function () {
  * @returns {number} the next docket record index
  */
 Case.prototype.generateNextDocketRecordIndex = function () {
-  this.docketEntries
-    .filter(record => record.index !== undefined)
-    .sort((a, b) => a.index - b.index);
-  const nextIndex = this.docketEntries.length + 1;
+  const nextIndex =
+    this.documents
+      .filter(d => d.isOnDocketRecord && d.index !== undefined)
+      .sort((a, b) => a.index - b.index).length + 1;
   return nextIndex;
 };
 
