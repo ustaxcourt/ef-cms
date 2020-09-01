@@ -123,7 +123,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   );
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+  caseEntity.addDocument(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
