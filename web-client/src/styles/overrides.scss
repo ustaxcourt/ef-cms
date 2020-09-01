@@ -22,6 +22,7 @@ option:first-child {
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
+    color: color($theme-color-base-darkest);
     position: relative;
     padding-right: 2rem;
     padding-left: 2rem;
@@ -121,11 +122,11 @@ option:first-child {
 }
 
 .usa-alert--info {
-  background-color: $color-primary-alt-lightest;
+  background-color: $theme-color-base-lightest;
   background-image: url('images/alerts/info.svg');
 
   &::before {
-    background-color: color($theme-color-accent-cool-dark);
+    background-color: color($theme-color-base-lightest);
   }
 }
 
