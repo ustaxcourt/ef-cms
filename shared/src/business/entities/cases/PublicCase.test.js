@@ -34,7 +34,6 @@ describe('PublicCase', () => {
           createdAt: '2020-01-02T03:30:45.007Z',
           docketNumber: '111-12',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          docketRecord: [{ any: 'thing' }],
           documents: [{ any: 'thing' }],
           receivedAt: '2020-01-05T03:30:45.007Z',
           sealedDate: '2020-01-05T03:30:45.007Z',
@@ -50,7 +49,6 @@ describe('PublicCase', () => {
         contactPrimary: expect.anything(),
         contactSecondary: expect.anything(),
         createdAt: expect.anything(),
-        docketRecord: expect.anything(),
         receivedAt: expect.anything(),
       });
     });
@@ -65,7 +63,6 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
-        docketRecord: [],
         documents: [],
         receivedAt: 'testing',
       },
@@ -86,7 +83,6 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
-      docketRecord: [],
       documents: [],
       isSealed: false,
       receivedAt: 'testing',
@@ -102,7 +98,6 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
-        docketRecord: null,
         documents: null,
         receivedAt: 'testing',
       },
@@ -117,7 +112,6 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
-      docketRecord: [],
       documents: [],
       isSealed: false,
       receivedAt: 'testing',
@@ -133,11 +127,13 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
-        docketRecord: [{ documentId: '123' }],
         documents: [
           {
+            description: 'Order',
             documentId: '123',
             documentType: 'Order that case is assigned',
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
           },
           { documentId: '234', documentType: 'Order', isDraft: true },
           { documentId: '345', documentType: 'Petition' },
@@ -156,25 +152,19 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
-      docketRecord: [
-        {
-          description: undefined,
-          documentId: '123',
-          filedBy: undefined,
-          filingDate: undefined,
-          index: undefined,
-        },
-      ],
       documents: [
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
           createdAt: undefined,
+          description: 'Order',
           documentId: '123',
           documentTitle: undefined,
           documentType: 'Order that case is assigned',
           eventCode: undefined,
           filedBy: undefined,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
           isPaper: undefined,
           processingStatus: undefined,
           receivedAt: undefined,
@@ -263,13 +253,11 @@ describe('PublicCase', () => {
     });
 
     it('should return false for a court-issued order document that is on the docket record', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          documentId: '123',
-          documentType: 'Order',
-        },
-        [{ documentId: '123' }],
-      );
+      const isPrivate = isPrivateDocument({
+        documentId: '123',
+        documentType: 'Order',
+        isOnDocketRecord: true,
+      });
       expect(isPrivate).toEqual(false);
     });
 
