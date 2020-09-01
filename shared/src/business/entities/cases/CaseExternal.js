@@ -2,6 +2,7 @@ const joi = require('joi');
 const {
   BUSINESS_TYPES,
   FILING_TYPES,
+  LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
   PROCEDURE_TYPES,
@@ -122,7 +123,11 @@ CaseExternal.commonRequirements = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.valid(
+        ...TRIAL_CITY_STRINGS,
+        ...LEGACY_TRIAL_CITY_STRINGS,
+        null,
+      ),
       JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .required(),
