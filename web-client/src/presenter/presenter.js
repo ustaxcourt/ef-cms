@@ -382,6 +382,7 @@ import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespo
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { userContactUpdateCompleteSequence } from './sequences/userContactUpdateCompleteSequence';
 import { userContactUpdateErrorSequence } from './sequences/userContactUpdateErrorSequence';
+import { userContactUpdateInProgressSequence } from './sequences/userContactUpdateInProgressSequence';
 import { userContactUpdateInitialUpdateCompleteSequence } from './sequences/userContactUpdateInitialUpdateCompleteSequence';
 import { userContactUpdateProgressSequence } from './sequences/userContactUpdateProgressSequence';
 import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
@@ -816,6 +817,7 @@ export const presenter = {
     uploadCourtIssuedDocumentSequence,
     userContactUpdateCompleteSequence,
     userContactUpdateErrorSequence,
+    userContactUpdateInProgressSequence,
     userContactUpdateInitialUpdateCompleteSequence,
     userContactUpdateProgressSequence,
     validateAddDeficiencyStatisticsSequence,
