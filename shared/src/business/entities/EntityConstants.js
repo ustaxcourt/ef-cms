@@ -924,7 +924,9 @@ const ALL_DOCUMENT_TYPES_MAP = (() => {
 })();
 
 const ALL_DOCUMENT_TYPES = (() => {
-  return ALL_DOCUMENT_TYPES_MAP.map(d => d.documentType).filter(d => d);
+  return ALL_DOCUMENT_TYPES_MAP.map(d => d.documentType)
+    .filter(d => d)
+    .sort();
 })();
 
 const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
