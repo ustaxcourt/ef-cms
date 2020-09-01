@@ -22,11 +22,11 @@ option:first-child {
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
-    color: color($theme-color-base-darkest);
-    font-size: 17px;
     position: relative;
     padding-right: 2rem;
     padding-left: 2rem;
+    color: color($theme-color-base-darkest);
+    font-size: 17px;
     svg {
       position: absolute;
       left: 0;
