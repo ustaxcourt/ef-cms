@@ -207,6 +207,27 @@ digraph {
 ```
 </details>
 
+![Code delivery pipeline described by code below.](https://user-images.githubusercontent.com/14930/91789441-a9a95200-ebdc-11ea-91d7-02ce5e6e9392.png)
+
+<details>
+<summary>Source for diagram</summary><br>
+
+This diagram was created with [Graphviz](https://graphviz.org/), and the source is below for future edits. Use an online editor, such as [Edotor](https://edotor.net/), and download the resulting graph PNG to update the image. Don’t forget to copy-paste the source back into this page for next time an edit is needed!
+
+```dot
+digraph {
+	rankdir="LR"
+	
+	Code [shape = doublecircle]
+	node [style = rounded, shape = box]
+
+	Code -> GitHub -> CircleCI
+	CircleCI -> SonarCloud
+	CircleCI -> AWS [label = "via Terraform"]
+}
+```
+</details>
+
 ## Backlog
 
 There are a few backlogs related to the project:
