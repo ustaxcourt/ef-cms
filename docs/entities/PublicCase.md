@@ -68,13 +68,6 @@
               - "S"
               - "SL"
               - "W"
-          docketRecord: 
-            type: "array"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 0
           documents: 
             type: "array"
             rules: 
@@ -339,93 +332,6 @@
           name: "min"
           args: 
             limit: 1
-    docketRecord: 
-      type: "array"
-      flags: 
-        presence: "required"
-        description: "List of DocketRecord Entities for the case."
-      rules: 
-        - 
-          name: "unique"
-          args: 
-            comparator: [object Function]
-      items: 
-        - 
-          type: "object"
-          keys: 
-            description: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "max"
-                  args: 
-                    limit: 500
-            documentId: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "guid"
-                  args: 
-                    options: 
-                      version: 
-                        - "uuidv4"
-            filedBy: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "max"
-                  args: 
-                    limit: 500
-              allow: 
-                - null
-            filingDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-              rules: 
-                - 
-                  name: "max"
-                  args: 
-                    date: "now"
-            index: 
-              type: "number"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "integer"
-            isStricken: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
-            numberOfPages: 
-              type: "number"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "integer"
     documents: 
       type: "array"
       flags: 
@@ -468,6 +374,19 @@
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
                 presence: "optional"
+            description: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 500
             docketNumber: 
               type: "string"
               flags: 
@@ -1223,6 +1142,25 @@
                     limit: 500
               allow: 
                 - null
+            filingDate: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
+                presence: "optional"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
+            index: 
+              type: "number"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
             isMinuteEntry: 
               type: "boolean"
               flags: 
@@ -1231,6 +1169,17 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+            isStricken: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            numberOfPages: 
+              type: "number"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
             processingStatus: 
               type: "string"
               flags: 
