@@ -1,11 +1,18 @@
 const {
+  entityName: irsPractitionerEntityName,
+  IrsPractitioner,
+} = require('../../entities/IrsPractitioner');
+const {
+  entityName: privatePractitionerEntityName,
+  PrivatePractitioner,
+} = require('../../entities/PrivatePractitioner');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { isEqual } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * updateUserContactInformationInteractor
@@ -43,25 +50,22 @@ const updateUserContactInformationInteractor = async ({
     return;
   }
 
-  if (user.isUpdatingInformation) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'user_contact_update_in_progress',
-      },
-      userId: user.userId,
+  let userEntity;
+  if (user.entityName === privatePractitionerEntityName) {
+    userEntity = new PrivatePractitioner({
+      ...user,
+      contact: { ...contactInfo },
+      isUpdatingInformation: true,
     });
-    return;
+  } else if (user.entityName === irsPractitionerEntityName) {
+    userEntity = new IrsPractitioner({
+      ...user,
+      contact: { ...contactInfo },
+      isUpdatingInformation: true,
+    });
+  } else {
+    throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
-
-  // TODO: the user could potentially be a IrsPractitioner as well... how do we
-  // figure out which entity to construct?
-  // const userEntity = new PrivatePractitioner({
-  const userEntity = new User({
-    ...user,
-    contact: { ...contactInfo },
-    isUpdatingInformation: true,
-  });
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
@@ -90,14 +94,11 @@ const updateUserContactInformationInteractor = async ({
     userId: user.userId,
   });
 
-  const userEntityAfterUpdate = new User({
-    ...userEntity,
-    isUpdatingInformation: false,
-  });
+  userEntity.isUpdatingInformation = false;
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
-    user: userEntityAfterUpdate.validate().toRawObject(),
+    user: userEntity.validate().toRawObject(),
   });
 };
 
@@ -132,6 +133,8 @@ exports.updateUserContactInformationInteractor = async ({
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
+
+    console.log('********', error);
 
     applicationContext.logger.info('Error', error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({

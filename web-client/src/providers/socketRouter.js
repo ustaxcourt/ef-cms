@@ -44,9 +44,6 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
-      case 'user_contact_update_in_progress':
-        await app.getSequence('userContactUpdateInProgressSequence')();
-        break;
       case 'user_contact_update_error':
         await app.getSequence('userContactUpdateErrorSequence')({
           ...message,
