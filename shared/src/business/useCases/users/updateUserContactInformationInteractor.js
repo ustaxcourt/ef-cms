@@ -134,14 +134,12 @@ exports.updateUserContactInformationInteractor = async ({
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
-    console.log('********', error);
-
     applicationContext.logger.info('Error', error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'user_contact_update_error',
-        error,
+        error: error.toString(),
       },
       userId,
     });

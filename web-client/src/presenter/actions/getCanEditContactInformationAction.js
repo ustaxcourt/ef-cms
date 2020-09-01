@@ -1,11 +1,10 @@
-import { state } from 'cerebral';
-
 /**
- * fixme
+ * Determines if a user's contact information is already being updated
  *
  *
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
- * @returns {object} continue path for the sequence */
+ * @returns {object} continue path for the sequence
+ */
 export const getCanEditContactInformationAction = ({ path, props }) => {
   const { user } = props;
 

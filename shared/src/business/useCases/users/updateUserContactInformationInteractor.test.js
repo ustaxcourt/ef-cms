@@ -8,6 +8,7 @@ const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
 jest.mock('./generateChangeOfAddress');
+const { entityName } = require('../../entities/IrsPractitioner');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 
 describe('updateUserContactInformationInteractor', () => {
@@ -27,11 +28,13 @@ describe('updateUserContactInformationInteractor', () => {
 
   beforeEach(() => {
     user = MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
+    user.entityName = entityName;
+    user.role = ROLES.irsPractitioner;
 
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockImplementation(async () => user);
+      .getUserById.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockImplementation(() => {});
@@ -84,26 +87,6 @@ describe('updateUserContactInformationInteractor', () => {
     ).toEqual('user_contact_full_update_complete');
   });
 
-  it('should return without updating user or cases when the contact information for the user has an update in progress', async () => {
-    user = { ...user, isUpdatingInformation: true };
-
-    await updateUserContactInformationInteractor({
-      applicationContext,
-      contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-
-    expect(applicationContext.getUseCases().updateUser).not.toBeCalled();
-    expect(generateChangeOfAddress).not.toBeCalled();
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toBeCalledTimes(1);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.action,
-    ).toEqual('user_contact_update_in_progress');
-  });
-
   it('should throw an error when updateUser throws an error', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -149,16 +132,38 @@ describe('updateUserContactInformationInteractor', () => {
         state: 'IL',
       },
       email: undefined,
-      entityName: 'User',
+      entityName: 'IrsPractitioner',
       isUpdatingInformation: true,
       name: 'IRS Practitioner',
       role: 'irsPractitioner',
-      section: 'irsPractitioner',
       token: undefined,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
-  ('');
+
+  it('should notify the user when the user being updated is not a privatePractitioner or irsPractitioner', async () => {
+    user = { ...user, entityName: 'notapractitioner' };
+
+    await updateUserContactInformationInteractor({
+      applicationContext,
+      contactInfo,
+      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toBeCalledTimes(1);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('user_contact_update_error');
+    expect(
+      JSON.stringify(
+        applicationContext.getNotificationGateway().sendNotificationToUser.mock
+          .calls[0][0].message.error,
+      ),
+    ).toContain('Error: Unrecognized entityType notapractitioner');
+  });
 
   it('should generate a change of address document', async () => {
     await updateUserContactInformationInteractor({
