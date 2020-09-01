@@ -83,8 +83,10 @@ const mutateRecord = async (item, documentClient, tableName) => {
           const newDocument = new Document(
             {
               ...docketEntry,
+              docketNumber: item.docketNumber,
               documentTitle: docketEntry.description,
               documentType,
+              filedBy: 'Migrated',
               isFileAttached: false,
               isMinuteEntry: true,
               isOnDocketRecord: true,
