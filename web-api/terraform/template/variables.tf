@@ -14,7 +14,7 @@ variable "cognito_suffix" {
   type = string
 }
 
-variable "ses_dmarc_rua" {
+variable "email_dmarc_policy" {
   type = string
 }
 
