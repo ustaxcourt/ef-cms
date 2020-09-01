@@ -43,7 +43,7 @@ const addPetitionDocumentToCase = ({
   );
 
   documentEntity.setWorkItem(workItemEntity);
-  caseToAdd.addDocumentWithoutDocketRecord(documentEntity);
+  caseToAdd.addDocument(documentEntity);
 
   return workItemEntity;
 };
@@ -158,7 +158,7 @@ exports.createCaseInteractor = async ({
     user,
   });
 
-  caseToAdd.addDocumentWithoutDocketRecord(
+  caseToAdd.addDocument(
     new Document(
       {
         description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
@@ -195,7 +195,7 @@ exports.createCaseInteractor = async ({
     { applicationContext },
   );
 
-  caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
+  caseToAdd.addDocument(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document(
@@ -219,7 +219,7 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(odsDocumentEntity);
+    caseToAdd.addDocument(odsDocumentEntity);
   }
 
   await applicationContext.getPersistenceGateway().createCase({

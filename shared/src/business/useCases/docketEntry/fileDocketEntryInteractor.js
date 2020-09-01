@@ -155,7 +155,7 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       workItems.push(workItem);
-      caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+      caseEntity.addDocument(documentEntity);
     }
   }
 
