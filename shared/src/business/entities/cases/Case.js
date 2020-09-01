@@ -44,7 +44,6 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -65,7 +64,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
-  docketRecord: 'At least one valid Docket Record is required',
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
@@ -279,13 +277,9 @@ Case.prototype.init = function init(
     this.irsPractitioners = [];
   }
 
-  if (Array.isArray(rawCase.docketRecord)) {
-    this.docketRecord = rawCase.docketRecord.map(
-      docketRecord => new DocketRecord(docketRecord, { applicationContext }),
-    );
-  } else {
-    this.docketRecord = [];
-  }
+  this.docketEntries = this.documents.filter(
+    document => document.isOnDocketRecord,
+  );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -419,9 +413,6 @@ Case.VALIDATION_RULES = {
   docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
     'Auto-generated from docket number and the suffix.',
   ),
-  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    DocketRecord.VALIDATION_RULES,
-  ).required(),
   documents: joi
     .array()
     .items(Document.VALIDATION_RULES)
@@ -1060,13 +1051,10 @@ Case.prototype.getIrsSendDate = function () {
  * @returns {number} the next docket record index
  */
 Case.prototype.generateNextDocketRecordIndex = function () {
-  const recordsWithIndex = [
-    ...this.docketRecord,
-    ...this.documents.filter(d => d.isOnDocketRecord),
-  ]
+  this.docketEntries
     .filter(record => record.index !== undefined)
     .sort((a, b) => a.index - b.index);
-  const nextIndex = recordsWithIndex.length + 1;
+  const nextIndex = this.docketEntries.length + 1;
   return nextIndex;
 };
 
