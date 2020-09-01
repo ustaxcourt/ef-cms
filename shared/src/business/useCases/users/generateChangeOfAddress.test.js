@@ -42,14 +42,19 @@ describe('generateChangeOfAddress', () => {
     userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
-  beforeAll(() => {
+  beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUser.mockReturnValue([mockCaseWithPrivatePractitioner]);
+      .getCaseIdsByUser.mockReturnValue([
+        mockCaseWithPrivatePractitioner.docketNumber,
+      ]);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithPrivatePractitioner);
   });
 
   it('attempts to run a change of address when address1 changes', async () => {
@@ -205,13 +210,20 @@ describe('generateChangeOfAddress', () => {
     });
   });
 
-  it('should notify honeybadger and continue processing the second user-case if the first user-case is invalid', async () => {
+  it('should notify honeybadger and continue processing the next case if the case currently being processed is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUser.mockReturnValue([
+      .getCaseIdsByUser.mockReturnValue([
         { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
         mockCaseWithPrivatePractitioner,
       ]);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCaseWithPrivatePractitioner,
+        docketNumber: undefined,
+      })
+      .mockReturnValueOnce(mockCaseWithPrivatePractitioner);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
