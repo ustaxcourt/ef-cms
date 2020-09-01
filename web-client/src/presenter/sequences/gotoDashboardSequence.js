@@ -33,7 +33,7 @@ const goToDashboard = [
   getUserAction,
   setUserAction,
   set(state.selectedWorkItems, []),
-  // clearErrorAlertsAction,
+  clearErrorAlertsAction,
   runPathForUserRoleAction,
   {
     ...takePathForRoles(
