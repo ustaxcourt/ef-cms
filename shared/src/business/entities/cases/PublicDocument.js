@@ -32,6 +32,7 @@ PublicDocument.prototype.init = function init(rawDocument) {
   this.filedBy = rawDocument.filedBy;
   this.filingDate = rawDocument.filingDate;
   this.index = rawDocument.index;
+  this.isMinuteEntry = rawDocument.isMinuteEntry;
   this.isOnDocketRecord = rawDocument.isOnDocketRecord;
   this.isPaper = rawDocument.isPaper;
   this.isStricken = rawDocument.isStricken;
@@ -40,13 +41,23 @@ PublicDocument.prototype.init = function init(rawDocument) {
   this.receivedAt = rawDocument.receivedAt;
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
-  this.isMinuteEntry = rawDocument.isMinuteEntry;
+
+  if (this.isOnDocketRecord) {
+    this.description = rawDocument.description;
+    this.documentId = rawDocument.documentId;
+    this.filedBy = rawDocument.filedBy;
+    this.filingDate = rawDocument.filingDate;
+    this.index = rawDocument.index;
+    this.isStricken = rawDocument.isStricken;
+    this.numberOfPages = rawDocument.numberOfPages;
+  }
 };
 
-PublicDocument.VALIDATION_RULES = joi.object().keys({
+PublicDocument.VALIDATION_RULES = {
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
+  description: JoiValidationConstants.STRING.max(500).optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   documentId: JoiValidationConstants.UUID.optional(),
   documentTitle: JoiValidationConstants.STRING.max(500).optional(),
@@ -55,8 +66,13 @@ PublicDocument.VALIDATION_RULES = joi.object().keys({
   ).optional(),
   eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
   filedBy: JoiValidationConstants.STRING.max(500).optional().allow(null),
+  filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(),
+  // Required on DocketRecord so probably should be required here.
+  index: joi.number().integer().optional(),
   isMinuteEntry: joi.boolean().optional(),
   isPaper: joi.boolean().optional(),
+  isStricken: joi.boolean().optional(),
+  numberOfPages: joi.number().integer().optional(),
   processingStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
   ).optional(),
@@ -66,7 +82,7 @@ PublicDocument.VALIDATION_RULES = joi.object().keys({
     .array()
     .items({ name: JoiValidationConstants.STRING.max(500).required() })
     .optional(),
-});
+};
 
 joiValidationDecorator(PublicDocument, PublicDocument.VALIDATION_RULES, {});
 
