@@ -40,7 +40,7 @@ exports.migrateCaseDeadlineInteractor = async ({
 
   await applicationContext.getPersistenceGateway().createCaseDeadline({
     applicationContext,
-    caseDeadlineToCreate: caseDeadlineValidatedRaw,
+    caseDeadline: caseDeadlineValidatedRaw,
   });
 
   return caseDeadlineValidatedRaw;
