@@ -473,10 +473,11 @@ select[disabled] {
     max-width: 700px;
   }
   display: inline-block;
+  padding-top: 1.25rem;
+  padding-right: 1.25rem;
   padding-bottom: 1rem;
   padding-left: 1.75rem;
-  padding-right: 1.25rem;
-  padding-top: 1.25rem;  border-left: 5px solid color($theme-color-primary-vivid);
+  border-left: 5px solid color($theme-color-primary-vivid);
   background: color($theme-color-base-lightest);
   color: color($theme-color-base-dark);
 
