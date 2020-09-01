@@ -4,8 +4,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { isEqual } = require('lodash');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * updateUserContactInformationInteractor
@@ -43,11 +43,24 @@ const updateUserContactInformationInteractor = async ({
     return;
   }
 
+  if (user.isUpdatingInformation) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_update_in_progress',
+      },
+      userId: user.userId,
+    });
+    return;
+  }
+
   // TODO: the user could potentially be a IrsPractitioner as well... how do we
   // figure out which entity to construct?
-  const userEntity = new PrivatePractitioner({
+  // const userEntity = new PrivatePractitioner({
+  const userEntity = new User({
     ...user,
     contact: { ...contactInfo },
+    isUpdatingInformation: true,
   });
 
   await applicationContext.getPersistenceGateway().updateUser({
@@ -75,6 +88,16 @@ const updateUserContactInformationInteractor = async ({
       action: 'user_contact_full_update_complete',
     },
     userId: user.userId,
+  });
+
+  const userEntityAfterUpdate = new User({
+    ...userEntity,
+    isUpdatingInformation: false,
+  });
+
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: userEntityAfterUpdate.validate().toRawObject(),
   });
 };
 
