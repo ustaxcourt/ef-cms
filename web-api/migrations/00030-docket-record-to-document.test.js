@@ -12,8 +12,10 @@ describe('merge docket record records into document records', () => {
 
   const DOCUMENT_ID_1 = '2ffd0350-65a3-4aea-a395-4a9665a05d91';
   const DOCUMENT_ID_2 = '2bcb652e-75ce-4308-b461-8fa391d372a9';
+  const DOCUMENT_ID_3 = '4116b850-eb4d-435e-8758-406e431969ad';
   const DOCKET_RECORD_ID_1 = 'a6957cea-33cf-43b6-a5f8-27459191306f';
   const DOCKET_RECORD_ID_2 = '10d919cd-129c-48ea-b99b-da356cefaaa5';
+  const DOCKET_RECORD_ID_3 = '6e3d3bd0-9ca6-463b-8a24-2722fdf9d90e';
   const USER_ID = '411a505c-adb9-48d1-a495-7d3b9768fe7c';
 
   const validDocument = {
@@ -59,6 +61,17 @@ describe('merge docket record records into document records', () => {
     pk: `case|${MOCK_CASE.docketNumber}`,
     sk: `docket-record|${DOCKET_RECORD_ID_2}`,
   };
+  const mockDocketRecord3 = {
+    description: 'first record',
+    docketRecordId: DOCKET_RECORD_ID_3,
+    documentId: DOCUMENT_ID_3,
+    entityName: 'DocketRecord',
+    eventCode: 'P',
+    filingDate: '2018-03-01T00:01:00.000Z',
+    index: 3,
+    pk: `case|${MOCK_CASE.docketNumber}`,
+    sk: `docket-record|${DOCKET_RECORD_ID_3}`,
+  };
 
   beforeEach(() => {
     mockItems = [
@@ -67,6 +80,7 @@ describe('merge docket record records into document records', () => {
       mockDocumentRecord2,
       mockDocketRecord1,
       mockDocketRecord2,
+      mockDocketRecord3,
     ];
 
     scanStub = jest.fn().mockReturnValue({
@@ -123,7 +137,7 @@ describe('merge docket record records into document records', () => {
   it('should modify case records', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub).toBeCalledTimes(2);
+    expect(putStub).toBeCalledTimes(3);
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
       description: validDocument.documentType,
       index: 1,
@@ -143,8 +157,22 @@ describe('merge docket record records into document records', () => {
       sk: `document|${DOCUMENT_ID_2}`,
       userId: MOCK_CASE.userId,
     });
+    expect(putStub.mock.calls[2][0].Item).toMatchObject({
+      description: 'first record',
+      documentTitle: 'first record',
+      documentType: 'Petition',
+      eventCode: 'P',
+      filedBy: 'Migrated',
+      index: 3,
+      isFileAttached: false,
+      isMinuteEntry: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      sk: `document|${DOCUMENT_ID_3}`,
+      userId: MOCK_CASE.userId,
+    });
 
-    expect(deleteStub).toBeCalledTimes(2);
+    expect(deleteStub).toBeCalledTimes(3);
     expect(deleteStub.mock.calls[0][0].Key).toMatchObject({
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `docket-record|${DOCKET_RECORD_ID_1}`,
@@ -152,6 +180,10 @@ describe('merge docket record records into document records', () => {
     expect(deleteStub.mock.calls[1][0].Key).toMatchObject({
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `docket-record|${DOCKET_RECORD_ID_2}`,
+    });
+    expect(deleteStub.mock.calls[2][0].Key).toMatchObject({
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `docket-record|${DOCKET_RECORD_ID_3}`,
     });
   });
 });
