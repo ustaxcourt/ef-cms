@@ -366,6 +366,9 @@ const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
 const {
+  getCaseIdsByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getCaseIdsByUser');
+const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
@@ -1141,6 +1144,7 @@ const gatewayMethods = {
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDocketNumber,
+  getCaseIdsByUser,
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,

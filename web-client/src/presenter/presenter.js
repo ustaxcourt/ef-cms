@@ -21,6 +21,7 @@ import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTria
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
+import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequence';
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
@@ -457,6 +458,7 @@ export const presenter = {
     blockCaseFromTrialSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
+    canEditContactInformationSequence,
     cancelAddDraftDocumentSequence,
     cancelAddStatisticSequence,
     cancelAndNavigateToCorrespondenceSequence,

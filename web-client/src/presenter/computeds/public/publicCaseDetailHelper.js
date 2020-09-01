@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import { uniqBy } from 'lodash';
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
@@ -11,18 +12,25 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
-  // TODO 636
-  const formattedDocketRecord = publicCase.docketRecord.map(d =>
-    applicationContext.getUtilities().formatDocketRecord(applicationContext, d),
-  );
-
-  const formattedDocketRecordWithDocument = applicationContext
-    .getUtilities()
-    .formatDocketRecordWithDocument(
-      applicationContext,
-      formattedDocketRecord,
-      publicCase.documents,
+  const formattedDocketRecord = publicCase.documents
+    .filter(d => d.isOnDocketRecord)
+    .map(d =>
+      applicationContext
+        .getUtilities()
+        .formatDocketRecord(applicationContext, d),
     );
+
+  // TODO 636 (remove uniqBy after we remove docketRecord from getFormattedCaseDetail)
+  const formattedDocketRecordWithDocument = uniqBy(
+    applicationContext
+      .getUtilities()
+      .formatDocketRecordWithDocument(
+        applicationContext,
+        formattedDocketRecord,
+        publicCase.documents,
+      ),
+    'index',
+  );
 
   let sortedFormattedDocketRecord = applicationContext
     .getUtilities()
