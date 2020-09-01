@@ -7,6 +7,8 @@ import {
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
+const { US_STATES } = applicationContext.getConstants();
+
 describe('createCaseFromPaperAction', () => {
   let errorStub, successStub;
 
@@ -41,7 +43,7 @@ describe('createCaseFromPaperAction', () => {
           petitionFile: {},
           requestForPlaceOfTrialFile: {},
           stinFile: {},
-          trialCities: [{ city: 'Birmingham', state: 'Alabama' }],
+          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
         },
         user: {
@@ -85,7 +87,7 @@ describe('createCaseFromPaperAction', () => {
           ownershipDisclosureFile: {},
           petitionFile: {},
           stinFile: {},
-          trialCities: [{ city: 'Birmingham', state: 'Alabama' }],
+          trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
         },
         user: {

@@ -40,7 +40,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
   );
 
   documentEntity.setWorkItem(workItemEntity);
-  caseToAdd.addDocumentWithoutDocketRecord(documentEntity);
+  caseToAdd.addDocument(documentEntity);
 
   return {
     workItem: workItemEntity,
@@ -182,12 +182,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(
-      applicationForWaiverOfFilingFeeDocumentEntity,
-      {
-        applicationContext,
-      },
-    );
+    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
   }
 
   if (requestForPlaceOfTrialFileId) {
@@ -224,12 +219,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(
-      requestForPlaceOfTrialDocumentEntity,
-      {
-        applicationContext,
-      },
-    );
+    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
   }
 
   if (stinFileId) {
@@ -256,7 +246,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
+    caseToAdd.addDocument(stinDocumentEntity);
   }
 
   if (ownershipDisclosureFileId) {
@@ -283,7 +273,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(odsDocumentEntity);
+    caseToAdd.addDocument(odsDocumentEntity);
   }
 
   await Promise.all([

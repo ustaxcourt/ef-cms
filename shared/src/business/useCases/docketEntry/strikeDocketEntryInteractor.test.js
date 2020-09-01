@@ -13,7 +13,7 @@ describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
 
-  beforeAll(() => {
+  beforeEach(() => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -38,6 +38,7 @@ describe('strikeDocketEntryInteractor', () => {
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           index: 1,
+          isOnDocketRecord: true,
           userId: mockUserId,
         },
       ],
@@ -109,5 +110,26 @@ describe('strikeDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateDocument,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocument.mock.calls[0][0]
+        .document,
+    ).toMatchObject({ strickenAt: expect.anything() });
+  });
+
+  it('should throw an error if the document is not on the docket record', async () => {
+    caseRecord.documents[0].isOnDocketRecord = false;
+
+    await expect(
+      strikeDocketEntryInteractor({
+        applicationContext,
+        docketNumber: caseRecord.docketNumber,
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+      }),
+    ).rejects.toThrow(
+      'Cannot strike a document that is not on the docket record.',
+    );
+    expect(
+      applicationContext.getPersistenceGateway().updateDocument,
+    ).not.toHaveBeenCalled();
   });
 });
