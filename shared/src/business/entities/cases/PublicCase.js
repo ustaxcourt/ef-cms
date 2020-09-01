@@ -15,7 +15,6 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { map } = require('lodash');
 const { PublicContact } = require('./PublicContact');
-const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
 
 /**
@@ -44,10 +43,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     ? new PublicContact(rawCase.contactSecondary)
     : undefined;
 
-  // rawCase.docketRecord is not returned in elasticsearch queries due to _source definition
-  this.docketRecord = (rawCase.docketRecord || []).map(
-    entry => new PublicDocketRecordEntry(entry, { applicationContext }),
-  );
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || [])
     .filter(document => !document.isDraft)
@@ -71,11 +66,6 @@ const publicCaseSchema = {
   docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
     'Auto-generated from docket number and the suffix.',
   ),
-  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    PublicDocketRecordEntry.VALIDATION_RULES,
-  )
-    .required()
-    .description('List of DocketRecord Entities for the case.'),
   documents: joi
     .array()
     .items(PublicDocument.VALIDATION_RULES)
@@ -94,7 +84,6 @@ const sealedCaseSchemaRestricted = {
   docketNumberSuffix: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCKET_NUMBER_SUFFIXES),
   ).optional(),
-  docketRecord: joi.array().max(0),
   documents: joi.array().max(0),
   isSealed: joi.boolean(),
   receivedAt: joi.any().forbidden(),
@@ -108,19 +97,16 @@ joiValidationDecorator(
   {},
 );
 
-const isPrivateDocument = function (document, docketRecord) {
+const isPrivateDocument = function (document) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
   const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
+  const isDocumentOnDocketRecord = document.isOnDocketRecord;
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
-  const isDocumentOnDocketRecord =
-    docketRecord.find(
-      docketEntry => docketEntry.documentId === document.documentId,
-    ) || document.isOnDocketRecord;
 
   const isPublicDocumentType =
     (isStipDecision || isOrder || isCourtIssuedDocument) && !isTranscript;

@@ -110,7 +110,7 @@ const otherFilersCase = {
       title: 'Tax Matters Partner',
     },
   ],
-  preferredTrialCity: 'Washington, District of Columbia',
+  preferredTrialCity: 'Tulsa, Oklahoma', // legacy city
   status: STATUS_TYPES.calendared,
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
@@ -223,6 +223,15 @@ const legacyServedDocumentCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
+const legacyDeadline = {
+  caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
+  createdAt: '2020-01-01T01:02:15.185-04:00',
+  deadlineDate: '2020-01-24T00:00:00.000-05:00',
+  description: 'Due date migrated from Blackstone',
+  docketNumber: otherFilersCase.docketNumber,
+  entityName: 'CaseDeadline',
+};
+
 describe('Case migration journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -252,6 +261,10 @@ describe('Case migration journey', () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       legacyServedDocumentCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case-deadline',
+      legacyDeadline,
     );
 
     await refreshElasticsearchIndex();
@@ -438,5 +451,12 @@ describe('Case migration journey', () => {
             correspondenceCaseUpdatedPetitionerName,
         ),
     ).toBeDefined();
+  });
+
+  it('Docketclerk views case with casedeadlines', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: otherFilersCase.docketNumber,
+    });
+    expect(test.getState('caseDeadlines').length).toBe(1);
   });
 });

@@ -375,6 +375,11 @@
             limit: 1
       allow: 
         - "Practitioner"
+    isUpdatingInformation: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Whether the contact information for the user is being updated."
     section: 
       type: "string"
       flags: 

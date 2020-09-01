@@ -24,9 +24,9 @@ exports.generateChangeOfAddress = async ({
   updatedName,
   user,
 }) => {
-  const userCases = await applicationContext
+  const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUser({
+    .getCaseIdsByUser({
       applicationContext,
       userId: user.userId,
     });
@@ -37,18 +37,26 @@ exports.generateChangeOfAddress = async ({
     message: {
       action: 'user_contact_update_progress',
       completedCases,
-      totalCases: userCases.length,
+      totalCases: docketNumbers.length,
     },
     userId: user.userId,
   });
 
   const updatedCases = [];
-  for (let userCase of userCases) {
+
+  for (let docketNumber of docketNumbers) {
     try {
       let oldData;
       const newData = contactInfo;
 
       const name = updatedName ? updatedName : user.name;
+
+      const userCase = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
 
       let caseEntity = new Case(userCase, { applicationContext });
       const privatePractitioner = caseEntity.privatePractitioners.find(
@@ -238,7 +246,7 @@ exports.generateChangeOfAddress = async ({
       message: {
         action: 'user_contact_update_progress',
         completedCases,
-        totalCases: userCases.length,
+        totalCases: docketNumbers.length,
       },
       userId: user.userId,
     });
