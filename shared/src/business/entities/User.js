@@ -37,7 +37,6 @@ const userDecorator = (obj, rawObj) => {
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.role = rawObj.role || ROLES.petitioner;
-  obj.isUpdatingInformation = rawObj.isUpdatingInformation;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
   if (rawObj.contact) {
@@ -110,12 +109,6 @@ const userValidation = {
   contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
   entityName: JoiValidationConstants.STRING.valid('User').required(),
-  isUpdatingInformation: joi
-    .boolean()
-    .optional()
-    .description(
-      'Whether the contact information for the user is being updated.',
-    ),
   section: JoiValidationConstants.STRING.valid(
     ...SECTIONS,
     ...CHAMBERS_SECTIONS,

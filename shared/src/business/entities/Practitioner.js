@@ -33,6 +33,7 @@ Practitioner.prototype.init = function init(rawUser) {
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus;
+  this.isUpdatingInformation = rawUser.isUpdatingInformation;
   this.alternateEmail = rawUser.alternateEmail;
   this.barNumber = rawUser.barNumber;
   this.birthYear = rawUser.birthYear;
@@ -124,6 +125,12 @@ const practitionerValidation = {
   firstName: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The first name of the practitioner.'),
+  isUpdatingInformation: joi
+    .boolean()
+    .optional()
+    .description(
+      'Whether the contact information for the user is being updated.',
+    ),
   lastName: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The last name of the practitioner.'),
