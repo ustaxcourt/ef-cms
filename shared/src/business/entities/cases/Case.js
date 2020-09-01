@@ -11,6 +11,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_MB,
   MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
@@ -580,7 +581,11 @@ Case.VALIDATION_RULES = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.valid(
+        ...TRIAL_CITY_STRINGS,
+        ...LEGACY_TRIAL_CITY_STRINGS,
+        null,
+      ),
       JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()

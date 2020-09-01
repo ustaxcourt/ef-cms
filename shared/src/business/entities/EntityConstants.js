@@ -647,7 +647,22 @@ const TRIAL_CITIES = {
   SMALL: SMALL_CITIES,
 };
 
+const LEGACY_TRIAL_CITIES = [
+  { city: 'Biloxi', state: 'Mississippi' },
+  { city: 'Huntington', state: 'West Virginia' },
+  { city: 'Maui', state: 'Hawaii' },
+  { city: 'Missoula', state: 'Montana' },
+  { city: 'Newark', state: 'New Jersey' },
+  { city: 'Pasadena', state: 'California' },
+  { city: 'Tulsa', state: 'Oklahoma' },
+  { city: 'Westbury', state: 'New York' },
+];
+
 const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
+const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   location => `${location.city}, ${location.state}`,
 );
 
@@ -1029,6 +1044,7 @@ module.exports = deepFreeze({
   TRIAL_STATUS_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
+  LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
 });
