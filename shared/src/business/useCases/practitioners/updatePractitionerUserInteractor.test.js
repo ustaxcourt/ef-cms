@@ -6,26 +6,26 @@ const {
 } = require('./updatePractitionerUserInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
+jest.mock('../users/generateChangeOfAddress');
 
-const mockUser = {
-  admissionsDate: '2019-03-01T21:40:46.415Z',
-  admissionsStatus: 'Active',
-  barNumber: 'AB1111',
-  birthYear: 2019,
-  email: 'ab@example.com',
-  employer: 'Private',
-  firmName: 'GW Law Offices',
-  firstName: 'Test',
-  lastName: 'Attorney',
-  name: 'Test Attorney',
-  originalBarState: 'Oklahoma',
-  practitionerType: 'Attorney',
-  role: ROLES.privatePractitioner,
-  userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
-};
-
-describe('update practitioner user', () => {
+describe('updatePractitionerUserInteractor', () => {
   let testUser;
+  const mockUser = {
+    admissionsDate: '2019-03-01T21:40:46.415Z',
+    admissionsStatus: 'Active',
+    barNumber: 'AB1111',
+    birthYear: 2019,
+    email: 'ab@example.com',
+    employer: 'Private',
+    firmName: 'GW Law Offices',
+    firstName: 'Test',
+    lastName: 'Attorney',
+    name: 'Test Attorney',
+    originalBarState: 'Oklahoma',
+    practitionerType: 'Attorney',
+    role: ROLES.privatePractitioner,
+    userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
+  };
 
   beforeEach(() => {
     testUser = {
@@ -33,33 +33,27 @@ describe('update practitioner user', () => {
       userId: 'admissionsclerk',
     };
 
-    applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
-    applicationContext
-      .getPersistenceGateway()
-      .updatePractitionerUser.mockResolvedValue(mockUser);
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue(mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUser.mockResolvedValue([]);
+      .updatePractitionerUser.mockResolvedValue(mockUser);
   });
 
-  it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
-    const updatedUser = await updatePractitionerUserInteractor({
-      applicationContext,
-      barNumber: 'AB1111',
-      user: { ...mockUser, barNumber: 'AB2222', email: 'bc@example.com' },
-    });
-    expect(updatedUser).toBeDefined();
-    expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
-        .calls[0][0],
-    ).toMatchObject({ user: mockUser });
+  it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
+    testUser = {
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    };
+
+    await expect(
+      updatePractitionerUserInteractor({
+        applicationContext,
+        user: mockUser,
+      }),
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('throws an error if the barNumber/userId combo passed in does not match the user retrieved from getPractitionerByBarNumber', async () => {
@@ -84,17 +78,20 @@ describe('update practitioner user', () => {
     ).rejects.toThrow('Bar number does not match user data.');
   });
 
-  it('throws unauthorized for a non-internal user', async () => {
-    testUser = {
-      role: ROLES.petitioner,
-      userId: 'petitioner',
-    };
+  it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
+    const updatedUser = await updatePractitionerUserInteractor({
+      applicationContext,
+      barNumber: 'AB1111',
+      user: { ...mockUser, barNumber: 'AB2222', email: 'bc@example.com' },
+    });
 
-    await expect(
-      updatePractitionerUserInteractor({
-        applicationContext,
-        user: mockUser,
-      }),
-    ).rejects.toThrow(UnauthorizedError);
+    expect(updatedUser).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
+        .calls[0][0],
+    ).toMatchObject({ user: mockUser });
   });
 });

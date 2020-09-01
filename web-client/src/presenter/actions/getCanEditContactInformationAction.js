@@ -1,0 +1,22 @@
+import { state } from 'cerebral';
+
+/**
+ * fixme
+ *
+ *
+ * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
+ * @returns {object} continue path for the sequence */
+export const getCanEditContactInformationAction = ({ path, props }) => {
+  const { user } = props;
+
+  if (user.isUpdatingInformation) {
+    return path.no({
+      alertError: {
+        message: 'Update already in progress. Please try again later.',
+        title: 'Update Error',
+      },
+    });
+  }
+
+  return path.yes();
+};
