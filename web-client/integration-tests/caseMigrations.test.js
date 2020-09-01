@@ -110,7 +110,7 @@ const otherFilersCase = {
       title: 'Tax Matters Partner',
     },
   ],
-  preferredTrialCity: 'Washington, District of Columbia',
+  preferredTrialCity: 'Tulsa, Oklahoma', // legacy city
   status: STATUS_TYPES.calendared,
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };

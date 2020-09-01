@@ -72115,6 +72115,14 @@
               - "Spokane, Washington"
               - "Charleston, West Virginia"
               - "Milwaukee, Wisconsin"
+              - "Biloxi, Mississippi"
+              - "Huntington, West Virginia"
+              - "Maui, Hawaii"
+              - "Missoula, Montana"
+              - "Newark, New Jersey"
+              - "Pasadena, California"
+              - "Tulsa, Oklahoma"
+              - "Westbury, New York"
               - null
         - 
           schema: 
