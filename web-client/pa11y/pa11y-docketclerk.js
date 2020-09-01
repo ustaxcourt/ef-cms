@@ -13,6 +13,27 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19',
   {
     actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes: 'checks a11y of seal address button',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/case-information&info=sealed-address-button',
+  },
+  {
+    actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes:
+      'checks a11y of sealed address display for primary and secondary contact',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
+  },
+  {
+    actions: [
       'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
       'click element .usa-radio__label[for=payment-status-paid]',
       'wait for element #petition-payment-method to be visible',
@@ -180,4 +201,5 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/document-view?documentId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/document-view?documentId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
+  'http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
 ];

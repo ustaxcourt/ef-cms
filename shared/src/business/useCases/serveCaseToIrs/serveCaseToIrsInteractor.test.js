@@ -356,6 +356,12 @@ describe('serveCaseToIrsInteractor', () => {
 });
 
 describe('addDocketEntryForPaymentStatus', () => {
+  let user;
+
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
+
   it('adds a docketRecord for a paid petition payment', async () => {
     const caseEntity = new Case(
       {
@@ -365,9 +371,13 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-    await addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+    await addDocketEntryForPaymentStatus({
+      applicationContext,
+      caseEntity,
+      user,
+    });
 
-    const addedDocketRecord = caseEntity.docketRecord.find(
+    const addedDocketRecord = caseEntity.documents.find(
       docketEntry => docketEntry.eventCode === 'FEE',
     );
 
@@ -386,9 +396,13 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-    await addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+    await addDocketEntryForPaymentStatus({
+      applicationContext,
+      caseEntity,
+      user,
+    });
 
-    const addedDocketRecord = caseEntity.docketRecord.find(
+    const addedDocketRecord = caseEntity.documents.find(
       docketEntry => docketEntry.eventCode === 'FEEW',
     );
 
@@ -396,12 +410,12 @@ describe('addDocketEntryForPaymentStatus', () => {
     expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 
-  it('should add a docket entry for all intiially filed documents except for the petition and stin file', async () => {
+  it('should set isOnDocketRecord true for all intially filed documents except for the petition and stin file', async () => {
     const mockCase = {
       ...MOCK_CASE,
-      docketRecord: {},
+      docketRecord: [],
       documents: [
-        ...MOCK_CASE.documents,
+        MOCK_CASE.documents[0],
         {
           createdAt: '2018-11-21T20:49:28.192Z',
           docketNumber: '101-18',
@@ -427,7 +441,6 @@ describe('addDocketEntryForPaymentStatus', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    expect(mockCase.docketRecord).toEqual({});
 
     applicationContext
       .getUseCaseHelpers()
@@ -443,15 +456,19 @@ describe('addDocketEntryForPaymentStatus', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketRecord[0],
-    ).toMatchObject({
-      action: undefined,
-      description: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
-      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      editState: undefined,
-      entityName: 'DocketRecord',
-      eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-      index: 1,
-    });
+        .caseToUpdate.documents,
+    ).toMatchObject([
+      {
+        description: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
+        index: 1,
+        isOnDocketRecord: true,
+      },
+      {
+        description:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
+        index: 2,
+        isOnDocketRecord: true,
+      },
+    ]);
   });
 });

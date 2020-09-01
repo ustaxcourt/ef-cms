@@ -34,6 +34,10 @@ hr {
   max-width: 200px;
 }
 
+.max-width-50 {
+  max-width: 50%;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -1536,4 +1540,17 @@ button.change-scanner-button {
   height: 945px;
   padding: 20px;
   border: 1px solid color($theme-color-base-lighter);
+}
+
+.sealed-address {
+  color: color($theme-color-secondary-dark);
+}
+
+.sealed-contact-icon {
+  position: absolute;
+  margin-left: -20px;
+}
+
+.position-relative {
+  position: relative;
 }

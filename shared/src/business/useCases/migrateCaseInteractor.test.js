@@ -41,6 +41,9 @@ describe('migrateCaseInteractor', () => {
       ...adminUser,
       section: 'admin',
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(undefined);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue({
       name: 'john doe',
@@ -58,9 +61,9 @@ describe('migrateCaseInteractor', () => {
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner1@example.com',
         name: 'Diana Prince',
-        phone: '+1 (215) 128-6587',
+        phone: '128-6587',
         postalCode: '69580',
-        state: 'AR',
+        state: 'WI',
       },
       docketNumber: '00101-00',
       docketRecord: MOCK_CASE.docketRecord,
@@ -104,6 +107,18 @@ describe('migrateCaseInteractor', () => {
         },
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('throws an error case has a trial session id but it cannot be found in persistence', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          trialSessionId: 'cafebabe-b37b-479d-9201-067ec6e335bb',
+        },
+      }),
+    ).rejects.toThrow('Trial Session not found');
   });
 
   it('should pull the current user record from persistence', async () => {
@@ -386,5 +401,61 @@ describe('migrateCaseInteractor', () => {
       ).toHaveBeenCalled();
       expect(createdCases.length).toEqual(1);
     });
+  });
+
+  it("adds the case to a trial session's calendar if the case has a trialSessionId", async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        isCalendared: true,
+        maxCases: 100,
+        sessionType: 'Hybrid',
+        startDate: '2020-08-10',
+        term: 'Summer',
+        termYear: '2020',
+        trialLocation: 'Memphis, Tennessee',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
+      });
+
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+  });
+
+  it('should throw an exception when contacts are invalid', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          contactPrimary: {
+            address1: '64731 Moss Ridge Suite 997',
+            address2: null,
+            address3: null,
+            city: 'Landrychester',
+            contactId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+            country: 'U.S.A.',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Griffith, Moore and Freeman (f.k.a Herring-Benitez)',
+            postalCode: '73301',
+            state: 'TX',
+          },
+          contactSecondary: undefined,
+          partyType:
+            'Partnership (as a partner other than Tax Matters Partner)',
+        },
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
   });
 });

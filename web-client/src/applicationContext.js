@@ -37,6 +37,7 @@ import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConso
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
+import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/archiveCorrespondenceDocumentProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
@@ -79,7 +80,6 @@ import { createPractitionerUserInteractor } from '../../shared/src/proxies/pract
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
-import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
@@ -171,6 +171,7 @@ import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxie
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
 import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents/saveSignedDocumentProxy';
+import { sealCaseContactAddressInteractor } from '../../shared/src/proxies/sealCaseContactAddressProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
@@ -273,6 +274,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,
@@ -295,7 +297,6 @@ const allUseCases = {
   createTrialSessionInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
-  deleteCorrespondenceDocumentInteractor,
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
   deleteTrialSessionInteractor,
@@ -378,6 +379,7 @@ const allUseCases = {
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
   saveSignedDocumentInteractor,
+  sealCaseContactAddressInteractor,
   sealCaseInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,

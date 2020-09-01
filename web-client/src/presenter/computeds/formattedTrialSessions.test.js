@@ -1,4 +1,3 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import {
   filterFormattedSessionsByStatus,
@@ -11,6 +10,11 @@ import {
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+
+const {
+  SESSION_STATUS_GROUPS,
+  USER_ROLES: ROLES,
+} = applicationContext.getConstants();
 
 const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
@@ -415,7 +419,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '4', userId: '4' },
-        sessionStatus: 'New',
+        sessionStatus: SESSION_STATUS_GROUPS.new,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -427,7 +431,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '1', userId: '1' },
-        sessionStatus: 'New',
+        sessionStatus: SESSION_STATUS_GROUPS.new,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -439,7 +443,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         formattedStartDate: '11/25/19',
         judge: { name: '5', userId: '5' },
-        sessionStatus: 'New',
+        sessionStatus: SESSION_STATUS_GROUPS.new,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',

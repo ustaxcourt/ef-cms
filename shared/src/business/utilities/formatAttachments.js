@@ -7,14 +7,22 @@
  * @returns {array} the formatted array of attachment objects
  */
 export const formatAttachments = ({ attachments, caseDetail }) => {
-  const { archivedDocuments = [], correspondence = [], documents } = caseDetail;
+  const {
+    archivedDocuments = [],
+    archivedCorrespondences = [],
+    correspondence = [],
+    documents,
+  } = caseDetail;
 
-  const allDocuments = [...archivedDocuments, ...documents, ...correspondence];
+  const allDocuments = [
+    ...archivedDocuments,
+    ...archivedCorrespondences,
+    ...documents,
+    ...correspondence,
+  ];
 
   const formattedAttachments = attachments.map(({ documentId }) => {
-    const document = allDocuments.find(
-      document => document.documentId === documentId,
-    );
+    const document = allDocuments.find(d => d.documentId === documentId);
 
     if (document) {
       return {

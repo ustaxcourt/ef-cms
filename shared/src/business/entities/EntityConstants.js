@@ -28,6 +28,7 @@ const CHIEF_JUDGE = 'Chief Judge';
 const DOCKET_NUMBER_SUFFIXES = {
   DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS: 'X',
   DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION: 'R',
+  DISCLOSURE: 'D',
   LIEN_LEVY: 'L',
   PASSPORT: 'P',
   SMALL: 'S',
@@ -264,18 +265,22 @@ const MINUTE_ENTRIES_MAP = {
     description:
       'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
     eventCode: 'MINC',
+    documentType: 'Caption of case is amended',
   },
   dockedNumberIsAmended: {
     description:
       'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
     eventCode: 'MIND',
+    documentType: 'Docket Number is amended',
   },
   filingFeePaid: {
     description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
     eventCode: 'FEE',
   },
   filingFeeWaived: {
     description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
     eventCode: 'FEEW',
   },
 };
@@ -387,6 +392,7 @@ const CASE_TYPES_MAP = {
   deficiency: 'Deficiency',
   djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
   djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  disclosure: 'Disclosure',
   innocentSpouse: 'Innocent Spouse',
   interestAbatement: 'Interest Abatement',
   other: 'Other',
@@ -641,7 +647,22 @@ const TRIAL_CITIES = {
   SMALL: SMALL_CITIES,
 };
 
+const LEGACY_TRIAL_CITIES = [
+  { city: 'Biloxi', state: 'Mississippi' },
+  { city: 'Huntington', state: 'West Virginia' },
+  { city: 'Maui', state: 'Hawaii' },
+  { city: 'Missoula', state: 'Montana' },
+  { city: 'Newark', state: 'New Jersey' },
+  { city: 'Pasadena', state: 'California' },
+  { city: 'Tulsa', state: 'Oklahoma' },
+  { city: 'Westbury', state: 'New York' },
+];
+
 const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
+const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   location => `${location.city}, ${location.state}`,
 );
 
@@ -898,6 +919,10 @@ const ALL_DOCUMENT_TYPES = (() => {
     t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
   );
 
+  const minuteEntryTypes = Object.keys(MINUTE_ENTRIES_MAP)
+    .map(t => MINUTE_ENTRIES_MAP[t].documentType)
+    .filter(t => t);
+
   const documentTypes = [
     ...initialTypes,
     ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
@@ -906,6 +931,7 @@ const ALL_DOCUMENT_TYPES = (() => {
     ...COURT_ISSUED_DOCUMENT_TYPES,
     ...signedTypes,
     ...systemGeneratedTypes,
+    ...minuteEntryTypes,
   ];
   return documentTypes.sort();
 })();
@@ -1018,6 +1044,7 @@ module.exports = deepFreeze({
   TRIAL_STATUS_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
+  LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
 });

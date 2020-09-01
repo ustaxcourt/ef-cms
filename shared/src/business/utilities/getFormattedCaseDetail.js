@@ -72,7 +72,9 @@ const formatDocument = (applicationContext, document) => {
 
   result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
 
-  result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
+  result.isUnservable =
+    UNSERVABLE_EVENT_CODES.includes(document.eventCode) ||
+    document.isLegacyServed;
 
   result.isInProgress =
     (!result.isCourtIssuedDocument &&
@@ -82,7 +84,7 @@ const formatDocument = (applicationContext, document) => {
       !result.servedAt &&
       !result.isUnservable);
 
-  result.isNotServedDocument = !result.servedAt;
+  result.isNotServedDocument = !result.servedAt && !result.isLegacyServed;
 
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
@@ -148,7 +150,11 @@ const formatDocketRecordWithDocument = (
     return acc;
   }, {});
 
-  return docketRecords.map(record => {
+  // TODO 636
+  return [
+    ...docketRecords,
+    ...documents.filter(d => d.isOnDocketRecord === true),
+  ].map(record => {
     let formattedDocument;
 
     const { index } = record;

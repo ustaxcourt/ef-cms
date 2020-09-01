@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 const { UserCase } = require('../entities/UserCase');
 
@@ -61,18 +62,21 @@ exports.migrateCaseInteractor = async ({
     },
   );
 
-  for (let privatePractitioner of caseToAdd.privatePractitioners) {
+  for (let casePractitioner of [
+    ...caseToAdd.privatePractitioners,
+    ...caseToAdd.irsPractitioners,
+  ]) {
     const practitioner = await applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber({
         applicationContext,
-        barNumber: privatePractitioner.barNumber,
+        barNumber: casePractitioner.barNumber,
       });
 
     if (practitioner) {
-      privatePractitioner.contact = practitioner.contact;
-      privatePractitioner.name = practitioner.name;
-      privatePractitioner.userId = practitioner.userId;
+      casePractitioner.contact = practitioner.contact;
+      casePractitioner.name = practitioner.name;
+      casePractitioner.userId = practitioner.userId;
 
       const userCaseEntity = new UserCase(caseToAdd);
 
@@ -83,34 +87,36 @@ exports.migrateCaseInteractor = async ({
         userId: practitioner.userId,
       });
     } else {
-      privatePractitioner.userId = applicationContext.getUniqueId();
+      casePractitioner.userId = applicationContext.getUniqueId();
     }
   }
 
-  for (let irsPractitioner of caseToAdd.irsPractitioners) {
-    const practitioner = await applicationContext
+  if (caseToAdd.trialSessionId) {
+    const trialSessionData = await applicationContext
       .getPersistenceGateway()
-      .getPractitionerByBarNumber({
+      .getTrialSessionById({
         applicationContext,
-        barNumber: irsPractitioner.barNumber,
+        trialSessionId: caseToAdd.trialSessionId,
       });
 
-    if (practitioner) {
-      irsPractitioner.contact = practitioner.contact;
-      irsPractitioner.name = practitioner.name;
-      irsPractitioner.userId = practitioner.userId;
-
-      const userCaseEntity = new UserCase(caseToAdd);
-
-      await applicationContext.getPersistenceGateway().associateUserWithCase({
-        applicationContext,
-        docketNumber: caseToAdd.docketNumber,
-        userCase: userCaseEntity.validate().toRawObject(),
-        userId: practitioner.userId,
-      });
-    } else {
-      irsPractitioner.userId = applicationContext.getUniqueId();
+    if (!trialSessionData) {
+      throw new Error(
+        `Trial Session not found with id ${caseToAdd.trialSessionId}`,
+      );
     }
+
+    const trialSessionEntity = new TrialSession(trialSessionData, {
+      applicationContext,
+    });
+
+    trialSessionEntity.addCaseToCalendar(caseToAdd);
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+
+    caseToAdd.setAsCalendared(trialSessionEntity);
   }
 
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
@@ -121,7 +127,7 @@ exports.migrateCaseInteractor = async ({
   });
 
   for (const correspondenceEntity of caseToAdd.correspondence) {
-    await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+    await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
       docketNumber: caseToAdd.docketNumber,

@@ -66,6 +66,16 @@ describe('caseTypeDescriptionHelper', () => {
           description: 'Notice of Determination of Worker Classification',
           type: CASE_TYPES_MAP.workerClassification,
         },
+        {
+          description: 'Notice of Intention to Disclose',
+          type: 'Disclosure1',
+        },
+
+        {
+          description:
+            'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+          type: 'Disclosure2',
+        },
       ],
     });
   });
@@ -89,6 +99,10 @@ describe('caseTypeDescriptionHelper', () => {
         {
           description: 'Declaratory Judgment (Retirement Plan)',
           type: CASE_TYPES_MAP.djRetirementPlan,
+        },
+        {
+          description: 'Disclosure',
+          type: CASE_TYPES_MAP.disclosure,
         },
         {
           description: 'Innocent Spouse',

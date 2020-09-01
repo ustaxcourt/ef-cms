@@ -6,12 +6,20 @@
 * Completed - newest to oldest by Completed date
 
 ## Unread messages
-* When a new message is received, a closed envelope icon is displayed on page refresh (not in real time) next to the Messages link in the header
-* Total number of unread messages is displayed next to the My Messages page title
-* Unread messages are indicated by bold text (Document Title) and a closed envelope icon
 * Messages are considered “read” when the user clicks on the item into the Document Detail page from their My Messages inbox  
+
+**Icon in Header**
+* If any messages are unread in the My Messages Inbox, a envelope icon displays next to Messages in the global header
+* Icon in header displays until there are no unread messages in My Messages inbox
+
+**My Messages Inbox**
+* Total number of unread messages is displayed as part of the Inbox tab label (i.e. Inbox (1))
+* Unread messages are indicated by bold text (Document Title) and a closed envelope icon
+* Total messages in My Messages Inbox displays above the message list table
+
+**Section Messages Inbox**
 * Section Messages inbox does not indicate unread messages with an icon
-* Message count shown on Section Messages should be number of TOTAL messages in box
+* Total messages in Section Messages Inbox displays above the message list table
 
 ## Sent messages
 * Sent messages are visible in the Sent box for 7 days
@@ -31,5 +39,3 @@
 
 ## Message icons
 * If Unread - Bold with blue envelope icon
-* If High Priority - Red exclamation point (not implemented yet)
-* If High Priority and Unread - Red exclamation point and bold (not implemented yet)

@@ -19,6 +19,8 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 
 - Install [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html), which is used to automatically configure AWS.
 
+  - See [Terraform tips & tricks](../terraform.md) for debugging and background information on Terraform.
+
 - Clone this repository.
 
 - Set the `EFCMS_DOMAIN` environment variable to the domain you’ll be hosting EF-CMS at. You may want to set this in your `~/.zshrc` file for ease of use:
@@ -81,7 +83,9 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `COGNITO_SUFFIX` | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_PASS` | Password of your choice used by the Cognito admin user |
   | `SES_DMARC_EMAIL` | Email address used with SES to which aggregate DMARC validations are sent |
-  | `IRS_SUPERUSER_EMAIL` | Email address used to serve all new petitions to the IRS |
+  | `IRS_SUPERUSER_EMAIL_STG` | Email address used to serve all new petitions to the IRS for STG |
+  | `IRS_SUPERUSER_EMAIL_TEST` | Email address used to serve all new petitions to the IRS for TEST |
+  | `IRS_SUPERUSER_EMAIL_PROD` | Email address used to serve all new petitions to the IRS for PROD |
 
 - Run a build in CircleCI.
   - The build may fail the first time, as provisioning new security certificates can take some time (and cause a timeout). See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to common problems.

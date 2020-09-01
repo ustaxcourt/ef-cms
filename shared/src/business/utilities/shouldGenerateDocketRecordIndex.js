@@ -40,33 +40,39 @@ const getIsUnservable = docketRecordEntry =>
  *
  * @param {string} applicationContext the application context
  * @param {string} caseDetail the case detail object
- * @param {string} docketRecordEntry the docket record entry
+ * @param {object} docketRecordEntry the docket record entry
+ * @param {object} documentEntity the document entity
  * @returns {boolean} true if a given entry should have an index applied or false otherwise
  */
-const shouldGenerateDocketRecordIndex = ({ caseDetail, docketRecordEntry }) => {
-  if (!docketRecordEntry || (docketRecordEntry && docketRecordEntry.index)) {
+const shouldGenerateDocketRecordIndex = ({
+  caseDetail,
+  docketRecordEntry,
+  documentEntity,
+}) => {
+  const entityToUse = docketRecordEntry || documentEntity;
+
+  if (!entityToUse || (entityToUse && entityToUse.index)) {
     return false; // an index does not need to be generated
   }
 
-  const isMinuteEntry = getIsMinuteEntry(docketRecordEntry);
-  const isInitialFilingType = getIsInitialFilingType(docketRecordEntry);
-  const isCourtIssued = getIsCourtIssued(docketRecordEntry);
-  const isUnservable = getIsUnservable(docketRecordEntry);
+  const isMinuteEntry = getIsMinuteEntry(entityToUse);
+  const isInitialFilingType = getIsInitialFilingType(entityToUse);
+  const isCourtIssued = getIsCourtIssued(entityToUse);
+  const isUnservable = getIsUnservable(entityToUse);
 
-  if (!isInitialFilingType && !isMinuteEntry && !docketRecordEntry.documentId) {
+  if (!isInitialFilingType && !isMinuteEntry && !entityToUse.documentId) {
     return false;
   }
 
-  const document = getDocumentForEntry(caseDetail, docketRecordEntry);
+  const document =
+    documentEntity || getDocumentForEntry(caseDetail, entityToUse);
 
   if (document && !document.isPaper && !isCourtIssued) {
     return true;
   }
 
   if (isInitialFilingType) {
-    if (
-      docketRecordEntry.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
-    ) {
+    if (entityToUse.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode) {
       return true;
     } else {
       const petitionDocument = caseDetail.documents.find(

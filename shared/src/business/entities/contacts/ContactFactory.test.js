@@ -167,6 +167,148 @@ describe('ContactFactory', () => {
     expect(caseExternal.isValid()).toEqual(false);
   });
 
+  it('defaults isAddressSealed to false when no value is specified', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Jimmy Dean',
+          phone: '4444444444',
+          postalCode: '05198',
+          secondaryName: 'Jimmy Dean',
+          serviceIndicator: 'WHAT',
+          state: 'AK',
+          title: 'Some Title',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estate,
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.contactPrimary.isAddressSealed).toBe(false);
+  });
+
+  it('sets the value of isAddressSealed when a value is specified', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          isAddressSealed: true,
+          name: 'Jimmy Dean',
+          phone: '4444444444',
+          postalCode: '05198',
+          secondaryName: 'Jimmy Dean',
+          serviceIndicator: 'WHAT',
+          state: 'AK',
+          title: 'Some Title',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estate,
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.contactPrimary.isAddressSealed).toBe(true);
+  });
+
+  it('defaults sealedAndUnavailable to false when no value is specified', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Jimmy Dean',
+          phone: '4444444444',
+          postalCode: '05198',
+          secondaryName: 'Jimmy Dean',
+          serviceIndicator: 'WHAT',
+          state: 'AK',
+          title: 'Some Title',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estate,
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.contactPrimary.sealedAndUnavailable).toBe(false);
+  });
+
+  it('sets the value of sealedAndUnavailable when a value is specified', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Jimmy Dean',
+          phone: '4444444444',
+          postalCode: '05198',
+          sealedAndUnavailable: true,
+          secondaryName: 'Jimmy Dean',
+          serviceIndicator: 'WHAT',
+          state: 'AK',
+          title: 'Some Title',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estate,
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.contactPrimary.sealedAndUnavailable).toBe(true);
+  });
+
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
     caseExternal = new CaseExternal(
       {

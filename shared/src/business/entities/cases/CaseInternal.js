@@ -12,9 +12,11 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { Document } = require('../Document');
 const { Statistic } = require('../Statistic');
 
@@ -25,7 +27,8 @@ const { Statistic } = require('../Statistic');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseInternal(rawCase, { applicationContext }) {
+function CaseInternal() {}
+CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -83,6 +86,13 @@ function CaseInternal(rawCase, { applicationContext }) {
       )
     : [];
 
+  this.archivedCorrespondences = Array.isArray(rawCase.archivedCorrespondences)
+    ? rawCase.archivedCorrespondences.map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      )
+    : [];
+
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -94,7 +104,7 @@ function CaseInternal(rawCase, { applicationContext }) {
   });
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
-}
+};
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
   ...Case.VALIDATION_ERROR_MESSAGES,
@@ -135,24 +145,19 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
+    archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
     archivedDocuments: Case.VALIDATION_RULES.archivedDocuments,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
-    caseType: joi
-      .string()
-      .valid(...CASE_TYPES)
-      .required(),
+    caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
     contactPrimary: joi.object().required(),
     contactSecondary: joi.object().optional().allow(null),
-    filingType: joi
-      .string()
-      .valid(
-        ...FILING_TYPES[ROLES.petitioner],
-        ...FILING_TYPES[ROLES.privatePractitioner],
-      )
-      .optional(),
+    filingType: JoiValidationConstants.STRING.valid(
+      ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
+    ).optional(),
     hasVerifiedIrsNotice: joi.boolean().required(),
     irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
-    mailingDate: joi.string().max(25).required(),
+    mailingDate: JoiValidationConstants.STRING.max(25).required(),
     noticeOfAttachments: Case.VALIDATION_RULES.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
       Case.VALIDATION_RULES.orderDesignatingPlaceOfTrial,
@@ -187,10 +192,9 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    partyType: joi
-      .string()
-      .valid(...Object.values(PARTY_TYPES))
-      .required(),
+    partyType: JoiValidationConstants.STRING.valid(
+      ...Object.values(PARTY_TYPES),
+    ).required(),
     petitionFile: joi.object().required(), // object of type File
     petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'petitionFile',
@@ -216,12 +220,11 @@ const paperRequirements = joi
       .conditional('requestForPlaceOfTrialFile', {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
-        then: joi.string().required(),
+        then: JoiValidationConstants.STRING.required(),
       }),
-    procedureType: joi
-      .string()
-      .valid(...PROCEDURE_TYPES)
-      .required(),
+    procedureType: JoiValidationConstants.STRING.valid(
+      ...PROCEDURE_TYPES,
+    ).required(),
     receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
@@ -273,4 +276,4 @@ CaseInternal.prototype.getValidationErrors = function () {
   return validationErrors;
 };
 
-module.exports = { CaseInternal };
+module.exports = { CaseInternal: validEntityDecorator(CaseInternal) };

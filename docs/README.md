@@ -21,6 +21,7 @@ Table of contents:
 | Item | Description
 |------|-------------
 | Diagram | See the [AWS system overview diagram](./images/aws-diagram.png).
+| Testing | See [testing overview](./testing.md).
 | Email | The [email documentation](./architecture/email.md) includes sending domains and information about SPF, DKIM, and DMARC records.
 
 ## Developing EF-CMS on a local developer machine
@@ -31,7 +32,7 @@ Table of contents:
 | API documentation | The API is documented via Swagger, but right now it’s only available when the site is running in Docker. That can be reviewed at [`http://localhost:3000/api/swagger`](http://localhost:3000/api/swagger).
 | HTML style guide | There is an HTML style guide, but right now it’s only available when the site is running in Docker. That can be found at [`http://localhost:1234/style-guide`](http://localhost:1234/style-guide).
 |  Visual style guide | A [visual style guide](style-guide.pdf) — covering typography, colors, icons, buttons, form elements, etc. — is maintained as a PDF.
-| Accessibility testing | Per the requirements of the code review, all work must meet [Section 508 standards](https://www.section508.gov/), per [WCAG 2.0 AA](https://www.w3.org/TR/WCAG20/). The process by which that’s assured by developers is documented in [`ACCESSIBILITY.md`](ACCESSIBILITY.md).
+| Accessibility testing | Per the requirements of the code review, all work must meet [Section 508 standards](https://www.section508.gov/), per [WCAG 2.0 AA](https://www.w3.org/TR/WCAG20/). The process by which that’s assured by developers is documented in [`testing.md`](testing.md#accessibility).
 | Developer Check Lists | Various check lists that can help you out when developing on this project and doing things such as adding a new endpoint or creating a new stack. [`CHECKLISTS.md`](CHECKLISTS.md).
 
 ## Reviewing and accepting changes to EF-CMS
@@ -39,6 +40,8 @@ Table of contents:
 At the end of each sprint, the vendor files a pull request back to the U.S. Tax Court’s repository. The review process used by the Court is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
 
 ## Operating EF-CMS within AWS
+
+The infrastructure for EF-CMS is configured with Terraform — see [Terraform tips & tricks](./terraform.md) for debugging and background information on Terraform.
 
 1. [Initial environment setup](environments/setup.md)
 2. [Continuous release process with CircleCI](environments/release.md)

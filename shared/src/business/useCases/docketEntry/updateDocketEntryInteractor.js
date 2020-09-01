@@ -10,9 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -86,7 +84,10 @@ exports.updateDocketEntryInteractor = async ({
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
+      description: editableFields.documentTitle,
       documentId: primaryDocumentFileId,
+      editState: JSON.stringify(editableFields),
+      isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
@@ -96,24 +97,6 @@ exports.updateDocketEntryInteractor = async ({
     },
     { applicationContext },
   );
-
-  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
-    documentEntity.documentId,
-  );
-
-  const docketRecordEntry = new DocketRecord(
-    {
-      ...existingDocketRecordEntry,
-      description: editableFields.documentTitle,
-      documentId: documentEntity.documentId,
-      editState: JSON.stringify(editableFields),
-      eventCode: documentEntity.eventCode,
-      filingDate: documentEntity.receivedAt,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
 
   if (editableFields.isFileAttached) {
     const { workItem } = documentEntity;

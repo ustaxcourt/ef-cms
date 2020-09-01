@@ -6,7 +6,7 @@ const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '1000kb' }));
+app.use(bodyParser.json({ limit: '1200kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
@@ -28,6 +28,9 @@ const {
 const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
+const {
+  archiveCorrespondenceDocumentLambda,
+} = require('./correspondence/archiveCorrespondenceDocumentLambda');
 const {
   archiveDraftDocumentLambda,
 } = require('./documents/archiveDraftDocumentLambda');
@@ -70,9 +73,6 @@ const {
 const {
   deleteCaseDeadlineLambda,
 } = require('./caseDeadline/deleteCaseDeadlineLambda');
-const {
-  deleteCorrespondenceDocumentLambda,
-} = require('./correspondence/deleteCorrespondenceDocumentLambda');
 const {
   deleteCounselFromCaseLambda,
 } = require('./cases/deleteCounselFromCaseLambda');
@@ -244,6 +244,9 @@ const {
 const {
   saveSignedDocumentLambda,
 } = require('./documents/saveSignedDocumentLambda');
+const {
+  sealCaseContactAddressLambda,
+} = require('./cases/sealCaseContactAddressLambda');
 const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
@@ -515,13 +518,13 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(archiveDraftDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:docketRecordId/strike',
+    '/case-documents/:docketNumber/:documentId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE
   app.delete(
     '/case-documents/:docketNumber/correspondence/:documentId',
-    lambdaWrapper(deleteCorrespondenceDocumentLambda),
+    lambdaWrapper(archiveCorrespondenceDocumentLambda),
   );
 }
 /**
@@ -565,6 +568,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateQcCompleteForTrialLambda),
   );
   app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
+  app.put(
+    '/case-meta/:docketNumber/seal-address/:contactId',
+    lambdaWrapper(sealCaseContactAddressLambda),
+  );
   app.post(
     '/case-meta/:docketNumber/other-statistics',
     lambdaWrapper(updateOtherStatisticsLambda),
