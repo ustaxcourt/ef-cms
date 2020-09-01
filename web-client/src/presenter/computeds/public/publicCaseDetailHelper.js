@@ -11,6 +11,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
+  // TODO 636
   const formattedDocketRecord = publicCase.docketRecord.map(d =>
     applicationContext.getUtilities().formatDocketRecord(applicationContext, d),
   );

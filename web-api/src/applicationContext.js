@@ -858,9 +858,6 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocketRecord,
-} = require('../../shared/src/persistence/dynamo/docketRecord/updateDocketRecord');
-const {
   updateDocument,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocument');
 const {
@@ -1106,7 +1103,6 @@ const gatewayMethods = {
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocketRecord,
     updateDocument,
     updateDocumentProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,

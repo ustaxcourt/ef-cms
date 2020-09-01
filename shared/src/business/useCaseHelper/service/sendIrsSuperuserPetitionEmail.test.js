@@ -28,7 +28,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         contactPrimary: {},
         contactSecondary: {},
         docketNumber: '123-20',
-        docketRecord: [
+        documents: [
           {
             documentId: '35479520-e2d6-4357-b72f-5b46f16a708a',
             index: 0,
@@ -68,7 +68,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketNumber: '123-20',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        docketRecord: [],
+        documents: [],
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -103,7 +103,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           name: 'Carol Baskin',
         },
         docketNumber: '123-20',
-        docketRecord: [],
+        documents: [],
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -146,7 +146,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           name: 'Joe Exotic',
         },
         docketNumber: '123-20',
-        docketRecord: [],
+        documents: [],
         privatePractitioners: [],
       },
       documentEntity: {
@@ -170,7 +170,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           name: 'Joe Exotic',
         },
         docketNumber: '123-20',
-        docketRecord: [],
+        documents: [],
         preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
       },
@@ -195,7 +195,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           name: 'Joe Exotic',
         },
         docketNumber: '123-20',
-        docketRecord: [],
+        documents: [],
         preferredTrialCity: '',
         privatePractitioners: [],
       },
