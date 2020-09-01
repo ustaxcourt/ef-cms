@@ -222,7 +222,7 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
-  result.docketEntries = result.documents
+  result.docketEntries = (result.documents || [])
     .filter(document => document.isOnDocketRecord === true) // TODO 636
     .map(d => formatDocketRecord(applicationContext, d));
 

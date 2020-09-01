@@ -93,6 +93,24 @@ describe('migrateCaseDeadlineInteractor', () => {
       applicationContext.getPersistenceGateway().createCaseDeadline,
     ).toHaveBeenCalled();
     expect(createdCaseDeadlines.length).toEqual(1);
+
+    const secondResult = await migrateCaseDeadlineInteractor({
+      applicationContext,
+      caseDeadlineMetadata: {
+        caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
+        createdAt: '2020-01-01T01:02:15.185-04:00',
+        deadlineDate: '2020-01-24T00:00:00.000-05:00',
+        description: 'Due date migrated from Blackstone',
+        docketNumber: '15925-10',
+        entityName: 'CaseDeadline',
+      },
+    });
+
+    expect(secondResult).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).toHaveBeenCalled();
+    expect(createdCaseDeadlines.length).toEqual(2);
   });
 
   describe('validation', () => {

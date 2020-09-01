@@ -13,6 +13,8 @@ const {
 } = require('./User');
 const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 
+const entityName = 'IrsPractitioner';
+
 /**
  * constructor
  *
@@ -20,7 +22,7 @@ const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
  * @constructor
  */
 function IrsPractitioner() {
-  this.entityName = 'IrsPractitioner';
+  this.entityName = entityName;
 }
 
 IrsPractitioner.prototype.init = function init(rawUser) {
@@ -56,4 +58,7 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-exports.IrsPractitioner = validEntityDecorator(IrsPractitioner);
+module.exports = {
+  IrsPractitioner: validEntityDecorator(IrsPractitioner),
+  entityName,
+};
