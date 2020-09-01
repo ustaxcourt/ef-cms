@@ -162,6 +162,7 @@ describe('merge docket record records into document records', () => {
       documentTitle: 'first record',
       documentType: 'Petition',
       eventCode: 'P',
+      filedBy: 'Migrated',
       index: 3,
       isFileAttached: false,
       isMinuteEntry: true,
