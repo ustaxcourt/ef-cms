@@ -222,7 +222,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
             );
           }
 
-          caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+          caseEntity.addDocument(documentEntity);
 
           if (isAutoServed) {
             documentEntity.setAsServed(servedParties.all);
