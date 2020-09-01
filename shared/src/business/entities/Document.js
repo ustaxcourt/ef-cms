@@ -664,6 +664,11 @@ Document.prototype.isCourtIssued = function () {
   return COURT_ISSUED_DOCUMENT_TYPES.includes(this.documentType);
 };
 
+/**
+ * sets the number of pages for the docket entry
+ *
+ * @param {Number} numberOfPages the number of pages
+ */
 Document.prototype.setNumberOfPages = function (numberOfPages) {
   this.numberOfPages = numberOfPages;
 };
@@ -681,26 +686,23 @@ Document.getFormattedType = function (documentType) {
 };
 
 /**
- * sets the number of pages for the docket entry
- *
- * @param {Number} numberOfPages the number of pages
- */
-Document.prototype.setNumberOfPages = function (numberOfPages) {
-  this.numberOfPages = numberOfPages;
-};
-
-/**
- * strikes this docket record
+ * strikes this docket entry
  *
  * @param {object} obj param
  * @param {string} obj.name user name
  * @param {string} obj.userId user id
  */
 Document.prototype.strikeEntry = function ({ name, userId }) {
-  this.isStricken = true;
-  this.strickenBy = name;
-  this.strickenByUserId = userId;
-  this.strickenAt = createISODateString();
+  if (this.isOnDocketRecord) {
+    this.isStricken = true;
+    this.strickenBy = name;
+    this.strickenByUserId = userId;
+    this.strickenAt = createISODateString();
+  } else {
+    throw new Error(
+      'Cannot strike a document that is not on the docket record.',
+    );
+  }
 };
 
 exports.Document = validEntityDecorator(Document);
