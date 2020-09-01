@@ -4,8 +4,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { isEqual } = require('lodash');
+const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * updateUserContactInformationInteractor
@@ -43,7 +43,9 @@ const updateUserContactInformationInteractor = async ({
     return;
   }
 
-  const userEntity = new User({
+  // TODO: the user could potentially be a IrsPractitioner as well... how do we
+  // figure out which entity to construct?
+  const userEntity = new PrivatePractitioner({
     ...user,
     contact: { ...contactInfo },
   });
