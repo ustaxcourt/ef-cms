@@ -53,7 +53,7 @@ PublicDocument.prototype.init = function init(rawDocument) {
   }
 };
 
-PublicDocument.VALIDATION_RULES = {
+PublicDocument.VALIDATION_RULES = joi.object().keys({
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
@@ -82,7 +82,7 @@ PublicDocument.VALIDATION_RULES = {
     .array()
     .items({ name: JoiValidationConstants.STRING.max(500).required() })
     .optional(),
-};
+});
 
 joiValidationDecorator(PublicDocument, PublicDocument.VALIDATION_RULES, {});
 
