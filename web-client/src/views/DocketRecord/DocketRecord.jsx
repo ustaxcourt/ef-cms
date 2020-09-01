@@ -19,6 +19,10 @@ export const DocketRecord = connect(
     formattedCaseDetail,
     showModal,
   }) {
+    console.log(
+      'formattedCaseDetail',
+      formattedCaseDetail.formattedDocketEntries,
+    );
     return (
       <>
         <DocketRecordHeader />
