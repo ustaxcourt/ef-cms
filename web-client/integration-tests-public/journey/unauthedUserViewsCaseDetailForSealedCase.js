@@ -13,6 +13,6 @@ export const unauthedUserViewsCaseDetailForSealedCase = test => {
     expect(test.getState('caseDetail.sealedDate')).toBeUndefined();
     expect(test.getState('caseDetail.caseCaption')).toBeUndefined();
     expect(test.getState('caseDetail.documents')).toEqual([]);
-    expect(test.getState('caseDetail.docketRecord')).toEqual([]);
+    expect(test.getState('caseDetail.docketEntries')).toEqual([]);
   });
 };

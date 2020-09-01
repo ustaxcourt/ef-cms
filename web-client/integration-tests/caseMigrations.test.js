@@ -193,7 +193,7 @@ const legacyServedDocumentCase = {
   caseCaption: 'The Sixth Migrated Case',
   docketNumber: '156-21',
   docketRecord: [
-    ...MOCK_CASE.docketRecord,
+    ...MOCK_CASE.docketRecord, // TODO 636
     {
       description: 'Answer',
       docketRecordId: 'c48eac57-8249-4e48-a66b-3e23f76fa418',

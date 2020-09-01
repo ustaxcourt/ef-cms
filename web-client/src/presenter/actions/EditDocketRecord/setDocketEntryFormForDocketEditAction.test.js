@@ -24,15 +24,10 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       state: {
         caseDetail: {
           docketNumber: '123-45',
-          docketRecord: [
-            {
-              documentId: '123-abc-123-abc',
-              editState: JSON.stringify(editState),
-            },
-          ],
           documents: [
             {
               documentId: '123-abc-123-abc',
+              editState: JSON.stringify(editState),
               eventCode: 'OPP',
               lodged: true,
             },
