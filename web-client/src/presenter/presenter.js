@@ -400,7 +400,7 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
-import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
+import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
 import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -835,7 +835,7 @@ export const presenter = {
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validateEditIrsPractitionersSequence,
     validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,
