@@ -46,8 +46,11 @@ export const castToISO = (applicationContext, dateString) => {
  */
 export const checkDate = (applicationContext, updatedDateString) => {
   const hasAllDateParts = /.+-.+-.+/;
+
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
+  } else if (dateHasText(updatedDateString)) {
+    updatedDateString = '-1';
   } else {
     if (
       !updatedDateString.includes('undefined') &&
@@ -60,6 +63,16 @@ export const checkDate = (applicationContext, updatedDateString) => {
     }
   }
   return updatedDateString;
+};
+
+const dateHasText = updatedDateString => {
+  const letterMatcher = /[0-9]+$/;
+  const dateParts = updatedDateString.split('-');
+  return (
+    !letterMatcher.test(dateParts[0]) ||
+    !letterMatcher.test(dateParts[1]) ||
+    !letterMatcher.test(dateParts[2])
+  );
 };
 
 /**
@@ -115,6 +128,7 @@ export const getCaseDetailFormWithComputedDatesAction = ({
     applicationContext,
     `${irsYear}-${irsMonth}-${irsDay}`,
   );
+
   form.petitionPaymentDate = checkDate(
     applicationContext,
     `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
