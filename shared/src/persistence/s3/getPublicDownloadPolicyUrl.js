@@ -19,7 +19,11 @@ exports.getPublicDownloadPolicyUrl = ({ applicationContext, documentId }) => {
           return reject(err);
         }
         resolve({
-          url: data,
+          url: applicationContext.documentUrlTranslator({
+            applicationContext,
+            documentUrl: data,
+            useTempBucket: false,
+          }),
         });
       },
     );

@@ -10,13 +10,15 @@ exports.getDownloadPolicyUrl = ({
   documentId,
   useTempBucket,
 }) => {
+  const bucketName = useTempBucket
+    ? applicationContext.getTempDocumentsBucketName()
+    : applicationContext.getDocumentsBucketName();
+
   return new Promise((resolve, reject) => {
     applicationContext.getStorageClient().getSignedUrl(
       'getObject',
       {
-        Bucket: useTempBucket
-          ? applicationContext.getTempDocumentsBucketName()
-          : applicationContext.getDocumentsBucketName(),
+        Bucket: bucketName,
         Expires: 120,
         Key: documentId,
       },
@@ -25,7 +27,11 @@ exports.getDownloadPolicyUrl = ({
           return reject(new Error(err));
         }
         resolve({
-          url: data,
+          url: applicationContext.documentUrlTranslator({
+            applicationContext,
+            documentUrl: data,
+            useTempBucket,
+          }),
         });
       },
     );
