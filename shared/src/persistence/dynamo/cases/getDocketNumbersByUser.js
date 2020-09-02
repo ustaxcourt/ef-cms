@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.getCaseIdsByUser = async ({ applicationContext, userId }) => {
+exports.getDocketNumbersByUser = async ({ applicationContext, userId }) => {
   return (
     await client.query({
       ExpressionAttributeNames: {

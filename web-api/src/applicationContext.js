@@ -366,9 +366,6 @@ const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
 const {
-  getCaseIdsByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getCaseIdsByUser');
-const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
@@ -416,6 +413,9 @@ const {
 const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
+const {
+  getDocketNumbersByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -1144,7 +1144,6 @@ const gatewayMethods = {
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDocketNumber,
-  getCaseIdsByUser,
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
@@ -1152,6 +1151,7 @@ const gatewayMethods = {
   getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getDocketNumbersByUser,
   getDocument,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
