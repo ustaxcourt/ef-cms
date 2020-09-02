@@ -48,7 +48,6 @@ export const DatePickerComponent = ({
   }, [values]);
 
   const splitDate = dateString => {
-    console.log(dateString, 'in component');
     if (dateString.includes('/')) {
       return dateString.split('/');
     } else if (dateString.includes('-')) {
