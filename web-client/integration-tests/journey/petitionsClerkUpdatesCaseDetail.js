@@ -73,21 +73,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2018',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsMonth',
-      value: '',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsDay',
-      value: '24',
-    });
     await test.runSequence('validateCaseDetailSequence');
     expect(test.getState('validationErrors')).toEqual({});
 

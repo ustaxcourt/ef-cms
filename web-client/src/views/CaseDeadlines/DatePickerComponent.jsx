@@ -60,7 +60,7 @@ export const DatePickerComponent = ({
   // inputRef evaluates to undefined when the date value does not match MM/DD/YYY or MM-DD-YYY,
   // which is why we need to get the input element by ID
   useEffect(() => {
-    const input = document.getElementById(`${name}-date`);
+    const input = document.getElementById(`${name}-date`) || inputRef.current;
     input.addEventListener('change', e => {
       if (values) {
         const [month, day, year] = splitDate(e.target.value);
