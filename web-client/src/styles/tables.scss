@@ -434,7 +434,7 @@ table.docket-record {
 
     tr.qc-untouched {
       td {
-        font-weight: bold;
+        font-weight: $font-semibold;
       }
       .fa-star {
         color: color($theme-color-secondary-dark);
