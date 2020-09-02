@@ -1,4 +1,4 @@
-FROM cypress/base:12.16.0
+FROM cypress/base:12.18.3
 
 WORKDIR /home/app/ef-cms
 
@@ -9,6 +9,11 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update && \
   apt-get install -y -t stretch-backports openjdk-11-jdk
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN rm awscliv2.zip
 
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
 RUN unzip sonar-scanner-cli-4.0.0.1744-linux.zip

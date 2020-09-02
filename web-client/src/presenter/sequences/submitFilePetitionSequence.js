@@ -6,6 +6,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -26,6 +27,7 @@ export const submitFilePetitionSequence = [
     success: showProgressSequenceDecorator([
       stopShowValidationAction,
       openFileUploadStatusModalAction,
+      setCaseTypeAction,
       createCaseAction,
       {
         error: [openFileUploadErrorModal],

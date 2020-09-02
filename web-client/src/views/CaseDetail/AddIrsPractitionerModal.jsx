@@ -9,7 +9,8 @@ import classNames from 'classnames';
 export const AddIrsPractitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    caseDetailHelper: state.caseDetailHelper,
+    caseDetailPractitionerSearchHelper:
+      state.caseDetailPractitionerSearchHelper,
     confirmSequence: sequences.associateIrsPractitionerWithCaseSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -18,7 +19,7 @@ export const AddIrsPractitionerModal = connect(
   },
   function AddIrsPractitionerModal({
     cancelSequence,
-    caseDetailHelper,
+    caseDetailPractitionerSearchHelper,
     confirmSequence,
     modal,
     updateModalValueSequence,
@@ -38,22 +39,36 @@ export const AddIrsPractitionerModal = connect(
           <FormGroup errorText={validationErrors.user}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="counsel-matches-legend">
-                {caseDetailHelper.respondentSearchResultsCount} counsel
-                match(es) found
+                {
+                  caseDetailPractitionerSearchHelper.respondentSearchResultsCount
+                }{' '}
+                counsel match(es) found
               </legend>
 
-              {caseDetailHelper.respondentSearchResultsCount === 1 && (
+              {caseDetailPractitionerSearchHelper.respondentSearchResultsCount ===
+                1 && (
                 <span>
-                  {caseDetailHelper.respondentMatchesFormatted[0].name} (
-                  {caseDetailHelper.respondentMatchesFormatted[0].barNumber}
+                  {
+                    caseDetailPractitionerSearchHelper
+                      .respondentMatchesFormatted[0].name
+                  }{' '}
+                  (
+                  {
+                    caseDetailPractitionerSearchHelper
+                      .respondentMatchesFormatted[0].barNumber
+                  }
                   )
                   <br />
-                  {caseDetailHelper.respondentMatchesFormatted[0].cityStateZip}
+                  {
+                    caseDetailPractitionerSearchHelper
+                      .respondentMatchesFormatted[0].cityStateZip
+                  }
                 </span>
               )}
               <div className="respondent-matches">
-                {caseDetailHelper.respondentSearchResultsCount > 1 &&
-                  caseDetailHelper.respondentMatchesFormatted.map(
+                {caseDetailPractitionerSearchHelper.respondentSearchResultsCount >
+                  1 &&
+                  caseDetailPractitionerSearchHelper.respondentMatchesFormatted.map(
                     (counsel, idx) => (
                       <div
                         className={classNames(

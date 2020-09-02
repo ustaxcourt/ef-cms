@@ -12,6 +12,7 @@ import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/n
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -44,6 +45,7 @@ export const submitPetitionFromPaperSequence = [
         success: [
           stopShowValidationAction,
           showProgressSequenceDecorator([
+            setCaseTypeAction,
             createCaseFromPaperAction,
             {
               error: [openFileUploadErrorModal],

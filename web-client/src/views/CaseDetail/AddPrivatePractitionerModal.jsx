@@ -10,7 +10,8 @@ export const AddPrivatePractitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     caseDetail: state.formattedCaseDetail,
-    caseDetailHelper: state.caseDetailHelper,
+    caseDetailPractitionerSearchHelper:
+      state.caseDetailPractitionerSearchHelper,
     confirmSequence: sequences.associatePrivatePractitionerWithCaseSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -20,7 +21,7 @@ export const AddPrivatePractitionerModal = connect(
   function AddPrivatePractitionerModal({
     cancelSequence,
     caseDetail,
-    caseDetailHelper,
+    caseDetailPractitionerSearchHelper,
     confirmSequence,
     modal,
     updateModalValueSequence,
@@ -40,25 +41,36 @@ export const AddPrivatePractitionerModal = connect(
           <FormGroup errorText={validationErrors.user}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="counsel-matches-legend">
-                {caseDetailHelper.practitionerSearchResultsCount} Counsel
-                match(es) found
+                {
+                  caseDetailPractitionerSearchHelper.practitionerSearchResultsCount
+                }{' '}
+                Counsel match(es) found
               </legend>
 
-              {caseDetailHelper.practitionerSearchResultsCount === 1 && (
+              {caseDetailPractitionerSearchHelper.practitionerSearchResultsCount ===
+                1 && (
                 <span>
-                  {caseDetailHelper.practitionerMatchesFormatted[0].name} (
-                  {caseDetailHelper.practitionerMatchesFormatted[0].barNumber}
+                  {
+                    caseDetailPractitionerSearchHelper
+                      .practitionerMatchesFormatted[0].name
+                  }{' '}
+                  (
+                  {
+                    caseDetailPractitionerSearchHelper
+                      .practitionerMatchesFormatted[0].barNumber
+                  }
                   )
                   <br />
                   {
-                    caseDetailHelper.practitionerMatchesFormatted[0]
-                      .cityStateZip
+                    caseDetailPractitionerSearchHelper
+                      .practitionerMatchesFormatted[0].cityStateZip
                   }
                 </span>
               )}
               <div className="practitioner-matches">
-                {caseDetailHelper.practitionerSearchResultsCount > 1 &&
-                  caseDetailHelper.practitionerMatchesFormatted.map(
+                {caseDetailPractitionerSearchHelper.practitionerSearchResultsCount >
+                  1 &&
+                  caseDetailPractitionerSearchHelper.practitionerMatchesFormatted.map(
                     (counsel, idx) => (
                       <div
                         className={classNames(

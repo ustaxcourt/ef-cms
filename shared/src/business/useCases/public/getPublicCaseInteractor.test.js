@@ -1,6 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { cloneDeep } = require('lodash');
 const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
@@ -58,7 +59,6 @@ describe('getPublicCaseInteractor', () => {
 
   it('should return minimal information when the requested case has been sealed', async () => {
     const docketNumber = '102-20';
-
     const result = await getPublicCaseInteractor({
       applicationContext,
       docketNumber,
@@ -67,5 +67,25 @@ describe('getPublicCaseInteractor', () => {
     expect(result).toMatchObject({
       docketNumber: '102-20',
     });
+  });
+
+  it('should return minimal information when the requested case contact address has been sealed', async () => {
+    const docketNumber = '102-20';
+    mockCases[docketNumber] = cloneDeep({
+      ...mockCases['102-20'],
+      sealedDate: undefined,
+    });
+    mockCases[docketNumber].contactPrimary.isAddressSealed = true;
+
+    const result = await getPublicCaseInteractor({
+      applicationContext,
+      docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketNumber,
+    });
+
+    expect(result.contactPrimary.address1).toBeUndefined();
   });
 });
