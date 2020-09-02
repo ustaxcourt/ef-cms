@@ -366,9 +366,6 @@ const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
 const {
-  getCaseIdsByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getCaseIdsByUser');
-const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
@@ -416,6 +413,9 @@ const {
 const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
+const {
+  getDocketNumbersByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -861,9 +861,6 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocketRecord,
-} = require('../../shared/src/persistence/dynamo/docketRecord/updateDocketRecord');
-const {
   updateDocument,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocument');
 const {
@@ -1109,7 +1106,6 @@ const gatewayMethods = {
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocketRecord,
     updateDocument,
     updateDocumentProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,
@@ -1148,7 +1144,6 @@ const gatewayMethods = {
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDocketNumber,
-  getCaseIdsByUser,
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
@@ -1156,6 +1151,7 @@ const gatewayMethods = {
   getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getDocketNumbersByUser,
   getDocument,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,

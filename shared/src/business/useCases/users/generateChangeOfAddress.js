@@ -26,7 +26,7 @@ exports.generateChangeOfAddress = async ({
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getCaseIdsByUser({
+    .getDocketNumbersByUser({
       applicationContext,
       userId: user.userId,
     });
