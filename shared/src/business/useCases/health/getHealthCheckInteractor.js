@@ -74,38 +74,56 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   }
 };
 
-const getS3DocumentsBucketStatus = async ({ applicationContext }) => {
-  const documentsBucketParams = {
-    Bucket: applicationContext.environment.documentsBucketName,
+const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
+  const bucketNameParams = {
+    Bucket: bucketName,
     MaxKeys: 1,
   };
 
   try {
     await applicationContext
       .getStorageClient()
-      .listObjects(documentsBucketParams)
+      .listObjectsV2(bucketNameParams)
       .promise();
+
     return true;
   } catch (e) {
     return false;
   }
 };
 
-const getS3TempDocumentsBucketStatus = async ({ applicationContext }) => {
-  const tempDocumentsBucketParams = {
-    Bucket: applicationContext.environment.tempDocumentsBucketName,
-    MaxKeys: 1,
-  };
+const getS3BucketStatus = async ({ applicationContext }) => {
+  const efcmsDomain = process.env.EFCMS_DOMAIN;
+  const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-us-east-1`;
+  const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-us-west-1`;
+  const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-us-east-1`;
+  const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-us-west-1`;
+  const appS3Bucket = `app.${efcmsDomain}`;
+  const publicS3Bucket = `${efcmsDomain}`;
+  const publicFailoverS3Bucket = `failover.${efcmsDomain}`;
+  const appFailoverS3Bucket = `app-failover.${efcmsDomain}`;
 
-  try {
-    await applicationContext
-      .getStorageClient()
-      .listObjects(tempDocumentsBucketParams)
-      .promise();
-    return true;
-  } catch (e) {
-    return false;
+  const s3Buckets = [
+    eastS3BucketName,
+    westS3BucketName,
+    eastS3TempBucketName,
+    westS3TempBucketName,
+    appS3Bucket,
+    publicS3Bucket,
+    publicFailoverS3Bucket,
+    appFailoverS3Bucket,
+  ];
+
+  let bucketStatus = {};
+
+  for (const bucket of s3Buckets) {
+    bucketStatus[bucket] = await checkS3BucketsStatus({
+      applicationContext,
+      bucketName: bucket,
+    });
   }
+
+  return bucketStatus;
 };
 
 /**
@@ -126,13 +144,7 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
 
   const dynamsoftStatus = await getDynamsoftStatus({ applicationContext });
 
-  const s3DocumentsBucketStatus = await getS3DocumentsBucketStatus({
-    applicationContext,
-  });
-  const s3TempDocumentsBucketStatus = await getS3TempDocumentsBucketStatus({
-    applicationContext,
-  });
-
+  const s3BucketStatus = await getS3BucketStatus({ applicationContext });
   return {
     dynamo: {
       efcms: dynamoStatus,
@@ -140,7 +152,6 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
     },
     dynamsoft: dynamsoftStatus,
     elasticsearch: elasticSearchStatus,
-    s3DocumentsBucket: s3DocumentsBucketStatus,
-    s3TempDocumentsBucket: s3TempDocumentsBucketStatus,
+    s3Bucket: s3BucketStatus,
   };
 };
