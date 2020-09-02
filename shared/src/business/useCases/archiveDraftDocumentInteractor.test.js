@@ -51,4 +51,55 @@ describe('archiveDraftDocumentInteractor', () => {
       ),
     ).toBeFalsy();
   });
+
+  it('updates work items if there is a workItem found on the document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        documents: [
+          ...MOCK_CASE.documents,
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            docketNumber: '101-20',
+            documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            isOnDocketRecord: false,
+            signedAt: '2019-04-19T17:29:13.120Z',
+            signedByUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3111',
+            signedJudgeName: 'Test Judge',
+            userId: '11181f4d-1e47-423a-8caf-6d2fdc3d3111',
+            workItem: {
+              docketNumber: '101-20',
+              section: 'docket',
+              sentBy: 'Test User',
+              workItemId: '22181f4d-1e47-423a-8caf-6d2fdc3d3122',
+            },
+          },
+        ],
+      });
+
+    await archiveDraftDocumentInteractor({
+      applicationContext,
+      docketNumber: '101-20',
+      documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteSectionOutboxRecord,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteUserOutboxRecord,
+    ).toHaveBeenCalled();
+  });
 });
