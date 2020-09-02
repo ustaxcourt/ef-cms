@@ -330,10 +330,21 @@ const SIGNED_DOCUMENT_TYPES = {
   },
 };
 
-const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = [
-  'Entry of Appearance',
-  'Substitution of Counsel',
+const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
+  {
+    documentType: 'Entry of Appearance',
+    documentTitle: 'Entry of Appearance',
+    eventCode: 'EA',
+  },
+  {
+    documentType: 'Substitution of Counsel',
+    documentTitle: 'Substitution of Counsel',
+    eventCode: 'SOC',
+  },
 ];
+const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(
+  d => d.documentType,
+);
 
 const PAYMENT_STATUS = {
   PAID: 'Paid',
@@ -902,38 +913,35 @@ const ALL_EVENT_CODES = flatten([
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
   .sort();
 
-const ALL_DOCUMENT_TYPES = (() => {
+const ALL_DOCUMENT_TYPES_MAP = (() => {
   const allFilingEvents = flatten([
     ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
     ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
   ]);
-  const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
-  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
-    t => INITIAL_DOCUMENT_TYPES[t].documentType,
-  );
-  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
-    t => SIGNED_DOCUMENT_TYPES[t].documentType,
-  );
-  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
-    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
-  );
-
-  const minuteEntryTypes = Object.keys(MINUTE_ENTRIES_MAP)
-    .map(t => MINUTE_ENTRIES_MAP[t].documentType)
-    .filter(t => t);
+  const filingEventTypes = allFilingEvents;
+  const orderDocTypes = ORDER_TYPES;
+  const initialTypes = Object.values(INITIAL_DOCUMENT_TYPES);
+  const signedTypes = Object.values(SIGNED_DOCUMENT_TYPES);
+  const systemGeneratedTypes = Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES);
+  const minuteEntryTypes = Object.values(MINUTE_ENTRIES_MAP);
 
   const documentTypes = [
     ...initialTypes,
-    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
     ...filingEventTypes,
     ...orderDocTypes,
-    ...COURT_ISSUED_DOCUMENT_TYPES,
+    ...COURT_ISSUED_EVENT_CODES,
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
   ];
-  return documentTypes.sort();
+  return documentTypes;
+})();
+
+const ALL_DOCUMENT_TYPES = (() => {
+  return ALL_DOCUMENT_TYPES_MAP.map(d => d.documentType)
+    .filter(d => d)
+    .sort();
 })();
 
 const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
@@ -950,6 +958,7 @@ module.exports = deepFreeze({
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
   ALL_DOCUMENT_TYPES,
+  ALL_DOCUMENT_TYPES_MAP,
   ALL_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
