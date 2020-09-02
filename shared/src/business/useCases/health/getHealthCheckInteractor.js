@@ -43,8 +43,19 @@ const getDeployDynamoStatus = async ({ applicationContext }) => {
     return false;
   }
 };
+const handleAxiosTimeout = axios => {
+  let source = axios.CancelToken.source();
+  setTimeout(() => {
+    source.cancel();
+  }, 1000);
+  return source;
+};
 
 const getDynamsoftStatus = async ({ applicationContext }) => {
+  const axios = applicationContext.getHttpClient();
+
+  let source = handleAxiosTimeout(axios);
+
   try {
     const efcmsDomain = process.env.EFCMS_DOMAIN;
     await Promise.all(
@@ -53,7 +64,9 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
         `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js`,
         `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.install.js`,
         `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.css`,
-      ].map(applicationContext.getHttpClient().get),
+      ].map(url => {
+        return axios.get(url, { cancelToken: source.token, timeout: 1000 });
+      }),
     );
     return true;
   } catch (e) {
