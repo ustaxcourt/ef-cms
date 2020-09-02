@@ -76,6 +76,14 @@
           name: "max"
           args: 
             limit: 100
+    isAddressSealed: 
+      type: "boolean"
+      flags: 
+        presence: "required"
+    sealedAndUnavailable: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     name: 
       type: "string"
       flags: 

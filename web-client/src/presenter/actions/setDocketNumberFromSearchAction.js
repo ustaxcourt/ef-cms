@@ -1,13 +1,20 @@
 import { state } from 'cerebral';
-const docketNumberMatcher = /^(\d{3,5}-\d{2})[XPRWSL]?L?(.*)$/i;
 
-export const trimDocketNumberSearch = searchTerm => {
-  if (!searchTerm) {
+export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
+  if (searchTerm === '') {
     return '';
   }
+
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  const suffixes = Object.values(DOCKET_NUMBER_SUFFIXES).join('|');
+  // eslint-disable-next-line security/detect-non-literal-regexp
+  const docketNumberMatcher = new RegExp(
+    `^(\\d{3,6}-\\d{2})(${suffixes})?$`,
+    'i',
+  );
+
   const match = docketNumberMatcher.exec(searchTerm.trim());
-  const docketNumber =
-    match && match.length > 1 && match[2] === '' ? match[1] : searchTerm;
+  const docketNumber = match && match.length > 1 ? match[1] : searchTerm;
   return docketNumber;
 };
 
@@ -18,9 +25,12 @@ export const trimDocketNumberSearch = searchTerm => {
  * @param {object} providers.get the cerebral get function used for getting state.header.searchTerm
  * @returns {object} the docketNumber provided in the search term
  */
-export const setDocketNumberFromSearchAction = ({ get }) => {
+export const setDocketNumberFromSearchAction = ({
+  applicationContext,
+  get,
+}) => {
   const searchTerm = get(state.header.searchTerm);
-  const docketNumber = trimDocketNumberSearch(searchTerm);
+  const docketNumber = trimDocketNumberSearch(applicationContext, searchTerm);
   return {
     docketNumber,
   };

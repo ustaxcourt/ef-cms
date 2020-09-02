@@ -7,9 +7,13 @@ import classNames from 'classnames';
 
 export const OtherFilerInformation = connect(
   {
+    caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
   },
-  function OtherFilerInformation({ formattedCaseDetail }) {
+  function OtherFilerInformation({
+    caseInformationHelper,
+    formattedCaseDetail,
+  }) {
     return (
       <>
         {formattedCaseDetail.otherFilers.length === 0 && (
@@ -44,6 +48,9 @@ export const OtherFilerInformation = connect(
                                     nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
                                     noMargin={true}
                                     showEmail={true}
+                                    showSealAddressLink={
+                                      caseInformationHelper.showSealAddressLink
+                                    }
                                   />
                                 </address>
                                 {otherFiler.serviceIndicator && (
@@ -77,6 +84,9 @@ export const OtherFilerInformation = connect(
                                     contact={otherFiler}
                                     nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
                                     showEmail={true}
+                                    showSealAddressLink={
+                                      caseInformationHelper.showSealAddressLink
+                                    }
                                   />
                                 </address>
                                 {otherFiler.serviceIndicator && (
@@ -96,7 +106,7 @@ export const OtherFilerInformation = connect(
                   </div>
                 </div>
               </div>
-            </div>{' '}
+            </div>
           </div>
         )}
       </>

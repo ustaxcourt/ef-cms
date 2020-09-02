@@ -13,6 +13,7 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseDetailPractitionerSearchHelper } from './computeds/caseDetailPractitionerSearchHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
@@ -108,6 +109,7 @@ const helpers = {
   caseDetailEditHelper,
   caseDetailHeaderHelper,
   caseDetailHelper,
+  caseDetailPractitionerSearchHelper,
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
