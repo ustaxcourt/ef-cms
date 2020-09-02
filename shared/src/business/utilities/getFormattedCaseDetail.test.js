@@ -646,6 +646,62 @@ describe('formatDocument', () => {
       servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
     });
   });
+
+  describe('isInProgress', () => {
+    it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'A', //not unservable, not court-issued
+        isFileAttached: false,
+        isMinuteEntry: false,
+      });
+      expect(results.isInProgress).toEqual(true);
+    });
+
+    it('should return isInProgress true if the document has a file attached and is not served or unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'A', //not unservable
+        isFileAttached: true,
+      });
+      expect(results.isInProgress).toEqual(true);
+    });
+
+    it('should return isInProgress false if the document is court-issued', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'O', //court-issued
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document has a file attached and is served', () => {
+      const results = formatDocument(applicationContext, {
+        isFileAttached: true,
+        servedAt: '2019-03-01T21:40:46.415Z',
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document has a file attached and is unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'CTRA', //unservable
+        isFileAttached: true,
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document is a minute entry', () => {
+      const results = formatDocument(applicationContext, {
+        isMinuteEntry: true,
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document is unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'CTRA', //unservable
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+  });
 });
 
 describe('getFilingsAndProceedings', () => {

@@ -350,6 +350,7 @@ module.exports = {
           'unprioritize',
           'unprocessable',
           'unsanitized',
+          'unservable',
           'unset',
           'unsets',
           'unsetting',
