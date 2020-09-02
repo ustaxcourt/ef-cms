@@ -346,7 +346,6 @@ const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
-const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
@@ -382,8 +381,6 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  * Always put "higher priority routes" before their competition.
  * Consider grouping the routes by request method.
  */
-
-app.get('/health', lambdaWrapper(getHealthCheckLambda));
 
 /**
  * api

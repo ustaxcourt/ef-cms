@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
 const AWS = require('aws-sdk');
+const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -1317,6 +1318,7 @@ module.exports = appContextUser => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,

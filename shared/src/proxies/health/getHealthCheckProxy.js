@@ -3,11 +3,12 @@ const { get } = require('../requests');
 /**
  * getHealthCheckInteractor
  *
- * fixme
+ * @param {object} providers.applicationContext the application context
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.getHealthCheckInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/health',
+    endpoint: '/public-api/health',
   });
 };
