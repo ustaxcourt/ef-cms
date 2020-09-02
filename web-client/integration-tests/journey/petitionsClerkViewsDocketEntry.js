@@ -13,8 +13,8 @@ export const petitionsClerkViewsDocketEntry = (test, draftOrderIndex) => {
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const docketRecordEntry = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => (entry.document.documentId = documentId),
+    const docketRecordEntry = caseDetailFormatted.formattedDocketEntries.find(
+      entry => (entry.documentId = documentId),
     );
 
     expect(docketRecordEntry.document).toBeTruthy();

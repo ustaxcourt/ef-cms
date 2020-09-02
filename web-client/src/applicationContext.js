@@ -97,12 +97,12 @@ import { formatAttachments } from '../../shared/src/business/utilities/formatAtt
 import {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
+  formatDocketEntry,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
@@ -552,7 +552,7 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
-      formatDocketRecordWithDocument,
+      formatDocketEntry,
       formatDocument,
       formatDollars,
       formatJudgeName,
@@ -572,7 +572,7 @@ const applicationContext = {
       isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
-      sortDocketRecords,
+      sortDocketEntries,
     };
   },
   initHoneybadger: async () => {
