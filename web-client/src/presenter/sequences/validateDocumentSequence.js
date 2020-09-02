@@ -3,16 +3,16 @@ import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateRec
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
+import { validateDocumentAction } from '../actions/EditDocketRecordEntry/validateDocumentAction';
 
-export const validateDocketRecordSequence = [
+export const validateDocumentSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
       computeFilingFormDateAction,
       computeDateReceivedAction,
-      validateDocketRecordAction,
+      validateDocumentAction,
       {
         error: [setValidationErrorsByFlagAction],
         success: [clearAlertsAction],
