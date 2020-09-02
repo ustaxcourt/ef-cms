@@ -3,12 +3,17 @@ const {
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITH_SECONDARY_OTHERS,
+} = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getCaseInteractor } = require('./getCaseInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
 const { documents } = MOCK_CASE;
+const { cloneDeep } = require('lodash');
 
 const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
+const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
 const petitionerId = '273f5d19-3707-41c0-bccc-449c52dfe54e';
 const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
 const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
@@ -148,6 +153,72 @@ describe('Get case', () => {
         docketNumber: '00101-00',
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  describe('access to contact information which is sealed', () => {
+    beforeAll(() => {
+      const mockCaseWithSealed = cloneDeep(MOCK_CASE_WITH_SECONDARY_OTHERS);
+      // seal ALL addresses present on this mock case
+      mockCaseWithSealed.contactPrimary.isAddressSealed = true;
+      mockCaseWithSealed.contactSecondary.isAddressSealed = true;
+      mockCaseWithSealed.otherFilers.forEach(
+        filer => (filer.isAddressSealed = true),
+      );
+      mockCaseWithSealed.otherPetitioners.forEach(
+        filer => (filer.isAddressSealed = true),
+      );
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
+    });
+
+    it(`allows unfiltered view of sealed contact addresses if role is ${ROLES.docket_clerk}`, async () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        name: 'Security Officer Worf',
+        role: ROLES.docketClerk,
+        userId: docketClerkId,
+      });
+      const result = await getCaseInteractor({
+        applicationContext,
+        docketNumber: '101-18',
+      });
+      expect(result.contactPrimary.city).toBeDefined();
+      expect(result.contactPrimary.sealedAndUnavailable).toBe(false);
+      expect(result.contactSecondary.city).toBeDefined();
+      expect(result.contactSecondary.sealedAndUnavailable).toBe(false);
+      result.otherFilers.forEach(filer => {
+        expect(filer.city).toBeDefined();
+        expect(filer.sealedAndUnavailable).toBe(false);
+      });
+      result.otherPetitioners.forEach(filer => {
+        expect(filer.city).toBeDefined();
+        expect(filer.sealedAndUnavailable).toBe(false);
+      });
+    });
+
+    it('returns limited contact address information if address is sealed and requesting user is not docket clerk', async () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        name: 'Reginald Barclay',
+        role: ROLES.petitioner,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
+      const result = await getCaseInteractor({
+        applicationContext,
+        docketNumber: '101-18',
+      });
+      expect(result.contactPrimary.city).toBeUndefined();
+      expect(result.contactPrimary.sealedAndUnavailable).toBe(true);
+      expect(result.contactSecondary.city).toBeUndefined();
+      expect(result.contactSecondary.sealedAndUnavailable).toBe(true);
+      result.otherFilers.forEach(filer => {
+        expect(filer.city).toBeUndefined();
+        expect(filer.sealedAndUnavailable).toBe(true);
+      });
+      result.otherPetitioners.forEach(filer => {
+        expect(filer.city).toBeUndefined();
+        expect(filer.sealedAndUnavailable).toBe(true);
+      });
+    });
   });
 
   describe('permissions-filtered access', () => {
