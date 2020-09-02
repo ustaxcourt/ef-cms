@@ -462,6 +462,9 @@ const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
 const {
+  getHealthCheckInteractor,
+} = require('../../shared/src/business/useCases/health/getHealthCheckInteractor');
+const {
   getInboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForSectionInteractor');
 const {
@@ -1483,6 +1486,7 @@ module.exports = appContextUser => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
