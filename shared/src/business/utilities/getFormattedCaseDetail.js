@@ -64,9 +64,9 @@ const formatDocument = (applicationContext, document) => {
   result.isPetition =
     result.documentType === 'Petition' || result.eventCode === 'P';
 
-  result.isCourtIssuedDocument =
-    !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
-    result.documentType === 'Stipulated Decision';
+  result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
+    result.documentType,
+  );
 
   const qcWorkItem = result.workItem;
 
@@ -79,6 +79,7 @@ const formatDocument = (applicationContext, document) => {
   result.isInProgress =
     (!result.isCourtIssuedDocument &&
       result.isFileAttached === false &&
+      !result.isMinuteEntry &&
       !result.isUnservable) ||
     (result.isFileAttached === true &&
       !result.servedAt &&
