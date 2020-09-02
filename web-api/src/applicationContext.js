@@ -1024,7 +1024,21 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   return dynamoClientCache[type];
 };
 
+const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+  if (!dynamoCache[type]) {
+    dynamoCache[type] = new DynamoDB({
+      endpoint: useMasterRegion
+        ? environment.masterDynamoDbEndpoint
+        : environment.dynamoDbEndpoint,
+      region: useMasterRegion ? environment.masterRegion : environment.region,
+    });
+  }
+  return dynamoCache[type];
+};
+
 let dynamoClientCache = {};
+let dynamoCache = {};
 let s3Cache;
 let sesCache;
 let searchClientCache;
@@ -1265,6 +1279,7 @@ module.exports = appContextUser => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
+    getDynamoClient,
     getEmailClient: () => {
       if (process.env.CI) {
         return {
