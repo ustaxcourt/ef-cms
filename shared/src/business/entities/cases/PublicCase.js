@@ -48,6 +48,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+
+  this.docketEntries = this.documents.filter(
+    document => document.isOnDocketRecord,
+  );
 };
 
 PublicCase.validationName = 'PublicCase';

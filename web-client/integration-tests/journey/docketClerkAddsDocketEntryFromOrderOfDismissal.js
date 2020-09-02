@@ -77,13 +77,13 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => entry.document && entry.document.documentId === documentId,
+    const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
+      entry => entry && entry.documentId === documentId,
     );
 
     expect(newDocketEntry).toBeTruthy();
     expect(
-      `${newDocketEntry.document.documentTitle} ${newDocketEntry.record.filingsAndProceedings}`,
+      `${newDocketEntry.documentTitle} ${newDocketEntry.filingsAndProceedings}`,
     ).toEqual(
       'Order of Dismissal Entered, Judge Buch for Something (Attachment(s))',
     );

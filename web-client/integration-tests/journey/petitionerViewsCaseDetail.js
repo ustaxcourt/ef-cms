@@ -43,8 +43,8 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
       ]),
     );
 
-    const rqtDocument = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => entry.record.eventCode === 'RQT',
+    const rqtDocument = caseDetailFormatted.formattedDocketEntries.find(
+      entry => entry.eventCode === 'RQT',
     );
     expect(rqtDocument).toBeTruthy();
 

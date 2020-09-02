@@ -7,8 +7,8 @@ export const messageModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const {
     correspondence,
-    docketRecordWithDocument,
     draftDocuments,
+    formattedDocketEntries,
   } = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({ applicationContext, caseDetail });
@@ -25,14 +25,14 @@ export const messageModalHelper = (get, applicationContext) => {
     currentAttachmentCount === 0 || screenMetadata.showAddDocumentForm;
 
   const documents = [];
-  docketRecordWithDocument.forEach(entry => {
-    if (entry.document) {
+  formattedDocketEntries.forEach(entry => {
+    if (entry) {
       const document = caseDetail.documents.find(
-        item => item.documentId === entry.document.documentId,
+        item => item.documentId === entry.documentId,
       );
 
       if (document.isFileAttached) {
-        documents.push(entry.document);
+        documents.push(entry);
       }
     }
   });
