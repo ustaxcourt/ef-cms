@@ -97,11 +97,11 @@ const formatDocument = (applicationContext, document) => {
   return result;
 };
 
-const formatDocketRecord = (applicationContext, docketRecord) => {
-  const result = cloneDeep(docketRecord);
+const formatDocketRecord = (applicationContext, document) => {
+  const result = cloneDeep(document);
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYY');
+    .formatDateString(result.filingDate, 'MMDDYY'); //TODO 636 - docket entry createdAtFormatted uses filingDate while document uses createdAt
   return result;
 };
 
@@ -140,54 +140,38 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
   return result;
 };
 
-const formatDocketRecordWithDocument = (
-  applicationContext,
-  docketRecords,
-  documents = [],
-) => {
-  const documentMap = documents.reduce((acc, document) => {
-    acc[document.documentId] = document;
-    return acc;
-  }, {});
+const formatDocketRecordWithDocument = (applicationContext, docketEntries) => {
+  return docketEntries
+    .filter(d => d.isOnDocketRecord === true)
+    .map(record => {
+      let formattedDocument;
 
-  // TODO 636
-  return [
-    ...docketRecords,
-    ...documents.filter(d => d.isOnDocketRecord === true),
-  ].map(record => {
-    let formattedDocument;
+      const { index } = record;
 
-    const { index } = record;
+      if (record.documentId) {
+        formattedDocument = formatDocument(applicationContext, record);
 
-    if (record.documentId && documentMap[record.documentId]) {
-      formattedDocument = formatDocument(
-        applicationContext,
-        documentMap[record.documentId],
-      );
+        if (
+          formattedDocument.isCourtIssuedDocument &&
+          !formattedDocument.servedAt &&
+          !formattedDocument.isUnservable
+        ) {
+          record.createdAtFormatted = undefined;
+        }
 
-      if (
-        formattedDocument.isCourtIssuedDocument &&
-        !formattedDocument.servedAt &&
-        !formattedDocument.isUnservable
-      ) {
-        record.createdAtFormatted = undefined;
+        record.isAvailableToUser = documentMeetsAgeRequirements(record);
+
+        record.filingsAndProceedings = getFilingsAndProceedings(
+          formattedDocument,
+        );
+
+        if (formattedDocument.additionalInfo) {
+          record.description += ` ${formattedDocument.additionalInfo}`;
+        }
       }
 
-      record.isAvailableToUser = documentMeetsAgeRequirements(
-        documentMap[record.documentId],
-      );
-
-      record.filingsAndProceedings = getFilingsAndProceedings(
-        formattedDocument,
-      );
-
-      if (formattedDocument.additionalInfo) {
-        record.description += ` ${formattedDocument.additionalInfo}`;
-      }
-    }
-
-    return { document: formattedDocument, index, record };
-  });
+      return { document: formattedDocument, index, record };
+    });
 };
 
 const getFilingsAndProceedings = formattedDocument => {
@@ -238,16 +222,14 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
-  if (result.docketRecord) {
-    result.docketRecord = result.docketRecord.map(d =>
-      formatDocketRecord(applicationContext, d),
-    );
-    result.docketRecordWithDocument = formatDocketRecordWithDocument(
-      applicationContext,
-      result.docketRecord,
-      result.documents,
-    );
-  }
+  result.docketEntries = (result.documents || [])
+    .filter(document => document.isOnDocketRecord === true) // TODO 636
+    .map(d => formatDocketRecord(applicationContext, d));
+
+  result.docketRecordWithDocument = formatDocketRecordWithDocument(
+    applicationContext,
+    result.docketEntries,
+  );
 
   result.pendingItemsDocketEntries = result.docketRecordWithDocument.filter(
     entry => entry.document && entry.document.pending,

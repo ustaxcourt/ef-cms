@@ -10,7 +10,7 @@ const { DocketRecord } = require('../entities/DocketRecord');
  */
 exports.validateDocketRecordInteractor = ({
   applicationContext,
-  docketRecord,
+  docketRecord, // TODO 636
 }) => {
   const errors = new DocketRecord(docketRecord, {
     applicationContext,
