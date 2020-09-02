@@ -8,10 +8,7 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getHealthCheckLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return {
-      stuff: true,
-    };
-    // return await applicationContext.getUseCases().getAppHealthInteractor({
-    //   applicationContext,
-    // });
+    return await applicationContext.getUseCases().getHealthCheckInteractor({
+      applicationContext,
+    });
   });
