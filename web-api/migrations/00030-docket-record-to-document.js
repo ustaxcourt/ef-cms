@@ -3,16 +3,10 @@ const {
   aggregateCaseItems,
 } = require('../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
 const {
-  INITIAL_DOCUMENT_TYPES,
-  MINUTE_ENTRIES_MAP,
+  ALL_DOCUMENT_TYPES_MAP,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { Document } = require('../../shared/src/business/entities/Document');
 const { isCaseRecord, upGenerator } = require('./utilities');
-
-const documentTypesMap = [
-  ...Object.values(MINUTE_ENTRIES_MAP),
-  ...Object.values(INITIAL_DOCUMENT_TYPES),
-];
 
 const applicationContext = createApplicationContext({});
 
@@ -76,7 +70,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
         );
 
         if (!caseDocument) {
-          const { documentType } = documentTypesMap.find(
+          const { documentType } = ALL_DOCUMENT_TYPES_MAP.find(
             m => m.eventCode === docketEntry.eventCode,
           );
 
@@ -91,6 +85,9 @@ const mutateRecord = async (item, documentClient, tableName) => {
               isMinuteEntry: true,
               isOnDocketRecord: true,
               processingStatus: 'complete',
+              signedAt: '2020-07-06T17:06:04.552Z',
+              signedByUserId: '7b69a8b5-bcc4-4449-8994-08fda8d342e7',
+              signedJudgeName: 'Chief Judge',
               userId: item.userId,
             },
             { applicationContext },
