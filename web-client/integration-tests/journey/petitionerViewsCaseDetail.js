@@ -34,7 +34,7 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetail.documents.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
-    expect(caseDetailFormatted.documents).toEqual(
+    expect(caseDetailFormatted.formattedDocuments).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ eventCode: 'P' }),
         expect.objectContaining({

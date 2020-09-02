@@ -16,7 +16,7 @@ export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.documents.find(
+    const orderDocument = caseDetailFormatted.formattedDocuments.find(
       doc => doc.documentId === documentId,
     );
 
