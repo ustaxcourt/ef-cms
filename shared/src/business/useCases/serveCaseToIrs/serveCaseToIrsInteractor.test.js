@@ -1,5 +1,6 @@
 const {
   addDocketEntryForPaymentStatus,
+  deleteStinIfAvailable,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
 const {
@@ -470,5 +471,49 @@ describe('addDocketEntryForPaymentStatus', () => {
         isOnDocketRecord: true,
       },
     ]);
+  });
+
+  describe('deleteStinIfAvailable', () => {
+    it('deletes the STIN document from S3', async () => {
+      const caseEntity = {
+        documents: [
+          {
+            documentId: 'document-id-123',
+            documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+          },
+        ],
+      };
+
+      const documentId = await deleteStinIfAvailable({
+        applicationContext,
+        caseEntity,
+      });
+
+      expect(documentId).toEqual('document-id-123');
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3.mock
+          .calls[0][0].key,
+      ).toEqual('document-id-123');
+    });
+
+    it('does not delete the STIN if it is not found in the case', async () => {
+      const caseEntity = {
+        documents: [
+          {
+            documentId: 'document-id-123',
+            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+          },
+        ],
+      };
+
+      await deleteStinIfAvailable({ applicationContext, caseEntity });
+
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      ).not.toHaveBeenCalled();
+    });
   });
 });
