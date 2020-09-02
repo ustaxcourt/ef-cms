@@ -119,4 +119,4 @@ This happened when duplicate API gateways (i.e., `gateway_api_$ENV`) were create
 }
 ```
 
-The fix was to just modify the cognito_authorizer_lambda_$ENV and resave.  We had to add a random console log and save the lambda and it fixed the issue.  Destroying the lambd in the AWS console and then recreating the lambda via terraform might also fix the issue.
+The fix was to just modify the cognito_authorizer_lambda_$ENV and resave.  We had to add a random console log and save the lambda and it fixed the issue.  Destroying the lambda in the AWS console and then recreating the lambda via terraform might also fix the issue.
