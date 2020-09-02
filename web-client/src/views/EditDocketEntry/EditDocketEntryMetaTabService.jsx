@@ -10,7 +10,7 @@ export const EditDocketEntryMetaTabService = connect(
     updateDocketEntryMetaDocumentFormValueSequence:
       sequences.updateDocketEntryMetaDocumentFormValueSequence,
     validationErrors: state.modal.validationErrors,
-    validationSequence: sequences.validateDocketRecordSequence,
+    validationSequence: sequences.validateDocumentSequence,
   },
   function EditDocketEntryMetaTabService({
     form,

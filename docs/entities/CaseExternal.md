@@ -8,6 +8,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Corporation"
         - "Partnership (as the Tax Matters Partner)"
@@ -26,11 +31,21 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     filingType: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Myself"
         - "Myself and my spouse"
@@ -44,6 +59,11 @@
         presence: "required"
     caseType: 
       type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       whens: 
         - 
           ref: 
@@ -126,6 +146,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Conservator"
         - "Corporation"
@@ -191,6 +216,11 @@
             type: "string"
             flags: 
               only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "Fresno, California"
               - "Tallahassee, Florida"
@@ -266,11 +296,23 @@
               - "Spokane, Washington"
               - "Charleston, West Virginia"
               - "Milwaukee, Wisconsin"
+              - "Biloxi, Mississippi"
+              - "Huntington, West Virginia"
+              - "Maui, Hawaii"
+              - "Missoula, Montana"
+              - "Newark, New Jersey"
+              - "Pasadena, California"
+              - "Tulsa, Oklahoma"
+              - "Westbury, New York"
               - null
         - 
           schema: 
             type: "string"
             rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
               - 
                 name: "pattern"
                 args: 
@@ -280,6 +322,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Regular"
         - "Small"

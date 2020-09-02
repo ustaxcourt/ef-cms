@@ -4,8 +4,8 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-UserCaseNote.validationName = 'UserCaseNote';
 
 /**
  * User's Case Note entity
@@ -13,12 +13,17 @@ UserCaseNote.validationName = 'UserCaseNote';
  * @param {object} rawProps the raw case note data
  * @constructor
  */
-function UserCaseNote(rawProps) {
+function UserCaseNote() {
   this.entityName = 'UserCaseNote';
+}
+
+UserCaseNote.prototype.init = function init(rawProps) {
   this.docketNumber = rawProps.docketNumber;
   this.userId = rawProps.userId;
   this.notes = rawProps.notes;
-}
+};
+
+UserCaseNote.validationName = 'UserCaseNote';
 
 UserCaseNote.VALIDATION_ERROR_MESSAGES = {
   notes: 'Add note',
@@ -26,8 +31,8 @@ UserCaseNote.VALIDATION_ERROR_MESSAGES = {
 
 UserCaseNote.schema = joi.object().keys({
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-  entityName: joi.string().valid('UserCaseNote').required(),
-  notes: joi.string().required(),
+  entityName: JoiValidationConstants.STRING.valid('UserCaseNote').required(),
+  notes: JoiValidationConstants.STRING.required(),
   userId: JoiValidationConstants.UUID.required(),
 });
 
@@ -37,4 +42,4 @@ joiValidationDecorator(
   UserCaseNote.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { UserCaseNote };
+module.exports = { UserCaseNote: validEntityDecorator(UserCaseNote) };

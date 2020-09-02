@@ -27,7 +27,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     servedAt,
   } = documentEntity;
 
-  const docketEntry = caseEntity.docketRecord.find(
+  const docketEntry = caseEntity.documents.find(
     entry => entry.documentId === documentId,
   );
 

@@ -30,6 +30,7 @@ const mockCaseDetailBase = {
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
+  documents: [],
   receivedAt: new Date(),
 };
 
@@ -162,36 +163,36 @@ describe('formatCase', () => {
     expect(result.correspondence[0].formattedFilingDate).toEqual('05/21/20');
   });
 
-  it('should format docket records if the case docket record array is set', () => {
+  it('should format docket entries from documents', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
+      documents: [
         {
           createdAt: getDateISO(),
+          documentId: '123',
           index: '1',
+          isOnDocketRecord: true,
         },
       ],
     });
 
-    expect(result.docketRecord[0]).toHaveProperty('createdAtFormatted');
+    expect(result.docketRecordWithDocument[0].document).toHaveProperty(
+      'createdAtFormatted',
+    );
     expect(result).toHaveProperty('docketRecordWithDocument');
   });
 
-  it('should format docket records and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
+  it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
+      documents: [
         {
           createdAt: getDateISO(),
           documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentType: 'Petition',
           filingDate: getDateISO(),
           index: '1',
-        },
-      ],
-      documents: [
-        {
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentType: 'Petition',
+          isOnDocketRecord: true,
         },
       ],
     });
@@ -205,20 +206,16 @@ describe('formatCase', () => {
   it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-      ],
       documents: [
         {
+          createdAt: getDateISO(),
           documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
           documentTitle: 'Order [Judge Name] [Anything]',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
+          filingDate: getDateISO(),
+          index: 1,
+          isOnDocketRecord: true,
           scenario: 'Type B',
         },
       ],
@@ -233,38 +230,23 @@ describe('formatCase', () => {
   it('should return docket entries with pending documents for pendingItemsDocketEntries', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          document: {
-            documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-            documentType: 'Administrative Record',
-            pending: true,
-          },
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-        {
-          createdAt: getDateISO(),
-          document: {
-            documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
-            documentType: 'Administrative Record',
-          },
-          documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-      ],
       documents: [
         {
+          createdAt: getDateISO(),
           documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
           documentType: 'Administrative Record',
+          filingDate: getDateISO(),
+          index: '1',
+          isOnDocketRecord: true,
           pending: true,
         },
         {
+          createdAt: getDateISO(),
           documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
           documentType: 'Administrative Record',
+          filingDate: getDateISO(),
+          index: '2',
+          isOnDocketRecord: true,
         },
       ],
     });
@@ -333,26 +315,21 @@ describe('formatCase', () => {
   it('should apply additional information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          description: 'desc',
-          documentId: 'd-1-2-3',
-          index: '1',
-        },
-      ],
       documents: [
         {
           additionalInfo: 'additional information',
           createdAt: getDateISO(),
+          description: 'desc',
           documentId: 'd-1-2-3',
           documentType: 'Petition',
+          index: '1',
+          isOnDocketRecord: true,
           servedAt: getDateISO(),
         },
       ],
     });
 
-    expect(result.docketRecord[0].description).toEqual(
+    expect(result.docketRecordWithDocument[0].record.description).toEqual(
       'desc additional information',
     );
   });
@@ -360,19 +337,13 @@ describe('formatCase', () => {
   it('should format certificate of service date', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
-          index: '1',
-        },
-      ],
       documents: [
         {
           certificateOfServiceDate: getDateISO(),
           createdAt: getDateISO(),
           documentId: 'd-1-2-3',
           documentType: 'Petition',
+          index: '1',
           servedAt: getDateISO(),
         },
       ],
@@ -673,6 +644,62 @@ describe('formatDocument', () => {
     });
     expect(results).toMatchObject({
       servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+    });
+  });
+
+  describe('isInProgress', () => {
+    it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'A', //not unservable, not court-issued
+        isFileAttached: false,
+        isMinuteEntry: false,
+      });
+      expect(results.isInProgress).toEqual(true);
+    });
+
+    it('should return isInProgress true if the document has a file attached and is not served or unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'A', //not unservable
+        isFileAttached: true,
+      });
+      expect(results.isInProgress).toEqual(true);
+    });
+
+    it('should return isInProgress false if the document is court-issued', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'O', //court-issued
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document has a file attached and is served', () => {
+      const results = formatDocument(applicationContext, {
+        isFileAttached: true,
+        servedAt: '2019-03-01T21:40:46.415Z',
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document has a file attached and is unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'CTRA', //unservable
+        isFileAttached: true,
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document is a minute entry', () => {
+      const results = formatDocument(applicationContext, {
+        isMinuteEntry: true,
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document is unservable', () => {
+      const results = formatDocument(applicationContext, {
+        eventCode: 'CTRA', //unservable
+      });
+      expect(results.isInProgress).toEqual(false);
     });
   });
 });

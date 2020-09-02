@@ -1,21 +1,21 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { validateDocketRecordAction } from './validateDocketRecordAction';
+import { validateDocumentAction } from './validateDocumentAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('validateDocketRecordAction', () => {
+describe('validateDocumentAction', () => {
   let successStub;
   let errorStub;
 
-  let mockDocketRecord;
+  let mockDocument;
 
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
-    mockDocketRecord = {
+    mockDocument = {
       description: 'hello world',
       eventCode: 'HELLO',
       filingDate: '1990-01-01T05:00:00.000Z',
@@ -31,14 +31,14 @@ describe('validateDocketRecordAction', () => {
   it('should call the success path when no errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateDocketRecordInteractor.mockReturnValue(null);
+      .validateDocumentInteractor.mockReturnValue(null);
 
-    await runAction(validateDocketRecordAction, {
+    await runAction(validateDocumentAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockDocketRecord,
+        form: mockDocument,
         screenMetadata: {
           editType: 'NoDocument',
         },
@@ -47,23 +47,23 @@ describe('validateDocketRecordAction', () => {
 
     expect(successStub).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().validateDocketRecordInteractor,
+      applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateDocketRecordInteractor.mockReturnValue({
+      .validateDocumentInteractor.mockReturnValue({
         validationErrors: 'error',
       });
 
-    await runAction(validateDocketRecordAction, {
+    await runAction(validateDocumentAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockDocketRecord,
+        form: mockDocument,
         screenMetadata: {
           editType: 'NoDocument',
         },
@@ -72,26 +72,26 @@ describe('validateDocketRecordAction', () => {
 
     expect(errorStub).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().validateDocketRecordInteractor,
+      applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found with a document', async () => {
     applicationContext
       .getUseCases()
-      .validateDocketRecordInteractor.mockReturnValue(null);
+      .validateDocumentInteractor.mockReturnValue(null);
     applicationContext
       .getUseCases()
       .validateDocketEntryInteractor.mockReturnValue({
         validationErrors: 'error',
       });
 
-    await runAction(validateDocketRecordAction, {
+    await runAction(validateDocumentAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockDocketRecord,
+        form: mockDocument,
         screenMetadata: {
           editType: 'Document',
         },
@@ -99,7 +99,7 @@ describe('validateDocketRecordAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validateDocketRecordInteractor,
+      applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validateDocketEntryInteractor,
@@ -110,17 +110,17 @@ describe('validateDocketRecordAction', () => {
   it('should call the success path when no errors are found with a document', async () => {
     applicationContext
       .getUseCases()
-      .validateDocketRecordInteractor.mockReturnValue(null);
+      .validateDocumentInteractor.mockReturnValue(null);
     applicationContext
       .getUseCases()
       .validateDocketEntryInteractor.mockReturnValue(null);
 
-    await runAction(validateDocketRecordAction, {
+    await runAction(validateDocumentAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockDocketRecord,
+        form: mockDocument,
         screenMetadata: {
           editType: 'Document',
         },
@@ -132,24 +132,24 @@ describe('validateDocketRecordAction', () => {
       applicationContext.getUseCases().validateDocketEntryInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().validateDocketRecordInteractor,
+      applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
   });
 
   it('should call the success path when no errors are found with a court-issued document', async () => {
     applicationContext
       .getUseCases()
-      .validateDocketRecordInteractor.mockReturnValue(null);
+      .validateDocumentInteractor.mockReturnValue(null);
     applicationContext
       .getUseCases()
       .validateCourtIssuedDocketEntryInteractor.mockReturnValue(null);
 
-    await runAction(validateDocketRecordAction, {
+    await runAction(validateDocumentAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockDocketRecord,
+        form: mockDocument,
         screenMetadata: {
           editType: 'CourtIssued',
         },
@@ -161,26 +161,26 @@ describe('validateDocketRecordAction', () => {
       applicationContext.getUseCases().validateCourtIssuedDocketEntryInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().validateDocketRecordInteractor,
+      applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found with a court-issued document', async () => {
     applicationContext
       .getUseCases()
-      .validateDocketRecordInteractor.mockReturnValue(null);
+      .validateDocumentInteractor.mockReturnValue(null);
     applicationContext
       .getUseCases()
       .validateCourtIssuedDocketEntryInteractor.mockReturnValue({
         validationErrors: 'error',
       });
 
-    await runAction(validateDocketRecordAction, {
+    await runAction(validateDocumentAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockDocketRecord,
+        form: mockDocument,
         screenMetadata: {
           editType: 'CourtIssued',
         },
@@ -192,7 +192,7 @@ describe('validateDocketRecordAction', () => {
       applicationContext.getUseCases().validateCourtIssuedDocketEntryInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().validateDocketRecordInteractor,
+      applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
   });
 });

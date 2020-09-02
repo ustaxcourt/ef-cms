@@ -92,8 +92,9 @@ describe('generateDocketRecordPdfInteractor', () => {
     });
 
     expect(
-      applicationContext.getDocumentGenerators().docketRecord,
-    ).toHaveBeenCalled();
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data,
+    ).toMatchObject({ includePartyDetail: true });
   });
 
   it('Returns a file ID and url to the generated file', async () => {
@@ -107,5 +108,17 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toHaveBeenCalled();
     expect(result).toEqual(mockPdfUrlAndID);
+  });
+
+  it('defaults includePartyDetail to false when a value has not been provided', async () => {
+    await generateDocketRecordPdfInteractor({
+      applicationContext,
+      caseDetail,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data,
+    ).toMatchObject({ includePartyDetail: false });
   });
 });

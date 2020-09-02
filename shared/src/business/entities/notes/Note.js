@@ -1,6 +1,10 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 Note.validationName = 'Note';
@@ -11,18 +15,19 @@ Note.validationName = 'Note';
  * @param {object} rawProps the raw note data
  * @constructor
  */
-function Note(rawProps) {
+function Note() {}
+Note.prototype.init = function (rawProps) {
   this.notes = rawProps.notes;
-}
+};
 
 Note.VALIDATION_ERROR_MESSAGES = {
   notes: 'Add note',
 };
 
 Note.schema = joi.object().keys({
-  notes: joi.string().required(),
+  notes: JoiValidationConstants.STRING.required(),
 });
 
 joiValidationDecorator(Note, Note.schema, Note.VALIDATION_ERROR_MESSAGES);
 
-module.exports = { Note };
+module.exports = { Note: validEntityDecorator(Note) };

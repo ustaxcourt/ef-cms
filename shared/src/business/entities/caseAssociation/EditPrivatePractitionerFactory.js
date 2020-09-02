@@ -4,6 +4,7 @@ const {
 } = require('./AddPrivatePractitionerFactory');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   makeRequiredHelper,
@@ -25,7 +26,11 @@ EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
  * @returns {object} the instance
  */
 EditPrivatePractitionerFactory.get = metadata => {
-  let entityConstructor = function (rawProps) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawProps) {
     Object.assign(this, {
       representingPrimary: rawProps.representingPrimary,
       representingSecondary: rawProps.representingSecondary,
@@ -60,7 +65,7 @@ EditPrivatePractitionerFactory.get = metadata => {
     EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new entityConstructor(metadata);
+  return new (validEntityDecorator(entityConstructor))(metadata);
 };
 
 module.exports = { EditPrivatePractitionerFactory };

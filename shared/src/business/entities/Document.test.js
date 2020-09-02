@@ -3,6 +3,7 @@ const {
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_DOCUMENT_TYPES,
@@ -1689,6 +1690,104 @@ describe('Document entity', () => {
       expect(createdDocument.isValid()).toEqual(false);
       expect(createdDocument.getFormattedValidationErrors()).toEqual({
         servedParties: '"servedParties" must be an array',
+      });
+    });
+  });
+
+  describe('minute entries', () => {
+    it('creates minute entry', () => {
+      const document = new Document(
+        {
+          description: 'Request for Place of Trial at Flavortown, TN',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBe(true);
+      expect(document.isMinuteEntry).toBe(true);
+    });
+  });
+
+  describe('setNumberOfPages', () => {
+    it('sets the number of pages', () => {
+      const document = new Document(
+        {
+          description: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 1,
+        },
+        { applicationContext },
+      );
+      document.setNumberOfPages(13);
+      expect(document.numberOfPages).toEqual(13);
+    });
+  });
+
+  describe('strikeEntry', () => {
+    it('strikes a document if isOnDocketRecord is true', () => {
+      const document = new Document(
+        {
+          description: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 1,
+          isOnDocketRecord: true,
+        },
+        { applicationContext },
+      );
+      document.strikeEntry({
+        name: 'Test User',
+        userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+      });
+      expect(document).toMatchObject({
+        isStricken: true,
+        strickenAt: expect.anything(),
+        strickenBy: 'Test User',
+        strickenByUserId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+      });
+    });
+
+    it('throws an error if isOnDocketRecord is false', () => {
+      const document = new Document(
+        {
+          description: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 1,
+          isOnDocketRecord: false,
+        },
+        { applicationContext },
+      );
+      let error;
+      try {
+        document.strikeEntry({
+          name: 'Test User',
+          userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+        });
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toEqual(
+        new Error('Cannot strike a document that is not on the docket record.'),
+      );
+      expect(document).toMatchObject({
+        isStricken: false,
+        strickenAt: undefined,
+        strickenBy: undefined,
+        strickenByUserId: undefined,
       });
     });
   });

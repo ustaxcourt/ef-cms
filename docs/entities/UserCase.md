@@ -10,6 +10,10 @@
         description: "The name of the party bringing the case, e.g. \"Carol Williams, Petitioner,\" \"Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner,\" or \"Estate of Test Taxpayer, Deceased, Petitioner.\" This is the first half of the case title."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 4700
@@ -28,6 +32,10 @@
         description: "Unique case identifier in XXXXX-YY format."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -36,11 +44,21 @@
       flags: 
         presence: "optional"
         description: "Auto-generated from docket number and the suffix."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     entityName: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "UserCase"
     leadDocketNumber: 
@@ -49,6 +67,10 @@
         presence: "optional"
         description: "If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "pattern"
           args: 
@@ -59,6 +81,11 @@
         only: true
         presence: "optional"
         description: "Status of the case."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Assigned - Case"
         - "Assigned - Motion"

@@ -5,6 +5,7 @@ const {
 const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
+  MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -13,7 +14,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
+const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -21,25 +22,38 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
+  user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocketRecord(
-      new DocketRecord(
+    caseEntity.addDocument(
+      new Document(
         {
           description: 'Filing Fee Paid',
-          eventCode: 'FEE',
+          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
           filingDate: caseEntity.petitionPaymentDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId: user.userId,
         },
         { applicationContext },
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocketRecord(
-      new DocketRecord(
+    caseEntity.addDocument(
+      new Document(
         {
           description: 'Filing Fee Waived',
-          eventCode: 'FEEW',
+          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
           filingDate: caseEntity.petitionPaymentWaivedDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId: user.userId,
         },
         { applicationContext },
       ),
@@ -63,7 +77,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   }
 };
 
-const addDocketEntries = ({ applicationContext, caseEntity }) => {
+const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
   );
@@ -81,19 +95,8 @@ const addDocketEntries = ({ applicationContext, caseEntity }) => {
     );
 
     if (foundDocument) {
-      const newDocketRecord = new DocketRecord(
-        {
-          description:
-            foundDocument.documentTitle || foundDocument.documentType,
-          documentId: foundDocument.documentId,
-          eventCode: foundDocument.eventCode,
-          filedBy: foundDocument.filedBy,
-          filingDate: foundDocument.filingDate,
-          servedPartiesCode: foundDocument.servedPartiesCode,
-        },
-        { applicationContext },
-      );
-      caseEntity.addDocketRecord(newDocketRecord);
+      foundDocument.isOnDocketRecord = true;
+      caseEntity.updateDocument(foundDocument);
     }
   }
 };
@@ -168,7 +171,11 @@ exports.serveCaseToIrsInteractor = async ({
     }
   }
 
-  exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+  exports.addDocketEntryForPaymentStatus({
+    applicationContext,
+    caseEntity,
+    user,
+  });
 
   caseEntity
     .updateCaseCaptionDocketRecord({ applicationContext })
@@ -218,20 +225,22 @@ exports.serveCaseToIrsInteractor = async ({
   });
 
   for (const doc of caseEntity.documents) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      documentId: doc.documentId,
-      replaceCoversheet: !caseEntity.isPaper,
-      useInitialData: !caseEntity.isPaper,
-    });
-
-    doc.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
+    if (doc.isFileAttached) {
+      await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketNumber: caseEntity.docketNumber,
         documentId: doc.documentId,
+        replaceCoversheet: !caseEntity.isPaper,
+        useInitialData: !caseEntity.isPaper,
       });
+
+      doc.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentId: doc.documentId,
+        });
+    }
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -283,7 +292,7 @@ exports.serveCaseToIrsInteractor = async ({
   let urlToReturn;
 
   if (caseEntity.isPaper) {
-    addDocketEntries({ applicationContext, caseEntity });
+    addDocketEntries({ caseEntity });
 
     ({
       url: urlToReturn,
