@@ -66,7 +66,7 @@ describe('migrateCaseInteractor', () => {
         state: 'WI',
       },
       docketNumber: '00101-00',
-      docketRecord: MOCK_CASE.docketRecord,
+      docketRecord: MOCK_CASE.docketRecord, // TODO 636
       documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -153,18 +153,6 @@ describe('migrateCaseInteractor', () => {
         migrateCaseInteractor({
           applicationContext,
           caseMetadata: {},
-        }),
-      ).rejects.toThrow('The Case entity was invalid');
-    });
-
-    it('should fail to migrate a case when the docket record is invalid', async () => {
-      await expect(
-        migrateCaseInteractor({
-          applicationContext,
-          caseMetadata: {
-            ...caseMetadata,
-            docketRecord: [{}],
-          },
         }),
       ).rejects.toThrow('The Case entity was invalid');
     });

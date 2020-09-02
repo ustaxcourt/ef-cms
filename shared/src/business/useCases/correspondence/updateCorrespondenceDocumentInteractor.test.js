@@ -42,21 +42,14 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     },
     correspondence: [mockCorrespondence],
     docketNumber: '123-45',
-    docketRecord: [
-      {
-        description: 'Docket Record 1',
-        docketRecordId: mockDocumentId,
-        documentId: mockDocumentId,
-        eventCode: 'OAJ',
-        filingDate: createISODateString(),
-        index: 0,
-      },
-    ],
     documents: [
       {
+        description: 'Docket Record 1',
         documentId: mockDocumentId,
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
+        filingDate: createISODateString(),
+        index: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: '611dc444-fd8f-43a0-8844-c4d57745c718',
         signedJudgeName: 'Judy',

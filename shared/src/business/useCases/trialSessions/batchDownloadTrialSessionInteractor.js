@@ -74,7 +74,11 @@ const batchDownloadTrialSessionInteractor = async ({
       return acc;
     }, {});
 
-    caseToBatch.docketRecord.forEach(aDocketRecord => {
+    caseToBatch.documents.forEach(aDocketRecord => {
+      if (!aDocketRecord.isOnDocketRecord) {
+        return; // TODO 636
+      }
+
       let myDoc;
       if (
         aDocketRecord.documentId &&

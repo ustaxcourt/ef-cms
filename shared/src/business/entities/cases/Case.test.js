@@ -949,19 +949,6 @@ describe('Case entity', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
-          docketRecord: [
-            {
-              description: 'Petition',
-              documentId: '123',
-              filedBy: 'Test Petitioner',
-              filingDate: '2019-03-01T21:42:29.073Z',
-            },
-            {
-              description:
-                'Request for Place of Trial at Charleston, West Virginia',
-              filingDate: '2019-03-01T21:42:29.073Z',
-            },
-          ],
         },
         {
           applicationContext,
@@ -1199,29 +1186,6 @@ describe('Case entity', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
-          docketRecord: [
-            {
-              index: 1,
-            },
-            {
-              index: 2,
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const nextIndex = caseRecord.generateNextDocketRecordIndex();
-      expect(nextIndex).toEqual(4); // because there is one document with isOnDocketRecord = true
-    });
-
-    it('returns an index of 1 if the docketRecord array is empty', () => {
-      const caseRecord = new Case(
-        {
-          ...MOCK_CASE,
-          docketRecord: [],
         },
         {
           applicationContext,
@@ -1230,6 +1194,21 @@ describe('Case entity', () => {
 
       const nextIndex = caseRecord.generateNextDocketRecordIndex();
       expect(nextIndex).toEqual(2); // because there is one document with isOnDocketRecord = true
+    });
+
+    it('returns an index of 1 if the documents array is empty', () => {
+      const caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const nextIndex = caseRecord.generateNextDocketRecordIndex();
+      expect(nextIndex).toEqual(1); // because there is one document with isOnDocketRecord = true
     });
   });
 
