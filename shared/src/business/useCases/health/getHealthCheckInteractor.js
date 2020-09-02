@@ -61,6 +61,40 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   }
 };
 
+const getS3DocumentsBucketStatus = async ({ applicationContext }) => {
+  const documentsBucketParams = {
+    Bucket: applicationContext.environment.documentsBucketName,
+    MaxKeys: 1,
+  };
+
+  try {
+    await applicationContext
+      .getStorageClient()
+      .listObjects(documentsBucketParams)
+      .promise();
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+const getS3TempDocumentsBucketStatus = async ({ applicationContext }) => {
+  const tempDocumentsBucketParams = {
+    Bucket: applicationContext.environment.tempDocumentsBucketName,
+    MaxKeys: 1,
+  };
+
+  try {
+    await applicationContext
+      .getStorageClient()
+      .listObjects(tempDocumentsBucketParams)
+      .promise();
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 /**
  * getHealthCheckInteractor
  *
@@ -79,6 +113,13 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
 
   const dynamsoftStatus = await getDynamsoftStatus({ applicationContext });
 
+  const s3DocumentsBucketStatus = await getS3DocumentsBucketStatus({
+    applicationContext,
+  });
+  const s3TempDocumentsBucketStatus = await getS3TempDocumentsBucketStatus({
+    applicationContext,
+  });
+
   return {
     dynamo: {
       efcms: dynamoStatus,
@@ -86,5 +127,7 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
     },
     dynamsoft: dynamsoftStatus,
     elasticsearch: elasticSearchStatus,
+    s3DocumentsBucket: s3DocumentsBucketStatus,
+    s3TempDocumentsBucket: s3TempDocumentsBucketStatus,
   };
 };
