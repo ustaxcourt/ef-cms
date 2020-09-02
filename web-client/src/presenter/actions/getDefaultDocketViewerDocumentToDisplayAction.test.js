@@ -17,25 +17,20 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            documents: [
               {
                 documentId: '123',
                 index: 1,
+                isOnDocketRecord: true,
               },
               {
                 index: 2,
+                isOnDocketRecord: true,
               },
               {
                 documentId: '234',
                 index: 3,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-              },
-              {
-                documentId: '234',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -56,21 +51,19 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            documents: [
               {
                 index: 1,
+                isOnDocketRecord: true,
               },
               {
                 documentId: '123',
                 index: 2,
+                isOnDocketRecord: true,
               },
               {
                 index: 3,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -91,18 +84,20 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            documents: [
               {
                 index: 1,
+                isOnDocketRecord: true,
               },
               {
                 index: 2,
+                isOnDocketRecord: true,
               },
               {
                 index: 3,
+                isOnDocketRecord: true,
               },
             ],
-            documents: [],
           },
         },
       },
@@ -121,25 +116,20 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            documents: [
               {
                 documentId: '123',
                 index: 1,
+                isOnDocketRecord: true,
               },
               {
                 index: 2,
+                isOnDocketRecord: true,
               },
               {
                 documentId: '234',
                 index: 3,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-              },
-              {
-                documentId: '234',
+                isOnDocketRecord: true,
               },
             ],
           },

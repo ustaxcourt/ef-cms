@@ -61,12 +61,12 @@ describe('migrateCaseInteractor', () => {
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner1@example.com',
         name: 'Diana Prince',
-        phone: '+1 (215) 128-6587',
+        phone: '128-6587',
         postalCode: '69580',
-        state: 'AR',
+        state: 'WI',
       },
       docketNumber: '00101-00',
-      docketRecord: MOCK_CASE.docketRecord,
+      docketRecord: MOCK_CASE.docketRecord, // TODO 636
       documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -153,18 +153,6 @@ describe('migrateCaseInteractor', () => {
         migrateCaseInteractor({
           applicationContext,
           caseMetadata: {},
-        }),
-      ).rejects.toThrow('The Case entity was invalid');
-    });
-
-    it('should fail to migrate a case when the docket record is invalid', async () => {
-      await expect(
-        migrateCaseInteractor({
-          applicationContext,
-          caseMetadata: {
-            ...caseMetadata,
-            docketRecord: [{}],
-          },
         }),
       ).rejects.toThrow('The Case entity was invalid');
     });
@@ -431,5 +419,31 @@ describe('migrateCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw an exception when contacts are invalid', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          contactPrimary: {
+            address1: '64731 Moss Ridge Suite 997',
+            address2: null,
+            address3: null,
+            city: 'Landrychester',
+            contactId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+            country: 'U.S.A.',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Griffith, Moore and Freeman (f.k.a Herring-Benitez)',
+            postalCode: '73301',
+            state: 'TX',
+          },
+          contactSecondary: undefined,
+          partyType:
+            'Partnership (as a partner other than Tax Matters Partner)',
+        },
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
   });
 });

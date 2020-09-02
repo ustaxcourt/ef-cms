@@ -414,6 +414,9 @@ const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
 const {
+  getDocketNumbersByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
+const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
@@ -858,9 +861,6 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocketRecord,
-} = require('../../shared/src/persistence/dynamo/docketRecord/updateDocketRecord');
-const {
   updateDocument,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocument');
 const {
@@ -1106,7 +1106,6 @@ const gatewayMethods = {
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocketRecord,
     updateDocument,
     updateDocumentProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,
@@ -1152,6 +1151,7 @@ const gatewayMethods = {
   getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getDocketNumbersByUser,
   getDocument,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,

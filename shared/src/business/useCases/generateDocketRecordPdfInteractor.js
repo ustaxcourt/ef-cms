@@ -13,6 +13,7 @@ exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   docketNumber,
   docketRecordSort,
+  includePartyDetail = false,
 }) => {
   const caseSource = await applicationContext
     .getPersistenceGateway()
@@ -41,7 +42,8 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketNumberWithSuffix: `${caseEntity.docketNumber}${
         caseEntity.docketNumberSuffix || ''
       }`,
-      entries: formattedCaseDetail.docketRecordWithDocument,
+      entries: formattedCaseDetail.docketRecordWithDocument, // TODO 636
+      includePartyDetail,
     },
   });
 

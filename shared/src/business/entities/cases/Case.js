@@ -11,7 +11,9 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_MB,
+  MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -35,6 +37,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   shouldGenerateDocketRecordIndex,
@@ -42,9 +45,8 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
-const { find, includes, isEmpty } = require('lodash');
+const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -63,7 +65,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
-  docketRecord: 'At least one valid Docket Record is required',
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
@@ -134,7 +135,11 @@ Case.validationName = 'Case';
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase, { applicationContext, filtered = false }) {
+function Case() {}
+Case.prototype.init = function init(
+  rawCase,
+  { applicationContext, filtered = false },
+) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
@@ -273,13 +278,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.irsPractitioners = [];
   }
 
-  if (Array.isArray(rawCase.docketRecord)) {
-    this.docketRecord = rawCase.docketRecord.map(
-      docketRecord => new DocketRecord(docketRecord, { applicationContext }),
-    );
-  } else {
-    this.docketRecord = [];
-  }
+  this.docketEntries = this.documents.filter(
+    document => document.isOnDocketRecord,
+  );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -313,7 +314,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
-}
+};
 
 Case.VALIDATION_RULES = {
   archivedCorrespondences: joi
@@ -328,9 +329,7 @@ Case.VALIDATION_RULES = {
     .description(
       'List of Document Entities that were archived instead of added to the docket record.',
     ),
-  associatedJudge: joi
-    .string()
-    .max(50)
+  associatedJudge: JoiValidationConstants.STRING.max(50)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Judge assigned to this case. Defaults to Chief Judge.'),
@@ -348,9 +347,9 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     },
   ),
-  automaticBlockedReason: joi
-    .string()
-    .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
+  automaticBlockedReason: JoiValidationConstants.STRING.valid(
+    ...Object.values(AUTOMATIC_BLOCKED_REASONS),
+  )
     .description('The reason the case was automatically blocked from trial.')
     .when('automaticBlocked', {
       is: true,
@@ -367,9 +366,7 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }).meta({ tags: ['Restricted'] }),
-  blockedReason: joi
-    .string()
-    .max(250)
+  blockedReason: JoiValidationConstants.STRING.max(250)
     .description(
       'Open text field for describing reason for blocking this case from trial.',
     )
@@ -382,21 +379,16 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseNote: joi
-    .string()
-    .max(500)
+  caseNote: JoiValidationConstants.STRING.max(500)
     .optional()
     .meta({ tags: ['Restricted'] }),
-  caseType: joi
-    .string()
-    .valid(...CASE_TYPES)
-    .required(),
+  caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: CASE_STATUS_TYPES.closed,
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: ContactFactory.getValidationRules('primary').required(),
+  contactPrimary: ContactFactory.getValidationRules('primary'),
   contactSecondary: ContactFactory.getValidationRules('secondary')
     .optional()
     .allow(null),
@@ -416,31 +408,22 @@ Case.VALIDATION_RULES = {
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberSuffix: joi
-    .string()
-    .allow(null)
+  docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
-  docketNumberWithSuffix: joi
-    .string()
-    .optional()
-    .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    DocketRecord.VALIDATION_RULES,
-  ).required(),
+  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
+    'Auto-generated from docket number and the suffix.',
+  ),
   documents: joi
     .array()
     .items(Document.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
-  entityName: joi.string().valid('Case').required(),
-  filingType: joi
-    .string()
-    .valid(
-      ...FILING_TYPES[ROLES.petitioner],
-      ...FILING_TYPES[ROLES.privatePractitioner],
-    )
-    .optional(),
+  entityName: JoiValidationConstants.STRING.valid('Case').required(),
+  filingType: JoiValidationConstants.STRING.valid(
+    ...FILING_TYPES[ROLES.petitioner],
+    ...FILING_TYPES[ROLES.privatePractitioner],
+  ).optional(),
   hasPendingItems: joi.boolean().optional(),
   hasVerifiedIrsNotice: joi
     .boolean()
@@ -453,24 +436,21 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .meta({ tags: ['Restricted'] }),
-  highPriorityReason: joi
-    .string()
-    .max(250)
+  highPriorityReason: JoiValidationConstants.STRING.max(250)
     .when('highPriority', {
       is: true,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
-  initialCaption: joi
-    .string()
-    .max(500)
+  initialCaption: JoiValidationConstants.STRING.max(500)
     .allow(null)
     .optional()
     .description('Case caption before modification.'),
-  initialDocketNumberSuffix: joi
-    .string()
-    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES), '_')
+  initialDocketNumberSuffix: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCKET_NUMBER_SUFFIXES),
+    '_',
+  )
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
@@ -495,9 +475,7 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Litigation costs for the case.'),
-  mailingDate: joi
-    .string()
-    .max(25)
+  mailingDate: JoiValidationConstants.STRING.max(25)
     .when('isPaper', {
       is: true,
       otherwise: joi.allow(null).optional(),
@@ -560,9 +538,7 @@ Case.VALIDATION_RULES = {
     .items(ContactFactory.getValidationRules('otherPetitioners'))
     .description('List of OtherPetitionerContact Entities for the case.')
     .optional(),
-  partyType: joi
-    .string()
-    .valid(...Object.values(PARTY_TYPES))
+  partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
   petitionPaymentDate: JoiValidationConstants.ISO_DATE.when(
@@ -573,18 +549,16 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     },
   ).description('When the petitioner paid the case fee.'),
-  petitionPaymentMethod: joi
-    .string()
-    .max(50)
+  petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
     .when('petitionPaymentStatus', {
       is: PAYMENT_STATUS.PAID,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     })
     .description('How the petitioner paid the case fee.'),
-  petitionPaymentStatus: joi
-    .string()
-    .valid(...Object.values(PAYMENT_STATUS))
+  petitionPaymentStatus: JoiValidationConstants.STRING.valid(
+    ...Object.values(PAYMENT_STATUS),
+  )
     .required()
     .description('Status of the case fee payment.'),
   petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
@@ -598,8 +572,12 @@ Case.VALIDATION_RULES = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      joi.string().valid(...TRIAL_CITY_STRINGS, null),
-      joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid(
+        ...TRIAL_CITY_STRINGS,
+        ...LEGACY_TRIAL_CITY_STRINGS,
+        null,
+      ),
+      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
     .description('Where the petitioner would prefer to hold the case trial.'),
@@ -608,9 +586,7 @@ Case.VALIDATION_RULES = {
     .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
-  procedureType: joi
-    .string()
-    .valid(...PROCEDURE_TYPES)
+  procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
     .required()
     .description('Procedure type of the case.'),
   qcCompleteForTrial: joi
@@ -645,9 +621,9 @@ Case.VALIDATION_RULES = {
       }),
     })
     .description('List of Statistic Entities for the case.'),
-  status: joi
-    .string()
-    .valid(...Object.values(CASE_STATUS_TYPES))
+  status: JoiValidationConstants.STRING.valid(
+    ...Object.values(CASE_STATUS_TYPES),
+  )
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
@@ -657,8 +633,8 @@ Case.VALIDATION_RULES = {
   trialLocation: joi
     .alternatives()
     .try(
-      joi.string().valid(...TRIAL_CITY_STRINGS, null),
-      joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
     .description(
@@ -671,9 +647,7 @@ Case.VALIDATION_RULES = {
   }).description(
     'The unique ID of the trial session associated with this case.',
   ),
-  trialTime: joi
-    .string()
-    .pattern(PATTERNS['H:MM'])
+  trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
   useSameAsPrimary: joi
@@ -886,30 +860,19 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function (document, { applicationContext }) {
-  this.documents = [...this.documents, document];
+Case.prototype.addDocument = function (documentEntity) {
+  if (documentEntity.isOnDocketRecord) {
+    const updateIndex = shouldGenerateDocketRecordIndex({
+      caseDetail: this,
+      documentEntity,
+    });
 
-  this.addDocketRecord(
-    new DocketRecord(
-      {
-        description: document.documentType,
-        documentId: document.documentId,
-        eventCode: document.eventCode,
-        filedBy: document.filedBy,
-        filingDate: document.receivedAt || document.createdAt,
-        numberOfPages: document.numberOfPages,
-      },
-      { applicationContext },
-    ),
-  );
-};
+    if (updateIndex) {
+      documentEntity.index = this.generateNextDocketRecordIndex();
+    }
+  }
 
-/**
- *
- * @param {object} document the document to add to the case
- */
-Case.prototype.addDocumentWithoutDocketRecord = function (document) {
-  this.documents = [...this.documents, document];
+  this.documents = [...this.documents, documentEntity];
 };
 
 Case.prototype.closeCase = function () {
@@ -941,8 +904,8 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   const caseCaptionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastCaption = this.initialCaption;
 
-  this.docketRecord.forEach(docketRecord => {
-    const result = caseCaptionRegex.exec(docketRecord.description);
+  this.documents.forEach(document => {
+    const result = caseCaptionRegex.exec(document.description);
     if (result) {
       const [, , changedCaption] = result;
       lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
@@ -953,12 +916,20 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
 
   if (needsCaptionChangedRecord) {
-    this.addDocketRecord(
-      new DocketRecord(
+    const { userId } = applicationContext.getCurrentUser();
+
+    this.addDocument(
+      new Document(
         {
           description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
-          eventCode: 'MINC',
+          documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
           filingDate: createISODateString(),
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId,
         },
         { applicationContext },
       ),
@@ -983,8 +954,8 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  this.docketRecord.forEach(docketRecord => {
-    const result = docketNumberRegex.exec(docketRecord.description);
+  this.documents.forEach(document => {
+    const result = docketNumberRegex.exec(document.description);
     if (result) {
       const [, , changedDocketNumber] = result;
       lastDocketNumber = changedDocketNumber;
@@ -995,12 +966,20 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
     lastDocketNumber !== newDocketNumber && !this.isPaper;
 
   if (needsDocketNumberChangeRecord) {
-    this.addDocketRecord(
-      new DocketRecord(
+    const { userId } = applicationContext.getCurrentUser();
+
+    this.addDocument(
+      new Document(
         {
           description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-          eventCode: 'MIND',
+          documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
           filingDate: createISODateString(),
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId,
         },
         { applicationContext },
       ),
@@ -1072,135 +1051,16 @@ Case.prototype.getIrsSendDate = function () {
 };
 
 /**
- *
- * @param {string} preferredTrialCity the preferred trial city
- * @returns {Case} the updated case entity
- */
-Case.prototype.setRequestForTrialDocketRecord = function (
-  preferredTrialCity,
-  { applicationContext },
-) {
-  this.preferredTrialCity = preferredTrialCity;
-
-  const found = find(this.docketRecord, item =>
-    item.description.includes('Request for Place of Trial'),
-  );
-
-  if (preferredTrialCity && !found) {
-    this.addDocketRecord(
-      new DocketRecord(
-        {
-          description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-          filingDate: this.receivedAt,
-        },
-        { applicationContext },
-      ),
-    );
-  }
-  return this;
-};
-
-/**
  * gets the next possible (unused) index for the docket record
  *
  * @returns {number} the next docket record index
  */
 Case.prototype.generateNextDocketRecordIndex = function () {
-  const recordsWithIndex = [...this.docketRecord]
-    .filter(record => record.index !== undefined)
-    .sort((a, b) => a.index - b.index);
-  const nextIndex = recordsWithIndex.length + 1;
+  const nextIndex =
+    this.documents
+      .filter(d => d.isOnDocketRecord && d.index !== undefined)
+      .sort((a, b) => a.index - b.index).length + 1;
   return nextIndex;
-};
-
-/**
- *
- * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
- * @returns {Case} the updated case entity
- */
-Case.prototype.addDocketRecord = function (docketRecordEntity) {
-  const updateIndex = shouldGenerateDocketRecordIndex({
-    caseDetail: this,
-    docketRecordEntry: docketRecordEntity,
-  });
-
-  if (updateIndex) {
-    docketRecordEntity.index = this.generateNextDocketRecordIndex();
-  }
-
-  this.docketRecord = [...this.docketRecord, docketRecordEntity];
-  return this;
-};
-
-/**
- *
- * @param {DocketRecord} updatedDocketEntry the update docket entry data
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
-  const foundEntry = this.docketRecord.find(
-    entry => entry.docketRecordId === updatedDocketEntry.docketRecordId,
-  );
-
-  const updateIndex = shouldGenerateDocketRecordIndex({
-    caseDetail: this,
-    docketRecordEntry: foundEntry,
-  });
-
-  if (updateIndex) {
-    updatedDocketEntry.index = this.generateNextDocketRecordIndex();
-  }
-
-  if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
-  return this;
-};
-
-/**
- * finds a docket record by its documentId
- *
- * @param {string} documentId the document id
- * @returns {DocketRecord|undefined} the updated case entity
- */
-Case.prototype.getDocketRecordByDocumentId = function (documentId) {
-  const foundEntry = this.docketRecord.find(
-    entry => entry.documentId === documentId,
-  );
-
-  return foundEntry;
-};
-
-/**
- * finds a docket record by its docket record index
- *
- * @param {string} docketRecordId the id of the docket record to be updated
- * @returns {DocketRecord|undefined} the updated case entity
- */
-Case.prototype.getDocketRecord = function (docketRecordId) {
-  const foundEntry = this.docketRecord.find(
-    entry => entry.docketRecordId === docketRecordId,
-  );
-
-  return foundEntry;
-};
-
-/**
- *
- * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
- * @param {boolean} updateIndex whether to update the index on the docket record entity
- * @returns {Case} the updated case entity
- */
-Case.prototype.updateDocketRecord = function (docketRecordEntity, updateIndex) {
-  const docketRecordIndex = this.docketRecord.findIndex(
-    entry => entry.docketRecordId === docketRecordEntity.docketRecordId,
-  );
-
-  if (updateIndex) {
-    docketRecordEntity.index = this.generateNextDocketRecordIndex();
-  }
-
-  this.docketRecord[docketRecordIndex] = docketRecordEntity;
-  return this;
 };
 
 /**
@@ -1213,6 +1073,19 @@ Case.prototype.updateDocument = function (updatedDocument) {
   const foundDocument = allCaseDocuments.find(
     document => document.documentId === updatedDocument.documentId,
   );
+
+  if (foundDocument) Object.assign(foundDocument, updatedDocument);
+
+  if (updatedDocument.isOnDocketRecord) {
+    const updateIndex = shouldGenerateDocketRecordIndex({
+      caseDetail: this,
+      documentEntity: foundDocument,
+    });
+
+    if (updateIndex) {
+      updatedDocument.index = this.generateNextDocketRecordIndex();
+    }
+  }
 
   if (foundDocument) Object.assign(foundDocument, updatedDocument);
 
@@ -1827,7 +1700,7 @@ Case.prototype.deleteStatistic = function (statisticId) {
 };
 
 module.exports = {
-  Case,
+  Case: validEntityDecorator(Case),
   getPetitionDocumentFromDocuments,
   isAssociatedUser,
 };

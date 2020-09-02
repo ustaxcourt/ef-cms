@@ -67,7 +67,9 @@ export const petitionsClerkSubmitsCaseToIrs = test => {
     //check that documents were served
     const documents = test.getState('caseDetail.documents');
     for (const document of documents) {
-      expect(document.servedAt).toBeDefined();
+      if (!document.isMinuteEntry) {
+        expect(document.servedAt).toBeDefined();
+      }
     }
   });
 };
