@@ -29,7 +29,6 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
 const getDynamoStatus = async ({ applicationContext }) => {
   try {
     const { Table } = await describeTable({ applicationContext });
-
     return Table.TableStatus === 'ACTIVE';
   } catch (e) {
     return false;
@@ -39,19 +38,36 @@ const getDynamoStatus = async ({ applicationContext }) => {
 const getDeployDynamoStatus = async ({ applicationContext }) => {
   try {
     const { Table } = await describeDeployTable({ applicationContext });
-
     return Table.TableStatus === 'ACTIVE';
   } catch (e) {
     return false;
   }
 };
 
+const getDynamsoftStatus = async ({ applicationContext }) => {
+  try {
+    const efcmsDomain = process.env.EFCMS_DOMAIN;
+    await Promise.all(
+      [
+        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.initiate.js`,
+        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js`,
+        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.install.js`,
+        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.css`,
+      ].map(applicationContext.getHttpClient().get),
+    );
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 /**
- * fixme
+ * getHealthCheckInteractor
  *
+ * @param {object} providers.applicationContext the application context
+ * @returns {object} contains the status of all our different services
  */
 exports.getHealthCheckInteractor = async ({ applicationContext }) => {
-  // elasticsearch
   const elasticSearchStatus = await getElasticSearchStatus({
     applicationContext,
   });
@@ -61,11 +77,14 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
     applicationContext,
   });
 
+  const dynamsoftStatus = await getDynamsoftStatus({ applicationContext });
+
   return {
     dynamo: {
       efcms: dynamoStatus,
       efcmsDeploy: deployDynamoStatus,
     },
+    dynamsoft: dynamsoftStatus,
     elasticsearch: elasticSearchStatus,
   };
 };

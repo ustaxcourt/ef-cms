@@ -118,7 +118,6 @@ import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSe
 import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditUploadCourtIssuedDocumentSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuccessSequence';
-import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
@@ -556,7 +555,6 @@ export const presenter = {
     gotoEditUploadCourtIssuedDocumentSequence,
     gotoFileDocumentSequence,
     gotoFilePetitionSuccessSequence,
-    gotoHealthCheckSequence,
     gotoIdleLogoutSequence,
     gotoLoginSequence,
     gotoMessageDetailSequence,

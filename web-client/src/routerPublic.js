@@ -40,6 +40,11 @@ const router = {
       app.getSequence('gotoTodaysOpinionsSequence')();
     });
 
+    route('/health', () => {
+      setPageTitle('Health Check');
+      return app.getSequence('gotoHealthCheckSequence')();
+    });
+
     route('/', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();
