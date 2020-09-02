@@ -1118,6 +1118,11 @@ const router = {
       }
     });
 
+    registerRoute('/health', () => {
+      setPageTitle('Health Check');
+      return app.getSequence('gotoHealthCheckSequence')();
+    });
+
     registerRoute(
       '..',
       () => {

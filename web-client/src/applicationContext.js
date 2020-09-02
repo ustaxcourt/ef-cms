@@ -26,6 +26,7 @@ import { generatePrintablePendingReportInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
@@ -338,6 +339,7 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
+  getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
