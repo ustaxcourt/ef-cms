@@ -2,11 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  PARTY_TYPES,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
+const {
   updateInitialFilingDocuments,
 } = require('./updateInitialFilingDocuments');
 const { Case } = require('../../../business/entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
@@ -75,6 +78,50 @@ describe('addNewInitialFilingToCase', () => {
     );
     expect(filedDocument.isFileAttached).toBeTruthy();
     expect(filedDocument.isPaper).toBeTruthy();
+  });
+
+  it('should set partyPrimary and partySecondary to true if there is a contactSecondary', async () => {
+    mockOriginalCase = new Case(
+      {
+        ...MOCK_CASE,
+        contactSecondary: {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          name: 'Test Petitioner',
+          postalCode: '12345',
+          state: 'TX',
+        },
+        documents: [],
+        partyType: PARTY_TYPES.petitionerSpouse,
+      },
+      { applicationContext },
+    );
+
+    mockCaseToUpdate = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        name: 'Test Petitioner',
+        postalCode: '12345',
+        state: 'TX',
+      },
+      documents: [...MOCK_CASE.documents, mockRQT],
+      partyType: PARTY_TYPES.petitionerSpouse,
+    };
+
+    await updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser: petitionsClerkUser,
+      caseEntity: mockOriginalCase,
+      caseToUpdate: mockCaseToUpdate,
+    });
+
+    const filedDocument = mockOriginalCase.documents.find(
+      d => d.documentId === mockRQT.documentId,
+    );
+    expect(filedDocument.partyPrimary).toBeTruthy();
+    expect(filedDocument.partySecondary).toBeTruthy();
   });
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
