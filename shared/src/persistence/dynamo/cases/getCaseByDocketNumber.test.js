@@ -32,7 +32,6 @@ describe('getCaseByDocketNumber', () => {
       archivedDocuments: [],
       correspondence: [],
       docketNumber: '123-20',
-      docketRecord: [],
       documents: [],
       irsPractitioners: [],
       pk: 'case|123-20',
@@ -62,11 +61,6 @@ describe('getCaseByDocketNumber', () => {
               pk: 'case|123-20',
               sk: 'privatePractitioner|123',
               userId: 'abc-123',
-            },
-            {
-              docketRecordId: 'abc-123',
-              pk: 'case|123-20',
-              sk: 'docket-record|123',
             },
             {
               archived: true,
@@ -127,13 +121,6 @@ describe('getCaseByDocketNumber', () => {
         },
       ],
       docketNumber: '123-20',
-      docketRecord: [
-        {
-          docketRecordId: 'abc-123',
-          pk: 'case|123-20',
-          sk: 'docket-record|123',
-        },
-      ],
       documents: [
         {
           archived: false,
@@ -172,7 +159,6 @@ describe('getCaseByDocketNumber', () => {
       archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
-      docketRecord: [],
       documents: [],
       irsPractitioners: [],
       privatePractitioners: [],
