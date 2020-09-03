@@ -1,9 +1,12 @@
+const AWS = require('aws-sdk');
 const {
   describeDeployTable,
   describeTable,
 } = require('../../../persistence/dynamodbClientService');
-const { getCognitoLoginUrl } = require('../../../sharedAppContext');
 const { search } = require('../../../persistence/elasticsearch/searchClient');
+
+const regionEast = 'us-east-1';
+const regionWest = 'us-west-1';
 
 const getElasticSearchStatus = async ({ applicationContext }) => {
   try {
@@ -95,10 +98,10 @@ const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
 
 const getS3BucketStatus = async ({ applicationContext }) => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
-  const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-us-east-1`;
-  const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-us-west-1`;
-  const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-us-east-1`;
-  const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-us-west-1`;
+  const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`;
+  const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionWest}`;
+  const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionEast}`;
+  const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionWest}`;
   const appS3Bucket = `app.${efcmsDomain}`;
   const publicS3Bucket = `${efcmsDomain}`;
   const publicFailoverS3Bucket = `failover.${efcmsDomain}`;
@@ -133,8 +136,25 @@ const getCognitoStatus = async ({ applicationContext }) => {
   const source = handleAxiosTimeout(axios);
 
   try {
-    axios.get(
-      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login',
+    const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider(
+      { region: regionEast },
+    );
+
+    const params = {
+      MaxResults: 1,
+      UserPoolId: process.env.USER_POOL_ID,
+    };
+
+    const {
+      UserPoolClients,
+    } = await cognitoidentityserviceprovider
+      .listUserPoolClients(params)
+      .promise();
+
+    const clientID = UserPoolClients[0].ClientId;
+
+    await axios.get(
+      `https://${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientID}&redirect_uri=https%3A//app.${process.env.EFCMS_DOMAIN}/log-in`,
       {
         cancelToken: source.token,
         timeout: 20000,
