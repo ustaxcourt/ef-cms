@@ -184,7 +184,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
     formattedResult.showNotServed =
-      !formattedResult.isUnservable && entry.isNotServedDocument;
+      !formattedResult.isUnservable &&
+      entry.isNotServedDocument &&
+      !entry.isMinuteEntry;
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
