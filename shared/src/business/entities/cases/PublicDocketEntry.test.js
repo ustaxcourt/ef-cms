@@ -1,9 +1,9 @@
 const { INITIAL_DOCUMENT_TYPES } = require('../EntityConstants');
-const { PublicDocument } = require('./PublicDocument');
+const { PublicDocketEntry } = require('./PublicDocketEntry');
 
-describe('PublicDocument', () => {
+describe('PublicDocketEntry', () => {
   it('should only have expected fields', () => {
-    const entity = new PublicDocument({
+    const entity = new PublicDocketEntry({
       additionalInfo: 'something',
       additionalInfo2: 'something else',
       anotherThing: false,
@@ -38,7 +38,7 @@ describe('PublicDocument', () => {
   describe('isOnDocketRecord', () => {
     describe('minute entries', () => {
       it('creates minute entry', () => {
-        const document = new PublicDocument({
+        const document = new PublicDocketEntry({
           description: 'Request for Place of Trial at Flavortown, TN',
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -53,7 +53,7 @@ describe('PublicDocument', () => {
     });
 
     it('sets docket record related fields if a document is on the docket record', () => {
-      const entity = new PublicDocument({
+      const entity = new PublicDocketEntry({
         description: 'testing',
         documentId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
         documentType:
