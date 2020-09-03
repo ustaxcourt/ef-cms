@@ -18,6 +18,12 @@ describe('dynamodbClientService', function () {
     docketNumber: '123-20',
   };
 
+  const mockDynamoClient = {
+    describeTable: jest.fn().mockImplementation(() => {
+      return { promise: async () => null };
+    }),
+  };
+
   beforeEach(() => {
     applicationContext.getDocumentClient().batchGet.mockReturnValue({
       promise: () =>
@@ -86,6 +92,10 @@ describe('dynamodbClientService', function () {
         });
       },
     });
+
+    applicationContext.getDynamoClient = jest
+      .fn()
+      .mockImplementation(() => mockDynamoClient);
   });
 
   describe('put', () => {
@@ -220,16 +230,6 @@ describe('dynamodbClientService', function () {
 
   describe('describeTable', () => {
     it("should return information on the environment's table", async () => {
-      const mockDynamoClient = {
-        describeTable: jest.fn().mockImplementation(() => {
-          return { promise: async () => null };
-        }),
-      };
-      applicationContext.getDynamoClient = jest
-        .fn()
-        .mockImplementation(() => mockDynamoClient);
-      applicationContext.environment.stage = 'test';
-
       await describeTable({
         applicationContext,
       });
@@ -237,23 +237,13 @@ describe('dynamodbClientService', function () {
       expect(
         applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
       ).toEqual({
-        TableName: 'efcms-test',
+        TableName: 'efcms-local',
       });
     });
   });
 
   describe('describeDeployTable', () => {
     it("should return information on the environment's table", async () => {
-      const mockDynamoClient = {
-        describeTable: jest.fn().mockImplementation(() => {
-          return { promise: async () => null };
-        }),
-      };
-      applicationContext.getDynamoClient = jest
-        .fn()
-        .mockImplementation(() => mockDynamoClient);
-      applicationContext.environment.stage = 'test';
-
       await describeDeployTable({
         applicationContext,
       });
@@ -261,7 +251,7 @@ describe('dynamodbClientService', function () {
       expect(
         applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
       ).toEqual({
-        TableName: 'efcms-deploy-test',
+        TableName: 'efcms-deploy-local',
       });
     });
   });
