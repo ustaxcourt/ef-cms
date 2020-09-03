@@ -3,6 +3,7 @@ const {
   describeDeployTable,
   describeTable,
 } = require('../../../persistence/dynamodbClientService');
+const { execSync } = require('child_process');
 const { search } = require('../../../persistence/elasticsearch/searchClient');
 
 const regionEast = 'us-east-1';
@@ -166,6 +167,22 @@ const getCognitoStatus = async ({ applicationContext }) => {
   }
 };
 
+const getEmailServiceStatus = async () => {
+  try {
+    const result = await execSync(
+      'ping email.us-east-1.amazonaws.com -c 1 -W 10',
+    );
+
+    const receivedString = result.toString('utf8').split(',')[1];
+
+    const receivedPackets = receivedString.split(' ')[1];
+
+    return receivedPackets === '1';
+  } catch (e) {
+    return false;
+  }
+};
+
 /**
  * getHealthCheckInteractor
  *
@@ -188,6 +205,10 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
 
   const cognitoStatus = await getCognitoStatus({ applicationContext });
 
+  const emailServiceStatus = await getEmailServiceStatus({
+    applicationContext,
+  });
+
   return {
     cognito: cognitoStatus,
     dynamo: {
@@ -196,6 +217,7 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
     },
     dynamsoft: dynamsoftStatus,
     elasticsearch: elasticSearchStatus,
+    emailService: emailServiceStatus,
     s3: s3BucketStatus,
   };
 };
