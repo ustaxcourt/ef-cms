@@ -42,9 +42,7 @@ const getIsDraftForDocument = async ({
   if (fullCaseRecord) {
     const isNotArchived = !document.archived;
     const isNotServed = !document.servedAt;
-    const isDocumentOnDocketRecord = fullCaseRecord.docketRecord.find(
-      docketEntry => docketEntry.documentId === document.documentId,
-    );
+    const isDocumentOnDocketRecord = document.isOnDocketRecord;
     const isStipDecision = document.documentType === 'Stipulated Decision';
     const isDraftOrder = orderDocumentTypes.includes(document.documentType);
     const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
