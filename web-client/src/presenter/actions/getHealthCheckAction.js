@@ -3,7 +3,9 @@
  *
  */
 export const getHealthCheckAction = async ({ applicationContext }) => {
-  await applicationContext
+  const health = await applicationContext
     .getUseCases()
     .getHealthCheckInteractor({ applicationContext });
+
+  return { health };
 };

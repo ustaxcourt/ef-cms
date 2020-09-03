@@ -1,6 +1,7 @@
 import { Error } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
+import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
@@ -14,6 +15,7 @@ import React, { useEffect } from 'react';
 
 const pages = {
   Error,
+  HealthCheck,
   Interstitial,
   PublicCaseDetail,
   PublicPrintableDocketRecord,
