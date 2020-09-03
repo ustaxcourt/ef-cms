@@ -19,7 +19,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocuments.find(
+    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 
@@ -71,7 +71,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.formattedDocuments.find(
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 

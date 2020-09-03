@@ -64,7 +64,7 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const petitionDocument = applicationContext
     .getUtilities()
-    .getPetitionDocumentFromDocuments(caseDetail.documents);
+    .getPetitionDocumentFromDocuments(caseDetail.docketEntries);
   const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
 
   return {

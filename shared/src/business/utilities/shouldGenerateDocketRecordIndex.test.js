@@ -2,7 +2,7 @@ import { shouldGenerateDocketRecordIndex } from './shouldGenerateDocketRecordInd
 
 describe('shouldGenerateDocketRecordIndex', () => {
   it('returns false for any entry that already has an index', () => {
-    const caseDetail = { documents: [] };
+    const caseDetail = { docketEntries: [] };
     const docketRecordEntry = {
       documentId: '123',
       index: 1,
@@ -18,7 +18,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns false for entries without a document', () => {
     // are there exceptions to this? entries without a document
-    const caseDetail = { documents: [] };
+    const caseDetail = { docketEntries: [] };
     const docketRecordEntry = {
       documentType: 'Answer',
       eventCode: 'A',
@@ -34,7 +34,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for electronically filed non court issued documents', () => {
     const caseDetail = {
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           isPaper: false,
@@ -57,7 +57,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns false for electronically filed court issued documents', () => {
     const caseDetail = {
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           isPaper: false,
@@ -79,7 +79,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for petition documents', () => {
     const caseDetail = {
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           isPaper: true,
@@ -102,17 +102,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for initial document types filed along with the petition', () => {
     const caseDetail = {
-      docketRecord: [
-        {
-          description: 'Petition',
-          docketRecordId: '234',
-          documentId: '123',
-          eventCode: 'P',
-          filingDate: '2019-03-01T21:40:46.415Z',
-          index: 1,
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           createdAt: '2019-03-01T21:40:46.415Z',
           documentId: '012',
@@ -141,17 +131,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for initial document types filed after the petition if the document is being served', () => {
     const caseDetail = {
-      docketRecord: [
-        {
-          description: 'Petition',
-          docketRecordId: '234',
-          documentId: '123',
-          eventCode: 'P',
-          filingDate: '2019-03-01T21:40:46.415Z',
-          index: 1,
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           createdAt: '2019-03-01T21:40:46.415Z',
           documentId: '012',
@@ -181,17 +161,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns false for initial document types filed after the petition if the document is NOT being served', () => {
     const caseDetail = {
-      docketRecord: [
-        {
-          description: 'Petition',
-          docketRecordId: '234',
-          documentId: '123',
-          eventCode: 'P',
-          filingDate: '2019-03-01T21:40:46.415Z',
-          index: 1,
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           createdAt: '2019-03-01T21:40:46.415Z',
           documentId: '012',
@@ -221,7 +191,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for documents that are unservable', () => {
     const caseDetail = {
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           isPaper: true,
@@ -244,7 +214,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for minute entries', () => {
     const caseDetail = {
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           isPaper: true,
@@ -266,7 +236,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
   });
 
   it('returns true for minute entries', () => {
-    const caseDetail = { documents: [] };
+    const caseDetail = { docketEntries: [] };
     const docketRecordEntry = {
       documentId: '123',
       documentType: 'Filing Fee Paid',
@@ -283,7 +253,9 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns false for servable documents that are not served', () => {
     const caseDetail = {
-      documents: [{ documentId: '123', isPaper: true, servedAt: undefined }],
+      docketEntries: [
+        { documentId: '123', isPaper: true, servedAt: undefined },
+      ],
     };
     const docketRecordEntry = {
       documentId: '123',
@@ -301,7 +273,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for servable documents that are served', () => {
     const caseDetail = {
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           isPaper: true,

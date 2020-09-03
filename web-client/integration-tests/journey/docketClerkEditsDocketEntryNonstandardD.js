@@ -94,7 +94,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
         'Certificate of Service Petition 05-05-2015 some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocuments.find(
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({

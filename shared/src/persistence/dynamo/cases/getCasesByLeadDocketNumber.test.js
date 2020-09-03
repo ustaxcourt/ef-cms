@@ -21,7 +21,7 @@ describe('getCasesByLeadDocketNumber', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({
-        documents: [],
+        docketEntries: [],
         irsPractitioners: [],
         pk: 'case|123-20',
         privatePractitioners: [],
@@ -40,7 +40,7 @@ describe('getCasesByLeadDocketNumber', () => {
     ).toHaveBeenCalled();
     expect(result).toEqual([
       {
-        documents: [],
+        docketEntries: [],
         irsPractitioners: [],
         pk: 'case|123-20',
         privatePractitioners: [],

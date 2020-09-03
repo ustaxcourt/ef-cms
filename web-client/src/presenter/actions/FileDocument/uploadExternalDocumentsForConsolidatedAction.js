@@ -64,7 +64,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   }
 
   const getPendingDocumentsForCase = caseDetail =>
-    caseDetail.documents.filter(
+    caseDetail.docketEntries.filter(
       document => document.processingStatus === 'pending',
     );
 

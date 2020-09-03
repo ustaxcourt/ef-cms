@@ -18,7 +18,7 @@ exports.fetchPendingItems = async ({
 }) => {
   const source = [
     'associatedJudge',
-    'documents',
+    'docketEntries',
     'caseCaption',
     'docketNumber',
     'docketNumberSuffix',
@@ -53,7 +53,7 @@ exports.fetchPendingItems = async ({
       applicationContext,
     });
 
-    foundCaseEntity.documents.forEach(document => {
+    foundCaseEntity.docketEntries.forEach(document => {
       if (document.pending) {
         foundDocuments.push({
           ...omit(

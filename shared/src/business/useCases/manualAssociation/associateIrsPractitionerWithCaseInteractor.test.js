@@ -27,9 +27,11 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
       postalCode: '12345',
       state: 'CA',
     },
+    // TODO 636
+    docketEntries: MOCK_CASE.docketEntries,
+
     docketNumber: '123-19',
-    docketRecord: MOCK_CASE.docketRecord, // TODO 636
-    documents: MOCK_CASE.documents,
+    docketRecord: MOCK_CASE.docketRecord,
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',

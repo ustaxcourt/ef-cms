@@ -33,7 +33,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
-    const messageDocument = getHelper().documents[0];
+    const messageDocument = getHelper().docketEntries[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
     await test.runSequence('updateMessageModalAttachmentsSequence', {

@@ -23,8 +23,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '123-abc-123-abc',
               editState: JSON.stringify(editState),
@@ -33,6 +32,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
             },
             { documentId: '321-cba-321-cba' },
           ],
+          docketNumber: '123-45',
         },
         form: {},
       },
@@ -69,21 +69,16 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
-          docketRecord: [
+          docketEntries: [
             {
               documentId: '123-abc-123-abc',
               editState: JSON.stringify(editState),
-            },
-          ],
-          documents: [
-            {
-              documentId: '123-abc-123-abc',
               eventCode: 'OPP',
               lodged: true,
             },
             { documentId: '321-cba-321-cba' },
           ],
+          docketNumber: '123-45',
         },
         form: {},
       },
@@ -91,6 +86,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
     const expectedResult = {
       documentId: '123-abc-123-abc',
+      editState: JSON.stringify(editState),
       eventCode: 'OPP',
       lodged: true,
     };
@@ -107,9 +103,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: '123-abc-123-abc',
             },
@@ -117,6 +111,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
               documentId: '321-cba-321-cba',
             },
           ],
+          docketNumber: '123-45',
         },
         form: {},
       },

@@ -31,8 +31,8 @@ describe('getCaseByDocketNumber', () => {
       archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
+      docketEntries: [],
       docketNumber: '123-20',
-      documents: [],
       irsPractitioners: [],
       pk: 'case|123-20',
       privatePractitioners: [],
@@ -120,8 +120,7 @@ describe('getCaseByDocketNumber', () => {
           sk: 'correspondence|124',
         },
       ],
-      docketNumber: '123-20',
-      documents: [
+      docketEntries: [
         {
           archived: false,
           documentId: 'abc-124',
@@ -129,6 +128,7 @@ describe('getCaseByDocketNumber', () => {
           sk: 'document|124',
         },
       ],
+      docketNumber: '123-20',
       irsPractitioners: [
         { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
@@ -159,7 +159,7 @@ describe('getCaseByDocketNumber', () => {
       archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
-      documents: [],
+      docketEntries: [],
       irsPractitioners: [],
       privatePractitioners: [],
     });

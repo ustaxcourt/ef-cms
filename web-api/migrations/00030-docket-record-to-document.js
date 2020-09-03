@@ -34,7 +34,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
     const fullCaseRecord = aggregateCaseItems(caseRecords.Items);
 
     await Promise.all(
-      fullCaseRecord.documents.map(document => {
+      (fullCaseRecord.documents || []).map(document => {
         const docketEntry = (fullCaseRecord.docketRecord || []).find(
           d => d.documentId === document.documentId,
         );

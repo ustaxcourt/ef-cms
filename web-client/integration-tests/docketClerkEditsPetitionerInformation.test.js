@@ -74,7 +74,7 @@ describe('docket clerk edits the petitioner information', () => {
     );
 
     const noticeDocument = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(d => d.documentTitle === 'Notice of Change of Address');
     expect(noticeDocument.servedAt).toBeDefined();
   });

@@ -53,8 +53,8 @@ export const unauthedUserViewsCaseDetail = test => {
       },
     ]);
 
-    expect(helper.formattedCaseDetail.documents.length).toEqual(5); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
-    expect(helper.formattedCaseDetail.documents).toEqual(
+    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(5); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
+    expect(helper.formattedCaseDetail.docketEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentType: 'Petition',
