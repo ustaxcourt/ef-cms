@@ -65,8 +65,8 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
         }),
       ]),
     );
-    expect(
-      caseDetailFormatted.docketRecordWithDocument[1].record.eventCode,
-    ).toEqual('RQT');
+    expect(caseDetailFormatted.formattedDocketEntries[1].eventCode).toEqual(
+      'RQT',
+    );
   });
 };

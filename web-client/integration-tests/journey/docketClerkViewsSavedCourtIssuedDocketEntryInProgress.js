@@ -16,8 +16,8 @@ export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => (entry.document.documentId = documentId),
+    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      entry => entry.documentId === documentId,
     );
 
     expect(orderDocument).toBeTruthy();
