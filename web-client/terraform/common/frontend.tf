@@ -169,23 +169,23 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = "s3.us-east-1.amazonaws.com/${var.dns_domain}-documents-${var.environment}-us-east-1/"
+    domain_name = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
     origin_id   = "primary-documents.${var.dns_domain}"
   }
 
   origin {
-    domain_name = "s3.us-west-1.amazonaws.com/${var.dns_domain}-documents-${var.environment}-us-west-1/"
+    domain_name = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
     origin_id   = "failover-documents.${var.dns_domain}"
   }
 
   origin {
-    domain_name = "s3.us-east-1.amazonaws.com/${var.dns_domain}-temp-documents-${var.environment}-us-east-1/"
+    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
     origin_id   = "primary-temp-documents.${var.dns_domain}"
   }
 
   origin {
-    domain_name = "s3.us-west-1.amazonaws.com/${var.dns_domain}-temp-documents-${var.environment}-us-west-1/"
-    origin_id   = "failover-documents.${var.dns_domain}"
+    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
+    origin_id   = "failover-temp-documents.${var.dns_domain}"
   }
 
   custom_error_response {
@@ -269,6 +269,10 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     forwarded_values {
       query_string = true
+
+      cookies {
+        forward = "none"
+      }
     }
   }
 
@@ -291,6 +295,10 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     forwarded_values {
       query_string = true
+
+      cookies {
+        forward = "none"
+      }
     }
   }
 
