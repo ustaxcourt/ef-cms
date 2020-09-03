@@ -5,17 +5,19 @@ const {
   batchGet,
   batchWrite,
   delete: deleteObj,
+  describeDeployTable,
+  describeTable,
   get,
   put,
   query,
   updateConsistent,
 } = require('./dynamodbClientService');
 
-const MOCK_ITEM = {
-  docketNumber: '123-20',
-};
-
 describe('dynamodbClientService', function () {
+  const MOCK_ITEM = {
+    docketNumber: '123-20',
+  };
+
   beforeEach(() => {
     applicationContext.getDocumentClient().batchGet.mockReturnValue({
       promise: () =>
@@ -212,6 +214,54 @@ describe('dynamodbClientService', function () {
       ).toEqual({
         Key: { pk: '123-20' },
         TableName: 'efcms-local',
+      });
+    });
+  });
+
+  describe('describeTable', () => {
+    it("should return information on the environment's table", async () => {
+      const mockDynamoClient = {
+        describeTable: jest.fn().mockImplementation(() => {
+          return { promise: async () => null };
+        }),
+      };
+      applicationContext.getDynamoClient = jest
+        .fn()
+        .mockImplementation(() => mockDynamoClient);
+      applicationContext.environment.stage = 'test';
+
+      await describeTable({
+        applicationContext,
+      });
+
+      expect(
+        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
+      ).toEqual({
+        TableName: 'efcms-test',
+      });
+    });
+  });
+
+  describe('describeDeployTable', () => {
+    it("should return information on the environment's table", async () => {
+      const mockDynamoClient = {
+        describeTable: jest.fn().mockImplementation(() => {
+          return { promise: async () => null };
+        }),
+      };
+      applicationContext.getDynamoClient = jest
+        .fn()
+        .mockImplementation(() => mockDynamoClient);
+      applicationContext.environment.stage = 'test';
+
+      await describeDeployTable({
+        applicationContext,
+      });
+
+      expect(
+        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
+      ).toEqual({
+        TableName: 'efcms-deploy-test',
       });
     });
   });
