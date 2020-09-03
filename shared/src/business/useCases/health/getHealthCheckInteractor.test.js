@@ -57,4 +57,71 @@ describe('getHealthCheckInteractor', () => {
       },
     });
   });
+
+  it('should return false for all services if services are down', async () => {
+    const status = await getHealthCheckInteractor({
+      applicationContext: {
+        environment: {
+          stage: 'dev',
+        },
+        getHttpClient: () => {
+          return {
+            CancelToken: {
+              source: () => ({
+                cancel: () => null,
+              }),
+            },
+            get: () => Promise.reject(true),
+          };
+        },
+        getPersistenceGateway() {
+          return {
+            getClientId: () => {
+              throw new Error();
+            },
+            getDeployTableStatus: () => {
+              throw new Error();
+            },
+            getFirstSingleCaseRecord: () => {
+              throw new Error();
+            },
+            getSesStatus: () => {
+              throw new Error();
+            },
+            getTableStatus: () => {
+              throw new Error();
+            },
+          };
+        },
+        getStorageClient: () => {
+          return {
+            listObjectsV2: () => ({
+              promise: () => Promise.reject(true),
+            }),
+          };
+        },
+      },
+    });
+    expect(status).toEqual({
+      clamAV: false,
+      cognito: false,
+      dynamo: {
+        efcms: false,
+        efcmsDeploy: false,
+      },
+      dynamsoft: false,
+      elasticsearch: false,
+      emailService: false,
+      s3: {
+        'app.dev.ustc-case-mgmt.flexion.us': false,
+        'app-failover.dev.ustc-case-mgmt.flexion.us': false,
+        'dev.ustc-case-mgmt.flexion.us': false,
+        'dev.ustc-case-mgmt.flexion.us-documents-dev-us-east-1': false,
+        'dev.ustc-case-mgmt.flexion.us-documents-dev-us-west-1': false,
+        'dev.ustc-case-mgmt.flexion.us-temp-documents-dev-us-east-1': false,
+        'dev.ustc-case-mgmt.flexion.us-temp-documents-dev-us-west-1': false,
+        'failover.dev.ustc-case-mgmt.flexion.us': false,
+      },
+    });
+  });
 });
