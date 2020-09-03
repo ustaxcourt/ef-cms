@@ -443,8 +443,7 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
-  initialCaption: JoiValidationConstants.STRING.max(500)
-    .allow(null)
+  initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
     .optional()
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: JoiValidationConstants.STRING.valid(
