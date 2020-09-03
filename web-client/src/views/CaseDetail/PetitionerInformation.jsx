@@ -424,7 +424,14 @@ const PetitionerInformation = connect(
                   </div>
                   {caseInformationHelper.showAddCounsel && practitionerSearch()}
                 </div>
-                {practitionerPartyInformation()}
+                {caseDetailHelper.hasPrivatePractitioners &&
+                  practitionerPartyInformation()}
+
+                {!caseDetailHelper.hasPrivatePractitioners && (
+                  <span>
+                    There is no respondent counsel associated with this case
+                  </span>
+                )}
               </div>
             </div>
           </div>

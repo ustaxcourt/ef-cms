@@ -155,7 +155,14 @@ const RespondentInformation = connect(
                   </div>
                   {caseInformationHelper.showAddCounsel && respondentSearch()}
                 </div>
-                {respondentPartyInformation()}
+                {caseDetailHelper.hasIrsPractitioners &&
+                  respondentPartyInformation()}
+
+                {!caseDetailHelper.hasIrsPractitioners && (
+                  <span>
+                    There is no respondent counsel associated with this case
+                  </span>
+                )}
               </div>
             </div>
           </div>
