@@ -72,10 +72,10 @@ const PetitionerInformation = connect(
               {formattedCaseDetail.contactPrimary && (
                 <div className="grid-row">
                   <div className="grid-col-6">
-                    <p className="label margin-top-0">Party type</p>
-                    <p className="irs-notice-date">
-                      {formattedCaseDetail.partyType}
+                    <p className="semi-bold margin-top-0 margin-bottom-0">
+                      Party type
                     </p>
+                    {formattedCaseDetail.partyType}
                   </div>
 
                   <div className="grid-col-6">
