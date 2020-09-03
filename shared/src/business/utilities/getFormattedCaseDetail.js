@@ -162,6 +162,10 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.description += ` ${formattedDocument.additionalInfo}`;
   }
 
+  if (formattedEntry.lodged) {
+    formattedEntry.eventCode = 'MISCL';
+  }
+
   return { ...formattedDocument, ...formattedEntry };
 };
 
@@ -205,15 +209,11 @@ const formatCase = (applicationContext, caseDetail) => {
   }
   const result = cloneDeep(caseDetail);
 
-  if (result.documents) {
-    result.formattedDocuments = result.documents.map(d =>
-      formatDocument(applicationContext, d),
-    );
-
-    result.draftDocuments = result.formattedDocuments
+  if (result.docketEntries) {
+    result.draftDocuments = result.docketEntries
       .filter(document => document.isDraft && !document.archived)
       .map(document => ({
-        ...document,
+        ...formatDocument(applicationContext, document),
         editUrl:
           document.documentType === 'Miscellaneous'
             ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
@@ -226,9 +226,7 @@ const formatCase = (applicationContext, caseDetail) => {
           .getUtilities()
           .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
       }));
-  }
 
-  if (result.docketEntries) {
     result.formattedDocketEntries = result.docketEntries.map(d =>
       formatDocketEntry(applicationContext, d),
     );

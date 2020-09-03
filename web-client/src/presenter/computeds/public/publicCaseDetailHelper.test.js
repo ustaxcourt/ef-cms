@@ -21,7 +21,6 @@ describe('publicCaseDetailHelper', () => {
       caseDetail: {
         docketEntries: [],
         docketNumber: '123-45',
-        documents: [],
       },
     };
   });
@@ -33,7 +32,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should return hasDocument false if the document is a minute entry', () => {
-      state.caseDetail.documents = [
+      state.caseDetail.docketEntries = [
         {
           description: 'Request for Place of Trial at Flavortown, TN',
           documentType:
@@ -71,7 +70,7 @@ describe('publicCaseDetailHelper', () => {
   });
 
   it('should format docket entries with documents and sort chronologically', () => {
-    state.caseDetail.documents = [
+    state.caseDetail.docketEntries = [
       {
         action: 'something',
         createdAt: '2018-11-21T20:49:28.192Z',

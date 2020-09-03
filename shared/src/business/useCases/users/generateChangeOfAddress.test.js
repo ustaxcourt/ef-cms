@@ -198,7 +198,7 @@ describe('generateChangeOfAddress', () => {
       },
     });
 
-    const noticeOfChangeOfAddressDocument = cases[0].documents.find(
+    const noticeOfChangeOfAddressDocument = cases[0].docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
 

@@ -35,8 +35,7 @@ describe('fileExternalDocumentInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      documents: [
+      docketEntries: [
         {
           description: 'first record',
           docketNumber: '45678-18',
@@ -74,6 +73,7 @@ describe('fileExternalDocumentInteractor', () => {
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -133,7 +133,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase.documents[4].servedAt).toBeDefined();
+    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -175,7 +175,7 @@ describe('fileExternalDocumentInteractor', () => {
       },
     });
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-    expect(updatedCase.documents).toMatchObject([
+    expect(updatedCase.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
       {},
       {},
@@ -229,8 +229,8 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase.documents[3].status).toBeUndefined();
-    expect(updatedCase.documents[3].servedAt).toBeUndefined();
+    expect(updatedCase.docketEntries[3].status).toBeUndefined();
+    expect(updatedCase.docketEntries[3].servedAt).toBeUndefined();
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {

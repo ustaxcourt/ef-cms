@@ -28,7 +28,7 @@ const getIsCourtIssued = docketRecordEntry =>
 
 const getDocumentForEntry = (caseDetail, docketRecordEntry) =>
   docketRecordEntry.documentId &&
-  caseDetail.documents.find(
+  caseDetail.docketEntries.find(
     doc => doc.documentId === docketRecordEntry.documentId,
   );
 
@@ -75,7 +75,7 @@ const shouldGenerateDocketRecordIndex = ({
     if (entityToUse.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode) {
       return true;
     } else {
-      const petitionDocument = caseDetail.documents.find(
+      const petitionDocument = caseDetail.docketEntries.find(
         d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
       );
       // if the petition has a servedAt, then this non-petition initial document is being added after the fact (not filed at the same time)

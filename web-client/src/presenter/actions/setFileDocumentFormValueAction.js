@@ -15,7 +15,7 @@ export const setFileDocumentFormValueAction = ({ get, props, store }) => {
   ) {
     const caseDetail = get(state.caseDetail);
 
-    const previousDocument = caseDetail.documents.find(
+    const previousDocument = caseDetail.docketEntries.find(
       document => document.documentId === props.value,
     );
     store.set(state.form[props.key], previousDocument);

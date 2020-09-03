@@ -39,7 +39,7 @@ export const petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving = (
       applicationForWaiverOfFilingFeeFile,
     );
     await test.runSequence('setDocumentForPreviewSequence');
-    expect(test.getState('form.documents')).toEqual(
+    expect(test.getState('form.docketEntries')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentType: 'Application for Waiver of Filing Fee',

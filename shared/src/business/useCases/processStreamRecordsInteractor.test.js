@@ -34,7 +34,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(applicationContext.getSearchClient().bulk).not.toHaveBeenCalled();
   });
 
-  it('calls bulk function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out items that are not cases, documents, or users', async () => {
+  it('calls bulk function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out items that are not cases, docketEntries, or users', async () => {
     await processStreamRecordsInteractor({
       applicationContext,
       recordsToProcess: [
@@ -115,7 +115,7 @@ describe('processStreamRecordsInteractor', () => {
               sk: { S: '6' },
               workItem: {
                 blah: true,
-                documents: [{ documentId: '6' }],
+                docketEntries: [{ documentId: '6' }],
               },
             },
           },
@@ -365,8 +365,8 @@ describe('processStreamRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
+        docketEntries: [{ documentId: '1' }],
         docketNumber,
-        documents: [{ documentId: '1' }],
         entityName: 'Case',
         pk: `case|${docketNumber}`,
         sk: `case|${docketNumber}`,
@@ -432,19 +432,18 @@ describe('processStreamRecordsInteractor', () => {
       },
       { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
       {
+        docketEntries: { L: [{ M: { documentId: { S: '1' } } }] },
         docketNumber: { S: '1' },
-        documents: { L: [{ M: { documentId: { S: '1' } } }] },
         entityName: { S: 'Case' },
         pk: { S: 'case|1' },
         sk: { S: 'case|1' },
       },
-      // calls documents again because they are indexed again after the case
+      // calls docketEntries again because they are indexed again after the case
       { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
       {
+        docketEntries: undefined,
         docketNumber: { S: '1' },
-        docketRecord: undefined,
         documentId: { S: '1' },
-        documents: undefined,
         entityName: { S: 'Document' },
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
@@ -455,18 +454,17 @@ describe('processStreamRecordsInteractor', () => {
         index: { _id: 'case|4_case|4', _index: 'efcms-case' },
       },
       {
+        docketEntries: { L: [{ M: { documentId: { S: '1' } } }] },
         docketNumber: { S: '4' },
-        documents: { L: [{ M: { documentId: { S: '1' } } }] },
         entityName: { S: 'Case' },
         pk: { S: 'case|4' },
         sk: { S: 'case|4' },
       },
       { index: { _id: 'case|4_document|1', _index: 'efcms-document' } },
       {
+        docketEntries: undefined,
         docketNumber: { S: '4' },
-        docketRecord: undefined,
         documentId: { S: '1' },
-        documents: undefined,
         entityName: { S: 'Document' },
         irsPractitioners: undefined,
         pk: { S: 'case|4' },
@@ -480,8 +478,8 @@ describe('processStreamRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
+        docketEntries: [{ documentContentsId: '5', documentId: '1' }],
         docketNumber,
-        documents: [{ documentContentsId: '5', documentId: '1' }],
         entityName: 'Case',
         pk: `case|${docketNumber}`,
         sk: `case|${docketNumber}`,
@@ -529,27 +527,26 @@ describe('processStreamRecordsInteractor', () => {
       },
       { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
       {
-        docketNumber: { S: '1' },
-        documents: {
+        docketEntries: {
           L: [
             { M: { documentContentsId: { S: '5' }, documentId: { S: '1' } } },
           ],
         },
+        docketNumber: { S: '1' },
         entityName: { S: 'Case' },
         pk: { S: 'case|1' },
         sk: { S: 'case|1' },
       },
-      // calls documents again because they are indexed again after the case
+      // calls docketEntries again because they are indexed again after the case
       { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
       {
+        docketEntries: undefined,
         docketNumber: { S: '1' },
-        docketRecord: undefined,
         documentContents: {
           S: 'I am some document contents',
         },
         documentContentsId: { S: '5' },
         documentId: { S: '1' },
-        documents: undefined,
         entityName: { S: 'Document' },
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
@@ -562,7 +559,7 @@ describe('processStreamRecordsInteractor', () => {
   it('does not attempt to index a case record if getCaseByDocketNumber does not return a case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({ documents: [] });
+      .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
 
     await processStreamRecordsInteractor({
       applicationContext,

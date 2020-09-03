@@ -33,7 +33,6 @@ const mockCaseDetailBase = {
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
-  documents: [],
   receivedAt: new Date(),
 };
 
@@ -90,20 +89,30 @@ describe('formatCase', () => {
       docketEntries: documents,
       documents,
     });
-    expect(result.formattedDocuments[0].isPetition).toBeTruthy();
-    expect(result.formattedDocuments[0].qcWorkItemsCompleted).toBeTruthy();
-    expect(result.formattedDocuments[0].qcWorkItemsUntouched).toEqual(false);
+    expect(result.formattedDocketEntries[0].isPetition).toBeTruthy();
+    expect(result.formattedDocketEntries[0].qcWorkItemsCompleted).toBeTruthy();
+    expect(result.formattedDocketEntries[0].qcWorkItemsUntouched).toEqual(
+      false,
+    );
 
-    expect(result.formattedDocuments[0]).toHaveProperty('createdAtFormatted');
-    expect(result.formattedDocuments[0]).toHaveProperty('servedAtFormatted');
-    expect(result.formattedDocuments[0]).toHaveProperty('showServedAt');
-    expect(result.formattedDocuments[0]).toHaveProperty('isStatusServed');
-    expect(result.formattedDocuments[0]).toHaveProperty('isPetition');
-    expect(result.formattedDocuments[0]).toHaveProperty('servedPartiesCode');
-    expect(result.formattedDocuments[0].showLegacySealed).toBeTruthy();
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'createdAtFormatted',
+    );
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'servedAtFormatted',
+    );
+    expect(result.formattedDocketEntries[0]).toHaveProperty('showServedAt');
+    expect(result.formattedDocketEntries[0]).toHaveProperty('isStatusServed');
+    expect(result.formattedDocketEntries[0]).toHaveProperty('isPetition');
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'servedPartiesCode',
+    );
+    expect(result.formattedDocketEntries[0].showLegacySealed).toBeTruthy();
 
-    expect(result.formattedDocuments[1].showLegacySealed).toBeFalsy();
-    expect(result.formattedDocuments[1].qcWorkItemsUntouched).toEqual(false);
+    expect(result.formattedDocketEntries[1].showLegacySealed).toBeFalsy();
+    expect(result.formattedDocketEntries[1].qcWorkItemsUntouched).toEqual(
+      false,
+    );
   });
 
   it('should correctly format legacy served documents', () => {
@@ -134,11 +143,11 @@ describe('formatCase', () => {
       documents,
     });
 
-    expect(result.formattedDocuments[0].isNotServedDocument).toBeFalsy();
-    expect(result.formattedDocuments[0].isUnservable).toBeTruthy();
+    expect(result.formattedDocketEntries[0].isNotServedDocument).toBeFalsy();
+    expect(result.formattedDocketEntries[0].isUnservable).toBeTruthy();
 
-    expect(result.formattedDocuments[1].isNotServedDocument).toBeFalsy();
-    expect(result.formattedDocuments[1].isUnservable).toBeTruthy();
+    expect(result.formattedDocketEntries[1].isNotServedDocument).toBeFalsy();
+    expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
   it('should format the filing date of all correspondence documents', () => {
@@ -314,23 +323,9 @@ describe('formatCase', () => {
   });
 
   it('should apply additional information', () => {
-    const documents = [
-      {
-        additionalInfo: 'additional information',
-        createdAt: getDateISO(),
-        description: 'desc',
-        documentId: 'd-1-2-3',
-        documentType: 'Petition',
-        index: '1',
-        isOnDocketRecord: true,
-        servedAt: getDateISO(),
-      },
-    ];
-
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents: [
+      docketEntries: [
         {
           additionalInfo: 'additional information',
           createdAt: getDateISO(),
@@ -352,7 +347,7 @@ describe('formatCase', () => {
   it('should format certificate of service date', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      documents: [
+      docketEntries: [
         {
           certificateOfServiceDate: getDateISO(),
           createdAt: getDateISO(),
@@ -365,7 +360,7 @@ describe('formatCase', () => {
     });
 
     expect(
-      result.formattedDocuments[0].certificateOfServiceDateFormatted,
+      result.formattedDocketEntries[0].certificateOfServiceDateFormatted,
     ).toEqual(
       applicationContext
         .getUtilities()
@@ -774,7 +769,7 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDetail: {
         ...mockCaseDetailBase,
-        documents: [
+        docketEntries: [
           {
             archived: false,
             createdAt: getDateISO(),

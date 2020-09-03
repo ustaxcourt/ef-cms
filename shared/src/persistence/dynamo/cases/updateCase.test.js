@@ -684,15 +684,15 @@ describe('updateCase', () => {
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockResolvedValue({
           ...mockCase,
-          documents: [],
+          docketEntries: [],
         });
 
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          docketEntries: [MOCK_DOCUMENTS[0]],
           docketNumber: '101-18',
           docketNumberSuffix: null,
-          documents: [MOCK_DOCUMENTS[0]],
           status: CASE_STATUS_TYPES.generalDocket,
         },
       });
@@ -716,9 +716,9 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          docketEntries: [MOCK_DOCUMENTS[0], MOCK_DOCUMENTS[1]],
           docketNumber: '101-18',
           docketNumberSuffix: null,
-          documents: [MOCK_DOCUMENTS[0], MOCK_DOCUMENTS[1]],
           status: CASE_STATUS_TYPES.generalDocket,
         },
       });

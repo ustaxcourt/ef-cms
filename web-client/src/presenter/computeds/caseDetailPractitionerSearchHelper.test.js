@@ -33,7 +33,10 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [{ userId: '2' }] },
+        caseDetail: {
+          docketEntries: [],
+          privatePractitioners: [{ userId: '2' }],
+        },
         form: {},
         modal: {
           practitionerMatches: [
@@ -77,7 +80,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
         modal: { practitionerMatches: [{ name: '1' }, { name: '2' }] },
       },
@@ -93,7 +96,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
         modal: { practitionerMatches: [] },
       },
@@ -109,7 +112,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
         modal: {},
       },
@@ -125,7 +128,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '1' }] },
+        caseDetail: { docketEntries: [], irsPractitioners: [{ userId: '1' }] },
         form: {},
         modal: {
           respondentMatches: [
@@ -169,7 +172,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
         modal: { respondentMatches: [{ name: '1' }, { name: '2' }] },
       },
@@ -185,7 +188,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
         modal: { respondentMatches: [] },
       },
@@ -201,7 +204,7 @@ describe('caseDetailPractitionerSearchHelper', () => {
     const result = runCompute(caseDetailPractitionerSearchHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
         modal: {},
       },

@@ -98,7 +98,7 @@ describe('selectDocumentTypeHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel: 'Which document are you objecting to?',
-        previouslyFiledDocuments: MOCK_CASE.documents.filter(
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -135,7 +135,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel:
           'Which document is this affidavit in support of?',
-        previouslyFiledDocuments: MOCK_CASE.documents.filter(
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
@@ -157,7 +157,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel:
           'Which document is this Certificate of Service for?',
-        previouslyFiledDocuments: MOCK_CASE.documents.filter(
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showDateFields: true,
@@ -197,7 +197,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         ordinalField: 'What iteration is this filing?',
         previousDocumentSelectLabel: 'Which document is this a supplement to?',
-        previouslyFiledDocuments: MOCK_CASE.documents.filter(
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,

@@ -6,7 +6,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
-  const mockPrimaryDocumentId = MOCK_CASE.documents[0].documentId;
+  const mockPrimaryDocumentId = MOCK_CASE.docketEntries[0].documentId;
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(

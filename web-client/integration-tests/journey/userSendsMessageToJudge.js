@@ -31,7 +31,7 @@ export const userSendsMessageToJudge = (test, subject) => {
       value: 'dabbad00-18d0-43ec-bafb-654e83405416', //judgeArmen
     });
 
-    const messageDocument = getHelper().documents[0];
+    const messageDocument = getHelper().docketEntries[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
     await test.runSequence('updateMessageModalAttachmentsSequence', {
