@@ -302,7 +302,6 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           'documents',
           'irsPractitioners',
           'privatePractitioners',
-          'docketRecord',
         ]),
       },
       applicationContext,
