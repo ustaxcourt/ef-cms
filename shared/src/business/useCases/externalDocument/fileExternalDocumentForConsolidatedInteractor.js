@@ -10,7 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -130,7 +130,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     if (documentId && metadata) {
       // TODO: Double check what is auto-generated here,
       // as this may not be entirely necessary
-      const rawDocument = new Document(
+      const rawDocument = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
@@ -149,7 +149,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           caseEntity.docketNumber,
         );
 
-        const documentEntity = new Document(
+        const documentEntity = new DocketEntry(
           {
             ...rawDocument,
             ...caseEntity.getCaseContacts({

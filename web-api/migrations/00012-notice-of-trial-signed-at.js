@@ -1,7 +1,9 @@
 const createApplicationContext = require('../src/applicationContext');
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
-const { Document } = require('../../shared/src/business/entities/Document');
+const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
 
 const mutateRecord = async item => {
   if (isDocumentRecord(item)) {
@@ -10,7 +12,7 @@ const mutateRecord = async item => {
 
     if (documentRequiresSignedAt && !item.signedAt) {
       // Use createdAt for signedAt, since these are likely auto-generated documents (signed and created at the same time)
-      const documentToUpdate = new Document(
+      const documentToUpdate = new DocketEntry(
         { ...item, signedAt: item.createdAt },
         { applicationContext },
       )

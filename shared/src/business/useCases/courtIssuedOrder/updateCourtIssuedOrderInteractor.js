@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
@@ -80,7 +80,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
 
-  const documentEntity = new Document(
+  const documentEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,

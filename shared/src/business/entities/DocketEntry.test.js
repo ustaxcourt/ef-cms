@@ -13,12 +13,12 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Document } = require('./Document');
+const { DocketEntry } = require('./DocketEntry');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
-describe('Document entity', () => {
-  const A_VALID_DOCUMENT = {
+describe('DocketEntry entity', () => {
+  const A_VALID_DOCKET_ENTRY = {
     documentType: 'Petition',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
@@ -37,37 +37,37 @@ describe('Document entity', () => {
 
   describe('isPendingOnCreation', () => {
     beforeAll(() => {
-      jest.spyOn(Document, 'isPendingOnCreation');
+      jest.spyOn(DocketEntry, 'isPendingOnCreation');
     });
 
     afterAll(() => {
-      Document.isPendingOnCreation.mockRestore();
+      DocketEntry.isPendingOnCreation.mockRestore();
     });
 
     it('respects any defined "pending" value', () => {
       const raw1 = { eventCode: 'FOO', pending: true };
-      const doc1 = new Document(raw1, { applicationContext });
+      const doc1 = new DocketEntry(raw1, { applicationContext });
       expect(doc1.pending).toBeTruthy();
 
       const raw2 = { eventCode: 'FOO', pending: false };
-      const doc2 = new Document(raw2, { applicationContext });
+      const doc2 = new DocketEntry(raw2, { applicationContext });
       expect(doc2.pending).toBeFalsy();
 
-      expect(Document.isPendingOnCreation).not.toHaveBeenCalled();
+      expect(DocketEntry.isPendingOnCreation).not.toHaveBeenCalled();
     });
 
     it('sets pending to false for non-matching event code and category', () => {
       const raw1 = { category: 'Ice Hockey', eventCode: 'ABC' };
-      const doc1 = new Document(raw1, { applicationContext });
+      const doc1 = new DocketEntry(raw1, { applicationContext });
       expect(doc1.pending).toBe(false);
 
-      expect(Document.isPendingOnCreation).toHaveBeenCalled();
+      expect(DocketEntry.isPendingOnCreation).toHaveBeenCalled();
 
       const raw2 = { color: 'blue', sport: 'Ice Hockey' };
-      const doc2 = new Document(raw2, { applicationContext });
+      const doc2 = new DocketEntry(raw2, { applicationContext });
       expect(doc2.pending).toBe(false);
 
-      expect(Document.isPendingOnCreation).toHaveBeenCalled();
+      expect(DocketEntry.isPendingOnCreation).toHaveBeenCalled();
     });
 
     it('sets pending to true for known list of matching events or categories', () => {
@@ -76,21 +76,21 @@ describe('Document entity', () => {
         documentType: 'some kind of motion',
         eventCode: 'FOO',
       };
-      const doc1 = new Document(raw1, { applicationContext });
+      const doc1 = new DocketEntry(raw1, { applicationContext });
       expect(doc1.pending).toBeTruthy();
 
       const raw2 = {
         documentType: 'it is a proposed stipulated decision',
         eventCode: 'PSDE',
       };
-      const doc2 = new Document(raw2, { applicationContext });
+      const doc2 = new DocketEntry(raw2, { applicationContext });
       expect(doc2.pending).toBeTruthy();
 
       const raw3 = {
         documentType: 'it is an order to show cause',
         eventCode: 'OSC',
       };
-      const doc3 = new Document(raw3, { applicationContext });
+      const doc3 = new DocketEntry(raw3, { applicationContext });
       expect(doc3.pending).toBeTruthy();
 
       const raw4 = {
@@ -98,16 +98,16 @@ describe('Document entity', () => {
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APW',
       };
-      const doc4 = new Document(raw4, { applicationContext });
+      const doc4 = new DocketEntry(raw4, { applicationContext });
       expect(doc4.pending).toBeTruthy();
     });
   });
 
   describe('signedAt', () => {
     it('should implicitly set a signedAt for Notice event codes', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           eventCode: 'NOT',
           signedAt: null,
         },
@@ -118,9 +118,9 @@ describe('Document entity', () => {
     });
 
     it('should NOT implicitly set a signedAt for non Notice event codes', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           eventCode: 'O',
           signedAt: null,
         },
@@ -133,9 +133,9 @@ describe('Document entity', () => {
 
   describe('isDraft', () => {
     it('should default to false when no isDraft value is provided', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           eventCode: 'NOT',
           signedAt: null,
         },
@@ -148,18 +148,20 @@ describe('Document entity', () => {
 
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
-      expect(() => new Document({}, {})).toThrow();
+      expect(() => new DocketEntry({}, {})).toThrow();
     });
 
     it('Creates a valid document', () => {
-      const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
+      const myDoc = new DocketEntry(A_VALID_DOCKET_ENTRY, {
+        applicationContext,
+      });
       myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       expect(myDoc.isValid()).toBeTruthy();
-      expect(myDoc.entityName).toEqual('Document');
+      expect(myDoc.entityName).toEqual('DocketEntry');
     });
 
     it('Creates an invalid document with no document type', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
@@ -169,7 +171,7 @@ describe('Document entity', () => {
     });
 
     it('Creates an invalid document with no userId', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
           documentType: 'Petition',
         },
@@ -179,7 +181,7 @@ describe('Document entity', () => {
     });
 
     it('Creates an invalid document with serviceDate of undefined-undefined-undefined', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
           serviceDate: 'undefined-undefined-undefined',
         },
@@ -189,9 +191,9 @@ describe('Document entity', () => {
     });
 
     it('setWorkItem', () => {
-      const myDoc = new Document(
+      const myDoc = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '68584a2f-52d8-4876-8e44-0920f5061428',
         },
         { applicationContext },
@@ -221,9 +223,9 @@ describe('Document entity', () => {
       let error;
       let document;
       try {
-        document = new Document(
+        document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentContents: 'this is the content of the document',
           },
           { applicationContext },
@@ -241,7 +243,7 @@ describe('Document entity', () => {
     it('should throw an error on invalid documents', () => {
       let error;
       try {
-        new Document({}, { applicationContext }).validate();
+        new DocketEntry({}, { applicationContext }).validate();
       } catch (err) {
         error = err;
       }
@@ -249,9 +251,9 @@ describe('Document entity', () => {
     });
 
     it('should correctly validate with a secondaryDate', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           eventCode: TRANSCRIPT_EVENT_CODE,
           secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -264,9 +266,9 @@ describe('Document entity', () => {
 
     describe('handling of sealed legacy documents', () => {
       it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             secondaryDate: '2019-03-01T21:40:46.415Z',
           },
@@ -276,9 +278,9 @@ describe('Document entity', () => {
       });
 
       it('should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             isLegacySealed: true,
             secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -293,9 +295,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when "isLegacy" is true, "isLegacySealed" is true, "isSealed" is true', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: ORDER_TYPES[0].documentType,
             eventCode: 'O',
@@ -313,9 +315,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when "isLegacySealed" is false, "isSealed" and "isLegacy" are undefined', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: ORDER_TYPES[0].documentType,
             eventCode: 'O',
@@ -333,7 +335,7 @@ describe('Document entity', () => {
 
     describe('filedBy scenarios', () => {
       let mockDocumentData = {
-        ...A_VALID_DOCUMENT,
+        ...A_VALID_DOCKET_ENTRY,
         documentId: '777afd4b-1408-4211-a80e-3e897999861a',
         secondaryDate: '2019-03-01T21:40:46.415Z',
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -343,7 +345,7 @@ describe('Document entity', () => {
 
       describe('documentType is not in the list of documents that require filedBy', () => {
         it('should pass validation when filedBy is undefined', () => {
-          let internalDocument = new Document(
+          let internalDocument = new DocketEntry(
             { ...mockDocumentData, documentType: 'Petition' },
             { applicationContext },
           );
@@ -356,9 +358,9 @@ describe('Document entity', () => {
         describe('external filing events', () => {
           describe('that are not autogenerated', () => {
             it('should fail validation when "filedBy" is not provided', () => {
-              const document = new Document(
+              const document = new DocketEntry(
                 {
-                  ...A_VALID_DOCUMENT,
+                  ...A_VALID_DOCKET_ENTRY,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
@@ -373,9 +375,9 @@ describe('Document entity', () => {
             });
 
             it('should pass validation when "filedBy" is provided', () => {
-              const document = new Document(
+              const document = new DocketEntry(
                 {
-                  ...A_VALID_DOCUMENT,
+                  ...A_VALID_DOCKET_ENTRY,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
@@ -392,8 +394,11 @@ describe('Document entity', () => {
 
           describe('that are autogenerated', () => {
             it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
-              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
-              const document = new Document(
+              const documentWithoutFiledBy = omit(
+                A_VALID_DOCKET_ENTRY,
+                'filedBy',
+              );
+              const document = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
@@ -411,8 +416,11 @@ describe('Document entity', () => {
             });
 
             it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
-              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
-              const document = new Document(
+              const documentWithoutFiledBy = omit(
+                A_VALID_DOCKET_ENTRY,
+                'filedBy',
+              );
+              const document = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
@@ -428,8 +436,11 @@ describe('Document entity', () => {
             });
 
             it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
-              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
-              const document = new Document(
+              const documentWithoutFiledBy = omit(
+                A_VALID_DOCKET_ENTRY,
+                'filedBy',
+              );
+              const document = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
@@ -450,9 +461,9 @@ describe('Document entity', () => {
         describe('internal filing events', () => {
           describe('that are not autogenerated', () => {
             it('should fail validation when "filedBy" is not provided', () => {
-              const document = new Document(
+              const document = new DocketEntry(
                 {
-                  ...A_VALID_DOCUMENT,
+                  ...A_VALID_DOCKET_ENTRY,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
@@ -467,9 +478,9 @@ describe('Document entity', () => {
             });
 
             it('should pass validation when "filedBy" is provided', () => {
-              const document = new Document(
+              const document = new DocketEntry(
                 {
-                  ...A_VALID_DOCUMENT,
+                  ...A_VALID_DOCKET_ENTRY,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
@@ -486,8 +497,11 @@ describe('Document entity', () => {
 
           describe('that are autogenerated', () => {
             it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
-              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
-              const document = new Document(
+              const documentWithoutFiledBy = omit(
+                A_VALID_DOCKET_ENTRY,
+                'filedBy',
+              );
+              const document = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
@@ -505,8 +519,11 @@ describe('Document entity', () => {
             });
 
             it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
-              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
-              const document = new Document(
+              const documentWithoutFiledBy = omit(
+                A_VALID_DOCKET_ENTRY,
+                'filedBy',
+              );
+              const document = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
@@ -522,8 +539,11 @@ describe('Document entity', () => {
             });
 
             it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
-              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
-              const document = new Document(
+              const documentWithoutFiledBy = omit(
+                A_VALID_DOCKET_ENTRY,
+                'filedBy',
+              );
+              const document = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
@@ -545,9 +565,9 @@ describe('Document entity', () => {
 
     describe('signed property scenarios', () => {
       it('should fail validation when isDraft is false and signedAt is undefined for a document requiring signature', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -564,9 +584,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when isDraft is false and signedAt is undefined for a document not requiring signature', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Answer',
             eventCode: 'A',
@@ -583,9 +603,9 @@ describe('Document entity', () => {
       });
 
       it('should fail validation when isDraft is false and signedJudgeName is undefined for a document requiring signature', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -601,9 +621,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when isDraft is false and signedJudgeName is undefined for a document not requiring signature', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Answer',
             eventCode: 'A',
@@ -619,9 +639,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -639,9 +659,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when isDraft is true and signedJudgeName and signedAt are undefined', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -657,9 +677,9 @@ describe('Document entity', () => {
       });
 
       it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -673,9 +693,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -692,9 +712,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -710,9 +730,9 @@ describe('Document entity', () => {
       });
 
       it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -726,9 +746,9 @@ describe('Document entity', () => {
       });
 
       it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
-        const document = new Document(
+        const document = new DocketEntry(
           {
-            ...A_VALID_DOCUMENT,
+            ...A_VALID_DOCKET_ENTRY,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
@@ -745,9 +765,9 @@ describe('Document entity', () => {
     });
 
     it('should fail validation when the document type is opinion and judge is not provided', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: OPINION_DOCUMENT_TYPES[0].documentType,
           eventCode: 'MOP',
@@ -760,9 +780,9 @@ describe('Document entity', () => {
     });
 
     it('should fail validation when the document has a servedAt date and servedParties is not defined', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
           eventCode: TRANSCRIPT_EVENT_CODE,
@@ -783,9 +803,9 @@ describe('Document entity', () => {
     });
 
     it('should fail validation when the document has servedParties and servedAt is not defined', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
           eventCode: TRANSCRIPT_EVENT_CODE,
@@ -808,7 +828,7 @@ describe('Document entity', () => {
 
   describe('generate filed by string', () => {
     it('should generate correct filedBy string for partyPrimary', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -835,7 +855,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary and otherFilingParty', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -863,7 +883,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for only partySecondary', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -891,7 +911,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -921,7 +941,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary, partyIrsPractitioner, and otherFilingParty', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -952,7 +972,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for only otherFilingParty', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -983,7 +1003,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary and partySecondary', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: true,
@@ -1018,7 +1038,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1046,7 +1066,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1077,7 +1097,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1108,7 +1128,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1145,7 +1165,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1180,7 +1200,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary in the constructor when called with a contactPrimary property', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -1208,7 +1228,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partySecondary in the constructor when called with a contactSecondary property', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -1237,7 +1257,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner in the constructor when values are present', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -1268,7 +1288,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyPrimary and partySecondary in the constructor when values are present', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           attachments: true,
@@ -1304,7 +1324,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1336,7 +1356,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1368,7 +1388,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1406,7 +1426,7 @@ describe('Document entity', () => {
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
@@ -1444,7 +1464,9 @@ describe('Document entity', () => {
 
   describe('unsignDocument', () => {
     it('signs and unsigns the document', () => {
-      const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+      const document = new DocketEntry(A_VALID_DOCKET_ENTRY, {
+        applicationContext,
+      });
       document.setSigned('abc-123', 'Joe Exotic');
 
       expect(document.signedByUserId).toEqual('abc-123');
@@ -1461,7 +1483,9 @@ describe('Document entity', () => {
 
   describe('setQCed', () => {
     it('updates the document QC information with user name, id, and date', () => {
-      const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+      const document = new DocketEntry(A_VALID_DOCKET_ENTRY, {
+        applicationContext,
+      });
       const user = {
         name: 'Jean Luc',
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
@@ -1476,9 +1500,9 @@ describe('Document entity', () => {
 
   describe('isAutoServed', () => {
     it('should return true if the documentType is an external document and the documentTitle does not contain Simultaneous', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Answer to Second Amendment to Petition',
           documentType: 'Answer to Second Amendment to Petition',
         },
@@ -1488,9 +1512,9 @@ describe('Document entity', () => {
     });
 
     it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Entry of Appearance',
           documentType: 'Entry of Appearance',
         },
@@ -1500,9 +1524,9 @@ describe('Document entity', () => {
     });
 
     it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Amended Simultaneous Memoranda of Law',
           documentType: 'Amended Simultaneous Memoranda of Law',
         },
@@ -1512,9 +1536,9 @@ describe('Document entity', () => {
     });
 
     it('should return false if the documentType is an internally-filed document', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Application for Examination Pursuant to Rule 73',
           documentType: 'Application for Examination Pursuant to Rule 73',
         },
@@ -1526,9 +1550,9 @@ describe('Document entity', () => {
 
   describe('setAsServed', () => {
     it('sets the Document as served', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           draftState: {
             documentContents: 'Yee to the haw',
           },
@@ -1542,9 +1566,9 @@ describe('Document entity', () => {
     });
 
     it('sets the Document as served with served parties', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
         },
         { applicationContext },
       );
@@ -1561,10 +1585,12 @@ describe('Document entity', () => {
 
   describe('getFormattedType', () => {
     it('strips out the dash and returns the verbiage after it', () => {
-      expect(Document.getFormattedType('T.C. Opinion')).toEqual('T.C. Opinion');
+      expect(DocketEntry.getFormattedType('T.C. Opinion')).toEqual(
+        'T.C. Opinion',
+      );
     });
     it("returns the verbiage if there's no dash", () => {
-      expect(Document.getFormattedType('Summary Opinion')).toEqual(
+      expect(DocketEntry.getFormattedType('Summary Opinion')).toEqual(
         'Summary Opinion',
       );
     });
@@ -1572,9 +1598,9 @@ describe('Document entity', () => {
 
   describe('secondaryDocument validation', () => {
     it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Standard',
           secondaryDocument: {},
@@ -1588,9 +1614,9 @@ describe('Document entity', () => {
     });
 
     it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Standard',
           secondaryDocument: undefined,
@@ -1601,9 +1627,9 @@ describe('Document entity', () => {
     });
 
     it('should be valid if secondaryDocument is not present and the scenario is Nonstandard H', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Nonstandard H',
           secondaryDocument: undefined,
@@ -1615,9 +1641,9 @@ describe('Document entity', () => {
     });
 
     it('should be valid if secondaryDocument is present and its contents are valid and the scenario is Nonstandard H', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Nonstandard H',
           secondaryDocument: {
@@ -1632,9 +1658,9 @@ describe('Document entity', () => {
     });
 
     it('should not be valid if secondaryDocument is present and it is missing fields and the scenario is Nonstandard H', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Nonstandard H',
           secondaryDocument: {},
@@ -1647,9 +1673,9 @@ describe('Document entity', () => {
       ).toEqual(['documentType', 'eventCode']);
     });
     it('should filter out unnecessary values from servedParties', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: applicationContext.getUniqueId(),
           servedAt: Date.now(),
           servedParties: [
@@ -1673,9 +1699,9 @@ describe('Document entity', () => {
       ]);
     });
     it('should return an error when servedParties is not an array', () => {
-      const createdDocument = new Document(
+      const createdDocument = new DocketEntry(
         {
-          ...A_VALID_DOCUMENT,
+          ...A_VALID_DOCKET_ENTRY,
           documentId: applicationContext.getUniqueId(),
           servedAt: Date.now(),
           servedParties: {
@@ -1696,7 +1722,7 @@ describe('Document entity', () => {
 
   describe('minute entries', () => {
     it('creates minute entry', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           description: 'Request for Place of Trial at Flavortown, TN',
           documentType:
@@ -1716,7 +1742,7 @@ describe('Document entity', () => {
 
   describe('setNumberOfPages', () => {
     it('sets the number of pages', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           description: 'Answer',
           documentType: 'Answer',
@@ -1734,7 +1760,7 @@ describe('Document entity', () => {
 
   describe('strikeEntry', () => {
     it('strikes a document if isOnDocketRecord is true', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           description: 'Answer',
           documentType: 'Answer',
@@ -1759,7 +1785,7 @@ describe('Document entity', () => {
     });
 
     it('throws an error if isOnDocketRecord is false', () => {
-      const document = new Document(
+      const document = new DocketEntry(
         {
           description: 'Answer',
           documentType: 'Answer',
