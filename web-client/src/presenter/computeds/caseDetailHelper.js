@@ -100,7 +100,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRespondentSection: !isExternalUser || hasIrsPractitioners,
     userCanViewCase:
       (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,

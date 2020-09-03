@@ -134,39 +134,38 @@ const RespondentInformation = connect(
 
     return (
       <>
-        {caseDetailHelper.showRespondentSection && (
-          <div className="subsection party-information">
-            <div className="card">
-              <div className="content-wrapper">
-                <div className="grid-row header-row">
-                  <div className="grid-col-6 display-flex" id="secondary-label">
-                    <h3>Respondent Counsel</h3>
-                    {caseInformationHelper.showEditIrsPractitioners && (
-                      <Button
-                        link
-                        className="margin-left-205 padding-0 height-3"
-                        id="edit-irsPractitioners-button"
-                        onClick={() => openEditIrsPractitionersModalSequence()}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    )}
-                  </div>
-                  {caseInformationHelper.showAddCounsel && respondentSearch()}
+        <div className="subsection party-information">
+          <div className="card">
+            <div className="content-wrapper">
+              <div className="grid-row header-row">
+                <div className="grid-col-6 display-flex" id="secondary-label">
+                  <h3>Respondent Counsel</h3>
+                  {caseInformationHelper.showEditIrsPractitioners && (
+                    <Button
+                      link
+                      className="margin-left-205 padding-0 height-3"
+                      id="edit-irsPractitioners-button"
+                      onClick={() => openEditIrsPractitionersModalSequence()}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </Button>
+                  )}
                 </div>
-                {caseDetailHelper.hasIrsPractitioners &&
-                  respondentPartyInformation()}
-
-                {!caseDetailHelper.hasIrsPractitioners && (
-                  <span>
-                    There is no respondent counsel associated with this case
-                  </span>
-                )}
+                {caseInformationHelper.showAddCounsel && respondentSearch()}
               </div>
+              {caseDetailHelper.hasIrsPractitioners &&
+                respondentPartyInformation()}
+
+              {!caseDetailHelper.hasIrsPractitioners && (
+                <span>
+                  There is no respondent counsel associated with this case.
+                </span>
+              )}
             </div>
           </div>
-        )}
+        </div>
+
         {showModal === 'AddIrsPractitionerModal' && <AddIrsPractitionerModal />}
         {showModal === 'EditIrsPractitionersModal' && (
           <EditIrsPractitionersModal />

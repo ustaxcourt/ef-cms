@@ -429,7 +429,7 @@ const PetitionerInformation = connect(
 
                 {!caseDetailHelper.hasPrivatePractitioners && (
                   <span>
-                    There is no respondent counsel associated with this case
+                    There is no petitioner counsel associated with this case.
                   </span>
                 )}
               </div>
