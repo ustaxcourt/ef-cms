@@ -1,28 +1,10 @@
-const AWS = require('aws-sdk');
-const {
-  describeDeployTable,
-  describeTable,
-} = require('../../../persistence/dynamodbClientService');
-const { execSync } = require('child_process');
-const { search } = require('../../../persistence/elasticsearch/searchClient');
-
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
 const getElasticSearchStatus = async ({ applicationContext }) => {
   try {
-    await search({
+    await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
       applicationContext,
-      searchParameters: {
-        body: {
-          _source: ['docketNumber'],
-          query: {
-            match_all: {},
-          },
-          size: 1,
-        },
-        index: 'efcms-case',
-      },
     });
   } catch (e) {
     return false;
@@ -33,8 +15,10 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
 
 const getDynamoStatus = async ({ applicationContext }) => {
   try {
-    const { Table } = await describeTable({ applicationContext });
-    return Table.TableStatus === 'ACTIVE';
+    const status = await applicationContext
+      .getPersistenceGateway()
+      .getTableStatus({ applicationContext });
+    return status === 'ACTIVE';
   } catch (e) {
     return false;
   }
@@ -42,8 +26,10 @@ const getDynamoStatus = async ({ applicationContext }) => {
 
 const getDeployDynamoStatus = async ({ applicationContext }) => {
   try {
-    const { Table } = await describeDeployTable({ applicationContext });
-    return Table.TableStatus === 'ACTIVE';
+    const status = await applicationContext
+      .getPersistenceGateway()
+      .getDeployTableStatus({ applicationContext });
+    return status === 'ACTIVE';
   } catch (e) {
     return false;
   }
@@ -80,15 +66,13 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
 };
 
 const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
-  const bucketNameParams = {
-    Bucket: bucketName,
-    MaxKeys: 1,
-  };
-
   try {
     await applicationContext
       .getStorageClient()
-      .listObjectsV2(bucketNameParams)
+      .listObjectsV2({
+        Bucket: bucketName,
+        MaxKeys: 1,
+      })
       .promise();
 
     return true;
@@ -137,28 +121,18 @@ const getCognitoStatus = async ({ applicationContext }) => {
   const source = handleAxiosTimeout(axios);
 
   try {
-    const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider(
-      { region: regionEast },
-    );
-
-    const params = {
-      MaxResults: 1,
-      UserPoolId: process.env.USER_POOL_ID,
-    };
-
-    const {
-      UserPoolClients,
-    } = await cognitoidentityserviceprovider
-      .listUserPoolClients(params)
-      .promise();
-
-    const clientID = UserPoolClients[0].ClientId;
+    const clientId = await applicationContext
+      .getPersistenceGateway()
+      .getClientId({
+        applicationContext,
+        userPoolId: process.env.USER_POOL_ID,
+      });
 
     await axios.get(
-      `https://${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientID}&redirect_uri=https%3A//app.${process.env.EFCMS_DOMAIN}/log-in`,
+      `https://${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=https%3A//app.${process.env.EFCMS_DOMAIN}/log-in`,
       {
         cancelToken: source.token,
-        timeout: 20000,
+        timeout: 1000,
       },
     );
     return true;
@@ -167,17 +141,9 @@ const getCognitoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getEmailServiceStatus = async () => {
+const getEmailServiceStatus = async ({ applicationContext }) => {
   try {
-    const result = await execSync(
-      'ping email.us-east-1.amazonaws.com -c 1 -W 10',
-    );
-
-    const receivedString = result.toString('utf8').split(',')[1];
-
-    const receivedPackets = receivedString.split(' ')[1];
-
-    return receivedPackets === '1';
+    return await applicationContext.getPersistenceGateway().getSesStatus();
   } catch (e) {
     return false;
   }
