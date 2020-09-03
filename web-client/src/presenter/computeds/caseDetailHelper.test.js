@@ -604,4 +604,79 @@ describe('case detail computed', () => {
     });
     expect(result.showPetitionProcessingAlert).toEqual(true);
   });
+
+  it('should return hasIrsPractitioners false if there are no irs practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [], irsPractitioners: [] },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasIrsPractitioners).toEqual(false);
+  });
+
+  it('should return hasIrsPractitioners true if there are irs practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [], irsPractitioners: [{ userId: '789' }] },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasIrsPractitioners).toEqual(true);
+  });
+
+  it('should return hasPrivatePractitioners false if there are no private practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [], privatePractitioners: [] },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasPrivatePractitioners).toEqual(false);
+  });
+
+  it('should return hasPrivatePractitioners true if there are private practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          documents: [],
+          privatePractitioners: [{ userId: '789' }],
+        },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasPrivatePractitioners).toEqual(true);
+  });
 });
