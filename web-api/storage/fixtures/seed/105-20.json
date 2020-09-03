@@ -19,7 +19,7 @@
     "entityName": "Document",
     "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "documentTitle": "Order that this case is sealed",
-    "documentContents": "We are sealing this case right meow.\n",
+    "documentContentsId": "6680e4d5-7128-479e-8f44-8648b3b80f97",
     "relationship": "primaryDocument",
     "workItem": {
       "associatedJudge": "Chief Judge",
@@ -47,7 +47,7 @@
         "entityName": "Document",
         "documentTitle": "Order that this case is sealed",
         "relationship": "primaryDocument",
-        "documentContents": "We are sealing this case right meow.\n",
+        "documentContentsId": "6680e4d5-7128-479e-8f44-8648b3b80f97",
         "isFileAttached": true,
         "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
         "eventCode": "O",

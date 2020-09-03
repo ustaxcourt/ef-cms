@@ -43,11 +43,6 @@ exports.migrateCaseInteractor = async ({
         applicationContext
           .getPersistenceGateway()
           .deleteCaseByDocketNumber({ applicationContext, docketNumber }),
-        ...caseToDelete.documents.map(({ documentId }) =>
-          applicationContext
-            .getPersistenceGateway()
-            .deleteDocumentFromS3({ applicationContext, key: documentId }),
-        ),
       ]);
     }
   }

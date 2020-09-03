@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { Message } = require('../../entities/Message');
 const { orderBy } = require('lodash');
@@ -108,7 +108,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
     documentMetadata.documentContentsId = documentContentsId;
   }
 
-  const documentEntity = new Document(
+  const documentEntity = new DocketEntry(
     {
       ...documentMetadata,
       documentId: primaryDocumentFileId,
@@ -123,7 +123,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   );
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+  caseEntity.addDocument(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

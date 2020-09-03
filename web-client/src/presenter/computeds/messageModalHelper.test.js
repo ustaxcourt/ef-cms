@@ -25,22 +25,39 @@ describe('messageModalHelper', () => {
           documentTitle: 'Test Correspondence',
         },
       ],
-      docketRecord: [
-        { documentId: '123', index: 1 },
-        { documentId: '234', index: 2 },
-        { index: 3 }, // note: no document
+      docketEntries: [
+        {
+          documentId: '123',
+          documentType: 'Petition',
+          index: 1,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+        },
+        {
+          documentId: '234',
+          documentTitle: 'Some Document',
+          index: 2,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+        },
+        { index: 3, isOnDocketRecord: true },
       ],
       documents: [
         {
           documentId: '123',
           documentType: 'Petition',
+          index: 1,
           isFileAttached: true,
+          isOnDocketRecord: true,
         },
         {
           documentId: '234',
           documentTitle: 'Some Document',
+          index: 2,
           isFileAttached: true,
+          isOnDocketRecord: true,
         },
+        { index: 3, isOnDocketRecord: true },
         { documentId: '345', documentType: 'Order', isDraft: true },
       ],
     };
@@ -143,9 +160,23 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          docketRecord: [{ documentId: '123', index: 1 }],
+          docketEntries: [
+            {
+              documentId: '123',
+              index: 1,
+              isDraft: true,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+            },
+          ],
           documents: [
-            { documentId: '123', isDraft: true, isFileAttached: true },
+            {
+              documentId: '123',
+              index: 1,
+              isDraft: true,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+            },
           ],
         },
         modal: {
@@ -165,7 +196,6 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          docketRecord: [],
           documents: [],
         },
         modal: {
@@ -185,7 +215,6 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          docketRecord: [],
           documents: [
             { documentId: '123', documentType: 'Order', isDraft: true },
           ],
@@ -207,8 +236,14 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [{ documentId: '234' }],
-          docketRecord: [{ documentId: '123', index: 1 }],
-          documents: [{ documentId: '123', documentType: 'Order' }],
+          documents: [
+            {
+              documentId: '123',
+              documentType: 'Order',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
         },
         modal: {
           form: {},

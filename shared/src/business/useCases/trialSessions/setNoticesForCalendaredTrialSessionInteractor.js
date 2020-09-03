@@ -12,7 +12,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -118,12 +118,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocumentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
 
-    const noticeOfTrialDocument = new Document(
+    const noticeOfTrialDocument = new DocketEntry(
       {
+        description: noticeOfTrialDocumentTitle,
         documentId: newNoticeOfTrialIssuedDocumentId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
+        isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
         userId: user.userId,
@@ -131,9 +133,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(noticeOfTrialDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocument(noticeOfTrialDocument);
     caseEntity.setNoticeOfTrialDate();
 
     // Standing Pretrial Notice/Order
@@ -175,21 +175,21 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       documentId: newStandingPretrialDocumentId,
     });
 
-    const standingPretrialDocument = new Document(
+    const standingPretrialDocument = new DocketEntry(
       {
+        description: standingPretrialDocumentTitle,
         documentId: newStandingPretrialDocumentId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
+        isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
     );
 
-    caseEntity.addDocument(standingPretrialDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocument(standingPretrialDocument);
 
     // Serve notice
     const servedParties = await serveNoticesForCase({
@@ -202,6 +202,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     noticeOfTrialDocument.setAsServed(servedParties.all);
     standingPretrialDocument.setAsServed(servedParties.all);
+
+    caseEntity.updateDocument(noticeOfTrialDocument); // to generate an index
+    caseEntity.updateDocument(standingPretrialDocument); // to generate an index
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({

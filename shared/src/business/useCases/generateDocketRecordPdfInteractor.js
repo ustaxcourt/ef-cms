@@ -42,7 +42,7 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketNumberWithSuffix: `${caseEntity.docketNumber}${
         caseEntity.docketNumberSuffix || ''
       }`,
-      entries: formattedCaseDetail.docketRecordWithDocument,
+      entries: formattedCaseDetail.formattedDocketEntries,
       includePartyDetail,
     },
   });

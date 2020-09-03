@@ -18,9 +18,8 @@ import {
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
-  formatDocketRecord,
-  formatDocketRecordWithDocument,
-  sortDocketRecords,
+  formatDocketEntry,
+  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
@@ -89,10 +88,9 @@ const applicationContextPublic = {
       compareCasesByDocketNumber,
       createISODateString,
       formatDateString,
-      formatDocketRecord,
-      formatDocketRecordWithDocument,
+      formatDocketEntry,
       getJudgeLastName,
-      sortDocketRecords,
+      sortDocketEntries,
     };
   },
 };

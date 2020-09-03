@@ -18,7 +18,7 @@ const {
 } = require('../../useCaseHelper/saveFileAndGenerateUrl');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
@@ -147,7 +147,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocumentEntity = new Document(
+  const updatedDocumentEntity = new DocketEntry(
     {
       ...document,
       filingDate: createISODateString(),

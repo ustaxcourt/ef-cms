@@ -2,6 +2,7 @@ const joi = require('joi');
 const {
   BUSINESS_TYPES,
   FILING_TYPES,
+  LEGACY_TRIAL_CITY_STRINGS,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
   PROCEDURE_TYPES,
@@ -14,6 +15,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
@@ -25,12 +27,13 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternal(rawCase, { applicationContext }) {
-  CaseExternal.prototype.init.call(this, rawCase, { applicationContext });
+function CaseExternal() {}
+CaseExternal.prototype.init = function init(rawCase, { applicationContext }) {
+  CaseExternal.prototype.initSelf.call(this, rawCase, { applicationContext });
   CaseExternal.prototype.initContacts.call(this, rawCase, {
     applicationContext,
   });
-}
+};
 
 CaseExternal.prototype.initContacts = function (
   rawCase,
@@ -48,7 +51,7 @@ CaseExternal.prototype.initContacts = function (
   this.contactSecondary = contacts.secondary;
 };
 
-CaseExternal.prototype.init = function (rawCase) {
+CaseExternal.prototype.initSelf = function (rawCase) {
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
@@ -120,7 +123,11 @@ CaseExternal.commonRequirements = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+      JoiValidationConstants.STRING.valid(
+        ...TRIAL_CITY_STRINGS,
+        ...LEGACY_TRIAL_CITY_STRINGS,
+        null,
+      ),
       JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .required(),
@@ -146,4 +153,4 @@ joiValidationDecorator(
   CaseExternal.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CaseExternal };
+module.exports = { CaseExternal: validEntityDecorator(CaseExternal) };

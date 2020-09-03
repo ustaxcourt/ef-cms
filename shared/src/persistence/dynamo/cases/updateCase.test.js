@@ -59,7 +59,6 @@ describe('updateCase', () => {
 
     mockCase = {
       docketNumberSuffix: null,
-      docketRecord: [],
       inProgress: false,
       irsPractitioners: [],
       pk: 'case|101-18',
@@ -675,33 +674,6 @@ describe('updateCase', () => {
         pk: 'case|101-18',
         sk: `correspondence|${mockCorrespondenceId}`,
         userId: 'user-id-existing-234',
-      });
-    });
-  });
-
-  describe('docketEntries', () => {
-    it('adds a docketEntry to a case when docketEntries is an empty list', async () => {
-      await updateCase({
-        applicationContext,
-        caseToUpdate: {
-          docketEntries: [
-            { docketEntryId: 'e69dabd1-80bc-4cdf-8503-81d886a4947e' },
-          ],
-          docketNumber: '101-18',
-          docketNumberSuffix: null,
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-      });
-
-      expect(
-        applicationContext.getDocumentClient().delete,
-      ).not.toHaveBeenCalled();
-      expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
-      ).toMatchObject({
-        pk: 'case|101-18',
-        sk: 'docket-entry|e69dabd1-80bc-4cdf-8503-81d886a4947e',
       });
     });
   });

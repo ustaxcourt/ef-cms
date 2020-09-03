@@ -23,7 +23,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -67,10 +67,9 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
-  const { index: docketRecordIndexUpdated } = [
-    ...caseEntity.docketRecord,
-    ...caseEntity.documents.filter(d => d.isOnDocketRecord),
-  ].find(record => record.documentId === documentId);
+  const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
+    record => record.documentId === documentId,
+  );
 
   const currentDocument = caseEntity.getDocumentById({
     documentId,
@@ -104,7 +103,7 @@ exports.completeDocketEntryQCInteractor = async ({
     serviceDate: entryMetadata.serviceDate,
   };
 
-  const updatedDocument = new Document(
+  const updatedDocument = new DocketEntry(
     {
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate
@@ -285,10 +284,11 @@ exports.completeDocketEntryQCInteractor = async ({
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocument = new Document(
+    let noticeUpdatedDocument = new DocketEntry(
       {
         ...NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
+        isOnDocketRecord: true,
         userId: user.userId,
       },
       { applicationContext },
@@ -298,12 +298,11 @@ exports.completeDocketEntryQCInteractor = async ({
       NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
+    noticeUpdatedDocument.description = noticeUpdatedDocument.documentTitle; // TODO 636 clean this up
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
-    caseEntity.addDocument(noticeUpdatedDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocument(noticeUpdatedDocument);
 
     const { Body: pdfData } = await applicationContext
       .getStorageClient()
