@@ -121,11 +121,19 @@ export const HealthCheck = connect(
                   icon="check-circle"
                 />
               </div>
-              <div>
+              <div className="margin-bottom-1">
                 Elasticsearch
                 <FontAwesomeIcon
                   className="margin-left-1"
                   color={health.elasticsearch ? 'green' : 'red'}
+                  icon="check-circle"
+                />
+              </div>
+              <div>
+                Email Service
+                <FontAwesomeIcon
+                  className="margin-left-1"
+                  color={health.emailService ? 'green' : 'red'}
                   icon="check-circle"
                 />
               </div>
