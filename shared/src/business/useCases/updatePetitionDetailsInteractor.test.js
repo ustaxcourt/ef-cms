@@ -134,7 +134,7 @@ describe('updatePetitionDetailsInteractor', () => {
     });
 
     // TODO 636
-    const waivedDocument = [...result.docketRecord, ...result.documents].find(
+    const waivedDocument = result.docketEntries.find(
       entry => entry.description === 'Filing Fee Waived',
     );
 
@@ -161,7 +161,7 @@ describe('updatePetitionDetailsInteractor', () => {
     });
 
     // TODO 636
-    const wavedDocument = [...result.docketRecord, ...result.documents].find(
+    const wavedDocument = result.docketEntries.find(
       entry => entry.description === 'Filing Fee Paid',
     );
 

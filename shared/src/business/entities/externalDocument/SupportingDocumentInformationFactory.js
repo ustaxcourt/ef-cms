@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
@@ -25,7 +26,11 @@ SupportingDocumentInformationFactory.get = (
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
 ) => {
-  let entityConstructor = function (rawProps) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
@@ -98,7 +103,7 @@ SupportingDocumentInformationFactory.get = (
 
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
-  return new entityConstructor(documentMetadata);
+  return new (validEntityDecorator(entityConstructor))(documentMetadata);
 };
 
 module.exports = { SupportingDocumentInformationFactory };

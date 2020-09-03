@@ -7,7 +7,7 @@ const {
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -66,8 +66,8 @@ exports.updatePetitionDetailsInteractor = async ({
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCase.addDocumentWithoutDocketRecord(
-        new Document(
+      newCase.addDocument(
+        new DocketEntry(
           {
             description: 'Filing Fee Paid',
             documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
@@ -83,8 +83,8 @@ exports.updatePetitionDetailsInteractor = async ({
         ),
       );
     } else if (isWaived) {
-      newCase.addDocumentWithoutDocketRecord(
-        new Document(
+      newCase.addDocument(
+        new DocketEntry(
           {
             description: 'Filing Fee Waived',
             documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,

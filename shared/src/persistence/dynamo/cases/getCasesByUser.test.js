@@ -58,7 +58,6 @@ describe('getCasesByUser', () => {
         archivedDocuments: [],
         correspondence: [],
         docketNumber: '123-20',
-        docketRecord: [],
         documents: [],
         irsPractitioners: [],
         pk: 'case|123-20',

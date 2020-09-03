@@ -1,6 +1,7 @@
 const joi = require('joi').extend(require('@hapi/joi-date'));
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 DeadlineSearch.validationName = 'DeadlineSearch';
@@ -13,10 +14,14 @@ DeadlineSearch.VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'];
  * @param {object} rawProps the raw document search data
  * @constructor
  */
-function DeadlineSearch(rawProps = {}) {
+function DeadlineSearch() {
+  this.entityName = 'DeadlineSearch';
+}
+
+DeadlineSearch.prototype.init = function init(rawProps = {}) {
   this.startDate = rawProps.startDate;
   this.endDate = rawProps.endDate;
-}
+};
 
 DeadlineSearch.VALIDATION_ERROR_MESSAGES = {
   endDate: [
@@ -66,4 +71,4 @@ joiValidationDecorator(
   DeadlineSearch.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { DeadlineSearch };
+exports.DeadlineSearch = validEntityDecorator(DeadlineSearch);

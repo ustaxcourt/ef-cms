@@ -31,10 +31,11 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
+DocketEntry.validationName = 'DocketEntry';
 /**
  * constructor
  *
- * @param {object} rawDocketEntry the raw document data
+ * @param {object} rawDocketEntry the raw docket entry data
  * @constructor
  */
 function DocketEntry() {
@@ -48,11 +49,11 @@ DocketEntry.prototype.init = function init(
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
+    this.editState = rawDocketEntry.editState;
     this.draftState = rawDocketEntry.draftState;
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
@@ -62,7 +63,7 @@ DocketEntry.prototype.init = function init(
         : rawDocketEntry.pending;
     if (rawDocketEntry.previousDocument) {
       this.previousDocument = {
-        docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
+        documentId: rawDocketEntry.previousDocument.documentId,
         documentTitle: rawDocketEntry.previousDocument.documentTitle,
         documentType: rawDocketEntry.previousDocument.documentType,
       };
@@ -89,17 +90,18 @@ DocketEntry.prototype.init = function init(
   this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
   this.createdAt = rawDocketEntry.createdAt || createISODateString();
   this.date = rawDocketEntry.date;
-  this.description = rawDocketEntry.description;
-  this.docketEntryId =
-    rawDocketEntry.docketEntryId || applicationContext.getUniqueId();
-  this.docketEntryIdBeforeSignature =
-    rawDocketEntry.docketEntryIdBeforeSignature;
+  this.description =
+    rawDocketEntry.description ||
+    rawDocketEntry.documentTitle ||
+    rawDocketEntry.documentType;
   this.docketNumber = rawDocketEntry.docketNumber;
   this.docketNumbers = rawDocketEntry.docketNumbers;
   this.documentContentsId = rawDocketEntry.documentContentsId;
+  this.documentId =
+    rawDocketEntry.documentId || applicationContext.getUniqueId();
+  this.documentIdBeforeSignature = rawDocketEntry.documentIdBeforeSignature;
   this.documentTitle = rawDocketEntry.documentTitle;
   this.documentType = rawDocketEntry.documentType;
-  this.editState = rawDocketEntry.editState;
   this.eventCode = rawDocketEntry.eventCode;
   this.filedBy = rawDocketEntry.filedBy;
   this.filingDate = rawDocketEntry.filingDate || createISODateString();
@@ -113,6 +115,8 @@ DocketEntry.prototype.init = function init(
   this.isLegacy = rawDocketEntry.isLegacy;
   this.isLegacySealed = rawDocketEntry.isLegacySealed;
   this.isLegacyServed = rawDocketEntry.isLegacyServed;
+  this.isMinuteEntry = rawDocketEntry.isMinuteEntry || false;
+  this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord || false;
   this.isPaper = rawDocketEntry.isPaper;
   this.isSealed = rawDocketEntry.isSealed;
   this.isStricken = rawDocketEntry.isStricken || false;
@@ -188,8 +192,6 @@ DocketEntry.isPendingOnCreation = rawDocketEntry => {
   return isPending;
 };
 
-DocketEntry.validationName = 'DocketEntry';
-
 DocketEntry.VALIDATION_RULES = joi.object().keys({
   action: JoiValidationConstants.STRING.max(100)
     .optional()
@@ -222,17 +224,12 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .description(
       'An optional date used when generating a fully concatenated document title.',
     ),
-  description: JoiValidationConstants.STRING.max(500)
-    .required()
+  description: joi
+    .string() //TODO 636 - delete this field (temporary validation)
+    .optional()
     .description(
-      'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
+      'Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value.',
     ),
-  docketEntryId: JoiValidationConstants.UUID.required().description(
-    'ID of the associated PDF document in the S3 bucket.',
-  ),
-  docketEntryIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
-    'The id for the original document that was uploaded.',
-  ),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'Docket Number of the associated Case in XXXXX-YY format.',
   ),
@@ -243,6 +240,12 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     ),
   documentContentsId: JoiValidationConstants.UUID.optional().description(
     'The S3 ID containing the text contents of the document.',
+  ),
+  documentId: JoiValidationConstants.UUID.required().description(
+    'ID of the associated PDF document in the S3 bucket.',
+  ),
+  documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
+    'The id for the original document that was uploaded.',
   ),
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
     'The title of this document.',
@@ -255,7 +258,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .allow(null)
     .optional()
     .meta({ tags: ['Restricted'] })
-    .description('JSON representation of the in-progress edit of this item.'),
+    .description('JSON representation of the in-progress edit of this item.'), // TODO 636 - can we remove?
   entityName: JoiValidationConstants.STRING.valid('DocketEntry').required(),
   eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).required(),
   filedBy: JoiValidationConstants.STRING.max(500)
@@ -278,7 +281,6 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
         }),
       }),
     })
-    .meta({ tags: ['Restricted'] })
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
@@ -333,6 +335,8 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .description(
       'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
+  isMinuteEntry: joi.boolean().optional(), //TODO 636 - make required
+  isOnDocketRecord: joi.boolean().optional(), //TODO 636 - make required
   isPaper: joi.boolean().optional(),
   isSealed: joi
     .boolean()
@@ -344,7 +348,11 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .description('Indicates whether or not the document is sealed.'),
   isStricken: joi
     .boolean()
-    .required()
+    .when('isLegacy', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    })
     .description('Indicates the item has been removed from the docket record.'),
   judge: JoiValidationConstants.STRING.max(100)
     .allow(null)
@@ -390,7 +398,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
   previousDocument: joi
     .object()
     .keys({
-      docketEntryId: JoiValidationConstants.UUID.optional().description(
+      documentId: JoiValidationConstants.UUID.optional().description(
         'The ID of the previous document.',
       ),
       documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
@@ -525,17 +533,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
   workItem: WorkItem.VALIDATION_RULES.optional(),
 });
 
-DocketEntry.VALIDATION_ERROR_MESSAGES = {
-  description: 'Enter a description',
-  eventCode: 'Enter an event code',
-  filingDate: 'Enter a valid filing date',
-};
-
-joiValidationDecorator(
-  DocketEntry,
-  DocketEntry.VALIDATION_RULES,
-  DocketEntry.VALIDATION_ERROR_MESSAGES,
-);
+joiValidationDecorator(DocketEntry, DocketEntry.VALIDATION_RULES);
 
 /**
  *
@@ -616,7 +614,6 @@ DocketEntry.prototype.generateFiledBy = function (caseDetail) {
     }
   }
 };
-
 /**
  * attaches a signedAt date to the document
  *
@@ -672,6 +669,11 @@ DocketEntry.prototype.isCourtIssued = function () {
   return COURT_ISSUED_DOCUMENT_TYPES.includes(this.documentType);
 };
 
+/**
+ * sets the number of pages for the docket entry
+ *
+ * @param {Number} numberOfPages the number of pages
+ */
 DocketEntry.prototype.setNumberOfPages = function (numberOfPages) {
   this.numberOfPages = numberOfPages;
 };
@@ -689,26 +691,23 @@ DocketEntry.getFormattedType = function (documentType) {
 };
 
 /**
- * sets the number of pages for the docket entry
- *
- * @param {Number} numberOfPages the number of pages
- */
-DocketEntry.prototype.setNumberOfPages = function (numberOfPages) {
-  this.numberOfPages = numberOfPages;
-};
-
-/**
- * strikes this docket record
+ * strikes this docket entry
  *
  * @param {object} obj param
  * @param {string} obj.name user name
  * @param {string} obj.userId user id
  */
 DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
-  this.isStricken = true;
-  this.strickenBy = name;
-  this.strickenByUserId = userId;
-  this.strickenAt = createISODateString();
+  if (this.isOnDocketRecord) {
+    this.isStricken = true;
+    this.strickenBy = name;
+    this.strickenByUserId = userId;
+    this.strickenAt = createISODateString();
+  } else {
+    throw new Error(
+      'Cannot strike a document that is not on the docket record.',
+    );
+  }
 };
 
 exports.DocketEntry = validEntityDecorator(DocketEntry);

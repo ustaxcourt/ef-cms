@@ -8,6 +8,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { isEmpty } = require('lodash');
 
@@ -29,7 +30,9 @@ DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
  * @param {object} rawProps the raw document search data
  * @constructor
  */
-function DocumentSearch(rawProps = {}) {
+function DocumentSearch() {}
+
+DocumentSearch.prototype.init = function init(rawProps = {}) {
   if (!isEmpty(rawProps.judge)) {
     this.judge = rawProps.judge;
   }
@@ -67,7 +70,7 @@ function DocumentSearch(rawProps = {}) {
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
     this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
   }
-}
+};
 
 DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   chooseOneValue:
@@ -173,4 +176,4 @@ DocumentSearch.prototype.getValidationErrors = function () {
   return validationErrors;
 };
 
-module.exports = { DocumentSearch };
+exports.DocumentSearch = validEntityDecorator(DocumentSearch);

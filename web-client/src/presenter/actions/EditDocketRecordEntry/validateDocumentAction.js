@@ -10,17 +10,13 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateDocketRecordAction = ({
-  applicationContext,
-  get,
-  path,
-}) => {
+export const validateDocumentAction = ({ applicationContext, get, path }) => {
   const formMetadata = get(state.form);
   const editType = get(state.screenMetadata.editType); // Document, CourtIssued, NoDocument
 
-  let errors = applicationContext.getUseCases().validateDocketRecordInteractor({
+  let errors = applicationContext.getUseCases().validateDocumentInteractor({
     applicationContext,
-    docketRecord: formMetadata,
+    document: formMetadata,
   });
 
   let errorDisplayOrder = ['description', 'eventCode', 'filingDate', 'index'];

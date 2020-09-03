@@ -1,6 +1,7 @@
 const joi = require('joi');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
@@ -8,11 +9,12 @@ const {
  * @param {object} rawProps the metadata
  * @constructor
  */
-function AddIrsPractitioner(rawProps) {
+function AddIrsPractitioner() {}
+AddIrsPractitioner.prototype.init = function init(rawProps) {
   Object.assign(this, {
     user: rawProps.user,
   });
-}
+};
 
 AddIrsPractitioner.VALIDATION_ERROR_MESSAGES = {
   user: 'Select a respondent counsel',
@@ -28,4 +30,6 @@ joiValidationDecorator(
   AddIrsPractitioner.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { AddIrsPractitioner };
+module.exports = {
+  AddIrsPractitioner: validEntityDecorator(AddIrsPractitioner),
+};

@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -14,12 +15,13 @@ const {
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function ExternalDocumentStandard(rawProps) {
+function ExternalDocumentStandard() {}
+ExternalDocumentStandard.prototype.init = function init(rawProps) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.selectedCases = rawProps.selectedCases;
-}
+};
 
 ExternalDocumentStandard.prototype.getDocumentTitle = function () {
   return this.documentTitle;
@@ -45,4 +47,6 @@ joiValidationDecorator(
   ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { ExternalDocumentStandard };
+module.exports = {
+  ExternalDocumentStandard: validEntityDecorator(ExternalDocumentStandard),
+};

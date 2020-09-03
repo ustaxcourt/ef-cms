@@ -171,7 +171,7 @@ Message.VALIDATION_RULES = {
 };
 
 joiValidationDecorator(
-  validEntityDecorator(Message),
+  Message,
   joi.object().keys(Message.VALIDATION_RULES),
   Message.VALIDATION_ERROR_MESSAGES,
 );

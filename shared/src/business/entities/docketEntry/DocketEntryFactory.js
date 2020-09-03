@@ -13,6 +13,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -45,7 +46,11 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function DocketEntryFactory(rawProps) {
-  let entityConstructor = function (rawPropsParam) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawPropsParam) {
     this.addToCoversheet = rawPropsParam.addToCoversheet;
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
@@ -195,7 +200,7 @@ function DocketEntryFactory(rawProps) {
     DocketEntryFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new entityConstructor(rawProps);
+  return new (validEntityDecorator(entityConstructor))(rawProps);
 }
 
 module.exports = { DocketEntryFactory };

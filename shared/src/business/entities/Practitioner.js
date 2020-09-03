@@ -18,6 +18,8 @@ const {
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 
+const entityName = 'Practitioner';
+
 /**
  * constructor
  *
@@ -25,7 +27,7 @@ const {
  * @constructor
  */
 function Practitioner() {
-  this.entityName = 'Practitioner';
+  this.entityName = entityName;
 }
 
 Practitioner.prototype.init = function init(rawUser) {
@@ -186,4 +188,7 @@ Practitioner.getFullName = function (practitionerData) {
   return `${firstName}${middleName} ${lastName}${suffix}`;
 };
 
-exports.Practitioner = validEntityDecorator(Practitioner);
+module.exports = {
+  Practitioner: validEntityDecorator(Practitioner),
+  entityName,
+};

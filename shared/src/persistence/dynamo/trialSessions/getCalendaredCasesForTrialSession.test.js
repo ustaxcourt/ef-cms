@@ -40,11 +40,6 @@ describe('getCalendaredCasesForTrialSession', () => {
         userId: 'abc-123',
       },
       {
-        docketRecordId: 'abc-123',
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: 'docket-record|123',
-      },
-      {
         documentId: 'abc-123',
         pk: `case|${MOCK_CASE.docketNumber}`,
         sk: 'document|123',
@@ -63,13 +58,6 @@ describe('getCalendaredCasesForTrialSession', () => {
         correspondence: [],
         disposition: 'something',
         docketNumber: MOCK_CASE.docketNumber,
-        docketRecord: [
-          {
-            docketRecordId: 'abc-123',
-            pk: `case|${MOCK_CASE.docketNumber}`,
-            sk: 'docket-record|123',
-          },
-        ],
         documents: [
           {
             documentId: 'abc-123',

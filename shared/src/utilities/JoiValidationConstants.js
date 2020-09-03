@@ -6,16 +6,11 @@ const {
   MAX_FILE_SIZE_BYTES,
 } = require('../business/entities/EntityConstants');
 const { FORMATS } = require('../business/utilities/DateHandler');
+
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 const STRING = joi.string().min(1);
 exports.JoiValidationConstants = deepFreeze({
   CASE_CAPTION: STRING.max(4700),
-  DOCKET_ENTRY: joi
-    .array()
-    .unique(
-      (a, b) =>
-        a.index !== undefined && b.index !== undefined && a.index === b.index,
-    ),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
   DOCKET_RECORD: joi
     .array()

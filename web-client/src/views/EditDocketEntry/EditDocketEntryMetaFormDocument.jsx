@@ -21,7 +21,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryMetaDocumentFormValueSequence:
       sequences.updateDocketEntryMetaDocumentFormValueSequence,
-    validateDocketRecordSequence: sequences.validateDocketRecordSequence,
+    validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
   },
   function EditDocketEntryMetaFormDocument({
@@ -30,7 +30,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     internalTypesHelper,
     OBJECTIONS_OPTIONS,
     updateDocketEntryMetaDocumentFormValueSequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validationErrors,
   }) {
     return (
@@ -52,7 +52,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                       key: e.target.name,
                       value: e.target.value === 'Lodge',
                     });
-                    validateDocketRecordSequence();
+                    validateDocumentSequence();
                   }}
                 />
                 <label
@@ -79,7 +79,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             month: form.filingDateMonth,
             year: form.filingDateYear,
           }}
-          onBlur={validateDocketRecordSequence}
+          onBlur={validateDocumentSequence}
           onChange={updateDocketEntryMetaDocumentFormValueSequence}
         />
         <FormGroup errorText={validationErrors.eventCode}>
@@ -107,7 +107,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 inputValue,
                 name,
                 updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
-                validateSequence: validateDocketRecordSequence,
+                validateSequence: validateDocumentSequence,
               });
               return true;
             }}
@@ -115,7 +115,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               onInputChange({
                 action,
                 inputText,
-                updateSequence: validateDocketRecordSequence,
+                updateSequence: validateDocumentSequence,
               });
             }}
           />
@@ -148,7 +148,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             type="text"
             value={form.additionalInfo || ''}
             onBlur={() => {
-              validateDocketRecordSequence();
+              validateDocumentSequence();
             }}
             onChange={e => {
               updateDocketEntryMetaDocumentFormValueSequence({
@@ -171,7 +171,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                validateDocketRecordSequence();
+                validateDocumentSequence();
               }}
             />
             <label
@@ -199,7 +199,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             type="text"
             value={form.additionalInfo2 || ''}
             onBlur={() => {
-              validateDocketRecordSequence();
+              validateDocumentSequence();
             }}
             onChange={e => {
               updateDocketEntryMetaDocumentFormValueSequence({
@@ -215,7 +215,7 @@ export const EditDocketEntryMetaFormDocument = connect(
 
         <FilingPartiesForm
           updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
-          validateSequence={validateDocketRecordSequence}
+          validateSequence={validateDocumentSequence}
         />
 
         {editDocketEntryMetaHelper.showObjection && (
@@ -239,7 +239,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
-                      validateDocketRecordSequence();
+                      validateDocumentSequence();
                     }}
                   />
                   <label

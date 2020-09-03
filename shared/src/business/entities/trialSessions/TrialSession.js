@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   SESSION_TERMS,
@@ -15,8 +16,6 @@ const {
 } = require('../EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
-
-TrialSession.validationName = 'TrialSession';
 
 /**
  * constructor
@@ -79,6 +78,8 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
     };
   }
 };
+
+TrialSession.validationName = 'TrialSession';
 
 TrialSession.VALIDATION_ERROR_MESSAGES = {
   maxCases: 'Enter a valid number of maximum cases',
@@ -357,4 +358,4 @@ TrialSession.prototype.setNoticesIssued = function () {
   return this;
 };
 
-module.exports = { TrialSession };
+module.exports = { TrialSession: validEntityDecorator(TrialSession) };

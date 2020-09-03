@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -14,6 +15,7 @@ export const submitUpdateUserContactInformationSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
+      setCurrentPageAction('Interstitial'),
       startWebSocketConnectionAction,
       updateUserContactInformationAction,
     ]),

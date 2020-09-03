@@ -21,6 +21,7 @@ import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTria
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
+import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequence';
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
@@ -399,7 +400,7 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
-import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
+import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
 import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -457,6 +458,7 @@ export const presenter = {
     blockCaseFromTrialSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
+    canEditContactInformationSequence,
     cancelAddDraftDocumentSequence,
     cancelAddStatisticSequence,
     cancelAndNavigateToCorrespondenceSequence,
@@ -833,7 +835,7 @@ export const presenter = {
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validateEditIrsPractitionersSequence,
     validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,

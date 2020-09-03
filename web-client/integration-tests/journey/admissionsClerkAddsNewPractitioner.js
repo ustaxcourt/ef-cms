@@ -1,3 +1,7 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
+const { US_STATES } = applicationContext.getConstants();
+
 export const admissionsClerkAddsNewPractitioner = test => {
   return it('admissions clerk adds a new practitioner', async () => {
     test.currentTimestamp = Date.now();
@@ -49,7 +53,7 @@ export const admissionsClerkAddsNewPractitioner = test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'originalBarState',
-      value: 'Oklahoma',
+      value: US_STATES.OK,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'practitionerType',

@@ -1,4 +1,4 @@
-const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
+const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
 const { NewPractitioner } = require('./NewPractitioner');
 
 describe('NewPractitioner', () => {
@@ -23,7 +23,7 @@ describe('NewPractitioner', () => {
       firmName: 'GW Law Offices',
       firstName: 'Test',
       lastName: 'Practitioner',
-      originalBarState: 'Illinois',
+      originalBarState: US_STATES.IL,
       practitionerType: 'Attorney',
       role: ROLES.NewPractitioner,
     });
@@ -57,7 +57,7 @@ describe('NewPractitioner', () => {
       email: 'test@example.com',
       employer: 'Private',
       firmName: 'GW Law Offices',
-      originalBarState: 'Illinois',
+      originalBarState: US_STATES.IL,
       practitionerType: 'Attorney',
       role: ROLES.NewPractitioner,
     });
