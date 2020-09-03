@@ -14,7 +14,7 @@ const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { clone } = require('lodash');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -160,7 +160,7 @@ exports.generateChangeOfAddress = async ({
           documentData.partyIrsPractitioner = true;
         }
 
-        const changeOfAddressDocument = new Document(documentData, {
+        const changeOfAddressDocument = new DocketEntry(documentData, {
           applicationContext,
         });
 

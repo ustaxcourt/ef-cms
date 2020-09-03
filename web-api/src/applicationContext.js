@@ -257,6 +257,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
+const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -951,7 +954,6 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
@@ -1028,7 +1030,7 @@ let searchClientCache;
 
 const entitiesByName = {
   Case,
-  Document,
+  DocketEntry,
   IrsPractitioner,
   Practitioner,
   PrivatePractitioner,

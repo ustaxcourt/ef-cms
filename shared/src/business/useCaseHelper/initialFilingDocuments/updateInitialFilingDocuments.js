@@ -2,7 +2,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
 } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { omit } = require('lodash');
 
 const addNewInitialFilingToCase = ({
@@ -49,7 +49,7 @@ const addNewInitialFilingToCase = ({
     };
   }
 
-  const documentToAdd = new Document(documentMeta, { applicationContext });
+  const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
 
   caseEntity.documents.push(documentToAdd);
 };

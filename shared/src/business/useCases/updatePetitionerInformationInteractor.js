@@ -14,7 +14,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -146,7 +146,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
     const newDocumentId = applicationContext.getUniqueId();
 
-    const changeOfAddressDocument = new Document(
+    const changeOfAddressDocument = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactName}`,

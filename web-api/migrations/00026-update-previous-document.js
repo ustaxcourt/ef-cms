@@ -1,12 +1,14 @@
 const createApplicationContext = require('../src/applicationContext');
-const { Document } = require('../../shared/src/business/entities/Document');
+const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async item => {
   if (isDocumentRecord(item)) {
     if (item.previousDocument) {
-      const updatedDocument = new Document(item, { applicationContext })
+      const updatedDocument = new DocketEntry(item, { applicationContext })
         .validate()
         .toRawObject();
 
