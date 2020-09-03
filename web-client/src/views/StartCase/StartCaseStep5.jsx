@@ -162,24 +162,27 @@ export const StartCaseStep5 = connect(
                         )}
                       </>
                     </div>
-                    <div className="tablet:grid-col-4 margin-bottom-1">
+                    <div className="tablet:grid-col-4 margin-bottom-1 party-information">
                       <span
-                        className="usa-label usa-label-display"
+                        className="usa-label usa-label-display margin-bottom-0"
                         htmlFor="filing-contact-primary"
                       >
                         {startCaseHelper.contactPrimaryLabel}
                       </span>
                       {form.contactPrimary && (
                         <address aria-labelledby="primary-label">
-                          <AddressDisplay contact={form.contactPrimary} />
+                          <AddressDisplay
+                            contact={form.contactPrimary}
+                            noMargin={true}
+                          />
                         </address>
                       )}
                     </div>
-                    <div className="tablet:grid-col-4 margin-bottom-1">
+                    <div className="tablet:grid-col-4 margin-bottom-1 party-information">
                       {startCaseHelper.hasContactSecondary && (
                         <>
                           <span
-                            className="usa-label usa-label-display"
+                            className="usa-label usa-label-display margin-bottom-0"
                             htmlFor="filing-contact-secondary"
                           >
                             {startCaseHelper.contactSecondaryLabel}
