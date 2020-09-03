@@ -55,6 +55,7 @@ Valid Case object example:
             "receivedAt": "2020-01-27T05:00:00.000Z",
             "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
             "workItems": []
+            "isLegacyServed": false
         },
         {
             "date": null,
@@ -122,6 +123,7 @@ Valid Case object example:
                 "phone": "+1 (555) 555-5555",
                 "postalCode": "61234",
                 "state": "IL",
+                "isAddressSealed": false
             },
             "representingPrimary": true,
             "serviceIndicator": "Paper"
@@ -311,11 +313,8 @@ Valid Case object example:
 
 Valid Trial Session object example:
 
-* Note: `caseOrder` is an array of all cases within a Trial Session. See [the TrialSession entity](./entities/TrialSession.md).
-
 ```
 {
-  "caseOrder": [{ "docketNumber": "111-21" }],
   "isCalendared": true,
   "maxCases": 100,
   "sessionType": "Hybrid",

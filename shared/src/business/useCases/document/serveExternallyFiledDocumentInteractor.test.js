@@ -1,7 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
@@ -18,7 +17,6 @@ const {
 jest.mock('../addCoversheetInteractor');
 
 const { addCoverToPdf } = require('../addCoversheetInteractor');
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
@@ -26,12 +24,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const DOCUMENT_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
 
   beforeAll(() => {
-    const testPdfDocBytes = () => {
-      // sample.pdf is a 1 page document
-      return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-    };
-
-    const testPdfDoc = testPdfDocBytes();
     const PDF_MOCK_BUFFER = 'Hello World';
 
     addCoverToPdf.mockResolvedValue({

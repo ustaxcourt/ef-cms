@@ -659,6 +659,9 @@ workflows:
       - deploy:
           requires:
             - build-client-coverage
+      - smoketests:
+          requires:
+            - deploy
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -715,7 +718,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - staging
 
   build-and-deploy-with-context:

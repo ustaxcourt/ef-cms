@@ -1,11 +1,20 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketNumberFromAdvancedSearchAction } from './setDocketNumberFromAdvancedSearchAction';
 
 describe('setDocketNumberFromAdvancedSearchAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('matches a docket number', async () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18' },
@@ -19,6 +28,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18S' },
@@ -32,6 +44,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18S' },
@@ -45,6 +60,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18R' },
@@ -58,6 +76,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18P' },
@@ -71,6 +92,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18W' },
@@ -84,6 +108,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18X' },
@@ -97,6 +124,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18L' },
@@ -110,6 +140,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18SL' },
@@ -123,6 +156,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '101-18SX' },
@@ -136,6 +172,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: 'XY101-18' },
@@ -149,6 +188,9 @@ describe('setDocketNumberFromAdvancedSearchAction', () => {
     const { output } = await runAction(
       setDocketNumberFromAdvancedSearchAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
           advancedSearchForm: {
             caseSearchByDocketNumber: { docketNumber: '  101-18SL  ' },
