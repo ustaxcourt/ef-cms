@@ -31,7 +31,7 @@ export const petitionsClerkCreatesMessageToChambers = test => {
       value: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5', //armensChambers
     });
 
-    const messageDocument = getHelper().docketEntries[0];
+    const messageDocument = getHelper().documents[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
     await test.runSequence('updateMessageModalAttachmentsSequence', {

@@ -25,10 +25,12 @@ describe('publicCaseDetailHelper', () => {
     };
   });
 
-  describe('formattedDocketEntries', () => {
-    it('should return the formattedDocketEntries as an array', () => {
+  describe('formattedDocketEntriesOnDocketRecord', () => {
+    it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
       const result = runCompute(publicCaseDetailHelper, { state });
-      expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
+      expect(
+        Array.isArray(result.formattedDocketEntriesOnDocketRecord),
+      ).toBeTruthy();
     });
 
     it('should return hasDocument false if the document is a minute entry', () => {
@@ -56,7 +58,7 @@ describe('publicCaseDetailHelper', () => {
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
       });
@@ -278,7 +280,7 @@ describe('publicCaseDetailHelper', () => {
       },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
-    expect(result.formattedDocketEntries).toMatchObject([
+    expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: '10/21/18',
         description: 'second record additionalInfo!',
