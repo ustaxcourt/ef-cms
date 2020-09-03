@@ -230,4 +230,36 @@ describe('case information helper', () => {
       expect(result.showOtherPetitioners).toEqual(true);
     });
   });
+
+  describe('showSealAddressLink', () => {
+    it('should be true when the user is a docket clerk', () => {
+      const user = {
+        role: ROLES.docketClerk,
+        userId: '789',
+      };
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {},
+          form: {},
+        },
+      });
+      expect(result.showSealAddressLink).toEqual(true);
+    });
+
+    it('should be false when the user is not a docket clerk', () => {
+      const user = {
+        role: ROLES.petitionsClerk,
+        userId: '789',
+      };
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {},
+          form: {},
+        },
+      });
+      expect(result.showSealAddressLink).toEqual(false);
+    });
+  });
 });

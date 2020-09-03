@@ -1,7 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
@@ -14,18 +13,10 @@ const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
 
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
 
   beforeEach(() => {
-    const testPdfDocBytes = () => {
-      // sample.pdf is a 1 page document
-      return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-    };
-    const testPdfDoc = testPdfDocBytes();
-
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
