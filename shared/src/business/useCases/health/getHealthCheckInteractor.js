@@ -2,6 +2,7 @@ const {
   describeDeployTable,
   describeTable,
 } = require('../../../persistence/dynamodbClientService');
+const { getCognitoLoginUrl } = require('../../../sharedAppContext');
 const { search } = require('../../../persistence/elasticsearch/searchClient');
 
 const getElasticSearchStatus = async ({ applicationContext }) => {
@@ -54,7 +55,7 @@ const handleAxiosTimeout = axios => {
 const getDynamsoftStatus = async ({ applicationContext }) => {
   const axios = applicationContext.getHttpClient();
 
-  let source = handleAxiosTimeout(axios);
+  const source = handleAxiosTimeout(axios);
 
   try {
     const efcmsDomain = process.env.EFCMS_DOMAIN;
@@ -126,6 +127,25 @@ const getS3BucketStatus = async ({ applicationContext }) => {
   return bucketStatus;
 };
 
+const getCognitoStatus = async ({ applicationContext }) => {
+  const axios = applicationContext.getHttpClient();
+
+  const source = handleAxiosTimeout(axios);
+
+  try {
+    axios.get(
+      'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login',
+      {
+        cancelToken: source.token,
+        timeout: 20000,
+      },
+    );
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 /**
  * getHealthCheckInteractor
  *
@@ -145,13 +165,17 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
   const dynamsoftStatus = await getDynamsoftStatus({ applicationContext });
 
   const s3BucketStatus = await getS3BucketStatus({ applicationContext });
+
+  const cognitoStatus = await getCognitoStatus({ applicationContext });
+
   return {
+    cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,
       efcmsDeploy: deployDynamoStatus,
     },
     dynamsoft: dynamsoftStatus,
     elasticsearch: elasticSearchStatus,
-    s3Bucket: s3BucketStatus,
+    s3: s3BucketStatus,
   };
 };
