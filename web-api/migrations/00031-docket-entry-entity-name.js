@@ -7,7 +7,7 @@ const { isDocumentRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async item => {
-  if (isDocumentRecord(item) && item.entityName !== DocketEntry.entityName) {
+  if (isDocumentRecord(item) && item.entityName !== 'DocketEntry') {
     const newDocketEntry = new DocketEntry(item, { applicationContext })
       .validate()
       .toRawObject();
