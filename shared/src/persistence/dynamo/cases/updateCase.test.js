@@ -59,7 +59,6 @@ describe('updateCase', () => {
 
     mockCase = {
       docketNumberSuffix: null,
-      docketRecord: [],
       inProgress: false,
       irsPractitioners: [],
       pk: 'case|101-18',
