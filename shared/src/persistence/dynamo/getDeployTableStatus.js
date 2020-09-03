@@ -1,6 +1,6 @@
-const { describeDeployTable } = require('./dynamodbClientService');
+const { describeDeployTable } = require('../dynamodbClientService');
 
-export const getDeployTableStatus = async ({ applicationContext }) => {
+exports.getDeployTableStatus = async ({ applicationContext }) => {
   const { Table } = await describeDeployTable({ applicationContext });
   return Table.TableStatus;
 };
