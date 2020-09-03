@@ -394,54 +394,6 @@ describe('case detail computed', () => {
     expect(result.showPractitionerSection).toEqual(false);
   });
 
-  it('should show respondent section if user is an internal user', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-      },
-    });
-    expect(result.showRespondentSection).toEqual(true);
-  });
-
-  it('should show respondent section if user is an external user and there are irsPractitioners on the case', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          documents: [],
-          irsPractitioners: [{ name: 'Test Respondents' }],
-        },
-        form: {},
-      },
-    });
-    expect(result.showRespondentSection).toEqual(true);
-  });
-
-  it('should not show respondent section if user is an external user and there are no irsPractitioners on the case', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [] },
-        form: {},
-      },
-    });
-    expect(result.showRespondentSection).toEqual(false);
-  });
-
   it('should show empty state for consolidated cases', () => {
     const user = {
       role: ROLES.privatePractitioner,
