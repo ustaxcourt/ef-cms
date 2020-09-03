@@ -9,7 +9,7 @@ import {
   Case,
   getPetitionDocumentFromDocuments,
 } from '../../shared/src/business/entities/cases/Case';
-import { Document } from '../../shared/src/business/entities/Document';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   compareISODateStrings,
@@ -567,7 +567,7 @@ const applicationContext = {
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
-      isPendingOnCreation: Document.isPendingOnCreation,
+      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,

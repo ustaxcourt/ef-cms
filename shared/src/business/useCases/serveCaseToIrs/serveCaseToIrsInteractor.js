@@ -14,7 +14,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -26,7 +26,7 @@ exports.addDocketEntryForPaymentStatus = ({
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     caseEntity.addDocument(
-      new Document(
+      new DocketEntry(
         {
           description: 'Filing Fee Paid',
           documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
@@ -43,7 +43,7 @@ exports.addDocketEntryForPaymentStatus = ({
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     caseEntity.addDocument(
-      new Document(
+      new DocketEntry(
         {
           description: 'Filing Fee Waived',
           documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,

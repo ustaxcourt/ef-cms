@@ -7,7 +7,9 @@ const {
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   ORDER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
-const { Document } = require('../../shared/src/business/entities/Document');
+const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
@@ -111,7 +113,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
     }
 
     if (isUpdated) {
-      const updatedDocument = new Document(item, { applicationContext })
+      const updatedDocument = new DocketEntry(item, { applicationContext })
         .validate()
         .toRawObject();
 

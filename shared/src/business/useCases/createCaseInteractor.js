@@ -6,7 +6,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { PETITIONS_SECTION } = require('../entities/EntityConstants');
 const { ROLES } = require('../entities/EntityConstants');
@@ -130,7 +130,7 @@ exports.createCaseInteractor = async ({
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   caseToAdd.initialCaption = caseToAdd.caseCaption;
 
-  const petitionDocumentEntity = new Document(
+  const petitionDocumentEntity = new DocketEntry(
     {
       description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
@@ -159,7 +159,7 @@ exports.createCaseInteractor = async ({
   });
 
   caseToAdd.addDocument(
-    new Document(
+    new DocketEntry(
       {
         description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
         documentType:
@@ -176,7 +176,7 @@ exports.createCaseInteractor = async ({
     ),
   );
 
-  const stinDocumentEntity = new Document(
+  const stinDocumentEntity = new DocketEntry(
     {
       documentId: stinFileId,
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -198,7 +198,7 @@ exports.createCaseInteractor = async ({
   caseToAdd.addDocument(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new Document(
+    const odsDocumentEntity = new DocketEntry(
       {
         description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
