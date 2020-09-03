@@ -137,6 +137,14 @@ export const HealthCheck = connect(
                   icon="check-circle"
                 />
               </div>
+              <div>
+                ClamAV
+                <FontAwesomeIcon
+                  className="margin-left-1"
+                  color={health.clamAV ? 'green' : 'red'}
+                  icon="check-circle"
+                />
+              </div>
             </div>
           </div>
         </section>
