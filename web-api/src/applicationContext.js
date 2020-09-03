@@ -391,6 +391,9 @@ const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
+  getClientId,
+} = require('../../shared/src/persistence/cognito/getClientId');
+const {
   getClosedCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
 const {
@@ -414,6 +417,9 @@ const {
 const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
+const {
+  getDeployTableStatus,
+} = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
 const {
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
@@ -459,6 +465,9 @@ const {
 const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
+const {
+  getFirstSingleCaseRecord,
+} = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
 const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
@@ -549,6 +558,9 @@ const {
 const {
   getSectionOutboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
+const {
+  getTableStatus,
+} = require('../../shared/src/persistence/dynamo/getTableStatus');
 const {
   getTodaysOpinionsInteractor,
 } = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
@@ -1166,9 +1178,11 @@ const gatewayMethods = {
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUser,
+  getClientId,
   getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getDeployTableStatus,
   getDocketNumbersByUser,
   getDocument,
   getDocumentQCInboxForSection,
@@ -1179,6 +1193,7 @@ const gatewayMethods = {
   getElasticsearchReindexRecords,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
+  getFirstSingleCaseRecord,
   getIndexedCasesForUser,
   getInternalUsers,
   getMessageThreadByParentId,
@@ -1190,6 +1205,7 @@ const gatewayMethods = {
   getRecord,
   getSectionInboxMessages,
   getSectionOutboxMessages,
+  getTableStatus,
   getTrialSessionById,
   getTrialSessionWorkingCopy,
   getTrialSessions,
