@@ -13,7 +13,7 @@ const RenderHealthStatus = ({ item, requiresMargin = false }) => {
         requiresMargin && 'margin-top-05',
       )}
     >
-      <h4 className="text-light">
+      <h4 className="text-light font-sans-pro">
         {item ? 'Pass' : 'Fail'}{' '}
         <FontAwesomeIcon
           className="margin-left-1"
@@ -38,7 +38,7 @@ export const HealthCheck = connect(
           <div className="grid-row grid-gap">
             <div className="grid-col-3">
               <div className="card height-8">
-                <h2 className="margin-top-205 margin-left-205">
+                <h2 className="margin-top-2 margin-left-205">
                   ClamAV
                   <RenderHealthStatus
                     item={health.clamAV}
@@ -47,7 +47,7 @@ export const HealthCheck = connect(
                 </h2>
               </div>
               <div className="card height-8">
-                <h2 className="margin-top-205 margin-left-205">
+                <h2 className="margin-top-2 margin-left-205">
                   Cognito
                   <RenderHealthStatus
                     item={health.cognito}
@@ -56,7 +56,7 @@ export const HealthCheck = connect(
                 </h2>
               </div>
               <div className="card height-8">
-                <h2 className="margin-top-205 margin-left-205">
+                <h2 className="margin-top-2 margin-left-205">
                   Dynamsoft
                   <RenderHealthStatus
                     item={health.dynamsoft}
@@ -67,7 +67,7 @@ export const HealthCheck = connect(
             </div>
             <div className="grid-col-3">
               <div className="card height-card">
-                <h2 className="margin-top-205 margin-left-205">DynamoDB</h2>
+                <h2 className="margin-top-2 margin-left-205">DynamoDB</h2>
                 <hr />
                 <p className="margin-left-205 margin-top-negative">
                   <span className="health-check-text">efcms</span>
@@ -80,7 +80,7 @@ export const HealthCheck = connect(
               </div>
 
               <div className="card height-8">
-                <h2 className="margin-top-205 margin-left-2">
+                <h2 className="margin-top-2 margin-left-2">
                   ElasticSearch
                   <RenderHealthStatus
                     item={health.elasticsearch}
@@ -89,7 +89,7 @@ export const HealthCheck = connect(
                 </h2>
               </div>
               <div className="card height-8">
-                <h2 className="margin-top-205 margin-left-2">
+                <h2 className="margin-top-2 margin-left-2">
                   Email Service
                   <RenderHealthStatus
                     item={health.emailService}
@@ -100,7 +100,7 @@ export const HealthCheck = connect(
             </div>
             <div className="grid-col-3">
               <div className="card height-card">
-                <h2 className="margin-top-205 margin-left-205">s3 public</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 public</h2>
                 <hr />
                 <p className="margin-left-205 margin-top-negative">
                   <span className="health-check-text">client</span>
@@ -112,7 +112,7 @@ export const HealthCheck = connect(
                 </p>
               </div>
               <div className="card height-card">
-                <h2 className="margin-top-205 margin-left-205">s3 east</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 east</h2>
                 <hr />
                 <p className="margin-left-205 margin-top-negative">
                   <span className="health-check-text">documents</span>
@@ -126,7 +126,7 @@ export const HealthCheck = connect(
             </div>
             <div className="grid-col-3">
               <div className="card height-card">
-                <h2 className="margin-top-205 margin-left-205">s3 app</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 app</h2>
                 <hr />
                 <p className="margin-left-205 margin-top-negative">
                   <span className="health-check-text">client</span>
@@ -138,7 +138,7 @@ export const HealthCheck = connect(
                 </p>
               </div>
               <div className="card height-card">
-                <h2 className="margin-top-205 margin-left-205">s3 west</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 west</h2>
                 <hr />
                 <p className="margin-left-205 margin-top-negative">
                   <span className="health-check-text">documents</span>

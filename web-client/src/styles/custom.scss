@@ -1590,6 +1590,18 @@ button.change-scanner-button {
   font-weight: 600;
 }
 
+.card {
+  hr {
+    width: 90%;
+    margin-left: 15px;
+  }
+}
+
 .margin-top-negative {
   margin-top: -10px;
+}
+
+.font-sans-pro {
+  font-family: $font-source-sans;
+  font-size: 17px;
 }
