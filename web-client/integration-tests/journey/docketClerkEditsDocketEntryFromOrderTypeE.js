@@ -95,7 +95,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2050-01-01',
+      date: '2050-01-01T05:00:00.000Z',
       documentTitle:
         'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',
@@ -108,7 +108,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     });
 
     expect(test.getState('form')).toMatchObject({
-      date: '2050-01-01',
+      date: '2050-01-01T05:00:00.000Z',
       day: '1',
       documentTitle:
         'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
