@@ -105,13 +105,13 @@ export const HealthCheck = connect(
                   <hr />
                   <div className="margin-left-205 margin-top-negative grid-row">
                     <div className="health-check-text grid-col-9">client</div>
-                    <RenderHealthStatus item={health.publicS3Bucket} />
+                    <RenderHealthStatus item={health.public} />
                   </div>
                   <div className="margin-left-205 margin-bottom-205 grid-row">
                     <div className="health-check-text grid-col-9">
                       clientFailover
                     </div>
-                    <RenderHealthStatus item={health.publicFailoverS3Bucket} />
+                    <RenderHealthStatus item={health.publicFailover} />
                   </div>
                 </div>
                 <div className="card height-card">
@@ -121,13 +121,13 @@ export const HealthCheck = connect(
                     <div className="health-check-text  grid-col-9">
                       documents
                     </div>
-                    <RenderHealthStatus item={health.eastS3BucketName} />
+                    <RenderHealthStatus item={health.eastDocuments} />
                   </div>
                   <div className="margin-left-205 margin-bottom-205 grid-row">
                     <div className="health-check-text  grid-col-9">
                       tempDocuments
                     </div>
-                    <RenderHealthStatus item={health.eastS3TempBucketName} />
+                    <RenderHealthStatus item={health.eastTempDocuments} />
                   </div>
                 </div>
               </div>
@@ -137,13 +137,13 @@ export const HealthCheck = connect(
                   <hr />
                   <div className="margin-left-205 margin-top-negative grid-row">
                     <div className="health-check-text grid-col-9">client</div>
-                    <RenderHealthStatus item={health.appS3Bucket} />
+                    <RenderHealthStatus item={health.app} />
                   </div>
                   <div className="margin-left-205 margin-bottom-205 grid-row">
                     <div className="health-check-text grid-col-9">
                       clientFailover
                     </div>
-                    <RenderHealthStatus item={health.appFailoverS3Bucket} />
+                    <RenderHealthStatus item={health.appFailover} />
                   </div>
                 </div>
                 <div className="card height-card">
@@ -153,13 +153,13 @@ export const HealthCheck = connect(
                     <div className="health-check-text grid-col-9">
                       documents
                     </div>
-                    <RenderHealthStatus item={health.westS3BucketName} />
+                    <RenderHealthStatus item={health.westDocuments} />
                   </div>
                   <div className="margin-left-205 margin-bottom-205 grid-row">
                     <div className="health-check-text grid-col-9">
                       tempDocuments
                     </div>
-                    <RenderHealthStatus item={health.westS3TempBucketName} />
+                    <RenderHealthStatus item={health.westTempDocuments} />
                   </div>
                 </div>
               </div>
