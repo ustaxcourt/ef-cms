@@ -50,13 +50,13 @@ resource "aws_elasticsearch_domain" "efcms-search" {
   }
 }
 
-resource "aws_elasticsearch_domain" "efcms-app-logs" {
-  domain_name           = "efcms-app-logs-${var.environment}"
+resource "aws_elasticsearch_domain" "efcms-logs" {
+  domain_name           = "efcms-logs-${var.environment}"
   elasticsearch_version = "7.4"
 
   cluster_config {
     instance_type = "t2.small.elasticsearch"
-    instance_count = var.es_instance_count == "" ? "1" : var.es_instance_count
+    instance_count = var.es_logs_instance_count == "" ? "1" : var.es_logs_instance_count
   }
 
   ebs_options{

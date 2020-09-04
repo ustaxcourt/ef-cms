@@ -1,7 +1,7 @@
 data "archive_file" "zip_api_public" {
   type        = "zip"
   output_path = "${path.module}/lambdas/api-public.js.zip"
-  source_file = "${path.module}/lambdas/dist/api-public.js"
+  source_file = "${path.module}/lambdas/api-public.js"
 }
 
 resource "aws_lambda_function" "api_public_lambda" {

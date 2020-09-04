@@ -27,6 +27,11 @@ variable "es_instance_count" {
   default = "1"
 }
 
+variable "es_logs_instance_count" {
+  type    = string
+  default = "1"
+}
+
 variable "honeybadger_key" {
   type    = string
   default = "default_key"

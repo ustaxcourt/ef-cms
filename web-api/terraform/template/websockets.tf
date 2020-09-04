@@ -21,7 +21,7 @@ resource "aws_apigatewayv2_route" "disconnect" {
 data "archive_file" "zip_websockets" {
   type        = "zip"
   output_path = "${path.module}/lambdas/websockets.js.zip"
-  source_file = "${path.module}/lambdas/dist/websockets.js"
+  source_file = "${path.module}/lambdas/websockets.js"
 }
 
 resource "aws_lambda_function" "websockets_connect_lambda" {

@@ -19,7 +19,7 @@ resource "aws_s3_bucket_object" "api_object" {
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/lambdas/api.js.zip"
-  source_file = "${path.module}/lambdas/dist/api.js"
+  source_file = "${path.module}/lambdas/api.js"
 }
 
 resource "aws_lambda_function" "api_lambda" {

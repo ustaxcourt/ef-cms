@@ -22,6 +22,10 @@ variable "es_instance_count" {
   type = string
 }
 
+variable "es_logs_instance_count" {
+  type = string
+}
+
 variable "honeybadger_key" {
   type = string
 }
