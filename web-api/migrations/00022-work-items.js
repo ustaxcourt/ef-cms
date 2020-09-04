@@ -7,7 +7,9 @@ const {
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   ORDER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
-const { Document } = require('../../shared/src/business/entities/Document');
+const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
@@ -40,9 +42,7 @@ const getIsDraftForDocument = async ({
   if (fullCaseRecord) {
     const isNotArchived = !document.archived;
     const isNotServed = !document.servedAt;
-    const isDocumentOnDocketRecord = fullCaseRecord.docketRecord.find(
-      docketEntry => docketEntry.documentId === document.documentId,
-    );
+    const isDocumentOnDocketRecord = document.isOnDocketRecord;
     const isStipDecision = document.documentType === 'Stipulated Decision';
     const isDraftOrder = orderDocumentTypes.includes(document.documentType);
     const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
@@ -111,7 +111,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
     }
 
     if (isUpdated) {
-      const updatedDocument = new Document(item, { applicationContext })
+      const updatedDocument = new DocketEntry(item, { applicationContext })
         .validate()
         .toRawObject();
 

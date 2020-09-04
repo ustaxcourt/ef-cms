@@ -25,6 +25,23 @@ describe('messageModalHelper', () => {
           documentTitle: 'Test Correspondence',
         },
       ],
+      docketEntries: [
+        {
+          documentId: '123',
+          documentType: 'Petition',
+          index: 1,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+        },
+        {
+          documentId: '234',
+          documentTitle: 'Some Document',
+          index: 2,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+        },
+        { index: 3, isOnDocketRecord: true },
+      ],
       documents: [
         {
           documentId: '123',
@@ -143,6 +160,15 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
+          docketEntries: [
+            {
+              documentId: '123',
+              index: 1,
+              isDraft: true,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+            },
+          ],
           documents: [
             {
               documentId: '123',

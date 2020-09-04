@@ -1,4 +1,4 @@
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 
 /**
  * validateDocumentInteractor
@@ -9,7 +9,7 @@ const { Document } = require('../entities/Document');
  * @returns {object} the validation errors or null
  */
 exports.validateDocumentInteractor = ({ applicationContext, document }) => {
-  const errors = new Document(document, {
+  const errors = new DocketEntry(document, {
     applicationContext,
   }).getFormattedValidationErrors();
 

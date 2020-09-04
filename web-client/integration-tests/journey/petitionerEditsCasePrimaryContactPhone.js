@@ -22,9 +22,9 @@ export const petitionerEditsCasePrimaryContactPhone = test => {
       },
     );
 
-    const noticeDocument = caseDetailFormatted.docketRecordWithDocument.find(
+    const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
       entry =>
-        entry.record.description ===
+        entry.description ===
         'Notice of Change of Telephone Number for Mona Schultz',
     );
     expect(noticeDocument).toBeTruthy();

@@ -1,5 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { omit, pick } = require('lodash');
 
 /**
@@ -57,7 +57,7 @@ exports.fetchPendingItems = async ({
       if (document.pending) {
         foundDocuments.push({
           ...omit(
-            new Document(
+            new DocketEntry(
               {
                 ...document,
               },

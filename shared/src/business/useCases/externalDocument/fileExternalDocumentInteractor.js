@@ -11,7 +11,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -110,7 +110,7 @@ exports.fileExternalDocumentInteractor = async ({
 
   for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
-      const documentEntity = new Document(
+      const documentEntity = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,

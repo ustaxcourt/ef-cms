@@ -9,7 +9,7 @@ import {
   Case,
   getPetitionDocumentFromDocuments,
 } from '../../shared/src/business/entities/cases/Case';
-import { Document } from '../../shared/src/business/entities/Document';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   compareISODateStrings,
@@ -97,12 +97,12 @@ import { formatAttachments } from '../../shared/src/business/utilities/formatAtt
 import {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
+  formatDocketEntry,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
@@ -552,7 +552,7 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
-      formatDocketRecordWithDocument,
+      formatDocketEntry,
       formatDocument,
       formatDollars,
       formatJudgeName,
@@ -567,12 +567,12 @@ const applicationContext = {
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
-      isPendingOnCreation: Document.isPendingOnCreation,
+      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
-      sortDocketRecords,
+      sortDocketEntries,
     };
   },
   initHoneybadger: async () => {
