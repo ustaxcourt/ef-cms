@@ -27,9 +27,8 @@ export const HealthCheck = connect(
   function HealthCheck({ health }) {
     return (
       <>
-        {console.log(health)}
         <BigHeader text="Health Check" />
-        <section className="usa-section grid-container">
+        <section className="usa-section grid-container ">
           <div className="grid-row grid-gap">
             <div className="grid-col-3">
               <div className="card height-8">
@@ -52,25 +51,19 @@ export const HealthCheck = connect(
               </div>
             </div>
             <div className="grid-col-3">
-              <div>
-                Dynamo
-                <div className="margin-bottom-1 margin-top-1 margin-left-1">
-                  EFCMS
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.dynamo.efcms ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  EFCMS Deploy
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.dynamo.efcmsDeploy ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
+              <div className="card height-card">
+                <h2 className="margin-top-205 margin-left-205">DynamoDB</h2>
+                <hr />
+                <p className="margin-left-205 margin-top-negative">
+                  <span className="health-check-text">efcms</span>
+                  <RenderHealthStatus item={health.efcms} />
+                </p>
+                <p className="margin-left-205 margin-bottom-205">
+                  <span className="health-check-text">efcmsDeploy</span>
+                  <RenderHealthStatus item={health.efcmsDeploy} />
+                </p>
               </div>
+
               <div className="card height-8">
                 <h2 className="margin-top-205 margin-left-2">
                   ElasticSearch
@@ -85,75 +78,57 @@ export const HealthCheck = connect(
               </div>
             </div>
             <div className="grid-col-3">
-              <div>
-                S3
-                <div className="margin-bottom-1 margin-top-1 margin-left-1">
-                  East Documents
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.eastS3BucketName ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  West Documents
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.westS3BucketName ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  East Temp Documents
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.eastS3TempBucketName ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  West Temp Documents
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.westS3TempBucketName ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  App
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.appS3Bucket ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  Public
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.publicS3Bucket ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-bottom-1 margin-left-1">
-                  Public Failover
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.publicFailoverS3Bucket ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
-                <div className="margin-left-1">
-                  App Failover
-                  <FontAwesomeIcon
-                    className="margin-left-1"
-                    color={health.s3.appFailoverS3Bucket ? 'green' : 'red'}
-                    icon="check-circle"
-                  />
-                </div>
+              <div className="card height-card">
+                <h2 className="margin-top-205 margin-left-205">s3 public</h2>
+                <hr />
+                <p className="margin-left-205 margin-top-negative">
+                  <span className="health-check-text">client</span>
+                  <RenderHealthStatus item={health.publicS3Bucket} />
+                </p>
+                <p className="margin-left-205 margin-bottom-205">
+                  <span className="health-check-text">clientFailover</span>
+                  <RenderHealthStatus item={health.publicFailoverS3Bucket} />
+                </p>
+              </div>
+              <div className="card height-card">
+                <h2 className="margin-top-205 margin-left-205">s3 east</h2>
+                <hr />
+                <p className="margin-left-205 margin-top-negative">
+                  <span className="health-check-text">documents</span>
+                  <RenderHealthStatus item={health.eastS3BucketName} />
+                </p>
+                <p className="margin-left-205 margin-bottom-205">
+                  <span className="health-check-text">tempDocuments</span>
+                  <RenderHealthStatus item={health.eastS3TempBucketName} />
+                </p>
               </div>
             </div>
-            <div className="grid-col-3"></div>
+            <div className="grid-col-3">
+              <div className="card height-card">
+                <h2 className="margin-top-205 margin-left-205">s3 app</h2>
+                <hr />
+                <p className="margin-left-205 margin-top-negative">
+                  <span className="health-check-text">client</span>
+                  <RenderHealthStatus item={health.appS3Bucket} />
+                </p>
+                <p className="margin-left-205 margin-bottom-205">
+                  <span className="health-check-text">clientFailover</span>
+                  <RenderHealthStatus item={health.appFailoverS3Bucket} />
+                </p>
+              </div>
+              <div className="card height-card">
+                <h2 className="margin-top-205 margin-left-205">s3 west</h2>
+                <hr />
+                <p className="margin-left-205 margin-top-negative">
+                  <span className="health-check-text">documents</span>
+                  <RenderHealthStatus item={health.westS3BucketName} />
+                </p>
+                <p className="margin-left-205 margin-bottom-205">
+                  <span className="health-check-text">tempDocuments</span>
+                  <RenderHealthStatus item={health.westS3TempBucketName} />
+                </p>
+              </div>
+            </div>
           </div>
         </section>
       </>
