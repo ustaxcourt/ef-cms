@@ -40,7 +40,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
   );
 
   documentEntity.setWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity, { applicationContext });
+  caseToAdd.addDocument(documentEntity);
 
   return {
     workItem: workItemEntity,
@@ -122,11 +122,13 @@ exports.createCaseFromPaperInteractor = async ({
   const petitionDocumentEntity = new Document(
     {
       createdAt: caseToAdd.receivedAt,
+      description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.receivedAt,
       isFileAttached: true,
+      isOnDocketRecord: true,
       isPaper: true,
       mailingDate: petitionEntity.mailingDate,
       partyPrimary: true,
@@ -156,6 +158,8 @@ exports.createCaseFromPaperInteractor = async ({
     const applicationForWaiverOfFilingFeeDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
+        description:
+          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
         documentId: applicationForWaiverOfFilingFeeFileId,
         documentTitle,
         documentType:
@@ -178,12 +182,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(
-      applicationForWaiverOfFilingFeeDocumentEntity,
-      {
-        applicationContext,
-      },
-    );
+    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
   }
 
   if (requestForPlaceOfTrialFileId) {
@@ -198,6 +197,7 @@ exports.createCaseFromPaperInteractor = async ({
     const requestForPlaceOfTrialDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
+        description: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         documentId: requestForPlaceOfTrialFileId,
         documentTitle,
         documentType:
@@ -219,18 +219,14 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(
-      requestForPlaceOfTrialDocumentEntity,
-      {
-        applicationContext,
-      },
-    );
+    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
   }
 
   if (stinFileId) {
     const stinDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
+        description: INITIAL_DOCUMENT_TYPES.stin.documentType,
         documentId: stinFileId,
         documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -250,15 +246,14 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocument(stinDocumentEntity);
   }
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
+        description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
@@ -278,9 +273,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocumentWithoutDocketRecord(odsDocumentEntity, {
-      applicationContext,
-    });
+    caseToAdd.addDocument(odsDocumentEntity);
   }
 
   await Promise.all([

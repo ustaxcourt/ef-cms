@@ -50,9 +50,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 
   caseEntity.updateDocument(currentDocument);
 
-  const docketEntry = caseEntity.getDocketRecordByDocumentId(documentId);
-  caseEntity.updateDocketRecordEntry(docketEntry);
-
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({

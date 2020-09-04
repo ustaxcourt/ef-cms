@@ -21,7 +21,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
-import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
+import { validateDocumentAction } from '../actions/EditDocketRecordEntry/validateDocumentAction';
 
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
@@ -39,7 +39,7 @@ export const submitEditDocketEntryMetaSequence = [
     document: [generateTitleAction],
     noDocument: [],
   },
-  validateDocketRecordAction,
+  validateDocumentAction,
   {
     error: [
       setAlertErrorAction,

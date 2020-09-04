@@ -82,18 +82,18 @@ describe('formatRecord', () => {
 
   it('formats a record with a nested contact', () => {
     const initialRecord = {
-      address1: 'knows how to party',
       admissionsStatus: 'Active',
       birthYear: '',
-      city: 'the city of Compton',
+      'contact/address1': 'knows how to party',
+      'contact/city': 'the city of Compton',
+      'contact/phone': '1234567890',
+      'contact/postalCode': '11111',
+      'contact/state': 'CA',
       firstName: 'Rachael',
       isDojEmployee: 'N',
       isIrsEmployee: 'N',
       lastName: 'Ray',
       middleName: 'R',
-      phone: '1234567890',
-      postalCode: '11111',
-      state: 'CA',
       suffix: 'Esquire',
       unformattedAdmissionsDate: '11-30-2000',
     };
