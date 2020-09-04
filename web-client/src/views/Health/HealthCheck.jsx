@@ -3,10 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
-const RenderHealthStatus = ({ item }) => {
+const RenderHealthStatus = ({ item, requiresMargin = false }) => {
   return (
-    <span className="float-right margin-right-205">
+    <span
+      className={classNames(
+        'float-right margin-right-205',
+        requiresMargin && 'margin-top-05',
+      )}
+    >
       <h4 className="text-light">
         {item ? 'Pass' : 'Fail'}{' '}
         <FontAwesomeIcon
@@ -34,19 +40,28 @@ export const HealthCheck = connect(
               <div className="card height-8">
                 <h2 className="margin-top-205 margin-left-205">
                   ClamAV
-                  <RenderHealthStatus item={health.clamAV} />
+                  <RenderHealthStatus
+                    item={health.clamAV}
+                    requiresMargin={true}
+                  />
                 </h2>
               </div>
               <div className="card height-8">
                 <h2 className="margin-top-205 margin-left-205">
                   Cognito
-                  <RenderHealthStatus item={health.cognito} />
+                  <RenderHealthStatus
+                    item={health.cognito}
+                    requiresMargin={true}
+                  />
                 </h2>
               </div>
               <div className="card height-8">
                 <h2 className="margin-top-205 margin-left-205">
                   Dynamsoft
-                  <RenderHealthStatus item={health.dynamsoft} />
+                  <RenderHealthStatus
+                    item={health.dynamsoft}
+                    requiresMargin={true}
+                  />
                 </h2>
               </div>
             </div>
@@ -67,13 +82,19 @@ export const HealthCheck = connect(
               <div className="card height-8">
                 <h2 className="margin-top-205 margin-left-2">
                   ElasticSearch
-                  <RenderHealthStatus item={health.elasticsearch} />
+                  <RenderHealthStatus
+                    item={health.elasticsearch}
+                    requiresMargin={true}
+                  />
                 </h2>
               </div>
               <div className="card height-8">
                 <h2 className="margin-top-205 margin-left-2">
                   Email Service
-                  <RenderHealthStatus item={health.emailService} />
+                  <RenderHealthStatus
+                    item={health.emailService}
+                    requiresMargin={true}
+                  />
                 </h2>
               </div>
             </div>
