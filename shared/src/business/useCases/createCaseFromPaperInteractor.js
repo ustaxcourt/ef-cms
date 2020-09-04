@@ -4,7 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -119,7 +119,7 @@ exports.createCaseFromPaperInteractor = async ({
     partySecondary = true;
   }
 
-  const petitionDocumentEntity = new Document(
+  const petitionDocumentEntity = new DocketEntry(
     {
       createdAt: caseToAdd.receivedAt,
       description: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -155,7 +155,7 @@ exports.createCaseFromPaperInteractor = async ({
       documentTitle,
     } = INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
-    const applicationForWaiverOfFilingFeeDocumentEntity = new Document(
+    const applicationForWaiverOfFilingFeeDocumentEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description:
@@ -194,7 +194,7 @@ exports.createCaseFromPaperInteractor = async ({
       );
     }
 
-    const requestForPlaceOfTrialDocumentEntity = new Document(
+    const requestForPlaceOfTrialDocumentEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -223,7 +223,7 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (stinFileId) {
-    const stinDocumentEntity = new Document(
+    const stinDocumentEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -250,7 +250,7 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new Document(
+    const odsDocumentEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,

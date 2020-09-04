@@ -5,7 +5,9 @@ const {
 const {
   ALL_DOCUMENT_TYPES_MAP,
 } = require('../../shared/src/business/entities/EntityConstants');
-const { Document } = require('../../shared/src/business/entities/Document');
+const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
 const { isCaseRecord, upGenerator } = require('./utilities');
 
 const applicationContext = createApplicationContext({});
@@ -33,12 +35,12 @@ const mutateRecord = async (item, documentClient, tableName) => {
 
     await Promise.all(
       fullCaseRecord.documents.map(document => {
-        const docketEntry = fullCaseRecord.docketRecord.find(
+        const docketEntry = (fullCaseRecord.docketRecord || []).find(
           d => d.documentId === document.documentId,
         );
 
         if (docketEntry) {
-          const updatedDocument = new Document(
+          const updatedDocument = new DocketEntry(
             {
               ...document,
               ...docketEntry,
@@ -64,7 +66,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
     );
 
     await Promise.all(
-      fullCaseRecord.docketRecord.map(docketEntry => {
+      (fullCaseRecord.docketRecord || []).map(docketEntry => {
         const caseDocument = fullCaseRecord.documents.find(
           d => d.documentId === docketEntry.documentId,
         );
@@ -74,7 +76,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
             m => m.eventCode === docketEntry.eventCode,
           );
 
-          const newDocument = new Document(
+          const newDocument = new DocketEntry(
             {
               ...docketEntry,
               docketNumber: item.docketNumber,

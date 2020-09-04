@@ -7,7 +7,7 @@ const {
 } = require('../entities/EntityConstants');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { isEmpty } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
@@ -97,7 +97,7 @@ exports.updateSecondaryContactInteractor = async ({
 
     const newDocumentId = applicationContext.getUniqueId();
 
-    const changeOfAddressDocument = new Document(
+    const changeOfAddressDocument = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,

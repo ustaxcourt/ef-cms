@@ -10,7 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -79,7 +79,7 @@ exports.updateDocketEntryInteractor = async ({
     serviceDate: documentMetadata.serviceDate,
   };
 
-  const documentEntity = new Document(
+  const documentEntity = new DocketEntry(
     {
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate

@@ -3,7 +3,7 @@ const {
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { Message } = require('../entities/Message');
 const { orderBy } = require('lodash');
 
@@ -85,7 +85,7 @@ exports.saveSignedDocumentInteractor = async ({
 
   let signedDocumentEntity;
   if (originalDocumentEntity.documentType === 'Proposed Stipulated Decision') {
-    signedDocumentEntity = new Document(
+    signedDocumentEntity = new DocketEntry(
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentId: signedDocumentId,
@@ -142,7 +142,7 @@ exports.saveSignedDocumentInteractor = async ({
       signedDocumentId,
     });
 
-    signedDocumentEntity = new Document(
+    signedDocumentEntity = new DocketEntry(
       {
         ...originalDocumentEntity,
         createdAt: applicationContext.getUtilities().createISODateString(),
