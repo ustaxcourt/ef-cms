@@ -2,10 +2,12 @@ const createApplicationContext = require('../src/applicationContext');
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
+const {
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
-const { Document } = require('../../shared/src/business/entities/Document');
 
 const DEFAULT_FILED_BY = 'Filed via migration.';
 
@@ -16,7 +18,7 @@ const mutateRecord = async item => {
       EXTERNAL_DOCUMENT_TYPES.includes(item.documentType);
 
     if (documentRequiresFiledBy && !item.filedBy) {
-      const documentToUpdate = new Document(
+      const documentToUpdate = new DocketEntry(
         { ...item, filedBy: DEFAULT_FILED_BY },
         { applicationContext },
       )

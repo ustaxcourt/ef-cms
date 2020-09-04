@@ -382,7 +382,7 @@ describe('migrateCaseInteractor', () => {
       ).toBeCalled();
       expect(
         applicationContext.getPersistenceGateway().deleteDocumentFromS3,
-      ).toBeCalledTimes(4); // MOCK_CASE has 4 documents
+      ).toBeCalledTimes(0); // MOCK_CASE has 4 documents
       expect(result).toBeDefined();
       expect(
         applicationContext.getPersistenceGateway().createCase,

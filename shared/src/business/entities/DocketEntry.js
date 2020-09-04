@@ -31,19 +31,19 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
-Document.validationName = 'Document';
+DocketEntry.validationName = 'DocketEntry';
 /**
  * constructor
  *
- * @param {object} rawDocument the raw document data
+ * @param {object} rawDocketEntry the raw docket entry data
  * @constructor
  */
-function Document() {
-  this.entityName = 'Document';
+function DocketEntry() {
+  this.entityName = 'DocketEntry';
 }
 
-Document.prototype.init = function init(
-  rawDocument,
+DocketEntry.prototype.init = function init(
+  rawDocketEntry,
   { applicationContext, filtered = false },
 ) {
   if (!applicationContext) {
@@ -53,113 +53,116 @@ Document.prototype.init = function init(
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.editState = rawDocument.editState;
-    this.draftState = rawDocument.draftState;
-    this.isDraft = rawDocument.isDraft || false;
-    this.judge = rawDocument.judge;
+    this.editState = rawDocketEntry.editState;
+    this.draftState = rawDocketEntry.draftState;
+    this.isDraft = rawDocketEntry.isDraft || false;
+    this.judge = rawDocketEntry.judge;
     this.pending =
-      rawDocument.pending === undefined
-        ? Document.isPendingOnCreation(rawDocument)
-        : rawDocument.pending;
-    if (rawDocument.previousDocument) {
+      rawDocketEntry.pending === undefined
+        ? DocketEntry.isPendingOnCreation(rawDocketEntry)
+        : rawDocketEntry.pending;
+    if (rawDocketEntry.previousDocument) {
       this.previousDocument = {
-        documentId: rawDocument.previousDocument.documentId,
-        documentTitle: rawDocument.previousDocument.documentTitle,
-        documentType: rawDocument.previousDocument.documentType,
+        documentId: rawDocketEntry.previousDocument.documentId,
+        documentTitle: rawDocketEntry.previousDocument.documentTitle,
+        documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.processingStatus = rawDocument.processingStatus || 'pending';
-    this.qcAt = rawDocument.qcAt;
-    this.qcByUserId = rawDocument.qcByUserId;
-    this.signedAt = rawDocument.signedAt;
-    this.signedByUserId = rawDocument.signedByUserId;
-    this.signedJudgeName = rawDocument.signedJudgeName;
-    this.userId = rawDocument.userId;
-    this.workItem = rawDocument.workItem
-      ? new WorkItem(rawDocument.workItem, { applicationContext })
+    this.processingStatus = rawDocketEntry.processingStatus || 'pending';
+    this.qcAt = rawDocketEntry.qcAt;
+    this.qcByUserId = rawDocketEntry.qcByUserId;
+    this.signedAt = rawDocketEntry.signedAt;
+    this.signedByUserId = rawDocketEntry.signedByUserId;
+    this.signedJudgeName = rawDocketEntry.signedJudgeName;
+    this.userId = rawDocketEntry.userId;
+    this.workItem = rawDocketEntry.workItem
+      ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
       : undefined;
   }
 
-  this.action = rawDocument.action;
-  this.additionalInfo = rawDocument.additionalInfo;
-  this.additionalInfo2 = rawDocument.additionalInfo2;
-  this.addToCoversheet = rawDocument.addToCoversheet;
-  this.archived = rawDocument.archived;
-  this.attachments = rawDocument.attachments;
-  this.certificateOfService = rawDocument.certificateOfService;
-  this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
-  this.createdAt = rawDocument.createdAt || createISODateString();
-  this.date = rawDocument.date;
+  this.action = rawDocketEntry.action;
+  this.additionalInfo = rawDocketEntry.additionalInfo;
+  this.additionalInfo2 = rawDocketEntry.additionalInfo2;
+  this.addToCoversheet = rawDocketEntry.addToCoversheet;
+  this.archived = rawDocketEntry.archived;
+  this.attachments = rawDocketEntry.attachments;
+  this.certificateOfService = rawDocketEntry.certificateOfService;
+  this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
+  this.createdAt = rawDocketEntry.createdAt || createISODateString();
+  this.date = rawDocketEntry.date;
   this.description =
-    rawDocument.description ||
-    rawDocument.documentTitle ||
-    rawDocument.documentType;
-  this.docketNumber = rawDocument.docketNumber;
-  this.docketNumbers = rawDocument.docketNumbers;
-  this.documentContentsId = rawDocument.documentContentsId;
-  this.documentId = rawDocument.documentId || applicationContext.getUniqueId();
-  this.documentIdBeforeSignature = rawDocument.documentIdBeforeSignature;
-  this.documentTitle = rawDocument.documentTitle;
-  this.documentType = rawDocument.documentType;
-  this.eventCode = rawDocument.eventCode;
-  this.filedBy = rawDocument.filedBy;
-  this.filingDate = rawDocument.filingDate || createISODateString();
-  this.freeText = rawDocument.freeText;
-  this.freeText2 = rawDocument.freeText2;
-  this.hasOtherFilingParty = rawDocument.hasOtherFilingParty;
-  this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
-  this.index = rawDocument.index;
-  this.isAutoGenerated = rawDocument.isAutoGenerated;
-  this.isFileAttached = rawDocument.isFileAttached;
-  this.isLegacy = rawDocument.isLegacy;
-  this.isLegacySealed = rawDocument.isLegacySealed;
-  this.isLegacyServed = rawDocument.isLegacyServed;
-  this.isMinuteEntry = rawDocument.isMinuteEntry || false;
-  this.isOnDocketRecord = rawDocument.isOnDocketRecord || false;
-  this.isPaper = rawDocument.isPaper;
-  this.isSealed = rawDocument.isSealed;
-  this.isStricken = rawDocument.isStricken || false;
-  this.lodged = rawDocument.lodged;
-  this.mailingDate = rawDocument.mailingDate;
-  this.numberOfPages = rawDocument.numberOfPages;
-  this.objections = rawDocument.objections;
-  this.ordinalValue = rawDocument.ordinalValue;
-  this.otherFilingParty = rawDocument.otherFilingParty;
-  this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
-  this.partyPrimary = rawDocument.partyPrimary;
-  this.partySecondary = rawDocument.partySecondary;
-  this.receivedAt = rawDocument.receivedAt || createISODateString();
-  this.relationship = rawDocument.relationship;
-  this.scenario = rawDocument.scenario;
-  this.secondaryDate = rawDocument.secondaryDate;
-  this.secondaryDocument = rawDocument.secondaryDocument;
-  this.servedAt = rawDocument.servedAt;
-  this.servedPartiesCode = rawDocument.servedPartiesCode;
-  this.serviceDate = rawDocument.serviceDate;
-  this.serviceStamp = rawDocument.serviceStamp;
-  this.strickenAt = rawDocument.strickenAt;
-  this.strickenBy = rawDocument.strickenBy;
-  this.strickenByUserId = rawDocument.strickenByUserId;
-  this.supportingDocument = rawDocument.supportingDocument;
-  this.trialLocation = rawDocument.trialLocation;
+    rawDocketEntry.description ||
+    rawDocketEntry.documentTitle ||
+    rawDocketEntry.documentType;
+  this.docketNumber = rawDocketEntry.docketNumber;
+  this.docketNumbers = rawDocketEntry.docketNumbers;
+  this.documentContentsId = rawDocketEntry.documentContentsId;
+  this.documentId =
+    rawDocketEntry.documentId || applicationContext.getUniqueId();
+  this.documentIdBeforeSignature = rawDocketEntry.documentIdBeforeSignature;
+  this.documentTitle = rawDocketEntry.documentTitle;
+  this.documentType = rawDocketEntry.documentType;
+  this.eventCode = rawDocketEntry.eventCode;
+  this.filedBy = rawDocketEntry.filedBy;
+  this.filingDate = rawDocketEntry.filingDate || createISODateString();
+  this.freeText = rawDocketEntry.freeText;
+  this.freeText2 = rawDocketEntry.freeText2;
+  this.hasOtherFilingParty = rawDocketEntry.hasOtherFilingParty;
+  this.hasSupportingDocuments = rawDocketEntry.hasSupportingDocuments;
+  this.index = rawDocketEntry.index;
+  this.isAutoGenerated = rawDocketEntry.isAutoGenerated;
+  this.isFileAttached = rawDocketEntry.isFileAttached;
+  this.isLegacy = rawDocketEntry.isLegacy;
+  this.isLegacySealed = rawDocketEntry.isLegacySealed;
+  this.isLegacyServed = rawDocketEntry.isLegacyServed;
+  this.isMinuteEntry = rawDocketEntry.isMinuteEntry || false;
+  this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord || false;
+  this.isPaper = rawDocketEntry.isPaper;
+  this.isSealed = rawDocketEntry.isSealed;
+  this.isStricken = rawDocketEntry.isStricken || false;
+  this.lodged = rawDocketEntry.lodged;
+  this.mailingDate = rawDocketEntry.mailingDate;
+  this.numberOfPages = rawDocketEntry.numberOfPages;
+  this.objections = rawDocketEntry.objections;
+  this.ordinalValue = rawDocketEntry.ordinalValue;
+  this.otherFilingParty = rawDocketEntry.otherFilingParty;
+  this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
+  this.partyPrimary = rawDocketEntry.partyPrimary;
+  this.partySecondary = rawDocketEntry.partySecondary;
+  this.receivedAt = rawDocketEntry.receivedAt || createISODateString();
+  this.relationship = rawDocketEntry.relationship;
+  this.scenario = rawDocketEntry.scenario;
+  this.secondaryDate = rawDocketEntry.secondaryDate;
+  this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  this.servedAt = rawDocketEntry.servedAt;
+  this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
+  this.serviceDate = rawDocketEntry.serviceDate;
+  this.serviceStamp = rawDocketEntry.serviceStamp;
+  this.strickenAt = rawDocketEntry.strickenAt;
+  this.strickenBy = rawDocketEntry.strickenBy;
+  this.strickenByUserId = rawDocketEntry.strickenByUserId;
+  this.supportingDocument = rawDocketEntry.supportingDocument;
+  this.trialLocation = rawDocketEntry.trialLocation;
 
   // only share the userId with an external user if it is the logged in user
-  if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
-    this.userId = rawDocument.userId;
+  if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
+    this.userId = rawDocketEntry.userId;
   }
 
   // only use the privatePractitioner name
-  if (Array.isArray(rawDocument.privatePractitioners)) {
-    this.privatePractitioners = rawDocument.privatePractitioners.map(item => {
-      return {
-        name: item.name,
-        partyPrivatePractitioner: item.partyPrivatePractitioner,
-      };
-    });
+  if (Array.isArray(rawDocketEntry.privatePractitioners)) {
+    this.privatePractitioners = rawDocketEntry.privatePractitioners.map(
+      item => {
+        return {
+          name: item.name,
+          partyPrivatePractitioner: item.partyPrivatePractitioner,
+        };
+      },
+    );
   }
 
-  if (Array.isArray(rawDocument.servedParties)) {
-    this.servedParties = rawDocument.servedParties.map(item => {
+  if (Array.isArray(rawDocketEntry.servedParties)) {
+    this.servedParties = rawDocketEntry.servedParties.map(item => {
       return {
         email: item.email,
         name: item.name,
@@ -167,27 +170,29 @@ Document.prototype.init = function init(
       };
     });
   } else {
-    this.servedParties = rawDocument.servedParties;
+    this.servedParties = rawDocketEntry.servedParties;
   }
 
-  if (DOCUMENT_NOTICE_EVENT_CODES.includes(rawDocument.eventCode)) {
+  if (DOCUMENT_NOTICE_EVENT_CODES.includes(rawDocketEntry.eventCode)) {
     this.signedAt = createISODateString();
   }
 
-  this.generateFiledBy(rawDocument);
+  this.generateFiledBy(rawDocketEntry);
 };
 
-Document.isPendingOnCreation = rawDocument => {
+DocketEntry.isPendingOnCreation = rawDocketEntry => {
   const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
     return (
-      (rawDocument.category && trackedType.category === rawDocument.category) ||
-      (rawDocument.eventCode && trackedType.eventCode === rawDocument.eventCode)
+      (rawDocketEntry.category &&
+        trackedType.category === rawDocketEntry.category) ||
+      (rawDocketEntry.eventCode &&
+        trackedType.eventCode === rawDocketEntry.eventCode)
     );
   });
   return isPending;
 };
 
-Document.VALIDATION_RULES = joi.object().keys({
+DocketEntry.VALIDATION_RULES = joi.object().keys({
   action: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
@@ -254,7 +259,7 @@ Document.VALIDATION_RULES = joi.object().keys({
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('JSON representation of the in-progress edit of this item.'), // TODO 636 - can we remove?
-  entityName: JoiValidationConstants.STRING.valid('Document').required(),
+  entityName: JoiValidationConstants.STRING.valid('DocketEntry').required(),
   eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).required(),
   filedBy: JoiValidationConstants.STRING.max(500)
     .when('documentType', {
@@ -528,13 +533,13 @@ Document.VALIDATION_RULES = joi.object().keys({
   workItem: WorkItem.VALIDATION_RULES.optional(),
 });
 
-joiValidationDecorator(Document, Document.VALIDATION_RULES);
+joiValidationDecorator(DocketEntry, DocketEntry.VALIDATION_RULES);
 
 /**
  *
  * @param {WorkItem} workItem the work item to add to the document
  */
-Document.prototype.setWorkItem = function (workItem) {
+DocketEntry.prototype.setWorkItem = function (workItem) {
   this.workItem = workItem;
 };
 
@@ -542,11 +547,11 @@ Document.prototype.setWorkItem = function (workItem) {
  * sets the document as archived (used to hide from the ui)
  *
  */
-Document.prototype.archive = function () {
+DocketEntry.prototype.archive = function () {
   this.archived = true;
 };
 
-Document.prototype.setAsServed = function (servedParties = null) {
+DocketEntry.prototype.setAsServed = function (servedParties = null) {
   this.servedAt = createISODateString();
   this.draftState = null;
 
@@ -561,7 +566,7 @@ and contact info from the case detail
  *
  * @param {object} caseDetail the case detail
  */
-Document.prototype.generateFiledBy = function (caseDetail) {
+DocketEntry.prototype.generateFiledBy = function (caseDetail) {
   if (!this.filedBy) {
     let partiesArray = [];
     this.partyIrsPractitioner && partiesArray.push('Resp.');
@@ -616,7 +621,7 @@ Document.prototype.generateFiledBy = function (caseDetail) {
  * @param {string} signedJudgeName the judge's signature for the document
  *
  */
-Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
+DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
@@ -627,22 +632,22 @@ Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
  *
  * @param {object} user the user completing QC process
  */
-Document.prototype.setQCed = function (user) {
+DocketEntry.prototype.setQCed = function (user) {
   this.qcByUserId = user.userId;
   this.qcAt = createISODateString();
 };
 
-Document.prototype.unsignDocument = function () {
+DocketEntry.prototype.unsignDocument = function () {
   this.signedAt = null;
   this.signedJudgeName = null;
   this.signedByUserId = null;
 };
 
-Document.prototype.setAsProcessingStatusAsCompleted = function () {
+DocketEntry.prototype.setAsProcessingStatusAsCompleted = function () {
   this.processingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 };
 
-Document.prototype.isAutoServed = function () {
+DocketEntry.prototype.isAutoServed = function () {
   const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
     this.documentType,
   );
@@ -660,7 +665,7 @@ Document.prototype.isAutoServed = function () {
   );
 };
 
-Document.prototype.isCourtIssued = function () {
+DocketEntry.prototype.isCourtIssued = function () {
   return COURT_ISSUED_DOCUMENT_TYPES.includes(this.documentType);
 };
 
@@ -669,7 +674,7 @@ Document.prototype.isCourtIssued = function () {
  *
  * @param {Number} numberOfPages the number of pages
  */
-Document.prototype.setNumberOfPages = function (numberOfPages) {
+DocketEntry.prototype.setNumberOfPages = function (numberOfPages) {
   this.numberOfPages = numberOfPages;
 };
 
@@ -681,7 +686,7 @@ Document.prototype.setNumberOfPages = function (numberOfPages) {
  * @param {string} documentType document type to strip the event code
  * @returns {string} formatted document type
  */
-Document.getFormattedType = function (documentType) {
+DocketEntry.getFormattedType = function (documentType) {
   return documentType.split('-').slice(-1).join('').trim();
 };
 
@@ -692,7 +697,7 @@ Document.getFormattedType = function (documentType) {
  * @param {string} obj.name user name
  * @param {string} obj.userId user id
  */
-Document.prototype.strikeEntry = function ({ name, userId }) {
+DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
   if (this.isOnDocketRecord) {
     this.isStricken = true;
     this.strickenBy = name;
@@ -705,4 +710,4 @@ Document.prototype.strikeEntry = function ({ name, userId }) {
   }
 };
 
-exports.Document = validEntityDecorator(Document);
+exports.DocketEntry = validEntityDecorator(DocketEntry);

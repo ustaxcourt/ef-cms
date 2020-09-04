@@ -67,10 +67,18 @@ export const caseDetailHelper = (get, applicationContext) => {
     .getPetitionDocumentFromDocuments(caseDetail.documents);
   const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
 
+  const hasPrivatePractitioners =
+    !!caseDetail.privatePractitioners &&
+    !!caseDetail.privatePractitioners.length;
+  const hasIrsPractitioners =
+    !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
+
   return {
     caseDeadlines,
     documentDetailTab,
     hasConsolidatedCases,
+    hasIrsPractitioners,
+    hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
@@ -89,15 +97,9 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
     showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
-    showPractitionerSection:
-      !isExternalUser ||
-      (caseDetail.privatePractitioners &&
-        !!caseDetail.privatePractitioners.length),
+    showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRespondentSection:
-      !isExternalUser ||
-      (caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length),
     userCanViewCase:
       (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,

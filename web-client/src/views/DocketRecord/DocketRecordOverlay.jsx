@@ -76,9 +76,8 @@ export const DocketRecordOverlay = connect(
 
     const renderModalContent = () => {
       const closeFunc = dismissModalSequence;
-      const { document, record } = formattedCaseDetail.docketRecordWithDocument[
-        docketRecordIndex
-      ];
+      const entry =
+        formattedCaseDetail.formattedDocketEntries[docketRecordIndex];
       return (
         <FocusLock>
           <dialog
@@ -101,7 +100,7 @@ export const DocketRecordOverlay = connect(
                 Document Details
               </Button>
               <hr className="margin-top-1 margin-bottom-2" />
-              <h3 tabIndex="-1">{record.description}</h3>
+              <h3 tabIndex="-1">{entry.description}</h3>
               <Button
                 link
                 aria-label={'View PDF'}
@@ -109,7 +108,7 @@ export const DocketRecordOverlay = connect(
                 onClick={() => {
                   openCaseDocumentDownloadUrlSequence({
                     docketNumber: caseDetail.docketNumber,
-                    documentId: document.documentId,
+                    documentId: entry.documentId,
                   });
                 }}
               >
@@ -117,23 +116,19 @@ export const DocketRecordOverlay = connect(
                 View PDF
               </Button>
               <p className="semi-bold label margin-top-3">Date</p>
-              <p className="margin-top-0">{document.createdAtFormatted}</p>
+              <p className="margin-top-0">{entry.createdAtFormatted}</p>
               <p className="semi-bold label margin-top-3">Pages</p>
-              <p className="margin-top-0">{record.numberOfPages}</p>
+              <p className="margin-top-0">{entry.numberOfPages}</p>
               <p className="semi-bold label margin-top-3">Filed By</p>
-              <p className="margin-top-0">{document && document.filedBy}</p>
+              <p className="margin-top-0">{entry.filedBy}</p>
               <p className="semi-bold label margin-top-3">Action</p>
-              <p className="margin-top-0">{record.action}</p>
+              <p className="margin-top-0">{entry.action}</p>
               <p className="semi-bold label margin-top-3">Served</p>
               <p className="margin-top-0">
-                {document && document.isStatusServed && (
-                  <span>{document.servedAtFormatted}</span>
-                )}
+                {entry.isStatusServed && <span>{entry.servedAtFormatted}</span>}
               </p>
               <p className="semi-bold label margin-top-3">Parties</p>
-              <p className="margin-top-0">
-                {document && document.servedPartiesCode}
-              </p>
+              <p className="margin-top-0">{entry.servedPartiesCode}</p>
             </div>
           </dialog>
         </FocusLock>

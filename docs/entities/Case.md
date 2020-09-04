@@ -687,7 +687,7 @@
                   args: 
                     limit: 1
               allow: 
-                - "Document"
+                - "DocketEntry"
             eventCode: 
               type: "string"
               flags: 
@@ -4805,7 +4805,7 @@
                   args: 
                     limit: 1
               allow: 
-                - "Document"
+                - "DocketEntry"
             eventCode: 
               type: "string"
               flags: 
@@ -8049,7 +8049,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 4700
       allow: 
         - null
     initialDocketNumberSuffix: 

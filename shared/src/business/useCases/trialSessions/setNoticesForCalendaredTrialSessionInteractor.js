@@ -12,7 +12,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -118,7 +118,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocumentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
 
-    const noticeOfTrialDocument = new Document(
+    const noticeOfTrialDocument = new DocketEntry(
       {
         description: noticeOfTrialDocumentTitle,
         documentId: newNoticeOfTrialIssuedDocumentId,
@@ -175,7 +175,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       documentId: newStandingPretrialDocumentId,
     });
 
-    const standingPretrialDocument = new Document(
+    const standingPretrialDocument = new DocketEntry(
       {
         description: standingPretrialDocumentTitle,
         documentId: newStandingPretrialDocumentId,

@@ -15,7 +15,7 @@ export const petitionsClerkServesOrder = test => {
 
     const { documentId } = test;
 
-    const orderDocument = caseDetailFormatted.documents.find(
+    const orderDocument = caseDetailFormatted.formattedDocuments.find(
       doc => doc.documentId === documentId,
     );
 
