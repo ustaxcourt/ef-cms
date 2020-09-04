@@ -238,22 +238,17 @@ const castToISO = dateString => {
 const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
 
-  console.log(updatedDateString);
-
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
   } else if (dateHasText(updatedDateString)) {
     updatedDateString = '-1';
+  } else if (
+    !updatedDateString.includes('undefined') &&
+    hasAllDateParts.test(updatedDateString)
+  ) {
+    updatedDateString = castToISO(updatedDateString);
   } else {
-    if (
-      !updatedDateString.includes('undefined') &&
-      hasAllDateParts.test(updatedDateString)
-    ) {
-      updatedDateString = castToISO(updatedDateString);
-    } else {
-      //xx-xx-undefined
-      updatedDateString = null;
-    }
+    return null;
   }
   return updatedDateString;
 };

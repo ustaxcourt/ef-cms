@@ -17,7 +17,7 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { Document } = require('../Document');
+const { DocketEntry } = require('../DocketEntry');
 const { Statistic } = require('../Statistic');
 
 /**
@@ -82,7 +82,7 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
 
   this.archivedDocuments = Array.isArray(rawCase.archivedDocuments)
     ? rawCase.archivedDocuments.map(
-        doc => new Document(doc, { applicationContext }),
+        doc => new DocketEntry(doc, { applicationContext }),
       )
     : [];
 

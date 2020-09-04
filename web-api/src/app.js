@@ -743,6 +743,7 @@ app.post(
   );
   app.post('/messages', lambdaWrapper(createMessageLambda));
 }
+
 /**
  * migrate
  */
@@ -796,6 +797,7 @@ app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
     lambdaWrapper(runTrialSessionPlanningReportLambda),
   );
 }
+
 /**
  * sections
  */

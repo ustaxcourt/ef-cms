@@ -87,7 +87,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       description: 'Entry of Appearance',
     });
 
-    const updatedDocument = caseDetailFormatted.documents.find(
+    const updatedDocument = caseDetailFormatted.formattedDocuments.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({

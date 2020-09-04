@@ -357,69 +357,19 @@ describe('DateHandler', () => {
     });
   });
 
-  describe.only('checkDate', () => {
+  describe('checkDate', () => {
     it('should return -1 when the date is invalid', async () => {
       expect(DateHandler.checkDate('xx-01-01')).toEqual('-1');
     });
 
-    it('should delete the date when the year is missing', async () => {
-      const y = ' ';
-      const m = '02';
-      const d = '01';
-      expect(DateHandler.checkDate(`-${m}-${d}`)).toEqual(null);
+    it('should return null when date does not include letters or numbers', async () => {
+      expect(DateHandler.checkDate('--')).toEqual(null);
     });
 
-    // it('should delete the date if year and month are missing', async () => {
-    //   const results = await runAction(
-    //     getCaseDetailFormWithComputedDatesAction,
-    //     {
-    //       modules,
-
-    //       state: {
-    //         form: {
-    //           irsDay: '24',
-    //           irsMonth: '',
-    //           irsNoticeDate: null,
-    //           irsYear: '',
-    //           paymentDateDay: '24',
-    //           paymentDateMonth: '',
-    //           paymentDateWaivedDay: '24',
-    //           paymentDateWaivedMonth: '',
-    //           paymentDateWaivedYear: '',
-    //           paymentDateYear: '',
-    //           petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-    //           petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
-    //           receivedAt: '2018-12-24T05:00:00.000Z',
-    //           receivedAtDay: '24',
-    //           receivedAtMonth: '',
-    //           receivedAtYear: '',
-    //         },
-    //       },
-    //     },
-    //   );
-    //   expect(results.output).toEqual({
-    //     formWithComputedDates: {
-    //       irsNoticeDate: null,
-    //       petitionPaymentDate: null,
-    //       petitionPaymentWaivedDate: null,
-    //       receivedAt: null,
-    //     },
-    //   });
-    // });
+    it('should return the expected date in ISO format', () => {
+      expect(DateHandler.checkDate('2009-09-03')).toEqual(
+        '2009-09-03T04:00:00.000Z',
+      );
+    });
   });
 });
-
-// it('should return null if year or day is not defined', async () => {
-//   const result = await runAction(computeFormDateAction, {
-//     modules: {
-//       presenter,
-//     },
-//     state: {
-//       form: {
-//         month: '2',
-//       },
-//     },
-//   });
-
-//   expect(result.output.computedDate).toEqual(null);
-// });
