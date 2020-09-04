@@ -325,4 +325,101 @@ describe('DateHandler', () => {
       });
     });
   });
+  describe('castToISO', () => {
+    it('returns an iso string when the date string passed in is valid', () => {
+      expect(DateHandler.castToISO('2010-10-10')).toEqual(
+        '2010-10-10T04:00:00.000Z',
+      );
+    });
+
+    it('returns an iso string when the date string of 2009-01-01 passed in is valid', () => {
+      expect(DateHandler.castToISO('2009-01-01')).toEqual(
+        '2009-01-01T05:00:00.000Z',
+      );
+    });
+
+    it('returns an iso string for 01-01-2009 when the date string of 2009 is passed in', () => {
+      expect(DateHandler.castToISO('2009')).toEqual('2009-01-01T05:00:00.000Z');
+    });
+
+    it('returns null when the date string passed in is invalid', () => {
+      expect(DateHandler.castToISO('x-10-10')).toEqual('-1');
+    });
+
+    it('returns null when the date string passed in is an empty string', () => {
+      expect(DateHandler.castToISO('')).toEqual(null);
+    });
+
+    it('returns the same iso string passed in when an iso string is passed in', () => {
+      expect(DateHandler.castToISO('1990-01-01T05:00:00.000Z')).toEqual(
+        '1990-01-01T05:00:00.000Z',
+      );
+    });
+  });
+
+  describe.only('checkDate', () => {
+    it('should return -1 when the date is invalid', async () => {
+      expect(DateHandler.checkDate('xx-01-01')).toEqual('-1');
+    });
+
+    it('should delete the date when the year is missing', async () => {
+      const y = ' ';
+      const m = '02';
+      const d = '01';
+      expect(DateHandler.checkDate(`-${m}-${d}`)).toEqual(null);
+    });
+
+    // it('should delete the date if year and month are missing', async () => {
+    //   const results = await runAction(
+    //     getCaseDetailFormWithComputedDatesAction,
+    //     {
+    //       modules,
+
+    //       state: {
+    //         form: {
+    //           irsDay: '24',
+    //           irsMonth: '',
+    //           irsNoticeDate: null,
+    //           irsYear: '',
+    //           paymentDateDay: '24',
+    //           paymentDateMonth: '',
+    //           paymentDateWaivedDay: '24',
+    //           paymentDateWaivedMonth: '',
+    //           paymentDateWaivedYear: '',
+    //           paymentDateYear: '',
+    //           petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+    //           petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
+    //           receivedAt: '2018-12-24T05:00:00.000Z',
+    //           receivedAtDay: '24',
+    //           receivedAtMonth: '',
+    //           receivedAtYear: '',
+    //         },
+    //       },
+    //     },
+    //   );
+    //   expect(results.output).toEqual({
+    //     formWithComputedDates: {
+    //       irsNoticeDate: null,
+    //       petitionPaymentDate: null,
+    //       petitionPaymentWaivedDate: null,
+    //       receivedAt: null,
+    //     },
+    //   });
+    // });
+  });
 });
+
+// it('should return null if year or day is not defined', async () => {
+//   const result = await runAction(computeFormDateAction, {
+//     modules: {
+//       presenter,
+//     },
+//     state: {
+//       form: {
+//         month: '2',
+//       },
+//     },
+//   });
+
+//   expect(result.output.computedDate).toEqual(null);
+// });
