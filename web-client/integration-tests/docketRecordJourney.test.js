@@ -322,10 +322,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     const orderEntry = formattedDocketEntries[8];
 
+    expect(orderEntry.index).toBeUndefined();
     expect(orderEntry).toMatchObject({
       createdAtFormatted: undefined,
       eventCode: 'O',
-      index: undefined,
       servedAtFormatted: undefined,
       showNotServed: true,
     });
@@ -413,10 +413,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     test.documentId = entry.documentId;
 
+    expect(entry.index).toBeUndefined();
     expect(entry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'A',
-      index: undefined,
       showNotServed: true,
     });
   });

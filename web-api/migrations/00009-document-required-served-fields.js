@@ -5,7 +5,9 @@ const {
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const { isEmpty } = require('lodash');
 const applicationContext = createApplicationContext({});
-const { Document } = require('../../shared/src/business/entities/Document');
+const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
 
 const DEFAULT_SERVED_AT_DATE = createISODateString();
 const DEFAULT_SERVED_PARTIES = [
@@ -21,7 +23,7 @@ const mutateRecord = async item => {
 
   if (isDocumentRecord(item)) {
     if (!servedPropertiesComplete) {
-      const documentToUpdate = new Document(
+      const documentToUpdate = new DocketEntry(
         {
           ...item,
           servedAt: item.servedAt || DEFAULT_SERVED_AT_DATE,
