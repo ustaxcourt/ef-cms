@@ -9,7 +9,7 @@ import {
   Case,
   getPetitionDocumentFromDocuments,
 } from '../../shared/src/business/entities/cases/Case';
-import { Document } from '../../shared/src/business/entities/Document';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   compareISODateStrings,
@@ -28,7 +28,7 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
-import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
+import { validateDocumentInteractor } from '../../shared/src/business/useCases/validateDocumentInteractor';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
@@ -98,12 +98,12 @@ import { formatAttachments } from '../../shared/src/business/utilities/formatAtt
 import {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
+  formatDocketEntry,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
@@ -433,7 +433,7 @@ const allUseCases = {
   validateCourtIssuedDocketEntryInteractor,
   validateCreateMessageInteractor,
   validateDocketEntryInteractor,
-  validateDocketRecordInteractor,
+  validateDocumentInteractor,
   validateEditPrivatePractitionerInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
@@ -554,7 +554,7 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
-      formatDocketRecordWithDocument,
+      formatDocketEntry,
       formatDocument,
       formatDollars,
       formatJudgeName,
@@ -569,12 +569,12 @@ const applicationContext = {
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
-      isPendingOnCreation: Document.isPendingOnCreation,
+      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
-      sortDocketRecords,
+      sortDocketEntries,
     };
   },
   initHoneybadger: async () => {

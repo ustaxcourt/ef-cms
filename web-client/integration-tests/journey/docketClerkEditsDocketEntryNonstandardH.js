@@ -95,7 +95,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
         'Motion for Leave to File First Amended Petition some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.documents.find(
+    const updatedDocument = caseDetailFormatted.formattedDocuments.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({
