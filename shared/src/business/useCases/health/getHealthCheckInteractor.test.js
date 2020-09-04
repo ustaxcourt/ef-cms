@@ -46,19 +46,19 @@ describe('getHealthCheckInteractor', () => {
       elasticsearch: true,
       emailService: true,
       s3: {
-        'app.dev.ustc-case-mgmt.flexion.us': true,
-        'app-failover.dev.ustc-case-mgmt.flexion.us': true,
-        'dev.ustc-case-mgmt.flexion.us': true,
-        'dev.ustc-case-mgmt.flexion.us-documents-dev-us-east-1': true,
-        'dev.ustc-case-mgmt.flexion.us-documents-dev-us-west-1': true,
-        'dev.ustc-case-mgmt.flexion.us-temp-documents-dev-us-east-1': true,
-        'dev.ustc-case-mgmt.flexion.us-temp-documents-dev-us-west-1': true,
-        'failover.dev.ustc-case-mgmt.flexion.us': true,
+        app: true,
+        appFailover: true,
+        eastDocuments: true,
+        eastTempDocuments: true,
+        public: true,
+        publicFailover: true,
+        westDocuments: true,
+        westTempDocuments: true,
       },
     });
   });
 
-  it('should return false for all services if services are down', async () => {
+  it('should return false for all services when services are down', async () => {
     const status = await getHealthCheckInteractor({
       applicationContext: {
         environment: {
@@ -113,14 +113,14 @@ describe('getHealthCheckInteractor', () => {
       elasticsearch: false,
       emailService: false,
       s3: {
-        'app.dev.ustc-case-mgmt.flexion.us': false,
-        'app-failover.dev.ustc-case-mgmt.flexion.us': false,
-        'dev.ustc-case-mgmt.flexion.us': false,
-        'dev.ustc-case-mgmt.flexion.us-documents-dev-us-east-1': false,
-        'dev.ustc-case-mgmt.flexion.us-documents-dev-us-west-1': false,
-        'dev.ustc-case-mgmt.flexion.us-temp-documents-dev-us-east-1': false,
-        'dev.ustc-case-mgmt.flexion.us-temp-documents-dev-us-west-1': false,
-        'failover.dev.ustc-case-mgmt.flexion.us': false,
+        app: false,
+        appFailover: false,
+        eastDocuments: false,
+        eastTempDocuments: false,
+        public: false,
+        publicFailover: false,
+        westDocuments: false,
+        westTempDocuments: false,
       },
     });
   });
