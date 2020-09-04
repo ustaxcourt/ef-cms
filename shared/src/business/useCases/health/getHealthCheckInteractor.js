@@ -92,23 +92,23 @@ const getS3BucketStatus = async ({ applicationContext }) => {
   const publicFailoverS3Bucket = `failover.${efcmsDomain}`;
   const appFailoverS3Bucket = `app-failover.${efcmsDomain}`;
 
-  const s3Buckets = [
-    eastS3BucketName,
-    westS3BucketName,
-    eastS3TempBucketName,
-    westS3TempBucketName,
-    appS3Bucket,
-    publicS3Bucket,
-    publicFailoverS3Bucket,
-    appFailoverS3Bucket,
-  ];
+  const s3Buckets = {
+    app: appS3Bucket,
+    appFailover: appFailoverS3Bucket,
+    eastDocuments: eastS3BucketName,
+    eastTempDocuments: eastS3TempBucketName,
+    public: publicS3Bucket,
+    publicFailover: publicFailoverS3Bucket,
+    westDocuments: westS3BucketName,
+    westTempDocuments: westS3TempBucketName,
+  };
 
   let bucketStatus = {};
 
-  for (const bucket of s3Buckets) {
-    bucketStatus[bucket] = await checkS3BucketsStatus({
+  for (const [key, value] of Object.entries(s3Buckets)) {
+    bucketStatus[key] = await checkS3BucketsStatus({
       applicationContext,
-      bucketName: bucket,
+      bucketName: value,
     });
   }
 
