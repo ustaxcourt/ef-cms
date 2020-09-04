@@ -31,7 +31,7 @@ export const HealthCheck = connect(
                   East Documents
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.eastS3BucketName ? 'green' : 'red'}
+                    color={health.s3.eastDocuments ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -39,7 +39,7 @@ export const HealthCheck = connect(
                   West Documents
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.westS3BucketName ? 'green' : 'red'}
+                    color={health.s3.westDocuments ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -47,7 +47,7 @@ export const HealthCheck = connect(
                   East Temp Documents
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.eastS3TempBucketName ? 'green' : 'red'}
+                    color={health.s3.eastTempDocuments ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -55,7 +55,7 @@ export const HealthCheck = connect(
                   West Temp Documents
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.westS3TempBucketName ? 'green' : 'red'}
+                    color={health.s3.westTempDocuments ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -63,7 +63,7 @@ export const HealthCheck = connect(
                   App
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.appS3Bucket ? 'green' : 'red'}
+                    color={health.s3.app ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -71,7 +71,7 @@ export const HealthCheck = connect(
                   Public
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.publicS3Bucket ? 'green' : 'red'}
+                    color={health.s3.public ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -79,7 +79,7 @@ export const HealthCheck = connect(
                   Public Failover
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.publicFailoverS3Bucket ? 'green' : 'red'}
+                    color={health.s3.publicFailover ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
@@ -87,7 +87,7 @@ export const HealthCheck = connect(
                   App Failover
                   <FontAwesomeIcon
                     className="margin-left-1"
-                    color={health.s3.appFailoverS3Bucket ? 'green' : 'red'}
+                    color={health.s3.appFailover ? 'green' : 'red'}
                     icon="check-circle"
                   />
                 </div>
