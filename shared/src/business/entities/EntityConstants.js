@@ -265,18 +265,22 @@ const MINUTE_ENTRIES_MAP = {
     description:
       'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
     eventCode: 'MINC',
+    documentType: 'Caption of case is amended',
   },
   dockedNumberIsAmended: {
     description:
       'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
     eventCode: 'MIND',
+    documentType: 'Docket Number is amended',
   },
   filingFeePaid: {
     description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
     eventCode: 'FEE',
   },
   filingFeeWaived: {
     description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
     eventCode: 'FEEW',
   },
 };
@@ -326,10 +330,21 @@ const SIGNED_DOCUMENT_TYPES = {
   },
 };
 
-const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = [
-  'Entry of Appearance',
-  'Substitution of Counsel',
+const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
+  {
+    documentType: 'Entry of Appearance',
+    documentTitle: 'Entry of Appearance',
+    eventCode: 'EA',
+  },
+  {
+    documentType: 'Substitution of Counsel',
+    documentTitle: 'Substitution of Counsel',
+    eventCode: 'SOC',
+  },
 ];
+const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(
+  d => d.documentType,
+);
 
 const PAYMENT_STATUS = {
   PAID: 'Paid',
@@ -643,7 +658,22 @@ const TRIAL_CITIES = {
   SMALL: SMALL_CITIES,
 };
 
+const LEGACY_TRIAL_CITIES = [
+  { city: 'Biloxi', state: 'Mississippi' },
+  { city: 'Huntington', state: 'West Virginia' },
+  { city: 'Maui', state: 'Hawaii' },
+  { city: 'Missoula', state: 'Montana' },
+  { city: 'Newark', state: 'New Jersey' },
+  { city: 'Pasadena', state: 'California' },
+  { city: 'Tulsa', state: 'Oklahoma' },
+  { city: 'Westbury', state: 'New York' },
+];
+
 const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
+const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   location => `${location.city}, ${location.state}`,
 );
 
@@ -883,33 +913,35 @@ const ALL_EVENT_CODES = flatten([
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
   .sort();
 
-const ALL_DOCUMENT_TYPES = (() => {
+const ALL_DOCUMENT_TYPES_MAP = (() => {
   const allFilingEvents = flatten([
     ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
     ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
   ]);
-  const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
-  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
-    t => INITIAL_DOCUMENT_TYPES[t].documentType,
-  );
-  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
-    t => SIGNED_DOCUMENT_TYPES[t].documentType,
-  );
-  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
-    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
-  );
+  const filingEventTypes = allFilingEvents;
+  const orderDocTypes = ORDER_TYPES;
+  const initialTypes = Object.values(INITIAL_DOCUMENT_TYPES);
+  const signedTypes = Object.values(SIGNED_DOCUMENT_TYPES);
+  const systemGeneratedTypes = Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES);
+  const minuteEntryTypes = Object.values(MINUTE_ENTRIES_MAP);
 
   const documentTypes = [
     ...initialTypes,
-    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
     ...filingEventTypes,
     ...orderDocTypes,
-    ...COURT_ISSUED_DOCUMENT_TYPES,
+    ...COURT_ISSUED_EVENT_CODES,
     ...signedTypes,
     ...systemGeneratedTypes,
+    ...minuteEntryTypes,
   ];
-  return documentTypes.sort();
+  return documentTypes;
+})();
+
+const ALL_DOCUMENT_TYPES = (() => {
+  return ALL_DOCUMENT_TYPES_MAP.map(d => d.documentType)
+    .filter(d => d)
+    .sort();
 })();
 
 const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
@@ -926,6 +958,7 @@ module.exports = deepFreeze({
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
   ALL_DOCUMENT_TYPES,
+  ALL_DOCUMENT_TYPES_MAP,
   ALL_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
@@ -1020,6 +1053,7 @@ module.exports = deepFreeze({
   TRIAL_STATUS_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
+  LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
 });

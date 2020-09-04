@@ -39,25 +39,6 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
 
   const requests = [];
 
-  const updatedDocketRecord = differenceWith(
-    caseToUpdate.docketRecord,
-    oldCase.docketRecord,
-    isEqual,
-  );
-
-  updatedDocketRecord.forEach(docketEntry => {
-    requests.push(
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `docket-record|${docketEntry.docketRecordId}`,
-          ...docketEntry,
-        },
-        applicationContext,
-      }),
-    );
-  });
-
   const updatedDocuments = differenceWith(
     caseToUpdate.documents,
     oldCase.documents,

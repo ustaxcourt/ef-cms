@@ -7,33 +7,33 @@ const {
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { PETITIONS_SECTION, ROLES } = require('../../entities/EntityConstants');
 
-const MOCK_SECTION = [
-  {
-    name: 'Test Petitioner 1',
-    role: ROLES.petitioner,
-    userId: '304a756b-ce23-438a-a9bb-3732c6a439b7',
-  },
-  {
-    name: 'Test Petitioner 2',
-    role: ROLES.petitioner,
-    userId: 'a79d2fac-aa2c-4183-9877-01ab1cdff127',
-  },
-];
-
-const MOCK_JUDGE_SECTION = [
-  {
-    name: 'Test Judge 1',
-    role: ROLES.judge,
-    userId: 'ce5add74-1559-448d-a67d-c887c8351b2e',
-  },
-  {
-    name: 'Test Judge 2',
-    role: ROLES.judge,
-    userId: 'ea83cea2-5ce9-451d-b3d6-1e7c0e51d311',
-  },
-];
-
 describe('Get users in section', () => {
+  const MOCK_SECTION = [
+    {
+      name: 'Test Petitioner 1',
+      role: ROLES.petitioner,
+      userId: '304a756b-ce23-438a-a9bb-3732c6a439b7',
+    },
+    {
+      name: 'Test Petitioner 2',
+      role: ROLES.petitioner,
+      userId: 'a79d2fac-aa2c-4183-9877-01ab1cdff127',
+    },
+  ];
+
+  const MOCK_JUDGE_SECTION = [
+    {
+      name: 'Test Judge 1',
+      role: ROLES.judge,
+      userId: 'ce5add74-1559-448d-a67d-c887c8351b2e',
+    },
+    {
+      name: 'Test Judge 2',
+      role: ROLES.judge,
+      userId: 'ea83cea2-5ce9-451d-b3d6-1e7c0e51d311',
+    },
+  ];
+
   it('retrieves the users in the petitions section', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -43,10 +43,12 @@ describe('Get users in section', () => {
       .getPersistenceGateway()
       .getUsersInSection.mockReturnValue(MOCK_SECTION);
     const sectionToGet = { section: PETITIONS_SECTION };
+
     const section = await getUsersInSectionInteractor({
       applicationContext,
       sectionToGet,
     });
+
     expect(section.length).toEqual(2);
     expect(section[0].name).toEqual('Test Petitioner 1');
   });

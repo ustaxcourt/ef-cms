@@ -2,6 +2,22 @@ const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
+const getDocumentInfo = ({ applicationContext, documentData }) => {
+  const document = new Document(documentData, {
+    applicationContext,
+  });
+
+  return {
+    attachments: document.attachments,
+    certificateOfService: document.certificateOfService,
+    certificateOfServiceDate: document.certificateOfServiceDate,
+    documentTitle: document.documentTitle,
+    filedBy: document.filedBy,
+    objections: document.objections,
+    receivedAt: document.receivedAt,
+  };
+};
+
 /**
  * generatePrintableFilingReceiptInteractor
  *
@@ -16,48 +32,42 @@ exports.generatePrintableFilingReceiptInteractor = async ({
   docketNumber,
   documentsFiled,
 }) => {
-  const caseSource = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
+  const caseEntity = new Case(caseRecord, { applicationContext }).validate();
 
-  const caseEntity = new Case(caseSource, { applicationContext }).validate();
+  const primaryDocument = getDocumentInfo({
+    applicationContext,
+    documentData: documentsFiled,
+  });
 
-  const getDocumentInfo = documentData => {
-    const document = new Document(documentData, {
-      applicationContext,
-    });
-    return {
-      attachments: document.attachments,
-      certificateOfService: document.certificateOfService,
-      certificateOfServiceDate: document.certificateOfServiceDate,
-      documentTitle: document.documentTitle,
-      filedBy: document.filedBy,
-      objections: document.objections,
-      receivedAt: document.receivedAt,
-    };
-  };
-  const primaryDocument = getDocumentInfo(documentsFiled);
+  const primaryDocumentRecord = caseEntity.documents.find(
+    doc => doc.documentId === documentsFiled.primaryDocumentId,
+  );
+  primaryDocument.filedBy = primaryDocumentRecord.filedBy;
 
   const filingReceiptDocumentParams = { document: primaryDocument };
 
   if (documentsFiled.hasSupportingDocuments) {
     filingReceiptDocumentParams.supportingDocuments = documentsFiled.supportingDocuments.map(
-      getDocumentInfo,
+      doc => getDocumentInfo({ applicationContext, documentData: doc }),
     );
   }
 
   if (documentsFiled.secondaryDocumentFile) {
-    filingReceiptDocumentParams.secondaryDocument = getDocumentInfo(
-      documentsFiled.secondaryDocument,
-    );
+    filingReceiptDocumentParams.secondaryDocument = getDocumentInfo({
+      applicationContext,
+      documentData: documentsFiled.secondaryDocument,
+    });
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
     filingReceiptDocumentParams.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
-      getDocumentInfo,
+      doc => getDocumentInfo({ applicationContext, documentData: doc }),
     );
   }
 

@@ -28,7 +28,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
       state: 'CA',
     },
     docketNumber: '123-19',
-    docketRecord: MOCK_CASE.docketRecord,
+    docketRecord: MOCK_CASE.docketRecord, // TODO 636
     documents: MOCK_CASE.documents,
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
