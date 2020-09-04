@@ -10,11 +10,11 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { map } = require('lodash');
 const { PublicContact } = require('./PublicContact');
-const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
 
 /**
@@ -24,7 +24,8 @@ const { PublicDocument } = require('./PublicDocument');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function PublicCase(rawCase, { applicationContext }) {
+function PublicCase() {}
+PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
@@ -42,42 +43,32 @@ function PublicCase(rawCase, { applicationContext }) {
     ? new PublicContact(rawCase.contactSecondary)
     : undefined;
 
-  // rawCase.docketRecord is not returned in elasticsearch queries due to _source definition
-  this.docketRecord = (rawCase.docketRecord || []).map(
-    entry => new PublicDocketRecordEntry(entry, { applicationContext }),
-  );
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || [])
     .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
-}
+};
+
+PublicCase.validationName = 'PublicCase';
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  contactPrimary: joi.object().required(),
-  contactSecondary: joi.object().optional().allow(null),
+  contactPrimary: PublicContact.VALIDATION_RULES.required(),
+  contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
-  docketNumberSuffix: joi
-    .string()
-    .allow(null)
+  docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
-  docketNumberWithSuffix: joi
-    .string()
-    .optional()
-    .description('Auto-generated from docket number and the suffix.'),
-  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    joi.object().meta({ entityName: 'PublicDocketRecord' }),
-  )
-    .required()
-    .description('List of DocketRecord Entities for the case.'),
+  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
+    'Auto-generated from docket number and the suffix.',
+  ),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'PublicDocument' }))
+    .items(PublicDocument.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   isSealed: joi.boolean(),
@@ -90,11 +81,9 @@ const sealedCaseSchemaRestricted = {
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-  docketNumberSuffix: joi
-    .string()
-    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
-    .optional(),
-  docketRecord: joi.array().max(0),
+  docketNumberSuffix: JoiValidationConstants.STRING.valid(
+    ...Object.values(DOCKET_NUMBER_SUFFIXES),
+  ).optional(),
   documents: joi.array().max(0),
   isSealed: joi.boolean(),
   receivedAt: joi.any().forbidden(),
@@ -108,17 +97,15 @@ joiValidationDecorator(
   {},
 );
 
-const isPrivateDocument = function (document, docketRecord) {
+const isPrivateDocument = function (document) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
   const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
+  const isDocumentOnDocketRecord = document.isOnDocketRecord;
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
-  );
-  const isDocumentOnDocketRecord = docketRecord.find(
-    docketEntry => docketEntry.documentId === document.documentId,
   );
 
   const isPublicDocumentType =
@@ -129,4 +116,7 @@ const isPrivateDocument = function (document, docketRecord) {
   );
 };
 
-module.exports = { PublicCase, isPrivateDocument };
+module.exports = {
+  PublicCase: validEntityDecorator(PublicCase),
+  isPrivateDocument,
+};

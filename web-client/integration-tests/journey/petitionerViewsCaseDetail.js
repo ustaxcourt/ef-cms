@@ -13,7 +13,7 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    const documentCount = overrides.documentCount || 2;
+    const documentCount = overrides.documentCount || 3;
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 

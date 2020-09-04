@@ -19,17 +19,13 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
+          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
-              index: 1,
-            },
-          ],
-          documents: [
-            {
-              documentId: 'abc',
               documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -48,17 +44,13 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
+          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
-              index: 1,
-            },
-          ],
-          documents: [
-            {
-              documentId: 'abc',
               documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -78,19 +70,15 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              index: 1,
-            },
-          ],
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
+              description: 'Petition',
               documentId: 'abc',
               documentType: 'Petition',
               filedBy: 'Test Petitioner',
+              index: 1,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -110,18 +98,14 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              index: 1,
-            },
-          ],
           documents: [
             {
               createdAt: '2018-11-22T20:49:28.192Z',
+              description: 'Petition',
               documentId: 'abc',
               documentType: 'Order',
+              index: 1,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -141,18 +125,14 @@ describe('documentViewerHelper', () => {
     let result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
+          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
-              index: 1,
-            },
-          ],
-          documents: [
-            {
-              documentId: 'abc',
               documentType: 'Petition',
+              index: 1,
               isLegacySealed: false,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -170,18 +150,12 @@ describe('documentViewerHelper', () => {
     result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              index: 1,
-            },
-          ],
           documents: [
             {
               documentId: 'abc',
               documentType: 'Petition',
               isLegacySealed: true,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -201,17 +175,13 @@ describe('documentViewerHelper', () => {
     let result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
+          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
-              index: 1,
-            },
-          ],
-          documents: [
-            {
-              documentId: 'abc',
               documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
             },
           ],
         },
@@ -228,17 +198,11 @@ describe('documentViewerHelper', () => {
     result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              index: 1,
-            },
-          ],
           documents: [
             {
               documentId: 'abc',
               documentType: 'Petition',
+              isOnDocketRecord: true,
               servedAt: '2018-11-21T20:49:28.192Z',
             },
           ],
@@ -262,13 +226,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -288,13 +252,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Corrected Transcript',
                 eventCode: 'CTRA',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -314,13 +278,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isOnDocketRecord: true,
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
@@ -345,13 +309,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -371,13 +335,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Petition',
                 eventCode: 'P',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -397,13 +361,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isOnDocketRecord: true,
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
@@ -424,13 +388,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isOnDocketRecord: true,
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
@@ -455,13 +419,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Answer',
                 eventCode: 'A',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -481,13 +445,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -507,13 +471,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Answer',
                 eventCode: 'A',
+                isOnDocketRecord: true,
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
@@ -534,13 +498,13 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Answer',
                 eventCode: 'A',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -563,17 +527,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Petition',
                 entityName: 'Document',
                 eventCode: 'P',
+                isOnDocketRecord: true,
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
@@ -595,17 +555,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Petition',
                 entityName: 'Document',
                 eventCode: 'P',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -626,17 +582,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Petition',
                 entityName: 'Document',
                 eventCode: 'P',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -659,17 +611,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
                 entityName: 'Document',
                 eventCode: 'PSDE',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -688,17 +636,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
                 entityName: 'Document',
                 eventCode: 'PSDE',
+                isOnDocketRecord: true,
               },
               {
                 archived: true,
@@ -724,17 +668,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
                 entityName: 'Document',
                 eventCode: 'PSDE',
+                isOnDocketRecord: true,
               },
               {
                 documentId: '234',
@@ -759,17 +699,13 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
             documents: [
               {
                 documentId: '123',
                 documentType: 'Answer',
                 entityName: 'Document',
                 eventCode: 'A',
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -788,18 +724,14 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
+          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
-              index: 1,
-              isStricken: true,
-            },
-          ],
-          documents: [
-            {
-              documentId: 'abc',
               documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+              isStricken: true,
             },
           ],
         },
@@ -819,18 +751,14 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          docketRecord: [
+          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
-              index: 1,
-              isStricken: true,
-            },
-          ],
-          documents: [
-            {
-              documentId: 'abc',
               documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+              isStricken: true,
             },
           ],
         },

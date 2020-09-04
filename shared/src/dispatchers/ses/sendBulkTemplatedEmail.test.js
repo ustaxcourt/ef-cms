@@ -5,13 +5,9 @@ const { sendBulkTemplatedEmail } = require('./sendBulkTemplatedEmail');
 
 describe('sendBulkTemplatedEmail', () => {
   it('sends the bulk email given a template', async () => {
-    applicationContext
-      .getEmailClient()
-      .sendBulkTemplatedEmail.mockImplementation({
-        promise: () => {
-          return Promise.resolve();
-        },
-      });
+    applicationContext.getEmailClient().sendBulkTemplatedEmail.mockReturnValue({
+      promise: () => Promise.resolve('hi'),
+    });
 
     await sendBulkTemplatedEmail({
       applicationContext,
@@ -46,6 +42,7 @@ describe('sendBulkTemplatedEmail', () => {
       ],
       Template: 'case_served',
     });
+    expect(applicationContext.logger.info).toHaveBeenCalledTimes(2);
   });
 
   it('should log when an error occurs sending the bulk email', async () => {
@@ -73,5 +70,6 @@ describe('sendBulkTemplatedEmail', () => {
     });
 
     expect(applicationContext.logger.error.mock.calls.length).toEqual(1);
+    expect(applicationContext.logger.info).toHaveBeenCalledTimes(1);
   });
 });

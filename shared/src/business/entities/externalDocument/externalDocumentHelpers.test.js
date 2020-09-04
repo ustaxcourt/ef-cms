@@ -1,8 +1,10 @@
-const joi = require('joi');
 const {
   addPropertyHelper,
   makeRequiredHelper,
 } = require('./externalDocumentHelpers');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 
 describe('external document helpers', () => {
   describe('addPropertyHelper', () => {
@@ -42,25 +44,27 @@ describe('external document helpers', () => {
   describe('makeRequiredHelper', () => {
     it('should make an optional field required', () => {
       const schema = {
-        something: joi.string().required(),
+        something: JoiValidationConstants.STRING.required(),
       };
       const schemaOptionalItems = {
-        somethingElse: joi.string(),
+        somethingElse: JoiValidationConstants.STRING,
       };
       makeRequiredHelper({
         itemName: 'somethingElse',
         schema,
         schemaOptionalItems,
       });
-      expect(schema.somethingElse).toEqual(joi.string().required());
+      expect(schema.somethingElse).toEqual(
+        JoiValidationConstants.STRING.required(),
+      );
     });
 
     it('should not add an optional field to the schema as required if it does not exist in the schemaOptionalItems', () => {
       const schema = {
-        something: joi.string().required(),
+        something: JoiValidationConstants.STRING.required(),
       };
       const schemaOptionalItems = {
-        somethingElse: joi.string(),
+        somethingElse: JoiValidationConstants.STRING,
       };
       makeRequiredHelper({
         itemName: 'somethingElse2',

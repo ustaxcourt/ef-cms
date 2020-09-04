@@ -7,6 +7,8 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+const getDateISO = () => new Date().toISOString();
+
 describe('formattedCaseDetail', () => {
   let globalUser;
   const {
@@ -52,6 +54,7 @@ describe('formattedCaseDetail', () => {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
           contactPrimary: {},
+          documents: [],
         },
       },
     });
@@ -66,11 +69,14 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {},
       correspondence: [],
-      docketRecord: [
+      documents: [
         {
+          createdAt: getDateISO(),
           description: 'Petition',
+          documentId: '123',
           filedBy: 'Jessica Frase Marine',
           filingDate: '2019-02-28T21:14:39.488Z',
+          isOnDocketRecord: true,
         },
       ],
       hasVerifiedIrsNotice: false,
@@ -83,7 +89,10 @@ describe('formattedCaseDetail', () => {
         validationErrors: {},
       },
     });
-    expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/19');
+
+    expect(
+      result.docketRecordWithDocument[0].record.createdAtFormatted,
+    ).toEqual('02/28/19');
   });
 
   it('maps docket record documents', () => {
@@ -91,21 +100,14 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {},
       correspondence: [],
-      docketRecord: [
-        {
-          description: 'Petition',
-          documentId: 'Petition',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
-        },
-      ],
       documents: [
         {
-          createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'Petition',
-          documentType: 'Petition',
-          showValidationInput: '2019-02-28T21:14:39.488Z',
-          status: 'served',
+          createdAt: getDateISO(),
+          description: 'Petition',
+          documentId: '123',
+          filedBy: 'Jessica Frase Marine',
+          filingDate: '2019-02-28T21:14:39.488Z',
+          isOnDocketRecord: true,
         },
       ],
       hasVerifiedIrsNotice: false,
@@ -119,7 +121,7 @@ describe('formattedCaseDetail', () => {
       },
     });
     expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
-      'Petition',
+      '123',
     );
   });
 
@@ -133,49 +135,22 @@ describe('formattedCaseDetail', () => {
         name: 'Bill',
       },
       correspondence: [],
-      docketRecord: [
-        {
-          description: 'Amended Petition',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          filingDate: '2019-04-19T17:29:13.120Z',
-        },
-        {
-          description:
-            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
-          filingDate: '2019-04-19T17:31:09.515Z',
-        },
-        {
-          description:
-            'Motion for Leave to File Computation for Entry of Decision',
-          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
-          filingDate: '2019-04-19T17:39:10.476Z',
-        },
-        {
-          description:
-            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
-          filingDate: '2019-04-19T17:42:13.122Z',
-        },
-        {
-          description: 'Hearing Exhibits for asdfasdfasdf',
-          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
-          filingDate: '2020-07-08T16:33:41.180Z',
-        },
-      ],
       documents: [
         {
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
           createdAt: '2019-04-19T17:29:13.120Z',
+          description: 'Amended Petition',
           documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
           exhibits: false,
+          filingDate: '2019-04-19T17:29:13.120Z',
           hasSupportingDocuments: true,
           isFileAttached: true,
+          isOnDocketRecord: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -190,14 +165,18 @@ describe('formattedCaseDetail', () => {
           category: 'Miscellaneous',
           certificateOfService: false,
           createdAt: '2019-04-19T18:24:09.515Z',
+          description:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
           documentTitle:
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
           exhibits: true,
+          filingDate: '2019-04-19T17:31:09.515Z',
           hasSupportingDocuments: true,
           isFileAttached: true,
+          isOnDocketRecord: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
           partyPrimary: true,
@@ -218,15 +197,19 @@ describe('formattedCaseDetail', () => {
           certificateOfServiceMonth: '6',
           certificateOfServiceYear: '2018',
           createdAt: '2019-04-19T17:39:10.476Z',
+          description:
+            'Motion for Leave to File Computation for Entry of Decision',
           documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
           documentTitle:
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
           exhibits: true,
+          filingDate: '2019-04-19T17:39:10.476Z',
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           isFileAttached: true,
+          isOnDocketRecord: true,
           objections: OBJECTIONS_OPTIONS_MAP.YES,
           partyPrimary: true,
           partySecondary: true,
@@ -243,14 +226,18 @@ describe('formattedCaseDetail', () => {
           additionalInfo2: 'Additional Info2',
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
+          description:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
             'Unsworn Declaration under Penalty of Perjury in Support',
           eventCode: 'USDL',
+          filingDate: '2019-04-19T17:42:13.122Z',
           freeText: 'Test',
           isFileAttached: true,
+          isOnDocketRecord: true,
           lodged: true,
           partyIrsPractitioner: true,
           partyPrivatePractitioner: true,
@@ -261,12 +248,15 @@ describe('formattedCaseDetail', () => {
         },
         {
           createdAt: '2019-04-19T17:29:13.122Z',
+          description: 'Hearing Exhibits for asdfasdfasdf',
           documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
           documentTitle: 'Hearing Exhibits for asdfasdfasdf',
           documentType: 'Hearing Exhibits',
           eventCode: 'HE',
+          filingDate: '2020-07-08T16:33:41.180Z',
           freeText: 'adsf',
           isFileAttached: true,
+          isOnDocketRecord: true,
           lodged: false,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Type A',
@@ -320,6 +310,7 @@ describe('formattedCaseDetail', () => {
         },
       },
     ]);
+
     expect(result.formattedDocketEntries).toMatchObject([
       {
         description: 'Amended Petition',
@@ -352,7 +343,7 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
       {
-        description:
+        descriptionDisplay:
           'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
         filingsAndProceedingsWithAdditionalInfo: ' (Lodged) Additional Info2',
         isInProgress: false,
@@ -391,21 +382,17 @@ describe('formattedCaseDetail', () => {
     it('should be a formatted date string if the document is on the docket record and is served', () => {
       const caseDetail = {
         ...baseCaseDetail,
-        docketRecord: [
-          {
-            description: 'Amended Petition',
-            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-            filingDate: '2019-04-19T17:29:13.120Z',
-          },
-        ],
         documents: [
           {
             createdAt: '2019-04-19T17:29:13.120Z',
+            description: 'Amended Petition',
             documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
             documentTitle: 'Amended Petition',
             documentType: 'Amended Petition',
             eventCode: 'PAP',
+            filingDate: '2019-04-19T17:29:13.120Z',
             isFileAttached: true,
+            isOnDocketRecord: true,
             partyPrimary: true,
             scenario: 'Standard',
             servedAt: '2019-06-19T17:29:13.120Z',
@@ -429,13 +416,6 @@ describe('formattedCaseDetail', () => {
     it('should be a formatted date string if the document is on the docket record and is an unserved external document', () => {
       const caseDetail = {
         ...baseCaseDetail,
-        docketRecord: [
-          {
-            description: 'Amended Petition',
-            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-            filingDate: '2019-04-19T17:29:13.120Z',
-          },
-        ],
         documents: [
           {
             createdAt: '2019-04-19T17:29:13.120Z',
@@ -443,7 +423,9 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Amended Petition',
             documentType: 'Amended Petition',
             eventCode: 'PAP',
+            filingDate: '2019-04-19T17:29:13.120Z',
             isFileAttached: true,
+            isOnDocketRecord: true,
             partyPrimary: true,
             scenario: 'Standard',
           },
@@ -466,13 +448,6 @@ describe('formattedCaseDetail', () => {
     it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
       const caseDetail = {
         ...baseCaseDetail,
-        docketRecord: [
-          {
-            description: 'Order',
-            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-            filingDate: '2019-04-19T17:29:13.120Z',
-          },
-        ],
         documents: [
           {
             createdAt: '2019-04-19T17:29:13.120Z',
@@ -480,7 +455,9 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Order',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-04-19T17:29:13.120Z',
             isFileAttached: true,
+            isOnDocketRecord: true,
           },
         ],
       };
@@ -565,13 +542,19 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketNumber: '123-45',
-        docketRecord: [
+        docketRecord: [{}, {}, {}, {}],
+        documents: [
           {
+            createdAt: '2019-02-28T21:14:39.488Z',
             description: 'Petition',
             documentId: 'Petition',
+            documentType: 'Petition',
             filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28T21:10:55.488Z',
             index: 1,
+            isOnDocketRecord: true,
+            showValidationInput: '2019-02-28T21:14:39.488Z',
+            status: 'served',
           },
           {
             description: 'Request for Place of Trial',
@@ -579,41 +562,29 @@ describe('formattedCaseDetail', () => {
             filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28T21:10:33.488Z',
             index: 2,
-          },
-          {
-            description: 'Ownership Disclosure Statement',
-            documentId: 'Ownership Disclosure Statement',
-            filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-03-28T21:14:39.488Z',
-            index: 4,
-          },
-          {
-            description: 'Other',
-            documentId: 'Other',
-            filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-01-28',
-            index: 3,
-          },
-        ],
-        documents: [
-          {
-            createdAt: '2019-02-28T21:14:39.488Z',
-            documentId: 'Petition',
-            documentType: 'Petition',
-            showValidationInput: '2019-02-28T21:14:39.488Z',
-            status: 'served',
+            isOnDocketRecord: true,
           },
           {
             createdAt: '2019-03-28T21:14:39.488Z',
+            description: 'Ownership Disclosure Statement',
             documentId: 'Ownership Disclosure Statement',
             documentType: 'Ownership Disclosure Statement',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-03-28T21:14:39.488Z',
+            index: 4,
+            isOnDocketRecord: true,
             showValidationInput: '2019-03-28T21:14:39.488Z',
             status: 'served',
           },
           {
             createdAt: '2019-01-01T21:14:39.488Z',
+            description: 'Other',
             documentId: 'Other',
             documentType: 'Other',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-01-28',
+            index: 3,
+            isOnDocketRecord: true,
             showValidationInput: '2019-01-01T21:14:39.488Z',
             status: 'served',
           },
@@ -758,6 +729,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -774,6 +746,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -790,6 +763,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo and friends,  Petitioners ',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -806,6 +780,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -824,6 +799,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -842,6 +818,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
         privatePractitioners: [{ name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -863,6 +840,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -886,6 +864,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -909,6 +888,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const caseDeadlines = [
         {
@@ -953,6 +933,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const caseDeadlines = [
         {
@@ -977,6 +958,7 @@ describe('formattedCaseDetail', () => {
         caseDeadlines: [],
         contactPrimary: {},
         correspondence: [],
+        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -997,19 +979,16 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        docketRecord: [
-          {
-            description: 'Petition',
-            documentId: 'Petition',
-            filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-02-28T21:14:39.488Z',
-          },
-        ],
         documents: [
           {
             createdAt: '2019-02-28T21:14:39.488Z',
+            description: 'Petition',
             documentId: 'Petition',
             documentType: 'Petition',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-02-28T21:14:39.488Z',
+            index: 1,
+            isOnDocketRecord: true,
             showValidationInput: '2019-02-28T21:14:39.488Z',
             status: 'served',
           },
@@ -1020,6 +999,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Order to do something',
             documentType: 'Order',
             isDraft: true,
+            isOnDocketRecord: false,
           },
           {
             archived: false,
@@ -1028,6 +1008,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Stipulated Decision',
             documentType: 'Stipulated Decision',
             isDraft: true,
+            isOnDocketRecord: false,
           },
         ],
         hasVerifiedIrsNotice: false,
@@ -1106,6 +1087,7 @@ describe('formattedCaseDetail', () => {
           {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
+            documents: [],
             status: STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
@@ -1114,6 +1096,7 @@ describe('formattedCaseDetail', () => {
         ],
         contactPrimary: {},
         correspondence: [],
+        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1137,6 +1120,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
+        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1168,30 +1152,6 @@ describe('formattedCaseDetail', () => {
         correspondence: [],
         docketRecord: [
           {
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            description: 'Filing Fee Paid',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            description: 'System Generated',
-            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            description: 'Court Issued - Not Served',
-            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            description: 'Court Issued - Served',
-            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
             description: 'Court Issued - Unservable',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
             filingDate: '2019-06-19T17:29:13.120Z',
@@ -1202,40 +1162,60 @@ describe('formattedCaseDetail', () => {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 1,
+            isOnDocketRecord: true,
+          },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 2,
+            isMinuteEntry: true,
+            isOnDocketRecord: true,
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'System Generated',
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isOnDocketRecord: true,
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Not Served',
             documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Served',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
@@ -1244,11 +1224,14 @@ describe('formattedCaseDetail', () => {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Unservable',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'U.S.C.A',
             documentType: 'U.S.C.A.',
             eventCode: 'USCA',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
@@ -1414,28 +1397,6 @@ describe('formattedCaseDetail', () => {
         correspondence: [],
         docketRecord: [
           {
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            numberOfPages: 24,
-          },
-          {
-            description: 'Filing Fee Paid',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            description: 'System Generated',
-            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            numberOfPages: 2,
-          },
-          {
-            description: 'Court Issued - Not Served',
-            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            numberOfPages: 7,
-          },
-          {
             description: 'Court Issued - Served',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             filingDate: '2019-06-19T17:29:13.120Z',
@@ -1446,40 +1407,60 @@ describe('formattedCaseDetail', () => {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isOnDocketRecord: true,
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isOnDocketRecord: true,
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'System Generated',
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isOnDocketRecord: true,
+            numberOfPages: 2,
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Not Served',
             documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
+            numberOfPages: 7,
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Served',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
@@ -1545,80 +1526,73 @@ describe('formattedCaseDetail', () => {
           name: 'Bob',
         },
         correspondence: [],
-        docketRecord: [
-          {
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isLegacy: true,
-            isStricken: true,
-            numberOfPages: 24,
-          },
-          {
-            description: 'Filing Fee Paid',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            description: 'System Generated',
-            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            numberOfPages: 2,
-          },
-          {
-            description: 'Court Issued - Not Served',
-            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            numberOfPages: 7,
-          },
-          {
-            description: 'Court Issued - Served',
-            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-            filingDate: '2019-06-19T17:29:13.120Z',
-          },
-        ],
         documents: [
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isFileAttached: true,
+            isLegacy: true,
+            isOnDocketRecord: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffb1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isFileAttached: false,
+            isOnDocketRecord: true,
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'System Generated',
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: 2,
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Not Served',
             documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
             isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: 7,
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Served',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
             documentType: 'Order',
             eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
             isCourtIssuedDocument: true,
             isFileAttached: true,
+            isOnDocketRecord: true,
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
@@ -2004,25 +1978,21 @@ describe('formattedCaseDetail', () => {
         contactPrimary,
         contactSecondary,
         correspondence: [],
-        docketRecord: [
-          {
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isLegacy: true,
-            isStricken: true,
-            numberOfPages: 24,
-          },
-        ],
         documents: [
           {
             attachments: false,
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isOnDocketRecord: true,
+            isStricken: true,
+            numberOfPages: 24,
           },
         ],
         otherFilers,
@@ -2045,9 +2015,7 @@ describe('formattedCaseDetail', () => {
 
     it('should be false if the document type is unservable', () => {
       //CTRA is a document type that cannot be served
-      caseDetail.docketRecord[0].eventCode = 'CTRA';
       caseDetail.documents[0].eventCode = 'CTRA';
-      caseDetail.docketRecord[0].documentType = 'Corrected Transcript';
       caseDetail.documents[0].documentType = 'Corrected Transcript';
 
       const result = runCompute(formattedCaseDetail, {
@@ -2067,7 +2035,6 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should be false if the document type is servable and has servedAt', () => {
-      caseDetail.docketRecord[0].servedAt = '2019-06-19T17:29:13.120Z';
       caseDetail.documents[0].servedAt = '2019-06-19T17:29:13.120Z';
 
       const result = runCompute(formattedCaseDetail, {

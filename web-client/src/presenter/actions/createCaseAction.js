@@ -62,7 +62,9 @@ export const createCaseAction = async ({
       documentId: document.documentId,
     });
   };
-  await Promise.all(caseDetail.documents.map(addCoversheet));
+  await Promise.all(
+    [...caseDetail.documents.filter(d => d.isFileAttached)].map(addCoversheet),
+  );
 
   return path.success({
     caseDetail,

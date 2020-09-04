@@ -8,6 +8,7 @@ describe('advancedSearchHelper', () => {
   const {
     COUNTRY_TYPES,
     DOCKET_NUMBER_SUFFIXES,
+    US_STATES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -195,7 +196,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
-        fullStateNamePrimary: 'Tennessee',
+        fullStateNamePrimary: US_STATES.TN,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
@@ -203,7 +204,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
-        fullStateNamePrimary: 'Texas',
+        fullStateNamePrimary: US_STATES.TX,
       },
     ]);
   });
@@ -307,7 +308,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
-        fullStateNamePrimary: 'Tennessee',
+        fullStateNamePrimary: US_STATES.TN,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
@@ -315,7 +316,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: 'Texas',
+        fullStateNamePrimary: US_STATES.TX,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
@@ -323,8 +324,8 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: 'Another Petitioner',
         docketNumberWithSuffix: '101-18W',
         formattedFiledDate: '04/01/18',
-        fullStateNamePrimary: 'California',
-        fullStateNameSecondary: 'Tennessee',
+        fullStateNamePrimary: US_STATES.CA,
+        fullStateNameSecondary: US_STATES.TN,
       },
       {
         caseTitle: '',

@@ -1,4 +1,4 @@
-const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
+const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
@@ -24,7 +24,7 @@ describe('Practitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       name: 'Test Practitioner',
-      originalBarState: 'Illinois',
+      originalBarState: US_STATES.IL,
       practitionerType: 'Attorney',
       role: ROLES.Practitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
@@ -157,7 +157,7 @@ describe('Practitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       name: 'Test Practitioner',
-      originalBarState: 'Illinois',
+      originalBarState: US_STATES.IL,
       practitionerType: 'Attorney',
       role: ROLES.inactivePractitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
@@ -188,7 +188,7 @@ describe('Practitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       name: 'Test Practitioner',
-      originalBarState: 'Illinois',
+      originalBarState: US_STATES.IL,
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
@@ -251,7 +251,7 @@ describe('Practitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       middleName: 'Middle',
-      originalBarState: 'Illinois',
+      originalBarState: US_STATES.IL,
       practitionerType: 'Attorney',
       role: ROLES.Practitioner,
       suffix: 'Sfx',
@@ -284,7 +284,7 @@ describe('Practitioner', () => {
         firmName: 'GW Law Offices',
         firstName: 'Test',
         lastName: 'Practitioner',
-        originalBarState: 'Illinois',
+        originalBarState: US_STATES.IL,
         practitionerType: 'Attorney',
         role: ROLES.Practitioner,
         userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',

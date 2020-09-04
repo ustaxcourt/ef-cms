@@ -24,6 +24,7 @@ describe('create user', () => {
       .createUser.mockReturnValue(mockUser);
 
     const userToCreate = {
+      barNumber: '',
       name: 'Jesse Pinkman',
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk1@example.com',

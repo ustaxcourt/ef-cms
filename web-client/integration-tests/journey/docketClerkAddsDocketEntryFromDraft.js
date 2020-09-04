@@ -64,16 +64,12 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.docketRecord.find(
-      entry => entry.documentId === documentId,
-    );
     const numberOfPagesIncludingCoversheet =
       draftOrderDocument.numberOfPages + 1;
     const updatedDocument = caseDetailFormatted.documents.find(
       doc => doc.documentId === documentId,
     );
 
-    expect(newDocketEntry).toBeTruthy();
     expect(updatedDocument.numberOfPages).toEqual(
       numberOfPagesIncludingCoversheet,
     );

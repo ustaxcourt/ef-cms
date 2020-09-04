@@ -105,7 +105,7 @@ exports.saveSignedDocumentInteractor = async ({
 
     signedDocumentEntity.setSigned(user.userId, nameForSigning);
 
-    caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
+    caseEntity.addDocument(signedDocumentEntity);
 
     if (parentMessageId) {
       const messages = await applicationContext

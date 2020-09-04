@@ -15,7 +15,7 @@ export const EditDocketEntryMetaTabAction = connect(
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.modal.validationErrors,
-    validationSequence: sequences.validateDocketRecordSequence,
+    validationSequence: sequences.validateDocumentSequence,
   },
   function EditDocketEntryMetaTabAction({
     editDocketEntryMetaHelper,

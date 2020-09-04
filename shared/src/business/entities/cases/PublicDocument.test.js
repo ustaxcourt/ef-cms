@@ -1,3 +1,4 @@
+const { INITIAL_DOCUMENT_TYPES } = require('../EntityConstants');
 const { PublicDocument } = require('./PublicDocument');
 
 describe('PublicDocument', () => {
@@ -31,6 +32,53 @@ describe('PublicDocument', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
+    });
+  });
+
+  describe('isOnDocketRecord', () => {
+    describe('minute entries', () => {
+      it('creates minute entry', () => {
+        const document = new PublicDocument({
+          description: 'Request for Place of Trial at Flavortown, TN',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        });
+
+        expect(document.isValid()).toBe(true);
+      });
+    });
+
+    it('sets docket record related fields if a document is on the docket record', () => {
+      const entity = new PublicDocument({
+        description: 'testing',
+        documentId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        documentType:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        filedBy: 'testing',
+        filingDate: '2020-05-27T09:23:43.007Z',
+        index: 1,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+        isStricken: false,
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      });
+
+      expect(entity.validate().toRawObject()).toMatchObject({
+        description: 'testing',
+        documentId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        documentType:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+        filedBy: 'testing',
+        filingDate: '2020-05-27T09:23:43.007Z',
+        index: 1,
+        isOnDocketRecord: true,
+        isStricken: false,
+      });
     });
   });
 });

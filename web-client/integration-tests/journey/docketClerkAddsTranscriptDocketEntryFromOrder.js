@@ -87,8 +87,8 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.docketRecord.find(
-      entry => entry.documentId === documentId,
+    const newDocketEntry = caseDetailFormatted.documents.find(
+      d => d.documentId === documentId,
     );
 
     expect(newDocketEntry).toBeTruthy();

@@ -5,7 +5,7 @@ import {
 
 export const petitionsClerkViewsCaseDetail = (
   test,
-  expectedDocumentCount = 2,
+  expectedDocumentCount = 3,
 ) => {
   return it('Petitions clerk views case detail', async () => {
     test.setState('caseDetail', {});

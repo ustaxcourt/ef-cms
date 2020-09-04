@@ -21,15 +21,11 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
 
   if (viewerDocumentToDisplay) return { viewerDocumentToDisplay };
 
-  const { docketRecord, documents } = get(state.caseDetail);
+  const { documents } = get(state.caseDetail);
 
   const formattedDocketRecordWithDocument = applicationContext
     .getUtilities()
-    .formatDocketRecordWithDocument(
-      applicationContext,
-      cloneDeep(docketRecord),
-      cloneDeep(documents),
-    );
+    .formatDocketRecordWithDocument(applicationContext, cloneDeep(documents));
 
   const entriesWithDocument = formattedDocketRecordWithDocument.filter(
     entry => !!entry.document,

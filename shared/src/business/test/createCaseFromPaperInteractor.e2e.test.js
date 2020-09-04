@@ -78,13 +78,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
       createdAt: RECEIVED_DATE,
       docketNumber: '101-19',
       docketNumberWithSuffix: '101-19',
-      docketRecord: [
-        {
-          description: 'Petition',
-          filedBy: 'Petr. Bob Jones',
-          filingDate: RECEIVED_DATE,
-        },
-      ],
       documents: [
         {
           createdAt: RECEIVED_DATE,

@@ -257,6 +257,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  documentUrlTranslator,
+} = require('../../shared/src/business/utilities/documentUrlTranslator');
+const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -413,6 +416,9 @@ const {
 const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
+const {
+  getDocketNumbersByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -858,9 +864,6 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocketRecord,
-} = require('../../shared/src/persistence/dynamo/docketRecord/updateDocketRecord');
-const {
   updateDocument,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocument');
 const {
@@ -971,6 +974,9 @@ const {
 const execPromise = util.promisify(exec);
 
 const environment = {
+  appEndpoint: process.env.EFCMS_DOMAIN
+    ? `app.${process.env.EFCMS_DOMAIN}`
+    : 'localhost:1234',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   elasticsearchEndpoint:
@@ -1106,7 +1112,6 @@ const gatewayMethods = {
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocketRecord,
     updateDocument,
     updateDocumentProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,
@@ -1152,6 +1157,7 @@ const gatewayMethods = {
   getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getDocketNumbersByUser,
   getDocument,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
@@ -1201,7 +1207,11 @@ module.exports = appContextUser => {
   return {
     barNumberGenerator,
     docketNumberGenerator,
+    documentUrlTranslator,
     environment,
+    getAppEndpoint: () => {
+      return environment.appEndpoint;
+    },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getCognito: () => {

@@ -11,7 +11,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -68,12 +67,19 @@ exports.fileDocketEntryInteractor = async ({
     const [documentId, metadata, relationship] = document;
 
     if (documentId && metadata) {
+      const docketRecordEditState =
+        metadata.isFileAttached === false ? documentMetadata : {};
+
       const documentEntity = new Document(
         {
           ...baseMetadata,
           ...metadata,
+          description: metadata.documentTitle,
           documentId,
           documentType: metadata.documentType,
+          editState: JSON.stringify(docketRecordEditState),
+          filingDate: metadata.receivedAt,
+          isOnDocketRecord: true,
           mailingDate: metadata.mailingDate,
           relationship,
           userId: user.userId,
@@ -149,23 +155,7 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       workItems.push(workItem);
-      caseEntity.addDocumentWithoutDocketRecord(documentEntity);
-
-      const docketRecordEditState =
-        documentEntity.isFileAttached === false ? documentMetadata : {};
-
-      caseEntity.addDocketRecord(
-        new DocketRecord(
-          {
-            description: metadata.documentTitle,
-            documentId: documentEntity.documentId,
-            editState: JSON.stringify(docketRecordEditState),
-            eventCode: documentEntity.eventCode,
-            filingDate: documentEntity.receivedAt,
-          },
-          { applicationContext },
-        ),
-      );
+      caseEntity.addDocument(documentEntity);
     }
   }
 

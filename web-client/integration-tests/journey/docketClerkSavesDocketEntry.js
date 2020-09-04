@@ -18,7 +18,7 @@ export const docketClerkSavesDocketEntry = test => {
       },
     );
 
-    test.docketRecordEntry = caseDetailFormatted.docketRecord.find(
+    test.docketRecordEntry = caseDetailFormatted.documents.find(
       entry => entry.description === 'Administrative Record',
     );
 

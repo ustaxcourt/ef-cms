@@ -41,24 +41,22 @@ exports.archiveDraftDocumentInteractor = async ({
   const { workItem } = documentToArchive;
 
   if (workItem) {
-    await Promise.all(
-      Promise.all([
-        applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-          applicationContext,
-          workItem,
-        }),
-        applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
-          applicationContext,
-          createdAt: workItem.createdAt,
-          section: workItem.sentBySection,
-        }),
-        applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
-          applicationContext,
-          createdAt: workItem.createdAt,
-          userId: workItem.sentByUserId,
-        }),
-      ]),
-    );
+    await Promise.all([
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+        applicationContext,
+        workItem,
+      }),
+      applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
+        applicationContext,
+        createdAt: workItem.createdAt,
+        section: workItem.sentBySection,
+      }),
+      applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
+        applicationContext,
+        createdAt: workItem.createdAt,
+        userId: workItem.sentByUserId,
+      }),
+    ]);
   }
 
   const updatedCase = await applicationContext

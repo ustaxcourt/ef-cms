@@ -131,6 +131,9 @@ exports.joiValidationDecorator = function (
   schema,
   errorToMessageMap = {},
 ) {
+  if (!entityConstructor['__proxy__']) {
+    entityConstructor = exports.validEntityDecorator(entityConstructor);
+  }
   if (!schema.validate && typeof schema === 'object') {
     schema = joi.object().keys({ ...schema });
   }
@@ -242,16 +245,62 @@ exports.joiValidationDecorator = function (
     collection,
     { applicationContext },
   ) {
-    return (collection || []).map(entity =>
+    const validRawEntity = entity =>
       new entityConstructor(entity, { applicationContext })
         .validate()
-        .toRawObject(),
-    );
+        .toRawObject();
+    return (collection || []).map(validRawEntity);
   };
 
   entityConstructor.validateCollection = function (collection) {
     return collection.map(entity => entity.validate());
   };
+};
+
+/**
+ * Creates a new Proxy object from the provided entity constructor.
+ * When the returned function is invoked with the 'new' keyword, a proxy
+ * instance of the original entity is returned which trims incoming string values.
+ *
+ * @param {Function} entityConstructor the entity constructor
+ * @returns {Function} a factory function with proxy trap for 'construct' and
+ *   proxy trap for 'set' on the returned instances
+ */
+exports.validEntityDecorator = entityFactoryFunction => {
+  const hasInitFunction =
+    typeof entityFactoryFunction === 'function' &&
+    typeof entityFactoryFunction.prototype.init === 'function';
+
+  if (!hasInitFunction) {
+    console.warn(
+      `WARNING: ${entityFactoryFunction.name} prototype has no 'init' function`,
+    );
+  }
+
+  const instanceHandler = {
+    set(target, prop, value) {
+      if (typeof value === 'string') {
+        value = value.trim();
+      }
+      target[prop] = value;
+      return true;
+    },
+  };
+  const factoryHandler = {
+    construct(target, args) {
+      const entityInstance = new target(...args);
+      const proxied = new Proxy(entityInstance, instanceHandler);
+      proxied.init && proxied.init(...args);
+      return proxied;
+    },
+  };
+  const ValidEntityProxy = new Proxy(entityFactoryFunction, factoryHandler);
+  Object.defineProperty(ValidEntityProxy, '__proxy__', {
+    iterable: false,
+    value: true,
+    writable: false,
+  });
+  return ValidEntityProxy;
 };
 
 exports.getFormattedValidationErrorsHelper = getFormattedValidationErrorsHelper;

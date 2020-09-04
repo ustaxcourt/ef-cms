@@ -1,12 +1,12 @@
 resource "aws_lambda_function" "api_async_lambda" {
-  function_name = "api_async_${var.environment}"
-  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "api.handler"
-  s3_bucket     = aws_s3_bucket.api_lambdas_bucket.id
-  s3_key        = aws_s3_bucket_object.api_object.key
+  function_name    = "api_async_${var.environment}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "api.handler"
+  s3_bucket        = aws_s3_bucket.api_lambdas_bucket.id
+  s3_key           = aws_s3_bucket_object.api_object.key
   source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout       = "900"
-  memory_size   = "3008"
+  timeout          = "900"
+  memory_size      = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
@@ -15,7 +15,7 @@ resource "aws_lambda_function" "api_async_lambda" {
   runtime = "nodejs12.x"
 
   environment {
-    variables = data.null_data_source.locals.outputs
+    variables = var.lambda_environment
   }
 }
 
@@ -84,7 +84,7 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
 
-    request_templates = {
+  request_templates = {
     "application/json" = <<EOF
 {
 "body" : $input.json('$'),
@@ -150,7 +150,7 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
 
-    request_templates = {
+  request_templates = {
     "application/json" = <<EOF
 {
 "path" : "$context.path",

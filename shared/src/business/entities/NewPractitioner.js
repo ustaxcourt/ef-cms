@@ -1,6 +1,10 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { Practitioner } = require('./Practitioner');
 
@@ -10,11 +14,17 @@ const { Practitioner } = require('./Practitioner');
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function NewPractitioner(rawUser) {
+function NewPractitioner() {
+  this.entityName = 'Practitioner';
+}
+
+NewPractitioner.prototype.init = function init(rawUser) {
   Practitioner.prototype.init.call(this, rawUser);
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
-}
+};
+
+NewPractitioner.validationName = 'Practitioner';
 
 const VALIDATION_ERROR_MESSAGES = {
   ...Practitioner.VALIDATION_ERROR_MESSAGES,
@@ -27,17 +37,15 @@ joiValidationDecorator(
   NewPractitioner,
   joi.object().keys({
     ...Practitioner.validationRules,
-    admissionsStatus: joi.string().required(),
-    barNumber: joi.string().optional().allow(null),
-    email: joi.string().required(),
-    firstName: joi.string().required(),
-    lastName: joi.string().required(),
-    role: joi.string().optional().allow(null),
-    userId: joi.string().optional().allow(null),
+    admissionsStatus: JoiValidationConstants.STRING.required(),
+    barNumber: JoiValidationConstants.STRING.optional().allow(null),
+    email: JoiValidationConstants.STRING.required(),
+    firstName: JoiValidationConstants.STRING.required(),
+    lastName: JoiValidationConstants.STRING.required(),
+    role: JoiValidationConstants.STRING.optional().allow(null),
+    userId: JoiValidationConstants.STRING.optional().allow(null),
   }),
   VALIDATION_ERROR_MESSAGES,
 );
 
-NewPractitioner.validationName = 'Practitioner';
-
-module.exports = { NewPractitioner };
+exports.NewPractitioner = validEntityDecorator(NewPractitioner);

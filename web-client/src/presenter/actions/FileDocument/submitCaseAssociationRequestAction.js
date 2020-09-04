@@ -11,7 +11,9 @@ import { state } from 'cerebral';
 export const submitCaseAssociationRequestAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
+  const { primaryDocumentId } = props.documentsFiled;
   const { docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
 
@@ -20,6 +22,7 @@ export const submitCaseAssociationRequestAction = async ({
   documentMetadata = {
     ...documentMetadata,
     docketNumber,
+    primaryDocumentId,
     privatePractitioners: [
       {
         ...user,
