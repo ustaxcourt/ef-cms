@@ -21,8 +21,10 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision = test => 
 
     await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    const docketEntries = test.getState('caseDetail.docketRecord');
-    expect(docketEntries.length).toEqual(4);
+    const documents = test
+      .getState('caseDetail.documents')
+      .filter(d => d.isOnDocketRecord);
+    expect(documents.length).toEqual(4);
     const stipDecisionDocument = test
       .getState('caseDetail.documents')
       .find(d => d.documentType === 'Stipulated Decision');

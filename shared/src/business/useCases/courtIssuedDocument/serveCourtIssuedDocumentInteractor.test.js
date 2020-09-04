@@ -333,6 +333,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
+    expect(updatedDocument.filingDate).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();

@@ -134,7 +134,10 @@ describe('updateTrialSessionInteractor', () => {
   it('creates a trial session working copy successfully if a judge is set on the updated trial session and a judge was not set on the old session', async () => {
     const trialSessionWithJudge = {
       ...mockTrialsById[MOCK_TRIAL_ID_2],
-      judge: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' },
+      judge: {
+        name: 'Judge Goodman',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+      },
     };
 
     await updateTrialSessionInteractor({
@@ -153,7 +156,10 @@ describe('updateTrialSessionInteractor', () => {
   it('creates a trial session working copy successfully if a judge is set on the updated trial session and it is a different judge than was on the old session', async () => {
     const trialSessionWithJudge = {
       ...mockTrialsById[MOCK_TRIAL_ID_3],
-      judge: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' }, // different judge id
+      judge: {
+        name: 'Judge North',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+      }, // different judge id
     };
 
     await updateTrialSessionInteractor({
@@ -172,7 +178,10 @@ describe('updateTrialSessionInteractor', () => {
   it('creates a trial session working copy successfully if a trial clerk is set on the updated trial session and a trial clerk was not set on the old session', async () => {
     const trialSessionWithTrialClerk = {
       ...mockTrialsById[MOCK_TRIAL_ID_2],
-      trialClerk: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' },
+      trialClerk: {
+        name: 'Clerk McIntosh',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+      },
     };
 
     await updateTrialSessionInteractor({
@@ -195,7 +204,10 @@ describe('updateTrialSessionInteractor', () => {
   it('creates a trial session working copy successfully if a trial clerk is set on the updated trial session and it is a different trial clerk than was on the old session', async () => {
     const trialSessionWithTrialClerk = {
       ...mockTrialsById[MOCK_TRIAL_ID_5],
-      trialClerk: { userId: 'c7d90c05-f6cd-442c-a168-202db587f16f' }, // different trial clerk id
+      trialClerk: {
+        name: 'Clerk Magni',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+      }, // different trial clerk id
     };
 
     await updateTrialSessionInteractor({

@@ -1,6 +1,7 @@
 const isCaseMessageRecord = item =>
   item.pk.startsWith('case|') && item.sk.startsWith('message|');
-const isCaseRecord = item => !!item.caseType;
+const isCaseRecord = item =>
+  item.pk.startsWith('case|') && item.sk.startsWith('case|');
 const isTrialSessionRecord = item =>
   !!item.caseOrder && !!item.trialSessionId && !!item.maxCases;
 const isUserCaseMappingRecord = item =>

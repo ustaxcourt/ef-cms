@@ -11,7 +11,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -21,14 +20,11 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {Array<string>} providers.documentIds the document ids for the primary, supporting,
- * secondary, and secondary supporting documents
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
 exports.fileExternalDocumentInteractor = async ({
   applicationContext,
-  documentIds,
   documentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -66,44 +62,44 @@ exports.fileExternalDocumentInteractor = async ({
     'practitioner',
     'docketNumber',
   ]);
+  const documentsToAdd = [
+    [
+      documentMetadata.primaryDocumentId,
+      { ...primaryDocumentMetadata, secondaryDocument },
+      DOCUMENT_RELATIONSHIPS.PRIMARY,
+    ],
+  ];
 
-  if (secondaryDocument) {
-    secondaryDocument.lodged = true;
-  }
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
     });
   }
 
-  const documentsToAdd = [
-    [
-      documentIds.shift(),
-      { ...primaryDocumentMetadata, secondaryDocument },
-      DOCUMENT_RELATIONSHIPS.PRIMARY,
-    ],
-  ];
-
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        supportingDocuments[i].documentId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
     }
   }
 
-  documentsToAdd.push([
-    documentIds.shift(),
-    secondaryDocument,
-    DOCUMENT_RELATIONSHIPS.SECONDARY,
-  ]);
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.documentId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
+  }
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        secondarySupportingDocuments[i].documentId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
@@ -120,6 +116,7 @@ exports.fileExternalDocumentInteractor = async ({
           ...metadata,
           documentId,
           documentType: metadata.documentType,
+          isOnDocketRecord: true,
           partyPrimary:
             baseMetadata.partyPrimary || documentMetadata.representingPrimary,
           partySecondary:
@@ -164,21 +161,9 @@ exports.fileExternalDocumentInteractor = async ({
       documentEntity.setWorkItem(workItem);
 
       workItems.push(workItem);
-      caseEntity.addDocumentWithoutDocketRecord(documentEntity);
-
-      const docketRecordEntity = new DocketRecord(
-        {
-          description: metadata.documentTitle,
-          documentId: documentEntity.documentId,
-          eventCode: documentEntity.eventCode,
-          filingDate: documentEntity.receivedAt,
-        },
-        { applicationContext },
-      );
+      caseEntity.addDocument(documentEntity);
 
       const isAutoServed = documentEntity.isAutoServed();
-
-      caseEntity.addDocketRecord(docketRecordEntity);
 
       if (isAutoServed) {
         documentEntity.setAsServed(servedParties.all);

@@ -13,6 +13,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -45,7 +46,11 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function DocketEntryFactory(rawProps) {
-  let entityConstructor = function (rawPropsParam) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawPropsParam) {
     this.addToCoversheet = rawPropsParam.addToCoversheet;
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
@@ -81,35 +86,33 @@ function DocketEntryFactory(rawProps) {
 
   let schema = joi.object().keys({
     addToCoversheet: joi.boolean(),
-    additionalInfo: joi.string(),
-    additionalInfo2: joi.string(),
+    additionalInfo: JoiValidationConstants.STRING,
+    additionalInfo2: JoiValidationConstants.STRING,
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
     dateReceived: JoiValidationConstants.ISO_DATE.max('now').required(),
-    documentType: joi
-      .string()
-      .valid(...ALL_DOCUMENT_TYPES)
-      .optional(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .required(),
-    freeText: joi.string().optional(),
+    documentType: JoiValidationConstants.STRING.valid(
+      ...ALL_DOCUMENT_TYPES,
+    ).optional(),
+    eventCode: JoiValidationConstants.STRING.valid(
+      ...ALL_EVENT_CODES,
+    ).required(),
+    freeText: JoiValidationConstants.STRING.optional(),
     hasOtherFilingParty: joi.boolean().optional(),
     hasSupportingDocuments: joi.boolean(),
     isDocumentRequired: joi.boolean().optional(),
     lodged: joi.boolean(),
-    ordinalValue: joi.string().optional(),
-    otherFilingParty: joi
-      .string()
-      .when('hasOtherFilingParty', {
+    ordinalValue: JoiValidationConstants.STRING.optional(),
+    otherFilingParty: JoiValidationConstants.STRING.when(
+      'hasOtherFilingParty',
+      {
         is: true,
         otherwise: joi.optional(),
         then: joi.required(),
-      })
-      .description(
-        'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
-      ),
+      },
+    ).description(
+      'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
+    ),
     previousDocument: joi.object().optional(),
     primaryDocumentFile: joi.object().when('isDocumentRequired', {
       is: true,
@@ -125,14 +128,14 @@ function DocketEntryFactory(rawProps) {
       },
     ),
     serviceDate: JoiValidationConstants.ISO_DATE.max('now').optional(),
-    trialLocation: joi.string().optional(),
+    trialLocation: JoiValidationConstants.STRING.optional(),
   });
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
       'now',
     ).required(),
-    objections: joi.string().required(),
+    objections: JoiValidationConstants.STRING.required(),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrimary: joi.boolean().invalid(false).required(),
     partySecondary: joi.boolean().required(),
@@ -150,7 +153,7 @@ function DocketEntryFactory(rawProps) {
 
   schema = schema.concat(docketEntryExternalDocumentSchema).concat(
     joi.object({
-      category: joi.string().optional(), // omitting category
+      category: JoiValidationConstants.STRING.optional(), // omitting category
     }),
   );
 
@@ -197,7 +200,7 @@ function DocketEntryFactory(rawProps) {
     DocketEntryFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new entityConstructor(rawProps);
+  return new (validEntityDecorator(entityConstructor))(rawProps);
 }
 
 module.exports = { DocketEntryFactory };

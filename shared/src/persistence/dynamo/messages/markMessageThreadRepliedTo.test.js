@@ -60,4 +60,19 @@ describe('markMessageThreadRepliedTo', () => {
       },
     });
   });
+
+  it("doesn't update messages if there are none found", async () => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () => Promise.resolve({ Items: [] }),
+    });
+
+    await markMessageThreadRepliedTo({
+      applicationContext,
+      parentMessageId: '0c0de040-1dfd-4be8-937a-d6aefdfcd71d',
+    });
+
+    expect(
+      applicationContext.getDocumentClient().update.mock.calls.length,
+    ).toEqual(0);
+  });
 });

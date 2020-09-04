@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -16,13 +17,15 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function ExternalDocumentNonStandardD(rawProps) {
+function ExternalDocumentNonStandardD() {}
+
+ExternalDocumentNonStandardD.prototype.init = function init(rawProps) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.previousDocument = rawProps.previousDocument;
   this.serviceDate = rawProps.serviceDate;
-}
+};
 
 ExternalDocumentNonStandardD.prototype.getDocumentTitle = function () {
   return replaceBracketed(
@@ -37,14 +40,14 @@ ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardD.schema = {
-  category: joi.string().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  category: JoiValidationConstants.STRING.required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
   previousDocument: joi
     .object()
     .keys({
-      documentTitle: joi.string().optional(),
-      documentType: joi.string().required(),
+      documentTitle: JoiValidationConstants.STRING.optional(),
+      documentType: JoiValidationConstants.STRING.required(),
     })
     .required(),
   serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),
@@ -56,4 +59,8 @@ joiValidationDecorator(
   ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { ExternalDocumentNonStandardD };
+module.exports = {
+  ExternalDocumentNonStandardD: validEntityDecorator(
+    ExternalDocumentNonStandardD,
+  ),
+};

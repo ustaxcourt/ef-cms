@@ -19,7 +19,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence:
       sequences.validateCourtIssuedDocketEntrySequence,
-    validateDocketRecordSequence: sequences.validateDocketRecordSequence,
+    validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
   },
   function EditDocketEntryMetaFormCourtIssued({
@@ -27,7 +27,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     form,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validationErrors,
   }) {
     return (
@@ -46,7 +46,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             month: form.filingDateMonth,
             year: form.filingDateYear,
           }}
-          onBlur={validateDocketRecordSequence}
+          onBlur={validateDocumentSequence}
           onChange={updateCourtIssuedDocketEntryFormValueSequence}
         />
 

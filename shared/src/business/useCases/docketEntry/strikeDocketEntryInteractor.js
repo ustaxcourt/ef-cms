@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -17,7 +16,7 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 exports.strikeDocketEntryInteractor = async ({
   applicationContext,
   docketNumber,
-  docketRecordId,
+  documentId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -39,32 +38,25 @@ exports.strikeDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketRecord = caseEntity.getDocketRecord(docketRecordId);
+  const documentEntity = caseEntity.getDocumentById({ documentId });
 
-  if (!docketRecord) {
-    throw new NotFoundError('Docket Record not found');
+  if (!documentEntity) {
+    throw new NotFoundError('Document not found');
   }
-
-  const docketRecordEntity = new DocketRecord(docketRecord, {
-    applicationContext,
-  });
 
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  docketRecordEntity.strikeEntry({ name: user.name, userId: user.userId });
+  documentEntity.strikeEntry({ name: user.name, userId: user.userId });
 
-  caseEntity.updateDocketRecordEntry(
-    docketRecordEntity,
-    docketRecordEntity.index,
-  );
+  caseEntity.updateDocument(documentEntity);
 
-  await applicationContext.getPersistenceGateway().updateDocketRecord({
+  await applicationContext.getPersistenceGateway().updateDocument({
     applicationContext,
     docketNumber,
-    docketRecord: docketRecordEntity.validate().toRawObject(),
-    docketRecordId: docketRecordId,
+    document: documentEntity.validate().toRawObject(),
+    documentId,
   });
 
   return caseEntity.toRawObject();

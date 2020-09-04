@@ -1,4 +1,6 @@
-const joi = require('joi');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('./ContactFactory');
 
 /**
@@ -9,7 +11,7 @@ exports.getSurvivingSpouseContact = ContactFactory.createContactFactory({
     secondaryName: 'Enter name of surviving spouse',
   },
   additionalValidation: {
-    secondaryName: joi.string().max(500).required(),
+    secondaryName: JoiValidationConstants.STRING.max(500).required(),
   },
   contactName: 'SurvivingSpouseContact',
 });

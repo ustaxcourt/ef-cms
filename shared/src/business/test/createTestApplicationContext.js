@@ -321,8 +321,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteSectionOutboxRecord,
-    deleteUserOutboxRecord,
+    deleteSectionOutboxRecord: jest
+      .fn()
+      .mockImplementation(deleteSectionOutboxRecord),
+    deleteUserOutboxRecord: jest
+      .fn()
+      .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
     getAllCaseDeadlines: jest.fn(),

@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 
@@ -13,11 +14,14 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawProps the raw case deadline data
  * @constructor
  */
-function CaseDeadline(rawProps, { applicationContext }) {
+function CaseDeadline() {
+  this.entityName = 'CaseDeadline';
+}
+
+CaseDeadline.prototype.init = function init(rawProps, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'CaseDeadline';
 
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
@@ -25,7 +29,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.deadlineDate = rawProps.deadlineDate;
   this.description = rawProps.description;
   this.docketNumber = rawProps.docketNumber;
-}
+};
 
 CaseDeadline.validationName = 'CaseDeadline';
 
@@ -51,16 +55,14 @@ CaseDeadline.schema = joi.object().keys({
   deadlineDate: JoiValidationConstants.ISO_DATE.required().description(
     'When the Case Deadline expires.',
   ),
-  description: joi
-    .string()
-    .max(120)
+  description: JoiValidationConstants.STRING.max(120)
     .min(1)
     .required()
     .description('User provided description of the Case Deadline.'),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Docket number of the case containing the Case Deadline.',
   ),
-  entityName: joi.string().valid('CaseDeadline').required(),
+  entityName: JoiValidationConstants.STRING.valid('CaseDeadline').required(),
 });
 
 joiValidationDecorator(
@@ -69,4 +71,4 @@ joiValidationDecorator(
   CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CaseDeadline };
+module.exports = { CaseDeadline: validEntityDecorator(CaseDeadline) };

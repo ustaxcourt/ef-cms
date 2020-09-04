@@ -1,6 +1,10 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { CaseExternal } = require('./CaseExternal');
@@ -13,8 +17,12 @@ const { CaseExternal } = require('./CaseExternal');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternalInformationFactory(rawCase, { applicationContext }) {
-  CaseExternal.prototype.init.call(this, rawCase, { applicationContext });
+function CaseExternalInformationFactory() {}
+CaseExternalInformationFactory.prototype.init = function init(
+  rawCase,
+  { applicationContext },
+) {
+  CaseExternal.prototype.initSelf.call(this, rawCase, { applicationContext });
   this.wizardStep = rawCase.wizardStep;
 
   if (+this.wizardStep >= 3) {
@@ -22,7 +30,7 @@ function CaseExternalInformationFactory(rawCase, { applicationContext }) {
       applicationContext,
     });
   }
-}
+};
 
 CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES =
   Case.VALIDATION_ERROR_MESSAGES;
@@ -74,7 +82,12 @@ const wizardStep4 = atWizardStep(4, {
 });
 
 const schema = {
-  wizardStep: joi.string().valid('1', '2', '3', '4').required(),
+  wizardStep: JoiValidationConstants.STRING.valid(
+    '1',
+    '2',
+    '3',
+    '4',
+  ).required(),
   ...wizardStep1,
   ...wizardStep2,
   ...wizardStep3,
@@ -87,4 +100,8 @@ joiValidationDecorator(
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CaseExternalInformationFactory };
+module.exports = {
+  CaseExternalInformationFactory: validEntityDecorator(
+    CaseExternalInformationFactory,
+  ),
+};

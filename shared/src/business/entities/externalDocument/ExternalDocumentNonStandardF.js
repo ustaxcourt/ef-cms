@@ -1,6 +1,10 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -12,13 +16,15 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function ExternalDocumentNonStandardF(rawProps) {
+function ExternalDocumentNonStandardF() {}
+
+ExternalDocumentNonStandardF.prototype.init = function init(rawProps) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.ordinalValue = rawProps.ordinalValue;
   this.previousDocument = rawProps.previousDocument;
-}
+};
 
 ExternalDocumentNonStandardF.prototype.getDocumentTitle = function () {
   return replaceBracketed(
@@ -33,15 +39,15 @@ ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardF.schema = {
-  category: joi.string().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
-  ordinalValue: joi.string().required(),
+  category: JoiValidationConstants.STRING.required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
+  ordinalValue: JoiValidationConstants.STRING.required(),
   previousDocument: joi
     .object()
     .keys({
-      documentTitle: joi.string().optional(),
-      documentType: joi.string().required(),
+      documentTitle: JoiValidationConstants.STRING.optional(),
+      documentType: JoiValidationConstants.STRING.required(),
     })
     .required(),
 };
@@ -52,4 +58,8 @@ joiValidationDecorator(
   ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { ExternalDocumentNonStandardF };
+module.exports = {
+  ExternalDocumentNonStandardF: validEntityDecorator(
+    ExternalDocumentNonStandardF,
+  ),
+};

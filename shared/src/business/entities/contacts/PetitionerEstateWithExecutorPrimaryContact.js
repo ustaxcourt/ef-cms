@@ -1,4 +1,6 @@
-const joi = require('joi');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('./ContactFactory');
 
 /**
@@ -11,8 +13,8 @@ exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createCon
       title: 'Enter title',
     },
     additionalValidation: {
-      secondaryName: joi.string().max(500).required(),
-      title: joi.string().max(100).optional(),
+      secondaryName: JoiValidationConstants.STRING.max(500).required(),
+      title: JoiValidationConstants.STRING.max(100).optional(),
     },
     contactName: 'PetitionerEstateWithExecutorPrimaryContact',
   },
