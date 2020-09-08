@@ -1,7 +1,7 @@
-const { execSync } = require('child_process');
+const { spawnSync } = require('child_process');
 
 exports.getSesStatus = async () => {
-  const result = await execSync(
+  const result = await spawnSync(
     'ping email.us-east-1.amazonaws.com -c 1 -W 10',
   );
 
