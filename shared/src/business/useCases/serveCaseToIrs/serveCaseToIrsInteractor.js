@@ -90,13 +90,13 @@ const addDocketEntries = ({ caseEntity }) => {
   );
 
   for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
-    const foundDocument = caseEntity.docketEntries.find(
+    const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
 
-    if (foundDocument) {
-      foundDocument.isOnDocketRecord = true;
-      caseEntity.updateDocument(foundDocument);
+    if (foundDocketEntry) {
+      foundDocketEntry.isOnDocketRecord = true;
+      caseEntity.updateDocketEntry(foundDocketEntry);
     }
   }
 };
@@ -144,7 +144,7 @@ exports.serveCaseToIrsInteractor = async ({
           role: ROLES.irsSuperuser,
         },
       ]);
-      caseEntity.updateDocument(initialDocketEntry);
+      caseEntity.updateDocketEntry(initialDocketEntry);
 
       if (
         initialDocketEntry.documentType ===

@@ -1062,29 +1062,28 @@ Case.prototype.generateNextDocketRecordIndex = function () {
 
 /**
  *
- * @param {Document|Correspondence} updatedDocument the document or correspondence to update on the case
+ * @param {DocketEntry} updatedDocketEntry the docket entry to update on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocument = function (updatedDocument) {
-  const allCaseDocuments = [...this.docketEntries, ...this.correspondence];
-  const foundDocument = allCaseDocuments.find(
-    document => document.documentId === updatedDocument.documentId,
+Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
+  const foundDocketEntry = this.docketEntries.find(
+    document => document.documentId === updatedDocketEntry.documentId,
   );
 
-  if (foundDocument) Object.assign(foundDocument, updatedDocument);
+  if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
 
-  if (updatedDocument.isOnDocketRecord) {
+  if (updatedDocketEntry.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
-      docketEntry: foundDocument,
+      docketEntry: foundDocketEntry,
     });
 
     if (updateIndex) {
-      updatedDocument.index = this.generateNextDocketRecordIndex();
+      updatedDocketEntry.index = this.generateNextDocketRecordIndex();
     }
   }
 
-  if (foundDocument) Object.assign(foundDocument, updatedDocument);
+  if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
 
   return this;
 };
@@ -1641,6 +1640,23 @@ Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
  */
 Case.prototype.fileCorrespondence = function (correspondenceEntity) {
   this.correspondence = [...this.correspondence, correspondenceEntity];
+
+  return this;
+};
+
+/**
+ * updates the correspondence document on the case
+ *
+ * @param {Correspondence} correspondenceEntity the correspondence document to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.updateCorrespondence = function (correspondenceEntity) {
+  const foundCorrespondence = this.correspondence.find(
+    document => document.documentId === correspondenceEntity.documentId,
+  );
+
+  if (foundCorrespondence)
+    Object.assign(foundCorrespondence, correspondenceEntity);
 
   return this;
 };

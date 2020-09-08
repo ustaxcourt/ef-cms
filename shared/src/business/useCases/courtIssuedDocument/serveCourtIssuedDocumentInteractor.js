@@ -147,7 +147,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocumentEntity = new DocketEntry(
+  const updatedDocketEntryEntity = new DocketEntry(
     {
       ...document,
       filingDate: createISODateString(),
@@ -156,9 +156,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     { applicationContext },
   );
 
-  updatedDocumentEntity.validate();
+  updatedDocketEntryEntity.validate();
 
-  caseEntity.updateDocument(updatedDocumentEntity);
+  caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
