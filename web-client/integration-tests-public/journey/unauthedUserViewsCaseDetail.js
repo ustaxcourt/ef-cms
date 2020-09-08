@@ -22,8 +22,8 @@ export const unauthedUserViewsCaseDetail = test => {
       state: test.getState(),
     });
 
-    expect(helper.formattedDocketEntries.length).toEqual(4);
-    expect(helper.formattedDocketEntries).toMatchObject([
+    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(4);
+    expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         description: 'Petition',
         hasDocument: true,
@@ -53,14 +53,15 @@ export const unauthedUserViewsCaseDetail = test => {
       },
     ]);
 
-    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(5); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
+    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(4);
     expect(helper.formattedCaseDetail.docketEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentType: 'Petition',
         }),
         expect.objectContaining({
-          documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         }),
         expect.objectContaining({
           documentType: 'Order of Dismissal',
