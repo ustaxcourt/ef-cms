@@ -52,8 +52,6 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.petitioner) {
     showEditContacts = true;
-  } else if (user.role === USER_ROLES.irsPractitioner) {
-    showEditContacts = false;
   } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
   } else if (user.role === USER_ROLES.docketClerk) {
