@@ -31,17 +31,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       state: 'CA',
     },
     createdAt: '',
-    docketNumber: '45678-18',
-    docketRecord: [
-      {
-        description: 'first record',
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-        eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
-      },
-    ],
-    documents: [
+    docketEntries: [
       {
         docketNumber: '45678-18',
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
@@ -68,6 +58,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         userId: mockUserId,
       },
     ],
+    docketNumber: '45678-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -149,7 +140,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(3);
   });
 
@@ -179,11 +170,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toMatchObject({ useTempBucket: false });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[2].documentContents,
+        .caseToUpdate.docketEntries[2].documentContents,
     ).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[2].draftState,
+        .caseToUpdate.docketEntries[2].draftState,
     ).toBeUndefined();
   });
 
@@ -205,7 +196,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(3);
   });
 });

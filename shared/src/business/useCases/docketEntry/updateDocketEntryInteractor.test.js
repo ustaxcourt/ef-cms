@@ -29,7 +29,7 @@ describe('updateDocketEntryInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
-  const documents = [
+  const docketEntries = [
     {
       docketNumber: '45678-18',
       documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
@@ -91,47 +91,8 @@ describe('updateDocketEntryInteractor', () => {
       state: 'CA',
     },
     createdAt: '',
+    docketEntries,
     docketNumber: '45678-18',
-    docketRecord: [
-      {
-        description: 'Petition',
-        docketRecordId: 'e275309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
-        eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
-      },
-      {
-        description: 'first record',
-        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
-        eventCode: 'ROA',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 2,
-      },
-      {
-        description: 'second record',
-        docketRecordId: 'c575309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        eventCode: 'A',
-        filingDate: '2018-03-01T00:01:00.000Z',
-      },
-      {
-        description: 'third record',
-        docketRecordId: 'd375309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
-        eventCode: 'ROA',
-        filingDate: '2018-03-01T00:01:00.000Z',
-      },
-      {
-        description: 'Request for Place of Trial',
-        docketRecordId: 'f175309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
-        eventCode: 'RQT',
-        filingDate: '2018-03-01T00:01:00.000Z',
-      },
-    ],
-    documents,
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -314,7 +275,7 @@ describe('updateDocketEntryInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[2],
+        .caseToUpdate.docketEntries[2],
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       freeText: 'Some text about this document',

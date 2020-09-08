@@ -21,7 +21,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
     await test.runSequence('deleteUploadedPdfSequence');
 
     const deletedDocument = test
-      .getState('form.documents')
+      .getState('form.docketEntries')
       .find(doc => doc.documentId === documentIdToDelete);
     expect(deletedDocument).toBeUndefined();
     expect(test.getState('pdfPreviewUrl')).toBeUndefined();
@@ -33,7 +33,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
         'Upload or scan an Application for Waiver of Filing Fee (APW)',
     });
 
-    expect(test.getState('form.documents')).toEqual(
+    expect(test.getState('form.docketEntries')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ documentType: 'Petition', eventCode: 'P' }),
       ]),
@@ -51,7 +51,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
     expect(test.getState('validationErrors')).toEqual({});
 
     const newApwFileDocumentId = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(
         doc =>
           doc.eventCode ===

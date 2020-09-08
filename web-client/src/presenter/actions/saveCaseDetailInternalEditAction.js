@@ -41,7 +41,7 @@ export const saveCaseDetailInternalEditAction = async ({
   for (const key of keys) {
     if (caseToUpdate[key]) {
       if (key === 'petitionFile') {
-        const oldPetitionDocument = originalCase.documents.find(
+        const oldPetitionDocument = originalCase.docketEntries.find(
           document =>
             document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
         );
@@ -63,7 +63,7 @@ export const saveCaseDetailInternalEditAction = async ({
             onUploadProgress: progressFunctions[key],
           });
 
-        caseToUpdate.documents.push({
+        caseToUpdate.docketEntries.push({
           documentId: newDocumentId,
           documentType: INITIAL_DOCUMENT_TYPES_MAP[key],
         });

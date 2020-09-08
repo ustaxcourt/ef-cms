@@ -49,7 +49,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         'http://example.com/document/5a3ea70f-c539-4118-81a3-0be94be3b4f1',
       );
 
-    MOCK_CASE.documents.push(
+    MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
           documentId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
@@ -87,7 +87,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         'http://example.com/document/83813a24-7687-418e-a186-c416b4bb0ad4',
       );
 
-    MOCK_CASE.documents.push(
+    MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
           documentId: '83813a24-7687-418e-a186-c416b4bb0ad4',
@@ -123,7 +123,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         'http://example.com/document/8008b288-8b6b-48e3-8239-599266b13b8b',
       );
 
-    MOCK_CASE.documents.push(
+    MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
           documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',

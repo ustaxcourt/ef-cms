@@ -28,9 +28,9 @@ export const caseDetailEditHelper = (get, applicationContext) => {
       PARTY_TYPES.partnershipBBA,
       PARTY_TYPES.corporation,
     ].includes(caseDetail.partyType) &&
-    caseDetail.documents
+    caseDetail.docketEntries
   ) {
-    const odsDocs = caseDetail.documents.filter(document => {
+    const odsDocs = caseDetail.docketEntries.filter(document => {
       return document.documentType === 'Ownership Disclosure Statement';
     });
     showOwnershipDisclosureStatement = true;
@@ -39,8 +39,8 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     }
   }
 
-  if (caseDetail.documents) {
-    const rptDocs = caseDetail.documents.filter(document => {
+  if (caseDetail.docketEntries) {
+    const rptDocs = caseDetail.docketEntries.filter(document => {
       return document.documentType.includes('Request for Place of Trial');
     });
     if (rptDocs[0]) {

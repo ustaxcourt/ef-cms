@@ -13,7 +13,7 @@ export const setupConfirmRemoveCaseDetailPendingItemModalAction = ({
 }) => {
   const { caseDetail, documentId } = props;
 
-  const selectedDocument = caseDetail.documents.find(
+  const selectedDocument = caseDetail.docketEntries.find(
     document => document.documentId === documentId,
   );
 

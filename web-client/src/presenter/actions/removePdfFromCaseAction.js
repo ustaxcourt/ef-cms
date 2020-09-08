@@ -13,9 +13,9 @@ export const removePdfFromCaseAction = async ({ get }) => {
   const documentId = get(state.documentId);
 
   if (documentId) {
-    (form.documents || []).some((document, idx) => {
+    (form.docketEntries || []).some((document, idx) => {
       if (document.documentId === documentId) {
-        form.documents.splice(idx, 1);
+        form.docketEntries.splice(idx, 1);
         return true;
       }
     });

@@ -13,7 +13,7 @@ describe('formattedDocument', () => {
     const result = runCompute(formattedDocument, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               createdAt: '2019-03-01T21:40:46.415Z',
               documentId: '123',
@@ -61,7 +61,7 @@ describe('formattedDocument', () => {
     const result = runCompute(formattedDocument, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               createdAt: '2019-03-01T21:40:46.415Z',
               documentId: '123',
