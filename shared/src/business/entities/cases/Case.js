@@ -45,7 +45,7 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { Document } = require('../Document');
+const { DocketEntry } = require('../DocketEntry');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -175,7 +175,7 @@ Case.prototype.init = function init(
 
     if (Array.isArray(rawCase.archivedDocuments)) {
       this.archivedDocuments = rawCase.archivedDocuments.map(
-        document => new Document(document, { applicationContext }),
+        document => new DocketEntry(document, { applicationContext }),
       );
     } else {
       this.archivedDocuments = [];
@@ -248,7 +248,7 @@ Case.prototype.init = function init(
 
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents
-      .map(document => new Document(document, { applicationContext }))
+      .map(document => new DocketEntry(document, { applicationContext }))
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     this.isSealed =
@@ -324,7 +324,7 @@ Case.VALIDATION_RULES = {
     .description('List of Correspondence Entities that were archived.'),
   archivedDocuments: joi
     .array()
-    .items(Document.VALIDATION_RULES)
+    .items(DocketEntry.VALIDATION_RULES)
     .optional()
     .description(
       'List of Document Entities that were archived instead of added to the docket record.',
@@ -416,7 +416,7 @@ Case.VALIDATION_RULES = {
   ),
   documents: joi
     .array()
-    .items(Document.VALIDATION_RULES)
+    .items(DocketEntry.VALIDATION_RULES)
     .required()
     .description('List of Document Entities for the case.'),
   entityName: JoiValidationConstants.STRING.valid('Case').required(),
@@ -770,7 +770,7 @@ Case.prototype.attachIrsPractitioner = function (practitioner) {
  * @param {string} document the document to archive
  */
 Case.prototype.archiveDocument = function (document, { applicationContext }) {
-  const documentToArchive = new Document(document, { applicationContext });
+  const documentToArchive = new DocketEntry(document, { applicationContext });
   documentToArchive.archive();
   this.archivedDocuments.push(documentToArchive);
   this.deleteDocumentById({ documentId: documentToArchive.documentId });
@@ -918,7 +918,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     const { userId } = applicationContext.getCurrentUser();
 
     this.addDocument(
-      new Document(
+      new DocketEntry(
         {
           description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
           documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
@@ -968,7 +968,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
     const { userId } = applicationContext.getCurrentUser();
 
     this.addDocument(
-      new Document(
+      new DocketEntry(
         {
           description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
           documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,

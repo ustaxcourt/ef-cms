@@ -687,7 +687,7 @@
                   args: 
                     limit: 1
               allow: 
-                - "Document"
+                - "DocketEntry"
             eventCode: 
               type: "string"
               flags: 
@@ -4805,7 +4805,7 @@
                   args: 
                     limit: 1
               allow: 
-                - "Document"
+                - "DocketEntry"
             eventCode: 
               type: "string"
               flags: 

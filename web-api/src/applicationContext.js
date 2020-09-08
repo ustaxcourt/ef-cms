@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
 const AWS = require('aws-sdk');
+const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -257,6 +258,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  DocketEntry,
+} = require('../../shared/src/business/entities/DocketEntry');
+const {
   documentUrlTranslator,
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
@@ -393,6 +397,9 @@ const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
+  getClientId,
+} = require('../../shared/src/persistence/cognito/getClientId');
+const {
   getClosedCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
 const {
@@ -416,6 +423,9 @@ const {
 const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
+const {
+  getDeployTableStatus,
+} = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
 const {
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
@@ -462,8 +472,14 @@ const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
+  getFirstSingleCaseRecord,
+} = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
+const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
+const {
+  getHealthCheckInteractor,
+} = require('../../shared/src/business/useCases/health/getHealthCheckInteractor');
 const {
   getInboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForSectionInteractor');
@@ -548,6 +564,9 @@ const {
 const {
   getSectionOutboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
+const {
+  getTableStatus,
+} = require('../../shared/src/persistence/dynamo/getTableStatus');
 const {
   getTodaysOpinionsInteractor,
 } = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
@@ -954,7 +973,6 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
@@ -1027,14 +1045,28 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   return dynamoClientCache[type];
 };
 
+const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+  if (!dynamoCache[type]) {
+    dynamoCache[type] = new DynamoDB({
+      endpoint: useMasterRegion
+        ? environment.masterDynamoDbEndpoint
+        : environment.dynamoDbEndpoint,
+      region: useMasterRegion ? environment.masterRegion : environment.region,
+    });
+  }
+  return dynamoCache[type];
+};
+
 let dynamoClientCache = {};
+let dynamoCache = {};
 let s3Cache;
 let sesCache;
 let searchClientCache;
 
 const entitiesByName = {
   Case,
-  Document,
+  DocketEntry,
   IrsPractitioner,
   Practitioner,
   PrivatePractitioner,
@@ -1154,9 +1186,11 @@ const gatewayMethods = {
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUser,
+  getClientId,
   getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getDeployTableStatus,
   getDocketNumbersByUser,
   getDocument,
   getDocumentQCInboxForSection,
@@ -1167,6 +1201,7 @@ const gatewayMethods = {
   getElasticsearchReindexRecords,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
+  getFirstSingleCaseRecord,
   getIndexedCasesForUser,
   getInternalUsers,
   getMessageThreadByParentId,
@@ -1178,6 +1213,7 @@ const gatewayMethods = {
   getRecord,
   getSectionInboxMessages,
   getSectionOutboxMessages,
+  getTableStatus,
   getTrialSessionById,
   getTrialSessionWorkingCopy,
   getTrialSessions,
@@ -1272,6 +1308,7 @@ module.exports = appContextUser => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
+    getDynamoClient,
     getEmailClient: () => {
       if (process.env.CI) {
         return {
@@ -1309,6 +1346,7 @@ module.exports = appContextUser => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,
@@ -1493,6 +1531,7 @@ module.exports = appContextUser => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,

@@ -23,7 +23,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -103,7 +103,7 @@ exports.completeDocketEntryQCInteractor = async ({
     serviceDate: entryMetadata.serviceDate,
   };
 
-  const updatedDocument = new Document(
+  const updatedDocument = new DocketEntry(
     {
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate
@@ -284,7 +284,7 @@ exports.completeDocketEntryQCInteractor = async ({
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocument = new Document(
+    let noticeUpdatedDocument = new DocketEntry(
       {
         ...NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
