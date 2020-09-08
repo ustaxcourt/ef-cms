@@ -571,7 +571,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [] },
+        caseDetail: { docketEntries: [], irsPractitioners: [] },
 
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -589,7 +589,10 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '789' }] },
+        caseDetail: {
+          docketEntries: [],
+          irsPractitioners: [{ userId: '789' }],
+        },
 
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -607,7 +610,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [] },
+        caseDetail: { docketEntries: [], privatePractitioners: [] },
 
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -626,7 +629,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           privatePractitioners: [{ userId: '789' }],
         },
 

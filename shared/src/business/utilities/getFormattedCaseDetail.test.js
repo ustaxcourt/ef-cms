@@ -1037,12 +1037,12 @@ describe('sortDocketEntries', () => {
 
     expect(result).toEqual([
       {
-        createdAtFormatted: '2019-08-03T00:10:02.000Z',
-        index: 1,
-      },
-      {
         createdAtFormatted: '2019-08-04T00:10:02.000Z',
         index: 2,
+      },
+      {
+        createdAtFormatted: '2019-08-03T00:10:02.000Z',
+        index: 1,
       },
       {
         createdAtFormatted: undefined,
