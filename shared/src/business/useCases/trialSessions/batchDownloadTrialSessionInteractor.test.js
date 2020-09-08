@@ -20,7 +20,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         description: 'fourth record',
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Stipulated Decision',
-        entityName: 'Document',
+        entityName: 'DocketEntry',
         eventCode: 'SDEC',
         filingDate: '2018-03-01T00:03:00.000Z',
         index: 4,
