@@ -117,12 +117,12 @@ describe('updateCase', () => {
     firstQueryStub.push({
       ...MOCK_DOCUMENTS[0],
       pk: 'case|101-18',
-      sk: 'document|a-document-id-123',
+      sk: 'docket-entry|a-document-id-123',
     });
     firstQueryStub.push({
       ...MOCK_DOCUMENTS[1],
       pk: 'case|101-18',
-      sk: 'document|a-document-id-456',
+      sk: 'docket-entry|a-document-id-456',
     });
   }
 
@@ -705,7 +705,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         pk: 'case|101-18',
-        sk: `document|${MOCK_DOCUMENTS[0].documentId}`,
+        sk: `docket-entry|${MOCK_DOCUMENTS[0].documentId}`,
         userId: MOCK_DOCUMENTS[0].userId,
       });
     });
@@ -731,7 +731,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         pk: 'case|101-18',
-        sk: `document|${MOCK_DOCUMENTS[0].documentId}`,
+        sk: `docket-entry|${MOCK_DOCUMENTS[0].documentId}`,
         userId: MOCK_DOCUMENTS[0].userId,
       });
     });

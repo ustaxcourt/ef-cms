@@ -73,7 +73,7 @@ const filterRecords = async ({ applicationContext, records }) => {
           docketRecord: undefined,
           documents: undefined,
           entityName: { S: 'Document' },
-          sk: { S: `document|${document.documentId}` },
+          sk: { S: `docket-entry|${document.documentId}` },
         };
 
         filteredRecords.push({
@@ -83,7 +83,7 @@ const filterRecords = async ({ applicationContext, records }) => {
                 S: caseRecord.dynamodb.Keys.pk.S,
               },
               sk: {
-                S: `document|${document.documentId}`,
+                S: `docket-entry|${document.documentId}`,
               },
             },
             NewImage: documentWithCaseInfo,
