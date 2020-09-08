@@ -11,16 +11,6 @@ describe('getDocketNumbersByUser', () => {
     userId: '522573b0-dc40-47f7-96fd-64758da315f5',
   };
 
-  // let queryStub = jest.fn().mockReturnValue({
-  //   promise: async () => ({
-  //     Items: [],
-  //   }),
-  // });
-
-  // applicationContext.getDocumentClient.mockReturnValue({
-  //   query: queryStub,
-  // });
-
   beforeEach(() => {
     client.query = jest.fn().mockReturnValueOnce([
       {
