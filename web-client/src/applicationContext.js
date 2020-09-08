@@ -48,6 +48,7 @@ import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/tr
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
   calculateISODate,
+  checkDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
@@ -539,6 +540,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
