@@ -562,6 +562,9 @@ const {
   getSectionOutboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
 const {
+  getSesStatus,
+} = require('../../shared/src/persistence/ses/getSesStatus');
+const {
   getTableStatus,
 } = require('../../shared/src/persistence/dynamo/getTableStatus');
 const {
@@ -1122,6 +1125,7 @@ const gatewayMethods = {
     createUser,
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
+    getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
     persistUser,
