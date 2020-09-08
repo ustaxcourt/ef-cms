@@ -3,14 +3,14 @@ import { shouldGenerateDocketRecordIndex } from './shouldGenerateDocketRecordInd
 describe('shouldGenerateDocketRecordIndex', () => {
   it('returns false for any entry that already has an index', () => {
     const caseDetail = { docketEntries: [] };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       index: 1,
     };
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(false);
@@ -19,14 +19,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
   it('returns false for entries without a document', () => {
     // are there exceptions to this? entries without a document
     const caseDetail = { docketEntries: [] };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentType: 'Answer',
       eventCode: 'A',
     };
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(false);
@@ -42,14 +42,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Answer',
       eventCode: 'A',
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);
@@ -64,14 +64,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Answer',
       eventCode: 'O',
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(false);
@@ -87,14 +87,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Petition',
       eventCode: 'P',
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);
@@ -115,7 +115,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
@@ -123,7 +123,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);
@@ -146,7 +146,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
@@ -154,7 +154,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
     expect(result).toEqual(true);
   });
@@ -169,21 +169,18 @@ describe('shouldGenerateDocketRecordIndex', () => {
           isPaper: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        {
-          documentId: '123',
-          isPaper: true,
-        },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:57.415Z',
+      isPaper: true,
     };
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(false);
@@ -198,7 +195,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Hearing before',
       eventCode: 'HEAR',
@@ -206,7 +203,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);
@@ -221,7 +218,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Filing Fee Paid',
       eventCode: 'FEE',
@@ -229,7 +226,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);
@@ -237,7 +234,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns true for minute entries', () => {
     const caseDetail = { docketEntries: [] };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Filing Fee Paid',
       eventCode: 'FEE',
@@ -245,7 +242,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);
@@ -253,19 +250,19 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
   it('returns false for servable documents that are not served', () => {
     const caseDetail = {
-      docketEntries: [
-        { documentId: '123', isPaper: true, servedAt: undefined },
-      ],
+      docketEntries: [],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Answer',
       eventCode: 'A',
+      isPaper: true,
+      servedAt: undefined,
     };
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(false);
@@ -281,7 +278,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
         },
       ],
     };
-    const docketRecordEntry = {
+    const docketEntry = {
       documentId: '123',
       documentType: 'Answer',
       eventCode: 'A',
@@ -289,7 +286,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
     const result = shouldGenerateDocketRecordIndex({
       caseDetail,
-      docketRecordEntry,
+      docketEntry,
     });
 
     expect(result).toEqual(true);

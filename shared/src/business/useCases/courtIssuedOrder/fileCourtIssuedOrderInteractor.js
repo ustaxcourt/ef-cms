@@ -108,7 +108,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
     documentMetadata.documentContentsId = documentContentsId;
   }
 
-  const documentEntity = new DocketEntry(
+  const docketEntryEntity = new DocketEntry(
     {
       ...documentMetadata,
       documentId: primaryDocumentFileId,
@@ -121,9 +121,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.setAsProcessingStatusAsCompleted();
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  caseEntity.addDocument(documentEntity);
+  caseEntity.addDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
@@ -144,8 +144,8 @@ exports.fileCourtIssuedOrderInteractor = async ({
       applicationContext,
     }).validate();
     messageEntity.addAttachment({
-      documentId: documentEntity.documentId,
-      documentTitle: documentEntity.documentTitle,
+      documentId: docketEntryEntity.documentId,
+      documentTitle: docketEntryEntity.documentTitle,
     });
 
     await applicationContext.getPersistenceGateway().updateMessage({
