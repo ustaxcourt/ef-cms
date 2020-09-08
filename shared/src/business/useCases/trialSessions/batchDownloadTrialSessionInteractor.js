@@ -69,12 +69,12 @@ const batchDownloadTrialSessionInteractor = async ({
     });
 
   sessionCases.forEach(caseToBatch => {
-    const documentMap = caseToBatch.documents.reduce((acc, document) => {
+    const documentMap = caseToBatch.docketEntries.reduce((acc, document) => {
       acc[document.documentId] = document;
       return acc;
     }, {});
 
-    caseToBatch.documents.forEach(aDocketRecord => {
+    caseToBatch.docketEntries.forEach(aDocketRecord => {
       if (!aDocketRecord.isOnDocketRecord) {
         return; // TODO 636
       }

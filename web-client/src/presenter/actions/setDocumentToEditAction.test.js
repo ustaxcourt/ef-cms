@@ -23,14 +23,14 @@ describe('setDocumentToEditAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
         documentIdToEdit: documentIdToEdit,
       },
@@ -45,14 +45,14 @@ describe('setDocumentToEditAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
       },
     });

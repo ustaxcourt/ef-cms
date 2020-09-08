@@ -19,7 +19,7 @@ export const setPdfPreviewUrlForCompleteDocketEntryAction = async ({
   const caseDetail = get(state.caseDetail);
   const { documentId } = props;
 
-  const caseDocument = caseDetail.documents.find(
+  const caseDocument = caseDetail.docketEntries.find(
     entry => entry.documentId === documentId,
   );
 

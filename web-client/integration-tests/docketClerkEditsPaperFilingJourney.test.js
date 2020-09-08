@@ -81,7 +81,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDocument = test.getState('caseDetail.documents.0');
+    const caseDocument = test.getState('caseDetail.docketEntries.0');
     expect(caseDocument).toMatchObject({
       documentType: 'Answer',
       eventCode: 'A',

@@ -77,7 +77,9 @@ export const DocketRecordOverlay = connect(
     const renderModalContent = () => {
       const closeFunc = dismissModalSequence;
       const entry =
-        formattedCaseDetail.formattedDocketEntries[docketRecordIndex];
+        formattedCaseDetail.formattedDocketEntriesOnDocketRecord[
+          docketRecordIndex
+        ];
       return (
         <FocusLock>
           <dialog

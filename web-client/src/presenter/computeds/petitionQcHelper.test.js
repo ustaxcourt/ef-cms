@@ -19,7 +19,7 @@ describe('petitionQcHelper', () => {
     it('should be false when the documentSelectedForPreview is NOT a petition file', () => {
       mockState = {
         caseDetail: {
-          documents: [],
+          docketEntries: [],
         },
         currentViewMetadata: {
           documentSelectedForPreview: 'requestForPlaceOfTrialFile',
@@ -38,7 +38,7 @@ describe('petitionQcHelper', () => {
     it('should be true when the documentSelectedForPreview is a petition file', () => {
       mockState = {
         caseDetail: {
-          documents: [],
+          docketEntries: [],
         },
         currentViewMetadata: {
           documentSelectedForPreview: 'petitionFile',
@@ -64,7 +64,7 @@ describe('petitionQcHelper', () => {
     it('returns all initial filing document tabs for paper filings', () => {
       mockState = {
         caseDetail: {
-          documents: [],
+          docketEntries: [],
         },
         currentViewMetadata: {
           documentSelectedForPreview: 'petitionFile',
@@ -88,7 +88,7 @@ describe('petitionQcHelper', () => {
     it('hides APW and RQT tabs for electronic filings', () => {
       mockState = {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
             },
@@ -120,7 +120,7 @@ describe('petitionQcHelper', () => {
     it('hides ODS tab for electronic filings if one was NOT initially filed', () => {
       mockState = {
         caseDetail: {
-          documents: [],
+          docketEntries: [],
         },
         currentViewMetadata: {
           documentSelectedForPreview: 'petitionFile',
@@ -149,7 +149,7 @@ describe('petitionQcHelper', () => {
     it('returns showRemovePdfButton true if the case is a paper filing', () => {
       mockState = {
         caseDetail: {
-          documents: [],
+          docketEntries: [],
         },
         currentViewMetadata: {
           documentSelectedForPreview: 'petitionFile',
@@ -173,7 +173,7 @@ describe('petitionQcHelper', () => {
     it('returns showRemovePdfButton false if the case is an electronic filing', () => {
       mockState = {
         caseDetail: {
-          documents: [],
+          docketEntries: [],
         },
         currentViewMetadata: {
           documentSelectedForPreview: 'petitionFile',

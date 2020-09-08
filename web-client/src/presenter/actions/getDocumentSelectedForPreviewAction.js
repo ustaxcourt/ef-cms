@@ -24,8 +24,8 @@ export const getDocumentSelectedForPreviewAction = async ({
 
   const documentTypeSelectedForPreview =
     INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview];
-  const { documents } = get(state.form);
-  const selectedDocument = get(documents).find(
+  const { docketEntries } = get(state.form);
+  const selectedDocument = get(docketEntries).find(
     document => document.documentType === documentTypeSelectedForPreview,
   );
 

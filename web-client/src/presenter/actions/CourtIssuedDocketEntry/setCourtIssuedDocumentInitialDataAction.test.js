@@ -11,11 +11,11 @@ const documentIds = [
   '11597d22-0874-4c5e-ac98-a843d1472baf',
 ];
 
-MOCK_CASE.documents.push({
+MOCK_CASE.docketEntries.push({
   documentId: documentIds[0],
   eventCode: 'OF',
 });
-MOCK_CASE.documents.push({
+MOCK_CASE.docketEntries.push({
   documentId: documentIds[1],
   eventCode: 'O',
   freeText: 'something',

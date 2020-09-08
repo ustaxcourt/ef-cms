@@ -43,7 +43,7 @@ export const petitionerFilesAmendedMotion = (test, fakeFile) => {
       value: 'First',
     });
     const caseDetail = test.getState('caseDetail');
-    const previousDocument = caseDetail.documents.find(
+    const previousDocument = caseDetail.docketEntries.find(
       document =>
         document.documentTitle ===
         'Motion for Leave to File Out of Time Statement Anything',

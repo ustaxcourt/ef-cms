@@ -34,7 +34,9 @@ describe('paperDocketEntryHelper', () => {
     const result = runCompute(paperDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [{ documentId: 'document-id-123', isFileAttached: true }],
+          docketEntries: [
+            { documentId: 'document-id-123', isFileAttached: true },
+          ],
         },
         currentViewMetadata: {
           documentUploadMode: 'preview',
@@ -51,7 +53,9 @@ describe('paperDocketEntryHelper', () => {
     const result = runCompute(paperDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [{ documentId: 'document-id-123', isFileAttached: false }],
+          docketEntries: [
+            { documentId: 'document-id-123', isFileAttached: false },
+          ],
         },
         currentViewMetadata: {
           documentUploadMode: 'scan',

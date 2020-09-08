@@ -74,15 +74,15 @@ describe('caseFilter', () => {
     const caseSearchResults = [
       {
         baz: 'quux',
+        docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '101-20',
-        documents: [{ documentType: 'Petition' }],
         foo: 'baz',
         sealedDate: undefined,
       },
       {
         baz: 'quux',
+        docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '102-20',
-        documents: [{ documentType: 'Petition' }],
         foo: 'bar',
         irsPractitioners: [{ userId: 'authRespondent' }],
         privatePractitioners: [{ userId: 'authPractitioner' }],
@@ -97,10 +97,10 @@ describe('caseFilter', () => {
           name: 'Joe Walsh',
           state: 'CA',
         },
-        docketNumber: '102-20',
-        documents: [
+        docketEntries: [
           { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
         ],
+        docketNumber: '102-20',
         foo: 'bar',
         irsPractitioners: [{ userId: 'authRespondent' }],
         privatePractitioners: [{ userId: 'authPractitioner' }],

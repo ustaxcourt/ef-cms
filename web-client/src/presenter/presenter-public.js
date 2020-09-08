@@ -2,6 +2,7 @@ import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabCh
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
+import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseDetailSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
@@ -12,6 +13,7 @@ import { navigateToPublicSiteSequence } from './sequences/public/navigateToPubli
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+
 import { state } from './state-public';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
@@ -35,6 +37,7 @@ export const presenter = {
     cerebralBindSimpleSetStateSequence,
     clearAdvancedSearchFormSequence,
     clearPdfPreviewUrlSequence,
+    gotoHealthCheckSequence,
     gotoPublicCaseDetailSequence,
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
