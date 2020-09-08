@@ -88,7 +88,7 @@ describe('PublicCase', () => {
     });
   });
 
-  it('should only have expected fields if docketEntries if null', () => {
+  it('should only have expected fields if docketEntries is null', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
