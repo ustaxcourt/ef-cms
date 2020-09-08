@@ -9,7 +9,7 @@ import { find } from 'lodash';
  */
 export const setPetitionIdAction = ({ props }) => {
   const { docketNumber } = props.caseDetail;
-  const { documentId } = find(props.caseDetail.documents, {
+  const { documentId } = find(props.caseDetail.docketEntries, {
     documentType: 'Petition',
   });
 

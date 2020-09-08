@@ -15,7 +15,7 @@ describe('formattedMessageDetail', () => {
   const { PETITIONS_SECTION } = getConstants();
 
   const mockCaseDetail = {
-    documents: [
+    docketEntries: [
       {
         documentId: '98065bac-b35c-423c-b649-122a09bb65b9',
         documentTitle: 'Test Document One',
@@ -245,8 +245,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -277,8 +276,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -309,8 +307,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -342,8 +339,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
-            docketRecord: [],
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -379,8 +375,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
-            documents: [
+            docketEntries: [
               {
                 archived: true,
                 documentId,
@@ -412,8 +407,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
-            docketRecord: [{ documentId }],
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',

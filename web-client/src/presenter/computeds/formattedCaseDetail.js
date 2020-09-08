@@ -228,6 +228,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
     return formattedResult;
   });
 
+  result.formattedDocketEntriesOnDocketRecord = result.formattedDocketEntries.filter(
+    d => d.isOnDocketRecord,
+  );
+
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
     draftDocument => {
       return {

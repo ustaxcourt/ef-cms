@@ -8,7 +8,7 @@ describe('setupConfirmRemoveCaseDetailPendingItemModalAction', () => {
       {
         props: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
                 documentTitle: 'something great',
@@ -32,7 +32,7 @@ describe('setupConfirmRemoveCaseDetailPendingItemModalAction', () => {
       {
         props: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
                 documentType: 'no way',

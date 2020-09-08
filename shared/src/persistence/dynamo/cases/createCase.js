@@ -24,7 +24,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
       },
       applicationContext,
     }),
-    ...caseToCreate.documents.map(document =>
+    ...caseToCreate.docketEntries.map(document =>
       client.put({
         Item: {
           pk: `case|${caseToCreate.docketNumber}`,

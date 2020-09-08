@@ -70,7 +70,7 @@ export const petitionsClerkSubmitsPaperCaseToIrs = test => {
       CASE_STATUS_TYPES.generalDocket,
     );
     //check that documents were served
-    const documents = test.getState('caseDetail.documents');
+    const documents = test.getState('caseDetail.docketEntries');
     for (const document of documents) {
       expect(document.servedAt).toBeDefined();
       expect(document.servedParties.length).toEqual(1);

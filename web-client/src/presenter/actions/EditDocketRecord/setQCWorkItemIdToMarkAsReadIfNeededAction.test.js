@@ -13,9 +13,7 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: '123-abc-123-abc',
               lodged: true,
@@ -23,6 +21,7 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
             },
             { documentId: '321-cba-321-cba' },
           ],
+          docketNumber: '123-45',
         },
         form: {},
       },

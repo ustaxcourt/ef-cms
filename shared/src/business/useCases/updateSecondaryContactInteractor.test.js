@@ -86,7 +86,7 @@ describe('updateSecondaryContactInteractor', () => {
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
-    const changeOfAddressDocument = updatedCase.documents.find(
+    const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
     expect(updatedCase.contactSecondary).toMatchObject({
@@ -105,7 +105,7 @@ describe('updateSecondaryContactInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
-    expect(caseDetail.documents[4].servedAt).toBeDefined();
+    expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
   });
 
   it('throws an error if the case was not found', async () => {
