@@ -154,7 +154,7 @@ exports.updateDocketEntryInteractor = async ({
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
-        docketEntryEntity,
+        documentEntity: docketEntryEntity,
         servedParties,
       });
     } else {
