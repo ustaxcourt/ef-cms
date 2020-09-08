@@ -1,11 +1,12 @@
 describe('Health check', () => {
-  it("should retrieve the status of the application's critial services", () => {
+  it("should retrieve the status of the application's critical services", () => {
+    const domain = Cypress.env('EFCMS_DOMAIN');
+
     cy.request({
       followRedirect: true,
       method: 'GET',
-      url: 'https://public-api.dev.ustc-case-mgmt.flexion.us/public-api/health',
+      url: `https://public-api.${domain}/public-api/health`,
     }).should(response => {
-      console.log(response.body);
       expect(response.body).to.have.property('clamAV');
       expect(response.body).to.have.property('cognito');
       expect(response.body).to.have.property('dynamsoft');
