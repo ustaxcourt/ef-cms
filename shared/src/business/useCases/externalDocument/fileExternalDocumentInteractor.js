@@ -110,7 +110,7 @@ exports.fileExternalDocumentInteractor = async ({
 
   for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
-      const documentEntity = new DocketEntry(
+      const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
@@ -146,8 +146,8 @@ exports.fileExternalDocumentInteractor = async ({
           docketNumber: caseToUpdate.docketNumber,
           docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           document: {
-            ...documentEntity.toRawObject(),
-            createdAt: documentEntity.createdAt,
+            ...docketEntryEntity.toRawObject(),
+            createdAt: docketEntryEntity.createdAt,
           },
           highPriority: highPriorityWorkItem,
           section: DOCKET_SECTION,
@@ -158,20 +158,20 @@ exports.fileExternalDocumentInteractor = async ({
         { applicationContext },
       );
 
-      documentEntity.setWorkItem(workItem);
+      docketEntryEntity.setWorkItem(workItem);
 
       workItems.push(workItem);
-      caseEntity.addDocument(documentEntity);
+      caseEntity.addDocketEntry(docketEntryEntity);
 
-      const isAutoServed = documentEntity.isAutoServed();
+      const isAutoServed = docketEntryEntity.isAutoServed();
 
       if (isAutoServed) {
-        documentEntity.setAsServed(servedParties.all);
+        docketEntryEntity.setAsServed(servedParties.all);
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity,
+          documentEntity: docketEntryEntity,
           servedParties,
         });
       }

@@ -1370,7 +1370,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.addDocument({
+      caseToVerify.addDocketEntry({
         documentId: '123',
         documentType: 'Answer',
         userId: 'irsPractitioner',

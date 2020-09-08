@@ -855,21 +855,21 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
 
 /**
  *
- * @param {object} document the document to add to the case
+ * @param {object} docketEntryEntity the docket entry to add to the case
  */
-Case.prototype.addDocument = function (documentEntity) {
-  if (documentEntity.isOnDocketRecord) {
+Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
-      documentEntity,
+      docketEntry: docketEntryEntity,
     });
 
     if (updateIndex) {
-      documentEntity.index = this.generateNextDocketRecordIndex();
+      docketEntryEntity.index = this.generateNextDocketRecordIndex();
     }
   }
 
-  this.docketEntries = [...this.docketEntries, documentEntity];
+  this.docketEntries = [...this.docketEntries, docketEntryEntity];
 };
 
 Case.prototype.closeCase = function () {
@@ -915,7 +915,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   if (needsCaptionChangedRecord) {
     const { userId } = applicationContext.getCurrentUser();
 
-    this.addDocument(
+    this.addDocketEntry(
       new DocketEntry(
         {
           description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
@@ -965,7 +965,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   if (needsDocketNumberChangeRecord) {
     const { userId } = applicationContext.getCurrentUser();
 
-    this.addDocument(
+    this.addDocketEntry(
       new DocketEntry(
         {
           description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
@@ -1076,7 +1076,7 @@ Case.prototype.updateDocument = function (updatedDocument) {
   if (updatedDocument.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
-      documentEntity: foundDocument,
+      docketEntry: foundDocument,
     });
 
     if (updateIndex) {

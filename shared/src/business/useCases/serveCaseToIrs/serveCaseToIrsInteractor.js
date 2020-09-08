@@ -25,7 +25,7 @@ exports.addDocketEntryForPaymentStatus = ({
   user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocument(
+    caseEntity.addDocketEntry(
       new DocketEntry(
         {
           description: 'Filing Fee Paid',
@@ -42,7 +42,7 @@ exports.addDocketEntryForPaymentStatus = ({
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocument(
+    caseEntity.addDocketEntry(
       new DocketEntry(
         {
           description: 'Filing Fee Waived',
@@ -133,21 +133,21 @@ exports.serveCaseToIrsInteractor = async ({
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-    const initialDocument = caseEntity.docketEntries.find(
+    const initialDocketEntry = caseEntity.docketEntries.find(
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocument) {
-      initialDocument.setAsServed([
+    if (initialDocketEntry) {
+      initialDocketEntry.setAsServed([
         {
           name: 'IRS',
           role: ROLES.irsSuperuser,
         },
       ]);
-      caseEntity.updateDocument(initialDocument);
+      caseEntity.updateDocument(initialDocketEntry);
 
       if (
-        initialDocument.documentType ===
+        initialDocketEntry.documentType ===
         INITIAL_DOCUMENT_TYPES.petition.documentType
       ) {
         await applicationContext
@@ -155,13 +155,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            documentEntity: initialDocument,
+            documentEntity: initialDocketEntry,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: initialDocument,
+          documentEntity: initialDocketEntry,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],

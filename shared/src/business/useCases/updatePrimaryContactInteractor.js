@@ -95,7 +95,7 @@ exports.updatePrimaryContactInteractor = async ({
 
     const newDocumentId = applicationContext.getUniqueId();
 
-    const changeOfAddressDocument = new DocketEntry(
+    const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
@@ -119,12 +119,12 @@ exports.updatePrimaryContactInteractor = async ({
 
     const servedParties = aggregatePartiesForService(caseEntity);
 
-    changeOfAddressDocument.setAsServed(servedParties.all);
+    changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocument,
+      documentEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -139,8 +139,8 @@ exports.updatePrimaryContactInteractor = async ({
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         document: {
-          ...changeOfAddressDocument.toRawObject(),
-          createdAt: changeOfAddressDocument.createdAt,
+          ...changeOfAddressDocketEntry.toRawObject(),
+          createdAt: changeOfAddressDocketEntry.createdAt,
         },
         section: DOCKET_SECTION,
         sentBy: user.name,
@@ -149,14 +149,14 @@ exports.updatePrimaryContactInteractor = async ({
       { applicationContext },
     );
 
-    changeOfAddressDocument.setWorkItem(workItem);
+    changeOfAddressDocketEntry.setWorkItem(workItem);
 
-    caseEntity.addDocument(changeOfAddressDocument);
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocument,
+      documentEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 
