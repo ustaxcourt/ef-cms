@@ -58,10 +58,10 @@ const {
 const {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
+  formatDocketEntry,
   formatDocument,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
@@ -210,9 +210,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
-    formatDocketRecordWithDocument: jest
-      .fn()
-      .mockImplementation(formatDocketRecordWithDocument),
+    formatDocketEntry: jest.fn().mockImplementation(formatDocketEntry),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
@@ -247,7 +245,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
-    sortDocketRecords: jest.fn().mockImplementation(sortDocketRecords),
+    sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
   });
 
   const mockGetHttpClientReturnValue = {
