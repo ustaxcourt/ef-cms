@@ -49,9 +49,7 @@ describe('completeDocketEntryQCInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      docketRecord: [],
-      documents: [
+      docketEntries: [
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
@@ -83,6 +81,7 @@ describe('completeDocketEntryQCInteractor', () => {
           workItem,
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -418,7 +417,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[0],
+        .caseToUpdate.docketEntries[0],
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       documentType: 'Notice of Change of Address',

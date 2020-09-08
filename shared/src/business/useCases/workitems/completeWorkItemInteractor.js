@@ -76,7 +76,7 @@ exports.completeWorkItemInteractor = async ({
     applicationContext,
   });
 
-  caseToUpdate.documents.forEach(document => {
+  caseToUpdate.docketEntries.forEach(document => {
     if (
       document.workItem &&
       document.workItem.workItemId === workItemEntity.workItemId

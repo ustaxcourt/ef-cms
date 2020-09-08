@@ -62,7 +62,7 @@ exports.addDocketEntryForPaymentStatus = ({
 };
 
 exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
-  const stinDocument = caseEntity.documents.find(
+  const stinDocument = caseEntity.docketEntries.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
@@ -90,7 +90,7 @@ const addDocketEntries = ({ caseEntity }) => {
   );
 
   for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
-    const foundDocument = caseEntity.documents.find(
+    const foundDocument = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
 
@@ -133,7 +133,7 @@ exports.serveCaseToIrsInteractor = async ({
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-    const initialDocument = caseEntity.documents.find(
+    const initialDocument = caseEntity.docketEntries.find(
       document => document.documentType === initialDocumentType.documentType,
     );
 
@@ -187,11 +187,11 @@ exports.serveCaseToIrsInteractor = async ({
   //   applicationContext,
   //   caseEntity,
   // });
-  // caseEntity.documents = caseEntity.documents.filter(
+  // caseEntity.docketEntries = caseEntity.docketEntries.filter(
   //   item => item.documentId !== deletedStinDocumentId,
   // );
 
-  const petitionDocument = caseEntity.documents.find(
+  const petitionDocument = caseEntity.docketEntries.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
@@ -224,7 +224,7 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
 
-  for (const doc of caseEntity.documents) {
+  for (const doc of caseEntity.docketEntries) {
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,

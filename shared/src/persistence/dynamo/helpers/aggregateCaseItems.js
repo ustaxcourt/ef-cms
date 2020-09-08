@@ -37,7 +37,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocuments: sortedArchivedDocuments,
     correspondence: sortedCorrespondences,
-    documents: sortedDocuments,
+    docketEntries: sortedDocuments,
     irsPractitioners,
     privatePractitioners,
   };
