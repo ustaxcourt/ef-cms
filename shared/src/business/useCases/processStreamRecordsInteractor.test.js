@@ -380,7 +380,7 @@ describe('processStreamRecordsInteractor', () => {
             Keys: { pk: { S: 'case|1' }, sk: { S: 'docket-entry|1' } },
             NewImage: {
               docketNumber: { S: '1' },
-              entityName: { S: 'Document' },
+              entityName: { S: 'DocketEntry' },
               pk: { S: 'case|1' },
               sk: { S: 'docket-entry|1' },
             },
@@ -416,10 +416,10 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketNumber: { S: '1' },
-        entityName: { S: 'Document' },
+        entityName: { S: 'DocketEntry' },
         pk: { S: 'case|1' },
         sk: { S: 'docket-entry|1' },
       },
@@ -439,12 +439,12 @@ describe('processStreamRecordsInteractor', () => {
         sk: { S: 'case|1' },
       },
       // calls documents again because they are indexed again after the case
-      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketEntries: undefined,
         docketNumber: { S: '1' },
         documentId: { S: '1' },
-        entityName: { S: 'Document' },
+        entityName: { S: 'DocketEntry' },
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
         privatePractitioners: undefined,
@@ -460,12 +460,12 @@ describe('processStreamRecordsInteractor', () => {
         pk: { S: 'case|4' },
         sk: { S: 'case|4' },
       },
-      { index: { _id: 'case|4_docket-entry|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|4_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketEntries: undefined,
         docketNumber: { S: '4' },
         documentId: { S: '1' },
-        entityName: { S: 'Document' },
+        entityName: { S: 'DocketEntry' },
         irsPractitioners: undefined,
         pk: { S: 'case|4' },
         privatePractitioners: undefined,
@@ -501,7 +501,7 @@ describe('processStreamRecordsInteractor', () => {
             NewImage: {
               docketNumber: { S: '1' },
               documentContentsId: { S: '5' },
-              entityName: { S: 'Document' },
+              entityName: { S: 'DocketEntry' },
               pk: { S: 'case|1' },
               sk: { S: 'docket-entry|1' },
             },
@@ -517,11 +517,11 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketNumber: { S: '1' },
         documentContentsId: { S: '5' },
-        entityName: { S: 'Document' },
+        entityName: { S: 'DocketEntry' },
         pk: { S: 'case|1' },
         sk: { S: 'docket-entry|1' },
       },
@@ -538,7 +538,7 @@ describe('processStreamRecordsInteractor', () => {
         sk: { S: 'case|1' },
       },
       // calls documents again because they are indexed again after the case
-      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketEntries: undefined,
         docketNumber: { S: '1' },
@@ -547,7 +547,7 @@ describe('processStreamRecordsInteractor', () => {
         },
         documentContentsId: { S: '5' },
         documentId: { S: '1' },
-        entityName: { S: 'Document' },
+        entityName: { S: 'DocketEntry' },
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
         privatePractitioners: undefined,
@@ -569,7 +569,7 @@ describe('processStreamRecordsInteractor', () => {
             Keys: { pk: { S: 'case|1' }, sk: { S: 'docket-entry|1' } },
             NewImage: {
               docketNumber: { S: '1' },
-              entityName: { S: 'Document' },
+              entityName: { S: 'DocketEntry' },
               pk: { S: 'case|1' },
               sk: { S: 'docket-entry|1' },
             },
@@ -586,10 +586,10 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketNumber: { S: '1' },
-        entityName: { S: 'Document' },
+        entityName: { S: 'DocketEntry' },
         pk: { S: 'case|1' },
         sk: { S: 'docket-entry|1' },
       },
