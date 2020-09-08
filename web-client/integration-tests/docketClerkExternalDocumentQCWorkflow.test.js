@@ -135,7 +135,7 @@ describe('Create a work item', () => {
     await test.runSequence('completeDocketEntryQCSequence');
 
     const noticeDocument = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(doc => doc.documentType === 'Notice of Docket Change');
 
     expect(noticeDocument).toBeTruthy();

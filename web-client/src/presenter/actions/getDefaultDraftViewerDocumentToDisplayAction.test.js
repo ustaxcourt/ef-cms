@@ -17,13 +17,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
-              {
-                documentId: '123',
-                index: 1,
-              },
-            ],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Petition',
@@ -56,13 +50,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
-              {
-                documentId: '123',
-                index: 1,
-              },
-            ],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Petition',
@@ -87,13 +75,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
         props: { documentId: '345' },
         state: {
           caseDetail: {
-            docketRecord: [
-              {
-                documentId: '123',
-                index: 1,
-              },
-            ],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Petition',

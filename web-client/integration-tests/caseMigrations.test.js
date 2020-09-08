@@ -191,9 +191,8 @@ const legacyServedDocumentCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Sixth Migrated Case',
-  docketNumber: '156-21',
-  documents: [
-    ...MOCK_CASE.documents,
+  docketEntries: [
+    ...MOCK_CASE.docketEntries,
     {
       createdAt: '2018-11-21T20:49:28.192Z',
       description: 'Answer',
@@ -211,6 +210,7 @@ const legacyServedDocumentCase = {
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ],
+  docketNumber: '156-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -312,7 +312,7 @@ describe('Case migration journey', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: legacyServedDocumentCase.docketNumber,
     });
-    const caseDocuments = test.getState('caseDetail.documents');
+    const caseDocuments = test.getState('caseDetail.docketEntries');
     expect(caseDocuments.length).toBe(5);
 
     const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);

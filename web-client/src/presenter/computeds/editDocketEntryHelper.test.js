@@ -11,7 +11,7 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Generic Document',
@@ -28,7 +28,7 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Notice of Change of Address',
@@ -46,7 +46,7 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Notice of Change of Address',
@@ -63,7 +63,7 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Notice of Change of Address',

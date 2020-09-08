@@ -14,8 +14,8 @@ describe('batchDownloadTrialSessionInteractor', () => {
       ...MOCK_CASE,
     };
 
-    mockCase.documents = [
-      ...mockCase.documents,
+    mockCase.docketEntries = [
+      ...mockCase.docketEntries,
       {
         description: 'fourth record',
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',

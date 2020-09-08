@@ -66,7 +66,7 @@ module.exports.createCase1 = async () => {
 
     const coversheets = [];
 
-    for (const document of caseDetail.documents) {
+    for (const document of caseDetail.docketEntries) {
       coversheets.push(addCoversheet(document));
     }
 

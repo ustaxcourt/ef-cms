@@ -49,7 +49,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       state: {
         caseDetail: {
           ...caseDetail,
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
@@ -92,7 +92,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       },
     });
 
-    const uploadedDocument = formWithComputedDates.documents.find(
+    const uploadedDocument = formWithComputedDates.docketEntries.find(
       document =>
         document.documentType ===
         INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
@@ -167,7 +167,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     };
     const caseDetail = {
       ...MOCK_CASE,
-      documents: [],
+      docketEntries: [],
       requestForPlaceOfTrialFile: mockRqtFile,
       requestForPlaceOfTrialFileSize: 2,
     };
@@ -188,7 +188,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toEqual(mockRqtFile);
     expect(
       applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
-        .calls[0][0].caseToUpdate.documents,
+        .calls[0][0].caseToUpdate.docketEntries,
     ).toMatchObject(
       expect.arrayContaining([
         {

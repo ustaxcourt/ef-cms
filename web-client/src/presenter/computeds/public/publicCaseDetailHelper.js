@@ -24,57 +24,59 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .sortDocketEntries(sortedFormattedDocketRecord, 'byDate');
 
-  const formattedDocketEntries = sortedFormattedDocketRecord.map(entry => {
-    const record = cloneDeep(entry);
-    let filingsAndProceedingsWithAdditionalInfo = '';
-    if (record.documentTitle && record.additionalInfo) {
-      filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
-    }
-    if (record.filingsAndProceedings) {
-      filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
-    }
-    if (record.additionalInfo2) {
-      filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
-    }
+  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecord.map(
+    entry => {
+      const record = cloneDeep(entry);
+      let filingsAndProceedingsWithAdditionalInfo = '';
+      if (record.documentTitle && record.additionalInfo) {
+        filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
+      }
+      if (record.filingsAndProceedings) {
+        filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
+      }
+      if (record.additionalInfo2) {
+        filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
+      }
 
-    return {
-      action: record.action,
-      createdAtFormatted: record.createdAtFormatted,
-      description: record.description,
-      descriptionDisplay: record.documentTitle || record.description,
-      documentId: record.documentId,
-      eventCode: record.eventCode || record.eventCode,
-      filedBy: record.filedBy,
-      filingsAndProceedingsWithAdditionalInfo,
-      hasDocument: !record.isMinuteEntry,
-      index: record.index,
-      isPaper: record.isPaper,
-      isStricken: record.isStricken,
-      numberOfPages: record.numberOfPages || record.numberOfPages || 0,
-      servedAtFormatted: record.servedAtFormatted,
-      servedPartiesCode: record.servedPartiesCode,
-      showDocumentDescriptionWithoutLink:
-        record.isStricken ||
-        !record.isCourtIssuedDocument ||
-        record.isNotServedDocument ||
-        record.isTranscript,
-      showLinkToDocument:
-        record.processingStatus ===
-          DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
-        record.isCourtIssuedDocument &&
-        !record.isNotServedDocument &&
-        !record.isStricken &&
-        !record.isTranscript,
-      showNotServed: record.isNotServedDocument,
-      showServed: record.isStatusServed,
-      signatory: record.signatory,
-    };
-  });
+      return {
+        action: record.action,
+        createdAtFormatted: record.createdAtFormatted,
+        description: record.description,
+        descriptionDisplay: record.documentTitle || record.description,
+        documentId: record.documentId,
+        eventCode: record.eventCode || record.eventCode,
+        filedBy: record.filedBy,
+        filingsAndProceedingsWithAdditionalInfo,
+        hasDocument: !record.isMinuteEntry,
+        index: record.index,
+        isPaper: record.isPaper,
+        isStricken: record.isStricken,
+        numberOfPages: record.numberOfPages || record.numberOfPages || 0,
+        servedAtFormatted: record.servedAtFormatted,
+        servedPartiesCode: record.servedPartiesCode,
+        showDocumentDescriptionWithoutLink:
+          record.isStricken ||
+          !record.isCourtIssuedDocument ||
+          record.isNotServedDocument ||
+          record.isTranscript,
+        showLinkToDocument:
+          record.processingStatus ===
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
+          record.isCourtIssuedDocument &&
+          !record.isNotServedDocument &&
+          !record.isStricken &&
+          !record.isTranscript,
+        showNotServed: record.isNotServedDocument,
+        showServed: record.isStatusServed,
+        signatory: record.signatory,
+      };
+    },
+  );
 
   const formattedCaseDetail = formatCaseDetail(publicCase);
 
   return {
     formattedCaseDetail,
-    formattedDocketEntries,
+    formattedDocketEntriesOnDocketRecord,
   };
 };

@@ -40,8 +40,8 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const requests = [];
 
   const updatedDocuments = differenceWith(
-    caseToUpdate.documents,
-    oldCase.documents,
+    caseToUpdate.docketEntries,
+    oldCase.docketEntries,
     isEqual,
   );
 

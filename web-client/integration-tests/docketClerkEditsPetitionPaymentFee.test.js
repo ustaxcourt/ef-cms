@@ -80,7 +80,7 @@ describe('docket clerk edits a petition payment fee', () => {
 
     expect(
       test
-        .getState('caseDetail.documents')
+        .getState('caseDetail.docketEntries')
         .find(r => r.description === 'Filing Fee Paid'),
     ).toMatchObject({
       description: 'Filing Fee Paid',
