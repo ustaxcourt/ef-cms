@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 
-export const getSesStatus = async () => {
+exports.getSesStatus = async () => {
   const result = await execSync(
     'ping email.us-east-1.amazonaws.com -c 1 -W 10',
   );
