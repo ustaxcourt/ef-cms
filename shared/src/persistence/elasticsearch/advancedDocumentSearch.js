@@ -141,7 +141,7 @@ exports.advancedDocumentSearch = async ({
       },
       size: 5000,
     },
-    index: 'efcms-document',
+    index: 'efcms-docket-entry',
   };
 
   const { results } = await search({
