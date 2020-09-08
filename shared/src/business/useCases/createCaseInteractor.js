@@ -14,10 +14,10 @@ const { UnauthorizedError } = require('../../errors/errors');
 const { UserCase } = require('../entities/UserCase');
 const { WorkItem } = require('../entities/WorkItem');
 
-const addPetitionDocumentToCase = ({
+const addPetitionDocketEntryToCase = ({
   applicationContext,
   caseToAdd,
-  documentEntity,
+  docketEntryEntity,
   user,
 }) => {
   const workItemEntity = new WorkItem(
@@ -31,8 +31,8 @@ const addPetitionDocumentToCase = ({
       docketNumber: caseToAdd.docketNumber,
       docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
       isInitializeCase: true,
       section: PETITIONS_SECTION,
@@ -42,8 +42,8 @@ const addPetitionDocumentToCase = ({
     { applicationContext },
   );
 
-  documentEntity.setWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity);
+  docketEntryEntity.setWorkItem(workItemEntity);
+  caseToAdd.addDocketEntry(docketEntryEntity);
 
   return workItemEntity;
 };
@@ -130,7 +130,7 @@ exports.createCaseInteractor = async ({
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   caseToAdd.initialCaption = caseToAdd.caseCaption;
 
-  const petitionDocumentEntity = new DocketEntry(
+  const petitionDocketEntryEntity = new DocketEntry(
     {
       description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
@@ -151,14 +151,14 @@ exports.createCaseInteractor = async ({
     { applicationContext },
   );
 
-  const newWorkItem = addPetitionDocumentToCase({
+  const newWorkItem = addPetitionDocketEntryToCase({
     applicationContext,
     caseToAdd,
-    documentEntity: petitionDocumentEntity,
+    docketEntryEntity: petitionDocketEntryEntity,
     user,
   });
 
-  caseToAdd.addDocument(
+  caseToAdd.addDocketEntry(
     new DocketEntry(
       {
         description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
@@ -176,7 +176,7 @@ exports.createCaseInteractor = async ({
     ),
   );
 
-  const stinDocumentEntity = new DocketEntry(
+  const stinDocketEntryEntity = new DocketEntry(
     {
       documentId: stinFileId,
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -195,10 +195,10 @@ exports.createCaseInteractor = async ({
     { applicationContext },
   );
 
-  caseToAdd.addDocument(stinDocumentEntity);
+  caseToAdd.addDocketEntry(stinDocketEntryEntity);
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new DocketEntry(
+    const odsDocketEntryEntity = new DocketEntry(
       {
         description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
@@ -219,7 +219,7 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity);
+    caseToAdd.addDocketEntry(odsDocketEntryEntity);
   }
 
   await applicationContext.getPersistenceGateway().createCase({
