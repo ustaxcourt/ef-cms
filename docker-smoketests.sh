@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# This runs the post-deply smoke tests
+# This runs the post-deploy smoke tests
 # rm -rf node_modules dist .elasticsearch .dynamodb
 # npm ci
 
