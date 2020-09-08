@@ -274,7 +274,7 @@ describe('Document entity', () => {
             servedAt: '2019-03-28T00:00:00.000-04:00',
             servedParties: [
               {
-                name: 'Billy R. Bond',
+                name: 'Bernard Lowe',
               },
               {
                 name: 'IRS',
@@ -317,7 +317,7 @@ describe('Document entity', () => {
             servedAt: '2019-03-28T00:00:00.000-04:00',
             servedParties: [
               {
-                name: 'Billy R. Bond',
+                name: 'Bernard Lowe',
               },
               {
                 name: 'IRS',
