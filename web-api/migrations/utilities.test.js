@@ -5,6 +5,7 @@ const {
   forAllRecords,
   isCaseMessageRecord,
   isCaseRecord,
+  isDocketEntryRecord,
   isNewUserCaseMappingRecord,
   isTrialSessionRecord,
   isUserCaseMappingRecord,
@@ -48,6 +49,27 @@ describe('utilities', () => {
         contactPrimary: { name: 'Guy Fieri' },
         pk: 'case|101-20',
         sk: 'document|101-20',
+      });
+
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isDocketEntryRecord', () => {
+    it('should return true if the item is a docket entry record', () => {
+      const result = isDocketEntryRecord({
+        pk: 'case|101-20',
+        sk: 'docket-entry|docket-entry-123',
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if the item is not a docket entry record', () => {
+      const result = isDocketEntryRecord({
+        contactPrimary: { name: 'Guy Fieri' },
+        pk: 'case|101-20',
+        sk: 'document|document-123',
       });
 
       expect(result).toEqual(false);
