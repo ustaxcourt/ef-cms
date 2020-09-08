@@ -5,7 +5,7 @@ export const formattedDocument = (get, applicationContext) => {
   const documentId = get(state.documentId);
 
   const allCaseDocuments = [
-    ...(caseDetail.documents || []),
+    ...(caseDetail.docketEntries || []),
     ...(caseDetail.correspondence || []),
   ];
   const document = allCaseDocuments.find(

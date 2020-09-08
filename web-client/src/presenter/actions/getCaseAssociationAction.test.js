@@ -230,7 +230,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          documents: [{ documentType: 'Petition' }],
+          docketEntries: [{ documentType: 'Petition' }],
         },
       },
     });
@@ -253,7 +253,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
         },

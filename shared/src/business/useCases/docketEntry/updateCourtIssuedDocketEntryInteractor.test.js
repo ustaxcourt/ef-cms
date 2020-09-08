@@ -33,18 +33,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      docketRecord: [
-        {
-          description: 'first record',
-          docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-          eventCode: 'P',
-          filingDate: '2018-03-01T00:01:00.000Z',
-          index: 1,
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           docketNumber: '45678-18',
           documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
@@ -111,6 +100,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           },
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -226,7 +216,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[4],
+        .caseToUpdate.docketEntries[4],
     ).toMatchObject({
       secondaryDate: '2019-03-01T21:40:46.415Z',
     });
@@ -258,7 +248,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3].objections,
+        .caseToUpdate.docketEntries[3].objections,
     ).toBeUndefined();
   });
 });

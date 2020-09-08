@@ -39,9 +39,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber0,
-        docketRecord: [],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
@@ -64,9 +63,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber1,
-        docketRecord: [],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
@@ -89,9 +87,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber2,
-        docketRecord: [],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
@@ -131,9 +128,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   });
 
   it('should associate the document with all selected cases from the consolidated set', async () => {
-    expect(caseRecords[0].documents.length).toEqual(4);
-    expect(caseRecords[1].documents.length).toEqual(4);
-    expect(caseRecords[2].documents.length).toEqual(4);
+    expect(caseRecords[0].docketEntries.length).toEqual(4);
+    expect(caseRecords[1].docketEntries.length).toEqual(4);
+    expect(caseRecords[2].docketEntries.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -148,11 +145,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadDocketNumber: docketNumber0,
     });
 
-    expect(result[0].documents[4].documentId).toEqual(documentId0);
-    expect(result[1].documents[4].documentId).toEqual(documentId0);
-    expect(result[0].documents[4].isOnDocketRecord).toEqual(true);
-    expect(result[1].documents[4].isOnDocketRecord).toEqual(true);
-    expect(result[2].documents.length).toEqual(4);
+    expect(result[0].docketEntries[4].documentId).toEqual(documentId0);
+    expect(result[1].docketEntries[4].documentId).toEqual(documentId0);
+    expect(result[0].docketEntries[4].isOnDocketRecord).toEqual(true);
+    expect(result[1].docketEntries[4].isOnDocketRecord).toEqual(true);
+    expect(result[2].docketEntries.length).toEqual(4);
   });
 
   // skipping this test until we have better acceptance criteria about consolidated cases
@@ -193,13 +190,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       record => record.docketNumber === docketNumber1,
     );
 
-    expect(lowestDocketNumberCase.documents[4].workItem).toBeDefined();
-    expect(nonLowestDocketNumberCase.documents[4].workItem).toBeUndefined();
+    expect(lowestDocketNumberCase.docketEntries[4].workItem).toBeDefined();
+    expect(nonLowestDocketNumberCase.docketEntries[4].workItem).toBeUndefined();
   });
 
   it('should file multiple documents for each case if a secondary document is provided', async () => {
-    expect(caseRecords[0].documents.length).toEqual(4);
-    expect(caseRecords[1].documents.length).toEqual(4);
+    expect(caseRecords[0].docketEntries.length).toEqual(4);
+    expect(caseRecords[1].docketEntries.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -221,13 +218,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadDocketNumber: docketNumber0,
     });
 
-    expect(result[0].documents.length).toEqual(6);
-    expect(result[1].documents.length).toEqual(6);
+    expect(result[0].docketEntries.length).toEqual(6);
+    expect(result[1].docketEntries.length).toEqual(6);
   });
 
   it('should file multiple documents for each case when supporting documents are provided', async () => {
-    expect(caseRecords[0].documents.length).toEqual(4);
-    expect(caseRecords[1].documents.length).toEqual(4);
+    expect(caseRecords[0].docketEntries.length).toEqual(4);
+    expect(caseRecords[1].docketEntries.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -267,7 +264,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadDocketNumber: docketNumber0,
     });
 
-    expect(result[0].documents.length).toEqual(8);
-    expect(result[1].documents.length).toEqual(8);
+    expect(result[0].docketEntries.length).toEqual(8);
+    expect(result[1].docketEntries.length).toEqual(8);
   });
 });

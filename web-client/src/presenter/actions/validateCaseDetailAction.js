@@ -23,7 +23,7 @@ export const validateCaseDetailAction = ({
   const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
 
   const findDocumentByType = type => {
-    return formWithComputedDates.documents.find(
+    return formWithComputedDates.docketEntries.find(
       document => document.documentType === type,
     );
   };

@@ -36,7 +36,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], status: CASE_STATUS_TYPES.new },
+        caseDetail: { docketEntries: [], status: CASE_STATUS_TYPES.new },
       },
     });
     expect(result.showEditCaseButton).toEqual(true);
@@ -50,7 +50,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], status: CASE_STATUS_TYPES.new },
+        caseDetail: { docketEntries: [], status: CASE_STATUS_TYPES.new },
       },
     });
     expect(result.showEditCaseButton).toEqual(false);
@@ -64,7 +64,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -84,7 +84,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [{ documentType: 'Petition' }],
+          docketEntries: [{ documentType: 'Petition' }],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -105,7 +105,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [
+          docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
         },
@@ -127,7 +127,10 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '789' }] },
+        caseDetail: {
+          docketEntries: [],
+          irsPractitioners: [{ userId: '789' }],
+        },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -148,7 +151,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           irsPractitioners: [{ userId: '789' }],
           isSealed: true,
         },
@@ -171,7 +174,10 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '123' }] },
+        caseDetail: {
+          docketEntries: [],
+          irsPractitioners: [{ userId: '123' }],
+        },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -191,7 +197,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -211,7 +217,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -231,7 +237,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -250,7 +256,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'FilePetitionSuccess',
         form: {},
         screenMetadata: {
@@ -269,7 +275,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], isSealed: true },
+        caseDetail: { docketEntries: [], isSealed: true },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -289,7 +295,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           privatePractitioners: [{ userId: '123' }],
         },
         currentPage: 'CaseDetail',
@@ -310,7 +316,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -330,7 +336,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           leadDocketNumber: '101-20',
         },
         currentPage: 'CaseDetail',
@@ -353,7 +359,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           leadDocketNumber: '',
         },
         currentPage: 'CaseDetail',
@@ -375,7 +381,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -388,7 +394,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show the Sealed Case banner if the case is sealed', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { documents: [], isSealed: true },
+        caseDetail: { docketEntries: [], isSealed: true },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {},
@@ -400,7 +406,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -415,7 +421,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -430,7 +436,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -450,7 +456,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -471,7 +477,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -492,7 +498,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -508,7 +514,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },

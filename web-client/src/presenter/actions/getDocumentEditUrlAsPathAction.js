@@ -19,7 +19,7 @@ export const getDocumentEditUrlAsPathAction = ({
   const parentMessageId = get(state.parentMessageId);
 
   if (documentIdToEdit) {
-    const documentToEdit = caseDetail.documents.find(
+    const documentToEdit = caseDetail.docketEntries.find(
       document => document.documentId === documentIdToEdit,
     );
 

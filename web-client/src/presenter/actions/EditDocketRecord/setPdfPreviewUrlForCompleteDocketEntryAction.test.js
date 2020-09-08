@@ -28,13 +28,13 @@ describe('setPdfPreviewUrlForCompleteDocketEntryAction', () => {
         },
         state: {
           caseDetail: {
-            docketNumber: '123-20',
-            documents: [
+            docketEntries: [
               {
                 documentId: DOCUMENT_ID,
                 isFileAttached: true,
               },
             ],
+            docketNumber: '123-20',
           },
           currentViewMetadata: {},
         },
@@ -61,13 +61,13 @@ describe('setPdfPreviewUrlForCompleteDocketEntryAction', () => {
         },
         state: {
           caseDetail: {
-            docketNumber: '123-20',
-            documents: [
+            docketEntries: [
               {
                 documentId: DOCUMENT_ID,
                 isFileAttached: false,
               },
             ],
+            docketNumber: '123-20',
           },
           currentViewMetadata: {},
         },

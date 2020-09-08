@@ -13,7 +13,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
   beforeAll(() => {
     mockCase = {
       ...MOCK_CASE,
-      documents: [
+      docketEntries: [
         {
           createdAt: '2018-11-21T20:49:28.192Z',
           docketNumber: '101-18',
@@ -73,7 +73,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       documentId: mockDocumentId,
     });
 
-    const unsignedDocument = updatedCase.documents.find(
+    const unsignedDocument = updatedCase.docketEntries.find(
       doc => doc.documentId === mockDocumentId,
     );
     expect(unsignedDocument).toMatchObject({

@@ -13,8 +13,8 @@ describe('servePaperFiledDocumentAction', () => {
 
   beforeAll(() => {
     caseDetail = {
+      docketEntries: [],
       docketNumber,
-      documents: [],
     };
   });
 

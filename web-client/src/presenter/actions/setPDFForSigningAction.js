@@ -26,8 +26,8 @@ export const setPDFForSigningAction = async ({
 
   let editingSignedStipulatedDecision = false;
 
-  if (caseDetail && Array.isArray(caseDetail.documents)) {
-    const document = caseDetail.documents.find(
+  if (caseDetail && Array.isArray(caseDetail.docketEntries)) {
+    const document = caseDetail.docketEntries.find(
       caseDocument => caseDocument.documentId === documentId,
     );
 

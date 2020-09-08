@@ -137,7 +137,7 @@ const createCase = async ({
     });
   };
 
-  for (const document of caseDetail.documents) {
+  for (const document of caseDetail.docketEntries) {
     if (shouldUpload) {
       await addCoversheet(document);
     }

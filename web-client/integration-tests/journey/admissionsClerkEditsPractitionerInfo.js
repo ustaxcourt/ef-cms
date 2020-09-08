@@ -45,7 +45,7 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     });
 
     const caseDetail = test.getState('caseDetail');
-    const noticeDocument = caseDetail.documents.find(
+    const noticeDocument = caseDetail.docketEntries.find(
       document => document.documentType === 'Notice of Change of Address',
     );
 

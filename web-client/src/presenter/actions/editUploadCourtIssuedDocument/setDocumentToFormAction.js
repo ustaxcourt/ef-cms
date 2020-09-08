@@ -12,7 +12,7 @@ export const setDocumentToFormAction = ({ props, store }) => {
   const { caseDetail, documentId } = props;
 
   const allCaseDocuments = [
-    ...(caseDetail.documents || []),
+    ...(caseDetail.docketEntries || []),
     ...(caseDetail.correspondence || []),
   ];
   const documentToSet = allCaseDocuments.find(
