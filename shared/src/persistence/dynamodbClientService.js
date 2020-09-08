@@ -62,7 +62,9 @@ exports.describeTable = async ({ applicationContext }) => {
 };
 
 exports.describeDeployTable = async ({ applicationContext }) => {
-  const dynamoClient = applicationContext.getDynamoClient();
+  const dynamoClient = applicationContext.getDynamoClient({
+    useMasterRegion: true,
+  });
 
   const params = {
     TableName: getDeployTableName({ applicationContext }),
