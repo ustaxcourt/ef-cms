@@ -1,6 +1,14 @@
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
+const handleAxiosTimeout = axios => {
+  let source = axios.CancelToken.source();
+  setTimeout(() => {
+    source.cancel();
+  }, 1000);
+  return source;
+};
+
 const getElasticSearchStatus = async ({ applicationContext }) => {
   try {
     await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
@@ -37,13 +45,6 @@ const getDeployDynamoStatus = async ({ applicationContext }) => {
     return false;
   }
 };
-const handleAxiosTimeout = axios => {
-  let source = axios.CancelToken.source();
-  setTimeout(() => {
-    source.cancel();
-  }, 1000);
-  return source;
-};
 
 const getDynamsoftStatus = async ({ applicationContext }) => {
   const axios = applicationContext.getHttpClient();
@@ -51,13 +52,16 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   const source = handleAxiosTimeout(axios);
 
   try {
-    const efcmsDomain = process.env.EFCMS_DOMAIN;
+    // Currently, dynamsoft is only deployed on the court's staging environment as it shares a license with
+    // other environments. Leaving this domain hard-coded for now until dynamsoft is deployed across multiple
+    // environments.
+    const dynamsoftDeployEnv = 'stg.ef-cms.ustaxcourt.gov';
     await Promise.all(
       [
-        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.initiate.js`,
-        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js`,
-        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.install.js`,
-        `https://dynamsoft-lib.${efcmsDomain}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.css`,
+        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.initiate.js`,
+        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js`,
+        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.install.js`,
+        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.css`,
       ].map(url => {
         return axios.get(url, { cancelToken: source.token, timeout: 1000 });
       }),
