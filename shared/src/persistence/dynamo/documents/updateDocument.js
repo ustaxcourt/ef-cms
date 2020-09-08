@@ -9,7 +9,7 @@ exports.updateDocument = async ({
   await client.put({
     Item: {
       pk: `case|${docketNumber}`,
-      sk: `document|${documentId}`,
+      sk: `docket-entry|${documentId}`,
       ...document,
     },
     applicationContext,

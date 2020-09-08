@@ -377,12 +377,12 @@ describe('processStreamRecordsInteractor', () => {
       recordsToProcess: [
         {
           dynamodb: {
-            Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'docket-entry|1' } },
             NewImage: {
               docketNumber: { S: '1' },
               entityName: { S: 'Document' },
               pk: { S: 'case|1' },
-              sk: { S: 'document|1' },
+              sk: { S: 'docket-entry|1' },
             },
           },
           eventName: 'INSERT',
@@ -416,12 +416,12 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
       {
         docketNumber: { S: '1' },
         entityName: { S: 'Document' },
         pk: { S: 'case|1' },
-        sk: { S: 'document|1' },
+        sk: { S: 'docket-entry|1' },
       },
       { index: { _id: 'case|4_case|4', _index: 'efcms-case' } },
       {
@@ -438,8 +438,8 @@ describe('processStreamRecordsInteractor', () => {
         pk: { S: 'case|1' },
         sk: { S: 'case|1' },
       },
-      // calls docketEntries again because they are indexed again after the case
-      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      // calls documents again because they are indexed again after the case
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
       {
         docketEntries: undefined,
         docketNumber: { S: '1' },
@@ -448,7 +448,7 @@ describe('processStreamRecordsInteractor', () => {
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
         privatePractitioners: undefined,
-        sk: { S: 'document|1' },
+        sk: { S: 'docket-entry|1' },
       },
       {
         index: { _id: 'case|4_case|4', _index: 'efcms-case' },
@@ -460,7 +460,7 @@ describe('processStreamRecordsInteractor', () => {
         pk: { S: 'case|4' },
         sk: { S: 'case|4' },
       },
-      { index: { _id: 'case|4_document|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|4_docket-entry|1', _index: 'efcms-document' } },
       {
         docketEntries: undefined,
         docketNumber: { S: '4' },
@@ -469,7 +469,7 @@ describe('processStreamRecordsInteractor', () => {
         irsPractitioners: undefined,
         pk: { S: 'case|4' },
         privatePractitioners: undefined,
-        sk: { S: 'document|1' },
+        sk: { S: 'docket-entry|1' },
       },
     ]);
   });
@@ -497,13 +497,13 @@ describe('processStreamRecordsInteractor', () => {
       recordsToProcess: [
         {
           dynamodb: {
-            Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'docket-entry|1' } },
             NewImage: {
               docketNumber: { S: '1' },
               documentContentsId: { S: '5' },
               entityName: { S: 'Document' },
               pk: { S: 'case|1' },
-              sk: { S: 'document|1' },
+              sk: { S: 'docket-entry|1' },
             },
           },
           eventName: 'INSERT',
@@ -517,13 +517,13 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
       {
         docketNumber: { S: '1' },
         documentContentsId: { S: '5' },
         entityName: { S: 'Document' },
         pk: { S: 'case|1' },
-        sk: { S: 'document|1' },
+        sk: { S: 'docket-entry|1' },
       },
       { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
       {
@@ -537,8 +537,8 @@ describe('processStreamRecordsInteractor', () => {
         pk: { S: 'case|1' },
         sk: { S: 'case|1' },
       },
-      // calls docketEntries again because they are indexed again after the case
-      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      // calls documents again because they are indexed again after the case
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
       {
         docketEntries: undefined,
         docketNumber: { S: '1' },
@@ -551,7 +551,7 @@ describe('processStreamRecordsInteractor', () => {
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
         privatePractitioners: undefined,
-        sk: { S: 'document|1' },
+        sk: { S: 'docket-entry|1' },
       },
     ]);
   });
@@ -566,12 +566,12 @@ describe('processStreamRecordsInteractor', () => {
       recordsToProcess: [
         {
           dynamodb: {
-            Keys: { pk: { S: 'case|1' }, sk: { S: 'document|1' } },
+            Keys: { pk: { S: 'case|1' }, sk: { S: 'docket-entry|1' } },
             NewImage: {
               docketNumber: { S: '1' },
               entityName: { S: 'Document' },
               pk: { S: 'case|1' },
-              sk: { S: 'document|1' },
+              sk: { S: 'docket-entry|1' },
             },
           },
           eventName: 'MODIFY',
@@ -586,12 +586,12 @@ describe('processStreamRecordsInteractor', () => {
     expect(
       applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
     ).toEqual([
-      { index: { _id: 'case|1_document|1', _index: 'efcms-document' } },
+      { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-document' } },
       {
         docketNumber: { S: '1' },
         entityName: { S: 'Document' },
         pk: { S: 'case|1' },
-        sk: { S: 'document|1' },
+        sk: { S: 'docket-entry|1' },
       },
     ]);
   });

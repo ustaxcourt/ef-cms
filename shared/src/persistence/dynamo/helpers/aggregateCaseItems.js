@@ -6,10 +6,10 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     .pop();
 
   const documents = caseAndCaseItems.filter(
-    item => item.sk.startsWith('document|') && !item.archived,
+    item => item.sk.startsWith('docket-entry|') && !item.archived,
   );
   const archivedDocuments = caseAndCaseItems.filter(
-    item => item.sk.startsWith('document|') && item.archived,
+    item => item.sk.startsWith('docket-entry|') && item.archived,
   );
   const privatePractitioners = caseAndCaseItems.filter(item =>
     item.sk.startsWith('privatePractitioner|'),

@@ -129,7 +129,7 @@ exports.advancedDocumentSearch = async ({
         bool: {
           must: [
             { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'document|' } },
+            { match: { 'sk.S': 'docket-entry|' } },
             {
               exists: {
                 field: 'servedAt',

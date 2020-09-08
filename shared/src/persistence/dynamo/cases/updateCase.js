@@ -73,7 +73,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       client.put({
         Item: {
           pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `document|${document.documentId}`,
+          sk: `docket-entry|${document.documentId}`,
           ...document,
         },
         applicationContext,

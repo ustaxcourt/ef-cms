@@ -17,7 +17,7 @@ exports.updateDocumentProcessingStatus = async ({
     },
     Key: {
       pk: `case|${docketNumber}`,
-      sk: `document|${documentId}`,
+      sk: `docket-entry|${documentId}`,
     },
     UpdateExpression: 'SET #processingStatus = :status',
     applicationContext,
