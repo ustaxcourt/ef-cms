@@ -23,14 +23,14 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
         documentIdToEdit: documentIdToEdit,
       },
@@ -47,14 +47,14 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
       },
     });
@@ -69,13 +69,13 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
         documentIdToEdit: '321',
       },

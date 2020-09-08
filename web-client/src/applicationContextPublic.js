@@ -28,6 +28,7 @@ import {
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
@@ -75,6 +76,7 @@ const applicationContextPublic = {
     getCaseForPublicDocketSearchInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     getDocumentDownloadUrlInteractor,
+    getHealthCheckInteractor,
     getPublicJudgesInteractor,
     getTodaysOpinionsInteractor,
     opinionPublicSearchInteractor,

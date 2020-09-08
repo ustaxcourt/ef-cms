@@ -127,6 +127,6 @@ export const respondentAddsMotion = (test, fakeFile) => {
 
     await test.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.documents').length).toEqual(8);
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(8);
   });
 };

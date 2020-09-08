@@ -135,9 +135,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         state: 'AL',
       },
       contactSecondary: {},
-      docketNumber,
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      documents: [
+      docketEntries: [
         {
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
@@ -318,6 +316,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         },
       ],
+      docketNumber,
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       filingType: 'Myself',
       initialCaption: 'Test Petitioner, Petitioner',
       initialDocketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
@@ -528,7 +528,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       applicationContext,
       docketNumber,
     });
-    const filedDocument = caseAfterDocument.documents.find(
+    const filedDocument = caseAfterDocument.docketEntries.find(
       d => d.documentType === 'Motion for Leave to File',
     );
     expect(filedDocument).toMatchObject({

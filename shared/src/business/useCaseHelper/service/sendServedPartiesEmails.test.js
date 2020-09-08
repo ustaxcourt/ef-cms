@@ -16,8 +16,8 @@ describe('sendServedPartiesEmails', () => {
       applicationContext,
       caseEntity: {
         caseCaption: 'A Caption',
+        docketEntries: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         docketNumber: '123-20',
-        documents: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         status: CASE_STATUS_TYPES.generalDocket,
       },
       documentEntity: {
@@ -51,8 +51,8 @@ describe('sendServedPartiesEmails', () => {
       applicationContext,
       caseEntity: {
         caseCaption: 'A Caption',
+        docketEntries: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         docketNumber: '123-20',
-        documents: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         status: CASE_STATUS_TYPES.new,
       },
       documentEntity: {
@@ -82,8 +82,8 @@ describe('sendServedPartiesEmails', () => {
       applicationContext,
       caseEntity: {
         caseCaption: 'A Caption',
+        docketEntries: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         docketNumber: '123-20',
-        documents: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         status: CASE_STATUS_TYPES.generalDocket,
       },
       documentEntity: {

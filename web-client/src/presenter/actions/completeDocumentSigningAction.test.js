@@ -61,8 +61,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber,
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
@@ -74,6 +73,7 @@ describe('completeDocumentSigningAction', () => {
               },
             },
           ],
+          docketNumber,
         },
         currentViewMetadata: {
           messageId: '123',
@@ -111,8 +111,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber,
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
@@ -124,6 +123,7 @@ describe('completeDocumentSigningAction', () => {
               },
             },
           ],
+          docketNumber,
         },
         currentViewMetadata: {
           messageId: '123',
@@ -157,8 +157,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber,
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
@@ -170,6 +169,7 @@ describe('completeDocumentSigningAction', () => {
               },
             },
           ],
+          docketNumber,
         },
         currentViewMetadata: {
           messageId: '123',
@@ -200,8 +200,7 @@ describe('completeDocumentSigningAction', () => {
       },
       state: {
         caseDetail: {
-          docketNumber,
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
@@ -213,6 +212,7 @@ describe('completeDocumentSigningAction', () => {
               },
             },
           ],
+          docketNumber,
         },
         currentViewMetadata: {
           messageId: '123',

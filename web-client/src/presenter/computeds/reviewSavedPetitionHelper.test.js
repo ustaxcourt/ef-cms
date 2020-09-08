@@ -39,7 +39,7 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          documents: [
+          docketEntries: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
               documentType:
