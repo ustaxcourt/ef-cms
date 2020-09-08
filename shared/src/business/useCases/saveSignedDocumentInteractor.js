@@ -79,7 +79,7 @@ exports.saveSignedDocumentInteractor = async ({
       docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
-  const originalDocumentEntity = caseEntity.documents.find(
+  const originalDocumentEntity = caseEntity.docketEntries.find(
     document => document.documentId === originalDocumentId,
   );
 

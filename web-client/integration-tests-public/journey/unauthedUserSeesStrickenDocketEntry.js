@@ -19,11 +19,14 @@ export const unauthedUserSeesStrickenDocketEntry = (
     expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
     expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
 
-    const { formattedDocketEntries } = runCompute(publicCaseDetailHelper, {
-      state: test.getState(),
-    });
+    const { formattedDocketEntriesOnDocketRecord } = runCompute(
+      publicCaseDetailHelper,
+      {
+        state: test.getState(),
+      },
+    );
 
-    const formattedDocketEntry = formattedDocketEntries.find(
+    const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
 

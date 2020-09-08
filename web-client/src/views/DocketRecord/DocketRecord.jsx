@@ -48,7 +48,7 @@ export const DocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCaseDetail.formattedDocketEntries.map(
+            {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
               (entry, arrayIndex) => {
                 return (
                   <tr

@@ -49,7 +49,7 @@ describe('formatAttachments', () => {
     },
   ];
 
-  it('formats documents in the attachments array based on meta from documents in the documents, correspondence, archivedDocuments, and archivedCorrespondences arrays', () => {
+  it('formats docketEntries in the attachments array based on meta from docketEntries in the docketEntries, correspondence, archivedDocuments, and archivedCorrespondences arrays', () => {
     const result = formatAttachments({
       attachments: [
         { documentId: '1' },
@@ -61,7 +61,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocuments,
       },
     });
 
@@ -93,7 +93,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocuments,
       },
     });
 
@@ -117,7 +117,7 @@ describe('formatAttachments', () => {
     const result = formatAttachments({
       attachments: [{ documentId: '1' }],
       caseDetail: {
-        documents: mockDocuments,
+        docketEntries: mockDocuments,
       },
     });
 
@@ -126,14 +126,14 @@ describe('formatAttachments', () => {
     ]);
   });
 
-  it('returns a placeholder document if an attachment is not found in the aggregated documents', () => {
+  it('returns a placeholder document if an attachment is not found in the aggregated docketEntries', () => {
     const result = formatAttachments({
       attachments: [{ documentId: '999' }],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocuments,
       },
     });
 
@@ -153,7 +153,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocuments: mockArchivedDocuments,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocuments,
       },
     });
 

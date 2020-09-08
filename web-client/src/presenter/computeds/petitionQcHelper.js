@@ -26,7 +26,7 @@ export const initialFilingDocumentTabs = [
 export const petitionQcHelper = (get, applicationContext) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
-  const documents = get(state.caseDetail.documents);
+  const documents = get(state.caseDetail.docketEntries);
 
   const hasODS = !!documents.find(
     document =>
