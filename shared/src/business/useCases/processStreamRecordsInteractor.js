@@ -71,7 +71,7 @@ const filterRecords = async ({ applicationContext, records }) => {
           ...AWS.DynamoDB.Converter.marshall(fullCase),
           ...AWS.DynamoDB.Converter.marshall(document),
           docketEntries: undefined,
-          entityName: { S: 'Document' },
+          entityName: { S: 'DocketEntry' },
           sk: { S: `docket-entry|${document.documentId}` },
         };
 
