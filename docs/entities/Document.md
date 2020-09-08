@@ -1293,6 +1293,7 @@
                           presence: "optional"
                         allow: 
                           - ""
+                          - null
                 otherwise: 
                   type: "any"
                   flags: 
@@ -1303,6 +1304,7 @@
               presence: "optional"
             allow: 
               - ""
+              - null
     filingDate: 
       type: "date"
       flags: 
