@@ -590,7 +590,7 @@
     "processingStatus": "complete",
     "filedBy": "Denise Gould",
     "isFileAttached": true,
-    "sk": "document|2da6d239-555a-40e8-af81-1949c8270cd7",
+    "sk": "docket-entry|2da6d239-555a-40e8-af81-1949c8270cd7",
     "documentId": "2da6d239-555a-40e8-af81-1949c8270cd7",
     "numberOfPages": 1,
     "pk": "case|106-19"
@@ -635,7 +635,7 @@
     "processingStatus": "complete",
     "filedBy": "Denise Gould",
     "isFileAttached": true,
-    "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "sk": "docket-entry|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "numberOfPages": 1,
     "pk": "case|106-19"
@@ -700,7 +700,7 @@
     "scenario": "Standard",
     "filedBy": "Petr. Denise Gould",
     "isFileAttached": true,
-    "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "sk": "docket-entry|7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "numberOfPages": 1,
     "pk": "case|106-19",

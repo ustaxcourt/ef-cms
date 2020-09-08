@@ -66,13 +66,13 @@ describe('getCaseByDocketNumber', () => {
               archived: true,
               documentId: 'abc-123',
               pk: 'case|123-20',
-              sk: 'document|123',
+              sk: 'docket-entry|123',
             },
             {
               archived: false,
               documentId: 'abc-124',
               pk: 'case|123-20',
-              sk: 'document|124',
+              sk: 'docket-entry|124',
             },
             {
               archived: true,
@@ -109,7 +109,7 @@ describe('getCaseByDocketNumber', () => {
           archived: true,
           documentId: 'abc-123',
           pk: 'case|123-20',
-          sk: 'document|123',
+          sk: 'docket-entry|123',
         },
       ],
       correspondence: [
@@ -126,7 +126,7 @@ describe('getCaseByDocketNumber', () => {
           archived: false,
           documentId: 'abc-124',
           pk: 'case|123-20',
-          sk: 'document|124',
+          sk: 'docket-entry|124',
         },
       ],
       irsPractitioners: [
