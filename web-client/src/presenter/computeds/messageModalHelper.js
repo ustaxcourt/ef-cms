@@ -26,14 +26,8 @@ export const messageModalHelper = (get, applicationContext) => {
 
   const documents = [];
   formattedDocketEntries.forEach(entry => {
-    if (entry) {
-      const document = caseDetail.docketEntries.find(
-        item => item.documentId === entry.documentId,
-      );
-
-      if (document.isFileAttached) {
-        documents.push(entry);
-      }
+    if (entry.isFileAttached && entry.isOnDocketRecord) {
+      documents.push(entry);
     }
   });
 
