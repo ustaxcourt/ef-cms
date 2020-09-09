@@ -38,7 +38,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     // verify that the user was given a link to their receipt
     expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
 
-    expect(caseDetail.docketEntries.length).toEqual(7); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
+    expect(caseDetail.docketEntries.length).toEqual(7);
 
     //verify that the documents were added and served
     expect(caseDetail.docketEntries).toEqual(
@@ -46,6 +46,9 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
         expect.objectContaining({ eventCode: 'P' }),
         expect.objectContaining({
           eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        }),
+        expect.objectContaining({
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         }),
         expect.objectContaining({
           eventCode: 'M014',

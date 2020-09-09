@@ -1394,6 +1394,7 @@
                                   presence: "optional"
                                 allow: 
                                   - ""
+                                  - null
                         otherwise: 
                           type: "any"
                           flags: 
@@ -1404,6 +1405,7 @@
                       presence: "optional"
                     allow: 
                       - ""
+                      - null
             filingDate: 
               type: "date"
               flags: 
@@ -1517,11 +1519,11 @@
             isMinuteEntry: 
               type: "boolean"
               flags: 
-                presence: "optional"
+                presence: "required"
             isOnDocketRecord: 
               type: "boolean"
               flags: 
-                presence: "optional"
+                presence: "required"
             isPaper: 
               type: "boolean"
               flags: 

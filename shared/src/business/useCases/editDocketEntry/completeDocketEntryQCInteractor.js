@@ -288,18 +288,15 @@ exports.completeDocketEntryQCInteractor = async ({
       {
         ...NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
+        documentTitle: replaceBracketed(
+          NOTICE_OF_DOCKET_CHANGE.documentTitle,
+          docketChangeInfo.docketEntryIndex,
+        ),
         isOnDocketRecord: true,
         userId: user.userId,
       },
       { applicationContext },
     );
-
-    noticeUpdatedDocketEntry.documentTitle = replaceBracketed(
-      NOTICE_OF_DOCKET_CHANGE.documentTitle,
-      docketChangeInfo.docketEntryIndex,
-    );
-    noticeUpdatedDocketEntry.description =
-      noticeUpdatedDocketEntry.documentTitle; // TODO 636 clean this up
 
     noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
