@@ -35,8 +35,8 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     },
     docketEntries: [
       {
-        description: 'Docket Record 1',
         documentId: mockDocumentId,
+        documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
         filingDate: createISODateString(),

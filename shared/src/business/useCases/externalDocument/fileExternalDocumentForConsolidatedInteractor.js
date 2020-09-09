@@ -134,8 +134,8 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
-          description: metadata.documentTitle,
           documentId,
+          documentTitle: metadata.documentTitle,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
           relationship,

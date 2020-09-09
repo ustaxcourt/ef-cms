@@ -132,8 +132,8 @@ exports.createCaseInteractor = async ({
 
   const petitionDocketEntryEntity = new DocketEntry(
     {
-      description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
+      documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.createdAt,
@@ -161,7 +161,7 @@ exports.createCaseInteractor = async ({
   caseToAdd.addDocketEntry(
     new DocketEntry(
       {
-        description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+        documentTitle: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
@@ -200,8 +200,8 @@ exports.createCaseInteractor = async ({
   if (ownershipDisclosureFileId) {
     const odsDocketEntryEntity = new DocketEntry(
       {
-        description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.createdAt,

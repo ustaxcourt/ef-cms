@@ -52,7 +52,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     certificateOfService: docketEntryMeta.certificateOfService,
     certificateOfServiceDate: docketEntryMeta.certificateOfServiceDate,
     date: docketEntryMeta.date,
-    description: docketEntryMeta.description,
     docketNumbers: docketEntryMeta.docketNumbers,
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
@@ -89,10 +88,6 @@ exports.updateDocketEntryMetaInteractor = async ({
       {
         ...originalDocument,
         ...editableFields,
-        description:
-          editableFields.documentTitle ||
-          editableFields.description ||
-          originalDocument.description,
         filedBy: undefined, // allow constructor to re-generate
         ...caseEntity.getCaseContacts({
           contactPrimary: true,

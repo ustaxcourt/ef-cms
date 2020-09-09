@@ -73,7 +73,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       ...omit(document, 'filedBy'),
       attachments: documentMeta.attachments,
       date: documentMeta.date,
-      description: documentMeta.generatedDocumentTitle,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
       editState: JSON.stringify(documentMeta),

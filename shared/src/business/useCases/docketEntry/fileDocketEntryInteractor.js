@@ -74,8 +74,8 @@ exports.fileDocketEntryInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
-          description: metadata.documentTitle,
           documentId,
+          documentTitle: metadata.documentTitle,
           documentType: metadata.documentType,
           editState: JSON.stringify(docketRecordEditState),
           filingDate: metadata.receivedAt,

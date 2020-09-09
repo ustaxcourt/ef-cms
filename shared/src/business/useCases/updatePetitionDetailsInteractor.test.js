@@ -165,7 +165,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     const wavedDocument = result.docketEntries.find(
       entry =>
-        entry.description === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+        entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
     );
 
     expect(wavedDocument).toBeTruthy();
