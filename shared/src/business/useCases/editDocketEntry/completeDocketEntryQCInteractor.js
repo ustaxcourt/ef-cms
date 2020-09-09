@@ -71,7 +71,7 @@ exports.completeDocketEntryQCInteractor = async ({
     record => record.documentId === documentId,
   );
 
-  const currentDocketEntry = caseEntity.getDocumentById({
+  const currentDocketEntry = caseEntity.getDocketEntryById({
     documentId,
   });
 

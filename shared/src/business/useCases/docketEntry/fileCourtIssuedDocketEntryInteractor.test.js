@@ -144,7 +144,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentType: 'Order',
         },
       }),
-    ).rejects.toThrow('Document not found');
+    ).rejects.toThrow('Docket entry not found');
   });
 
   it('should call countPagesInDocument, updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {

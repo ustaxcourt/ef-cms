@@ -33,7 +33,7 @@ exports.updateCorrespondenceDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentCorrespondenceDocument = caseEntity.getDocumentById({
+  const currentCorrespondenceDocument = caseEntity.getCorrespondenceById({
     documentId: documentMetadata.documentId,
   });
 

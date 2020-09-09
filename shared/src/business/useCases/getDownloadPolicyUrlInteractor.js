@@ -47,14 +47,14 @@ exports.getDownloadPolicyUrlInteractor = async ({
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
-      const selectedDocument = caseData.docketEntries.find(
+      const selectedDocketEntry = caseData.docketEntries.find(
         document => document.documentId === documentId,
       );
 
-      const documentEntity = caseEntity.getDocumentById({ documentId });
+      const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
 
       const documentIsAvailable = documentMeetsAgeRequirements(
-        selectedDocument,
+        selectedDocketEntry,
       );
 
       if (!documentIsAvailable) {
@@ -63,8 +63,8 @@ exports.getDownloadPolicyUrlInteractor = async ({
         );
       }
 
-      if (documentEntity.isCourtIssued()) {
-        if (!documentEntity.servedAt) {
+      if (docketEntryEntity.isCourtIssued()) {
+        if (!docketEntryEntity.servedAt) {
           throw new UnauthorizedError(
             'Unauthorized to view document at this time',
           );

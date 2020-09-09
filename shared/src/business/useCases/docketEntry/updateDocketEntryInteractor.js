@@ -47,7 +47,7 @@ exports.updateDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
+  const currentDocketEntry = caseEntity.getDocketEntryById({
     documentId: primaryDocumentFileId,
   });
 
@@ -81,7 +81,7 @@ exports.updateDocketEntryInteractor = async ({
 
   const docketEntryEntity = new DocketEntry(
     {
-      ...currentDocument,
+      ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
       description: editableFields.documentTitle,
@@ -103,8 +103,8 @@ exports.updateDocketEntryInteractor = async ({
 
     if (!isSavingForLater) {
       const workItemToDelete =
-        currentDocument.workItem &&
-        !currentDocument.workItem.document.isFileAttached;
+        currentDocketEntry.workItem &&
+        !currentDocketEntry.workItem.document.isFileAttached;
 
       if (workItemToDelete) {
         await applicationContext

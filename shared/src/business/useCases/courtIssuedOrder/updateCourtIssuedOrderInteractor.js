@@ -40,7 +40,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
+  const currentDocument = caseEntity.getDocketEntryById({
     documentId: documentIdToEdit,
   });
 
