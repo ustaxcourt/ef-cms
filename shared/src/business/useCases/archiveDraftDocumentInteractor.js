@@ -34,11 +34,11 @@ exports.archiveDraftDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const documentToArchive = caseEntity.getDocumentById({ documentId });
+  const docketEntryToArchive = caseEntity.getDocketEntryById({ documentId });
 
-  caseEntity.archiveDocument(documentToArchive, { applicationContext });
+  caseEntity.archiveDocument(docketEntryToArchive, { applicationContext });
 
-  const { workItem } = documentToArchive;
+  const { workItem } = docketEntryToArchive;
 
   if (workItem) {
     await Promise.all([

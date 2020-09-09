@@ -1979,17 +1979,19 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getDocumentById', () => {
-    it('should get the document by an Id', () => {
+  describe('getDocketEntryById', () => {
+    it('should get the docket entry by an Id', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const result = myCase.getDocumentById({
+      const result = myCase.getDocketEntryById({
         documentId: MOCK_DOCUMENTS[0].documentId,
       });
       expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
     });
+  });
 
+  describe('getCorrespondenceById', () => {
     it('should get a correspondence document by id', () => {
       const mockCorrespondence = new Correspondence({
         documentId: '123-abc',
@@ -2003,7 +2005,7 @@ describe('Case entity', () => {
         },
       );
 
-      const result = myCase.getDocumentById({
+      const result = myCase.getCorrespondenceById({
         documentId: mockCorrespondence.documentId,
       });
 

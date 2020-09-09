@@ -193,7 +193,7 @@ exports.addCoversheetInteractor = async ({
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
-  const docketEntryEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
 
   let pdfData;
   try {

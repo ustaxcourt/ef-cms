@@ -26,16 +26,19 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
 
   const caseEntity = new Case(caseToCheck, { applicationContext });
 
-  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
 
-  const isPrivate = isPrivateDocument(documentEntity, caseEntity.docketEntries);
+  const isPrivate = isPrivateDocument(
+    docketEntryEntity,
+    caseEntity.docketEntries,
+  );
 
   if (isPrivate) {
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
   const isOpinionDocument = OPINION_EVENT_CODES.includes(
-    documentEntity.eventCode,
+    docketEntryEntity.eventCode,
   );
 
   // opinion documents are public even in sealed cases

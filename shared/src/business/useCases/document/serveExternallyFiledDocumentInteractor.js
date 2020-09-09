@@ -40,7 +40,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocketEntry = caseEntity.getDocumentById({
+  const currentDocketEntry = caseEntity.getDocketEntryById({
     documentId,
   });
 
