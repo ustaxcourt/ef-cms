@@ -10,7 +10,7 @@ const {
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
-  formatDocument,
+  formatDocketEntry,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
 const {
@@ -126,7 +126,7 @@ exports.completeDocketEntryQCInteractor = async ({
     updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
   }
   updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocument(applicationContext, updatedDocketEntry),
+    formatDocketEntry(applicationContext, updatedDocketEntry),
   )}`;
   if (updatedDocketEntry.additionalInfo2) {
     updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
@@ -137,7 +137,7 @@ exports.completeDocketEntryQCInteractor = async ({
     currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
   }
   currentDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocument(applicationContext, currentDocketEntry),
+    formatDocketEntry(applicationContext, currentDocketEntry),
   )}`;
   if (currentDocketEntry.additionalInfo2) {
     currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;

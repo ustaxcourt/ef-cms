@@ -59,7 +59,6 @@ const {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getServedPartiesCode,
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
@@ -212,7 +211,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.formatDateString),
     formatDocketEntry: jest.fn().mockImplementation(formatDocketEntry),
-    formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),

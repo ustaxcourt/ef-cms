@@ -16,9 +16,9 @@ export const formattedDocument = (get, applicationContext) => {
     return;
   }
 
-  const documentFormatted = applicationContext
+  const docketEntryFormatted = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, document);
+    .formatDocketEntry(applicationContext, document);
 
-  return documentFormatted;
+  return docketEntryFormatted;
 };
