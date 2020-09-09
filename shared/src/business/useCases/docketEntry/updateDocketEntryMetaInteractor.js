@@ -108,8 +108,8 @@ exports.updateDocketEntryMetaInteractor = async ({
       // servedAt or filingDate has changed, generate a new coversheet
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: originalDocketEntry.documentId,
         docketNumber: caseEntity.docketNumber,
-        documentId: originalDocketEntry.documentId,
       });
     }
   }

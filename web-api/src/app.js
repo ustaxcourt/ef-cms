@@ -448,11 +448,11 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(serveCourtIssuedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/coversheet',
+    '/case-documents/:docketNumber/:docketEntryId/coversheet',
     lambdaWrapper(addCoversheetLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/remove-signature',
+    '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),
   );
   app.post(
