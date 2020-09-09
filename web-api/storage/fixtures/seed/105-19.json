@@ -201,7 +201,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Practitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|35306555-83f2-4f61-9be6-438bd107e5eb",
+    "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "numberOfPages": 1,
     "pk": "case|105-19"
@@ -218,7 +218,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Practitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "numberOfPages": 1,
     "pk": "case|105-19"

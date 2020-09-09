@@ -171,7 +171,7 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
-  caseEntity.updateDocument(updatedDocketEntry);
+  caseEntity.updateDocketEntry(updatedDocketEntry);
 
   const workItemToUpdate = updatedDocketEntry.workItem;
 

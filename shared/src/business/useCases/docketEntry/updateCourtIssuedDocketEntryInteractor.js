@@ -70,7 +70,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     trialLocation: documentMeta.trialLocation,
   };
 
-  const documentEntity = new DocketEntry(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
@@ -83,18 +83,18 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const { workItem } = documentEntity;
+  const { workItem } = docketEntryEntity;
 
   Object.assign(workItem, {
     document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
   });
 
-  documentEntity.setWorkItem(workItem);
+  docketEntryEntity.setWorkItem(workItem);
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({
