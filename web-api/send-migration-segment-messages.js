@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 
 // Seth said 200 for segment constant?
-const [ENV, SEGMENT_SIZE] = process.argv.slice(2);
+const [ENV, SEGMENT_SIZE, ACCOUNT_ID] = process.argv.slice(2);
 
 if (!ENV) {
   throw new Error('Please provide an environment.');
@@ -15,10 +15,7 @@ const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
 
 const getItemCount = async () => {
   const dynamo = new AWS.DynamoDB({
-    credentials: {
-      accessKeyId: 'noop',
-      secretAccessKey: 'noop',
-    },
+    // endpoint: 'dynamodb.us-east-1.amazonaws.com',
     endpoint: 'http://localhost:8000',
     region: 'us-east-1',
   });
@@ -39,8 +36,7 @@ const sendSegmentMessage = async ({ numSegments, segment }) => {
     MessageBody: JSON.stringify(messageBody),
     MessageDeduplicationId: JSON.stringify(segment),
     MessageGroupId: 'MigrationSegments',
-    QueueUrl:
-      'https://sqs.us-east-1.amazonaws.com/515554424717/migration_segments_ueue_exp1.fifo',
+    QueueUrl: `https://sqs.us-east-1.amazonaws.com/${ACCOUNT_ID}/migration_segments_queue_exp1.fifo`,
   };
 
   try {
