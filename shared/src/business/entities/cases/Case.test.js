@@ -2148,13 +2148,13 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updateDocument', () => {
+  describe('updateDocketEntry', () => {
     it('should update the document', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
 
-      myCase.updateDocument({
+      myCase.updateDocketEntry({
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
@@ -2171,14 +2171,16 @@ describe('Case entity', () => {
         applicationContext,
       });
 
-      myCase.updateDocument({
+      myCase.updateDocketEntry({
         documentId: '11001001',
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(myCase.docketEntries).toMatchObject(MOCK_DOCUMENTS);
     });
+  });
 
+  describe('updateCorrespondence', () => {
     it('should update a correspondence document', () => {
       const mockCorrespondence = new Correspondence({
         documentId: '123-abc',
@@ -2192,7 +2194,7 @@ describe('Case entity', () => {
         },
       );
 
-      myCase.updateDocument({
+      myCase.updateCorrespondence({
         documentId: mockCorrespondence.documentId,
         documentTitle: 'updated title',
       });
