@@ -1,7 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -152,10 +151,22 @@ export const Address = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                <ValidationText field={`${type}.city`} />
+                {validationErrors &&
+                  validationErrors[type] &&
+                  validationErrors[type].city && (
+                    <span className="usa-error-message">
+                      {validationErrors[type].city}
+                    </span>
+                  )}
               </div>
               <div className="grid-col-4">
-                <ValidationText field={`${type}.state`} />
+                {validationErrors &&
+                  validationErrors[type] &&
+                  validationErrors[type].state && (
+                    <span className="usa-error-message">
+                      {validationErrors[type].state}
+                    </span>
+                  )}
               </div>
             </div>
           </div>

@@ -13,6 +13,27 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19',
   {
     actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes: 'checks a11y of seal address button',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/case-information&info=sealed-address-button',
+  },
+  {
+    actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes:
+      'checks a11y of sealed address display for primary and secondary contact',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
+  },
+  {
+    actions: [
       'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
       'click element .usa-radio__label[for=payment-status-paid]',
       'wait for element #petition-payment-method to be visible',
@@ -37,7 +58,7 @@ module.exports = [
     actions: [
       'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
       'click element .usa-radio__label[for=payment-status-waived]',
-      'wait for element #payment-date-waived-legend to be visible',
+      'wait for element #payment-date-waived-date to be visible',
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
@@ -76,7 +97,7 @@ module.exports = [
     actions: [
       'wait for element #certificate-of-service to be visible',
       'click element #certificate-of-service+label',
-      'wait for element #service-date-month to be visible',
+      'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
@@ -117,6 +138,8 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to dismissal',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -130,6 +153,8 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to opinion',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
@@ -143,6 +168,8 @@ module.exports = [
       'click element #tab-order',
       'wait for #order-search to be visible',
       'set field #order-search to meow',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for svg.iconSealed to be visible',
     ],
@@ -156,14 +183,17 @@ module.exports = [
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
       'set field #opinion-search to sunglasses',
+      'set field #startDate-date-start to 08/03/2001',
+      'check field #startDate-date-start',
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of opinion search',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result-sunglasses',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-deadlines',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/111-19?openModal=UnconsolidateCasesModal',
@@ -171,4 +201,5 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/document-view?documentId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/document-view?documentId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
+  'http://localhost:1234/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
 ];

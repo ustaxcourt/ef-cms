@@ -33,6 +33,7 @@ describe('Modify Petitioner Contact Information', () => {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
         countryType: COUNTRY_TYPES.DOMESTIC,
+        inCareOf: 'Andy Dwyer',
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -60,8 +61,8 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-    documentCount: 5,
-  });
+    documentCount: 6,
+  }); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactAddress(test);
   petitionerNavigatesToEditSecondaryContact(test);

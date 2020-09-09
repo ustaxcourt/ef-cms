@@ -21,6 +21,7 @@ describe('DocketRecord', () => {
       caseCaptionExtension: 'Petitioner(s)',
       caseTitle: 'Test Case Title',
       docketNumberWithSuffix: '123-45S',
+      includePartyDetail: true,
     };
 
     contactPrimary = {
@@ -108,7 +109,7 @@ describe('DocketRecord', () => {
     ];
   });
 
-  it('renders the primary contact information', () => {
+  it('renders the primary contact information when options.includePartyDetail is true', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
@@ -139,6 +140,22 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(contactPrimary.phone);
 
     expect(contactPrimaryEl.text()).not.toContain(contactPrimary.country);
+  });
+
+  it('does not render the primary contact information when options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+
+    const wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    const contacts = wrapper.find('#petitioner-contacts');
+    expect(contacts).toEqual({});
   });
 
   it("displays a party's country if international", () => {
@@ -180,7 +197,8 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
   });
 
-  it('renders private practitioner contact information if present', () => {
+  it('renders private practitioner contact information when present and options.includePartyDetail is true', () => {
+    options.includePartyDetail = true;
     caseDetail.privatePractitioners = []; // No private practitioners
 
     let wrapper = mount(
@@ -224,6 +242,22 @@ describe('DocketRecord', () => {
     expect(contactEl.text()).not.toContain('Representing');
   });
 
+  it('does not render private practitioner contact information when present and options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+    caseDetail.privatePractitioners = [privatePractitioner];
+
+    let wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('#private-practitioner-contacts')).toEqual({});
+  });
+
   it('displays represented parties with each practitioner', () => {
     const privatePractitioner2 = {
       ...privatePractitioner,
@@ -263,7 +297,8 @@ describe('DocketRecord', () => {
     expect(practitioner2El.text()).toContain(contactSecondary.name);
   });
 
-  it('renders irs practitioner contact information if present', () => {
+  it('renders irs practitioner contact information when present and options.includePartyDetail is true', () => {
+    options.includePartyDetail = true;
     caseDetail.irsPractitioners = []; // No irs practitioners
 
     let wrapper = mount(
@@ -305,6 +340,22 @@ describe('DocketRecord', () => {
     expect(contactEl.text()).toContain(irsPractitioner.contact.phone);
 
     expect(contactEl.text()).not.toContain('Representing');
+  });
+
+  it('does not render irs practitioner contact information when present and options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+    caseDetail.irsPractitioners = [irsPractitioner];
+
+    let wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('#irs-practitioner-contacts')).toEqual({});
   });
 
   it('renders a table with docket record data', () => {

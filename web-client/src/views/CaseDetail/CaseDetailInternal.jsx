@@ -3,8 +3,6 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
-import { CaseMessagesCompleted } from './CaseMessagesCompleted';
-import { CaseMessagesInProgress } from './CaseMessagesInProgress';
 import { CaseNotes } from './CaseNotes';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
@@ -12,10 +10,13 @@ import { DocumentViewer } from '../DocketRecord/DocumentViewer';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
+import { MessagesCompleted } from './MessagesCompleted';
+import { MessagesInProgress } from './MessagesInProgress';
 import { OtherFilerInformation } from './OtherFilerInformation';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
+import { SealAddressModal } from './SealAddressModal';
 import { SealCaseModal } from './SealCaseModal';
 import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
@@ -104,14 +105,14 @@ export const CaseDetailInternal = connect(
                 tabName="messagesInProgress"
                 title="In Progress"
               >
-                <CaseMessagesInProgress />
+                <MessagesInProgress />
               </Tab>
               <Tab
                 id="tab-messages-completed"
                 tabName="messagesCompleted"
                 title="Completed"
               >
-                <CaseMessagesCompleted />
+                <MessagesCompleted />
               </Tab>
             </Tabs>
           )}
@@ -159,6 +160,7 @@ export const CaseDetailInternal = connect(
           <PaperServiceConfirmModal />
         )}
         {showModal === 'SealCaseModal' && <SealCaseModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },

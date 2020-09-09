@@ -4,6 +4,7 @@ const {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
+  PETITIONS_SECTION,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
@@ -28,6 +29,17 @@ describe('updateCase', () => {
     },
     createdAt: new Date().toISOString(),
     docketNumber: '56789-18',
+    docketRecord: [
+      {
+        description: 'Petition',
+        docketRecordId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        eventCode: 'P',
+        filedBy: 'Test User',
+        filingDate: '2019-01-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
     documents: [
       {
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -35,16 +47,14 @@ describe('updateCase', () => {
         eventCode: 'P',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-        workItems: [
-          {
-            docketNumber: '56789-18',
-            document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
-            isInitializeCase: true,
-            section: 'petitions',
-            sentBy: 'petitioner',
-            workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-          },
-        ],
+        workItem: {
+          docketNumber: '56789-18',
+          document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
+          isInitializeCase: true,
+          section: PETITIONS_SECTION,
+          sentBy: 'petitioner',
+          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+        },
       },
       {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -67,7 +77,7 @@ describe('updateCase', () => {
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: 'Regular',
     status: CASE_STATUS_TYPES.new,
-    userId: 'userId',
+    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   const petitionsClerkUser = {
@@ -245,5 +255,67 @@ describe('updateCase', () => {
         docketNumber: '123',
       }),
     ).rejects.toThrow('Unauthorized for update case');
+  });
+
+  it('should remove a new initial filing document from the case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+    const mockRQT = {
+      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      documentType: 'Request for Place of Trial',
+      eventCode: 'RQT',
+      filedBy: 'Test Petitioner',
+      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        documents: [...MOCK_CASE.documents, mockRQT],
+        isPaper: true,
+      });
+
+    await saveCaseDetailInternalEditInteractor({
+      applicationContext,
+      caseToUpdate: {
+        ...MOCK_CASE,
+        documents: [...MOCK_CASE.documents, mockRQT],
+        isPaper: true,
+        mailingDate: 'yesterday',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateInitialFilingDocuments,
+    ).toHaveBeenCalled();
+  });
+
+  it('should update which orders are needed', async () => {
+    const caseToUpdate = Object.assign(MOCK_CASE);
+    caseToUpdate.isPaper = true;
+    caseToUpdate.orderDesignatingPlaceOfTrial = true;
+    caseToUpdate.orderForAmendedPetition = true;
+    caseToUpdate.orderForAmendedPetitionAndFilingFee = true;
+    caseToUpdate.orderForFilingFee = true;
+    caseToUpdate.orderForOds = true;
+    caseToUpdate.orderForRatification = true;
+    caseToUpdate.orderToShowCause = true;
+
+    const result = await saveCaseDetailInternalEditInteractor({
+      applicationContext,
+      caseToUpdate: {
+        ...caseToUpdate,
+      },
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+    expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
+    expect(result.orderForAmendedPetition).toBeTruthy();
+    expect(result.orderForAmendedPetitionAndFilingFee).toBeTruthy();
+    expect(result.orderForFilingFee).toBeTruthy();
+    expect(result.orderForOds).toBeTruthy();
+    expect(result.orderForRatification).toBeTruthy();
+    expect(result.orderToShowCause).toBeTruthy();
   });
 });

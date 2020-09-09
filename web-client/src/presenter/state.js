@@ -1,7 +1,6 @@
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
-import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
@@ -13,10 +12,10 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseDetailPractitionerSearchHelper } from './computeds/caseDetailPractitionerSearchHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
-import { caseMessageModalHelper } from './computeds/caseMessageModalHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
@@ -59,14 +58,17 @@ import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
+import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
+import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -85,6 +87,7 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
@@ -93,7 +96,6 @@ const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
-  addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
@@ -105,10 +107,10 @@ const helpers = {
   caseDetailEditHelper,
   caseDetailHeaderHelper,
   caseDetailHelper,
+  caseDetailPractitionerSearchHelper,
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
-  caseMessageModalHelper,
   caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
@@ -149,14 +151,17 @@ const helpers = {
   loadingHelper,
   menuHelper,
   messageDocumentHelper,
+  messageModalHelper,
   messagesHelper,
   orderTypesHelper,
   paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
+  petitionQcHelper,
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   printPaperServiceHelper,
+  recentMessagesHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
@@ -175,6 +180,7 @@ const helpers = {
   trialSessionsHelper,
   trialSessionsSummaryHelper,
   updateCaseModalHelper,
+  userContactEditProgressHelper,
   viewAllDocumentsHelper,
   workQueueHelper,
   workQueueSectionHelper,
@@ -225,8 +231,6 @@ export const baseState = {
   docketRecordIndex: 0,
   // needs its own object because it's present when other forms are on screen
   documentId: null,
-  fieldOrder: [],
-  // TODO: related to errors
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     isUploading: false,
@@ -282,6 +286,8 @@ export const baseState = {
   },
   showValidation: false,
   user: null,
+  // used for progress indicator when updating contact information for all of a user's cases
+  userContactEditProgress: {},
   users: [],
   validationErrors: {},
   workItem: {},

@@ -65,9 +65,10 @@ export const formatWorkItem = ({
 
   result.highPriority = !!result.highPriority;
   result.sentBySection = capitalize(result.sentBySection);
-  result.completedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.completedAt, 'DATE_TIME');
+  result.completedAtFormatted = formatDateIfToday(
+    result.completedAt,
+    applicationContext,
+  );
   result.completedAtFormattedTZ = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME_TZ');
@@ -226,78 +227,75 @@ export const filterWorkItems = ({
   });
 
   const filters = {
-    documentQc: {
-      my: {
-        inProgress: item => {
-          return (
-            // DocketClerks
-            (item.assigneeId === user.userId &&
-              user.role === USER_ROLES.docketClerk &&
-              !item.completedAt &&
-              item.section === user.section &&
-              (item.document.isFileAttached === false || item.inProgress)) ||
-            // PetitionsClerks
-            (item.assigneeId === user.userId &&
-              user.role === USER_ROLES.petitionsClerk &&
-              item.caseStatus === STATUS_TYPES.new &&
-              item.caseIsInProgress === true)
-          );
-        },
-        inbox: item => {
-          return (
-            item.assigneeId === user.userId &&
+    my: {
+      inProgress: item => {
+        return (
+          // DocketClerks
+          (item.assigneeId === user.userId &&
+            user.role === USER_ROLES.docketClerk &&
             !item.completedAt &&
             item.section === user.section &&
-            item.document.isFileAttached !== false &&
-            !item.inProgress &&
-            item.caseIsInProgress !== true
-          );
-        },
-        outbox: item => {
-          return (
-            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
-            item.completedByUserId &&
-            item.completedByUserId === user.userId &&
-            !!item.completedAt
-          );
-        },
+            (item.document.isFileAttached === false || item.inProgress)) ||
+          // PetitionsClerks
+          (item.assigneeId === user.userId &&
+            user.role === USER_ROLES.petitionsClerk &&
+            item.caseStatus === STATUS_TYPES.new &&
+            item.caseIsInProgress === true)
+        );
       },
-      section: {
-        inProgress: item => {
-          return (
-            // DocketClerks
-            (!item.completedAt &&
-              user.role === USER_ROLES.docketClerk &&
-              item.section === user.section &&
-              (item.document.isFileAttached === false || item.inProgress)) ||
-            // PetitionsClerks
-            (user.role === USER_ROLES.petitionsClerk &&
-              item.caseStatus === STATUS_TYPES.new &&
-              item.caseIsInProgress === true)
-          );
-        },
-        inbox: item => {
-          return (
-            !item.completedAt &&
-            item.section === docQCUserSection &&
-            item.document.isFileAttached !== false &&
-            !item.inProgress &&
-            additionalFilters(item) &&
-            item.caseIsInProgress !== true
-          );
-        },
-        outbox: item => {
-          return (
-            !!item.completedAt &&
-            (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
-          );
-        },
+      inbox: item => {
+        return (
+          item.assigneeId === user.userId &&
+          !item.completedAt &&
+          item.section === user.section &&
+          item.document.isFileAttached !== false &&
+          !item.inProgress &&
+          item.caseIsInProgress !== true
+        );
+      },
+      outbox: item => {
+        return (
+          (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
+          item.completedByUserId &&
+          item.completedByUserId === user.userId &&
+          !!item.completedAt
+        );
+      },
+    },
+    section: {
+      inProgress: item => {
+        return (
+          // DocketClerks
+          (!item.completedAt &&
+            user.role === USER_ROLES.docketClerk &&
+            item.section === user.section &&
+            (item.document.isFileAttached === false || item.inProgress)) ||
+          // PetitionsClerks
+          (user.role === USER_ROLES.petitionsClerk &&
+            item.caseStatus === STATUS_TYPES.new &&
+            item.caseIsInProgress === true)
+        );
+      },
+      inbox: item => {
+        return (
+          !item.completedAt &&
+          item.section === docQCUserSection &&
+          item.document.isFileAttached !== false &&
+          !item.inProgress &&
+          additionalFilters(item) &&
+          item.caseIsInProgress !== true
+        );
+      },
+      outbox: item => {
+        return (
+          !!item.completedAt &&
+          (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
+        );
       },
     },
   };
 
-  const view = 'documentQc';
-  const composedFilter = filters[view][queue][box];
+  const composedFilter = filters[queue][box];
   return composedFilter;
 };
 
@@ -307,7 +305,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
-  const { USER_ROLES } = applicationContext.getConstants();
 
   const judgeUser = get(state.judgeUser);
 
@@ -336,66 +333,36 @@ export const formattedWorkQueue = (get, applicationContext) => {
     });
 
   const sortFields = {
-    documentQc: {
-      my: {
-        inProgress: 'receivedAt',
-        inbox: 'receivedAt',
-        outbox:
-          user.role === USER_ROLES.petitionsClerk
-            ? 'completedAt'
-            : 'receivedAt',
-      },
-      section: {
-        inProgress: 'receivedAt',
-        inbox: 'receivedAt',
-        outbox:
-          user.role === USER_ROLES.petitionsClerk
-            ? 'completedAt'
-            : 'receivedAt',
-      },
+    my: {
+      inProgress: 'receivedAt',
+      inbox: 'receivedAt',
+      outbox: 'completedAt',
     },
-    messages: {
-      my: {
-        inbox: 'receivedAt',
-        outbox: 'receivedAt',
-      },
-      section: {
-        inbox: 'receivedAt',
-        outbox: 'receivedAt',
-      },
+    section: {
+      inProgress: 'receivedAt',
+      inbox: 'receivedAt',
+      outbox: 'completedAt',
     },
   };
 
   const sortDirections = {
-    documentQc: {
-      my: {
-        inProgress: 'asc',
-        inbox: 'asc',
-        outbox: 'desc',
-      },
-      section: {
-        inProgress: 'asc',
-        inbox: 'asc',
-        outbox: 'desc',
-      },
+    my: {
+      inProgress: 'asc',
+      inbox: 'asc',
+      outbox: 'desc',
     },
-    messages: {
-      my: {
-        inbox: 'asc',
-        outbox: 'desc',
-      },
-      section: {
-        inbox: 'asc',
-        outbox: 'desc',
-      },
+    section: {
+      inProgress: 'asc',
+      inbox: 'asc',
+      outbox: 'desc',
     },
   };
 
   const sortField =
-    sortFields.documentQc[workQueueToDisplay.queue][workQueueToDisplay.box];
+    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   const sortDirection =
-    sortDirections.documentQc[workQueueToDisplay.queue][workQueueToDisplay.box];
+    sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [];
   let highPriorityDirection = [];

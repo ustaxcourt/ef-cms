@@ -1,6 +1,7 @@
 const isCaseMessageRecord = item =>
   item.pk.startsWith('case|') && item.sk.startsWith('message|');
-const isCaseRecord = item => !!item.caseType;
+const isCaseRecord = item =>
+  item.pk.startsWith('case|') && item.sk.startsWith('case|');
 const isTrialSessionRecord = item =>
   !!item.caseOrder && !!item.trialSessionId && !!item.maxCases;
 const isUserCaseMappingRecord = item =>
@@ -15,6 +16,8 @@ const isUserCaseNoteRecord = item =>
   item.pk.startsWith('user-case-note|') && item.sk.startsWith('user|');
 const isEligibleForTrialRecord = item =>
   item.pk === 'eligible-for-trial-case-catalog';
+const isWorkItemRecord = item =>
+  item.pk.startsWith('work-item|') && item.sk.startsWith('work-item|');
 
 const forAllRecords = async (documentClient, tableName, cb) => {
   let hasMoreResults = true;
@@ -70,5 +73,6 @@ module.exports = {
   isTrialSessionRecord,
   isUserCaseMappingRecord,
   isUserCaseNoteRecord,
+  isWorkItemRecord,
   upGenerator,
 };

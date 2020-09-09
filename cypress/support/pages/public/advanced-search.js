@@ -19,6 +19,10 @@ exports.enterDocumentKeywordForOpinionSearch = keyword => {
   cy.get('input#opinion-search').type(keyword);
 };
 
+exports.enterStartDateForOpinionSearch = date => {
+  cy.get('input#startDate-date-start').type(date);
+};
+
 exports.enterDocumentDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
 };

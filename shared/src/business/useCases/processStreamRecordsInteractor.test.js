@@ -1,17 +1,11 @@
 const {
-  bulkIndexRecords,
-} = require('../../persistence/elasticsearch/bulkIndexRecords');
-const {
   processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { indexRecord } = require('../../persistence/elasticsearch/indexRecord');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
     applicationContext.getSearchClient().bulk.mockReturnValue({ body: {} });
-    applicationContext.getPersistenceGateway().bulkIndexRecords = bulkIndexRecords;
-    applicationContext.getPersistenceGateway().indexRecord = indexRecord;
   });
 
   it('does not call bulk function if recordsToProcess is an empty array', async () => {
@@ -40,7 +34,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(applicationContext.getSearchClient().bulk).not.toHaveBeenCalled();
   });
 
-  it('calls bulk function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out items that are not cases, documents, or useres', async () => {
+  it('calls bulk function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out items that are not cases, documents, or users', async () => {
     await processStreamRecordsInteractor({
       applicationContext,
       recordsToProcess: [
@@ -81,11 +75,9 @@ describe('processStreamRecordsInteractor', () => {
           dynamodb: {
             Keys: { pk: { S: '4' } },
             NewImage: {
-              caseMetadata: { '101-19': { M: { manuallyAdded: true } } },
               docketNumber: { S: '4' },
               entityName: { S: 'Case' },
               pk: { S: '4' },
-              qcCompleteForTrial: { '123': true, '234': true },
               sk: { S: '4' },
             },
           },
@@ -121,12 +113,10 @@ describe('processStreamRecordsInteractor', () => {
               documentId: { S: '6' },
               pk: { S: '6' },
               sk: { S: '6' },
-              workItems: [
-                {
-                  blah: true,
-                  documents: [{ documentId: '6' }],
-                },
-              ],
+              workItem: {
+                blah: true,
+                documents: [{ documentId: '6' }],
+              },
             },
           },
           eventName: 'MODIFY',
@@ -646,5 +636,165 @@ describe('processStreamRecordsInteractor', () => {
         userId: { S: '1' },
       },
     ]);
+  });
+
+  it('calls bulk delete function with correct params only for records with eventName "REMOVE"', async () => {
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' } },
+            OldImage: {
+              docketNumber: { S: '1' },
+              entityName: { S: 'Case' },
+              pk: { S: '1' },
+              sk: { S: '1' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalled();
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getSearchClient().bulk.mock.calls[0][0].body,
+    ).toEqual([{ delete: { _id: '1_1', _index: 'efcms-case' } }]);
+  });
+
+  it('calls delete function for failed records from bulkDelete', async () => {
+    applicationContext.getSearchClient().bulk.mockResolvedValue({
+      errors: [{ badError: true }],
+      items: [
+        {
+          delete: { error: false },
+        },
+        {
+          delete: { error: true },
+        },
+      ],
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' } },
+            OldImage: {
+              docketNumber: { S: '1' },
+              entityName: { S: 'Case' },
+              pk: { S: '1' },
+              sk: { S: '1' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '2' } },
+            OldImage: {
+              docketNumber: { S: '2' },
+              entityName: { S: 'Case' },
+              pk: { S: '2' },
+              sk: { S: '2' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().delete).toBeCalledTimes(1);
+    expect(
+      applicationContext.getSearchClient().delete.mock.calls[0][0],
+    ).toMatchObject({ id: '2_2', index: 'efcms-case' });
+  });
+
+  it('logs error if bulk delete throws an error', async () => {
+    const error = new Error('bad!');
+    applicationContext.getSearchClient().bulk.mockImplementation(() => {
+      throw error;
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' } },
+            OldImage: {
+              docketNumber: { S: '1' },
+              entityName: { S: 'Case' },
+              pk: { S: '1' },
+              sk: { S: '1' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+      ],
+    });
+
+    expect(applicationContext.notifyHoneybadger).toBeCalledTimes(1);
+    expect(applicationContext.notifyHoneybadger.mock.calls[0][0]).toEqual(
+      error,
+    );
+  });
+
+  it('logs error if deleteRecord throws an error', async () => {
+    applicationContext.getSearchClient().bulk.mockResolvedValue({
+      errors: [{ badError: true }],
+      items: [
+        {
+          delete: { error: false },
+        },
+        {
+          delete: { error: true },
+        },
+      ],
+    });
+    const error = new Error('bad!');
+    applicationContext.getSearchClient().delete.mockImplementation(() => {
+      throw error;
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' } },
+            OldImage: {
+              docketNumber: { S: '1' },
+              entityName: { S: 'Case' },
+              pk: { S: '1' },
+              sk: { S: '1' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '2' } },
+            OldImage: {
+              docketNumber: { S: '2' },
+              entityName: { S: 'Case' },
+              pk: { S: '2' },
+              sk: { S: '2' },
+            },
+          },
+          eventName: 'REMOVE',
+        },
+      ],
+    });
+
+    expect(applicationContext.notifyHoneybadger).toBeCalledTimes(1);
+    expect(applicationContext.notifyHoneybadger.mock.calls[0][0]).toEqual(
+      error,
+    );
   });
 });

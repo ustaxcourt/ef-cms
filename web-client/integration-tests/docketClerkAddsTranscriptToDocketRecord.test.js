@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
@@ -18,6 +19,8 @@ const test = setupTest();
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Transcript to Docket Record', () => {
+  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -65,7 +68,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
       state: test.getState(),
     });
     const transcriptDocuments = formattedCase.formattedDocketEntries.filter(
-      document => document.eventCode === 'TRAN',
+      document => document.eventCode === TRANSCRIPT_EVENT_CODE,
     );
     // first transcript should be available to the user
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
@@ -73,5 +76,10 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     // second transcript should NOT be available to the user
     expect(transcriptDocuments[1].showLinkToDocument).toEqual(false);
     expect(transcriptDocuments[1].isUnservable).toEqual(true);
+
+    const transDocketRecord = formattedCase.documents.find(
+      record => record.eventCode === TRANSCRIPT_EVENT_CODE,
+    );
+    expect(transDocketRecord.index).toBeTruthy();
   });
 });

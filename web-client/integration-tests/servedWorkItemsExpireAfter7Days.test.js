@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business//test/createTestApplicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -10,6 +7,13 @@ import {
   uploadPetition,
 } from './helpers';
 import applicationContextFactory from '../../web-api/src/applicationContext';
+
+const {
+  IRS_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+  STATUS_TYPES: CASE_STATUS_TYPES,
+  USER_ROLES: ROLES,
+} = applicationContext.getConstants();
 
 const test = setupTest();
 
@@ -35,7 +39,7 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     const applicationContext = applicationContextFactory({
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -65,9 +69,9 @@ describe('verify old served work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      section: 'irsSystem',
+      section: IRS_SYSTEM_SECTION,
       sentBy: 'Test petitionsclerk1',
-      sentBySection: 'petitions',
+      sentBySection: PETITIONS_SECTION,
       sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       updatedAt: '2019-06-26T16:31:17.643Z',
       workItemId: `${workItemId8}`,

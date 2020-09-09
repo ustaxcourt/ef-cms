@@ -29,8 +29,20 @@ const RenderAddress = ({ contact, countryTypes }) => {
 const RenderContact = ({ contact, countryTypes }) => {
   return (
     <div className="party-details">
-      <p className="margin-bottom-0">{contact.name}</p>
-      <RenderAddress contact={contact} countryTypes={countryTypes} />
+      <div>
+        {contact.isAddressSealed && (
+          <div className="sealed-icon-container">
+            <div className="sealed-icon" />
+          </div>
+        )}
+        <p className="margin-bottom-0">{contact.name}</p>
+        {!contact.isAddressSealed && (
+          <RenderAddress contact={contact} countryTypes={countryTypes} />
+        )}
+        {contact.isAddressSealed && (
+          <p className="address-sealed-text">Address sealed</p>
+        )}
+      </div>
     </div>
   );
 };
@@ -124,45 +136,48 @@ export const DocketRecord = ({
         h3="Printable Docket Record"
       />
 
-      <div className="party-info" id="petitioner-contacts">
-        <div className="party-info-header">{caseDetail.partyType}</div>
-        <div className="party-info-content">
-          <RenderContact
-            caseTitle={options.caseTitle}
-            contact={caseDetail.contactPrimary}
-            countryTypes={countryTypes}
-          />
-          {caseDetail.contactSecondary && (
+      {options.includePartyDetail && (
+        <div className="party-info" id="petitioner-contacts">
+          <div className="party-info-header">{caseDetail.partyType}</div>
+          <div className="party-info-content">
             <RenderContact
-              contact={caseDetail.contactSecondary}
+              caseTitle={options.caseTitle}
+              contact={caseDetail.contactPrimary}
               countryTypes={countryTypes}
             />
-          )}
-        </div>
-      </div>
-
-      {caseDetail.privatePractitioners.length > 0 && (
-        <div className="party-info" id="private-practitioner-contacts">
-          <div className="party-info-header">Petitioner Counsel</div>
-          <div className="party-info-content">
-            {caseDetail.privatePractitioners.map(practitioner => {
-              if (practitioner.formattedName) {
-                return (
-                  <RenderPractitioner
-                    contactPrimary={caseDetail.contactPrimary}
-                    contactSecondary={caseDetail.contactSecondary}
-                    countryTypes={countryTypes}
-                    key={practitioner.barNumber}
-                    practitioner={practitioner}
-                  />
-                );
-              }
-            })}
+            {caseDetail.contactSecondary && (
+              <RenderContact
+                contact={caseDetail.contactSecondary}
+                countryTypes={countryTypes}
+              />
+            )}
           </div>
         </div>
       )}
 
-      {caseDetail.irsPractitioners.length > 0 && (
+      {caseDetail.privatePractitioners.length > 0 &&
+        options.includePartyDetail && (
+          <div className="party-info" id="private-practitioner-contacts">
+            <div className="party-info-header">Petitioner Counsel</div>
+            <div className="party-info-content">
+              {caseDetail.privatePractitioners.map(practitioner => {
+                if (practitioner.formattedName) {
+                  return (
+                    <RenderPractitioner
+                      contactPrimary={caseDetail.contactPrimary}
+                      contactSecondary={caseDetail.contactSecondary}
+                      countryTypes={countryTypes}
+                      key={practitioner.barNumber}
+                      practitioner={practitioner}
+                    />
+                  );
+                }
+              })}
+            </div>
+          </div>
+        )}
+
+      {caseDetail.irsPractitioners.length > 0 && options.includePartyDetail && (
         <div className="party-info" id="irs-practitioner-contacts">
           <div className="party-info-header">Respondent Counsel</div>
           <div className="party-info-content">

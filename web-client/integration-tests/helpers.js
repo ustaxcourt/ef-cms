@@ -14,6 +14,7 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/createTestApplicationContext';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
@@ -36,6 +37,9 @@ import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const formattedCaseMessages = withAppContextDecorator(
   formattedCaseMessagesComputed,
@@ -69,10 +73,18 @@ export const getFormattedDocumentQCMyInbox = async test => {
   });
 };
 
-export const getMySentFormattedCaseMessages = async test => {
-  await test.runSequence('gotoCaseMessagesSequence', {
-    box: 'outbox',
-    queue: 'my',
+export const getFormattedCaseDetailForTest = async test => {
+  await test.runSequence('gotoCaseDetailSequence', {
+    docketNumber: test.docketNumber,
+  });
+  return runCompute(formattedCaseDetail, {
+    state: test.getState(),
+  });
+};
+
+export const getCaseMessagesForCase = async test => {
+  await test.runSequence('gotoCaseDetailSequence', {
+    docketNumber: test.docketNumber,
   });
   return runCompute(formattedCaseMessages, {
     state: test.getState(),
@@ -151,17 +163,33 @@ export const serveDocument = async ({ docketNumber, documentId, test }) => {
 export const createCourtIssuedDocketEntry = async ({
   docketNumber,
   documentId,
+  eventCode,
   test,
+  trialLocation,
 }) => {
   await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketNumber,
     documentId,
   });
 
+  if (eventCode) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'eventCode',
+      value: eventCode,
+    });
+  }
+
   await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
     key: 'judge',
     value: 'Judge Buch',
   });
+
+  if (trialLocation) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'trialLocation',
+      value: trialLocation,
+    });
+  }
 
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
@@ -248,24 +276,6 @@ export const uploadProposedStipulatedDecision = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
-export const forwardWorkItem = async (test, to, workItemId, message) => {
-  let assigneeId;
-  if (to === 'docketclerk1') {
-    assigneeId = '2805d1ab-18d0-43ec-bafb-654e83405416';
-  }
-  test.setState('form', {
-    [workItemId]: {
-      assigneeId: assigneeId,
-      forwardMessage: message,
-      section: 'petitions',
-    },
-  });
-
-  await test.runSequence('submitForwardSequence', {
-    workItemId,
-  });
-};
-
 export const uploadPetition = async (
   test,
   overrides = {},
@@ -309,19 +319,21 @@ export const uploadPetition = async (
   //create token
   const userToken = jwt.sign(user, 'secret');
 
-  const response = await axios.post(
-    'http://localhost:4000/cases',
-    {
-      petitionFileId,
-      petitionMetadata,
-      stinFileId,
+  const data = {
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  };
+
+  if (overrides.ownershipDisclosureFileId) {
+    data.ownershipDisclosureFileId = overrides.ownershipDisclosureFileId;
+  }
+
+  const response = await axios.post('http://localhost:4000/cases', data, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-    },
-  );
+  });
 
   test.setState('caseDetail', response.data);
 
@@ -369,8 +381,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:4000';
-
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext = applicationContext;
@@ -415,6 +425,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
       setItem: () => null,
     },
     location: {},
+    open: url => {
+      test.setState('openedUrl', url);
+    },
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
     },
@@ -519,7 +532,8 @@ export const refreshElasticsearchIndex = async () => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
   await axios.post('http://localhost:9200/_refresh');
-  return await wait(1500);
+  await axios.post('http://localhost:9200/_flush');
+  return await wait(2000);
 };
 
 export const base64ToUInt8Array = b64 => {
@@ -558,5 +572,5 @@ export const getPetitionDocumentForCase = caseDetail => {
 
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
-  return petitionDocument.workItems[0];
+  return petitionDocument.workItem;
 };

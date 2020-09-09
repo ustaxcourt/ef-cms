@@ -10,9 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -86,7 +84,10 @@ exports.updateDocketEntryInteractor = async ({
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
+      description: editableFields.documentTitle,
       documentId: primaryDocumentFileId,
+      editState: JSON.stringify(editableFields),
+      isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
@@ -97,31 +98,13 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
-    documentEntity.documentId,
-  );
-
-  const docketRecordEntry = new DocketRecord(
-    {
-      ...existingDocketRecordEntry,
-      description: editableFields.documentTitle,
-      documentId: documentEntity.documentId,
-      editState: JSON.stringify(editableFields),
-      eventCode: documentEntity.eventCode,
-      filingDate: documentEntity.receivedAt,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
-
   if (editableFields.isFileAttached) {
-    const workItem = documentEntity.getQCWorkItem();
+    const { workItem } = documentEntity;
 
     if (!isSavingForLater) {
-      const workItemToDelete = currentDocument.workItems.find(
-        workItem => !workItem.document.isFileAttached,
-      );
+      const workItemToDelete =
+        currentDocument.workItem &&
+        !currentDocument.workItem.document.isFileAttached;
 
       if (workItemToDelete) {
         await applicationContext
@@ -162,7 +145,7 @@ exports.updateDocketEntryInteractor = async ({
         sentByUserId: user.userId,
       });
 
-      documentEntity.addWorkItem(workItem);
+      documentEntity.setWorkItem(workItem);
 
       const servedParties = aggregatePartiesForService(caseEntity);
       documentEntity.setAsServed(servedParties.all);
@@ -223,7 +206,7 @@ exports.updateDocketEntryInteractor = async ({
         workItem: workItem.validate().toRawObject(),
       });
   } else if (!editableFields.isFileAttached && isSavingForLater) {
-    const workItem = documentEntity.getQCWorkItem();
+    const { workItem } = documentEntity;
 
     Object.assign(workItem, {
       assigneeId: null,

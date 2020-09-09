@@ -41,6 +41,7 @@ describe('submitCaseAssociationRequest', () => {
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
+    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   let mockCurrentUser;
@@ -76,11 +77,13 @@ describe('submitCaseAssociationRequest', () => {
 
   it('should not add mapping if already there', async () => {
     mockCurrentUser = {
+      barNumber: 'BN1234',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     mockGetUserById = {
+      barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -114,6 +117,7 @@ describe('submitCaseAssociationRequest', () => {
 
   it('should add mapping for a practitioner', async () => {
     mockCurrentUser = {
+      barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -148,11 +152,13 @@ describe('submitCaseAssociationRequest', () => {
 
   it('should add mapping for an irsPractitioner', async () => {
     mockCurrentUser = {
+      barNumber: 'BN1234',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     mockGetUserById = {
+      barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',

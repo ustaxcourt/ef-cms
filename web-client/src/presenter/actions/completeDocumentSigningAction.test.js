@@ -65,15 +65,13 @@ describe('completeDocumentSigningAction', () => {
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItems: [
-                {
-                  messages: [
-                    {
-                      messageId: '123',
-                    },
-                  ],
-                },
-              ],
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
             },
           ],
         },
@@ -117,15 +115,13 @@ describe('completeDocumentSigningAction', () => {
           documents: [
             {
               documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItems: [
-                {
-                  messages: [
-                    {
-                      messageId: '123',
-                    },
-                  ],
-                },
-              ],
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
             },
           ],
         },
@@ -149,6 +145,93 @@ describe('completeDocumentSigningAction', () => {
     expect(result.output).toMatchObject({
       docketNumber,
       tab: 'docketRecord',
+    });
+  });
+
+  it('should construct a redirectUrl to the message detail document view if there is a parentMessageId present in state', async () => {
+    const parentMessageId = applicationContext.getUniqueId();
+
+    const result = await runAction(completeDocumentSigningAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber,
+          documents: [
+            {
+              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        currentViewMetadata: {
+          messageId: '123',
+        },
+        parentMessageId,
+        pdfForSigning: {
+          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          pageNumber: 3,
+          pdfjsLib: {},
+          signatureData: {
+            scale: 1,
+            x: 300,
+            y: 400,
+          },
+        },
+      },
+    });
+
+    expect(result.output).toMatchObject({
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockDocumentId}`,
+    });
+  });
+
+  it('should construct a redirectUrl to the draft documents view if there is no parentMessageId present in state', async () => {
+    const result = await runAction(completeDocumentSigningAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber,
+          documents: [
+            {
+              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        currentViewMetadata: {
+          messageId: '123',
+        },
+        pdfForSigning: {
+          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          pageNumber: 3,
+          pdfjsLib: {},
+          signatureData: {
+            scale: 1,
+            x: 300,
+            y: 400,
+          },
+        },
+      },
+    });
+
+    expect(result.output).toMatchObject({
+      redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${mockDocumentId}`,
     });
   });
 });

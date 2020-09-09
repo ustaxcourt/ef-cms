@@ -10,12 +10,13 @@
 * [Site Access](./Site-Access.md)
 * [Messages](./Messages.md)
 * [Messages Queues](./Message-Queues.md)
-* [Petitions](./Petitions.md)
+* [Petitions (General)](./Petitions-QC.md)
    * [Create Case from Paper Petition](./Create-Case-From-Paper-Petition.md)
    * [Review and Serve Petition](./Review-and-Serve-Petition.md)
-   * Electronic QC
+   * [eFiled Petition QC](./eFiledPetitionQC.md)
 
-* [Docket (General)](./Docket-(General).md)
+
+* [Docket Document QC](./DocketDocumentQC.md)
    * [Docket Document QC Process](./Docket-Document-QC-Process.md)
    * [Edit Docket Entry](./Edit-Docket-Record.md)
    * [Add Docket Entry - Externally Filed Documents](./Add-Docket-Entry---Externally-Filed-Documents.md)
@@ -46,5 +47,7 @@
 * [External Filings](./External-Filings.md)
 
 #### [Search](./Search.md)
+
+#### [Public Access](./PublicAccess.md)
 
 #### [Practitioner Database](./Practitioner-Database.md)

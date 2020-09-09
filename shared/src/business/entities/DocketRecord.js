@@ -4,8 +4,10 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * DocketRecord constructor
@@ -13,11 +15,17 @@ const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
  * @param {object} rawDocketRecord the raw docket record data
  * @constructor
  */
-function DocketRecord(rawDocketRecord, { applicationContext }) {
+function DocketRecord() {
+  this.entityName = 'DocketRecord';
+}
+
+DocketRecord.prototype.init = function init(
+  rawDocketRecord,
+  { applicationContext },
+) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'DocketRecord';
 
   this.docketRecordId =
     rawDocketRecord.docketRecordId || applicationContext.getUniqueId();
@@ -33,7 +41,10 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.servedPartiesCode = rawDocketRecord.servedPartiesCode;
   this.isLegacy = rawDocketRecord.isLegacy;
   this.isStricken = rawDocketRecord.isStricken;
-}
+  this.strickenBy = rawDocketRecord.strickenBy;
+  this.strickenByUserId = rawDocketRecord.strickenByUserId;
+  this.strickenAt = rawDocketRecord.strickenAt;
+};
 
 DocketRecord.validationName = 'DocketRecord';
 
@@ -41,83 +52,77 @@ DocketRecord.VALIDATION_ERROR_MESSAGES = {
   description: 'Enter a description',
   eventCode: 'Enter an event code',
   filingDate: 'Enter a valid filing date',
-  index: 'Enter an index',
 };
+
+DocketRecord.VALIDATION_RULES = joi.object().keys({
+  action: JoiValidationConstants.STRING.max(100)
+    .optional()
+    .allow(null)
+    .description('Action taken in response to this Docket Record item.'),
+  description: JoiValidationConstants.STRING.max(500)
+    .required()
+    .description(
+      'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
+    ),
+  docketRecordId: JoiValidationConstants.UUID.required(),
+  documentId: JoiValidationConstants.UUID.allow(null)
+    .optional()
+    .description('ID of the associated PDF document in the S3 bucket.'),
+  editState: JoiValidationConstants.STRING.max(4000)
+    .allow(null)
+    .optional()
+    .meta({ tags: ['Restricted'] })
+    .description('JSON representation of the in-progress edit of this item.'),
+  entityName: JoiValidationConstants.STRING.valid('DocketRecord').required(),
+  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
+    .required()
+    .description(
+      'Code associated with the event that resulted in this item being added to the Docket Record.',
+    ),
+  filedBy: JoiValidationConstants.STRING.max(500)
+    .optional()
+    .allow(null)
+    .meta({ tags: ['Restricted'] })
+    .description('User that filed this Docket Record item.'),
+  filingDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description('Date that this Docket Record item was filed.'),
+  index: joi
+    .number()
+    .integer()
+    .optional()
+    .description('Index of this item in the Docket Record list.'),
+  isLegacy: joi
+    .boolean()
+    .optional()
+    .description(
+      'Indicates whether or not the DocketRecord belongs to a legacy case that has been migrated to the new system.',
+    ),
+  isStricken: joi
+    .boolean()
+    .when('isLegacy', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    })
+    .description('Indicates the item has been removed from the docket record.'),
+  numberOfPages: joi.number().optional().allow(null),
+  servedPartiesCode: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVED_PARTIES_CODES),
+  )
+    .allow(null)
+    .optional()
+    .description('Served parties code to override system-computed code.'),
+  strickenAt: JoiValidationConstants.ISO_DATE.max('now')
+    .optional()
+    .description('Date that this Docket Record item was stricken.'),
+  strickenBy: JoiValidationConstants.STRING.optional(),
+  strickenByUserId: JoiValidationConstants.STRING.optional(),
+});
 
 joiValidationDecorator(
   DocketRecord,
-  joi.object().keys({
-    action: joi
-      .string()
-      .max(100)
-      .optional()
-      .allow(null)
-      .description('Action taken in response to this Docket Record item.'),
-    description: joi
-      .string()
-      .max(500)
-      .required()
-      .description(
-        'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
-      ),
-    docketRecordId: JoiValidationConstants.UUID.required(),
-    documentId: JoiValidationConstants.UUID.allow(null)
-      .optional()
-      .description('ID of the associated PDF document in the S3 bucket.'),
-    editState: joi
-      .string()
-      .max(4000)
-      .allow(null)
-      .optional()
-      .meta({ tags: ['Restricted'] })
-      .description('JSON representation of the in-progress edit of this item.'),
-    entityName: joi.string().valid('DocketRecord').required(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .required()
-      .description(
-        'Code associated with the event that resulted in this item being added to the Docket Record.',
-      ),
-    filedBy: joi
-      .string()
-      .max(500)
-      .optional()
-      .allow(null)
-      .meta({ tags: ['Restricted'] })
-      .description('User that filed this Docket Record item.'),
-    filingDate: JoiValidationConstants.ISO_DATE.max('now')
-      .required()
-      .description('Date that this Docket Record item was filed.'),
-    index: joi
-      .number()
-      .integer()
-      .required()
-      .description('Index of this item in the Docket Record list.'),
-    isLegacy: joi
-      .boolean()
-      .optional()
-      .description(
-        'Indicates whether or not the DocketRecord belongs to a legacy case that has been migrated to the new system.',
-      ),
-    isStricken: joi
-      .boolean()
-      .when('isLegacy', {
-        is: true,
-        otherwise: joi.optional(),
-        then: joi.required(),
-      })
-      .description(
-        'Indicates the item has been removed from the docket record.',
-      ),
-    numberOfPages: joi.number().optional().allow(null),
-    servedPartiesCode: joi
-      .string()
-      .valid(...Object.values(SERVED_PARTIES_CODES))
-      .allow(null)
-      .optional()
-      .description('Served parties code to override system-computed code.'),
-  }),
+  DocketRecord.VALIDATION_RULES,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
 
@@ -125,4 +130,18 @@ DocketRecord.prototype.setNumberOfPages = function (numberOfPages) {
   this.numberOfPages = numberOfPages;
 };
 
-module.exports = { DocketRecord };
+/**
+ * strikes this docket record
+ *
+ * @param {object} obj param
+ * @param {string} obj.name user name
+ * @param {string} obj.userId user id
+ */
+DocketRecord.prototype.strikeEntry = function ({ name, userId }) {
+  this.isStricken = true;
+  this.strickenBy = name;
+  this.strickenByUserId = userId;
+  this.strickenAt = createISODateString();
+};
+
+exports.DocketRecord = validEntityDecorator(DocketRecord);

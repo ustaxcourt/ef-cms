@@ -3,6 +3,9 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { getSectionOutboxMessages } = require('./getSectionOutboxMessages');
 jest.mock('../searchClient');
+const {
+  PETITIONS_SECTION,
+} = require('../../../business/entities/EntityConstants');
 const { search } = require('../searchClient');
 
 describe('getSectionOutboxMessages', () => {
@@ -11,7 +14,7 @@ describe('getSectionOutboxMessages', () => {
 
     const results = await getSectionOutboxMessages({
       applicationContext,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
     });
 
     expect(search).toHaveBeenCalledTimes(1);

@@ -1,7 +1,14 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, setupTest } from './helpers';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const test = setupTest();
 
@@ -12,7 +19,7 @@ const axiosInstance = axios.create({
       'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwibmFtZSI6IlRlc3QgQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI4NmMzZjg3Yi0zNTBiLTQ3N2QtOTJjMy00M2JkMDk1Y2IwMDYiLCJjdXN0b206cm9sZSI6ImFkbWluIiwic3ViIjoiODZjM2Y4N2ItMzUwYi00NzdkLTkyYzMtNDNiZDA5NWNiMDA2IiwiaWF0IjoxNTgyOTIxMTI1fQ.PBmSyb6_E_53FNG0GiEpAFqTNmooSh4rI0ApUQt3UH8',
     'Content-Type': 'application/json',
   },
-  timeout: 1000,
+  timeout: 2000,
 });
 
 const {
@@ -30,6 +37,7 @@ const firstConsolidatedCase = {
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 const secondConsolidatedCase = {
   ...MOCK_CASE,
@@ -39,12 +47,20 @@ const secondConsolidatedCase = {
   leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
+
+const correspondenceCaseOriginalPetitionerName = `Original ${Date.now()}`;
+const correspondenceCaseUpdatedPetitionerName = `Updated ${Date.now()}`;
 
 const correspondenceCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Third Migrated Case',
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+    name: correspondenceCaseOriginalPetitionerName,
+  },
   correspondence: [
     {
       documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
@@ -56,6 +72,7 @@ const correspondenceCase = {
   docketNumber: '106-15',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const otherFilersCase = {
@@ -93,8 +110,9 @@ const otherFilersCase = {
       title: 'Tax Matters Partner',
     },
   ],
-  preferredTrialCity: 'Washington, District of Columbia',
+  preferredTrialCity: 'Tulsa, Oklahoma', // legacy city
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 const otherPetitionersCase = {
@@ -104,7 +122,6 @@ const otherPetitionersCase = {
   docketNumber: '162-20',
   irsPractitioners: [
     {
-      additionalName: 'Test Other Petitioner',
       barNumber: 'RT6789',
       contact: {
         address1: '982 Oak Boulevard',
@@ -144,7 +161,6 @@ const otherPetitionersCase = {
   preferredTrialCity: 'Washington, District of Columbia',
   privatePractitioners: [
     {
-      additionalName: 'Test Other Petitioner',
       barNumber: 'PT1234',
       contact: {
         address1: '982 Oak Boulevard',
@@ -168,16 +184,60 @@ const otherPetitionersCase = {
     },
   ],
   status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-describe('Case journey', () => {
+const legacyServedDocumentCase = {
+  ...MOCK_CASE,
+  associatedJudge: CHIEF_JUDGE,
+  caseCaption: 'The Sixth Migrated Case',
+  docketNumber: '156-21',
+  docketRecord: [
+    ...MOCK_CASE.docketRecord,
+    {
+      description: 'Answer',
+      docketRecordId: 'c48eac57-8249-4e48-a66b-3e23f76fa418',
+      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+      eventCode: 'A',
+      filingDate: '2018-11-21T20:49:28.192Z',
+      index: 4,
+    },
+  ],
+  documents: [
+    ...MOCK_CASE.documents,
+    {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketNumber: '101-21',
+      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+      documentTitle: 'Answer',
+      documentType: 'Answer',
+      eventCode: 'A',
+      filedBy: 'Test Petitioner',
+      isLegacyServed: true,
+      processingStatus: 'complete',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ],
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+};
+
+const legacyDeadline = {
+  caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
+  createdAt: '2020-01-01T01:02:15.185-04:00',
+  deadlineDate: '2020-01-24T00:00:00.000-05:00',
+  description: 'Due date migrated from Blackstone',
+  docketNumber: otherFilersCase.docketNumber,
+  entityName: 'CaseDeadline',
+};
+
+describe('Case migration journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   it('should migrate cases', async () => {
-    jest.setTimeout(3000);
-
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       firstConsolidatedCase,
@@ -198,6 +258,16 @@ describe('Case journey', () => {
       'http://localhost:4000/migrate/case',
       otherFilersCase,
     );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      legacyServedDocumentCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case-deadline',
+      legacyDeadline,
+    );
+
+    await refreshElasticsearchIndex();
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -236,8 +306,157 @@ describe('Case journey', () => {
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing.0'),
     ).toBe('dd0ac156-aa2d-46e7-8b5a-902f1d16f199');
+    // override contact data with what's already in the database
+    expect(test.getState('caseDetail.irsPractitioners.0.contact.city')).toBe(
+      'Chicago',
+    );
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
-    ).toBe('Placeat sed dolorum');
+    ).toBe('Chicago');
+  });
+
+  it('Docketclerk views case with legacy served documents', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: legacyServedDocumentCase.docketNumber,
+    });
+    const caseDocuments = test.getState('caseDetail.documents');
+    expect(caseDocuments.length).toBe(5);
+
+    const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);
+    expect(legacyServedDocument.servedAt).toBeUndefined();
+
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+    expect(formattedCase.formattedDocketEntries[4].showNotServed).toBe(false);
+    expect(formattedCase.formattedDocketEntries[4].isInProgress).toBe(false);
+  });
+
+  loginAs(test, 'privatePractitioner@example.com');
+
+  it('private practitioner sees migrated case on their dashboard', async () => {
+    expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
+
+    const openCases = test.getState('openCases');
+    const foundCase = openCases.find(
+      c => c.docketNumber === otherPetitionersCase.docketNumber,
+    );
+    expect(foundCase).toBeDefined();
+  });
+
+  loginAs(test, 'irsPractitioner@example.com');
+
+  it('IRS practitioner sees migrated case on their dashboard', async () => {
+    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
+
+    const openCases = test.getState('openCases');
+    const foundCase = openCases.find(
+      c => c.docketNumber === otherPetitionersCase.docketNumber,
+    );
+    expect(foundCase).toBeDefined();
+  });
+
+  it('Docketclerk searches for correspondence case by petitioner name and finds it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseOriginalPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseOriginalPetitionerName,
+        ),
+    ).toBeDefined();
+  });
+
+  it('should re-migrate an existing case', async () => {
+    const correspondenceCaseOverwritten = {
+      ...correspondenceCase,
+      caseCaption: 'The Third Migrated Case, Overwritten',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        name: correspondenceCaseUpdatedPetitionerName,
+      },
+      correspondence: [],
+    };
+
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      correspondenceCaseOverwritten,
+    );
+
+    await refreshElasticsearchIndex();
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+
+  it('Docketclerk views overwritten correspondence case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: correspondenceCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.correspondence').length).toBe(0);
+    expect(test.getState('caseDetail.caseCaption')).toBe(
+      'The Third Migrated Case, Overwritten',
+    );
+  });
+
+  it('Docketclerk searches for correspondence case by original petitioner name and does not find it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseOriginalPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseOriginalPetitionerName,
+        ),
+    ).not.toBeDefined();
+  });
+
+  it('Docketclerk searches for correspondence case by updated petitioner name and finds it', async () => {
+    await test.runSequence('gotoAdvancedSearchSequence');
+
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'caseSearchByName',
+      key: 'petitionerName',
+      value: correspondenceCaseUpdatedPetitionerName,
+    });
+
+    await test.runSequence('submitCaseAdvancedSearchSequence');
+
+    expect(
+      test
+        .getState('searchResults')
+        .find(
+          result =>
+            result.contactPrimary.name ===
+            correspondenceCaseUpdatedPetitionerName,
+        ),
+    ).toBeDefined();
+  });
+
+  it('Docketclerk views case with casedeadlines', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: otherFilersCase.docketNumber,
+    });
+    expect(test.getState('caseDeadlines').length).toBe(1);
   });
 });

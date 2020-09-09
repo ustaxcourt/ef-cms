@@ -4,7 +4,7 @@ const {
 const {
   getJudgeForUserChambersInteractor,
 } = require('./getJudgeForUserChambersInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { DOCKET_SECTION, ROLES } = require('../../entities/EntityConstants');
 
 let currentUser;
 
@@ -23,7 +23,7 @@ const judgeUser = {
 const allUsers = [
   {
     role: ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     userId: 'docketclerk1',
   },
   { ...judgeUser },

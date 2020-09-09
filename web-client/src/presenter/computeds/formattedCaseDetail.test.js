@@ -11,6 +11,7 @@ describe('formattedCaseDetail', () => {
   let globalUser;
   const {
     DOCUMENT_RELATIONSHIPS,
+    OBJECTIONS_OPTIONS_MAP,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -175,7 +176,7 @@ describe('formattedCaseDetail', () => {
           exhibits: false,
           hasSupportingDocuments: true,
           isFileAttached: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
@@ -226,7 +227,7 @@ describe('formattedCaseDetail', () => {
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           isFileAttached: true,
-          objections: 'Yes',
+          objections: OBJECTIONS_OPTIONS_MAP.YES,
           partyPrimary: true,
           partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -1205,7 +1206,6 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{}],
           },
           {
             attachments: false,
@@ -1215,7 +1215,6 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
-            workItems: [{}],
           },
           {
             attachments: false,
@@ -1226,7 +1225,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
@@ -1239,7 +1238,7 @@ describe('formattedCaseDetail', () => {
             isCourtIssuedDocument: true,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
@@ -1252,7 +1251,7 @@ describe('formattedCaseDetail', () => {
             isCourtIssuedDocument: true,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
         ],
       };
@@ -1272,12 +1271,13 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[0].showEditDocketRecordEntry,
-      ).toEqual(false);
+      ).toBeFalsy();
     });
 
     it('should not show the edit button if the user does not have permission', () => {
-      caseDetail.documents[0].workItems[0].completedAt =
-        '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].workItem = {
+        completedAt: '2019-06-19T17:29:13.120Z',
+      };
 
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1296,8 +1296,9 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should show the edit button if the docket entry document is QCed and the user has permission', () => {
-      caseDetail.documents[0].workItems[0].completedAt =
-        '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].workItem = {
+        completedAt: '2019-06-19T17:29:13.120Z',
+      };
 
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1345,8 +1346,8 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[2].showEditDocketRecordEntry,
-      ).toEqual(false);
+        result.formattedDocketEntries[4].showEditDocketRecordEntry,
+      ).toBeFalsy();
     });
 
     it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
@@ -1362,7 +1363,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[3].showEditDocketRecordEntry,
+        result.formattedDocketEntries[5].showEditDocketRecordEntry,
       ).toEqual(false);
     });
 
@@ -1379,7 +1380,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[4].showEditDocketRecordEntry,
+        result.formattedDocketEntries[2].showEditDocketRecordEntry,
       ).toEqual(true);
     });
 
@@ -1396,7 +1397,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[5].showEditDocketRecordEntry,
+        result.formattedDocketEntries[3].showEditDocketRecordEntry,
       ).toEqual(true);
     });
   });
@@ -1449,7 +1450,6 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{}],
           },
           {
             attachments: false,
@@ -1459,7 +1459,6 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
-            workItems: [{}],
           },
           {
             attachments: false,
@@ -1470,7 +1469,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
@@ -1484,7 +1483,7 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
         ],
       };
@@ -1517,7 +1516,7 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[4].numberOfPages).toEqual(9);
+      expect(result.formattedDocketEntries[2].numberOfPages).toEqual(9);
     });
 
     it('should show zero (0) number of pages with no document', () => {
@@ -1587,7 +1586,6 @@ describe('formattedCaseDetail', () => {
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
             isFileAttached: true,
-            workItems: [{}],
           },
           {
             attachments: false,
@@ -1598,7 +1596,6 @@ describe('formattedCaseDetail', () => {
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
             isFileAttached: true,
-            workItems: [{}],
           },
           {
             attachments: false,
@@ -1610,7 +1607,7 @@ describe('formattedCaseDetail', () => {
             eventCode: 'O',
             isCourtIssuedDocument: true,
             isFileAttached: true,
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
           {
             attachments: false,
@@ -1625,7 +1622,7 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
-            workItems: [{ completedAt: '2019-06-19T17:29:13.120Z' }],
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
         ],
       };
@@ -1725,7 +1722,6 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{}],
           },
         ],
         otherFilers,
@@ -2027,7 +2023,6 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
-            workItems: [{}],
           },
         ],
         otherFilers,

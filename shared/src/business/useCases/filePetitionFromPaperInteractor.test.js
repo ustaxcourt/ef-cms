@@ -6,8 +6,8 @@ const { ROLES } = require('../entities/EntityConstants');
 
 beforeAll(() => {
   applicationContext
-    .getPersistenceGateway()
-    .uploadDocumentFromClient.mockResolvedValue(
+    .getUseCases()
+    .uploadDocumentAndMakeSafeInteractor.mockResolvedValue(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     );
 });
@@ -57,51 +57,68 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionMetadata: null,
     });
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].document,
     ).toEqual('this petition file');
   });
 
   it('calls upload on an Application for Waiver of Filing Fee file', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
+    });
+
     await filePetitionFromPaperInteractor({
       applicationContext,
       applicationForWaiverOfFilingFeeFile: 'this APW file',
     });
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[0][0].document,
     ).toEqual('this APW file');
   });
 
   it('calls upload on an ODS file', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
+    });
     await filePetitionFromPaperInteractor({
       applicationContext,
       ownershipDisclosureFile: 'this ods file',
     });
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][0].document,
     ).toEqual('this ods file');
   });
 
   it('calls upload on a STIN file', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
+    });
     await filePetitionFromPaperInteractor({
       applicationContext,
       stinFile: 'this stin file',
     });
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][0].document,
     ).toEqual('this stin file');
   });
 
   it('calls upload on a Request for Place of Trial file', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsClerk',
+    });
     await filePetitionFromPaperInteractor({
       applicationContext,
       requestForPlaceOfTrialFile: 'this rqt file',
     });
     expect(
-      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
         .calls[1][0].document,
     ).toEqual('this rqt file');
   });

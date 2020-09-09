@@ -6,6 +6,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -67,13 +68,13 @@ const formatDocument = (applicationContext, document) => {
     !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
     result.documentType === 'Stipulated Decision';
 
-  const qcWorkItems = result.workItems || [];
+  const qcWorkItem = result.workItem;
 
-  result.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
-    return acc && !!wi.completedAt;
-  }, true);
+  result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
 
-  result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
+  result.isUnservable =
+    UNSERVABLE_EVENT_CODES.includes(document.eventCode) ||
+    document.isLegacyServed;
 
   result.isInProgress =
     (!result.isCourtIssuedDocument &&
@@ -83,15 +84,12 @@ const formatDocument = (applicationContext, document) => {
       !result.servedAt &&
       !result.isUnservable);
 
-  result.isNotServedDocument = !result.servedAt;
+  result.isNotServedDocument = !result.servedAt && !result.isLegacyServed;
 
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
   result.qcWorkItemsUntouched =
-    !!qcWorkItems.length &&
-    qcWorkItems.reduce((acc, wi) => {
-      return acc && !wi.isRead && !wi.completedAt;
-    }, true);
+    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
   result.servedPartiesCode = getServedPartiesCode(result.servedParties);
@@ -152,7 +150,11 @@ const formatDocketRecordWithDocument = (
     return acc;
   }, {});
 
-  return docketRecords.map(record => {
+  // TODO 636
+  return [
+    ...docketRecords,
+    ...documents.filter(d => d.isOnDocketRecord === true),
+  ].map(record => {
     let formattedDocument;
 
     const { index } = record;
@@ -200,9 +202,9 @@ const getFilingsAndProceedings = formattedDocument => {
     `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
     `${
-      formattedDocument.objections === 'Yes'
+      formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
-        : formattedDocument.objections === 'No'
+        : formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.NO
         ? '(No Objection)'
         : ''
     }`,
@@ -292,25 +294,41 @@ const formatCase = (applicationContext, caseDetail) => {
       counsel.representingNames = [];
 
       if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingNames.push(caseDetail.contactPrimary.name);
+        counsel.representingNames.push({
+          name: caseDetail.contactPrimary.name,
+          secondaryName: caseDetail.contactPrimary.secondaryName,
+          title: caseDetail.contactPrimary.title,
+        });
       }
 
       if (
         caseDetail.contactSecondary &&
         counsel.representing.includes(caseDetail.contactSecondary.contactId)
       ) {
-        counsel.representingNames.push(caseDetail.contactSecondary.name);
+        counsel.representingNames.push({
+          name: caseDetail.contactSecondary.name,
+          secondaryName: caseDetail.contactSecondary.secondaryName,
+          title: caseDetail.contactSecondary.title,
+        });
       }
 
       caseDetail.otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
-          counsel.representingNames.push(otherPetitioner.name);
+          counsel.representingNames.push({
+            name: otherPetitioner.name,
+            secondaryName: otherPetitioner.secondaryName,
+            title: otherPetitioner.title,
+          });
         }
       });
 
       caseDetail.otherFilers.forEach(otherFiler => {
         if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingNames.push(otherFiler.name);
+          counsel.representingNames.push({
+            name: otherFiler.name,
+            secondaryName: otherFiler.secondaryName,
+            title: otherFiler.title,
+          });
         }
       });
     }
@@ -459,15 +477,26 @@ const getDocketRecordSortFunc = sortBy => {
   }
 };
 
+// sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
+const sortUndefined = (a, b) => {
+  if (a.record.createdAtFormatted && !b.record.createdAtFormatted) {
+    return -1;
+  }
+
+  if (!a.record.createdAtFormatted && b.record.createdAtFormatted) {
+    return 1;
+  }
+};
+
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
   const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
-    return result.reverse();
+    return result.reverse().sort(sortUndefined);
   }
-  return result;
+  return result.sort(sortUndefined);
 };
 
 const getFormattedCaseDetail = ({

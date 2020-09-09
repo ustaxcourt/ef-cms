@@ -1,8 +1,10 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
+  const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
+  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
+
   return it('Practitioner requests access to pending case', async () => {
     await test.runSequence('gotoRequestAccessSequence', {
       docketNumber: test.docketNumber,
@@ -50,7 +52,7 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'objections',
-      value: 'No',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {

@@ -17,20 +17,23 @@ describe('formatted work queue computed', () => {
   const {
     CHIEF_JUDGE,
     DOCKET_NUMBER_SUFFIXES,
+    DOCKET_SECTION,
     DOCUMENT_RELATIONSHIPS,
+    PETITIONS_SECTION,
+    SESSION_STATUS_GROUPS,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
   const petitionsClerkUser = {
     role: USER_ROLES.petitionsClerk,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     userId: 'abc',
   };
 
   const docketClerkUser = {
     role: USER_ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
     userId: 'abc',
   };
 
@@ -54,7 +57,7 @@ describe('formatted work queue computed', () => {
       documentType: 'Answer',
     },
     isCourtIssuedDocument: false,
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     selected: true,
     sentBy: 'respondent',
     showComplete: true,
@@ -93,14 +96,14 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
-    section: 'petitions',
+    section: PETITIONS_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
     workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
   };
   const qcWorkItem = {
     ...workItem,
-    section: 'docket',
+    section: DOCKET_SECTION,
   };
 
   it('filters the workitems for section QC inbox', () => {
@@ -118,7 +121,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -137,7 +140,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -156,7 +159,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -175,7 +178,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -214,7 +217,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -245,7 +248,7 @@ describe('formatted work queue computed', () => {
 
     expect(result[0]).toMatchObject({
       ...FORMATTED_WORK_ITEM,
-      section: 'docket',
+      section: DOCKET_SECTION,
     });
   });
 
@@ -546,7 +549,7 @@ describe('formatted work queue computed', () => {
       assigneeId: null,
       assigneeName: null,
       caseCaption: 'Ori Petersen',
-      caseStatus: 'New',
+      caseStatus: SESSION_STATUS_GROUPS.new,
       createdAt: '2019-12-16T16:48:02.889Z',
       docketNumber: '114-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
@@ -584,7 +587,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: true,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -609,7 +612,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -634,7 +637,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -667,7 +670,7 @@ describe('formatted work queue computed', () => {
           },
           inProgress: true,
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inProgress',
@@ -703,7 +706,7 @@ describe('formatted work queue computed', () => {
           inProgress: false,
           isInitializeCase: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'outbox',
@@ -740,7 +743,7 @@ describe('formatted work queue computed', () => {
           inProgress: true,
           isInitializeCase: false,
           isRead: true,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'outbox',
@@ -774,7 +777,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inProgress',
@@ -804,7 +807,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -834,7 +837,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          section: 'docket',
+          section: DOCKET_SECTION,
         },
         workQueueToDisplay: {
           box: 'inbox',
@@ -863,7 +866,7 @@ describe('formatted work queue computed', () => {
             servedAt: null,
           },
           isInitializeCase: false,
-          section: 'petitions',
+          section: PETITIONS_SECTION,
         },
         workQueueToDisplay: {
           box: 'inProgress',
@@ -911,7 +914,7 @@ describe('formatted work queue computed', () => {
       expect(result.sentBySection).toEqual('Section');
     });
 
-    it('should return completedAtFormatted as DATE_TIME format', () => {
+    it('should return completedAtFormatted as MM/DD/YY format for items older than the prior day', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         completedAt: '2019-02-28T21:14:39.488Z',
@@ -919,7 +922,42 @@ describe('formatted work queue computed', () => {
       };
 
       const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.completedAtFormatted).toEqual('02/28/19 04:14 pm');
+      expect(result.completedAtFormatted).toEqual('02/28/19');
+    });
+
+    it('should return completedAtFormatted as Yesterday for items from the prior day', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+      const yesterday = applicationContext
+        .getUtilities()
+        .calculateISODate({ dateString: currentTime, howMuch: -1 });
+
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        completedAt: yesterday,
+        completedAtFormatted: undefined,
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+      expect(result.completedAtFormatted).toEqual('Yesterday');
+    });
+
+    it('should return the current time for items completed today', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        completedAt: currentTime,
+        completedAtFormatted: undefined,
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+      expect(result.completedAtFormatted).toContain(':');
+      expect(result.completedAtFormatted).toContain('ET');
+      expect(result.completedAtFormatted).not.toContain('/');
     });
 
     it('should return completedAtFormattedTZ as DATE_TIME_TZ format', () => {

@@ -6,7 +6,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { PETITIONS_SECTION } = require('../entities/EntityConstants');
@@ -43,8 +42,8 @@ const addPetitionDocumentToCase = ({
     { applicationContext },
   );
 
-  documentEntity.addWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity, { applicationContext });
+  documentEntity.setWorkItem(workItemEntity);
+  caseToAdd.addDocument(documentEntity);
 
   return workItemEntity;
 };
@@ -133,11 +132,13 @@ exports.createCaseInteractor = async ({
 
   const petitionDocumentEntity = new Document(
     {
+      description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.createdAt,
       isFileAttached: true,
+      isOnDocketRecord: true,
       partyPrimary: true,
       partySecondary,
       privatePractitioners,
@@ -157,12 +158,19 @@ exports.createCaseInteractor = async ({
     user,
   });
 
-  caseToAdd.addDocketRecord(
-    new DocketRecord(
+  caseToAdd.addDocument(
+    new Document(
       {
         description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+        documentType:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         filingDate: caseToAdd.createdAt,
+        isFileAttached: false,
+        isMinuteEntry: true,
+        isOnDocketRecord: true,
+        processingStatus: 'complete',
+        userId: user.userId,
       },
       { applicationContext },
     ),
@@ -187,16 +195,18 @@ exports.createCaseInteractor = async ({
     { applicationContext },
   );
 
-  caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
+  caseToAdd.addDocument(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document(
       {
+        description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
+        isOnDocketRecord: true,
         partyPrimary: true,
         partySecondary,
         privatePractitioners,
@@ -209,7 +219,7 @@ exports.createCaseInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity, { applicationContext });
+    caseToAdd.addDocument(odsDocumentEntity);
   }
 
   await applicationContext.getPersistenceGateway().createCase({

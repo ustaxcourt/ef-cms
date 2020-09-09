@@ -2,6 +2,14 @@ const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
 const { isEmpty, pick } = require('lodash');
 
+const setIsValidated = obj => {
+  Object.defineProperty(obj, 'isValidated', {
+    enumerable: false,
+    value: true,
+    writable: false,
+  });
+};
+
 /**
  *
  * @param {Entity} entity the entity to convert to a raw object
@@ -25,6 +33,9 @@ function toRawObject(entity) {
     } else {
       obj[key] = value;
     }
+  }
+  if (entity.isValidated) {
+    setIsValidated(obj);
   }
   return obj;
 }
@@ -72,6 +83,15 @@ function getFormattedValidationErrors(entity) {
     errors = getFormattedValidationErrorsHelper(entity);
   }
   if (errors) {
+    for (const key of Object.keys(errors)) {
+      if (
+        // remove unhelpful error messages from contact validations
+        typeof errors[key] == 'string' &&
+        errors[key].endsWith('does not match any of the allowed types')
+      ) {
+        delete errors[key];
+      }
+    }
     Object.assign(obj, errors);
   }
   for (let key of keys) {
@@ -111,6 +131,9 @@ exports.joiValidationDecorator = function (
   schema,
   errorToMessageMap = {},
 ) {
+  if (!entityConstructor['__proxy__']) {
+    entityConstructor = exports.validEntityDecorator(entityConstructor);
+  }
   if (!schema.validate && typeof schema === 'object') {
     schema = joi.object().keys({ ...schema });
   }
@@ -130,6 +153,26 @@ exports.joiValidationDecorator = function (
   entityConstructor.prototype.isValid = function isValid() {
     const validationErrors = this.getFormattedValidationErrors();
     return isEmpty(validationErrors);
+  };
+
+  entityConstructor.prototype.validateForMigration = function validateForMigration() {
+    let { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    if (error) {
+      throw new InvalidEntityError(
+        entityConstructor.validationName,
+        JSON.stringify(
+          error.details.map(detail => {
+            return detail.message.replace(/"/g, "'");
+          }),
+        ),
+      );
+    }
+    setIsValidated(this);
+    return this;
   };
 
   entityConstructor.prototype.validate = function validate() {
@@ -165,6 +208,7 @@ exports.joiValidationDecorator = function (
         JSON.stringify(stringifyTransform(this.getValidationErrors())),
       );
     }
+    setIsValidated(this);
     return this;
   };
 
@@ -201,16 +245,62 @@ exports.joiValidationDecorator = function (
     collection,
     { applicationContext },
   ) {
-    return (collection || []).map(entity =>
+    const validRawEntity = entity =>
       new entityConstructor(entity, { applicationContext })
         .validate()
-        .toRawObject(),
-    );
+        .toRawObject();
+    return (collection || []).map(validRawEntity);
   };
 
   entityConstructor.validateCollection = function (collection) {
     return collection.map(entity => entity.validate());
   };
+};
+
+/**
+ * Creates a new Proxy object from the provided entity constructor.
+ * When the returned function is invoked with the 'new' keyword, a proxy
+ * instance of the original entity is returned which trims incoming string values.
+ *
+ * @param {Function} entityConstructor the entity constructor
+ * @returns {Function} a factory function with proxy trap for 'construct' and
+ *   proxy trap for 'set' on the returned instances
+ */
+exports.validEntityDecorator = entityFactoryFunction => {
+  const hasInitFunction =
+    typeof entityFactoryFunction === 'function' &&
+    typeof entityFactoryFunction.prototype.init === 'function';
+
+  if (!hasInitFunction) {
+    console.warn(
+      `WARNING: ${entityFactoryFunction.name} prototype has no 'init' function`,
+    );
+  }
+
+  const instanceHandler = {
+    set(target, prop, value) {
+      if (typeof value === 'string') {
+        value = value.trim();
+      }
+      target[prop] = value;
+      return true;
+    },
+  };
+  const factoryHandler = {
+    construct(target, args) {
+      const entityInstance = new target(...args);
+      const proxied = new Proxy(entityInstance, instanceHandler);
+      proxied.init && proxied.init(...args);
+      return proxied;
+    },
+  };
+  const ValidEntityProxy = new Proxy(entityFactoryFunction, factoryHandler);
+  Object.defineProperty(ValidEntityProxy, '__proxy__', {
+    iterable: false,
+    value: true,
+    writable: false,
+  });
+  return ValidEntityProxy;
 };
 
 exports.getFormattedValidationErrorsHelper = getFormattedValidationErrorsHelper;

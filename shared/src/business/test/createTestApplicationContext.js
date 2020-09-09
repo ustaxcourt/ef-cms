@@ -12,6 +12,12 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  bulkDeleteRecords,
+} = require('../../persistence/elasticsearch/bulkDeleteRecords');
+const {
+  bulkIndexRecords,
+} = require('../../persistence/elasticsearch/bulkIndexRecords');
+const {
   Case,
   getPetitionDocumentFromDocuments,
 } = require('../entities/cases/Case');
@@ -32,6 +38,9 @@ const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
+  deleteRecord,
+} = require('../../persistence/elasticsearch/deleteRecord');
+const {
   deleteSectionOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
@@ -40,6 +49,9 @@ const {
 const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
+const {
+  formatAttachments,
+} = require('../../../src/business/utilities/formatAttachments');
 const {
   formatCase,
   formatCaseDeadlines,
@@ -110,11 +122,12 @@ const {
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { fakeData, getFakeFile } = require('./getFakeFile');
+const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { indexRecord } = require('../../persistence/elasticsearch/indexRecord');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
@@ -188,6 +201,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
     formatDateString: jest
@@ -292,6 +306,8 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
+    bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
+    bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createCase: jest.fn().mockImplementation(createCase),
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
@@ -301,6 +317,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
+    deleteRecord: jest.fn().mockImplementation(deleteRecord),
     deleteSectionOutboxRecord,
     deleteUserOutboxRecord,
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
@@ -326,6 +343,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
+    indexRecord: jest.fn().mockImplementation(indexRecord),
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
@@ -407,7 +425,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
-    getElasticsearchIndexes: () => ['efcms-case'],
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),
@@ -437,7 +454,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
-    isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
       info: jest.fn(),
@@ -474,4 +490,5 @@ module.exports = {
   createTestApplicationContext,
   fakeData,
   getFakeFile,
+  testPdfDoc,
 };

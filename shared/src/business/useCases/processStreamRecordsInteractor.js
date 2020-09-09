@@ -1,47 +1,8 @@
 const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
-/**
- * recursively deletes the key from the item
- *
- * @param {object} item the object from which to delete the key
- * @param {string} key the key to delete recursively from the object
- * @returns {object} the record with all instances of the key removed
- */
-const recursivelyDeleteKey = (item, key) => {
-  Object.keys(item).some(function (k) {
-    if (k === key) {
-      delete item[k];
-    }
-    if (item[k] && typeof item[k] === 'object') {
-      const returnItem = recursivelyDeleteKey(item[k], key);
-      item[k] = returnItem;
-    }
-  });
-  return item;
-};
-
-/**
- * deletes objects with dynamic keys and nested data to prevent hitting our ES mapping limit
- *
- * @param {object} record the object from which to delete unnecessary data
- * @returns {object} the record with unnecessary data removed
- */
-const deleteDynamicAndNestedFields = record => {
-  let data = record.dynamodb.NewImage;
-  //dynamic keys
-  if (data.qcCompleteForTrial) {
-    delete data.qcCompleteForTrial;
-  }
-  if (data.caseMetadata) {
-    delete data.caseMetadata;
-  }
-  //nested data
-  data = recursivelyDeleteKey(data, 'workItems');
-  data = recursivelyDeleteKey(data, 'draftState');
-
-  record.dynamodb.NewImage = data;
-  return record;
+const getRemoveRecords = ({ records }) => {
+  return records.filter(record => record.eventName === 'REMOVE');
 };
 
 /**
@@ -133,7 +94,7 @@ const filterRecords = async ({ applicationContext, records }) => {
     }
   }
 
-  return filteredRecords.map(deleteDynamicAndNestedFields);
+  return filteredRecords;
 };
 
 /**
@@ -147,6 +108,37 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
+
+  const removeRecords = getRemoveRecords({ records: recordsToProcess });
+
+  if (removeRecords.length) {
+    try {
+      const {
+        failedRecords,
+      } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
+        applicationContext,
+        records: removeRecords,
+      });
+
+      if (failedRecords.length) {
+        for (const failedRecord of failedRecords) {
+          try {
+            await applicationContext.getPersistenceGateway().deleteRecord({
+              applicationContext,
+              indexName: failedRecord['_index'],
+              recordId: failedRecord['_id'],
+            });
+          } catch (e) {
+            applicationContext.logger.info('Error', e);
+            await applicationContext.notifyHoneybadger(e);
+          }
+        }
+      }
+    } catch (e) {
+      applicationContext.logger.info('Error', e);
+      await applicationContext.notifyHoneybadger(e);
+    }
+  }
 
   const filteredRecords = await filterRecords({
     applicationContext,
@@ -198,7 +190,7 @@ exports.processStreamRecordsInteractor = async ({
 
       for (const record of recordsToReprocess) {
         try {
-          let newImage = record.dynamodb.NewImage;
+          const newImage = record.dynamodb.NewImage;
 
           await applicationContext.getPersistenceGateway().indexRecord({
             applicationContext,

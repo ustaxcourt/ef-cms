@@ -67,6 +67,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
+    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   beforeEach(() => {
@@ -100,7 +101,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
       correspondence: {

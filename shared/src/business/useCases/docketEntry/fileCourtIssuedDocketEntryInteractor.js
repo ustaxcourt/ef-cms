@@ -8,7 +8,6 @@ const {
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
@@ -74,13 +73,16 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       ...omit(document, 'filedBy'),
       attachments: documentMeta.attachments,
       date: documentMeta.date,
+      description: documentMeta.generatedDocumentTitle,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
+      editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
       freeText: documentMeta.freeText,
       isDraft: false,
       isFileAttached: true,
+      isOnDocketRecord: true,
       judge: documentMeta.judge,
       numberOfPages,
       scenario: documentMeta.scenario,
@@ -118,7 +120,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     workItem.setAsCompleted({ message: 'completed', user });
   }
 
-  documentEntity.addWorkItem(workItem);
+  documentEntity.setWorkItem(workItem);
   caseEntity.updateDocument(documentEntity);
 
   workItem.assignToUser({
@@ -129,20 +131,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
-
-  caseEntity.addDocketRecord(
-    new DocketRecord(
-      {
-        description: documentMeta.generatedDocumentTitle,
-        documentId: documentEntity.documentId,
-        editState: JSON.stringify(documentMeta),
-        eventCode: documentEntity.eventCode,
-        filingDate: documentEntity.filingDate,
-        numberOfPages,
-      },
-      { applicationContext },
-    ),
-  );
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()

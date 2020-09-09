@@ -1,18 +1,11 @@
-const fs = require('fs');
-const path = require('path');
 const {
   appendPaperServiceAddressPageToPdf,
 } = require('./appendPaperServiceAddressPageToPdf');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const { PDFDocument } = require('pdf-lib');
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-const testPdfDocBytes = () => {
-  // sample.pdf is a 1 page document
-  return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-};
-const testPdfDoc = testPdfDocBytes();
 
 describe('appendPaperServiceAddressPageToPdf', () => {
   applicationContext

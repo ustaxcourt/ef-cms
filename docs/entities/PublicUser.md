@@ -6,8 +6,12 @@
     name: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -17,6 +21,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "adc"
         - "admin"
@@ -36,6 +45,10 @@
     judgeFullName: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -67,6 +80,10 @@
     judgeTitle: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 

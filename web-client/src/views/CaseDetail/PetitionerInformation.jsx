@@ -5,7 +5,6 @@ import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { OtherPetitionerDisplay } from './OtherPetitionerDisplay';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -47,17 +46,18 @@ const PetitionerInformation = connect(
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
                 Petitioner Contact Info
-                {caseDetailHelper.showEditContacts && (
-                  <Button
-                    link
-                    aria-label="Edit petitioner contact information"
-                    className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
-                    href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                    icon="edit"
-                  >
-                    Edit
-                  </Button>
-                )}
+                {caseDetailHelper.showEditContacts &&
+                  !formattedCaseDetail.contactPrimary.isAddressSealed && (
+                    <Button
+                      link
+                      aria-label="Edit petitioner contact information"
+                      className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
+                      href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
+                  )}
                 {caseDetailHelper.showEditPetitionerInformation && (
                   <Button
                     link
@@ -83,8 +83,20 @@ const PetitionerInformation = connect(
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
                         showEmail={true}
+                        showSealAddressLink={
+                          caseInformationHelper.showSealAddressLink
+                        }
                       />
                     </address>
+                    {caseDetailHelper.showEditContacts &&
+                      formattedCaseDetail.contactPrimary.isAddressSealed && (
+                        <div>
+                          <p className="text-italic">
+                            Call the Tax Court at (202) 521-0700 if you need to
+                            update your contact information
+                          </p>
+                        </div>
+                      )}
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
                       <div className="margin-top-4">
                         <p className="semi-bold margin-bottom-0">
@@ -107,26 +119,39 @@ const PetitionerInformation = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined" id="secondary-label">
                     Spouse Contact Info
-                    {caseDetailHelper.showEditContacts && (
-                      <Button
-                        link
-                        aria-label="Edit spouse contact information"
-                        className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
-                        href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
-                        icon="edit"
-                      >
-                        Edit
-                      </Button>
-                    )}
+                    {caseDetailHelper.showEditContacts &&
+                      !formattedCaseDetail.contactSecondary.isAddressSealed && (
+                        <Button
+                          link
+                          aria-label="Edit spouse contact information"
+                          className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
+                          href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
+                          icon="edit"
+                        >
+                          Edit
+                        </Button>
+                      )}
                   </h3>
                   <div>
                     <address aria-labelledby="secondary-label">
                       {formattedCaseDetail.contactSecondary.name && (
                         <AddressDisplay
                           contact={formattedCaseDetail.contactSecondary}
+                          showSealAddressLink={
+                            caseInformationHelper.showSealAddressLink
+                          }
                         />
                       )}
                     </address>
+                    {caseDetailHelper.showEditContacts &&
+                      formattedCaseDetail.contactSecondary.isAddressSealed && (
+                        <div className="max-width-50">
+                          <p className="text-italic">
+                            Call the Tax Court at (202) 521-0700 if you need to
+                            update your contact information
+                          </p>
+                        </div>
+                      )}
                     {formattedCaseDetail.contactSecondary.serviceIndicator && (
                       <div className="margin-top-4">
                         <p className="semi-bold margin-bottom-0">
@@ -167,7 +192,13 @@ const PetitionerInformation = connect(
                   >
                     <address aria-labelledby="secondary-label">
                       {otherPetitioner.name && (
-                        <OtherPetitionerDisplay petitioner={otherPetitioner} />
+                        <AddressDisplay
+                          contact={otherPetitioner}
+                          showEmail={true}
+                          showSealAddressLink={
+                            caseInformationHelper.showSealAddressLink
+                          }
+                        />
                       )}
                     </address>
                     {otherPetitioner.serviceIndicator && (
@@ -240,17 +271,58 @@ const PetitionerInformation = connect(
                     Representing
                   </p>
                   {practitioner.representingPrimary && (
-                    <p>{formattedCaseDetail.contactPrimary.name}</p>
+                    <p>
+                      <span>{formattedCaseDetail.contactPrimary.name}</span>
+                      {formattedCaseDetail.contactPrimary.secondaryName && (
+                        <span>
+                          <br />
+                          {formattedCaseDetail.contactPrimary.secondaryName}
+                        </span>
+                      )}
+                      {formattedCaseDetail.contactPrimary.title && (
+                        <span>
+                          <br />
+                          {formattedCaseDetail.contactPrimary.title}
+                        </span>
+                      )}
+                    </p>
                   )}
 
                   {practitioner.representingSecondary &&
-                    formattedCaseDetail.contactSecondary &&
-                    formattedCaseDetail.contactSecondary.name && (
-                      <p>{formattedCaseDetail.contactSecondary.name}</p>
+                    formattedCaseDetail.contactSecondary && (
+                      <p>
+                        <span>{formattedCaseDetail.contactSecondary.name}</span>
+                        {formattedCaseDetail.contactSecondary.secondaryName && (
+                          <span>
+                            <br />
+                            {formattedCaseDetail.contactSecondary.secondaryName}
+                          </span>
+                        )}
+                        {formattedCaseDetail.contactSecondary.title && (
+                          <span>
+                            <br />
+                            {formattedCaseDetail.contactSecondary.title}
+                          </span>
+                        )}
+                      </p>
                     )}
 
-                  {practitioner.representingNames.map(name => (
-                    <p key={name}>{name}</p>
+                  {practitioner.representingNames.map((item, index) => (
+                    <p key={index}>
+                      <span>{item.name}</span>
+                      {item.secondaryName && (
+                        <span>
+                          <br />
+                          {item.secondaryName}
+                        </span>
+                      )}
+                      {item.title && (
+                        <span>
+                          <br />
+                          {item.title}
+                        </span>
+                      )}
+                    </p>
                   ))}
                 </div>
               ),

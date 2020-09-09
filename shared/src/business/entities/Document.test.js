@@ -3,10 +3,14 @@ const {
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
+  OBJECTIONS_OPTIONS_MAP,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
+  PETITIONS_SECTION,
   ROLES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
@@ -184,7 +188,7 @@ describe('Document entity', () => {
       expect(myDoc.isValid()).toBeFalsy();
     });
 
-    it('addWorkItem', () => {
+    it('setWorkItem', () => {
       const myDoc = new Document(
         {
           ...A_VALID_DOCUMENT,
@@ -200,14 +204,14 @@ describe('Document entity', () => {
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
-          section: 'petitions',
+          section: PETITIONS_SECTION,
           sentBy: 'bob',
         },
         { applicationContext },
       );
-      myDoc.addWorkItem(workItem);
+      myDoc.setWorkItem(workItem);
       expect(myDoc.isValid()).toBeTruthy();
-      myDoc.addWorkItem(new WorkItem({}, { applicationContext }));
+      myDoc.setWorkItem(new WorkItem({}, { applicationContext }));
       expect(myDoc.isValid()).toBeFalsy();
     });
   });
@@ -249,7 +253,7 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
@@ -357,7 +361,7 @@ describe('Document entity', () => {
                   ...A_VALID_DOCUMENT,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
-                  eventCode: 'TRAN',
+                  eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
                   isOrder: true,
                   secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -374,7 +378,7 @@ describe('Document entity', () => {
                   ...A_VALID_DOCUMENT,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
-                  eventCode: 'TRAN',
+                  eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
                   isOrder: true,
                   secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -451,7 +455,7 @@ describe('Document entity', () => {
                   ...A_VALID_DOCUMENT,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
-                  eventCode: 'TRAN',
+                  eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
                   isOrder: true,
                   secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -468,7 +472,7 @@ describe('Document entity', () => {
                   ...A_VALID_DOCUMENT,
                   documentId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
-                  eventCode: 'TRAN',
+                  eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
                   isOrder: true,
                   secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -761,7 +765,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           servedAt: '2019-03-01T21:40:46.415Z',
@@ -784,7 +788,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          eventCode: TRANSCRIPT_EVENT_CODE,
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           servedParties: 'Test Petitioner',
@@ -817,7 +821,7 @@ describe('Document entity', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
@@ -844,7 +848,7 @@ describe('Document entity', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           otherFilingParty: 'Bob Barker',
           partyPrimary: true,
           relationship: 'primaryDocument',
@@ -872,7 +876,7 @@ describe('Document entity', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: false,
           partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -998,7 +1002,7 @@ describe('Document entity', () => {
           exhibits: true,
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
-          objections: 'Yes',
+          objections: OBJECTIONS_OPTIONS_MAP.YES,
           partyPrimary: true,
           partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -1190,7 +1194,7 @@ describe('Document entity', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
@@ -1218,7 +1222,7 @@ describe('Document entity', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
-          objections: 'No',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: false,
           partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -1283,7 +1287,7 @@ describe('Document entity', () => {
           exhibits: true,
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
-          objections: 'Yes',
+          objections: OBJECTIONS_OPTIONS_MAP.YES,
           partyPrimary: true,
           partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -1463,50 +1467,10 @@ describe('Document entity', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       };
       document.setQCed(user);
-      expect(document.qcByUser.name).toEqual('Jean Luc');
-      expect(document.qcByUser.userId).toEqual(
+      expect(document.qcByUserId).toEqual(
         '02323349-87fe-4d29-91fe-8dd6916d2fda',
       );
       expect(document.qcAt).toBeDefined();
-    });
-  });
-
-  describe('getQCWorkItem', () => {
-    it('returns the first workItem', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          workItems: [
-            {
-              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
-              assigneeName: 'bill',
-              caseStatus: CASE_STATUS_TYPES.NEW,
-              caseTitle: 'Johnny Joe Jacobson',
-              docketNumber: '101-18',
-              document: {},
-              sentBy: 'bill',
-              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
-            },
-          ],
-        },
-        { applicationContext },
-      );
-
-      expect(document.getQCWorkItem()).toMatchObject({
-        workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
-      });
-    });
-
-    it('returns undefined if there is no work item', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          workItems: [],
-        },
-        { applicationContext },
-      );
-
-      expect(document.getQCWorkItem()).toBeUndefined();
     });
   });
 
@@ -1726,6 +1690,104 @@ describe('Document entity', () => {
       expect(createdDocument.isValid()).toEqual(false);
       expect(createdDocument.getFormattedValidationErrors()).toEqual({
         servedParties: '"servedParties" must be an array',
+      });
+    });
+  });
+
+  describe('minute entries', () => {
+    it('creates minute entry', () => {
+      const document = new Document(
+        {
+          description: 'Request for Place of Trial at Flavortown, TN',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBe(true);
+      expect(document.isMinuteEntry).toBe(true);
+    });
+  });
+
+  describe('setNumberOfPages', () => {
+    it('sets the number of pages', () => {
+      const document = new Document(
+        {
+          description: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 1,
+        },
+        { applicationContext },
+      );
+      document.setNumberOfPages(13);
+      expect(document.numberOfPages).toEqual(13);
+    });
+  });
+
+  describe('strikeEntry', () => {
+    it('strikes a document if isOnDocketRecord is true', () => {
+      const document = new Document(
+        {
+          description: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 1,
+          isOnDocketRecord: true,
+        },
+        { applicationContext },
+      );
+      document.strikeEntry({
+        name: 'Test User',
+        userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+      });
+      expect(document).toMatchObject({
+        isStricken: true,
+        strickenAt: expect.anything(),
+        strickenBy: 'Test User',
+        strickenByUserId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+      });
+    });
+
+    it('throws an error if isOnDocketRecord is false', () => {
+      const document = new Document(
+        {
+          description: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 1,
+          isOnDocketRecord: false,
+        },
+        { applicationContext },
+      );
+      let error;
+      try {
+        document.strikeEntry({
+          name: 'Test User',
+          userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+        });
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toEqual(
+        new Error('Cannot strike a document that is not on the docket record.'),
+      );
+      expect(document).toMatchObject({
+        isStricken: false,
+        strickenAt: undefined,
+        strickenBy: undefined,
+        strickenByUserId: undefined,
       });
     });
   });

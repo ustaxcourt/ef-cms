@@ -143,15 +143,15 @@ describe('headerHelper', () => {
       expect(result.showMyCases).toBeFalsy();
     });
   });
-  it('should know when the page is Case Messages', () => {
+  it('should know when the page is Messages', () => {
     const result = runCompute(headerHelper, {
       state: {
         ...getBaseState({ role: ROLES.petitionsClerk }),
-        currentPage: 'CaseMessages',
+        currentPage: 'Messages',
         workQueueToDisplay: {},
       },
     });
-    expect(result.pageIsCaseMessages).toBeTruthy();
+    expect(result.pageIsMessages).toBeTruthy();
   });
   it('should know when the page is My Cases', () => {
     const result = runCompute(headerHelper, {

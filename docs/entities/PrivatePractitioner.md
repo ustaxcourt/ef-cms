@@ -6,9 +6,17 @@
     barNumber: 
       type: "string"
       flags: 
-        presence: "optional"
-      allow: 
-        - null
+        presence: "required"
+        description: "A unique identifier comprising of the practitioner initials, date, and series number."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     contact: 
       type: "object"
       flags: 
@@ -20,6 +28,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -28,6 +40,10 @@
           flags: 
             presence: "optional"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "max"
               args: 
@@ -40,6 +56,10 @@
             presence: "optional"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -51,6 +71,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -59,11 +83,21 @@
           flags: 
             only: true
             presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "domestic"
             - "international"
         country: 
           type: "string"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           whens: 
             - 
               ref: 
@@ -94,6 +128,10 @@
             presence: "required"
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 100
@@ -119,6 +157,10 @@
                   presence: "required"
                 rules: 
                   - 
+                    name: "min"
+                    args: 
+                      limit: 1
+                  - 
                     name: "max"
                     args: 
                       limit: 100
@@ -128,6 +170,10 @@
                   presence: "required"
                 rules: 
                   - 
+                    name: "min"
+                    args: 
+                      limit: 1
+                  - 
                     name: "pattern"
                     args: 
                       regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
@@ -135,6 +181,11 @@
           type: "string"
           flags: 
             only: true
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "AK"
             - "AL"
@@ -229,6 +280,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "email"
           args: 
             options: 
@@ -242,158 +297,26 @@
       flags: 
         only: true
         presence: "required"
-      allow: 
-        - "PrivatePractitioner"
-    section: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "optional"
-      allow: 
-        - "adc"
-        - "admissions"
-        - "chambers"
-        - "clerkofcourt"
-        - "docket"
-        - "petitions"
-        - "trialClerks"
-        - "armensChambers"
-        - "ashfordsChambers"
-        - "buchsChambers"
-        - "carluzzosChambers"
-        - "cohensChambers"
-        - "colvinsChambers"
-        - "copelandsChambers"
-        - "foleysChambers"
-        - "galesChambers"
-        - "gerbersChambers"
-        - "goekesChambers"
-        - "gustafsonsChambers"
-        - "guysChambers"
-        - "halpernsChambers"
-        - "holmesChambers"
-        - "jacobsChambers"
-        - "jonesChambers"
-        - "kerrigansChambers"
-        - "laubersChambers"
-        - "leydensChambers"
-        - "marvelsChambers"
-        - "morrisonsChambers"
-        - "negasChambers"
-        - "panuthosChambers"
-        - "parisChambers"
-        - "pughsChambers"
-        - "ruwesChambers"
-        - "thorntonsChambers"
-        - "torosChambers"
-        - "urdasChambers"
-        - "vasquezsChambers"
-        - "wellsChambers"
-        - "admin"
-        - "admissionsclerk"
-        - "docketclerk"
-        - "floater"
-        - "inactivePractitioner"
-        - "irsPractitioner"
-        - "irsSuperuser"
-        - "judge"
-        - "petitioner"
-        - "petitionsclerk"
-        - "privatePractitioner"
-        - "trialclerk"
-    token: 
-      type: "string"
-      flags: 
-        presence: "optional"
-    userId: 
-      type: "string"
-      flags: 
-        presence: "required"
       rules: 
         - 
-          name: "guid"
+          name: "min"
           args: 
-            options: 
-              version: 
-                - "uuidv4"
+            limit: 1
+      allow: 
+        - "PrivatePractitioner"
     name: 
       type: "string"
       flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    role: 
-      type: "string"
-      flags: 
         presence: "required"
-        only: true
-      allow: 
-        - "privatePractitioner"
-    judgeFullName: 
-      type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
             limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    judgeTitle: 
-      type: "string"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "role"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "judge"
-          then: 
-            type: "any"
-            flags: 
-              presence: "optional"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
     representing: 
       type: "array"
       flags: 
@@ -403,6 +326,10 @@
         - 
           type: "string"
           rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
             - 
               name: "guid"
               args: 
@@ -417,14 +344,55 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    role: 
+      type: "string"
+      flags: 
+        presence: "required"
+        only: true
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "privatePractitioner"
     serviceIndicator: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Electronic"
         - "None"
         - "Paper"
+    token: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+    userId: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
 
  ```

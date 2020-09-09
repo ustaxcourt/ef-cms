@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -7,6 +8,8 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
   draftOrderIndex,
   date,
 ) => {
+  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
+
   return it('Docket Clerk adds a docket entry for a transcript from the given order', async () => {
     let caseDetailFormatted;
 
@@ -32,7 +35,7 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'TRAN',
+      value: TRANSCRIPT_EVENT_CODE,
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
@@ -84,8 +87,8 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.docketRecord.find(
-      entry => entry.documentId === documentId,
+    const newDocketEntry = caseDetailFormatted.documents.find(
+      d => d.documentId === documentId,
     );
 
     expect(newDocketEntry).toBeTruthy();

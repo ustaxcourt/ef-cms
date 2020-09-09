@@ -4,6 +4,8 @@ const {
 } = require('../../entities/EntityConstants');
 const {
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
+  MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -12,32 +14,46 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
+const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
+  user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocketRecord(
-      new DocketRecord(
+    caseEntity.addDocument(
+      new Document(
         {
           description: 'Filing Fee Paid',
-          eventCode: 'FEE',
+          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
           filingDate: caseEntity.petitionPaymentDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId: user.userId,
         },
         { applicationContext },
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocketRecord(
-      new DocketRecord(
+    caseEntity.addDocument(
+      new Document(
         {
           description: 'Filing Fee Waived',
-          eventCode: 'FEEW',
+          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
           filingDate: caseEntity.petitionPaymentWaivedDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId: user.userId,
         },
         { applicationContext },
       ),
@@ -61,6 +77,30 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   }
 };
 
+const addDocketEntries = ({ caseEntity }) => {
+  const initialDocumentTypesListRequiringDocketEntry = Object.values(
+    INITIAL_DOCUMENT_TYPES_MAP,
+  );
+
+  remove(
+    initialDocumentTypesListRequiringDocketEntry,
+    doc =>
+      doc === INITIAL_DOCUMENT_TYPES.petition.documentType ||
+      doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
+  );
+
+  for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
+    const foundDocument = caseEntity.documents.find(
+      caseDocument => caseDocument.documentType === documentType,
+    );
+
+    if (foundDocument) {
+      foundDocument.isOnDocketRecord = true;
+      caseEntity.updateDocument(foundDocument);
+    }
+  }
+};
+
 /**
  * serveCaseToIrsInteractor
  *
@@ -75,7 +115,7 @@ exports.serveCaseToIrsInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -131,7 +171,11 @@ exports.serveCaseToIrsInteractor = async ({
     }
   }
 
-  exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+  exports.addDocketEntryForPaymentStatus({
+    applicationContext,
+    caseEntity,
+    user,
+  });
 
   caseEntity
     .updateCaseCaptionDocketRecord({ applicationContext })
@@ -151,10 +195,7 @@ exports.serveCaseToIrsInteractor = async ({
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-
-  const initializeCaseWorkItem = petitionDocument.workItems.find(
-    workItem => workItem.isInitializeCase,
-  );
+  const initializeCaseWorkItem = petitionDocument.workItem;
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
@@ -183,19 +224,23 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
   for (const doc of caseEntity.documents) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      documentId: doc.documentId,
-      replaceCoversheet: !caseEntity.isPaper,
-      useInitialData: !caseEntity.isPaper,
-    });
+    if (doc.isFileAttached) {
+      await applicationContext.getUseCases().addCoversheetInteractor({
+        applicationContext,
+        docketNumber: caseEntity.docketNumber,
+        documentId: doc.documentId,
+        replaceCoversheet: !caseEntity.isPaper,
+        useInitialData: !caseEntity.isPaper,
+      });
+
+      doc.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentId: doc.documentId,
+        });
+    }
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -244,15 +289,24 @@ exports.serveCaseToIrsInteractor = async ({
     s3Client.upload(params, resolve);
   });
 
+  let urlToReturn;
+
   if (caseEntity.isPaper) {
-    const {
-      url,
+    addDocketEntries({ caseEntity });
+
+    ({
+      url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
       documentId: caseConfirmationPdfName,
       useTempBucket: false,
-    });
-
-    return url;
+    }));
   }
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
+
+  return urlToReturn;
 };

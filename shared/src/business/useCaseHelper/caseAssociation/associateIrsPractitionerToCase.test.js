@@ -46,6 +46,7 @@ describe('associateIrsPractitionerToCase', () => {
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     status: CASE_STATUS_TYPES.NEW,
+    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   beforeEach(() => {
@@ -89,6 +90,7 @@ describe('associateIrsPractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     const user = {
+      barNumber: 'BN1234',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

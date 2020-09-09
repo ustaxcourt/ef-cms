@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
-import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
+import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
+import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -18,15 +18,15 @@ export const EditDocketEntry = connect(
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     editDocketEntryHelper: state.editDocketEntryHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    openCompleteAndSendCaseMessageModalSequence:
-      sequences.openCompleteAndSendCaseMessageModalSequence,
+    openCompleteAndSendMessageModalSequence:
+      sequences.openCompleteAndSendMessageModalSequence,
     showModal: state.modal.showModal,
   },
   function EditDocketEntry({
     completeDocketEntryQCSequence,
     editDocketEntryHelper,
     formCancelToggleCancelSequence,
-    openCompleteAndSendCaseMessageModalSequence,
+    openCompleteAndSendMessageModalSequence,
     showModal,
   }) {
     return (
@@ -82,7 +82,7 @@ export const EditDocketEntry = connect(
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      openCompleteAndSendCaseMessageModalSequence();
+                      openCompleteAndSendMessageModalSequence();
                     }}
                   >
                     Complete &amp; Send Message
@@ -105,10 +105,10 @@ export const EditDocketEntry = connect(
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog onCancelSequence="closeModalAndNavigateBackSequence" />
         )}
-        {showModal === 'CreateCaseMessageModalDialog' && (
-          <CreateCaseMessageModalDialog
+        {showModal === 'CreateMessageModalDialog' && (
+          <CreateMessageModalDialog
             title="Complete and Send Message"
             onConfirmSequence="completeDocketEntryQCAndSendMessageSequence"
           />

@@ -31,8 +31,8 @@ exports.handler = (event, context, callback) => {
   const applicationUrl = `https://${allowedDomainString}`;
   const subdomainsUrl = `https://*.${allowedDomainString}`;
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
-  const dynamsoftUrl = 'https://dynamsoft-lib-stg.ef-cms.ustaxcourt.gov';
-  const websocketUrl = `wss://${allowedDomainString}`;
+  const dynamsoftUrl = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
+  const websocketUrl = `wss://*.${allowedDomainString}`;
   const honeybadgerApiUrl = 'https://api.honeybadger.io';
   const localUrl = 'https://127.0.0.1:*';
   const localWebsocketUrl = 'ws://127.0.0.1:*';

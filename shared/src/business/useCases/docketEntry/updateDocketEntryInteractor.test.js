@@ -4,6 +4,7 @@ const {
 const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -22,7 +23,7 @@ describe('updateDocketEntryInteractor', () => {
       eventCode: 'A',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },
-    section: 'docket',
+    section: DOCKET_SECTION,
     sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     updatedAt: new Date().toISOString(),
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -31,9 +32,45 @@ describe('updateDocketEntryInteractor', () => {
   const documents = [
     {
       docketNumber: '45678-18',
+      documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
+      documentType: 'Petition',
+      eventCode: 'P',
+      filedBy: 'Test Petitioner',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      workItems: [workItem],
+    },
+    {
+      docketNumber: '45678-18',
+      documentId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
+      documentType: 'Record on Appeal',
+      eventCode: 'ROA',
+      filedBy: 'Test Petitioner',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      workItems: [workItem],
+    },
+    {
+      docketNumber: '45678-18',
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
       eventCode: 'A',
+      filedBy: 'Test Petitioner',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      workItem,
+    },
+    {
+      docketNumber: '45678-18',
+      documentId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
+      documentType: 'Record on Appeal',
+      eventCode: 'ROA',
+      filedBy: 'Test Petitioner',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      workItems: [workItem],
+    },
+    {
+      docketNumber: '45678-18',
+      documentId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
+      documentType: 'Request for Place of Trial',
+      eventCode: 'RQT',
       filedBy: 'Test Petitioner',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       workItems: [workItem],
@@ -57,12 +94,41 @@ describe('updateDocketEntryInteractor', () => {
     docketNumber: '45678-18',
     docketRecord: [
       {
-        description: 'first record',
-        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        description: 'Petition',
+        docketRecordId: 'e275309b-18d0-43ec-bafb-654e83405411',
+        documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
         eventCode: 'P',
         filingDate: '2018-03-01T00:01:00.000Z',
         index: 1,
+      },
+      {
+        description: 'first record',
+        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
+        documentId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
+        eventCode: 'ROA',
+        filingDate: '2018-03-01T00:01:00.000Z',
+        index: 2,
+      },
+      {
+        description: 'second record',
+        docketRecordId: 'c575309b-18d0-43ec-bafb-654e83405411',
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        eventCode: 'A',
+        filingDate: '2018-03-01T00:01:00.000Z',
+      },
+      {
+        description: 'third record',
+        docketRecordId: 'd375309b-18d0-43ec-bafb-654e83405411',
+        documentId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
+        eventCode: 'ROA',
+        filingDate: '2018-03-01T00:01:00.000Z',
+      },
+      {
+        description: 'Request for Place of Trial',
+        docketRecordId: 'f175309b-18d0-43ec-bafb-654e83405411',
+        documentId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
+        eventCode: 'RQT',
+        filingDate: '2018-03-01T00:01:00.000Z',
       },
     ],
     documents,
@@ -78,7 +144,7 @@ describe('updateDocketEntryInteractor', () => {
     mockCurrentUser = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -86,7 +152,7 @@ describe('updateDocketEntryInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
-      section: 'docket',
+      section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext
@@ -248,7 +314,7 @@ describe('updateDocketEntryInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[0],
+        .caseToUpdate.documents[2],
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       freeText: 'Some text about this document',

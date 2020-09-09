@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -13,7 +12,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to be updated
- * @param {object} providers.docketRecordIndex the index of the docket record entry to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
@@ -21,7 +19,6 @@ exports.updateDocketEntryMetaInteractor = async ({
   applicationContext,
   docketEntryMeta,
   docketNumber,
-  docketRecordIndex,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -42,11 +39,8 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocketEntry = caseEntity.docketRecord.find(
-    record => record.index === docketRecordIndex,
-  );
   const originalDocument = caseEntity.getDocumentById({
-    documentId: originalDocketEntry.documentId,
+    documentId: docketEntryMeta.documentId,
   });
 
   const editableFields = {
@@ -82,34 +76,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     trialLocation: docketEntryMeta.trialLocation,
   };
 
-  const documentEntityForFiledBy = new Document(
-    {
-      ...docketEntryMeta,
-      filedBy: undefined, // allow constructor to re-generate
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
-    },
-    { applicationContext },
-  );
-  const newFiledBy = documentEntityForFiledBy.filedBy;
-
-  const docketRecordEntity = new DocketRecord(
-    {
-      ...originalDocketEntry,
-      ...editableFields,
-      description:
-        editableFields.documentTitle ||
-        editableFields.description ||
-        originalDocketEntry.description,
-      filedBy: newFiledBy || originalDocketEntry.filedBy,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(docketRecordEntity);
-
   if (originalDocument) {
     const servedAtUpdated =
       editableFields.servedAt &&
@@ -123,7 +89,15 @@ exports.updateDocketEntryMetaInteractor = async ({
       {
         ...originalDocument,
         ...editableFields,
-        filedBy: newFiledBy || originalDocketEntry.filedBy,
+        description:
+          editableFields.documentTitle ||
+          editableFields.description ||
+          originalDocument.description,
+        filedBy: undefined, // allow constructor to re-generate
+        ...caseEntity.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );

@@ -55,6 +55,7 @@ Valid Case object example:
             "receivedAt": "2020-01-27T05:00:00.000Z",
             "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
             "workItems": []
+            "isLegacyServed": false
         },
         {
             "date": null,
@@ -122,6 +123,7 @@ Valid Case object example:
                 "phone": "+1 (555) 555-5555",
                 "postalCode": "61234",
                 "state": "IL",
+                "isAddressSealed": false
             },
             "representingPrimary": true,
             "serviceIndicator": "Paper"
@@ -306,5 +308,20 @@ Valid Case object example:
             "state": "AK"
         }
     ]
+}
+```
+
+Valid Trial Session object example:
+
+```
+{
+  "isCalendared": true,
+  "maxCases": 100,
+  "sessionType": "Hybrid",
+  "startDate": "2020-08-10",
+  "term": "Summer",
+  "termYear": "2020",
+  "trialLocation": "Memphis, Tennessee",
+  "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
 }
 ```

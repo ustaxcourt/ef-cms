@@ -17,6 +17,7 @@ describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
 
   const practitionerUser = {
+    barNumber: 'BN1234',
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: ROLES.privatePractitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -73,6 +74,7 @@ describe('associatePrivatePractitionerToCase', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
     applicationContext.getCurrentUser.mockReturnValue(

@@ -14,6 +14,7 @@ export const petitionsClerkCreatesNewCase = (
   test,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
+  shouldServe = true,
 ) => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
@@ -200,7 +201,9 @@ export const petitionsClerkCreatesNewCase = (
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await test.runSequence('serveCaseToIrsSequence');
+    if (shouldServe) {
+      await test.runSequence('serveCaseToIrsSequence');
+    }
 
     await test.runSequence('gotoCaseDetailSequence');
 

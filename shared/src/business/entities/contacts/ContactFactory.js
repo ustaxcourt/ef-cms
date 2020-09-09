@@ -12,7 +12,9 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { cloneDeep } = require('lodash');
 
 const ContactFactory = {};
 
@@ -42,13 +44,53 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
   postalCode: 'Enter ZIP code',
 };
 
+ContactFactory.getValidationRules = contactType => {
+  let results = joi;
+
+  for (const partyType in PARTY_TYPES) {
+    const constructor = ContactFactory.getContactConstructors({
+      partyType: PARTY_TYPES[partyType],
+    })[contactType];
+
+    if (constructor) {
+      results = results.when('partyType', {
+        is: PARTY_TYPES[partyType],
+        then: joi
+          .alternatives(
+            constructor({
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              isPaper: true,
+            }).VALIDATION_RULES,
+            constructor({
+              countryType: COUNTRY_TYPES.INTERNATIONAL,
+              isPaper: true,
+            }).VALIDATION_RULES,
+            constructor({
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              isPaper: false,
+            }).VALIDATION_RULES,
+            constructor({
+              countryType: COUNTRY_TYPES.INTERNATIONAL,
+              isPaper: false,
+            }).VALIDATION_RULES,
+          )
+          .required(),
+      });
+    } else {
+      results = results.forbidden();
+    }
+  }
+
+  return results;
+};
+
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 const commonValidationRequirements = {
-  address1: joi.string().max(500).required(),
-  address2: joi.string().max(500).optional(),
-  address3: joi.string().max(500).optional(),
-  city: joi.string().max(500).required(),
+  address1: JoiValidationConstants.STRING.max(100).required(),
+  address2: JoiValidationConstants.STRING.max(100).optional(),
+  address3: JoiValidationConstants.STRING.max(100).optional(),
+  city: JoiValidationConstants.STRING.max(100).required(),
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
@@ -57,15 +99,16 @@ const commonValidationRequirements = {
     then: joi.required(),
     otherwise: joi.optional(),
   }),
-  inCareOf: joi.string().max(500).optional(),
-  name: joi.string().max(500).required(),
-  phone: joi.string().max(500).required(),
-  secondaryName: joi.string().max(500).optional(),
-  title: joi.string().max(500).optional(),
-  serviceIndicator: joi
-    .string()
-    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
-    .optional(),
+  inCareOf: JoiValidationConstants.STRING.max(100).optional(),
+  isAddressSealed: joi.boolean().required(),
+  sealedAndUnavailable: joi.boolean().optional(),
+  name: JoiValidationConstants.STRING.max(100).required(),
+  phone: JoiValidationConstants.STRING.max(100).required(),
+  secondaryName: JoiValidationConstants.STRING.max(100).optional(),
+  title: JoiValidationConstants.STRING.max(100).optional(),
+  serviceIndicator: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVICE_INDICATOR_TYPES),
+  ).optional(),
   hasEAccess: joi
     .boolean()
     .optional()
@@ -75,22 +118,27 @@ const commonValidationRequirements = {
 };
 
 const domesticValidationObject = {
-  countryType: joi.string().valid(COUNTRY_TYPES.DOMESTIC).required(),
+  countryType: JoiValidationConstants.STRING.valid(
+    COUNTRY_TYPES.DOMESTIC,
+  ).required(),
   ...commonValidationRequirements,
-  state: joi
-    .string()
-    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER, STATE_NOT_AVAILABLE)
-    .required(),
+  state: JoiValidationConstants.STRING.valid(
+    ...Object.keys(US_STATES),
+    ...US_STATES_OTHER,
+    STATE_NOT_AVAILABLE,
+  ).required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
 
 ContactFactory.domesticValidationObject = domesticValidationObject;
 
 const internationalValidationObject = {
-  country: joi.string().max(500).required(),
-  countryType: joi.string().valid(COUNTRY_TYPES.INTERNATIONAL).required(),
+  country: JoiValidationConstants.STRING.max(500).required(),
+  countryType: JoiValidationConstants.STRING.valid(
+    COUNTRY_TYPES.INTERNATIONAL,
+  ).required(),
   ...commonValidationRequirements,
-  postalCode: joi.string().max(100).required(),
+  postalCode: JoiValidationConstants.STRING.max(100).required(),
 };
 
 ContactFactory.internationalValidationObject = internationalValidationObject;
@@ -110,11 +158,13 @@ ContactFactory.getValidationObject = ({
 }) => {
   const baseValidationObject =
     countryType === COUNTRY_TYPES.DOMESTIC
-      ? domesticValidationObject
-      : internationalValidationObject;
+      ? cloneDeep(domesticValidationObject)
+      : cloneDeep(internationalValidationObject);
 
   if (isPaper) {
-    baseValidationObject.phone = joi.string().max(100).optional();
+    baseValidationObject.phone = JoiValidationConstants.STRING.max(
+      100,
+    ).optional();
   }
   return baseValidationObject;
 };
@@ -414,11 +464,14 @@ ContactFactory.createContactFactory = ({
      *
      * @param {object} rawContact the options object
      */
-    function GenericContactConstructor(rawContact, { applicationContext }) {
+    function GenericContactConstructor() {}
+    GenericContactConstructor.prototype.init = function init(
+      rawContact,
+      { applicationContext },
+    ) {
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
-
       this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
       this.address2 = rawContact.address2 || undefined;
@@ -428,6 +481,8 @@ ContactFactory.createContactFactory = ({
       this.countryType = rawContact.countryType;
       this.email = rawContact.email;
       this.inCareOf = rawContact.inCareOf;
+      this.isAddressSealed = rawContact.isAddressSealed || false;
+      this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
       this.name = rawContact.name;
       this.phone = rawContact.phone;
       this.postalCode = rawContact.postalCode;
@@ -438,7 +493,7 @@ ContactFactory.createContactFactory = ({
       this.additionalName = rawContact.additionalName;
       this.otherFilerType = rawContact.otherFilerType;
       this.hasEAccess = rawContact.hasEAccess || undefined;
-    }
+    };
 
     GenericContactConstructor.contactName = () => contactName;
 
@@ -447,16 +502,18 @@ ContactFactory.createContactFactory = ({
       ...additionalErrorMappings,
     };
 
+    GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
+      ...ContactFactory.getValidationObject({ countryType, isPaper }),
+      ...additionalValidation,
+    });
+
     joiValidationDecorator(
       GenericContactConstructor,
-      joi.object().keys({
-        ...ContactFactory.getValidationObject({ countryType, isPaper }),
-        ...additionalValidation,
-      }),
+      GenericContactConstructor.VALIDATION_RULES,
       GenericContactConstructor.errorToMessageMap,
     );
 
-    return GenericContactConstructor;
+    return validEntityDecorator(GenericContactConstructor);
   };
 
   ContactFactoryConstructor.contactName = contactName;

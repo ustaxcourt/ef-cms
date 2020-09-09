@@ -2283,6 +2283,67 @@
         }
       }
     },
+    "/case-documents/{docketNumber}/{documentId}": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "tags": ["documents"],
+        "summary": "deletes a document from a case",
+        "description": "Deletes a document from a case and from S3.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "put": {
+        "tags": ["documents"],
+        "summary": "archives a document on a case, but does not delete it",
+        "description": "Archives a document on a case, but does not delete it.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{docketNumber}/{documentId}/document-download-url": {
       "parameters": [
         {
@@ -4990,6 +5051,64 @@
         }
       }
     },
+    "/case-meta/{docketNumber}/seal-address/{contactId}": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "contactId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the specified case contact address as sealed",
+        "description": "updates the case contact address as sealed.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-parties/{docketNumber}/associate-private-practitioner": {
       "parameters": [
         {
@@ -5348,14 +5467,14 @@
     "/messages": {
       "post": {
         "tags": ["messages"],
-        "summary": "create a case message",
+        "summary": "create a message",
         "description": "Create a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5407,7 +5526,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5459,7 +5578,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5511,7 +5630,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5563,7 +5682,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5615,7 +5734,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5667,7 +5786,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5719,7 +5838,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5771,7 +5890,7 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5808,14 +5927,14 @@
     "/messages/{parentMessageId}/complete": {
       "post": {
         "tags": ["messages"],
-        "summary": "complete a case message",
+        "summary": "complete a message",
         "description": "Complete a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5835,7 +5954,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -5873,14 +5992,14 @@
     "/messages/{parentMessageId}/reply": {
       "post": {
         "tags": ["messages"],
-        "summary": "reply to a case message",
+        "summary": "reply to a message",
         "description": "Reply to a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5900,7 +6019,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -5953,14 +6072,14 @@
     "/messages/{parentMessageId}/forward": {
       "post": {
         "tags": ["messages"],
-        "summary": "forward a case message",
+        "summary": "forward a message",
         "description": "Forward a message.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseMessage"
+              "$ref": "#/definitions/message"
             }
           }
         },
@@ -5980,7 +6099,7 @@
         {
           "in": "body",
           "name": "message info",
-          "description": "the case message info",
+          "description": "the message info",
           "schema": {
             "type": "object",
             "properties": {
@@ -6270,12 +6389,9 @@
               "documentType": {
                 "type": "string"
               },
-              "workItems": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {}
-                }
+              "workItem": {
+                "type": "object",
+                "properties": {}
               },
               "documentId": {
                 "type": "string"
@@ -6431,7 +6547,7 @@
       },
       "description": "a case procedural note"
     },
-    "caseMessage": {
+    "message": {
       "type": "object",
       "properties": {
         "attachments": {
@@ -6480,7 +6596,7 @@
         },
         "entityName": {
           "type": "string",
-          "description": "the name of the entity - CaseMessage"
+          "description": "the name of the entity - Message"
         },
         "from": {
           "type": "string",

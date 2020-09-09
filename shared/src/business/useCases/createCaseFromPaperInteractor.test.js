@@ -5,6 +5,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PETITIONS_SECTION,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
@@ -41,7 +42,7 @@ describe('createCaseFromPaperInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
-      section: 'petitions',
+      section: PETITIONS_SECTION,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -70,6 +71,7 @@ describe('createCaseFromPaperInteractor', () => {
   it('creates a case from paper', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor({
       applicationContext,
+      archivedDocuments: [],
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -117,6 +119,7 @@ describe('createCaseFromPaperInteractor', () => {
   it('creates a case from paper with a secondary contact', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor({
       applicationContext,
+      archivedDocuments: [],
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -175,6 +178,7 @@ describe('createCaseFromPaperInteractor', () => {
   it('creates a case from paper with a request for place of trial and preferred trial city', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor({
       applicationContext,
+      archivedDocuments: [],
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -224,6 +228,7 @@ describe('createCaseFromPaperInteractor', () => {
       applicationContext,
       applicationForWaiverOfFilingFeeFileId:
         '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      archivedDocuments: [],
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseCaption: 'caseCaption',

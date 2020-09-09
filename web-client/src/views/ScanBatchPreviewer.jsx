@@ -1,8 +1,8 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { ConfirmDeletePDFModal } from './ConfirmDeletePdfModal';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
-  DeletePDFModal,
   EmptyHopperModal,
   ScanErrorModal,
   UnfinishedScansModal,
@@ -65,6 +65,7 @@ export const ScanBatchPreviewer = connect(
     showModal,
     startScanSequence,
     title,
+    validateSequence,
     validationErrors,
   }) {
     useEffect(() => {
@@ -260,19 +261,25 @@ export const ScanBatchPreviewer = connect(
     const renderIframePreview = () => {
       return (
         <>
-          {showModal === 'ConfirmDeletePDFModal' && <DeletePDFModal />}
-          <div className="padding-top-4">
-            <PdfPreview />
+          {showModal === 'ConfirmDeletePDFModal' && (
+            <ConfirmDeletePDFModal
+              confirmSequence="removeScannedPdfSequence"
+              confirmText="Yes, Delete"
+              modalContent="This action cannot be undone."
+              title="Are you sure you want to delete this PDF?"
+            />
+          )}
+          <div className="padding-top-2">
             <Button
-              secondary
-              className="margin-top-3 red-warning bg-white"
-              icon={['fas', 'times-circle']}
+              link
+              className="red-warning push-right margin-bottom-1 padding-top-0"
               onClick={() => {
                 openConfirmDeletePDFModalSequence();
               }}
             >
-              Delete PDF
+              Remove PDF
             </Button>
+            <PdfPreview />
           </div>
         </>
       );
@@ -398,6 +405,9 @@ export const ScanBatchPreviewer = connect(
                   documentUploadMode: 'preview',
                   file,
                 });
+                if (validateSequence) {
+                  validateSequence();
+                }
               }}
             />
           </FormGroup>

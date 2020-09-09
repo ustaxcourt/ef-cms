@@ -1,7 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
@@ -21,20 +20,11 @@ const {
 const { createISODateString } = require('../../utilities/DateHandler');
 const { v4: uuidv4 } = require('uuid');
 
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-const testOutputPath = path.join(__dirname, '../../../../test-output/');
-
 describe('serveCourtIssuedDocumentInteractor', () => {
-  let testPdfDoc;
   let extendCase;
 
   const mockPdfUrl = 'www.example.com';
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-
-  const testPdfDocBytes = () => {
-    // sample.pdf is a 1 page document
-    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-  };
 
   const mockUser = {
     name: 'Docket Clerk',
@@ -79,7 +69,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         signedByUserId: uuidv4(),
         signedJudgeName: 'Chief Judge',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-        workItems: [mockWorkItem],
+        workItem: mockWorkItem,
       };
     },
   );
@@ -128,7 +118,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         {
           documentId: mockDocumentId,
@@ -138,7 +128,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         ...documentsWithCaseClosingEventCodes,
       ],
@@ -146,6 +136,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
       caseCaption: 'Caption',
@@ -201,7 +192,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         {
           documentId: mockDocumentId,
@@ -211,7 +202,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           signedByUserId: uuidv4(),
           signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-          workItems: [mockWorkItem],
+          workItem: mockWorkItem,
         },
         ...documentsWithCaseClosingEventCodes,
       ],
@@ -221,11 +212,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
   ];
 
   beforeEach(() => {
-    testPdfDoc = testPdfDocBytes();
     extendCase = {};
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
@@ -342,6 +333,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
+    expect(updatedDocument.filingDate).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -376,12 +368,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
     applicationContext
       .getPersistenceGateway()
-      .saveDocumentFromLambda.mockImplementation(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
-          newPdfData,
-        );
-      });
+      .saveDocumentFromLambda.mockImplementation(() => {});
 
     await serveCourtIssuedDocumentInteractor({
       applicationContext,

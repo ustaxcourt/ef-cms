@@ -8,6 +8,7 @@ const {
   isNewUserCaseMappingRecord,
   isTrialSessionRecord,
   isUserCaseMappingRecord,
+  isWorkItemRecord,
   upGenerator,
 } = require('./utilities');
 
@@ -35,7 +36,8 @@ describe('utilities', () => {
   describe('isCaseRecord', () => {
     it('should return true if the item is a case record', () => {
       const result = isCaseRecord({
-        caseType: CASE_TYPES_MAP.cdp,
+        pk: 'case|101-20',
+        sk: 'case|101-20',
       });
 
       expect(result).toEqual(true);
@@ -44,6 +46,8 @@ describe('utilities', () => {
     it('should return false if the item is not a case record', () => {
       const result = isCaseRecord({
         contactPrimary: { name: 'Guy Fieri' },
+        pk: 'case|101-20',
+        sk: 'document|101-20',
       });
 
       expect(result).toEqual(false);
@@ -117,6 +121,26 @@ describe('utilities', () => {
 
     it('should return false if the record is not a new user-case mapping record (no gsi1pk)', () => {
       const result = isNewUserCaseMappingRecord({});
+
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isWorkItemRecord', () => {
+    it('should return true if the item is a work item record', () => {
+      const result = isWorkItemRecord({
+        pk: 'work-item|123',
+        sk: 'work-item|123',
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if the item is not a work item record', () => {
+      const result = isWorkItemRecord({
+        pk: 'case|123',
+        sk: 'case|123',
+      });
 
       expect(result).toEqual(false);
     });

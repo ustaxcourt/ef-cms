@@ -47,7 +47,6 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
     'city',
     'state',
     'postalCode',
-    'inCareOf',
   ];
 
   const isAddressChange = Object.keys(initialDiff).some(field =>

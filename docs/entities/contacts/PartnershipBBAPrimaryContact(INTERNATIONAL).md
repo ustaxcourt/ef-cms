@@ -9,6 +9,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -17,6 +21,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "international"
     address1: 
@@ -25,42 +34,62 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     address2: 
       type: "string"
       flags: 
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     address3: 
       type: "string"
       flags: 
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     city: 
       type: "string"
       flags: 
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     contactId: 
       type: "string"
       flags: 
         presence: "required"
         description: "Unique contact ID only used by the system."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -73,23 +102,43 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
+    isAddressSealed: 
+      type: "boolean"
+      flags: 
+        presence: "required"
+    sealedAndUnavailable: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     name: 
       type: "string"
       flags: 
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     phone: 
       type: "string"
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -100,6 +149,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -109,14 +162,23 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     serviceIndicator: 
       type: "string"
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Electronic"
         - "None"
@@ -129,6 +191,10 @@
     email: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "email"
           args: 
@@ -165,6 +231,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 

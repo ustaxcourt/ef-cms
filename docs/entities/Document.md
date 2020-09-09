@@ -3,6 +3,22 @@
 ---
   type: "object"
   keys: 
+    action: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Action taken in response to this Docket Record item."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      allow: 
+        - null
     addToCoversheet: 
       type: "boolean"
       flags: 
@@ -13,6 +29,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -21,6 +41,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -86,12 +110,21 @@
         description: "An optional date used when generating a fully concatenated document title."
       allow: 
         - null
+    description: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value."
     docketNumber: 
       type: "string"
       flags: 
         presence: "optional"
         description: "Docket Number of the associated Case in XXXXX-YY format."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "pattern"
           args: 
@@ -103,6 +136,10 @@
         description: "Optional Docket Number text used when generating a fully concatenated document title."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -112,6 +149,10 @@
         presence: "optional"
         description: "The S3 ID containing the text contents of the document."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -125,6 +166,10 @@
         description: "ID of the associated PDF document in the S3 bucket."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -136,6 +181,10 @@
         presence: "optional"
         description: "The id for the original document that was uploaded."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -149,6 +198,10 @@
         description: "The title of this document."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 3000
@@ -158,6 +211,11 @@
         only: true
         presence: "required"
         description: "The type of this document."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Administrative Record"
         - "Affidavit in Support"
@@ -186,6 +244,7 @@
         - "Bond"
         - "Bounced Electronic Service"
         - "Brief in Support"
+        - "Caption of case is amended"
         - "Certificate as to the Genuineness of the Administrative Record"
         - "Certificate of Service"
         - "Civil Penalty Approval Form"
@@ -194,9 +253,12 @@
         - "Decision"
         - "Declaration in Support"
         - "Designation of Counsel to Receive Service"
+        - "Docket Number is amended"
         - "Entry of Appearance"
         - "Evidence"
         - "Exhibit(s)"
+        - "Filing Fee Paid"
+        - "Filing Fee Waived"
         - "Further Trial before"
         - "Hearing Exhibits"
         - "Hearing before"
@@ -500,11 +562,36 @@
         presence: "optional"
       allow: 
         - null
+    editState: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "JSON representation of the in-progress edit of this item."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 4000
+      allow: 
+        - null
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
     entityName: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Document"
     eventCode: 
@@ -512,6 +599,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "A"
         - "AAAP"
@@ -857,6 +949,10 @@
         description: "The party who filed the document, either the petitioner or respondent on the case."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -869,6 +965,11 @@
             type: "string"
             flags: 
               only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "Answer"
               - "Answer to Amended Petition"
@@ -1154,6 +1255,11 @@
                   type: "string"
                   flags: 
                     only: true
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "Notice of Change of Address"
                     - "Notice of Change of Address and Telephone Number"
@@ -1216,6 +1322,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 500
@@ -1224,6 +1334,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -1237,6 +1351,14 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    index: 
+      type: "number"
+      flags: 
+        presence: "optional"
+        description: "Index of this item in the Docket Record list."
+      rules: 
+        - 
+          name: "integer"
     isAutoGenerated: 
       type: "boolean"
       flags: 
@@ -1286,6 +1408,19 @@
             type: "any"
             flags: 
               presence: "optional"
+    isLegacyServed: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
+    isMinuteEntry: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+    isOnDocketRecord: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     isPaper: 
       type: "boolean"
       flags: 
@@ -1319,11 +1454,41 @@
             type: "any"
             flags: 
               presence: "optional"
+    isStricken: 
+      type: "boolean"
+      flags: 
+        description: "Indicates the item has been removed from the docket record."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isLegacy"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     judge: 
       type: "string"
       flags: 
         description: "The judge associated with the document."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -1339,6 +1504,11 @@
             type: "string"
             flags: 
               only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
             allow: 
               - "Memorandum Opinion"
               - "Summary Opinion"
@@ -1362,6 +1532,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 100
@@ -1376,19 +1550,33 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
-        - "No"
         - "Yes"
+        - "No"
         - "Unknown"
     ordinalValue: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     otherFilingParty: 
       type: "string"
       flags: 
         description: "When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -1437,6 +1625,388 @@
       type: "object"
       flags: 
         presence: "optional"
+      keys: 
+        documentId: 
+          type: "string"
+          flags: 
+            presence: "optional"
+            description: "The ID of the previous document."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
+        documentTitle: 
+          type: "string"
+          flags: 
+            presence: "optional"
+            description: "The title of the previous document."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 3000
+        documentType: 
+          type: "string"
+          flags: 
+            only: true
+            presence: "optional"
+            description: "The type of the previous document."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+          allow: 
+            - "Administrative Record"
+            - "Affidavit in Support"
+            - "Agreed Computation for Entry of Decision"
+            - "Amended"
+            - "Amended Certificate of Service"
+            - "Amended [Document Name]"
+            - "Amendment [anything]"
+            - "Answer"
+            - "Answer to Amended Petition"
+            - "Answer to Amended Petition, as Amended"
+            - "Answer to Amendment to Amended Petition"
+            - "Answer to Amendment to Petition"
+            - "Answer to Petition, as Amended"
+            - "Answer to Second Amended Petition"
+            - "Answer to Second Amendment to Petition"
+            - "Answer to Supplement to Petition"
+            - "Answer to Third Amended Petition"
+            - "Answer to Third Amendment to Petition"
+            - "Appellate Filing Fee Received"
+            - "Application"
+            - "Application for Examination Pursuant to Rule 73"
+            - "Application for Waiver of Filing Fee"
+            - "Application for Waiver of Filing Fee and Affidavit"
+            - "Application to Take Deposition"
+            - "Bond"
+            - "Bounced Electronic Service"
+            - "Brief in Support"
+            - "Caption of case is amended"
+            - "Certificate as to the Genuineness of the Administrative Record"
+            - "Certificate of Service"
+            - "Civil Penalty Approval Form"
+            - "Computation for Entry of Decision"
+            - "Corrected Transcript"
+            - "Decision"
+            - "Declaration in Support"
+            - "Designation of Counsel to Receive Service"
+            - "Docket Number is amended"
+            - "Entry of Appearance"
+            - "Evidence"
+            - "Exhibit(s)"
+            - "Filing Fee Paid"
+            - "Filing Fee Waived"
+            - "Further Trial before"
+            - "Hearing Exhibits"
+            - "Hearing before"
+            - "Letter"
+            - "Memorandum"
+            - "Memorandum Opinion"
+            - "Memorandum in Support"
+            - "Miscellaneous"
+            - "Miscellaneous (Lodged)"
+            - "Motion"
+            - "Motion for Appointment of Mediator"
+            - "Motion for Assignment of Judge"
+            - "Motion for Audio of Trial Proceeding(s)"
+            - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
+            - "Motion for Continuance"
+            - "Motion for Default and Dismissal"
+            - "Motion for Entry of Decision"
+            - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
+            - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
+            - "Motion for Extension of Time"
+            - "Motion for International Judicial Assistance"
+            - "Motion for Judgment on the Pleadings"
+            - "Motion for Leave to Conduct Discovery Pursuant to Rule 70(a)(2)"
+            - "Motion for Leave to File"
+            - "Motion for Leave to File Out of Time"
+            - "Motion for Leave to Serve Additional Interrogatories"
+            - "Motion for Leave to Use Electronic Equipment"
+            - "Motion for More Definite Statement Pursuant to Rule 51"
+            - "Motion for Non-Binding Mediation"
+            - "Motion for Oral Argument"
+            - "Motion for Order Fixing Amount of an Appeal Bond"
+            - "Motion for Order to Release the Amount of an Appeal Bond"
+            - "Motion for Order to Show Cause Why Case Should Not Be Sumitted on the Basis of the Administrative Record"
+            - "Motion for Order to Show Cause Why Judgment Should Not be Entered on the Basis of a Previously Decided Case"
+            - "Motion for Order to Show Cause Why Proposed Facts and Evidence Should Not be Accepted as Established Pursuant to Rule 91(f)"
+            - "Motion for Partial Summary Judgment"
+            - "Motion for Pretrial Conference"
+            - "Motion for Protective Order Pursuant to Rule 103"
+            - "Motion for Reasonable Litigation or Administrative Costs"
+            - "Motion for Reconsideration of Findings or Opinion Pursuant to Rule 161"
+            - "Motion for Reconsideration of Order"
+            - "Motion for Recusal of Judge"
+            - "Motion for Review By the Full Court"
+            - "Motion for Review En Banc"
+            - "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56"
+            - "Motion for Summary Judgment"
+            - "Motion for Voluntary Binding Arbitration"
+            - "Motion for Writ of Habeas Corpus Ad Testificandum"
+            - "Motion for a New Trial"
+            - "Motion for an Order under Federal Rule of Evidence 502(d)"
+            - "Motion for an Order under Model Rule of Professional Conduct 4.2"
+            - "Motion for in Camera Review"
+            - "Motion for the Court to Pay the Expenses of a Transcript"
+            - "Motion for the Court to Pay the Expenses of an Interpreter"
+            - "Motion in Limine"
+            - "Motion to Add Lien or Levy Designation"
+            - "Motion to Add Small Tax case Designation"
+            - "Motion to Amend Order"
+            - "Motion to Appoint New Tax Matters Partner"
+            - "Motion to Appoint Tax Matters Partner"
+            - "Motion to Appoint an Interpreter Pursuant to Rule 143(f)"
+            - "Motion to Authorize Proposed Sale of Seized Property"
+            - "Motion to Be Excused from Appearing at the Trial Session"
+            - "Motion to Be Exempt from E-Filing"
+            - "Motion to Be Recognized as Next Friend"
+            - "Motion to Bifurcate"
+            - "Motion to Calendar"
+            - "Motion to Calendar and Consolidate"
+            - "Motion to Calendar in the Electronic (North) Courtroom"
+            - "Motion to Certify for Interlocutory Appeal"
+            - "Motion to Change Place of Hearing of Disclosure Case"
+            - "Motion to Change Place of Submission of Declaratory Judgment Case"
+            - "Motion to Change Place of Trial"
+            - "Motion to Change Service Method"
+            - "Motion to Change or Correct Caption"
+            - "Motion to Change or Correct Docket Entry"
+            - "Motion to Clarify Order"
+            - "Motion to Close on Ground of Duplication"
+            - "Motion to Compel Discovery"
+            - "Motion to Compel Production of Documents"
+            - "Motion to Compel Responses to Interrogatories"
+            - "Motion to Compel the Taking of Deposition"
+            - "Motion to Conform the Pleadings to the Proof"
+            - "Motion to Consolidate"
+            - "Motion to Correct Clerical Order"
+            - "Motion to Correct Transcript"
+            - "Motion to Correct and Certify Record on Appeal"
+            - "Motion to Depose Pursuant to Rule 74"
+            - "Motion to Determine the Tax Matters Partner"
+            - "Motion to Dismiss"
+            - "Motion to Dismiss for Failure to Properly Prosecute"
+            - "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted"
+            - "Motion to Dismiss for Lack of Jurisdiction"
+            - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
+            - "Motion to Dismiss for Lack of Prosecution"
+            - "Motion to Dismiss on Grounds of Mootness"
+            - "Motion to Disqualify Counsel"
+            - "Motion to Enforce Subpoena"
+            - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
+            - "Motion to Extend Time to Move or File Answer"
+            - "Motion to File Document Under Seal"
+            - "Motion to Impose Sanctions"
+            - "Motion to Impose a Penalty"
+            - "Motion to Intervene"
+            - "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262"
+            - "Motion to Modify Order"
+            - "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)"
+            - "Motion to Permit Levy"
+            - "Motion to Preclude"
+            - "Motion to Proceed Anonymously"
+            - "Motion to Quash or Modify Subpoena"
+            - "Motion to Redetermine Interest Pursuant to Rule 261"
+            - "Motion to Remand"
+            - "Motion to Remove Lien/Levy Designation"
+            - "Motion to Remove Small Tax Case Designation"
+            - "Motion to Remove Tax Matters Partner"
+            - "Motion to Reopen the Record"
+            - "Motion to Require Petitioner to File a Reply in a Small Tax Case Pursuant to Rule 173(c)"
+            - "Motion to Restore Case to the General Docket"
+            - "Motion to Restrain Assessment or Collection or to Order Refund of Amount Collected"
+            - "Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157"
+            - "Motion to Review the Sufficiency of Answers or Objections to Request for Admissions"
+            - "Motion to Seal"
+            - "Motion to Set Pretrial Scheduling Order"
+            - "Motion to Set for a Time & Date Certain"
+            - "Motion to Sever"
+            - "Motion to Shift the Burden of Proof"
+            - "Motion to Shorten the Time"
+            - "Motion to Stay Proceedings"
+            - "Motion to Stay Proposed Sale of Seized Property"
+            - "Motion to Strike"
+            - "Motion to Submit Case Pursuant to Rule 122"
+            - "Motion to Substitute Parties and Change Caption"
+            - "Motion to Substitute Trial Exhibit(s)"
+            - "Motion to Supplement the Record"
+            - "Motion to Suppress Evidence"
+            - "Motion to Take Deposition Pursuant to Rule 74(c)(3)"
+            - "Motion to Take Judicial Notice"
+            - "Motion to Vacate"
+            - "Motion to Vacate or Revise Pursuant to Rule 162"
+            - "Motion to Withdraw"
+            - "Motion to Withdraw Counsel (filed by petitioner)"
+            - "Motion to Withdraw as Counsel"
+            - "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)"
+            - "No Objection"
+            - "Notice"
+            - "Notice of Abatement of Jeopardy Assessment"
+            - "Notice of Appeal"
+            - "Notice of Change of Address"
+            - "Notice of Change of Address and Telephone Number"
+            - "Notice of Change of Counsel for Non-Party"
+            - "Notice of Change of Telephone Number"
+            - "Notice of Clarification of Tax Matters Partner"
+            - "Notice of Concession"
+            - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
+            - "Notice of Death of Counsel"
+            - "Notice of Docket Change"
+            - "Notice of Election to Intervene"
+            - "Notice of Election to Participate"
+            - "Notice of Filing of Petition and Right to Intervene"
+            - "Notice of Filing of the Administrative Record"
+            - "Notice of Identification of Tax Matters Partner"
+            - "Notice of Intent Not to File"
+            - "Notice of Intervention"
+            - "Notice of Issue Concerning Foreign Law"
+            - "Notice of Jeopardy Assessment"
+            - "Notice of Judicial Ruling"
+            - "Notice of No Objection"
+            - "Notice of Objection"
+            - "Notice of Partial Abatement of Jeopardy Assessment"
+            - "Notice of Proceeding in Bankruptcy"
+            - "Notice of Relevant Judicial Decisions"
+            - "Notice of Settlement Agreement Pursuant to Rule 248(c)(1)"
+            - "Notice of Small Tax Case Election"
+            - "Notice of Supplemental Authority"
+            - "Notice of Telephone Number"
+            - "Notice of Termination Assessment"
+            - "Notice of Trial"
+            - "Notice of Unavailability"
+            - "Objection"
+            - "Objection [anything]"
+            - "Opposition"
+            - "Opposition [anything]"
+            - "Order"
+            - "Order and Decision"
+            - "Order fixing amount of bond"
+            - "Order for Amended Petition"
+            - "Order for Amended Petition and Filing Fee"
+            - "Order for Amendment to Petition"
+            - "Order for Filing Fee"
+            - "Order for Filing Fee. Application waiver of Filing Fee is denied"
+            - "Order for Ownership Disclosure Statement"
+            - "Order for Ratification of Petition"
+            - "Order of Dismissal"
+            - "Order of Dismissal and Decision"
+            - "Order of Dismissal for Lack of Jurisdiction"
+            - "Order of Service of Transcript (Bench Opinion)"
+            - "Order petr(s) to show cause why \"S\" should not be removed"
+            - "Order that caption of case is amended"
+            - "Order that case is assigned"
+            - "Order that case is submitted"
+            - "Order that jurisdiction is retained"
+            - "Order that the letter \"L\" is added to Docket number"
+            - "Order that the letter \"L\" is deleted from the Docket number"
+            - "Order that the letter \"P\" is added to the Docket number"
+            - "Order that the letter \"P\" is deleted from the Docket number"
+            - "Order that the letter \"R\" is added to the Docket number"
+            - "Order that the letter \"R\" is deleted from the Docket number"
+            - "Order that the letter \"S\" is added to the Docket number"
+            - "Order that the letter \"S\" is deleted from the Docket number"
+            - "Order that the letter \"W\" is added to the Docket number"
+            - "Order that the letter \"W\" is deleted from the Docket number"
+            - "Order that the letter \"X\" is added to the Docket number"
+            - "Order that the letter \"X\" is deleted from the Docket number"
+            - "Order that the letters \"SL\" are added to the Docket number"
+            - "Order that the letters \"SL\" are deleted from the Docket number"
+            - "Order time is extended for petr(s) to file Amended Petition"
+            - "Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee"
+            - "Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee"
+            - "Order time is extended for petr(s) to pay the filing fee"
+            - "Order to Show Cause"
+            - "Ownership Disclosure Statement"
+            - "Partial Administrative Record"
+            - "Partial Trial before"
+            - "Petition"
+            - "Prehearing Memorandum"
+            - "Pretrial Memorandum"
+            - "Proposed Stipulated Decision"
+            - "Ratification"
+            - "Ratification of Petition"
+            - "Record on Appeal"
+            - "Redacted"
+            - "Redacted Petition Filed"
+            - "Reference List of Redacted Information"
+            - "Reply"
+            - "Report"
+            - "Request"
+            - "Request for Admissions"
+            - "Request for Judicial Notice"
+            - "Request for Place of Trial"
+            - "Request for Pretrial Conference"
+            - "Response"
+            - "Response [anything]"
+            - "Returned Mail"
+            - "Revised Computation"
+            - "Revised Transcript"
+            - "Seriatim Answering Brief"
+            - "Seriatim Answering Memorandum Brief"
+            - "Seriatim Opening Brief"
+            - "Seriatim Opening Memorandum Brief"
+            - "Seriatim Reply Brief"
+            - "Seriatim Reply Memorandum Brief"
+            - "Seriatim Sur-Reply Brief"
+            - "Seriatim Sur-Reply Memorandum Brief"
+            - "Settlement Stipulation"
+            - "Simultaneous Answering Brief"
+            - "Simultaneous Answering Memoranda of Law"
+            - "Simultaneous Answering Memorandum Brief"
+            - "Simultaneous Memoranda of Law"
+            - "Simultaneous Opening Brief"
+            - "Simultaneous Opening Memorandum Brief"
+            - "Simultaneous Reply Brief"
+            - "Simultaneous Supplemental Brief"
+            - "Simultaneous Sur-Reply Brief"
+            - "Simultaneous Sur-Reply Memorandum Brief"
+            - "Standing Pretrial Notice"
+            - "Standing Pretrial Order"
+            - "Statement"
+            - "Statement of Redacted Information"
+            - "Statement of Taxpayer Identification"
+            - "Statement under Rule 212"
+            - "Statement under Rule 50(c)"
+            - "Status Report"
+            - "Stipulated Decision"
+            - "Stipulation"
+            - "Stipulation as to the Administrative Record"
+            - "Stipulation as to the Partial Administrative Record"
+            - "Stipulation of Facts"
+            - "Stipulation of Pretrial Deadlines"
+            - "Stipulation of Settled Issues"
+            - "Stipulation of Settlement"
+            - "Stipulation to Be Bound"
+            - "Stipulation to Take Deposition"
+            - "Substitution of Counsel"
+            - "Summary Opinion"
+            - "Supplement"
+            - "Supplement To [anything]"
+            - "Supplemental"
+            - "Supplemental [anything]"
+            - "Sur-Reply"
+            - "T.C. Opinion"
+            - "Transcript"
+            - "Trial Exhibits"
+            - "Trial before"
+            - "U.S.C.A"
+            - "Unsworn Declaration under Penalty of Perjury in Support"
+            - "Writ of Habeas Corpus Ad Testificandum"
     privatePractitioners: 
       type: "array"
       flags: 
@@ -1452,6 +2022,10 @@
                 presence: "required"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 100
@@ -1460,6 +2034,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "complete"
         - "pending"
@@ -1475,6 +2054,10 @@
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -1495,6 +2078,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "primaryDocument"
         - "primarySupportingDocument"
@@ -1506,6 +2094,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Standard"
         - "Nonstandard A"
@@ -1566,6 +2159,10 @@
             description: "The title of the secondary document."
           rules: 
             - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
               name: "max"
               args: 
                 limit: 500
@@ -1575,6 +2172,11 @@
             only: true
             presence: "required"
             description: "The type of the secondary document."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "Administrative Record"
             - "Affidavit in Support"
@@ -1603,6 +2205,7 @@
             - "Bond"
             - "Bounced Electronic Service"
             - "Brief in Support"
+            - "Caption of case is amended"
             - "Certificate as to the Genuineness of the Administrative Record"
             - "Certificate of Service"
             - "Civil Penalty Approval Form"
@@ -1611,9 +2214,12 @@
             - "Decision"
             - "Declaration in Support"
             - "Designation of Counsel to Receive Service"
+            - "Docket Number is amended"
             - "Entry of Appearance"
             - "Evidence"
             - "Exhibit(s)"
+            - "Filing Fee Paid"
+            - "Filing Fee Waived"
             - "Further Trial before"
             - "Hearing Exhibits"
             - "Hearing before"
@@ -1917,6 +2523,11 @@
             only: true
             presence: "required"
             description: "The event code of the secondary document."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
           allow: 
             - "A"
             - "AAAP"
@@ -2318,6 +2929,10 @@
                 presence: "optional"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "email"
                   args: 
                     options: 
@@ -2333,6 +2948,10 @@
                 description: "The name of a party from a contact, or \"IRS\""
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 100
@@ -2342,6 +2961,11 @@
                 only: true
                 presence: "optional"
                 description: "Currently only required for the IRS"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "adc"
                 - "admin"
@@ -2358,6 +2982,22 @@
                 - "petitionsclerk"
                 - "privatePractitioner"
                 - "trialclerk"
+    servedPartiesCode: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "optional"
+        description: "Served parties code to override system-computed code."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "B"
+        - "P"
+        - "R"
+        - null
     serviceDate: 
       type: "date"
       flags: 
@@ -2377,11 +3017,20 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     signedAt: 
       type: "string"
       flags: 
         description: "The time at which the document was signed."
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -2470,9 +3119,18 @@
             allow: 
               - null
     signedJudgeName: 
-      type: "any"
+      type: "string"
       flags: 
         description: "The judge who signed the document."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -2498,6 +3156,11 @@
                   type: "string"
                   flags: 
                     only: true
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "O"
                     - "OAJ"
@@ -2539,17 +3202,17 @@
                     - "ODJ"
                     - "SDEC"
                 then: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     presence: "required"
                 otherwise: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     presence: "optional"
                   allow: 
                     - null
           otherwise: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
             allow: 
@@ -2575,6 +3238,10 @@
               presence: "required"
             rules: 
               - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
                 name: "guid"
                 args: 
                   options: 
@@ -2586,6 +3253,10 @@
               presence: "optional"
             rules: 
               - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
                 name: "guid"
                 args: 
                   options: 
@@ -2593,10 +3264,50 @@
                       - "uuidv4"
             allow: 
               - null
+    strickenAt: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+        presence: "optional"
+        description: "Date that this Docket Record item was stricken."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            date: "now"
+    strickenBy: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+    strickenByUserId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     supportingDocument: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     trialLocation: 
@@ -2604,6 +3315,15 @@
       flags: 
         presence: "optional"
         description: "An optional trial location used when generating a fully concatenated document title."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     userId: 
@@ -2612,14 +3332,410 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
               version: 
                 - "uuidv4"
-    workItems: 
-      type: "array"
+    workItem: 
+      type: "object"
       flags: 
         presence: "optional"
+      keys: 
+        assigneeId: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
+          allow: 
+            - null
+        assigneeName: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+          allow: 
+            - null
+        associatedJudge: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+        caseIsInProgress: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
+        caseStatus: 
+          type: "string"
+          flags: 
+            only: true
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+          allow: 
+            - "Assigned - Case"
+            - "Assigned - Motion"
+            - "Calendared"
+            - "CAV"
+            - "Closed"
+            - "General Docket - Not at Issue"
+            - "General Docket - At Issue (Ready for Trial)"
+            - "Jurisdiction Retained"
+            - "New"
+            - "On Appeal"
+            - "Rule 155"
+            - "Submitted"
+        caseTitle: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 500
+        completedAt: 
+          type: "date"
+          flags: 
+            format: 
+              - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              - "YYYY-MM-DD"
+            presence: "optional"
+        completedBy: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+          allow: 
+            - null
+        completedByUserId: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
+          allow: 
+            - null
+        completedMessage: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+          allow: 
+            - null
+        createdAt: 
+          type: "date"
+          flags: 
+            format: 
+              - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              - "YYYY-MM-DD"
+            presence: "optional"
+        docketNumber: 
+          type: "string"
+          flags: 
+            presence: "required"
+            description: "Unique case identifier in XXXXX-YY format."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "pattern"
+              args: 
+                regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
+        docketNumberWithSuffix: 
+          type: "string"
+          flags: 
+            presence: "optional"
+            description: "Auto-generated from docket number and the suffix."
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+        document: 
+          type: "object"
+          flags: 
+            presence: "required"
+        entityName: 
+          type: "string"
+          flags: 
+            only: true
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+          allow: 
+            - "WorkItem"
+        hideFromPendingMessages: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
+        highPriority: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
+        inProgress: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
+        isInitializeCase: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
+        isRead: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
+        section: 
+          type: "string"
+          flags: 
+            only: true
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+          allow: 
+            - "adc"
+            - "admissions"
+            - "chambers"
+            - "clerkofcourt"
+            - "docket"
+            - "petitions"
+            - "trialClerks"
+            - "armensChambers"
+            - "ashfordsChambers"
+            - "buchsChambers"
+            - "carluzzosChambers"
+            - "cohensChambers"
+            - "colvinsChambers"
+            - "copelandsChambers"
+            - "foleysChambers"
+            - "galesChambers"
+            - "gerbersChambers"
+            - "goekesChambers"
+            - "gustafsonsChambers"
+            - "guysChambers"
+            - "halpernsChambers"
+            - "holmesChambers"
+            - "jacobsChambers"
+            - "jonesChambers"
+            - "kerrigansChambers"
+            - "laubersChambers"
+            - "leydensChambers"
+            - "marvelsChambers"
+            - "morrisonsChambers"
+            - "negasChambers"
+            - "panuthosChambers"
+            - "parisChambers"
+            - "pughsChambers"
+            - "ruwesChambers"
+            - "thorntonsChambers"
+            - "torosChambers"
+            - "urdasChambers"
+            - "vasquezsChambers"
+            - "wellsChambers"
+            - "admin"
+            - "admissionsclerk"
+            - "docketclerk"
+            - "floater"
+            - "inactivePractitioner"
+            - "irsPractitioner"
+            - "irsSuperuser"
+            - "judge"
+            - "petitioner"
+            - "petitionsclerk"
+            - "privatePractitioner"
+            - "trialclerk"
+            - "irsSystem"
+        sentBy: 
+          type: "string"
+          flags: 
+            presence: "required"
+            description: "The name of the user that sent the WorkItem"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+        sentBySection: 
+          type: "string"
+          flags: 
+            only: true
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+          allow: 
+            - "adc"
+            - "admissions"
+            - "chambers"
+            - "clerkofcourt"
+            - "docket"
+            - "petitions"
+            - "trialClerks"
+            - "armensChambers"
+            - "ashfordsChambers"
+            - "buchsChambers"
+            - "carluzzosChambers"
+            - "cohensChambers"
+            - "colvinsChambers"
+            - "copelandsChambers"
+            - "foleysChambers"
+            - "galesChambers"
+            - "gerbersChambers"
+            - "goekesChambers"
+            - "gustafsonsChambers"
+            - "guysChambers"
+            - "halpernsChambers"
+            - "holmesChambers"
+            - "jacobsChambers"
+            - "jonesChambers"
+            - "kerrigansChambers"
+            - "laubersChambers"
+            - "leydensChambers"
+            - "marvelsChambers"
+            - "morrisonsChambers"
+            - "negasChambers"
+            - "panuthosChambers"
+            - "parisChambers"
+            - "pughsChambers"
+            - "ruwesChambers"
+            - "thorntonsChambers"
+            - "torosChambers"
+            - "urdasChambers"
+            - "vasquezsChambers"
+            - "wellsChambers"
+            - "admin"
+            - "admissionsclerk"
+            - "docketclerk"
+            - "floater"
+            - "inactivePractitioner"
+            - "irsPractitioner"
+            - "irsSuperuser"
+            - "judge"
+            - "petitioner"
+            - "petitionsclerk"
+            - "privatePractitioner"
+            - "trialclerk"
+        sentByUserId: 
+          type: "string"
+          flags: 
+            presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
+        trialDate: 
+          type: "date"
+          flags: 
+            format: 
+              - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              - "YYYY-MM-DD"
+            presence: "optional"
+          allow: 
+            - null
+        updatedAt: 
+          type: "date"
+          flags: 
+            format: 
+              - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              - "YYYY-MM-DD"
+            presence: "required"
+        workItemId: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
 
  ```

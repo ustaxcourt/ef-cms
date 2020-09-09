@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import { uniqBy } from 'lodash';
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
@@ -11,17 +12,25 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
-  const formattedDocketRecord = publicCase.docketRecord.map(d =>
-    applicationContext.getUtilities().formatDocketRecord(applicationContext, d),
-  );
-
-  const formattedDocketRecordWithDocument = applicationContext
-    .getUtilities()
-    .formatDocketRecordWithDocument(
-      applicationContext,
-      formattedDocketRecord,
-      publicCase.documents,
+  const formattedDocketRecord = publicCase.documents
+    .filter(d => d.isOnDocketRecord)
+    .map(d =>
+      applicationContext
+        .getUtilities()
+        .formatDocketRecord(applicationContext, d),
     );
+
+  // TODO 636 (remove uniqBy after we remove docketRecord from getFormattedCaseDetail)
+  const formattedDocketRecordWithDocument = uniqBy(
+    applicationContext
+      .getUtilities()
+      .formatDocketRecordWithDocument(
+        applicationContext,
+        formattedDocketRecord,
+        publicCase.documents,
+      ),
+    'index',
+  );
 
   let sortedFormattedDocketRecord = applicationContext
     .getUtilities()
@@ -54,15 +63,17 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         eventCode: record.eventCode || (document && document.eventCode),
         filedBy: document && document.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
-        hasDocument: !!document,
+        hasDocument: !!document && !document.isMinuteEntry,
         index,
         isPaper: document && document.isPaper,
+        isStricken: record.isStricken,
         numberOfPages:
           (document && (record.numberOfPages || document.numberOfPages)) || 0,
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
           !document ||
+          record.isStricken ||
           (document &&
             (!document.isCourtIssuedDocument ||
               document.isNotServedDocument ||
@@ -73,6 +84,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
             DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
           document.isCourtIssuedDocument &&
           !document.isNotServedDocument &&
+          !record.isStricken &&
           !document.isTranscript,
         showNotServed: document && document.isNotServedDocument,
         showServed: document && document.isStatusServed,

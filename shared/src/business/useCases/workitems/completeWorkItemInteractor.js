@@ -33,13 +33,14 @@ exports.completeWorkItemInteractor = async ({
       applicationContext,
       workItemId,
     });
-
-  const completedWorkItem = new WorkItem(originalWorkItem, {
+  const originalWorkItemEntity = new WorkItem(originalWorkItem, {
     applicationContext,
-  })
+  });
+
+  const completedWorkItem = originalWorkItemEntity
     .setAsCompleted({
       message: completedMessage,
-      user: applicationContext.getCurrentUser(),
+      user,
     })
     .validate()
     .toRawObject();
@@ -75,14 +76,14 @@ exports.completeWorkItemInteractor = async ({
     applicationContext,
   });
 
-  caseToUpdate.documents.forEach(
-    document =>
-      (document.workItems = document.workItems.map(item => {
-        return item.workItemId === workItemEntity.workItemId
-          ? workItemEntity
-          : item;
-      })),
-  );
+  caseToUpdate.documents.forEach(document => {
+    if (
+      document.workItem &&
+      document.workItem.workItemId === workItemEntity.workItemId
+    ) {
+      document.workItem = workItemEntity;
+    }
+  });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

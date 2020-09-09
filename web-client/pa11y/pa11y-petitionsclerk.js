@@ -29,7 +29,7 @@ module.exports = [
     actions: [
       'wait for #tab-case-info to be visible',
       'click element #tab-case-info',
-      'wait for #date-received-legend to be visible',
+      'wait for #date-received-date-label to be visible',
     ],
     notes: 'checks a11y of Create Case with inputs revealed - Case Info tab',
     url:
@@ -41,7 +41,7 @@ module.exports = [
       'click element #tab-irs-notice',
       'wait for #irs-verified-notice-radios to be visible',
       'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
+      'wait for #date-of-notice-date-label to be visible',
     ],
     notes: 'checks a11y of Create Case with inputs revealed - IRS Notice tab',
     url:
@@ -198,7 +198,7 @@ module.exports = [
       'wait for #menu-button-add-deadline to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #menu-button-add-deadline',
-      'wait for #deadline-date-legend to be visible',
+      'wait for #deadline-date-date to be visible',
     ],
     notes: 'checks a11y of add deadline modal',
     url:
@@ -369,6 +369,17 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics&info=delete-other-statistics-modal',
   },
+  {
+    actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes:
+      'checks a11y of sealed address display for primary and secondary contact',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
+  },
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',
@@ -379,7 +390,7 @@ module.exports = [
       'click element button#tab-irs-notice',
       'wait for label#has-irs-verified-notice-yes to be visible',
       'click element label#has-irs-verified-notice-yes',
-      'wait for #date-of-notice-month to be visible',
+      'wait for #date-of-notice-date to be visible',
     ],
     notes: 'checks a11y of editable fields exposed when Yes notice attached',
     url:
@@ -391,7 +402,7 @@ module.exports = [
       'click element #tab-irs-notice',
       'wait for #irs-verified-notice-radios to be visible',
       'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
+      'wait for #date-of-notice-date to be visible',
       'set field #case-type to Deficiency',
       'check field #case-type',
       'wait for .statistic-form to be visible',
@@ -406,7 +417,7 @@ module.exports = [
       'click element #tab-irs-notice',
       'wait for #irs-verified-notice-radios to be visible',
       'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
+      'wait for #date-of-notice-date to be visible',
       'set field #case-type to Deficiency',
       'check field #case-type',
       'wait for .calculate-penalties to be visible',
@@ -416,6 +427,16 @@ module.exports = [
     notes: 'checks the Calculate Penalties on IRS Notice modal',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=penalties-modal',
+  },
+  {
+    actions: [
+      'wait for .remove-pdf-button to be visible',
+      'click element .remove-pdf-button',
+      'wait for .confirm-replace-petition-modal to be visible',
+    ],
+    notes: 'checks a11y of ConfirmReplacePetitionModal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/121-20/petition-qc',
   },
 
   /* review petition */
@@ -429,7 +450,7 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions',
   },
   {
-    actions: ['wait for #start-date-month to be visible'],
+    actions: ['wait for #start-date-date to be visible'],
     notes: 'checks a11y of trial sessions add form',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
@@ -478,12 +499,12 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
-  /* case messages */
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/my/inbox&info=case-messages-inbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/my/outbox&info=case-messages-outbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/inbox&info=case-messages-section-inbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/outbox&info=case-messages-section-outbox',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
+  /* messages */
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/inbox&info=messages-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/my/outbox&info=messages-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/inbox&info=messages-section-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/section/outbox&info=messages-section-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
   {
     actions: [
       'wait for #button-forward to be visible',
@@ -492,7 +513,7 @@ module.exports = [
     ],
     notes: 'checks the forward modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-forward',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-forward',
   },
   {
     actions: [
@@ -502,7 +523,7 @@ module.exports = [
     ],
     notes: 'checks the reply modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-reply',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-reply',
   },
   {
     actions: [
@@ -512,6 +533,6 @@ module.exports = [
     ],
     notes: 'checks the complete modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-complete',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-complete',
   },
 ];

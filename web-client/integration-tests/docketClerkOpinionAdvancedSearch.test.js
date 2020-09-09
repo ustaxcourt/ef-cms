@@ -27,6 +27,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'osteodontolignikeratic',
+          startDate: '1995-08-03',
         },
       });
 
@@ -41,6 +42,7 @@ describe('docket clerk opinion advanced search', () => {
         opinionSearch: {
           keyword: 'opinion',
           opinionType: 'Summary Opinion',
+          startDate: '1995-08-03',
         },
       });
 
@@ -56,6 +58,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'sunglasses',
+          startDate: '1995-08-03',
         },
       });
 
@@ -77,6 +80,7 @@ describe('docket clerk opinion advanced search', () => {
         opinionSearch: {
           docketNumber: '105-20',
           keyword: 'sunglasses',
+          startDate: '1995-08-03',
         },
       });
 
@@ -97,6 +101,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'sunglasses',
+          startDate: '1995-08-03',
         },
       });
 
@@ -116,6 +121,7 @@ describe('docket clerk opinion advanced search', () => {
         opinionSearch: {
           keyword: 'opinion',
           opinionType: 'T.C. Opinion',
+          startDate: '1995-08-03',
         },
       });
 

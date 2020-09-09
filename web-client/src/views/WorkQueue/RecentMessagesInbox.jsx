@@ -5,22 +5,22 @@ import React from 'react';
 
 export const RecentMessagesInbox = connect(
   {
-    formattedMessages: state.formattedMessages,
+    recentMessagesHelper: state.recentMessagesHelper,
   },
-  function RecentMessagesInbox({ formattedMessages }) {
+  function RecentMessagesInbox({ recentMessagesHelper }) {
     return (
       <React.Fragment>
         <table
           aria-describedby="recent-messages-tab"
-          className="usa-table work-queue subsection"
+          className="usa-table work-queue subsection messages"
           id="my-recent-messages"
         >
           <thead>
             <tr>
-              <th className="small">Received</th>
               <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket Number</span>
               </th>
+              <th className="small">Received</th>
               <th>Message</th>
               <th>Case Title</th>
               <th className="no-wrap">Case Status</th>
@@ -28,7 +28,7 @@ export const RecentMessagesInbox = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.messages.slice(0, 5).map((item, idx) => {
+          {recentMessagesHelper.recentMessages.map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>
@@ -41,7 +41,7 @@ export const RecentMessagesInbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
+                        href={`/messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
                       >
                         {item.subject}
                       </Button>
@@ -61,7 +61,7 @@ export const RecentMessagesInbox = connect(
             );
           })}
         </table>
-        {formattedMessages.messages.length === 0 && (
+        {recentMessagesHelper.recentMessages.length === 0 && (
           <p>There are no messages.</p>
         )}
       </React.Fragment>

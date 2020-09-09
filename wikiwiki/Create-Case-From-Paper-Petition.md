@@ -123,9 +123,10 @@
 **Add Another Year/Period**
 * Clerks are able to add up to 12 year/period sets
 * Sets 2-12 are optional UNLESS any field in a set includes data
-* If any field in a set has data, then all fields in that set are required 
+* If any field in a set has data, then all fields in that set are required
 
 #### Upload PDFs
+* All PDFS other than the Petition can be removed before the Petition package is served to the IRS
 
 **Petition**
 * Is required
@@ -144,6 +145,16 @@
 #### On click of Create Case button
 * Case is created in system
 * Docket number is assigned
-* Attached documents are entered onto the Docket Record (without service information)
+* Petition document is entered onto the Docket Record (without service information)
+* All other documents are not entered onto the Docket Record until service
 * Case appears in the Petitions Section Document QC > In Progress tab
 * App navigates to New Case : Review the Petition screen
+
+#### Received Date and Filing Date
+**Paper**
+* When a court user is uploading a paper document, they're asked to put in a received date. That received date entered should be saved as both the received date and the filed date or lodged date, depending on what the user selects.
+* Received date and filed date both show up on the cover sheet.
+* If the user then edits the date on the docket record (this story), the filed date or lodged date updates on the backend and a new cover sheet is generated that has the original received date and the new filed or lodged date.
+
+**Docket Record**
+* date that shows on the docket record is the Filed Date (edited)

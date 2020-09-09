@@ -3,7 +3,9 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
+const { UserCase } = require('../entities/UserCase');
 
 /**
  *
@@ -26,6 +28,30 @@ exports.migrateCaseInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  if (caseMetadata && caseMetadata.docketNumber) {
+    const docketNumber = Case.formatDocketNumber(caseMetadata.docketNumber);
+
+    const caseToDelete = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
+
+    if (caseToDelete) {
+      await Promise.all([
+        applicationContext
+          .getPersistenceGateway()
+          .deleteCaseByDocketNumber({ applicationContext, docketNumber }),
+        ...caseToDelete.documents.map(({ documentId }) =>
+          applicationContext
+            .getPersistenceGateway()
+            .deleteDocumentFromS3({ applicationContext, key: documentId }),
+        ),
+      ]);
+    }
+  }
+
   const caseToAdd = new Case(
     {
       ...caseMetadata,
@@ -36,33 +62,64 @@ exports.migrateCaseInteractor = async ({
     },
   );
 
-  for (const privatePractitioner of caseToAdd.privatePractitioners) {
+  for (let casePractitioner of [
+    ...caseToAdd.privatePractitioners,
+    ...caseToAdd.irsPractitioners,
+  ]) {
     const practitioner = await applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber({
         applicationContext,
-        barNumber: privatePractitioner.barNumber,
+        barNumber: casePractitioner.barNumber,
       });
 
-    privatePractitioner.userId = practitioner
-      ? practitioner.userId
-      : applicationContext.getUniqueId();
-  }
+    if (practitioner) {
+      casePractitioner.contact = practitioner.contact;
+      casePractitioner.name = practitioner.name;
+      casePractitioner.userId = practitioner.userId;
 
-  for (const irsPractitioner of caseToAdd.irsPractitioners) {
-    const practitioner = await applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber({
+      const userCaseEntity = new UserCase(caseToAdd);
+
+      await applicationContext.getPersistenceGateway().associateUserWithCase({
         applicationContext,
-        barNumber: irsPractitioner.barNumber,
+        docketNumber: caseToAdd.docketNumber,
+        userCase: userCaseEntity.validate().toRawObject(),
+        userId: practitioner.userId,
       });
-
-    irsPractitioner.userId = practitioner
-      ? practitioner.userId
-      : applicationContext.getUniqueId();
+    } else {
+      casePractitioner.userId = applicationContext.getUniqueId();
+    }
   }
 
-  const caseValidatedRaw = caseToAdd.validate().toRawObject();
+  if (caseToAdd.trialSessionId) {
+    const trialSessionData = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId: caseToAdd.trialSessionId,
+      });
+
+    if (!trialSessionData) {
+      throw new Error(
+        `Trial Session not found with id ${caseToAdd.trialSessionId}`,
+      );
+    }
+
+    const trialSessionEntity = new TrialSession(trialSessionData, {
+      applicationContext,
+    });
+
+    trialSessionEntity.addCaseToCalendar(caseToAdd);
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+
+    caseToAdd.setAsCalendared(trialSessionEntity);
+  }
+
+  const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
@@ -70,7 +127,7 @@ exports.migrateCaseInteractor = async ({
   });
 
   for (const correspondenceEntity of caseToAdd.correspondence) {
-    await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+    await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
       docketNumber: caseToAdd.docketNumber,

@@ -1,4 +1,5 @@
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
+const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy, without } = require('lodash');
@@ -27,6 +28,7 @@ const CHIEF_JUDGE = 'Chief Judge';
 const DOCKET_NUMBER_SUFFIXES = {
   DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS: 'X',
   DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION: 'R',
+  DISCLOSURE: 'D',
   LIEN_LEVY: 'L',
   PASSPORT: 'P',
   SMALL: 'S',
@@ -189,7 +191,13 @@ const SCENARIOS = [
 
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
 
-const OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+const OBJECTIONS_OPTIONS_MAP = {
+  YES: 'Yes',
+  NO: 'No',
+  UNKNOWN: 'Unknown',
+};
+const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
 const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -218,14 +226,17 @@ const TRACKED_DOCUMENT_TYPES = {
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
+    documentTitle: 'Application for Waiver of Filing Fee',
     documentType: 'Application for Waiver of Filing Fee',
     eventCode: 'APW',
   },
   ownershipDisclosure: {
+    documentTitle: 'Ownership Disclosure Statement',
     documentType: 'Ownership Disclosure Statement',
     eventCode: 'DISC',
   },
   petition: {
+    documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
   },
@@ -237,24 +248,39 @@ const INITIAL_DOCUMENT_TYPES = {
   stin: STIN_DOCKET_ENTRY_TYPE,
 };
 
+const INITIAL_DOCUMENT_TYPES_MAP = {
+  applicationForWaiverOfFilingFeeFile:
+    INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+  ownershipDisclosureFile:
+    INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+  petitionFile: INITIAL_DOCUMENT_TYPES.petition.documentType,
+  requestForPlaceOfTrialFile:
+    INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+  stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
+};
+
 // These docket entry types aren't defined anywhere else
 const MINUTE_ENTRIES_MAP = {
   captionOfCaseIsAmended: {
     description:
       'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
     eventCode: 'MINC',
+    documentType: 'Caption of case is amended',
   },
   dockedNumberIsAmended: {
     description:
       'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
     eventCode: 'MIND',
+    documentType: 'Docket Number is amended',
   },
   filingFeePaid: {
     description: 'Filing Fee Paid',
+    documentType: 'Filing Fee Paid',
     eventCode: 'FEE',
   },
   filingFeeWaived: {
     description: 'Filing Fee Waived',
+    documentType: 'Filing Fee Waived',
     eventCode: 'FEEW',
   },
 };
@@ -366,6 +392,7 @@ const CASE_TYPES_MAP = {
   deficiency: 'Deficiency',
   djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
   djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  disclosure: 'Disclosure',
   innocentSpouse: 'Innocent Spouse',
   interestAbatement: 'Interest Abatement',
   other: 'Other',
@@ -620,7 +647,22 @@ const TRIAL_CITIES = {
   SMALL: SMALL_CITIES,
 };
 
+const LEGACY_TRIAL_CITIES = [
+  { city: 'Biloxi', state: 'Mississippi' },
+  { city: 'Huntington', state: 'West Virginia' },
+  { city: 'Maui', state: 'Hawaii' },
+  { city: 'Missoula', state: 'Montana' },
+  { city: 'Newark', state: 'New Jersey' },
+  { city: 'Pasadena', state: 'California' },
+  { city: 'Tulsa', state: 'Oklahoma' },
+  { city: 'Westbury', state: 'New York' },
+];
+
 const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
+const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   location => `${location.city}, ${location.state}`,
 );
 
@@ -877,6 +919,10 @@ const ALL_DOCUMENT_TYPES = (() => {
     t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
   );
 
+  const minuteEntryTypes = Object.keys(MINUTE_ENTRIES_MAP)
+    .map(t => MINUTE_ENTRIES_MAP[t].documentType)
+    .filter(t => t);
+
   const documentTypes = [
     ...initialTypes,
     ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
@@ -885,6 +931,7 @@ const ALL_DOCUMENT_TYPES = (() => {
     ...COURT_ISSUED_DOCUMENT_TYPES,
     ...signedTypes,
     ...systemGeneratedTypes,
+    ...minuteEntryTypes,
   ];
   return documentTypes.sort();
 })();
@@ -898,7 +945,7 @@ const OTHER_FILER_TYPES = [
 
 const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
 
-module.exports = {
+module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
@@ -946,6 +993,7 @@ module.exports = {
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
   JUDGES_CHAMBERS,
@@ -955,6 +1003,7 @@ module.exports = {
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
+  OBJECTIONS_OPTIONS_MAP,
   OPINION_DOCUMENT_TYPES,
   OPINION_EVENT_CODES,
   ORDER_EVENT_CODES,
@@ -995,6 +1044,7 @@ module.exports = {
   TRIAL_STATUS_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
+  LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
-};
+});

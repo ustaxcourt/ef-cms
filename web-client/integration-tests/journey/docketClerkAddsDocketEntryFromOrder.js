@@ -207,10 +207,11 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.docketRecord.find(
-      entry => entry.documentId === documentId,
+    const newDocketEntry = caseDetailFormatted.documents.find(
+      entry => entry.documentId === documentId && entry.isOnDocketRecord,
     );
 
     expect(newDocketEntry).toBeTruthy();
+    expect(newDocketEntry.index).toBeFalsy();
   });
 };
