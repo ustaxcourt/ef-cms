@@ -30,7 +30,7 @@ export const submitCourtIssuedOrderAction = async ({
     docketNumber,
   };
 
-  documentMetadata.draftState = { ...documentMetadata };
+  documentMetadata.draftOrderState = { ...documentMetadata };
 
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
