@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 
 // Seth said 200 for segment constant?
-const [ENV, SEGMENT_SIZE, ACCOUNT_ID] = process.argv.slice(2);
+const [ENV, SEGMENT_SIZE] = process.argv.slice(2);
 
 if (!ENV) {
   throw new Error('Please provide an environment.');
@@ -11,12 +11,15 @@ if (!SEGMENT_SIZE) {
   throw new Error('Please provide a segment size.');
 }
 
+if (!process.env.AWS_ACCOUNT_ID) {
+  throw new Error('Please set AWS_ACCOUNT_ID in your environment.');
+}
+
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
 
 const getItemCount = async () => {
   const dynamo = new AWS.DynamoDB({
-    // endpoint: 'dynamodb.us-east-1.amazonaws.com',
-    endpoint: 'http://localhost:8000',
+    endpoint: 'dynamodb.us-east-1.amazonaws.com',
     region: 'us-east-1',
   });
 
@@ -34,9 +37,9 @@ const sendSegmentMessage = async ({ numSegments, segment }) => {
   const messageBody = { segment, totalSegments: numSegments };
   const params = {
     MessageBody: JSON.stringify(messageBody),
-    MessageDeduplicationId: JSON.stringify(segment),
+    MessageDeduplicationId: `${segment}`,
     MessageGroupId: 'MigrationSegments',
-    QueueUrl: `https://sqs.us-east-1.amazonaws.com/${ACCOUNT_ID}/migration_segments_queue_exp1.fifo`,
+    QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}.fifo`,
   };
 
   try {
