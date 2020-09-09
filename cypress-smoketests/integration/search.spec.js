@@ -1,4 +1,7 @@
 const {
+  addDocketEntryForOrderAndServe,
+} = require('../support/pages/case-detail');
+const {
   gotoAdvancedPractitionerSearch,
   gotoAdvancedSearch,
   goToOpinionSearch,
@@ -77,8 +80,14 @@ describe('Order Search', () => {
     token = results.AuthenticationResult.IdToken;
   });
 
-  it('should be able to login', () => {
+  it('should be able to login and create an order', () => {
     login(token);
+    cy.get('.ql-editor').type('A created order!');
+    cy.get('#save-order-button').click();
+    cy.url().should('contain', '/sign');
+    cy.get('#sign-pdf-canvas').click();
+    cy.get('#save-signature-button').click();
+    addDocketEntryForOrderAndServe();
   });
 
   it('should  search for an order by keyword', () => {
