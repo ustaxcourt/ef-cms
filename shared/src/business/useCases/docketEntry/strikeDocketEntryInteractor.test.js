@@ -28,8 +28,7 @@ describe('strikeDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      documents: [
+      docketEntries: [
         {
           description: 'first record',
           docketNumber: '45678-18',
@@ -42,6 +41,7 @@ describe('strikeDocketEntryInteractor', () => {
           userId: mockUserId,
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -85,7 +85,7 @@ describe('strikeDocketEntryInteractor', () => {
         docketNumber: caseRecord.docketNumber,
         docketRecordId: 'does-not-exist',
       }),
-    ).rejects.toThrow('Document not found');
+    ).rejects.toThrow('Docket entry not found');
   });
 
   it('should call getCaseByDocketNumber, getUserById, and updateDocument', async () => {
@@ -117,7 +117,7 @@ describe('strikeDocketEntryInteractor', () => {
   });
 
   it('should throw an error if the document is not on the docket record', async () => {
-    caseRecord.documents[0].isOnDocketRecord = false;
+    caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
       strikeDocketEntryInteractor({

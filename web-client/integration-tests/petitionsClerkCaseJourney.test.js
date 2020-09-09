@@ -30,7 +30,7 @@ describe('Petitions clerk case journey', () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
-    test.documentId = caseDetail.documents[0].documentId;
+    test.documentId = caseDetail.docketEntries[0].documentId;
   });
 
   loginAs(test, 'petitionsclerk@example.com');
@@ -42,7 +42,7 @@ describe('Petitions clerk case journey', () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
-    test.documentId = caseDetail.documents[0].documentId;
+    test.documentId = caseDetail.docketEntries[0].documentId;
   });
 
   loginAs(test, 'petitionsclerk@example.com');

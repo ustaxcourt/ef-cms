@@ -66,7 +66,7 @@ exports.updatePetitionDetailsInteractor = async ({
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCase.addDocument(
+      newCase.addDocketEntry(
         new DocketEntry(
           {
             description: 'Filing Fee Paid',
@@ -83,7 +83,7 @@ exports.updatePetitionDetailsInteractor = async ({
         ),
       );
     } else if (isWaived) {
-      newCase.addDocument(
+      newCase.addDocketEntry(
         new DocketEntry(
           {
             description: 'Filing Fee Waived',

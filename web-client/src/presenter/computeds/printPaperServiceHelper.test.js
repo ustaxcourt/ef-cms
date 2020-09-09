@@ -6,7 +6,7 @@ describe('printPaperServiceHelper', () => {
     const { documentTitle } = runCompute(printPaperServiceHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Document',
@@ -23,7 +23,7 @@ describe('printPaperServiceHelper', () => {
     const result = runCompute(printPaperServiceHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Document',

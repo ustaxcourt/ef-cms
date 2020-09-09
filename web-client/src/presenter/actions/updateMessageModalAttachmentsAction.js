@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  */
 export const updateMessageModalAttachmentsAction = ({ get, props, store }) => {
   const { attachments } = get(state.modal.form);
-  const { correspondence, documents } = get(state.caseDetail);
+  const { correspondence, docketEntries } = get(state.caseDetail);
   const documentId = props.documentId || get(state.documentId);
 
   if (documentId) {
-    const document = [...documents, ...correspondence].find(
+    const document = [...docketEntries, ...correspondence].find(
       d => d.documentId === documentId,
     );
 

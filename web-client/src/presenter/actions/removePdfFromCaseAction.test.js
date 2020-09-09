@@ -18,8 +18,7 @@ describe('removePdfFromCaseAction', () => {
       state: {
         documentId: mockDocumentId,
         form: {
-          docketNumber: '101-19',
-          documents: [
+          docketEntries: [
             {
               documentId: mockDocumentId,
             },
@@ -27,11 +26,12 @@ describe('removePdfFromCaseAction', () => {
               documentId: '123',
             },
           ],
+          docketNumber: '101-19',
         },
       },
     });
 
-    expect(output.caseDetail.documents).toEqual([
+    expect(output.caseDetail.docketEntries).toEqual([
       {
         documentId: '123',
       },
@@ -50,8 +50,7 @@ describe('removePdfFromCaseAction', () => {
         form: {
           applicationForWaiverOfFilingFeeFile: {},
           applicationForWaiverOfFilingFeeFileSize: 2,
-          docketNumber: '101-19',
-          documents: [
+          docketEntries: [
             {
               documentId: mockDocumentId,
             },
@@ -59,6 +58,7 @@ describe('removePdfFromCaseAction', () => {
               documentId: '123',
             },
           ],
+          docketNumber: '101-19',
         },
       },
     });
@@ -74,8 +74,7 @@ describe('removePdfFromCaseAction', () => {
       state: {
         documentId: mockDocumentId,
         form: {
-          docketNumber: '101-19',
-          documents: [
+          docketEntries: [
             {
               documentId: mockDocumentId,
             },
@@ -83,17 +82,18 @@ describe('removePdfFromCaseAction', () => {
               documentId: '123',
             },
           ],
+          docketNumber: '101-19',
         },
       },
     });
 
     expect(output.caseDetail).toEqual({
-      docketNumber: '101-19',
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
         },
       ],
+      docketNumber: '101-19',
     });
   });
 
@@ -105,8 +105,7 @@ describe('removePdfFromCaseAction', () => {
       state: {
         documentId: mockDocumentId,
         form: {
-          docketNumber: '101-19',
-          documents: [
+          docketEntries: [
             {
               documentId: mockDocumentId,
             },
@@ -114,6 +113,7 @@ describe('removePdfFromCaseAction', () => {
               documentId: '123',
             },
           ],
+          docketNumber: '101-19',
         },
       },
     });

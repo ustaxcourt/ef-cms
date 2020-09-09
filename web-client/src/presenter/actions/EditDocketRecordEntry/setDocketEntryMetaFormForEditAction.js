@@ -16,7 +16,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   props,
   store,
 }) => {
-  const { documents } = get(state.caseDetail);
+  const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
   const { deconstructDate } = applicationContext.getUtilities();
 
@@ -37,7 +37,7 @@ export const setDocketEntryMetaFormForEditAction = ({
     return deconstructedDate;
   };
 
-  const documentDetail = documents.find(
+  const documentDetail = docketEntries.find(
     ({ index }) => index === docketRecordIndex,
   );
 

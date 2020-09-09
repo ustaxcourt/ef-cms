@@ -10,10 +10,10 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
-const addPetitionDocumentWithWorkItemToCase = ({
+const addPetitionDocketEntryWithWorkItemToCase = ({
   applicationContext,
   caseToAdd,
-  documentEntity,
+  docketEntryEntity,
   user,
 }) => {
   const workItemEntity = new WorkItem(
@@ -27,8 +27,8 @@ const addPetitionDocumentWithWorkItemToCase = ({
       docketNumber: caseToAdd.docketNumber,
       docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
       isInitializeCase: true,
       section: user.section,
@@ -39,8 +39,8 @@ const addPetitionDocumentWithWorkItemToCase = ({
     { applicationContext },
   );
 
-  documentEntity.setWorkItem(workItemEntity);
-  caseToAdd.addDocument(documentEntity);
+  docketEntryEntity.setWorkItem(workItemEntity);
+  caseToAdd.addDocketEntry(docketEntryEntity);
 
   return {
     workItem: workItemEntity,
@@ -119,7 +119,7 @@ exports.createCaseFromPaperInteractor = async ({
     partySecondary = true;
   }
 
-  const petitionDocumentEntity = new DocketEntry(
+  const petitionDocketEntryEntity = new DocketEntry(
     {
       createdAt: caseToAdd.receivedAt,
       description: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -143,10 +143,10 @@ exports.createCaseFromPaperInteractor = async ({
     { applicationContext },
   );
 
-  const { workItem: newWorkItem } = addPetitionDocumentWithWorkItemToCase({
+  const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
     applicationContext,
     caseToAdd,
-    documentEntity: petitionDocumentEntity,
+    docketEntryEntity: petitionDocketEntryEntity,
     user,
   });
 
@@ -155,7 +155,7 @@ exports.createCaseFromPaperInteractor = async ({
       documentTitle,
     } = INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
-    const applicationForWaiverOfFilingFeeDocumentEntity = new DocketEntry(
+    const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description:
@@ -182,7 +182,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
+    caseToAdd.addDocketEntry(applicationForWaiverOfFilingFeeDocketEntryEntity);
   }
 
   if (requestForPlaceOfTrialFileId) {
@@ -194,7 +194,7 @@ exports.createCaseFromPaperInteractor = async ({
       );
     }
 
-    const requestForPlaceOfTrialDocumentEntity = new DocketEntry(
+    const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -219,11 +219,11 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
+    caseToAdd.addDocketEntry(requestForPlaceOfTrialDocketEntryEntity);
   }
 
   if (stinFileId) {
-    const stinDocumentEntity = new DocketEntry(
+    const stinDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -246,11 +246,11 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(stinDocumentEntity);
+    caseToAdd.addDocketEntry(stinDocketEntryEntity);
   }
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new DocketEntry(
+    const odsDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
@@ -273,7 +273,7 @@ exports.createCaseFromPaperInteractor = async ({
       { applicationContext },
     );
 
-    caseToAdd.addDocument(odsDocumentEntity);
+    caseToAdd.addDocketEntry(odsDocketEntryEntity);
   }
 
   await Promise.all([

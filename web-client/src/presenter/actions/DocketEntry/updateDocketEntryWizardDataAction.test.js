@@ -6,7 +6,7 @@ import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardData
 describe('updateDocketEntryWizardDataAction', () => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   const caseDetail = {
-    documents: [
+    docketEntries: [
       {
         documentId: '1',
         documentTitle: 'A Document',

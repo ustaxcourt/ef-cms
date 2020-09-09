@@ -47,7 +47,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
-      const selectedDocument = caseData.documents.find(
+      const selectedDocument = caseData.docketEntries.find(
         document => document.documentId === documentId,
       );
 
@@ -93,7 +93,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
     const caseEntity = new Case(caseData, { applicationContext });
 
-    const isPetitionServed = caseEntity.documents.find(
+    const isPetitionServed = caseEntity.docketEntries.find(
       doc => doc.documentType === 'Petition',
     ).servedAt;
 
