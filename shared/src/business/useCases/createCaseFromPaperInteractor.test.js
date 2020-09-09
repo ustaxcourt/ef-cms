@@ -71,7 +71,7 @@ describe('createCaseFromPaperInteractor', () => {
   it('creates a case from paper', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor({
       applicationContext,
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -119,7 +119,7 @@ describe('createCaseFromPaperInteractor', () => {
   it('creates a case from paper with a secondary contact', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor({
       applicationContext,
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -178,7 +178,7 @@ describe('createCaseFromPaperInteractor', () => {
   it('creates a case from paper with a request for place of trial and preferred trial city', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor({
       applicationContext,
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -228,7 +228,7 @@ describe('createCaseFromPaperInteractor', () => {
       applicationContext,
       applicationForWaiverOfFilingFeeFileId:
         '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseCaption: 'caseCaption',

@@ -60,10 +60,11 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const petitionDocument = applicationContext
+  const petitionDocketEntry = applicationContext
     .getUtilities()
-    .getPetitionDocumentFromDocuments(caseDetail.docketEntries);
-  const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+    .getPetitionDocketEntryFromDocketEntries(caseDetail.docketEntries);
+  const petitionIsServed =
+    petitionDocketEntry && !!petitionDocketEntry.servedAt;
 
   const hasPrivatePractitioners =
     !!caseDetail.privatePractitioners &&
