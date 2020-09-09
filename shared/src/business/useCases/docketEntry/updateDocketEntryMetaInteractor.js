@@ -85,7 +85,7 @@ exports.updateDocketEntryMetaInteractor = async ({
       editableFields.filingDate !== originalDocument.filingDate;
     const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
-    const documentEntity = new DocketEntry(
+    const docketEntryEntity = new DocketEntry(
       {
         ...originalDocument,
         ...editableFields,
@@ -102,7 +102,7 @@ exports.updateDocketEntryMetaInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.updateDocument(documentEntity);
+    caseEntity.updateDocketEntry(docketEntryEntity);
 
     if (shouldGenerateCoversheet) {
       // servedAt or filingDate has changed, generate a new coversheet

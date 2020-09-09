@@ -203,8 +203,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     noticeOfTrialDocketEntry.setAsServed(servedParties.all);
     standingPretrialDocketEntry.setAsServed(servedParties.all);
 
-    caseEntity.updateDocument(noticeOfTrialDocketEntry); // to generate an index
-    caseEntity.updateDocument(standingPretrialDocketEntry); // to generate an index
+    caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
+    caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
