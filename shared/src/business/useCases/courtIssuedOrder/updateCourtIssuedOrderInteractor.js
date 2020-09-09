@@ -80,7 +80,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
 
-  const documentEntity = new DocketEntry(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
@@ -92,12 +92,12 @@ exports.updateCourtIssuedOrderInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.setAsProcessingStatusAsCompleted();
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   // we always un-sign the order document on updates because the court user will need to sign it again
-  documentEntity.unsignDocument();
+  docketEntryEntity.unsignDocument();
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

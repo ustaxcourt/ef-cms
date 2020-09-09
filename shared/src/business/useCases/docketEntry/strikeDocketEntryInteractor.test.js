@@ -85,7 +85,7 @@ describe('strikeDocketEntryInteractor', () => {
         docketNumber: caseRecord.docketNumber,
         docketRecordId: 'does-not-exist',
       }),
-    ).rejects.toThrow('Document not found');
+    ).rejects.toThrow('Docket entry not found');
   });
 
   it('should call getCaseByDocketNumber, getUserById, and updateDocument', async () => {

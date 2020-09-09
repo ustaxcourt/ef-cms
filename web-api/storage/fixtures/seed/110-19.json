@@ -108,7 +108,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+    "sk": "document|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "numberOfPages": 1,
     "pk": "case|110-19"
@@ -132,7 +132,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Docketclerk",
     "isFileAttached": true,
-    "sk": "docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "signedJudgeName": "Maurice B. Foley",
     "signedAt": "2019-10-07T14:29:30.288Z",
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
@@ -155,7 +155,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "numberOfPages": 1,
     "pk": "case|110-19"
