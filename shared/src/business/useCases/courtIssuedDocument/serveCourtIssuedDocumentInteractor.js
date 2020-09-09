@@ -138,7 +138,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
-    documentId: docketEntryId,
+    key: docketEntryId,
   });
 
   const workItemToUpdate = courtIssuedDocument.workItem;

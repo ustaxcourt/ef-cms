@@ -18,7 +18,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: petitionFile,
-      documentId: petitionFileId,
+      key: petitionFileId,
     });
 
     const stinFile = getFakeFile();
@@ -27,7 +27,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: stinFile,
-      documentId: stinFileId,
+      key: stinFileId,
     });
 
     caseDetail = await applicationContext.getUseCases().createCaseInteractor({
