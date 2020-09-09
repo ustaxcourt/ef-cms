@@ -160,8 +160,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         },
         {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
           documentId: expect.anything(),
+          documentTitle: 'Request for Place of Trial at Aberdeen, South Dakota',
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',

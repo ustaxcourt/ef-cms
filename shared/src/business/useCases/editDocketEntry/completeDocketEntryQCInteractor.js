@@ -108,7 +108,7 @@ exports.completeDocketEntryQCInteractor = async ({
       ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      description: editableFields.documentTitle,
+      documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,

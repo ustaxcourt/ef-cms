@@ -330,19 +330,6 @@
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
                 presence: "optional"
-            description: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "max"
-                  args: 
-                    limit: 500
             docketNumber: 
               type: "string"
               flags: 

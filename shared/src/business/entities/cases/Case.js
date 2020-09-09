@@ -902,7 +902,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   let lastCaption = this.initialCaption;
 
   this.docketEntries.forEach(document => {
-    const result = caseCaptionRegex.exec(document.description);
+    const result = caseCaptionRegex.exec(document.documentTitle);
     if (result) {
       const [, , changedCaption] = result;
       lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
@@ -918,7 +918,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     this.addDocketEntry(
       new DocketEntry(
         {
-          description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
+          documentTitle: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
           documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
           eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
           filingDate: createISODateString(),
@@ -952,7 +952,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
   this.docketEntries.forEach(document => {
-    const result = docketNumberRegex.exec(document.description);
+    const result = docketNumberRegex.exec(document.documentTitle);
     if (result) {
       const [, , changedDocketNumber] = result;
       lastDocketNumber = changedDocketNumber;
@@ -968,7 +968,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
     this.addDocketEntry(
       new DocketEntry(
         {
-          description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+          documentTitle: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
           documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,
           eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
           filingDate: createISODateString(),
