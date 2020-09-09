@@ -212,7 +212,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|add36745-8e77-450b-a8dd-6f34272fe1d5",
+    "sk": "document|add36745-8e77-450b-a8dd-6f34272fe1d5",
     "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
     "numberOfPages": 1,
     "pk": "case|104-19"
@@ -229,7 +229,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "numberOfPages": 1,
     "pk": "case|104-19"
@@ -271,7 +271,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "isFileAttached": true,
-    "sk": "docket-entry|c63be3f2-2240-451e-b6bd-8206d52a070b",
+    "sk": "document|c63be3f2-2240-451e-b6bd-8206d52a070b",
     "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
     "numberOfPages": 1,
     "pk": "case|104-19",
@@ -280,7 +280,7 @@
   {
     "entityName": "Document",
     "pk": "case|104-19",
-    "sk": "docket-entry|8ed9bad9-db58-43c8-b03f-c2e3ad92995f",
+    "sk": "document|8ed9bad9-db58-43c8-b03f-c2e3ad92995f",
     "draftState": {
       "eventCode": "O",
       "documentTitle": "Order",

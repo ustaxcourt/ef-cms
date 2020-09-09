@@ -1,10 +1,13 @@
 const {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
+const {
   updatePetitionDetailsInteractor,
 } = require('./updatePetitionDetailsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { PAYMENT_STATUS } = require('../entities/EntityConstants');
 const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -133,9 +136,9 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    // TODO 636
     const waivedDocument = result.docketEntries.find(
-      entry => entry.description === 'Filing Fee Waived',
+      entry =>
+        entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
     );
 
     expect(waivedDocument).toBeTruthy();
@@ -160,9 +163,9 @@ describe('updatePetitionDetailsInteractor', () => {
       },
     });
 
-    // TODO 636
     const wavedDocument = result.docketEntries.find(
-      entry => entry.description === 'Filing Fee Paid',
+      entry =>
+        entry.description === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
     );
 
     expect(wavedDocument).toBeTruthy();
