@@ -33,7 +33,7 @@ export const petitionsClerkCreateOrder = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(4); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(4);
 
     const {
       draftDocuments,
