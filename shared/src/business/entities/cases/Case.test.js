@@ -71,7 +71,7 @@ describe('Case entity', () => {
     ]);
   });
 
-  describe('archivedDocuments', () => {
+  describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
       myCase = new Case(
@@ -82,7 +82,7 @@ describe('Case entity', () => {
       );
     });
 
-    it('should not populate archivedDocuments when the user is an external user and filtered is true', () => {
+    it('should not populate archivedDocketEntries when the user is an external user and filtered is true', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
       ); //petitioner user
@@ -90,28 +90,30 @@ describe('Case entity', () => {
       myCase = new Case(
         {
           ...MOCK_CASE,
-          archivedDocuments: [...MOCK_DOCUMENTS],
+          archivedDocketEntries: [...MOCK_DOCUMENTS],
           userId: applicationContext.getCurrentUser().userId,
         },
         { applicationContext, filtered: true },
       );
 
-      expect(myCase.archivedDocuments).toBeUndefined();
+      expect(myCase.archivedDocketEntries).toBeUndefined();
     });
 
-    it('should set archivedDocuments to the value provided when the user is an internal user', () => {
+    it('should set archivedDocketEntries to the value provided when the user is an internal user', () => {
       myCase = new Case(
         {
           ...MOCK_CASE,
-          archivedDocuments: [...MOCK_DOCUMENTS],
+          archivedDocketEntries: [...MOCK_DOCUMENTS],
         },
         { applicationContext },
       );
-      expect(myCase.archivedDocuments.length).toEqual(MOCK_DOCUMENTS.length);
+      expect(myCase.archivedDocketEntries.length).toEqual(
+        MOCK_DOCUMENTS.length,
+      );
     });
 
-    it('should set archivedDocuments to an empty list when a value is not provided and the user is an internal user', () => {
-      expect(myCase.archivedDocuments).toEqual([]);
+    it('should set archivedDocketEntries to an empty list when a value is not provided and the user is an internal user', () => {
+      expect(myCase.archivedDocketEntries).toEqual([]);
     });
   });
 
@@ -1212,11 +1214,11 @@ describe('Case entity', () => {
     });
   });
 
-  describe('archiveDocument', () => {
+  describe('archiveDocketEntry', () => {
     let caseRecord;
-    let documentToArchive;
+    let docketEntryToArchive;
     beforeEach(() => {
-      documentToArchive = {
+      docketEntryToArchive = {
         archived: undefined,
         documentId: '79c29d3f-d292-482c-b722-388577154664',
         documentType: 'Order',
@@ -1229,7 +1231,7 @@ describe('Case entity', () => {
       caseRecord = new Case(
         {
           ...MOCK_CASE,
-          docketEntries: [...MOCK_CASE.docketEntries, documentToArchive],
+          docketEntries: [...MOCK_CASE.docketEntries, docketEntryToArchive],
         },
         {
           applicationContext,
@@ -1237,30 +1239,36 @@ describe('Case entity', () => {
       );
     });
 
-    it('marks the document as archived', () => {
-      caseRecord.archiveDocument(documentToArchive, { applicationContext });
-      const archivedDocument = caseRecord.archivedDocuments.find(
-        d => d.documentId === documentToArchive.documentId,
+    it('marks the docket entry as archived', () => {
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      });
+      const archivedDocketEntry = caseRecord.archivedDocketEntries.find(
+        d => d.documentId === docketEntryToArchive.documentId,
       );
-      expect(archivedDocument.archived).toBeTruthy();
+      expect(archivedDocketEntry.archived).toBeTruthy();
     });
 
-    it('adds the provided document to the case archivedDocuments', () => {
-      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+    it('adds the provided docket entry to the case archivedDocketEntries', () => {
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      });
 
       expect(
-        caseRecord.archivedDocuments.find(
-          d => d.documentId === documentToArchive.documentId,
+        caseRecord.archivedDocketEntries.find(
+          d => d.documentId === docketEntryToArchive.documentId,
         ),
       ).toBeDefined();
     });
 
-    it('removes the provided document from the case docketEntries array', () => {
-      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+    it('removes the provided docket entry from the case docketEntries array', () => {
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      });
 
       expect(
         caseRecord.docketEntries.find(
-          d => d.documentId === documentToArchive.documentId,
+          d => d.documentId === docketEntryToArchive.documentId,
         ),
       ).toBeUndefined();
     });
@@ -1291,13 +1299,13 @@ describe('Case entity', () => {
       caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
-      const archivedDocument = caseRecord.archivedCorrespondences.find(
+      const archivedDocketEntry = caseRecord.archivedCorrespondences.find(
         d => d.documentId === correspondenceToArchive.documentId,
       );
-      expect(archivedDocument.archived).toBeTruthy();
+      expect(archivedDocketEntry.archived).toBeTruthy();
     });
 
-    it('adds the provided document to the case archivedDocuments', () => {
+    it('adds the provided document to the case archivedDocketEntries', () => {
       caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
@@ -2013,14 +2021,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('deleteDocumentById', () => {
+  describe('deleteDocketEntryById', () => {
     it('should delete the document with the given id', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
       const documentIdToDelete = MOCK_DOCUMENTS[1].documentId;
       expect(myCase.docketEntries.length).toEqual(4);
-      myCase.deleteDocumentById({
+      myCase.deleteDocketEntryById({
         documentId: documentIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(3);
@@ -2035,7 +2043,7 @@ describe('Case entity', () => {
       });
       const documentIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
       expect(myCase.docketEntries.length).toEqual(4);
-      myCase.deleteDocumentById({
+      myCase.deleteDocketEntryById({
         documentId: documentIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(4);
@@ -2083,12 +2091,12 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getPetitionDocument', () => {
-    it('should get the petition document by documentType', () => {
+  describe('getPetitionDocketEntry', () => {
+    it('should get the petition docket entry by documentType', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const result = myCase.getPetitionDocument();
+      const result = myCase.getPetitionDocketEntry();
       expect(result.documentType).toEqual(
         INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
@@ -2096,7 +2104,7 @@ describe('Case entity', () => {
   });
 
   describe('getIrsSendDate', () => {
-    it('should get the IRS send date from the petition document', () => {
+    it('should get the IRS send date from the petition docket entry', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -2112,7 +2120,7 @@ describe('Case entity', () => {
       expect(result).toEqual('2019-03-01T21:40:46.415Z');
     });
 
-    it('should return undefined for irsSendDate if the petition document is not served', () => {
+    it('should return undefined for irsSendDate if the petition docket entry is not served', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -2126,7 +2134,7 @@ describe('Case entity', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should return undefined for irsSendDate if the petition document is not found', () => {
+    it('should return undefined for irsSendDate if the petition docket entry is not found', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,

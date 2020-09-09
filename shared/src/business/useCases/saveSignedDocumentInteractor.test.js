@@ -101,17 +101,17 @@ describe('saveSignedDocumentInteractor', () => {
 
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
 
-    const signedDocumentEntity = caseEntity.docketEntries.find(
+    const signedDocketEntryEntity = caseEntity.docketEntries.find(
       document =>
         document.documentType === 'Stipulated Decision' &&
         document.documentId === mockSignedDocumentId,
     );
 
-    expect(signedDocumentEntity.isPaper).toEqual(false);
-    expect(signedDocumentEntity.documentId).toEqual(mockSignedDocumentId);
-    expect(signedDocumentEntity.isDraft).toEqual(true);
-    expect(signedDocumentEntity.signedJudgeName).toEqual('Guy Fieri');
-    expect(signedDocumentEntity.documentType).toEqual('Stipulated Decision');
+    expect(signedDocketEntryEntity.isPaper).toEqual(false);
+    expect(signedDocketEntryEntity.documentId).toEqual(mockSignedDocumentId);
+    expect(signedDocketEntryEntity.isDraft).toEqual(true);
+    expect(signedDocketEntryEntity.signedJudgeName).toEqual('Guy Fieri');
+    expect(signedDocketEntryEntity.documentType).toEqual('Stipulated Decision');
   });
 
   it("should set the document's processing status to complete", async () => {

@@ -37,7 +37,7 @@ describe('archiveDraftDocumentInteractor', () => {
     } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
 
     expect(
-      caseToUpdate.archivedDocuments.find(
+      caseToUpdate.archivedDocketEntries.find(
         d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ),
     ).toMatchObject({

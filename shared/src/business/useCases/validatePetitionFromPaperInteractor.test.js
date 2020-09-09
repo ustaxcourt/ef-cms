@@ -33,7 +33,7 @@ describe('validate petition from paper', () => {
     const errors = validatePetitionFromPaperInteractor({
       applicationContext,
       petition: {
-        archivedDocuments: [],
+        archivedDocketEntries: [],
         caseCaption: 'testing',
         caseType: CASE_TYPES_MAP.cdp,
         contactPrimary: {
