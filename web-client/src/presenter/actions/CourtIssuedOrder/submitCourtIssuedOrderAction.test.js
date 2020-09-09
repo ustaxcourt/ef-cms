@@ -38,7 +38,7 @@ describe('submitCourtIssuedOrderAction', () => {
     ).toBeCalled();
   });
 
-  it('should set document draftState', async () => {
+  it('should set document draftOrderState', async () => {
     applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor.mockReturnValue({ docketEntries: [] });
@@ -64,7 +64,7 @@ describe('submitCourtIssuedOrderAction', () => {
 
     expect(
       applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
-        .calls[0][0].documentMetadata.draftState,
+        .calls[0][0].documentMetadata.draftOrderState,
     ).toEqual({
       docketNumber: '111-20',
       documentType: 'Notice of Intervention',

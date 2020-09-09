@@ -46,8 +46,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
-    if (documentMetadata.draftState) {
-      documentMetadata.draftState.freeText = documentMetadata.documentTitle;
+    if (documentMetadata.draftOrderState) {
+      documentMetadata.draftOrderState.freeText =
+        documentMetadata.documentTitle;
     }
   }
 
@@ -86,8 +87,8 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState
-        ? documentMetadata.draftState.richText
+      richText: documentMetadata.draftOrderState
+        ? documentMetadata.draftOrderState.richText
         : undefined,
     };
 
@@ -98,10 +99,10 @@ exports.fileCourtIssuedOrderInteractor = async ({
       useTempBucket: false,
     });
 
-    if (documentMetadata.draftState) {
-      delete documentMetadata.draftState.documentContents;
-      delete documentMetadata.draftState.richText;
-      delete documentMetadata.draftState.editorDelta;
+    if (documentMetadata.draftOrderState) {
+      delete documentMetadata.draftOrderState.documentContents;
+      delete documentMetadata.draftOrderState.richText;
+      delete documentMetadata.draftOrderState.editorDelta;
     }
 
     delete documentMetadata.documentContents;
