@@ -1,13 +1,19 @@
-const { spawnSync } = require('child_process');
+exports.getSesStatus = async ({ applicationContext }) => {
+  const SES = applicationContext.getEmailClient();
+  const HOURS_TO_MONITOR = 24;
 
-exports.getSesStatus = async () => {
-  const result = await spawnSync(
-    'ping email.us-east-1.amazonaws.com -c 1 -W 10',
-  );
-
-  const receivedString = result.toString('utf8').split(',')[1];
-
-  const receivedPackets = receivedString.split(' ')[1];
-
-  return receivedPackets === '1';
+  try {
+    const { SendDataPoints } = await SES.getSendStatistics({}).promise();
+    const numberOfDatPoints = HOURS_TO_MONITOR * 4; // each data point is a 15 minute increment
+    return SendDataPoints.slice(0, numberOfDatPoints).every(
+      ({ Bounces, Complaints, Rejects }) =>
+        Bounces === 0 && Complaints === 0 && Rejects === 0,
+    );
+  } catch (err) {
+    console.log(
+      `within the last ${HOURS_TO_MONITOR} hours, there were bounced emails, complaints, or rejected emails`,
+      err,
+    );
+    return false;
+  }
 };
