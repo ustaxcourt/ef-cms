@@ -25,7 +25,7 @@ exports.addDocketEntryForPaymentStatus = ({
   user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocument(
+    caseEntity.addDocketEntry(
       new DocketEntry(
         {
           description: 'Filing Fee Paid',
@@ -42,7 +42,7 @@ exports.addDocketEntryForPaymentStatus = ({
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocument(
+    caseEntity.addDocketEntry(
       new DocketEntry(
         {
           description: 'Filing Fee Waived',
@@ -62,7 +62,7 @@ exports.addDocketEntryForPaymentStatus = ({
 };
 
 exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
-  const stinDocument = caseEntity.documents.find(
+  const stinDocument = caseEntity.docketEntries.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
@@ -90,13 +90,13 @@ const addDocketEntries = ({ caseEntity }) => {
   );
 
   for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
-    const foundDocument = caseEntity.documents.find(
+    const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
 
-    if (foundDocument) {
-      foundDocument.isOnDocketRecord = true;
-      caseEntity.updateDocument(foundDocument);
+    if (foundDocketEntry) {
+      foundDocketEntry.isOnDocketRecord = true;
+      caseEntity.updateDocketEntry(foundDocketEntry);
     }
   }
 };
@@ -133,21 +133,21 @@ exports.serveCaseToIrsInteractor = async ({
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-    const initialDocument = caseEntity.documents.find(
+    const initialDocketEntry = caseEntity.docketEntries.find(
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocument) {
-      initialDocument.setAsServed([
+    if (initialDocketEntry) {
+      initialDocketEntry.setAsServed([
         {
           name: 'IRS',
           role: ROLES.irsSuperuser,
         },
       ]);
-      caseEntity.updateDocument(initialDocument);
+      caseEntity.updateDocketEntry(initialDocketEntry);
 
       if (
-        initialDocument.documentType ===
+        initialDocketEntry.documentType ===
         INITIAL_DOCUMENT_TYPES.petition.documentType
       ) {
         await applicationContext
@@ -155,13 +155,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            documentEntity: initialDocument,
+            documentEntity: initialDocketEntry,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: initialDocument,
+          documentEntity: initialDocketEntry,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
@@ -187,11 +187,11 @@ exports.serveCaseToIrsInteractor = async ({
   //   applicationContext,
   //   caseEntity,
   // });
-  // caseEntity.documents = caseEntity.documents.filter(
+  // caseEntity.docketEntries = caseEntity.docketEntries.filter(
   //   item => item.documentId !== deletedStinDocumentId,
   // );
 
-  const petitionDocument = caseEntity.documents.find(
+  const petitionDocument = caseEntity.docketEntries.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
@@ -224,7 +224,7 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
 
-  for (const doc of caseEntity.documents) {
+  for (const doc of caseEntity.docketEntries) {
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,

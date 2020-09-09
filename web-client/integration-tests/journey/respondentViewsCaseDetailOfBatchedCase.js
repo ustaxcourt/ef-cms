@@ -11,6 +11,6 @@ export const respondentViewsCaseDetailOfBatchedCase = test => {
     expect(test.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,
     );
-    expect(test.getState('caseDetail.documents').length).toEqual(2);
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(2);
   });
 };

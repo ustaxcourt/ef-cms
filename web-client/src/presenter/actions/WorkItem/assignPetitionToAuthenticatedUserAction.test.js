@@ -33,7 +33,7 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
               workItem: { workItemId: '123' },

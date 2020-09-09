@@ -20,33 +20,7 @@ const caseDetail = {
     postalCode: '12345',
     state: 'AL',
   },
-  docketNumber: '123-45',
-  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-  docketRecord: [
-    {
-      createdAt: '2011-10-05T14:48:00.000Z',
-      description: 'Test Description',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-      filingDate: '2011-10-05T14:48:00.000Z',
-      index: '1',
-    },
-    {
-      createdAt: '2011-10-05T14:48:00.000Z',
-      description: 'Test Description',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-      filingDate: '2011-10-05T14:48:00.000Z',
-      index: '2',
-    },
-    {
-      createdAt: '2011-10-05T14:48:00.000Z',
-      description: 'Test Description',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-      filingDate: '2011-10-05T14:48:00.000Z',
-      filingsAndProceedings: 'Test F&P',
-      index: '3',
-    },
-  ],
-  documents: [
+  docketEntries: [
     {
       documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     },
@@ -60,6 +34,8 @@ const caseDetail = {
       servedAtFormatted: '03/27/19',
     },
   ],
+  docketNumber: '123-45',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
   privatePractitioners: [],

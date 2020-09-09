@@ -52,8 +52,6 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.petitioner) {
     showEditContacts = true;
-  } else if (user.role === USER_ROLES.irsPractitioner) {
-    showEditContacts = false;
   } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
   } else if (user.role === USER_ROLES.docketClerk) {
@@ -64,7 +62,7 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const petitionDocument = applicationContext
     .getUtilities()
-    .getPetitionDocumentFromDocuments(caseDetail.documents);
+    .getPetitionDocumentFromDocuments(caseDetail.docketEntries);
   const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
 
   const hasPrivatePractitioners =

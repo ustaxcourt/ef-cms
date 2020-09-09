@@ -261,6 +261,9 @@ const {
   DocketEntry,
 } = require('../../shared/src/business/entities/DocketEntry');
 const {
+  documentUrlTranslator,
+} = require('../../shared/src/business/utilities/documentUrlTranslator');
+const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -561,6 +564,9 @@ const {
 const {
   getSectionOutboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
+const {
+  getSesStatus,
+} = require('../../shared/src/persistence/ses/getSesStatus');
 const {
   getTableStatus,
 } = require('../../shared/src/persistence/dynamo/getTableStatus');
@@ -989,6 +995,9 @@ const {
 const execPromise = util.promisify(exec);
 
 const environment = {
+  appEndpoint: process.env.EFCMS_DOMAIN
+    ? `app.${process.env.EFCMS_DOMAIN}`
+    : 'localhost:1234',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   elasticsearchEndpoint:
@@ -1122,6 +1131,7 @@ const gatewayMethods = {
     createUser,
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
+    getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
     persistUser,
@@ -1237,7 +1247,11 @@ module.exports = appContextUser => {
   return {
     barNumberGenerator,
     docketNumberGenerator,
+    documentUrlTranslator,
     environment,
+    getAppEndpoint: () => {
+      return environment.appEndpoint;
+    },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getCognito: () => {

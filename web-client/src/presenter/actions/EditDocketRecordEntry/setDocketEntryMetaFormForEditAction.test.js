@@ -12,8 +12,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
 
   beforeAll(() => {
     caseDetail = {
-      docketNumber: '123-45',
-      documents: [
+      docketEntries: [
         { index: 1 },
         {
           documentId: '123',
@@ -46,6 +45,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
         },
       ],
+      docketNumber: '123-45',
     };
   });
 

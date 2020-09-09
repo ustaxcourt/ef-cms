@@ -1387,6 +1387,7 @@
                                   presence: "optional"
                                 allow: 
                                   - ""
+                                  - null
                         otherwise: 
                           type: "any"
                           flags: 
@@ -1397,6 +1398,7 @@
                       presence: "optional"
                     allow: 
                       - ""
+                      - null
             filingDate: 
               type: "date"
               flags: 
@@ -4162,55 +4164,11 @@
         description: "Damages for the case."
       allow: 
         - null
-    docketNumber: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "Unique case identifier in XXXXX-YY format."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "pattern"
-          args: 
-            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-    docketNumberSuffix: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-      allow: 
-        - null
-        - "X"
-        - "R"
-        - "D"
-        - "L"
-        - "P"
-        - "S"
-        - "SL"
-        - "W"
-    docketNumberWithSuffix: 
-      type: "string"
-      flags: 
-        presence: "optional"
-        description: "Auto-generated from docket number and the suffix."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-    documents: 
+    docketEntries: 
       type: "array"
       flags: 
         presence: "required"
-        description: "List of Document Entities for the case."
+        description: "List of DocketEntry Entities for the case."
       items: 
         - 
           type: "object"
@@ -5505,6 +5463,7 @@
                                   presence: "optional"
                                 allow: 
                                   - ""
+                                  - null
                         otherwise: 
                           type: "any"
                           flags: 
@@ -5515,6 +5474,7 @@
                       presence: "optional"
                     allow: 
                       - ""
+                      - null
             filingDate: 
               type: "date"
               flags: 
@@ -7949,6 +7909,50 @@
                         options: 
                           version: 
                             - "uuidv4"
+    docketNumber: 
+      type: "string"
+      flags: 
+        presence: "required"
+        description: "Unique case identifier in XXXXX-YY format."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "pattern"
+          args: 
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
+    docketNumberSuffix: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - null
+        - "X"
+        - "R"
+        - "D"
+        - "L"
+        - "P"
+        - "S"
+        - "SL"
+        - "W"
+    docketNumberWithSuffix: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Auto-generated from docket number and the suffix."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
     entityName: 
       type: "string"
       flags: 

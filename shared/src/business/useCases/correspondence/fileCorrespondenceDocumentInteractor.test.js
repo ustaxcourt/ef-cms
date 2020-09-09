@@ -33,8 +33,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       postalCode: '12345',
       state: 'TN',
     },
-    docketNumber: '123-45',
-    documents: [
+    docketEntries: [
       {
         description: 'Docket Record 1',
         documentId: mockDocumentId,
@@ -48,6 +47,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
     ],
+    docketNumber: '123-45',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',

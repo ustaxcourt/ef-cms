@@ -16,7 +16,7 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
     });
 
     const petitionDocumentId = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(d => d.eventCode === 'P').documentId;
 
     await test.runSequence('gotoCaseDetailSequence', {
