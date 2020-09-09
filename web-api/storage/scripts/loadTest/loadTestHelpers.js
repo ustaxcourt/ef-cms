@@ -132,8 +132,8 @@ const createCase = async ({
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: document.documentId,
       docketNumber: caseDetail.docketNumber,
-      documentId: document.documentId,
     });
   };
 

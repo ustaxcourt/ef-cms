@@ -175,12 +175,12 @@ exports.addCoverToPdf = async ({
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.documentId the document id
+ * @param {string} providers.docketEntryId the docket entry id
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
   replaceCoversheet = false,
   useInitialData = false,
 }) => {
@@ -193,7 +193,9 @@ exports.addCoversheetInteractor = async ({
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    documentId: docketEntryId,
+  });
 
   let pdfData;
   try {
@@ -201,12 +203,12 @@ exports.addCoversheetInteractor = async ({
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
+        Key: docketEntryId,
       })
       .promise();
     pdfData = Body;
   } catch (err) {
-    err.message = `${err.message} document id is ${documentId}`;
+    err.message = `${err.message} docket entry id is ${docketEntryId}`;
     throw err;
   }
 
@@ -226,12 +228,12 @@ exports.addCoversheetInteractor = async ({
     applicationContext,
     docketNumber: caseEntity.docketNumber,
     document: docketEntryEntity.validate().toRawObject(),
-    documentId,
+    documentId: docketEntryId,
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
-    documentId,
+    documentId: docketEntryId,
   });
 };
