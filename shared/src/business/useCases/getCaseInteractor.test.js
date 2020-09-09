@@ -31,7 +31,7 @@ describe('Get case', () => {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Petition',
           documentType: 'Petition',
-          draftState: {},
+          draftOrderState: {},
           eventCode: 'P',
           filedBy: 'Test Petitioner',
           processingStatus: 'pending',
@@ -70,7 +70,7 @@ describe('Get case', () => {
     });
     expect(caseRecord.docketEntries[0]).toMatchObject({
       documentContents: 'the contents!',
-      draftState: {
+      draftOrderState: {
         documentContents: 'the contents!',
         richText: '<b>the contents!</b>',
       },

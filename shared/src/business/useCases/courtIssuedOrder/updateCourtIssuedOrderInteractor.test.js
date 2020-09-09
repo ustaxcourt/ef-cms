@@ -130,7 +130,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
-        draftState: {},
+        draftOrderState: {},
         eventCode: 'OSC',
       },
     });
@@ -152,7 +152,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         docketNumber: caseRecord.docketNumber,
         documentContents: 'the contents!',
         documentType: 'Order to Show Cause',
-        draftState: {
+        draftOrderState: {
           documentContents: 'the contents!',
           richText: '<b>the contents!</b>',
         },
@@ -174,7 +174,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[2].draftState,
+        .caseToUpdate.docketEntries[2].draftOrderState,
     ).toBeUndefined();
   });
 
@@ -185,7 +185,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
-        draftState: {},
+        draftOrderState: {},
         eventCode: 'OSC',
         judge: 'Judge Judgy',
       },

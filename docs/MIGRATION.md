@@ -68,7 +68,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{}",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":false,
       "previousDocument":{
@@ -99,7 +99,7 @@ Valid Case object example:
           "pending":false,
           "partyIrsPractitioner":true,
           "previousDocument":{
-            "draftState":null,
+            "draftOrderState":null,
             "servedParties":[
               {
                 "name":"Carlos Haley",
@@ -316,7 +316,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{\"certificateOfServiceDate\":null,\"documentTitle\":\"Answer\",\"documentType\":\"Answer\",\"eventCode\":\"A\",\"isFileAttached\":true,\"lodged\":false,\"partyPrimary\":true,\"receivedAt\":\"2001-10-10\",\"scenario\":\"Standard\"}",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":false,
       "processingStatus":"complete",
@@ -398,7 +398,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{}",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":false,
       "processingStatus":"complete",
@@ -480,7 +480,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{}",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":false,
       "processingStatus":"complete",
@@ -561,7 +561,7 @@ Valid Case object example:
     },
     {
       "entityName":"DocketEntry",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":false,
       "processingStatus":"complete",
@@ -636,7 +636,7 @@ Valid Case object example:
     },
     {
       "entityName":"DocketEntry",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":false,
       "processingStatus":"complete",
@@ -670,7 +670,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{\"eventCode\":\"OSC\",\"documentType\":\"Order to Show Cause\",\"documentTitle\":\"Order to Show Cause [Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order to Show Cause\",\"caseId\":\"13de0327-51f1-42bb-ac8e-90f8ec5cea08\",\"documentId\":\"389c2e46-224a-4bbd-abde-de5ea2c20a67\"}",
-      "draftState":{
+      "draftOrderState":{
         "documentContents":"asdf\n",
         "richText":"<p>asdf</p>"
       },
@@ -696,7 +696,7 @@ Valid Case object example:
         "docketNumber":"543-20",
         "docketNumberWithSuffix":"543-20",
         "document":{
-          "draftState":null,
+          "draftOrderState":null,
           "servedParties":[
             {
               "name":"Carlos Haley",
@@ -765,7 +765,7 @@ Valid Case object example:
     },
     {
       "entityName":"DocketEntry",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "pending":true,
       "processingStatus":"complete",
@@ -992,7 +992,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{\"eventCode\":\"SDEC\",\"documentType\":\"Stipulated Decision\",\"documentTitle\":\"Stipulated Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"requiresSignature\":true,\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Stipulated Decision Entered, Judge Buch\",\"judge\":\"Judge Buch\",\"docketNumber\":\"543-20\",\"documentId\":\"e897e70a-66b6-469c-be60-5cee95aacf71\"}",
-      "draftState":null,
+      "draftOrderState":null,
       "isDraft":false,
       "judge":"Judge Buch",
       "pending":false,
@@ -1017,7 +1017,7 @@ Valid Case object example:
         "docketNumberWithSuffix":"543-20",
         "document":{
           "date":null,
-          "draftState":null,
+          "draftOrderState":null,
           "servedParties":[
             {
               "name":"Carlos Haley",
@@ -1149,7 +1149,7 @@ Valid Case object example:
     {
       "entityName":"DocketEntry",
       "editState":"{\"eventCode\":\"OAP\",\"documentType\":\"Order for Amended Petition\",\"documentTitle\":\"Order for Amended Petition on [Date] [Anything]\",\"scenario\":\"Type D\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"date\":\"2020-08-06\",\"generatedDocumentTitle\":\"Order for Amended Petition on 08-06-2020\",\"searchText\":\"OAP\",\"month\":\"8\",\"year\":\"2020\",\"day\":\"6\",\"docketNumber\":\"543-20\",\"documentId\":\"c077853b-211e-4482-9f64-56a53e7b0788\"}",
-      "draftState":{
+      "draftOrderState":{
         "eventCode":"OD",
         "documentTitle":"Order of Dismissal",
         "documentType":"Order of Dismissal",
@@ -1177,7 +1177,7 @@ Valid Case object example:
         "docketNumberWithSuffix":"543-20",
         "document":{
           "date":"2020-08-06",
-          "draftState":{
+          "draftOrderState":{
             "eventCode":"OD",
             "documentTitle":"Order of Dismissal",
             "documentType":"Order of Dismissal",
