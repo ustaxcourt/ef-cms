@@ -126,7 +126,7 @@ exports.updateSecondaryContactInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -158,7 +158,7 @@ exports.updateSecondaryContactInteractor = async ({
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 

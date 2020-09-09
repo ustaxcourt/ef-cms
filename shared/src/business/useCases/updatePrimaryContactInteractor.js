@@ -124,7 +124,7 @@ exports.updatePrimaryContactInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -156,7 +156,7 @@ exports.updatePrimaryContactInteractor = async ({
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 

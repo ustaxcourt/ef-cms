@@ -987,16 +987,29 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 };
 
 /**
- * gets the document with id documentId from the documents or correspondence arrays
+ * gets the docketEntry with id documentId from the docketEntries array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the document to retrieve
- * @returns {object} the retrieved document
+ * @params {string} params.documentId the id of the docketEntry to retrieve
+ * @returns {object} the retrieved docketEntry
  */
-Case.prototype.getDocumentById = function ({ documentId }) {
-  const allCaseDocuments = [...this.docketEntries, ...this.correspondence];
+Case.prototype.getDocketEntryById = function ({ documentId }) {
+  return this.docketEntries.find(
+    docketEntry => docketEntry.documentId === documentId,
+  );
+};
 
-  return allCaseDocuments.find(document => document.documentId === documentId);
+/**
+ * gets the correspondence with id documentId from the correspondence array
+ *
+ * @params {object} params the params object
+ * @params {string} params.documentId the id of the correspondence to retrieve
+ * @returns {object} the retrieved correspondence
+ */
+Case.prototype.getCorrespondenceById = function ({ documentId }) {
+  return this.correspondence.find(
+    correspondence => correspondence.documentId === documentId,
+  );
 };
 
 /**

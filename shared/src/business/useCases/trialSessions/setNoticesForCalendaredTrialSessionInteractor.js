@@ -239,14 +239,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeDocketEntryEntity,
+      docketEntryEntity: noticeDocketEntryEntity,
       servedParties,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: standingPretrialDocketEntryEntity,
+      docketEntryEntity: standingPretrialDocketEntryEntity,
       servedParties,
     });
 

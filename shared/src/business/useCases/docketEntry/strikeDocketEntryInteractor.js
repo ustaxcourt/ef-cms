@@ -38,7 +38,7 @@ exports.strikeDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketEntryEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
 
   if (!docketEntryEntity) {
     throw new NotFoundError('Docket entry not found');
