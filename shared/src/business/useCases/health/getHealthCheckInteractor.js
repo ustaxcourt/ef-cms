@@ -153,7 +153,9 @@ const getCognitoStatus = async ({ applicationContext }) => {
 
 const getEmailServiceStatus = async ({ applicationContext }) => {
   try {
-    return await applicationContext.getPersistenceGateway().getSesStatus();
+    return await applicationContext
+      .getPersistenceGateway()
+      .getSesStatus({ applicationContext });
   } catch (e) {
     console.log('Email service health check failed. ', e);
     return false;

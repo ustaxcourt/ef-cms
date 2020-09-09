@@ -565,7 +565,6 @@ const applicationContext = {
       getCaseCaption: Case.getCaseCaption,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
-      getFormattedDocumentType: DocketEntry.getFormattedType,
       getJudgeLastName,
       getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
