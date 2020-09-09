@@ -55,13 +55,10 @@ export const formatDocumentSearchResultRecord = (
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
-  result.formattedDocumentType = applicationContext
-    .getUtilities()
-    .getFormattedDocumentType(result.documentType);
 
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {
-    result.documentTitle = result.formattedDocumentType;
+    result.documentTitle = result.documentType;
   }
 
   if (OPINION_EVENT_CODES.includes(result.eventCode)) {

@@ -10,9 +10,6 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
 
   const formattedOpinions = todaysOpinions.map(opinion => ({
     ...opinion,
-    formattedDocumentType: applicationContext
-      .getUtilities()
-      .getFormattedDocumentType(opinion.documentType),
     formattedFilingDate: applicationContext
       .getUtilities()
       .formatDateString(opinion.filingDate, 'MMDDYY'),
