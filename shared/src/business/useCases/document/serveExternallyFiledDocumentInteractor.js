@@ -61,7 +61,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   const { pdfData: servedDocWithCover } = await addCoverToPdf({
     applicationContext,
     caseEntity,
-    documentEntity: currentDocketEntry,
+    docketEntryEntity: currentDocketEntry,
     pdfData: pdfData,
   });
 
@@ -113,7 +113,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    documentEntity: currentDocketEntry,
+    docketEntryEntity: currentDocketEntry,
     servedParties,
   });
 

@@ -333,7 +333,7 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeUpdatedDocketEntry,
+      docketEntryEntity: noticeUpdatedDocketEntry,
       servedParties,
     });
 
