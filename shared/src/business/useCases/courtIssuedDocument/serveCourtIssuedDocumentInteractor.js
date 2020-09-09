@@ -208,7 +208,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    documentEntity: courtIssuedDocument,
+    docketEntryEntity: courtIssuedDocument,
     servedParties,
   });
 

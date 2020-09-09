@@ -20,7 +20,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumber: '123-20',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      documentEntity: {
+      docketEntryEntity: {
         documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
         servedAt: '2019-03-01T21:40:46.415Z',
@@ -55,7 +55,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumber: '123-20',
         status: CASE_STATUS_TYPES.new,
       },
-      documentEntity: {
+      docketEntryEntity: {
         documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
         servedAt: '2019-03-01T21:40:46.415Z',
@@ -86,7 +86,7 @@ describe('sendServedPartiesEmails', () => {
         docketNumber: '123-20',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      documentEntity: {
+      docketEntryEntity: {
         documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
         servedAt: '2019-03-01T21:40:46.415Z',

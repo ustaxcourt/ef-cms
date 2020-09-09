@@ -7,7 +7,7 @@ const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 exports.sendServedPartiesEmails = async ({
   applicationContext,
   caseEntity,
-  documentEntity,
+  docketEntryEntity,
   servedParties,
 }) => {
   const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
@@ -19,11 +19,7 @@ exports.sendServedPartiesEmails = async ({
     eventCode,
     filedBy,
     servedAt,
-  } = documentEntity;
-
-  const docketEntry = caseEntity.docketEntries.find(
-    entry => entry.documentId === documentId,
-  );
+  } = docketEntryEntity;
 
   const currentDate = applicationContext
     .getUtilities()
@@ -48,7 +44,7 @@ exports.sendServedPartiesEmails = async ({
             docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
           },
           currentDate,
-          docketEntryNumber: docketEntry && docketEntry.index,
+          docketEntryNumber: docketEntryEntity.index,
           documentDetail: {
             documentId,
             documentTitle: documentTitle || documentType,

@@ -171,7 +171,7 @@ exports.generateChangeOfAddress = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocketEntry,
+          docketEntryEntity: changeOfAddressDocketEntry,
           servedParties,
         });
 
@@ -203,7 +203,7 @@ exports.generateChangeOfAddress = async ({
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocketEntry,
+          docketEntryEntity: changeOfAddressDocketEntry,
           pdfData: changeOfAddressPdf,
         });
 
