@@ -444,7 +444,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   // POST
   app.post(
-    '/case-documents/:docketNumber/:documentId/serve-court-issued',
+    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda),
   );
   app.post(
@@ -456,11 +456,11 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(removeSignatureFromDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/sign',
+    '/case-documents/:docketNumber/:docketEntryId/sign',
     lambdaWrapper(saveSignedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/serve',
+    '/case-documents/:docketNumber/:docketEntryId/serve',
     lambdaWrapper(serveExternallyFiledDocumentLambda),
   );
   app.post(
@@ -490,7 +490,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
   // PUT
   app.put(
-    '/case-documents/:docketNumber/court-issued-orders/:documentId',
+    '/case-documents/:docketNumber/court-issued-orders/:docketEntryId',
     lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
   );
   app.put(
@@ -514,11 +514,11 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateCorrespondenceDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:documentId',
+    '/case-documents/:docketNumber/:docketEntryId',
     lambdaWrapper(archiveDraftDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:documentId/strike',
+    '/case-documents/:docketNumber/:docketEntryId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE
@@ -658,7 +658,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
   app.delete(
-    '/cases/:docketNumber/remove-pending/:documentId',
+    '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
   );
   app.get(

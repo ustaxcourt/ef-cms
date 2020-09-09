@@ -26,8 +26,8 @@ describe('removeCaseDetailPendingItemAction', () => {
       applicationContext.getUseCases().removeCasePendingItemInteractor.mock
         .calls[0][0],
     ).toMatchObject({
+      docketEntryId: '123abc',
       docketNumber: '101-20',
-      documentId: '123abc',
     });
   });
 });
