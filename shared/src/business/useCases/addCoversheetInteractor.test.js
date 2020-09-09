@@ -81,8 +81,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     await addCoversheetInteractor(params);
@@ -102,8 +102,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       replaceCoversheet: true,
     };
 
@@ -124,8 +124,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     await addCoversheetInteractor(params);
@@ -144,8 +144,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     await addCoversheetInteractor(params);
@@ -162,8 +162,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
       docketNumber: '101-19',
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 
     await addCoversheetInteractor(params);
