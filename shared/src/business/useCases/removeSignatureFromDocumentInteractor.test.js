@@ -62,7 +62,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({
-      documentId: mockDocketEntryId,
+      key: mockDocketEntryId,
     });
   });
 

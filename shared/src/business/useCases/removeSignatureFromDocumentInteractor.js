@@ -39,7 +39,7 @@ exports.removeSignatureFromDocumentInteractor = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: originalPdfNoSignature,
-    documentId: docketEntryId,
+    key: docketEntryId,
   });
 
   const caseToUpdate = caseEntity.validate().toRawObject();

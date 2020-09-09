@@ -85,13 +85,13 @@ const createCase = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: petitionFile,
-        documentId: petitionFileId,
+        key: petitionFileId,
       });
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: stinFile,
-        documentId: stinFileId,
+        key: stinFileId,
       });
     } catch (e) {
       console.log('e', e);

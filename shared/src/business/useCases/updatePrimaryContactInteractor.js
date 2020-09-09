@@ -93,7 +93,7 @@ exports.updatePrimaryContactInteractor = async ({
         },
       });
 
-    const newDocumentId = applicationContext.getUniqueId();
+    const newDocketEntryId = applicationContext.getUniqueId();
 
     const changeOfAddressDocketEntry = new DocketEntry(
       {
@@ -101,7 +101,7 @@ exports.updatePrimaryContactInteractor = async ({
         additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
         description: documentType.title,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocumentId,
+        documentId: newDocketEntryId,
         documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,
@@ -163,7 +163,7 @@ exports.updatePrimaryContactInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
-      documentId: newDocumentId,
+      key: newDocketEntryId,
     });
 
     await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
