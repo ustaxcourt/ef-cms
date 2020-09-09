@@ -100,8 +100,8 @@ module.exports.createCase1 = async () => {
       docketNumber,
       //todo - do not hard code a judge
       nameForSigning: 'Maurice B. Foley',
-      originalDocumentId: documentId,
-      signedDocumentId: documentId,
+      originalDocketEntryId: documentId,
+      signedDocketEntryId: documentId,
     });
   });
 

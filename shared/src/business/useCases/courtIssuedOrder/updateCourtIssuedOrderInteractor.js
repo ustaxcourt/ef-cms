@@ -11,13 +11,13 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.documentIdToEdit the id of the document to update
+ * @param {object} providers.docketEntryIdToEdit the id of the docket entry to update
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the document is updated
  */
 exports.updateCourtIssuedOrderInteractor = async ({
   applicationContext,
-  documentIdToEdit,
+  docketEntryIdToEdit,
   documentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -41,7 +41,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocument = caseEntity.getDocketEntryById({
-    documentId: documentIdToEdit,
+    documentId: docketEntryIdToEdit,
   });
 
   if (!currentDocument) {
@@ -78,13 +78,16 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
+    .countPagesInDocument({
+      applicationContext,
+      documentId: docketEntryIdToEdit,
+    });
 
   const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
-      documentId: documentIdToEdit,
+      documentId: docketEntryIdToEdit,
       filedBy: user.name,
       numberOfPages,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

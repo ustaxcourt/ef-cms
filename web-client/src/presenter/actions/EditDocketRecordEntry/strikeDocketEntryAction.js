@@ -20,8 +20,8 @@ export const strikeDocketEntryAction = async ({
   try {
     await applicationContext.getUseCases().strikeDocketEntryInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber,
-      documentId,
     });
     return path.success({
       alertSuccess: {

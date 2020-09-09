@@ -66,8 +66,8 @@ describe('strikeDocketEntryInteractor', () => {
     await expect(
       strikeDocketEntryInteractor({
         applicationContext,
+        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -82,8 +82,8 @@ describe('strikeDocketEntryInteractor', () => {
     await expect(
       strikeDocketEntryInteractor({
         applicationContext,
+        docketEntryId: 'does-not-exist',
         docketNumber: caseRecord.docketNumber,
-        docketRecordId: 'does-not-exist',
       }),
     ).rejects.toThrow('Docket entry not found');
   });
@@ -97,8 +97,8 @@ describe('strikeDocketEntryInteractor', () => {
 
     await strikeDocketEntryInteractor({
       applicationContext,
+      docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
       docketNumber: caseRecord.docketNumber,
-      documentId: '8675309b-18d0-43ec-bafb-654e83405411',
     });
 
     expect(
@@ -122,8 +122,8 @@ describe('strikeDocketEntryInteractor', () => {
     await expect(
       strikeDocketEntryInteractor({
         applicationContext,
+        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow(
       'Cannot strike a document that is not on the docket record.',
