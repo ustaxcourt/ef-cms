@@ -1328,7 +1328,7 @@
         }
       }
     },
-    "/cases/{docketNumber}/remove-pending/{documentId}": {
+    "/cases/{docketNumber}/remove-pending/{docketEntryId}": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -1337,7 +1337,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2283,7 +2283,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}": {
+    "/case-documents/{docketNumber}/{docketEntryId}": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2292,7 +2292,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2806,7 +2806,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/work-items": {
+    "/case-documents/{docketNumber}/{docketEntryId}/work-items": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2815,7 +2815,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2864,7 +2864,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/serve-court-issued": {
+    "/case-documents/{docketNumber}/{docketEntryId}/serve-court-issued": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2873,7 +2873,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2922,7 +2922,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/serve": {
+    "/case-documents/{docketNumber}/{docketEntryId}/serve": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2931,7 +2931,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -3733,7 +3733,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/coversheet": {
+    "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -3742,7 +3742,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -3788,7 +3788,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/sign": {
+    "/case-documents/{docketNumber}/{docketEntryId}/sign": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -3797,7 +3797,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4554,7 +4554,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/court-issued-orders/{documentId}": {
+    "/case-documents/{docketNumber}/court-issued-orders/{docketEntryId}": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -4563,7 +4563,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"

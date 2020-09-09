@@ -97,7 +97,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     await expect(
       updateCourtIssuedOrderInteractor({
         applicationContext,
-        documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
@@ -113,7 +113,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     await expect(
       updateCourtIssuedOrderInteractor({
         applicationContext,
-        documentIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
+        docketEntryIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
@@ -126,7 +126,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('update existing document within case', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
@@ -147,7 +147,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('stores documentContents in S3 if present', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentContents: 'the contents!',
@@ -181,7 +181,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('does not update non-editable fields on document', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
