@@ -19,7 +19,7 @@ const {
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -225,9 +225,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
-    getPetitionDocumentFromDocuments: jest
+    getPetitionDocketEntryFromDocketEntries: jest
       .fn()
-      .mockImplementation(getPetitionDocumentFromDocuments),
+      .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,

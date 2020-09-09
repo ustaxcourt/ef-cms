@@ -2013,14 +2013,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('deleteDocumentById', () => {
+  describe('deleteDocketEntryById', () => {
     it('should delete the document with the given id', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
       const documentIdToDelete = MOCK_DOCUMENTS[1].documentId;
       expect(myCase.docketEntries.length).toEqual(4);
-      myCase.deleteDocumentById({
+      myCase.deleteDocketEntryById({
         documentId: documentIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(3);
@@ -2035,7 +2035,7 @@ describe('Case entity', () => {
       });
       const documentIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
       expect(myCase.docketEntries.length).toEqual(4);
-      myCase.deleteDocumentById({
+      myCase.deleteDocketEntryById({
         documentId: documentIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(4);
@@ -2083,12 +2083,12 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getPetitionDocument', () => {
-    it('should get the petition document by documentType', () => {
+  describe('getPetitionDocketEntry', () => {
+    it('should get the petition docket entry by documentType', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const result = myCase.getPetitionDocument();
+      const result = myCase.getPetitionDocketEntry();
       expect(result.documentType).toEqual(
         INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
@@ -2096,7 +2096,7 @@ describe('Case entity', () => {
   });
 
   describe('getIrsSendDate', () => {
-    it('should get the IRS send date from the petition document', () => {
+    it('should get the IRS send date from the petition docket entry', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -2112,7 +2112,7 @@ describe('Case entity', () => {
       expect(result).toEqual('2019-03-01T21:40:46.415Z');
     });
 
-    it('should return undefined for irsSendDate if the petition document is not served', () => {
+    it('should return undefined for irsSendDate if the petition docket entry is not served', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -2126,7 +2126,7 @@ describe('Case entity', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should return undefined for irsSendDate if the petition document is not found', () => {
+    it('should return undefined for irsSendDate if the petition docket entry is not found', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
