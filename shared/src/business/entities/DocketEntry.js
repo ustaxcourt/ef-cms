@@ -335,8 +335,8 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .description(
       'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
-  isMinuteEntry: joi.boolean().optional(), //TODO 636 - make required
-  isOnDocketRecord: joi.boolean().optional(), //TODO 636 - make required
+  isMinuteEntry: joi.boolean().required(),
+  isOnDocketRecord: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi
     .boolean()
