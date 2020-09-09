@@ -214,7 +214,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         .caseToUpdate.docketEntries[3],
     ).toMatchObject({
       documentContentsId: expect.anything(),
-      draftState: {},
+      draftOrderState: {},
     });
   });
 

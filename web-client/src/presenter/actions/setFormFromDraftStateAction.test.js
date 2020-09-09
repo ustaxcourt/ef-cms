@@ -10,7 +10,7 @@ describe('setFormFromDraftStateAction', () => {
     documentType: 'Order',
   };
 
-  documentToMatch.draftState = { ...documentToMatch };
+  documentToMatch.draftOrderState = { ...documentToMatch };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -62,7 +62,7 @@ describe('setFormFromDraftStateAction', () => {
     expect(result.state.form).toBeUndefined();
   });
 
-  it('sets state.form to the documentIdToEdit if draftState does not exist for the selected document', async () => {
+  it('sets state.form to the documentIdToEdit if draftOrderState does not exist for the selected document', async () => {
     const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,

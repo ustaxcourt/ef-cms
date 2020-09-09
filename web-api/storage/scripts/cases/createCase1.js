@@ -84,7 +84,7 @@ module.exports.createCase1 = async () => {
       richText: '<p>Testing</p>',
     };
 
-    documentMetadata.draftState = { ...documentMetadata };
+    documentMetadata.draftOrderState = { ...documentMetadata };
     const documentId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
 
     caseDetail = await applicationContext
@@ -117,7 +117,7 @@ module.exports.createCase1 = async () => {
       scenario: 'Type A',
     };
 
-    documentMetadata.draftState = { ...documentMetadata };
+    documentMetadata.draftOrderState = { ...documentMetadata };
     const documentId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
 
     caseDetail = await applicationContext

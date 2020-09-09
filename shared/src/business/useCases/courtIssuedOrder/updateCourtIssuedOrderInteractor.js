@@ -53,7 +53,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState.richText,
+      richText: documentMetadata.draftOrderState.richText,
     };
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -64,15 +64,15 @@ exports.updateCourtIssuedOrderInteractor = async ({
     });
 
     delete documentMetadata.documentContents;
-    delete documentMetadata.draftState.documentContents;
-    delete documentMetadata.draftState.richText;
-    delete documentMetadata.draftState.editorDelta;
+    delete documentMetadata.draftOrderState.documentContents;
+    delete documentMetadata.draftOrderState.richText;
+    delete documentMetadata.draftOrderState.editorDelta;
   }
 
   const editableFields = {
     documentTitle: documentMetadata.documentTitle,
     documentType: documentMetadata.documentType,
-    draftState: documentMetadata.draftState,
+    draftOrderState: documentMetadata.draftOrderState,
     freeText: documentMetadata.freeText,
   };
 
