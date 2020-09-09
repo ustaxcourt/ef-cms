@@ -452,7 +452,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(addCoversheetLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/remove-signature',
+    '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),
   );
   app.post(

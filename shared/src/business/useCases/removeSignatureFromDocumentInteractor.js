@@ -6,13 +6,13 @@ const { Case } = require('../entities/cases/Case');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case on which to remove the signature from the document
- * @param {string} providers.documentId the id of the signed document
+ * @param {string} providers.docketEntryId the id of the docket entry for the signed document
  * @returns {object} the updated case
  */
 exports.removeSignatureFromDocumentInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -21,7 +21,9 @@ exports.removeSignatureFromDocumentInteractor = async ({
       docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
-  const docketEntryToUnsign = caseEntity.getDocketEntryById({ documentId });
+  const docketEntryToUnsign = caseEntity.getDocketEntryById({
+    documentId: docketEntryId,
+  });
 
   docketEntryToUnsign.unsignDocument();
 
@@ -37,7 +39,7 @@ exports.removeSignatureFromDocumentInteractor = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: originalPdfNoSignature,
-    documentId,
+    documentId: docketEntryId,
   });
 
   const caseToUpdate = caseEntity.validate().toRawObject();
