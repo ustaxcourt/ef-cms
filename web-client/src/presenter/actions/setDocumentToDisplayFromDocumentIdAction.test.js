@@ -13,8 +13,8 @@ describe('setDocumentToDisplayFromDocumentIdAction', () => {
 
   beforeAll(() => {
     caseDetail = {
+      docketEntries: [],
       docketNumber,
-      documents: [],
     };
 
     applicationContext

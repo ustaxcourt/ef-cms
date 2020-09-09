@@ -49,8 +49,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -70,8 +69,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -93,8 +91,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -117,8 +114,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -140,8 +136,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -164,8 +159,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -190,8 +184,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -216,8 +209,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(clerkOfCourtUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -242,8 +234,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(judgeUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -268,8 +259,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -296,8 +286,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -323,8 +312,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -350,8 +338,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -378,8 +365,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -405,8 +391,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Notice',
@@ -434,8 +419,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Notice',
@@ -463,8 +447,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Stipulated Decision',
@@ -492,8 +475,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -519,8 +501,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -545,8 +526,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -571,8 +551,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Notice',
@@ -600,8 +579,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Stipulated Decision',
@@ -628,8 +606,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',
@@ -653,8 +630,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order to do something',

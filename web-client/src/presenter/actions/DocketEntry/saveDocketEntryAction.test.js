@@ -10,8 +10,8 @@ describe('saveDocketEntryAction', () => {
 
   beforeAll(() => {
     caseDetail = {
+      docketEntries: [],
       docketNumber: '123-45',
-      documents: [],
     };
   });
 
@@ -226,7 +226,7 @@ describe('saveDocketEntryAction', () => {
       .getUseCases()
       .updateDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    caseDetail.documents.push({
+    caseDetail.docketEntries.push({
       documentId: 'document-id-123',
       isFileAttached: true,
     });

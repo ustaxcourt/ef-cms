@@ -18,7 +18,7 @@ const {
 } = require('../../useCaseHelper/saveFileAndGenerateUrl');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
@@ -147,7 +147,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocumentEntity = new Document(
+  const updatedDocketEntryEntity = new DocketEntry(
     {
       ...document,
       filingDate: createISODateString(),
@@ -156,9 +156,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     { applicationContext },
   );
 
-  updatedDocumentEntity.validate();
+  updatedDocketEntryEntity.validate();
 
-  caseEntity.updateDocument(updatedDocumentEntity);
+  caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();

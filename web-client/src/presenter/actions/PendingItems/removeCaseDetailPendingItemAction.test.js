@@ -15,8 +15,8 @@ describe('removeCaseDetailPendingItemAction', () => {
       },
       props: {
         caseDetail: {
+          docketEntries: [{ documentId: '123abc', pending: true }],
           docketNumber: '101-20',
-          documents: [{ documentId: '123abc', pending: true }],
         },
         documentId: '123abc',
       },

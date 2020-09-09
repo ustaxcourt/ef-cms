@@ -39,28 +39,9 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
 
   const requests = [];
 
-  const updatedDocketRecord = differenceWith(
-    caseToUpdate.docketRecord,
-    oldCase.docketRecord,
-    isEqual,
-  );
-
-  updatedDocketRecord.forEach(docketEntry => {
-    requests.push(
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `docket-record|${docketEntry.docketRecordId}`,
-          ...docketEntry,
-        },
-        applicationContext,
-      }),
-    );
-  });
-
   const updatedDocuments = differenceWith(
-    caseToUpdate.documents,
-    oldCase.documents,
+    caseToUpdate.docketEntries,
+    oldCase.docketEntries,
     isEqual,
   );
 
@@ -92,7 +73,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       client.put({
         Item: {
           pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `document|${document.documentId}`,
+          sk: `docket-entry|${document.documentId}`,
           ...document,
         },
         applicationContext,
@@ -321,7 +302,6 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           'documents',
           'irsPractitioners',
           'privatePractitioners',
-          'docketRecord',
         ]),
       },
       applicationContext,

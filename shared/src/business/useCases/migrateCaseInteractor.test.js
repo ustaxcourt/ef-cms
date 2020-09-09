@@ -65,9 +65,8 @@ describe('migrateCaseInteractor', () => {
         postalCode: '69580',
         state: 'WI',
       },
+      docketEntries: MOCK_CASE.docketEntries,
       docketNumber: '00101-00',
-      docketRecord: MOCK_CASE.docketRecord,
-      documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
       partyType: PARTY_TYPES.petitioner,
@@ -157,18 +156,6 @@ describe('migrateCaseInteractor', () => {
       ).rejects.toThrow('The Case entity was invalid');
     });
 
-    it('should fail to migrate a case when the docket record is invalid', async () => {
-      await expect(
-        migrateCaseInteractor({
-          applicationContext,
-          caseMetadata: {
-            ...caseMetadata,
-            docketRecord: [{}],
-          },
-        }),
-      ).rejects.toThrow('The Case entity was invalid');
-    });
-
     it('should provide developer-friendly feedback when the case is invalid', async () => {
       let error, results;
       try {
@@ -176,8 +163,10 @@ describe('migrateCaseInteractor', () => {
           applicationContext,
           caseMetadata: {
             ...MOCK_CASE,
+            docketEntries: [
+              { ...MOCK_CASE.docketEntries[0], documentId: 'invalid' },
+            ],
             docketNumber: 'ABC',
-            documents: [{ ...MOCK_CASE.documents[0], documentId: 'invalid' }],
           },
         });
       } catch (e) {
@@ -189,7 +178,7 @@ describe('migrateCaseInteractor', () => {
         "'docketNumber' with value 'ABC' fails to match the required pattern",
       );
       expect(error.message).toContain(
-        "'documents[0].documentId' must be a valid GUID",
+        "'docketEntries[0].documentId' must be a valid GUID",
       );
     });
   });
@@ -394,7 +383,7 @@ describe('migrateCaseInteractor', () => {
       ).toBeCalled();
       expect(
         applicationContext.getPersistenceGateway().deleteDocumentFromS3,
-      ).toBeCalledTimes(4); // MOCK_CASE has 4 documents
+      ).toBeCalledTimes(0); // MOCK_CASE has 4 documents
       expect(result).toBeDefined();
       expect(
         applicationContext.getPersistenceGateway().createCase,

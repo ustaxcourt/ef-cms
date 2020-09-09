@@ -1,5 +1,6 @@
 const {
   addDocketEntryForPaymentStatus,
+  deleteStinIfAvailable,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
 const {
@@ -56,7 +57,7 @@ describe('serveCaseToIrsInteractor', () => {
 
   beforeAll(() => {
     mockCase = MOCK_CASE;
-    mockCase.documents[0].workItem = MOCK_WORK_ITEM;
+    mockCase.docketEntries[0].workItem = MOCK_WORK_ITEM;
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
     applicationContext.getStorageClient.mockReturnValue({
@@ -129,7 +130,7 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    expect(mockCase.documents[0].numberOfPages).toBeUndefined();
+    expect(mockCase.docketEntries[0].numberOfPages).toBeUndefined();
 
     applicationContext
       .getUseCaseHelpers()
@@ -148,7 +149,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[0],
+        .caseToUpdate.docketEntries[0],
     ).toMatchObject({ numberOfPages: 2 });
   });
 
@@ -286,8 +287,8 @@ describe('serveCaseToIrsInteractor', () => {
   it('should serve all initial document types when served and send the IRS superuser email service', async () => {
     mockCase = {
       ...MOCK_CASE,
-      documents: [
-        ...MOCK_CASE.documents,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
         {
           createdAt: '2018-11-21T20:49:28.192Z',
           docketNumber: '101-18',
@@ -332,7 +333,7 @@ describe('serveCaseToIrsInteractor', () => {
 
     const documentWithServedParties = applicationContext
       .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.documents.find(
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
         document =>
           document.documentType ===
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -377,7 +378,7 @@ describe('addDocketEntryForPaymentStatus', () => {
       user,
     });
 
-    const addedDocketRecord = caseEntity.documents.find(
+    const addedDocketRecord = caseEntity.docketEntries.find(
       docketEntry => docketEntry.eventCode === 'FEE',
     );
 
@@ -390,7 +391,7 @@ describe('addDocketEntryForPaymentStatus', () => {
       {
         ...MOCK_CASE,
         contactPrimary: undefined,
-        documents: [],
+        docketEntries: [],
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: 'Today',
       },
@@ -402,7 +403,7 @@ describe('addDocketEntryForPaymentStatus', () => {
       user,
     });
 
-    const addedDocketRecord = caseEntity.documents.find(
+    const addedDocketRecord = caseEntity.docketEntries.find(
       docketEntry => docketEntry.eventCode === 'FEEW',
     );
 
@@ -413,9 +414,8 @@ describe('addDocketEntryForPaymentStatus', () => {
   it('should set isOnDocketRecord true for all intially filed documents except for the petition and stin file', async () => {
     const mockCase = {
       ...MOCK_CASE,
-      docketRecord: [],
-      documents: [
-        MOCK_CASE.documents[0],
+      docketEntries: [
+        MOCK_CASE.docketEntries[0],
         {
           createdAt: '2018-11-21T20:49:28.192Z',
           docketNumber: '101-18',
@@ -456,7 +456,7 @@ describe('addDocketEntryForPaymentStatus', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents,
+        .caseToUpdate.docketEntries,
     ).toMatchObject([
       {
         description: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
@@ -470,5 +470,49 @@ describe('addDocketEntryForPaymentStatus', () => {
         isOnDocketRecord: true,
       },
     ]);
+  });
+
+  describe('deleteStinIfAvailable', () => {
+    it('deletes the STIN document from S3', async () => {
+      const caseEntity = {
+        docketEntries: [
+          {
+            documentId: 'document-id-123',
+            documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+          },
+        ],
+      };
+
+      const documentId = await deleteStinIfAvailable({
+        applicationContext,
+        caseEntity,
+      });
+
+      expect(documentId).toEqual('document-id-123');
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3.mock
+          .calls[0][0].key,
+      ).toEqual('document-id-123');
+    });
+
+    it('does not delete the STIN if it is not found in the case', async () => {
+      const caseEntity = {
+        docketEntries: [
+          {
+            documentId: 'document-id-123',
+            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+          },
+        ],
+      };
+
+      await deleteStinIfAvailable({ applicationContext, caseEntity });
+
+      expect(
+        applicationContext.getPersistenceGateway().deleteDocumentFromS3,
+      ).not.toHaveBeenCalled();
+    });
   });
 });

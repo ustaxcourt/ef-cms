@@ -49,7 +49,7 @@ describe('generateChangeOfAddress', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseIdsByUser.mockReturnValue([
+      .getDocketNumbersByUser.mockReturnValue([
         mockCaseWithPrivatePractitioner.docketNumber,
       ]);
     applicationContext
@@ -198,7 +198,7 @@ describe('generateChangeOfAddress', () => {
       },
     });
 
-    const noticeOfChangeOfAddressDocument = cases[0].documents.find(
+    const noticeOfChangeOfAddressDocument = cases[0].docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
 
@@ -213,7 +213,7 @@ describe('generateChangeOfAddress', () => {
   it('should notify honeybadger and continue processing the next case if the case currently being processed is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseIdsByUser.mockReturnValue([
+      .getDocketNumbersByUser.mockReturnValue([
         { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
         mockCaseWithPrivatePractitioner,
       ]);

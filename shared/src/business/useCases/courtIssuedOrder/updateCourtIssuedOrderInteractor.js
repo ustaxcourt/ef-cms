@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
@@ -80,7 +80,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
 
-  const documentEntity = new Document(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
@@ -92,12 +92,12 @@ exports.updateCourtIssuedOrderInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.setAsProcessingStatusAsCompleted();
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   // we always un-sign the order document on updates because the court user will need to sign it again
-  documentEntity.unsignDocument();
+  docketEntryEntity.unsignDocument();
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

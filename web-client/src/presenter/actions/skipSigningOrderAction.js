@@ -20,9 +20,9 @@ export const skipSigningOrderAction = ({ get, store }) => {
     };
   }
 
-  const { docketNumber, documents } = get(state.caseDetail);
+  const { docketEntries, docketNumber } = get(state.caseDetail);
   const documentId = get(state.documentId);
-  const order = documents.find(d => d.documentId === documentId);
+  const order = docketEntries.find(d => d.documentId === documentId);
 
   return {
     alertSuccess: {

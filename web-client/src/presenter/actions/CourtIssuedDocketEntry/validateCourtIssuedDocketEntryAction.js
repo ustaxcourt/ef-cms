@@ -29,7 +29,7 @@ export const validateCourtIssuedDocketEntryAction = ({
   // Additional validation to determine if the signature required warning should be displayed
   if (EVENT_CODES_REQUIRING_SIGNATURE.includes(entryMetadata.eventCode)) {
     const document =
-      caseDetail.documents.find(doc => doc.documentId === documentId) || {};
+      caseDetail.docketEntries.find(doc => doc.documentId === documentId) || {};
 
     if (!document.signedAt) {
       if (!errors) {

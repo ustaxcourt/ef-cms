@@ -11,7 +11,7 @@ export const setFormFromDraftStateAction = ({ props, store }) => {
   const { caseDetail, documentIdToEdit } = props;
 
   if (documentIdToEdit) {
-    const documentToEdit = caseDetail.documents.find(
+    const documentToEdit = caseDetail.docketEntries.find(
       document => document.documentId === documentIdToEdit,
     );
 

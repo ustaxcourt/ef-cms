@@ -399,6 +399,11 @@
             limit: 1
       allow: 
         - "User"
+    isUpdatingInformation: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Whether the contact information for the user is being updated."
     section: 
       type: "string"
       flags: 
