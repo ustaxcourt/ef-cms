@@ -258,7 +258,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .allow(null)
     .optional()
     .meta({ tags: ['Restricted'] })
-    .description('JSON representation of the in-progress edit of this item.'), // TODO 636 - can we remove?
+    .description('JSON representation of the in-progress edit of this item.'),
   entityName: JoiValidationConstants.STRING.valid('DocketEntry').required(),
   eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).required(),
   filedBy: JoiValidationConstants.STRING.max(500)
@@ -335,8 +335,8 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .description(
       'Indicates whether or not the legacy document was served prior to being migrated to the new system.',
     ),
-  isMinuteEntry: joi.boolean().optional(), //TODO 636 - make required
-  isOnDocketRecord: joi.boolean().optional(), //TODO 636 - make required
+  isMinuteEntry: joi.boolean().required(),
+  isOnDocketRecord: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi
     .boolean()

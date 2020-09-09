@@ -1418,11 +1418,11 @@
     isMinuteEntry: 
       type: "boolean"
       flags: 
-        presence: "optional"
+        presence: "required"
     isOnDocketRecord: 
       type: "boolean"
       flags: 
-        presence: "optional"
+        presence: "required"
     isPaper: 
       type: "boolean"
       flags: 

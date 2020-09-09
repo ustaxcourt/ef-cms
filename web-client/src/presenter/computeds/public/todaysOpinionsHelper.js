@@ -1,4 +1,3 @@
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { state } from 'cerebral';
 
 export const todaysOpinionsHelper = (get, applicationContext) => {
@@ -11,7 +10,9 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
 
   const formattedOpinions = todaysOpinions.map(opinion => ({
     ...opinion,
-    formattedDocumentType: DocketEntry.getFormattedType(opinion.documentType), // TODO 636 - this should be on the app context
+    formattedDocumentType: applicationContext
+      .getUtilities()
+      .getFormattedDocumentType(opinion.documentType),
     formattedFilingDate: applicationContext
       .getUtilities()
       .formatDateString(opinion.filingDate, 'MMDDYY'),
