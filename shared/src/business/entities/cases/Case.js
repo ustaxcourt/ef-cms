@@ -771,7 +771,7 @@ Case.prototype.archiveDocument = function (document, { applicationContext }) {
   const documentToArchive = new DocketEntry(document, { applicationContext });
   documentToArchive.archive();
   this.archivedDocuments.push(documentToArchive);
-  this.deleteDocumentById({ documentId: documentToArchive.documentId });
+  this.deleteDocketEntryById({ documentId: documentToArchive.documentId });
 };
 
 /**
@@ -1013,13 +1013,13 @@ Case.prototype.getCorrespondenceById = function ({ documentId }) {
 };
 
 /**
- * deletes the document with id documentId from the documents array
+ * deletes the docket entry with id documentId from the docketEntries array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the document to remove from the documents array
+ * @params {string} params.documentId the id of the docket entry to remove from the docketEntries array
  * @returns {Case} the updated case entity
  */
-Case.prototype.deleteDocumentById = function ({ documentId }) {
+Case.prototype.deleteDocketEntryById = function ({ documentId }) {
   this.docketEntries = this.docketEntries.filter(
     item => item.documentId !== documentId,
   );
@@ -1042,21 +1042,21 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   return this;
 };
 
-const getPetitionDocumentFromDocuments = function (documents) {
-  return documents.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+const getPetitionDocketEntryFromDocketEntries = function (docketEntries) {
+  return docketEntries.find(
+    docketEntry =>
+      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
-Case.prototype.getPetitionDocument = function () {
-  return getPetitionDocumentFromDocuments(this.docketEntries);
+Case.prototype.getPetitionDocketEntry = function () {
+  return getPetitionDocketEntryFromDocketEntries(this.docketEntries);
 };
 
 Case.prototype.getIrsSendDate = function () {
-  const petitionDocument = this.getPetitionDocument();
-  if (petitionDocument) {
-    return petitionDocument.servedAt;
+  const petitionDocketEntry = this.getPetitionDocketEntry();
+  if (petitionDocketEntry) {
+    return petitionDocketEntry.servedAt;
   }
 };
 
@@ -1727,6 +1727,6 @@ Case.prototype.deleteStatistic = function (statisticId) {
 
 module.exports = {
   Case: validEntityDecorator(Case),
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
   isAssociatedUser,
 };
