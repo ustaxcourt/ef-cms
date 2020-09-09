@@ -193,7 +193,7 @@ exports.addCoversheetInteractor = async ({
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
-  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocumentById({ documentId });
 
   let pdfData;
   try {
@@ -213,19 +213,19 @@ exports.addCoversheetInteractor = async ({
   const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
-    documentEntity,
+    documentEntity: docketEntryEntity,
     pdfData,
     replaceCoversheet,
     useInitialData,
   });
 
-  documentEntity.setAsProcessingStatusAsCompleted();
-  documentEntity.setNumberOfPages(numberOfPages);
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
+  docketEntryEntity.setNumberOfPages(numberOfPages);
 
   await applicationContext.getPersistenceGateway().updateDocument({
     applicationContext,
     docketNumber: caseEntity.docketNumber,
-    document: documentEntity.validate().toRawObject(),
+    document: docketEntryEntity.validate().toRawObject(),
     documentId,
   });
 
