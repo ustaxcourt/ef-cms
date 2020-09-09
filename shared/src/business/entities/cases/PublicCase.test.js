@@ -279,7 +279,7 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         archivedCorrespondences: [],
-        archivedDocuments: [],
+        archivedDocketEntries: [],
         associatedJudge: 'Judge Thornton',
         blocked: false,
         caseCaption: 'Richard Allen and Brian Chandler',

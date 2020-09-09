@@ -45,9 +45,9 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     isEqual,
   );
 
-  const updatedArchivedDocuments = differenceWith(
-    caseToUpdate.archivedDocuments,
-    oldCase.archivedDocuments,
+  const updatedArchivedDocketEntries = differenceWith(
+    caseToUpdate.archivedDocketEntries,
+    oldCase.archivedDocketEntries,
     isEqual,
   );
 
@@ -63,7 +63,9 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     isEqual,
   );
 
-  const allUpdatedDocuments = updatedDocuments.concat(updatedArchivedDocuments);
+  const allUpdatedDocuments = updatedDocuments.concat(
+    updatedArchivedDocketEntries,
+  );
   const allUpdatedCorrespondences = updatedCorrespondence.concat(
     updatedArchivedCorrespondences,
   );

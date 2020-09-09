@@ -80,8 +80,8 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
       )
     : [];
 
-  this.archivedDocuments = Array.isArray(rawCase.archivedDocuments)
-    ? rawCase.archivedDocuments.map(
+  this.archivedDocketEntries = Array.isArray(rawCase.archivedDocketEntries)
+    ? rawCase.archivedDocketEntries.map(
         doc => new DocketEntry(doc, { applicationContext }),
       )
     : [];
@@ -146,7 +146,7 @@ const paperRequirements = joi
       },
     ),
     archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
-    archivedDocuments: Case.VALIDATION_RULES.archivedDocuments,
+    archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
     contactPrimary: joi.object().required(),
