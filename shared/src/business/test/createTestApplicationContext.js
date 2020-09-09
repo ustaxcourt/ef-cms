@@ -125,7 +125,6 @@ const {
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { DocketEntry } = require('../entities/DocketEntry');
 const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
@@ -229,9 +228,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
-    getFormattedDocumentType: jest
-      .fn()
-      .mockImplementation(DocketEntry.getFormattedType),
     getPetitionDocketEntryFromDocketEntries: jest
       .fn()
       .mockImplementation(getPetitionDocketEntryFromDocketEntries),

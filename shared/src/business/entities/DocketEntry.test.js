@@ -1672,19 +1672,6 @@ describe('DocketEntry entity', () => {
     });
   });
 
-  describe('getFormattedType', () => {
-    it('strips out the dash and returns the verbiage after it', () => {
-      expect(DocketEntry.getFormattedType('T.C. Opinion')).toEqual(
-        'T.C. Opinion',
-      );
-    });
-    it("returns the verbiage if there's no dash", () => {
-      expect(DocketEntry.getFormattedType('Summary Opinion')).toEqual(
-        'Summary Opinion',
-      );
-    });
-  });
-
   describe('secondaryDocument validation', () => {
     it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
       const createdDocument = new DocketEntry(
