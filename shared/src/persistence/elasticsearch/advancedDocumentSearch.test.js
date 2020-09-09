@@ -10,7 +10,7 @@ describe('advancedDocumentSearch', () => {
 
   const orderQueryParams = [
     { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'document|' } },
+    { match: { 'sk.S': 'docket-entry|' } },
     {
       exists: {
         field: 'servedAt',
@@ -36,7 +36,7 @@ describe('advancedDocumentSearch', () => {
 
   const opinionQueryParams = [
     { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'document|' } },
+    { match: { 'sk.S': 'docket-entry|' } },
     {
       exists: {
         field: 'servedAt',

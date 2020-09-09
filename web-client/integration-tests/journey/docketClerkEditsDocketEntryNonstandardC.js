@@ -127,7 +127,7 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
         'Declaration of Bob Barker in Support of Petition some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocuments.find(
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({

@@ -28,15 +28,6 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
-          documents: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              index: 1,
-              isOnDocketRecord: true,
-            },
-          ],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -62,17 +53,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
-          documents: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              index: 1,
-              isOnDocketRecord: true,
-            },
-          ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -100,22 +81,10 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
-          documents: [
-            {
-              createdAt: '2018-11-21T20:49:28.192Z',
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              filedBy: 'Test Petitioner',
-              index: 1,
-              isOnDocketRecord: true,
-            },
-          ],
         },
         permissions: {
           SERVE_DOCUMENT: false,
         },
-
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -138,18 +107,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
-          documents: [
-            {
-              createdAt: '2018-11-22T20:49:28.192Z',
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Order',
-              index: 1,
-              isOnDocketRecord: true,
-            },
-          ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -175,18 +133,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
-          documents: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              index: 1,
-              isLegacySealed: false,
-              isOnDocketRecord: true,
-            },
-          ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -208,16 +155,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
-          documents: [
-            {
-              documentId: 'abc',
-              documentType: 'Petition',
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-            },
-          ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -234,15 +172,6 @@ describe('documentViewerHelper', () => {
       state: {
         caseDetail: {
           docketEntries: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              index: 1,
-              isOnDocketRecord: true,
-            },
-          ],
-          documents: [
             {
               description: 'Petition',
               documentId: 'abc',
@@ -273,16 +202,7 @@ describe('documentViewerHelper', () => {
               servedAt: '2018-11-21T20:49:28.192Z',
             },
           ],
-          documents: [
-            {
-              documentId: 'abc',
-              documentType: 'Petition',
-              isOnDocketRecord: true,
-              servedAt: '2018-11-21T20:49:28.192Z',
-            },
-          ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -302,15 +222,6 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -345,15 +256,6 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
-            documents: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Corrected Transcript',
-                eventCode: 'CTRA',
-                isOnDocketRecord: true,
-              },
-            ],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -372,16 +274,6 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isOnDocketRecord: true,
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
-            documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -421,15 +313,6 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
-            documents: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isOnDocketRecord: true,
-              },
-            ],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -448,15 +331,6 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Petition',
-                eventCode: 'P',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -492,16 +366,6 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
-            documents: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isOnDocketRecord: true,
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -520,16 +384,6 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isOnDocketRecord: true,
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
-            documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -569,15 +423,6 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
-            documents: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Answer',
-                eventCode: 'A',
-                isOnDocketRecord: true,
-              },
-            ],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -596,15 +441,6 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -640,16 +476,6 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
-            documents: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Answer',
-                eventCode: 'A',
-                isOnDocketRecord: true,
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -668,15 +494,6 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [
-              {
-                documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Answer',
-                eventCode: 'A',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -715,16 +532,6 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
-            documents: [
-              {
-                documentId: '123',
-                documentType: 'Petition',
-                entityName: 'Document',
-                eventCode: 'P',
-                isOnDocketRecord: true,
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
           },
           permissions: {
             SERVE_PETITION: true,
@@ -752,15 +559,6 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
-            documents: [
-              {
-                documentId: '123',
-                documentType: 'Petition',
-                entityName: 'Document',
-                eventCode: 'P',
-                isOnDocketRecord: true,
-              },
-            ],
           },
           permissions: {
             SERVE_PETITION: false,
@@ -780,15 +578,6 @@ describe('documentViewerHelper', () => {
           caseDetail: {
             correspondence: [],
             docketEntries: [
-              {
-                documentId: '123',
-                documentType: 'Petition',
-                entityName: 'Document',
-                eventCode: 'P',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId: '123',
                 documentType: 'Petition',
@@ -826,15 +615,6 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
-            documents: [
-              {
-                documentId: '123',
-                documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
-                eventCode: 'PSDE',
-                isOnDocketRecord: true,
-              },
-            ],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -852,15 +632,6 @@ describe('documentViewerHelper', () => {
           caseDetail: {
             correspondence: [],
             docketEntries: [
-              {
-                documentId: '123',
-                documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
-                eventCode: 'PSDE',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
@@ -900,15 +671,6 @@ describe('documentViewerHelper', () => {
                 eventCode: 'PSDE',
                 isOnDocketRecord: true,
               },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
-                eventCode: 'PSDE',
-                isOnDocketRecord: true,
-              },
               {
                 documentId: '234',
                 documentType: 'Stipulated Decision',
@@ -933,15 +695,6 @@ describe('documentViewerHelper', () => {
           caseDetail: {
             correspondence: [],
             docketEntries: [
-              {
-                documentId: '123',
-                documentType: 'Answer',
-                entityName: 'Document',
-                eventCode: 'A',
-                isOnDocketRecord: true,
-              },
-            ],
-            documents: [
               {
                 documentId: '123',
                 documentType: 'Answer',
@@ -976,16 +729,6 @@ describe('documentViewerHelper', () => {
               isStricken: true,
             },
           ],
-          documents: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              index: 1,
-              isOnDocketRecord: true,
-              isStricken: true,
-            },
-          ],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -1004,16 +747,6 @@ describe('documentViewerHelper', () => {
       state: {
         caseDetail: {
           docketEntries: [
-            {
-              description: 'Petition',
-              documentId: 'abc',
-              documentType: 'Petition',
-              index: 1,
-              isOnDocketRecord: true,
-              isStricken: true,
-            },
-          ],
-          documents: [
             {
               description: 'Petition',
               documentId: 'abc',

@@ -11,7 +11,7 @@ describe('submitCourtIssuedOrderAction', () => {
   it('should call fileCourtIssuedOrder', async () => {
     applicationContext
       .getUseCases()
-      .fileCourtIssuedOrderInteractor.mockReturnValue({ documents: [] });
+      .fileCourtIssuedOrderInteractor.mockReturnValue({ docketEntries: [] });
 
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
@@ -41,7 +41,7 @@ describe('submitCourtIssuedOrderAction', () => {
   it('should set document draftState', async () => {
     applicationContext
       .getUseCases()
-      .fileCourtIssuedOrderInteractor.mockReturnValue({ documents: [] });
+      .fileCourtIssuedOrderInteractor.mockReturnValue({ docketEntries: [] });
 
     await runAction(submitCourtIssuedOrderAction, {
       modules: {

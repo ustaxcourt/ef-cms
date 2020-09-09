@@ -66,7 +66,7 @@ export const uploadExternalDocumentsAction = async ({
     return path.error();
   }
 
-  const pendingDocuments = caseDetail.documents.filter(
+  const pendingDocuments = caseDetail.docketEntries.filter(
     document =>
       document.processingStatus === 'pending' &&
       document.isFileAttached !== false,

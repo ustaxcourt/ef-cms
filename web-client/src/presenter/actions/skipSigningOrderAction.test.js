@@ -11,13 +11,13 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          docketNumber: '123-19',
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order',
             },
           ],
+          docketNumber: '123-19',
         },
         documentId: 'abc',
       },
@@ -33,13 +33,13 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          docketNumber: '123-19',
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order',
             },
           ],
+          docketNumber: '123-19',
         },
         documentId: 'abc',
       },
@@ -55,13 +55,13 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          docketNumber: '123-19',
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Order',
             },
           ],
+          docketNumber: '123-19',
         },
         documentId: 'abc',
       },
@@ -77,13 +77,13 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          docketNumber: '123-19',
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order',
             },
           ],
+          docketNumber: '123-19',
         },
         documentId: 'abc',
         isCreatingOrder: true,

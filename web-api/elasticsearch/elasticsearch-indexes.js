@@ -1,6 +1,6 @@
 exports.elasticsearchIndexes = [
   'efcms-case',
-  'efcms-document',
+  'efcms-docket-entry',
   'efcms-user',
   'efcms-message',
   'efcms-user-case',

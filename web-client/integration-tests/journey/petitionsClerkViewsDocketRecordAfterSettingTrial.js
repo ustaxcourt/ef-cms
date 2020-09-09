@@ -7,7 +7,7 @@ export const petitionsClerkViewsDocketRecordAfterSettingTrial = (
       docketNumber: test.docketNumber,
     });
 
-    const documents = test.getState('caseDetail.documents');
+    const documents = test.getState('caseDetail.docketEntries');
 
     const noticeOfTrial = documents.find(
       entry => entry.documentType === 'Notice of Trial',

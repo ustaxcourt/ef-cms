@@ -19,7 +19,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocuments.find(
+    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 
@@ -89,12 +89,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.formattedDocuments.find(
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2050-01-01',
+      date: '2050-01-01T05:00:00.000Z',
       documentTitle: 'Order for Filing Fee on 01-01-2050',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
@@ -106,7 +106,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     });
 
     expect(test.getState('form')).toMatchObject({
-      date: '2050-01-01',
+      date: '2050-01-01T05:00:00.000Z',
       day: '1',
       documentTitle: 'Order for Filing Fee on 01-01-2050',
       documentType: 'Order for Filing Fee',

@@ -17,8 +17,7 @@ describe('addCoversheetInteractor', () => {
       name: 'Daenerys Stormborn',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
-    docketNumber: '101-19',
-    documents: [
+    docketEntries: [
       {
         certificateOfService: false,
         createdAt: '2019-04-19T14:45:15.595Z',
@@ -32,6 +31,7 @@ describe('addCoversheetInteractor', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
     ],
+    docketNumber: '101-19',
     partyType: PARTY_TYPES.petitioner,
   };
 
@@ -43,10 +43,9 @@ describe('addCoversheetInteractor', () => {
     contactSecondary: {
       name: 'Janie Petitioner',
     },
-    docketNumber: '102-19',
-    documents: [
+    docketEntries: [
       {
-        ...testingCaseData.documents[0],
+        ...testingCaseData.docketEntries[0],
         addToCoversheet: true,
         additionalInfo: 'Additional Info Something',
         certificateOfService: true,
@@ -61,6 +60,7 @@ describe('addCoversheetInteractor', () => {
         lodged: true,
       },
     ],
+    docketNumber: '102-19',
     partyType: PARTY_TYPES.petitionerSpouse,
   };
 
@@ -140,15 +140,6 @@ describe('addCoversheetInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...testingCaseData,
-        docketRecord: [
-          {
-            description: 'Test Docket Record',
-            documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            eventCode: 'O',
-            filingDate: new Date('2000-01-01').toISOString(),
-            index: 0,
-          },
-        ],
       });
 
     const params = {
@@ -191,10 +182,9 @@ describe('addCoversheetInteractor', () => {
       contactSecondary: {
         name: 'Janie Petitioner',
       },
-      docketNumber: '102-19',
-      documents: [
+      docketEntries: [
         {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -207,6 +197,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       ],
+      docketNumber: '102-19',
       partyType: PARTY_TYPES.petitionerSpouse,
     };
 
@@ -218,7 +209,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -242,7 +233,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: false,
@@ -265,7 +256,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -289,7 +280,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -313,7 +304,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -337,7 +328,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -362,7 +353,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -386,7 +377,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -411,7 +402,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -435,7 +426,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -460,7 +451,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -486,7 +477,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -511,7 +502,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -537,7 +528,7 @@ describe('addCoversheetInteractor', () => {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -562,7 +553,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -586,7 +577,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -610,7 +601,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -635,7 +626,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -659,7 +650,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner & Janie Petitioner, Petitioners',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -683,7 +674,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -707,7 +698,7 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -734,7 +725,7 @@ describe('addCoversheetInteractor', () => {
           initialDocketNumberSuffix: 'Z',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
@@ -763,7 +754,7 @@ describe('addCoversheetInteractor', () => {
           initialDocketNumberSuffix: 'Z',
         },
         documentEntity: {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,

@@ -42,7 +42,7 @@ describe('getCalendaredCasesForTrialSession', () => {
       {
         documentId: 'abc-123',
         pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: 'document|123',
+        sk: 'docket-entry|123',
       },
     ]);
   });
@@ -57,14 +57,14 @@ describe('getCalendaredCasesForTrialSession', () => {
         archivedDocuments: [],
         correspondence: [],
         disposition: 'something',
-        docketNumber: MOCK_CASE.docketNumber,
-        documents: [
+        docketEntries: [
           {
             documentId: 'abc-123',
             pk: `case|${MOCK_CASE.docketNumber}`,
-            sk: 'document|123',
+            sk: 'docket-entry|123',
           },
         ],
+        docketNumber: MOCK_CASE.docketNumber,
         irsPractitioners: [
           {
             pk: `case|${MOCK_CASE.docketNumber}`,

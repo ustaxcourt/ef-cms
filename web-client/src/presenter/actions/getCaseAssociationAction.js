@@ -38,7 +38,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const caseUserId = get(state.caseDetail.userId);
     isAssociated = caseUserId === user.userId;
   } else if (user.role === USER_ROLES.irsSuperuser) {
-    const documents = get(state.caseDetail.documents);
+    const documents = get(state.caseDetail.docketEntries);
 
     const isPetitionServed = !!documents.find(
       doc => doc.documentType === 'Petition',

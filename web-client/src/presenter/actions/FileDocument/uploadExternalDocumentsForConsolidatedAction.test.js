@@ -22,7 +22,7 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
     uploadExternalDocumentsInteractor.mockReturnValue([
       {
         ...MOCK_CASE,
-        documents: [
+        docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
             docketNumber: MOCK_CASE.docketNumber,
