@@ -21,7 +21,7 @@ const { addCoverToPdf } = require('../addCoversheetInteractor');
 describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
   const DOCKET_NUMBER = '101-20';
-  const DOCUMENT_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
+  const DOCKET_ENTRY_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
 
   beforeAll(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
@@ -118,15 +118,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should update the document with a servedAt date', async () => {
     await serveExternallyFiledDocumentInteractor({
       applicationContext,
+      docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
-      documentId: DOCUMENT_ID,
     });
 
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     const updatedCaseDocument = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.documentId === DOCUMENT_ID,
+        d => d.documentId === DOCKET_ENTRY_ID,
       );
     expect(updatedCaseDocument).toMatchObject({
       servedAt: expect.anything(),
@@ -137,8 +137,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should add a coversheet to the document', async () => {
     await serveExternallyFiledDocumentInteractor({
       applicationContext,
+      docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
-      documentId: DOCUMENT_ID,
     });
 
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
@@ -147,8 +147,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should send electronic-service parties emails', async () => {
     await serveExternallyFiledDocumentInteractor({
       applicationContext,
+      docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
-      documentId: DOCUMENT_ID,
     });
 
     expect(
@@ -186,8 +186,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     const result = await serveExternallyFiledDocumentInteractor({
       applicationContext,
+      docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
-      documentId: DOCUMENT_ID,
     });
 
     expect(

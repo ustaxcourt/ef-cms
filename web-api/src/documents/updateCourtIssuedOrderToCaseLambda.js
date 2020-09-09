@@ -13,6 +13,6 @@ exports.updateCourtIssuedOrderToCaseLambda = event =>
       .updateCourtIssuedOrderInteractor({
         ...JSON.parse(event.body),
         applicationContext,
-        documentIdToEdit: event.pathParameters.documentId,
+        docketEntryIdToEdit: event.pathParameters.docketEntryId,
       });
   });

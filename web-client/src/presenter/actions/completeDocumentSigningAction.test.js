@@ -19,7 +19,7 @@ describe('completeDocumentSigningAction', () => {
   applicationContext
     .getUseCases()
     .saveSignedDocumentInteractor.mockReturnValue({
-      signedDocumentId: mockDocumentId,
+      signedDocketEntryId: mockDocumentId,
     });
 
   beforeAll(() => {
