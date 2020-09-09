@@ -657,7 +657,7 @@
                 - "U.S.C.A"
                 - "Unsworn Declaration under Penalty of Perjury in Support"
                 - "Writ of Habeas Corpus Ad Testificandum"
-            draftState: 
+            draftOrderState: 
               type: "object"
               flags: 
                 presence: "optional"

@@ -54,7 +54,7 @@ DocketEntry.prototype.init = function init(
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
     this.editState = rawDocketEntry.editState;
-    this.draftState = rawDocketEntry.draftState;
+    this.draftOrderState = rawDocketEntry.draftOrderState;
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
     this.pending =
@@ -253,7 +253,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
   documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
     .required()
     .description('The type of this document.'),
-  draftState: joi.object().allow(null).optional(),
+  draftOrderState: joi.object().allow(null).optional(),
   editState: JoiValidationConstants.STRING.max(4000)
     .allow(null)
     .optional()
@@ -553,7 +553,7 @@ DocketEntry.prototype.archive = function () {
 
 DocketEntry.prototype.setAsServed = function (servedParties = null) {
   this.servedAt = createISODateString();
-  this.draftState = null;
+  this.draftOrderState = null;
 
   if (servedParties) {
     this.servedParties = servedParties;

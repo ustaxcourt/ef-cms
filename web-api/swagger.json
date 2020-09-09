@@ -4587,7 +4587,7 @@
                   "documentType": {
                     "type": "string"
                   },
-                  "draftState": {
+                  "draftOrderState": {
                     "type": "object"
                   },
                   "eventCode": {
