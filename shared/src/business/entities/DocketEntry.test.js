@@ -253,7 +253,7 @@ describe('DocketEntry entity', () => {
     it('should not throw an error on valid documents', () => {
       let error;
       try {
-        new Document(
+        new DocketEntry(
           {
             createdAt: '2019-03-27T00:00:00.000-04:00',
             documentId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
@@ -296,7 +296,7 @@ describe('DocketEntry entity', () => {
       expect(error).toBeUndefined();
 
       try {
-        new Document(
+        new DocketEntry(
           {
             createdAt: '2019-03-27T00:00:00.000-04:00',
             documentId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
