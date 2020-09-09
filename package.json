@@ -18,7 +18,7 @@
     "@hapi/joi-date": "^2.0.1",
     "archiver": "3.1.1",
     "autoprefixer": "^9.8.6",
-    "aws-sdk": "^2.747.0",
+    "aws-sdk": "^2.748.0",
     "aws-sdk-mock": "^5.0.0",
     "aws-serverless-express": "^3.3.8",
     "axios": "^0.19.2",
@@ -47,7 +47,7 @@
     "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-jsdoc": "^30.3.3",
+    "eslint-plugin-jsdoc": "^30.4.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
@@ -70,7 +70,7 @@
     "husky": "^4.3.0",
     "i": "^0.3.6",
     "imagemin": "^7.0.1",
-    "imagemin-pngquant": "^9.0.0",
+    "imagemin-pngquant": "^9.0.1",
     "is-reachable": "^4.0.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^26.4.2",
@@ -249,8 +249,9 @@
     "watcherGlob": false
   },
   "resolutions": {
-    "minimist": "^1.2.5",
+    "bl": "^4.0.3",
     "lodash": "^4.17.20",
+    "minimist": "^1.2.5",
     "yargs-parser": "^18.1.3"
   },
   "postcss": {
