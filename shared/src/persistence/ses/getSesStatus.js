@@ -1,13 +1,29 @@
-const { spawnSync } = require('child_process');
+exports.getSesStatus = async ({ applicationContext }) => {
+  const SES = applicationContext.getEmailClient();
 
-exports.getSesStatus = async () => {
-  const result = await spawnSync(
-    'ping email.us-east-1.amazonaws.com -c 1 -W 10',
-  );
+  try {
+    await SES.sendEmail({
+      Destination: {
+        ToAddresses: ['test@example.com'],
+      },
+      Message: {
+        Body: {
+          Text: {
+            Charset: 'UTF-8',
+            Data: 'This is a test status email.',
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Test email',
+        },
+      },
+      Source: process.env.EMAIL_SOURCE,
+    }).promise();
 
-  const receivedString = result.toString('utf8').split(',')[1];
-
-  const receivedPackets = receivedString.split(' ')[1];
-
-  return receivedPackets === '1';
+    return true;
+  } catch (err) {
+    console.log('error sending the ses email', err);
+    return false;
+  }
 };
