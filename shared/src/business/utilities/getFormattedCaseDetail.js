@@ -162,6 +162,10 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.description += ` ${formattedDocument.additionalInfo}`;
   }
 
+  if (formattedEntry.lodged) {
+    formattedEntry.eventCode = 'MISCL';
+  }
+
   return { ...formattedDocument, ...formattedEntry };
 };
 
@@ -205,15 +209,11 @@ const formatCase = (applicationContext, caseDetail) => {
   }
   const result = cloneDeep(caseDetail);
 
-  if (result.documents) {
-    result.formattedDocuments = result.documents.map(d =>
-      formatDocument(applicationContext, d),
-    );
-
-    result.draftDocuments = result.formattedDocuments
+  if (result.docketEntries) {
+    result.draftDocuments = result.docketEntries
       .filter(document => document.isDraft && !document.archived)
       .map(document => ({
-        ...document,
+        ...formatDocument(applicationContext, document),
         editUrl:
           document.documentType === 'Miscellaneous'
             ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
@@ -226,16 +226,12 @@ const formatCase = (applicationContext, caseDetail) => {
           .getUtilities()
           .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
       }));
-  }
 
-  if (result.docketEntries) {
     result.formattedDocketEntries = result.docketEntries.map(d =>
       formatDocketEntry(applicationContext, d),
     );
     // establish an initial sort by ascending index
-    result.formattedDocketEntries.sort((a, b) => {
-      return a.index - b.index;
-    });
+    result.formattedDocketEntries.sort(byIndexSortFunction);
 
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
       entry => entry.pending,
@@ -421,12 +417,22 @@ const formatCase = (applicationContext, caseDetail) => {
   return result;
 };
 
+const byIndexSortFunction = (a, b) => {
+  if (!a.index && !b.index) {
+    return 0;
+  } else if (!a.index) {
+    return -1;
+  } else if (!b.index) {
+    return 1;
+  }
+  return a.index - b.index;
+};
+
 const getDocketRecordSortFunc = sortBy => {
-  const byIndex = (a, b) => a.index - b.index;
   const byDate = (a, b) => {
     const compared = calendarDatesCompared(a.filingDate, b.filingDate);
     if (compared === 0) {
-      return byIndex(a, b);
+      return byIndexSortFunction(a, b);
     }
     return compared;
   };
@@ -434,7 +440,7 @@ const getDocketRecordSortFunc = sortBy => {
   switch (sortBy) {
     case 'byIndex': // fall-through
     case 'byIndexDesc':
-      return byIndex;
+      return byIndexSortFunction;
     case 'byDate': // fall through, is the default sort method
     case 'byDateDesc':
     default:

@@ -7,7 +7,7 @@ export const paperDocketEntryHelper = get => {
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
 
   const allCaseDocuments = [
-    ...(caseDetail.documents || []),
+    ...(caseDetail.docketEntries || []),
     ...(caseDetail.correspondence || []),
   ];
   const document = allCaseDocuments.find(

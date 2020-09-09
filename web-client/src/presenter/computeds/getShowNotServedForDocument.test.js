@@ -11,8 +11,7 @@ describe('getShowNotServedForDocument', () => {
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketRecord: [{ documentId }],
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentTitle: 'Some Stuff',
@@ -32,8 +31,7 @@ describe('getShowNotServedForDocument', () => {
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketRecord: [{ documentId }],
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentTitle: 'Some Stuff',
@@ -53,8 +51,7 @@ describe('getShowNotServedForDocument', () => {
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketRecord: [{ documentId }],
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentTitle: 'Some Stuff',
@@ -75,8 +72,7 @@ describe('getShowNotServedForDocument', () => {
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentTitle: 'Some Stuff',
@@ -96,8 +92,7 @@ describe('getShowNotServedForDocument', () => {
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketRecord: [],
-          documents: [],
+          docketEntries: [],
         },
         documentId,
         draftDocuments: [{ documentId }],
@@ -107,14 +102,13 @@ describe('getShowNotServedForDocument', () => {
     });
 
     it('should return false when the document is a correspondence document', () => {
-      // Correspondence documents should not be in case.documents and also are not served
+      // Correspondence documents should not be in case.docketEntries and also are not served
       const correspondenceDocumentId = applicationContext.getUniqueId();
 
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketRecord: [],
-          documents: [{ documentId }],
+          docketEntries: [{ documentId }],
         },
         documentId: correspondenceDocumentId,
         draftDocuments: [{ documentId }],

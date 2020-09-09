@@ -70,9 +70,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: DOCKET_NUMBER,
-      docketRecord: [],
-      documents: [
+      docketEntries: [
         {
           documentId: '225d5474-b02b-4137-a78e-2043f7a0f806',
           documentType: 'Answer',
@@ -81,6 +79,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       ],
+      docketNumber: DOCKET_NUMBER,
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -126,7 +125,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     const updatedCaseDocument = applicationContext
       .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.documents.find(
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
         d => d.documentId === DOCUMENT_ID,
       );
     expect(updatedCaseDocument).toMatchObject({

@@ -9,7 +9,6 @@ describe('publicCaseDetailHeaderHelper', () => {
         caseCaption: 'Test Caption',
         docketNumber: '123-45',
         docketNumberWithSuffix: '123-45S',
-        docketRecord: [],
       },
     };
   });
