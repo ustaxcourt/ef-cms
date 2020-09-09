@@ -82,7 +82,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const courtIssuedDocument = caseEntity.getDocumentById({
+  const courtIssuedDocument = caseEntity.getDocketEntryById({
     documentId,
   });
 
@@ -97,7 +97,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       documentId,
     });
 
-  const document = caseEntity.getDocumentById({ documentId });
+  const docketEntry = caseEntity.getDocketEntryById({ documentId });
 
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -149,7 +149,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   const updatedDocketEntryEntity = new DocketEntry(
     {
-      ...document,
+      ...docketEntry,
       filingDate: createISODateString(),
       isOnDocketRecord: true,
     },
@@ -208,7 +208,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    documentEntity: courtIssuedDocument,
+    docketEntryEntity: courtIssuedDocument,
     servedParties,
   });
 

@@ -168,7 +168,7 @@ exports.updatePetitionerInformationInteractor = async ({
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 
@@ -183,7 +183,7 @@ exports.updatePetitionerInformationInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 

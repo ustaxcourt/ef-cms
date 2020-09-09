@@ -71,7 +71,7 @@ exports.completeDocketEntryQCInteractor = async ({
     record => record.documentId === documentId,
   );
 
-  const currentDocketEntry = caseEntity.getDocumentById({
+  const currentDocketEntry = caseEntity.getDocketEntryById({
     documentId,
   });
 
@@ -330,7 +330,7 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeUpdatedDocketEntry,
+      docketEntryEntity: noticeUpdatedDocketEntry,
       servedParties,
     });
 

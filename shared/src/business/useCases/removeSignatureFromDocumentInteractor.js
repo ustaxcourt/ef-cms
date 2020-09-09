@@ -21,15 +21,15 @@ exports.removeSignatureFromDocumentInteractor = async ({
       docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
-  const documentToUnsign = caseEntity.getDocumentById({ documentId });
+  const docketEntryToUnsign = caseEntity.getDocketEntryById({ documentId });
 
-  documentToUnsign.unsignDocument();
+  docketEntryToUnsign.unsignDocument();
 
   const originalPdfNoSignature = await applicationContext
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      documentId: documentToUnsign.documentIdBeforeSignature,
+      documentId: docketEntryToUnsign.documentIdBeforeSignature,
       protocol: 'S3',
       useTempBucket: false,
     });
