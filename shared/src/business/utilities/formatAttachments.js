@@ -3,19 +3,19 @@
  *
  * @params {object} params the params object
  * @param {array} attachments attachments to format
- * @param {object} caseDetail the case detail with documents, archivedDocuments (optional), and correspondence (optional)
+ * @param {object} caseDetail the case detail with documents, archivedDocketEntries (optional), and correspondence (optional)
  * @returns {array} the formatted array of attachment objects
  */
 export const formatAttachments = ({ attachments, caseDetail }) => {
   const {
-    archivedDocuments = [],
+    archivedDocketEntries = [],
     archivedCorrespondences = [],
     correspondence = [],
     docketEntries,
   } = caseDetail;
 
   const allDocuments = [
-    ...archivedDocuments,
+    ...archivedDocketEntries,
     ...archivedCorrespondences,
     ...docketEntries,
     ...correspondence,

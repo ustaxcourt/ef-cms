@@ -1141,7 +1141,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            archivedDocuments: [
+            archivedDocketEntries: [
               {
                 ...baseDocument,
                 archived: true,

@@ -28,7 +28,7 @@ Valid Case object example:
   "statistics":[
 
   ],
-  "archivedDocuments":[
+  "archivedDocketEntries":[
 
   ],
   "archivedCorrespondences":[

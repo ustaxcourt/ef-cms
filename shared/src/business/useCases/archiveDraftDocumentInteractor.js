@@ -36,7 +36,7 @@ exports.archiveDraftDocumentInteractor = async ({
 
   const docketEntryToArchive = caseEntity.getDocketEntryById({ documentId });
 
-  caseEntity.archiveDocument(docketEntryToArchive, { applicationContext });
+  caseEntity.archiveDocketEntry(docketEntryToArchive, { applicationContext });
 
   const { workItem } = docketEntryToArchive;
 
