@@ -1642,7 +1642,7 @@ describe('DocketEntry entity', () => {
       const document = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          draftState: {
+          draftOrderState: {
             documentContents: 'Yee to the haw',
           },
         },
@@ -1651,7 +1651,7 @@ describe('DocketEntry entity', () => {
       document.setAsServed();
 
       expect(document.servedAt).toBeDefined();
-      expect(document.draftState).toEqual(null);
+      expect(document.draftOrderState).toEqual(null);
     });
 
     it('sets the Document as served with served parties', () => {
