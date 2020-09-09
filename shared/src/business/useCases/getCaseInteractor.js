@@ -30,8 +30,8 @@ const getDocumentContentsForDocuments = async ({
           documentContentsFile.toString(),
         );
         document.documentContents = documentContentsData.documentContents;
-        document.draftState = {
-          ...document.draftState,
+        document.draftOrderState = {
+          ...document.draftOrderState,
           documentContents: documentContentsData.documentContents,
           richText: documentContentsData.richText,
         };
