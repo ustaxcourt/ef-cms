@@ -1,7 +1,7 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
-export const docketClerkAddsDocketEntryWithoutFile = test => {
+export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
@@ -29,15 +29,15 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
     //primary document
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
-      value: 1,
+      value: overrides.dateReceivedMonth || 1,
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
-      value: 1,
+      value: overrides.dateReceivedDay || 1,
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
-      value: 2018,
+      value: overrides.dateReceivedYear || 2018,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
