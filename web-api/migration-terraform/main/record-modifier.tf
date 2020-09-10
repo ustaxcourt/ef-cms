@@ -13,13 +13,13 @@ resource "aws_lambda_function" "record_modifier_lambda" {
   source_code_hash = data.archive_file.record_modifier_zip.output_base64sha256
 
   runtime     = "nodejs12.x"
-  timeout     = "900"
+  timeout     = "60"
   memory_size = "3008"
 
   environment {
     variables = {
-      ENVIRONMENT = var.environment
-      SEGMENTS_QUEUE_URL   = aws_sqs_queue.migration_segments_queue.id
+      ENVIRONMENT        = var.environment
+      SEGMENTS_QUEUE_URL = aws_sqs_queue.migration_segments_queue.id
     }
   }
 }
