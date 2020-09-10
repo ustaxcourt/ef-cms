@@ -560,6 +560,7 @@ const applicationContext = {
       formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,
+      getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getFilingsAndProceedings,
       getFormattedCaseDetail,

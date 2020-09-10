@@ -1279,7 +1279,7 @@ describe('Case entity', () => {
     let correspondenceToArchive;
     beforeEach(() => {
       correspondenceToArchive = new Correspondence({
-        documentId: '123-abc',
+        correspondenceId: '123-abc',
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
       });
@@ -1300,7 +1300,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       const archivedDocketEntry = caseRecord.archivedCorrespondences.find(
-        d => d.documentId === correspondenceToArchive.documentId,
+        d => d.correspondenceId === correspondenceToArchive.correspondenceId,
       );
       expect(archivedDocketEntry.archived).toBeTruthy();
     });
@@ -1312,21 +1312,9 @@ describe('Case entity', () => {
 
       expect(
         caseRecord.archivedCorrespondences.find(
-          d => d.documentId === correspondenceToArchive.documentId,
+          d => d.correspondenceId === correspondenceToArchive.correspondenceId,
         ),
       ).toBeDefined();
-    });
-
-    it('removes the provided document from the case docketEntries array', () => {
-      caseRecord.archiveCorrespondence(correspondenceToArchive, {
-        applicationContext,
-      });
-
-      expect(
-        caseRecord.docketEntries.find(
-          d => d.documentId === correspondenceToArchive.documentId,
-        ),
-      ).toBeUndefined();
     });
   });
 
@@ -2002,7 +1990,7 @@ describe('Case entity', () => {
   describe('getCorrespondenceById', () => {
     it('should get a correspondence document by id', () => {
       const mockCorrespondence = new Correspondence({
-        documentId: '123-abc',
+        correspondenceId: '123-abc',
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
       });
@@ -2014,10 +2002,12 @@ describe('Case entity', () => {
       );
 
       const result = myCase.getCorrespondenceById({
-        documentId: mockCorrespondence.documentId,
+        correspondenceId: mockCorrespondence.correspondenceId,
       });
 
-      expect(result.documentId).toEqual(mockCorrespondence.documentId);
+      expect(result.correspondenceId).toEqual(
+        mockCorrespondence.correspondenceId,
+      );
     });
   });
 
@@ -2066,12 +2056,12 @@ describe('Case entity', () => {
       );
       expect(myCase.correspondence.length).toEqual(1);
       myCase.deleteCorrespondenceById({
-        correspondenceId: mockCorrespondence.documentId,
+        correspondenceId: mockCorrespondence.correspondenceId,
       });
       expect(myCase.correspondence.length).toEqual(0);
       expect(
         myCase.correspondence.find(
-          d => d.documentId === mockCorrespondence.documentId,
+          d => d.correspondenceId === mockCorrespondence.correspondenceId,
         ),
       ).toBeUndefined();
     });
@@ -2193,7 +2183,7 @@ describe('Case entity', () => {
   describe('updateCorrespondence', () => {
     it('should update a correspondence document', () => {
       const mockCorrespondence = new Correspondence({
-        documentId: '123-abc',
+        correspondenceId: '123-abc',
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
       });
@@ -2205,13 +2195,13 @@ describe('Case entity', () => {
       );
 
       myCase.updateCorrespondence({
-        documentId: mockCorrespondence.documentId,
+        correspondenceId: mockCorrespondence.correspondenceId,
         documentTitle: 'updated title',
       });
 
       expect(
         myCase.correspondence.find(
-          d => d.documentId === mockCorrespondence.documentId,
+          d => d.correspondenceId === mockCorrespondence.correspondenceId,
         ).documentTitle,
       ).toEqual('updated title');
     });
@@ -3442,7 +3432,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
       caseEntity.fileCorrespondence({
-        documentId: 'yeehaw',
+        correspondenceId: 'yeehaw',
         documentTitle: 'Correspondence document',
       });
 

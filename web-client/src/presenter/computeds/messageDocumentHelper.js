@@ -20,20 +20,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
     return null;
   }
 
-  const {
-    archivedDocketEntries = [],
-    archivedCorrespondences = [],
-    correspondence,
-    docketEntries,
-  } = caseDetail;
+  const { docketEntries } = caseDetail;
 
   const caseDocument =
-    [
-      ...correspondence,
-      ...docketEntries,
-      ...archivedDocketEntries,
-      ...archivedCorrespondences,
-    ].find(d => d.documentId === viewerDocumentToDisplay.documentId) || {};
+    applicationContext.getUtilities().getAttachmentDocumentById({
+      caseDetail,
+      documentId: viewerDocumentToDisplay.documentId,
+      useArchived: true,
+    }) || {};
 
   const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 

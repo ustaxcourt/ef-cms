@@ -24,7 +24,7 @@
               flags: 
                 presence: "optional"
                 description: "A correspondence document that was archived."
-            documentId: 
+            correspondenceId: 
               type: "string"
               flags: 
                 presence: "required"
