@@ -92,7 +92,7 @@ describe('DocketRecord', () => {
         action: 'Axun',
         additionalInfo2: 'Addl Info',
         createdAtFormatted: '01/01/20',
-        description: 'Test Description',
+        descriptionDisplay: 'Test Description',
         eventCode: 'T',
         filedBy: 'Test Filer',
         filingsAndProceedings: 'Test Filings And Proceedings',
