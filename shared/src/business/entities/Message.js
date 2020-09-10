@@ -44,6 +44,7 @@ Message.prototype.init = function init(rawMessage, { applicationContext }) {
   this.fromSection = rawMessage.fromSection;
   this.fromUserId = rawMessage.fromUserId;
   this.isCompleted = rawMessage.isCompleted || false;
+  this.isRead = rawMessage.isRead || false;
   this.isRepliedTo = rawMessage.isRepliedTo || false;
   this.message = rawMessage.message;
   this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
@@ -137,6 +138,7 @@ Message.VALIDATION_RULES = {
     .boolean()
     .required()
     .description('Whether the message thread has been completed.'),
+  isRead: joi.boolean().optional(),
   isRepliedTo: joi
     .boolean()
     .required()
