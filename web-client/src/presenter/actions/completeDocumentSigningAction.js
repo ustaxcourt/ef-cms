@@ -12,7 +12,7 @@ export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
 }) => {
-  const originalDocumentId = get(state.pdfForSigning.documentId);
+  const originalDocketEntryId = get(state.pdfForSigning.documentId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
   let documentId;
@@ -57,14 +57,14 @@ export const completeDocumentSigningAction = async ({
       });
 
     ({
-      signedDocumentId: documentId,
+      signedDocketEntryId: documentId,
     } = await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
       docketNumber,
       nameForSigning,
-      originalDocumentId,
+      originalDocketEntryId,
       parentMessageId,
-      signedDocumentId: signedDocumentFromUploadId,
+      signedDocketEntryId: signedDocumentFromUploadId,
     }));
   }
 

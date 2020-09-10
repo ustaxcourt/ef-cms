@@ -70,7 +70,7 @@ describe('formattedCaseDetail', () => {
     userId: '456',
   };
 
-  const simpleDocuments = [
+  const simpleDocketEntries = [
     {
       createdAt: getDateISO(),
       description: 'Petition',
@@ -81,7 +81,7 @@ describe('formattedCaseDetail', () => {
     },
   ];
 
-  const complexDocuments = [
+  const complexDocketEntries = [
     {
       attachments: false,
       category: 'Petition',
@@ -215,7 +215,6 @@ describe('formattedCaseDetail', () => {
         caseDetail: {
           contactPrimary: {},
           docketEntries: [],
-          documents: [],
         },
       },
     });
@@ -230,8 +229,7 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {},
       correspondence: [],
-      docketEntries: simpleDocuments,
-      documents: simpleDocuments,
+      docketEntries: simpleDocketEntries,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
@@ -253,8 +251,7 @@ describe('formattedCaseDetail', () => {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {},
       correspondence: [],
-      docketEntries: simpleDocuments,
-      documents: simpleDocuments,
+      docketEntries: simpleDocketEntries,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
@@ -278,8 +275,7 @@ describe('formattedCaseDetail', () => {
         name: 'Bill',
       },
       correspondence: [],
-      docketEntries: complexDocuments,
-      documents: complexDocuments,
+      docketEntries: complexDocketEntries,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner' }],
@@ -473,33 +469,30 @@ describe('formattedCaseDetail', () => {
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const documents = [
-      {
-        description: 'Motion for Leave to File Administrative Record',
-        documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-        documentType: 'Motion for Leave to File Administrative Record',
-        eventCode: 'M115',
-        filingDate: '2020-07-08T16:33:41.180Z',
-        lodged: true,
-      },
-      {
-        description: 'Motion for Leave to File Administrative Record',
-        documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
-        documentType: 'Motion for Leave to File Administrative Record',
-        eventCode: 'M115',
-        filingDate: '2020-07-08T16:33:41.180Z',
-        lodged: false,
-      },
-    ];
-
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {
         name: 'Bob',
       },
       correspondence: [],
-      docketEntries: documents,
-      documents,
+      docketEntries: [
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+          lodged: true,
+        },
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+          lodged: false,
+        },
+      ],
       petitioners: [{ name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner' }],
     };
@@ -512,10 +505,10 @@ describe('formattedCaseDetail', () => {
       },
     });
 
-    const lodgedDocument = result.formattedDocuments.find(
+    const lodgedDocument = result.formattedDocketEntries.find(
       d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
     );
-    const unlodgedDocument = result.formattedDocuments.find(
+    const unlodgedDocument = result.formattedDocketEntries.find(
       d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
     );
 
@@ -527,60 +520,57 @@ describe('formattedCaseDetail', () => {
     let sortedCaseDetail;
 
     beforeAll(() => {
-      const documents = [
-        {
-          createdAt: '2019-02-28T21:14:39.488Z',
-          description: 'Petition',
-          documentId: 'Petition',
-          documentType: 'Petition',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-01-28T21:10:55.488Z',
-          index: 1,
-          isOnDocketRecord: true,
-          showValidationInput: '2019-02-28T21:14:39.488Z',
-          status: 'served',
-        },
-        {
-          description: 'Request for Place of Trial',
-          documentId: 'Request for Place of Trial',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-01-28T21:10:33.488Z',
-          index: 2,
-          isOnDocketRecord: true,
-        },
-        {
-          createdAt: '2019-03-28T21:14:39.488Z',
-          description: 'Ownership Disclosure Statement',
-          documentId: 'Ownership Disclosure Statement',
-          documentType: 'Ownership Disclosure Statement',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-03-28T21:14:39.488Z',
-          index: 4,
-          isOnDocketRecord: true,
-          showValidationInput: '2019-03-28T21:14:39.488Z',
-          status: 'served',
-        },
-        {
-          createdAt: '2019-01-01T21:14:39.488Z',
-          description: 'Other',
-          documentId: 'Other',
-          documentType: 'Other',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-01-28',
-          index: 3,
-          isOnDocketRecord: true,
-          showValidationInput: '2019-01-01T21:14:39.488Z',
-          status: 'served',
-        },
-      ];
-
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        docketEntries: documents,
+        docketEntries: [
+          {
+            createdAt: '2019-02-28T21:14:39.488Z',
+            description: 'Petition',
+            documentId: 'Petition',
+            documentType: 'Petition',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-01-28T21:10:55.488Z',
+            index: 1,
+            isOnDocketRecord: true,
+            showValidationInput: '2019-02-28T21:14:39.488Z',
+            status: 'served',
+          },
+          {
+            description: 'Request for Place of Trial',
+            documentId: 'Request for Place of Trial',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-01-28T21:10:33.488Z',
+            index: 2,
+            isOnDocketRecord: true,
+          },
+          {
+            createdAt: '2019-03-28T21:14:39.488Z',
+            description: 'Ownership Disclosure Statement',
+            documentId: 'Ownership Disclosure Statement',
+            documentType: 'Ownership Disclosure Statement',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-03-28T21:14:39.488Z',
+            index: 4,
+            isOnDocketRecord: true,
+            showValidationInput: '2019-03-28T21:14:39.488Z',
+            status: 'served',
+          },
+          {
+            createdAt: '2019-01-01T21:14:39.488Z',
+            description: 'Other',
+            documentId: 'Other',
+            documentType: 'Other',
+            filedBy: 'Jessica Frase Marine',
+            filingDate: '2019-01-28',
+            index: 3,
+            isOnDocketRecord: true,
+            showValidationInput: '2019-01-01T21:14:39.488Z',
+            status: 'served',
+          },
+        ],
         docketNumber: '123-45',
-        documents,
         hasVerifiedIrsNotice: false,
       };
     });
@@ -693,7 +683,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -711,7 +700,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -729,7 +717,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -747,7 +734,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -767,7 +753,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -787,7 +772,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
         privatePractitioners: [{ name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -810,7 +794,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -835,7 +818,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -860,7 +842,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const caseDeadlines = [
         {
@@ -906,7 +887,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const caseDeadlines = [
         {
@@ -932,7 +912,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -949,7 +928,7 @@ describe('formattedCaseDetail', () => {
     let caseDetail;
 
     beforeAll(() => {
-      const documents = [
+      const docketEntries = [
         {
           createdAt: '2019-02-28T21:14:39.488Z',
           description: 'Petition',
@@ -986,8 +965,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        docketEntries: documents.filter(d => d.isOnDocketRecord),
-        documents,
+        docketEntries,
         hasVerifiedIrsNotice: false,
       };
     });
@@ -1038,8 +1016,7 @@ describe('formattedCaseDetail', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...caseDetail,
-            docketEntries: [caseDetail.documents[0]],
-            documents: [caseDetail.documents[0]],
+            docketEntries: [caseDetail.docketEntries[0]],
           },
           validationErrors: {},
         },
@@ -1058,7 +1035,6 @@ describe('formattedCaseDetail', () => {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
             docketEntries: [],
-            documents: [],
             status: STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
@@ -1068,7 +1044,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1093,7 +1068,6 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        documents: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1117,96 +1091,94 @@ describe('formattedCaseDetail', () => {
     let caseDetail;
 
     beforeAll(() => {
-      const documents = [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 1,
-          isOnDocketRecord: true,
-        },
-        {
-          description: 'Filing Fee Paid',
-          eventCode: 'FEE',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 2,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'System Generated',
-          documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-          documentTitle: 'System Generated',
-          documentType: 'Notice of Trial',
-          eventCode: 'NTD',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isOnDocketRecord: true,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Not Served',
-          documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-          documentTitle: 'Court Issued - Not Served',
-          documentType: 'Order',
-          eventCode: 'O',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isCourtIssuedDocument: true,
-          isOnDocketRecord: true,
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Served',
-          documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-          documentTitle: 'Court Issued - Served',
-          documentType: 'Order',
-          eventCode: 'O',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isCourtIssuedDocument: true,
-          isOnDocketRecord: true,
-          servedAt: '2019-06-19T17:29:13.120Z',
-          status: 'served',
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Unservable',
-          documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
-          documentTitle: 'U.S.C.A',
-          documentType: 'U.S.C.A.',
-          eventCode: 'USCA',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isCourtIssuedDocument: true,
-          isOnDocketRecord: true,
-          servedAt: '2019-06-19T17:29:13.120Z',
-          status: 'served',
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-      ];
-
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {
           name: 'Bob',
         },
         correspondence: [],
-        docketEntries: documents,
-        documents,
+        docketEntries: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 1,
+            isOnDocketRecord: true,
+            workItem: {},
+          },
+          {
+            description: 'Filing Fee Paid',
+            eventCode: 'FEE',
+            filingDate: '2019-06-20T17:29:13.120Z',
+            index: 2,
+            isMinuteEntry: true,
+            isOnDocketRecord: true,
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NTD',
+            filingDate: '2019-06-21T17:29:13.120Z',
+            isOnDocketRecord: true,
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-06-22T17:29:13.120Z',
+            isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-06-23T17:29:13.120Z',
+            isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Unservable',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'U.S.C.A',
+            documentType: 'U.S.C.A.',
+            eventCode: 'USCA',
+            filingDate: '2019-06-24T17:29:13.120Z',
+            isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+        ],
       };
     });
 
@@ -1359,86 +1331,83 @@ describe('formattedCaseDetail', () => {
     let caseDetail;
 
     beforeAll(() => {
-      const documents = [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 1,
-          isOnDocketRecord: true,
-          numberOfPages: 24,
-        },
-        {
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Filing Fee Paid',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 2,
-          isOnDocketRecord: true,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'System Generated',
-          documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-          documentTitle: 'System Generated',
-          documentType: 'Notice of Trial',
-          eventCode: 'NTD',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 3,
-          isOnDocketRecord: true,
-          numberOfPages: 2,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Not Served',
-          documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-          documentTitle: 'Court Issued - Not Served',
-          documentType: 'Order',
-          eventCode: 'O',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 4,
-          isCourtIssuedDocument: true,
-          isOnDocketRecord: true,
-          numberOfPages: 7,
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Served',
-          documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-          documentTitle: 'Court Issued - Served',
-          documentType: 'Order',
-          eventCode: 'O',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          index: 5,
-          isCourtIssuedDocument: true,
-          isOnDocketRecord: true,
-          numberOfPages: 9,
-          servedAt: '2019-06-19T17:29:13.120Z',
-          status: 'served',
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-      ];
-
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {
           name: 'Bob',
         },
         correspondence: [],
-        docketEntries: documents,
-        documents,
+        docketEntries: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 1,
+            isOnDocketRecord: true,
+            numberOfPages: 24,
+          },
+          {
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 2,
+            isOnDocketRecord: true,
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NTD',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 3,
+            isOnDocketRecord: true,
+            numberOfPages: 2,
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 4,
+            isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
+            numberOfPages: 7,
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            index: 5,
+            isCourtIssuedDocument: true,
+            isOnDocketRecord: true,
+            numberOfPages: 9,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+        ],
       };
     });
 
@@ -1477,88 +1446,85 @@ describe('formattedCaseDetail', () => {
     let caseDetail;
 
     beforeAll(() => {
-      const documents = [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isFileAttached: true,
-          isLegacy: true,
-          isOnDocketRecord: true,
-          isStricken: true,
-          numberOfPages: 24,
-        },
-        {
-          description: 'Filing Fee Paid',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffb1',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isFileAttached: false,
-          isOnDocketRecord: true,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'System Generated',
-          documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-          documentTitle: 'System Generated',
-          documentType: 'Notice of Trial',
-          eventCode: 'NTD',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          numberOfPages: 2,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Not Served',
-          documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-          documentTitle: 'Court Issued - Not Served',
-          documentType: 'Order',
-          eventCode: 'O',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isCourtIssuedDocument: true,
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          numberOfPages: 7,
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Court Issued - Served',
-          documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-          documentTitle: 'Court Issued - Served',
-          documentType: 'Order',
-          eventCode: 'O',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isCourtIssuedDocument: true,
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          numberOfPages: 9,
-          servedAt: '2019-06-19T17:29:13.120Z',
-          status: 'served',
-          workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-        },
-      ];
-
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary: {
           name: 'Bob',
         },
         correspondence: [],
-        docketEntries: documents,
-        documents,
+        docketEntries: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isFileAttached: true,
+            isLegacy: true,
+            isOnDocketRecord: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffb1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isFileAttached: false,
+            isOnDocketRecord: true,
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NTD',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: 2,
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isCourtIssuedDocument: true,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: 7,
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isCourtIssuedDocument: true,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            numberOfPages: 9,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+        ],
       };
     });
 
@@ -1632,30 +1598,27 @@ describe('formattedCaseDetail', () => {
       otherPetitioners = [baseContact];
       otherFilers = [baseContact];
 
-      const documents = [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isLegacy: true,
-          isStricken: true,
-          numberOfPages: 24,
-        },
-      ];
-
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary,
         contactSecondary,
         correspondence: [],
-        docketEntries: documents,
-        documents,
+        docketEntries: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
         otherFilers,
         otherPetitioners,
       };
@@ -1931,31 +1894,28 @@ describe('formattedCaseDetail', () => {
       otherPetitioners = [baseContact];
       otherFilers = [baseContact];
 
-      const documents = [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          filingDate: '2019-06-19T17:29:13.120Z',
-          isLegacy: true,
-          isOnDocketRecord: true,
-          isStricken: true,
-          numberOfPages: 24,
-        },
-      ];
-
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         contactPrimary,
         contactSecondary,
         correspondence: [],
-        docketEntries: documents,
-        documents,
+        docketEntries: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isOnDocketRecord: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
         otherFilers,
         otherPetitioners,
       };
@@ -2022,8 +1982,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         createdAt: '2020-02-02T17:29:13.120Z',
-        docketEntries: simpleDocuments,
-        documents: simpleDocuments,
+        docketEntries: simpleDocketEntries,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };
@@ -2045,8 +2004,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         createdAt: '2020-02-02T17:29:13.120Z',
-        docketEntries: simpleDocuments,
-        documents: simpleDocuments,
+        docketEntries: simpleDocketEntries,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };

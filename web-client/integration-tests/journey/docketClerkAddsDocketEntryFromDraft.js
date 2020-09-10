@@ -66,7 +66,7 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
 
     const numberOfPagesIncludingCoversheet =
       draftOrderDocument.numberOfPages + 1;
-    const updatedDocument = caseDetailFormatted.formattedDocuments.find(
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 

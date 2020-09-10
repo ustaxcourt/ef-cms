@@ -33,7 +33,7 @@ exports.updateCorrespondenceDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentCorrespondenceDocument = caseEntity.getDocumentById({
+  const currentCorrespondenceDocument = caseEntity.getCorrespondenceById({
     documentId: documentMetadata.documentId,
   });
 
@@ -45,7 +45,7 @@ exports.updateCorrespondenceDocumentInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocument(updatedCorrespondenceEntity);
+  caseEntity.updateCorrespondence(updatedCorrespondenceEntity);
 
   const caseEntityRaw = caseEntity.validate().toRawObject();
 

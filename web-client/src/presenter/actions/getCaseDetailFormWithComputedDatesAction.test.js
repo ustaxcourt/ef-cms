@@ -1,49 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  castToISO,
-  getCaseDetailFormWithComputedDatesAction,
-} from './getCaseDetailFormWithComputedDatesAction';
+import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const modules = { presenter };
-
-describe('castToISO', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
-  it('returns an iso string when the date string passed in is valid', () => {
-    expect(castToISO(applicationContext, '2010-10-10')).toEqual(
-      '2010-10-10T04:00:00.000Z',
-    );
-  });
-
-  it('returns an iso string when the date string of 2009-01-01 passed in is valid', () => {
-    expect(castToISO(applicationContext, '2009-01-01')).toEqual(
-      '2009-01-01T05:00:00.000Z',
-    );
-  });
-
-  it('returns an iso string for 01-01-2009 when the date string of 2009 is passed in', () => {
-    expect(castToISO(applicationContext, '2009')).toEqual(
-      '2009-01-01T05:00:00.000Z',
-    );
-  });
-
-  it('returns null when the date string passed in is invalid', () => {
-    expect(castToISO(applicationContext, 'x-10-10')).toEqual('-1');
-  });
-
-  it('returns null when the date string passed in is an empty string', () => {
-    expect(castToISO(applicationContext, '')).toEqual(null);
-  });
-
-  it('returns the same iso string passed in when an iso string is passed in', () => {
-    expect(castToISO(applicationContext, '1990-01-01T05:00:00.000Z')).toEqual(
-      '1990-01-01T05:00:00.000Z',
-    );
-  });
-});
 
 describe('getCaseDetailFormWithComputedDatesAction', () => {
   beforeAll(() => {

@@ -12,8 +12,8 @@ describe('archiveDraftDocumentInteractor', () => {
     await expect(
       archiveDraftDocumentInteractor({
         applicationContext,
+        docketEntryId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-20',
-        documentId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -28,8 +28,8 @@ describe('archiveDraftDocumentInteractor', () => {
 
     await archiveDraftDocumentInteractor({
       applicationContext,
+      docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-20',
-      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
 
     const {
@@ -37,7 +37,7 @@ describe('archiveDraftDocumentInteractor', () => {
     } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
 
     expect(
-      caseToUpdate.archivedDocuments.find(
+      caseToUpdate.archivedDocketEntries.find(
         d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ),
     ).toMatchObject({
@@ -46,7 +46,7 @@ describe('archiveDraftDocumentInteractor', () => {
     });
 
     expect(
-      caseToUpdate.documents.find(
+      caseToUpdate.docketEntries.find(
         d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ),
     ).toBeFalsy();
@@ -60,8 +60,8 @@ describe('archiveDraftDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        documents: [
-          ...MOCK_CASE.documents,
+        docketEntries: [
+          ...MOCK_CASE.docketEntries,
           {
             createdAt: '2019-04-19T17:29:13.120Z',
             docketNumber: '101-20',
@@ -86,8 +86,8 @@ describe('archiveDraftDocumentInteractor', () => {
 
     await archiveDraftDocumentInteractor({
       applicationContext,
+      docketEntryId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
       docketNumber: '101-20',
-      documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
     });
 
     expect(

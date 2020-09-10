@@ -11,7 +11,7 @@ const { put } = require('../requests');
  */
 exports.updateCourtIssuedOrderInteractor = ({
   applicationContext,
-  documentIdToEdit,
+  docketEntryIdToEdit,
   documentMetadata,
 }) => {
   const { docketNumber } = documentMetadata;
@@ -20,6 +20,6 @@ exports.updateCourtIssuedOrderInteractor = ({
     body: {
       documentMetadata,
     },
-    endpoint: `/case-documents/${docketNumber}/court-issued-orders/${documentIdToEdit}`,
+    endpoint: `/case-documents/${docketNumber}/court-issued-orders/${docketEntryIdToEdit}`,
   });
 };

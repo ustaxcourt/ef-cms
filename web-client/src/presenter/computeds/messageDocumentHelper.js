@@ -21,17 +21,17 @@ export const messageDocumentHelper = (get, applicationContext) => {
   }
 
   const {
-    archivedDocuments = [],
+    archivedDocketEntries = [],
     archivedCorrespondences = [],
     correspondence,
-    documents,
+    docketEntries,
   } = caseDetail;
 
   const caseDocument =
     [
       ...correspondence,
-      ...documents,
-      ...archivedDocuments,
+      ...docketEntries,
+      ...archivedDocketEntries,
       ...archivedCorrespondences,
     ].find(d => d.documentId === viewerDocumentToDisplay.documentId) || {};
 
@@ -120,7 +120,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     isInternalUser &&
     caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    !documents.find(
+    !docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 

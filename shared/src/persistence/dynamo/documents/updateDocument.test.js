@@ -27,7 +27,7 @@ describe('updateDocument', () => {
     ).toMatchObject({
       Item: {
         pk: `case|${mockDocketNumber}`,
-        sk: `document|${mockDocumentId}`,
+        sk: `docket-entry|${mockDocumentId}`,
         ...mockDocument,
       },
     });

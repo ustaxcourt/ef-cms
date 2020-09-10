@@ -39,11 +39,11 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId,
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: documentId,
   });
 
-  if (!currentDocument) {
+  if (!currentDocketEntry) {
     throw new NotFoundError('Document not found');
   }
 
@@ -70,9 +70,9 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     trialLocation: documentMeta.trialLocation,
   };
 
-  const documentEntity = new DocketEntry(
+  const docketEntryEntity = new DocketEntry(
     {
-      ...currentDocument,
+      ...currentDocketEntry,
       ...editableFields,
       description: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
@@ -83,18 +83,18 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const { workItem } = documentEntity;
+  const { workItem } = docketEntryEntity;
 
   Object.assign(workItem, {
     document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
   });
 
-  documentEntity.setWorkItem(workItem);
+  docketEntryEntity.setWorkItem(workItem);
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

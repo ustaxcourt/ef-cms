@@ -95,15 +95,15 @@ exports.updateSecondaryContactInteractor = async ({
         },
       });
 
-    const newDocumentId = applicationContext.getUniqueId();
+    const newDocketEntryId = applicationContext.getUniqueId();
 
-    const changeOfAddressDocument = new DocketEntry(
+    const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,
         description: changeOfAddressDocumentTypeToGenerate.title,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocumentId,
+        documentId: newDocketEntryId,
         documentTitle: changeOfAddressDocumentTypeToGenerate.title,
         documentType: changeOfAddressDocumentTypeToGenerate.title,
         eventCode: changeOfAddressDocumentTypeToGenerate.eventCode,
@@ -121,12 +121,12 @@ exports.updateSecondaryContactInteractor = async ({
 
     const servedParties = aggregatePartiesForService(caseEntity);
 
-    changeOfAddressDocument.setAsServed(servedParties.all);
+    changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocument,
+      docketEntryEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -141,8 +141,8 @@ exports.updateSecondaryContactInteractor = async ({
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         document: {
-          ...changeOfAddressDocument.toRawObject(),
-          createdAt: changeOfAddressDocument.createdAt,
+          ...changeOfAddressDocketEntry.toRawObject(),
+          createdAt: changeOfAddressDocketEntry.createdAt,
         },
         section: DOCKET_SECTION,
         sentBy: user.name,
@@ -151,21 +151,21 @@ exports.updateSecondaryContactInteractor = async ({
       { applicationContext },
     );
 
-    changeOfAddressDocument.setWorkItem(workItem);
+    changeOfAddressDocketEntry.setWorkItem(workItem);
 
-    caseEntity.addDocument(changeOfAddressDocument);
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocument,
+      docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
-      documentId: newDocumentId,
+      key: newDocketEntryId,
     });
 
     await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({

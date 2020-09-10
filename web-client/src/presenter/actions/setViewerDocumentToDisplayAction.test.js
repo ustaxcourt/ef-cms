@@ -23,8 +23,8 @@ describe('setViewerDocumentToDisplayAction', () => {
       },
       state: {
         caseDetail: {
+          docketEntries: [{ documentId: '1234' }],
           docketNumber: '123-45',
-          documents: [{ documentId: '1234' }],
         },
         viewerDocumentToDisplay: null,
       },
@@ -46,8 +46,8 @@ describe('setViewerDocumentToDisplayAction', () => {
       },
       state: {
         caseDetail: {
+          docketEntries: [{ documentId: '1234' }],
           docketNumber: '123-45',
-          documents: [{ documentId: '1234' }],
         },
         viewerDocumentToDisplay: null,
       },

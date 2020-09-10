@@ -5,7 +5,7 @@ export const editDocketEntryHelper = (get, applicationContext) => {
   const documentId = get(state.documentId);
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
 
-  const currentDocument = caseDetail.documents.find(
+  const currentDocument = caseDetail.docketEntries.find(
     document => document.documentId === documentId,
   );
 
@@ -21,9 +21,9 @@ export const editDocketEntryHelper = (get, applicationContext) => {
     }
   }
 
-  const formattedDocument = applicationContext
+  const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, currentDocument);
+    .formatDocketEntry(applicationContext, currentDocument);
 
-  return { formattedDocument, showPaperServiceWarning };
+  return { formattedDocketEntry, showPaperServiceWarning };
 };

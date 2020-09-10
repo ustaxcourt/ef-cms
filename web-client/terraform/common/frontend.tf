@@ -136,6 +136,58 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
+  origin_group {
+    origin_id = "group-documents.${var.dns_domain}"
+
+    failover_criteria {
+      status_codes = [403, 404, 500, 502, 503, 504]
+    }
+
+    member {
+      origin_id = "primary-documents.${var.dns_domain}"
+    }
+
+    member {
+      origin_id = "failover-documents.${var.dns_domain}"
+    }
+  }
+
+  origin_group {
+    origin_id = "group-temp-documents.${var.dns_domain}"
+
+    failover_criteria {
+      status_codes = [403, 404, 500, 502, 503, 504]
+    }
+
+    member {
+      origin_id = "primary-temp-documents.${var.dns_domain}"
+    }
+
+    member {
+      origin_id = "failover-temp-documents.${var.dns_domain}"
+    }
+  }
+
+  origin {
+    domain_name = "${var.dns_domain}-documents-${var.environment}-us-east-1.s3.amazonaws.com"
+    origin_id   = "primary-documents.${var.dns_domain}"
+  }
+
+  origin {
+    domain_name = "${var.dns_domain}-documents-${var.environment}-us-west-1.s3.amazonaws.com"
+    origin_id   = "failover-documents.${var.dns_domain}"
+  }
+
+  origin {
+    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1.s3.amazonaws.com"
+    origin_id   = "primary-temp-documents.${var.dns_domain}"
+  }
+
+  origin {
+    domain_name = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1.s3.amazonaws.com"
+    origin_id   = "failover-temp-documents.${var.dns_domain}"
+  }
+
   custom_error_response {
     error_caching_min_ttl = 0
     error_code            = 404
@@ -196,6 +248,58 @@ resource "aws_cloudfront_distribution" "distribution" {
     max_ttl                = 0
     compress               = true
     viewer_protocol_policy = "redirect-to-https"
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/documents/*"
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "group-documents.${var.dns_domain}"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+
+    lambda_function_association {
+      event_type   = "origin-request"
+      lambda_arn   = aws_lambda_function.strip_basepath_lambda.qualified_arn
+      include_body = false
+    }
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/temp-documents/*"
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "group-temp-documents.${var.dns_domain}"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+
+    lambda_function_association {
+      event_type   = "origin-request"
+      lambda_arn   = aws_lambda_function.strip_basepath_lambda.qualified_arn
+      include_body = false
+    }
+
+    forwarded_values {
+      query_string = true
+
+      cookies {
+        forward = "none"
+      }
+    }
   }
 
   aliases = ["app.${var.dns_domain}"]

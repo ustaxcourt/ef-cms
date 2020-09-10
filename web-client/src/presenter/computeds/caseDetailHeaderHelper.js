@@ -65,10 +65,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
 
-  const petitionDocument = applicationContext
+  const petitionDocketEntry = applicationContext
     .getUtilities()
-    .getPetitionDocumentFromDocuments(caseDetail.documents);
-  const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+    .getPetitionDocketEntryFromDocketEntries(caseDetail.docketEntries);
+  const petitionIsServed =
+    petitionDocketEntry && !!petitionDocketEntry.servedAt;
 
   return {
     hidePublicCaseInformation: !isExternalUser,

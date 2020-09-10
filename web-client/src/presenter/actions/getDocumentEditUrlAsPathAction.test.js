@@ -10,7 +10,7 @@ describe('getDocumentEditUrlAsPathAction', () => {
     documentType: 'Order',
   };
 
-  documentToMatch.draftState = { ...documentToMatch };
+  documentToMatch.draftOrderState = { ...documentToMatch };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -23,13 +23,13 @@ describe('getDocumentEditUrlAsPathAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
       },
       state: {
@@ -46,13 +46,13 @@ describe('getDocumentEditUrlAsPathAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
         documentIdToEdit: '321',
       },
@@ -72,13 +72,13 @@ describe('getDocumentEditUrlAsPathAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-19',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-19',
         },
         documentIdToEdit: '321',
       },

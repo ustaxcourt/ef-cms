@@ -41,7 +41,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   };
 
   const dynamicallyGeneratedDocketEntries = [];
-  const documentsWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
+  const docketEntriesWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
     eventCode => {
       const documentId = uuidv4();
       const docketRecordId = uuidv4();
@@ -88,27 +88,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         postalCode: '12345',
         state: 'TN',
       },
-      docketNumber: '101-20',
-      docketRecord: [
-        {
-          description: 'Docket Record 0',
-          docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          eventCode: 'O',
-          filingDate: createISODateString(),
-          index: 0,
-        },
-        {
-          description: 'Docket Record 1',
-          docketRecordId: mockDocumentId,
-          documentId: mockDocumentId,
-          eventCode: 'OAJ',
-          filingDate: createISODateString(),
-          index: 1,
-        },
-        ...dynamicallyGeneratedDocketEntries,
-      ],
-      documents: [
+      docketEntries: [
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
@@ -130,8 +110,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItem: mockWorkItem,
         },
-        ...documentsWithCaseClosingEventCodes,
+        ...docketEntriesWithCaseClosingEventCodes,
       ],
+      docketNumber: '101-20',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -159,30 +140,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         postalCode: '12345',
         state: 'TN',
       },
-      docketNumber: '102-20',
-      docketRecord: [
-        {
-          description: 'Docket Record 0',
-          docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          eventCode: 'O',
-          filingDate: createISODateString(),
-          index: 0,
-          signedAt: createISODateString(),
-          signedByUserId: uuidv4(),
-          signedJudgeName: 'Chief Judge',
-        },
-        {
-          description: 'Docket Record 0',
-          docketRecordId: mockDocumentId,
-          documentId: mockDocumentId,
-          eventCode: 'OAJ',
-          filingDate: createISODateString(),
-          index: 1,
-        },
-        ...dynamicallyGeneratedDocketEntries,
-      ],
-      documents: [
+      docketEntries: [
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
@@ -204,8 +162,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItem: mockWorkItem,
         },
-        ...documentsWithCaseClosingEventCodes,
+        ...docketEntriesWithCaseClosingEventCodes,
       ],
+      docketNumber: '102-20',
       filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
@@ -288,8 +247,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor({
         applicationContext,
+        docketEntryId: '000',
         docketNumber: '101-20',
-        documentId: '000',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -302,8 +261,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor({
         applicationContext,
+        docketEntryId: '000',
         docketNumber: '000-00',
-        documentId: '000',
       }),
     ).rejects.toThrow('Case 000-00 was not found');
   });
@@ -312,22 +271,22 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor({
         applicationContext,
+        docketEntryId: '000',
         docketNumber: '101-20',
-        documentId: '000',
       }),
-    ).rejects.toThrow('Document 000 was not found');
+    ).rejects.toThrow('Docket entry 000 was not found');
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '101-20',
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
-    const updatedDocument = updatedCase.documents.find(
+    const updatedDocument = updatedCase.docketEntries.find(
       document =>
         document.documentId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
@@ -348,13 +307,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the number of pages present in the document to be served', async () => {
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: mockDocumentId,
       docketNumber: '101-20',
-      documentId: mockDocumentId,
     });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
-    const updatedDocument = updatedCase.documents.find(
+    const updatedDocument = updatedCase.docketEntries.find(
       document => document.documentId === mockDocumentId,
     );
 
@@ -372,13 +331,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: mockDocumentId,
       docketNumber: '101-20',
-      documentId: mockDocumentId,
     });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
-    const updatedDocument = updatedCase.documents.find(
+    const updatedDocument = updatedCase.docketEntries.find(
       document => document.documentId === mockDocumentId,
     );
 
@@ -397,8 +356,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties, and should not return paperServicePdfData', async () => {
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '101-20',
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
     expect(
@@ -410,8 +369,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should return paperServicePdfData when there are paper service parties on the case', async () => {
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '102-20',
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
     expect(result.pdfUrl).toBe(mockPdfUrl.url);
@@ -422,8 +381,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: docketEntriesWithCaseClosingEventCodes[0].documentId,
       docketNumber: '101-20',
-      documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
     expect(
@@ -468,8 +427,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: docketEntriesWithCaseClosingEventCodes[0].documentId,
       docketNumber: '101-20',
-      documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
     expect(
@@ -480,12 +439,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  documentsWithCaseClosingEventCodes.forEach(document => {
+  docketEntriesWithCaseClosingEventCodes.forEach(document => {
     it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor({
         applicationContext,
+        docketEntryId: document.documentId,
         docketNumber: '101-20',
-        documentId: document.documentId,
       });
 
       const updatedCase = applicationContext.getPersistenceGateway().updateCase

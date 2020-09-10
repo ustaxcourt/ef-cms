@@ -65,9 +65,8 @@ describe('migrateCaseInteractor', () => {
         postalCode: '69580',
         state: 'WI',
       },
+      docketEntries: MOCK_CASE.docketEntries,
       docketNumber: '00101-00',
-      docketRecord: MOCK_CASE.docketRecord, // TODO 636
-      documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
       partyType: PARTY_TYPES.petitioner,
@@ -164,8 +163,10 @@ describe('migrateCaseInteractor', () => {
           applicationContext,
           caseMetadata: {
             ...MOCK_CASE,
+            docketEntries: [
+              { ...MOCK_CASE.docketEntries[0], documentId: 'invalid' },
+            ],
             docketNumber: 'ABC',
-            documents: [{ ...MOCK_CASE.documents[0], documentId: 'invalid' }],
           },
         });
       } catch (e) {
@@ -177,7 +178,7 @@ describe('migrateCaseInteractor', () => {
         "'docketNumber' with value 'ABC' fails to match the required pattern",
       );
       expect(error.message).toContain(
-        "'documents[0].documentId' must be a valid GUID",
+        "'docketEntries[0].documentId' must be a valid GUID",
       );
     });
   });

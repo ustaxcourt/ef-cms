@@ -14,7 +14,7 @@ const {
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
-  formatDocument,
+  formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   sortDocketEntries,
@@ -33,7 +33,6 @@ const mockCaseDetailBase = {
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
-  documents: [],
   receivedAt: new Date(),
 };
 
@@ -90,24 +89,34 @@ describe('formatCase', () => {
       docketEntries: documents,
       documents,
     });
-    expect(result.formattedDocuments[0].isPetition).toBeTruthy();
-    expect(result.formattedDocuments[0].qcWorkItemsCompleted).toBeTruthy();
-    expect(result.formattedDocuments[0].qcWorkItemsUntouched).toEqual(false);
+    expect(result.formattedDocketEntries[0].isPetition).toBeTruthy();
+    expect(result.formattedDocketEntries[0].qcWorkItemsCompleted).toBeTruthy();
+    expect(result.formattedDocketEntries[0].qcWorkItemsUntouched).toEqual(
+      false,
+    );
 
-    expect(result.formattedDocuments[0]).toHaveProperty('createdAtFormatted');
-    expect(result.formattedDocuments[0]).toHaveProperty('servedAtFormatted');
-    expect(result.formattedDocuments[0]).toHaveProperty('showServedAt');
-    expect(result.formattedDocuments[0]).toHaveProperty('isStatusServed');
-    expect(result.formattedDocuments[0]).toHaveProperty('isPetition');
-    expect(result.formattedDocuments[0]).toHaveProperty('servedPartiesCode');
-    expect(result.formattedDocuments[0].showLegacySealed).toBeTruthy();
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'createdAtFormatted',
+    );
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'servedAtFormatted',
+    );
+    expect(result.formattedDocketEntries[0]).toHaveProperty('showServedAt');
+    expect(result.formattedDocketEntries[0]).toHaveProperty('isStatusServed');
+    expect(result.formattedDocketEntries[0]).toHaveProperty('isPetition');
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'servedPartiesCode',
+    );
+    expect(result.formattedDocketEntries[0].showLegacySealed).toBeTruthy();
 
-    expect(result.formattedDocuments[1].showLegacySealed).toBeFalsy();
-    expect(result.formattedDocuments[1].qcWorkItemsUntouched).toEqual(false);
+    expect(result.formattedDocketEntries[1].showLegacySealed).toBeFalsy();
+    expect(result.formattedDocketEntries[1].qcWorkItemsUntouched).toEqual(
+      false,
+    );
   });
 
-  it('should correctly format legacy served documents', () => {
-    const documents = [
+  it('should correctly format legacy served docket entries', () => {
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         documentId: 'd-1-2-3',
@@ -130,15 +139,14 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
-    expect(result.formattedDocuments[0].isNotServedDocument).toBeFalsy();
-    expect(result.formattedDocuments[0].isUnservable).toBeTruthy();
+    expect(result.formattedDocketEntries[0].isNotServedDocument).toBeFalsy();
+    expect(result.formattedDocketEntries[0].isUnservable).toBeTruthy();
 
-    expect(result.formattedDocuments[1].isNotServedDocument).toBeFalsy();
-    expect(result.formattedDocuments[1].isUnservable).toBeTruthy();
+    expect(result.formattedDocketEntries[1].isNotServedDocument).toBeFalsy();
+    expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
   it('should format the filing date of all correspondence documents', () => {
@@ -314,23 +322,9 @@ describe('formatCase', () => {
   });
 
   it('should apply additional information', () => {
-    const documents = [
-      {
-        additionalInfo: 'additional information',
-        createdAt: getDateISO(),
-        description: 'desc',
-        documentId: 'd-1-2-3',
-        documentType: 'Petition',
-        index: '1',
-        isOnDocketRecord: true,
-        servedAt: getDateISO(),
-      },
-    ];
-
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents: [
+      docketEntries: [
         {
           additionalInfo: 'additional information',
           createdAt: getDateISO(),
@@ -352,7 +346,7 @@ describe('formatCase', () => {
   it('should format certificate of service date', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      documents: [
+      docketEntries: [
         {
           certificateOfServiceDate: getDateISO(),
           createdAt: getDateISO(),
@@ -365,7 +359,7 @@ describe('formatCase', () => {
     });
 
     expect(
-      result.formattedDocuments[0].certificateOfServiceDateFormatted,
+      result.formattedDocketEntries[0].certificateOfServiceDateFormatted,
     ).toEqual(
       applicationContext
         .getUtilities()
@@ -619,9 +613,9 @@ describe('formatCaseDeadlines', () => {
   });
 });
 
-describe('formatDocument', () => {
+describe('formatDocketEntry', () => {
   it('should format the servedAt date', () => {
-    const results = formatDocument(applicationContext, {
+    const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
     });
     expect(results).toMatchObject({
@@ -630,7 +624,7 @@ describe('formatDocument', () => {
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const result = formatDocument(
+    const result = formatDocketEntry(
       applicationContext,
 
       {
@@ -645,7 +639,7 @@ describe('formatDocument', () => {
   });
 
   it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
-    const results = formatDocument(applicationContext, {
+    const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
     });
@@ -655,7 +649,7 @@ describe('formatDocument', () => {
   });
 
   it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
-    const results = formatDocument(applicationContext, {
+    const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
@@ -666,7 +660,7 @@ describe('formatDocument', () => {
 
   describe('isInProgress', () => {
     it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         eventCode: 'A', //not unservable, not court-issued
         isFileAttached: false,
         isMinuteEntry: false,
@@ -675,7 +669,7 @@ describe('formatDocument', () => {
     });
 
     it('should return isInProgress true if the document has a file attached and is not served or unservable', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         eventCode: 'A', //not unservable
         isFileAttached: true,
       });
@@ -683,14 +677,14 @@ describe('formatDocument', () => {
     });
 
     it('should return isInProgress false if the document is court-issued', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         eventCode: 'O', //court-issued
       });
       expect(results.isInProgress).toEqual(false);
     });
 
     it('should return isInProgress false if the document has a file attached and is served', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         isFileAttached: true,
         servedAt: '2019-03-01T21:40:46.415Z',
       });
@@ -698,7 +692,7 @@ describe('formatDocument', () => {
     });
 
     it('should return isInProgress false if the document has a file attached and is unservable', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         eventCode: 'CTRA', //unservable
         isFileAttached: true,
       });
@@ -706,14 +700,14 @@ describe('formatDocument', () => {
     });
 
     it('should return isInProgress false if the document is a minute entry', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         isMinuteEntry: true,
       });
       expect(results.isInProgress).toEqual(false);
     });
 
     it('should return isInProgress false if the document is unservable', () => {
-      const results = formatDocument(applicationContext, {
+      const results = formatDocketEntry(applicationContext, {
         eventCode: 'CTRA', //unservable
       });
       expect(results.isInProgress).toEqual(false);
@@ -774,7 +768,7 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDetail: {
         ...mockCaseDetailBase,
-        documents: [
+        docketEntries: [
           {
             archived: false,
             createdAt: getDateISO(),
@@ -1042,12 +1036,12 @@ describe('sortDocketEntries', () => {
 
     expect(result).toEqual([
       {
-        createdAtFormatted: '2019-08-03T00:10:02.000Z',
-        index: 1,
-      },
-      {
         createdAtFormatted: '2019-08-04T00:10:02.000Z',
         index: 2,
+      },
+      {
+        createdAtFormatted: '2019-08-03T00:10:02.000Z',
+        index: 1,
       },
       {
         createdAtFormatted: undefined,

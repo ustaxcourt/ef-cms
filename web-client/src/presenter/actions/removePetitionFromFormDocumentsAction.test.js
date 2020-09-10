@@ -2,12 +2,12 @@ import { removePetitionFromFormDocumentsAction } from './removePetitionFromFormD
 import { runAction } from 'cerebral/test';
 
 describe('removePetitionFromFormDocumentsAction', () => {
-  it('removes the Petition document from the form.documents array', async () => {
+  it('removes the Petition document from the form.docketEntries array', async () => {
     const { state } = await runAction(removePetitionFromFormDocumentsAction, {
       props: {},
       state: {
         form: {
-          documents: [
+          docketEntries: [
             {
               documentType: 'Petition',
             },
@@ -18,7 +18,7 @@ describe('removePetitionFromFormDocumentsAction', () => {
         },
       },
     });
-    expect(state.form.documents).toEqual([
+    expect(state.form.docketEntries).toEqual([
       {
         documentType: 'Statement of Taxpayer Identification',
       },
