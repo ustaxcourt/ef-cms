@@ -53,6 +53,7 @@ describe('merge docket record records into document records', () => {
     sk: `docket-record|${DOCKET_RECORD_ID_1}`,
   };
   const mockDocketRecord2 = {
+    description: 'Request for Place of Trial at Boise, Idaho',
     docketRecordId: DOCKET_RECORD_ID_2,
     documentId: DOCUMENT_ID_2,
     eventCode: 'RQT',
@@ -61,6 +62,7 @@ describe('merge docket record records into document records', () => {
     sk: `docket-record|${DOCKET_RECORD_ID_2}`,
   };
   const mockDocketRecord3 = {
+    description: 'first record',
     docketRecordId: DOCKET_RECORD_ID_3,
     documentId: DOCUMENT_ID_3,
     entityName: 'DocketRecord',
