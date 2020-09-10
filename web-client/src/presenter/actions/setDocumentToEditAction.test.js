@@ -10,7 +10,7 @@ describe('setDocumentToEditAction', () => {
     documentType: 'Order',
   };
 
-  documentToMatch.draftState = { ...documentToMatch };
+  documentToMatch.draftOrderState = { ...documentToMatch };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;

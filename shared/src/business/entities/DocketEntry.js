@@ -54,7 +54,7 @@ DocketEntry.prototype.init = function init(
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
     this.editState = rawDocketEntry.editState;
-    this.draftState = rawDocketEntry.draftState;
+    this.draftOrderState = rawDocketEntry.draftOrderState;
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
     this.pending =
@@ -243,7 +243,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
   documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
     .required()
     .description('The type of this document.'),
-  draftState: joi.object().allow(null).optional(),
+  draftOrderState: joi.object().allow(null).optional(),
   editState: JoiValidationConstants.STRING.max(4000)
     .allow(null)
     .optional()
@@ -543,7 +543,7 @@ DocketEntry.prototype.archive = function () {
 
 DocketEntry.prototype.setAsServed = function (servedParties = null) {
   this.servedAt = createISODateString();
-  this.draftState = null;
+  this.draftOrderState = null;
 
   if (servedParties) {
     this.servedParties = servedParties;
@@ -666,18 +666,6 @@ DocketEntry.prototype.isCourtIssued = function () {
  */
 DocketEntry.prototype.setNumberOfPages = function (numberOfPages) {
   this.numberOfPages = numberOfPages;
-};
-
-/**
- * retrieves formatted document type (stripped eventCode, without the dash).
- * if it's TCOP - TC Opinion, it retrieves TC Opinion.
- * if it's Summary Opinion, then it returns Summary Opinion
- *
- * @param {string} documentType document type to strip the event code
- * @returns {string} formatted document type
- */
-DocketEntry.getFormattedType = function (documentType) {
-  return documentType.split('-').slice(-1).join('').trim();
 };
 
 /**

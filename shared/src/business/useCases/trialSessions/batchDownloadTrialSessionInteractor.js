@@ -205,7 +205,7 @@ const batchDownloadTrialSessionInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId: zipName,
+    key: zipName,
     useTempBucket: true,
   });
 

@@ -39,8 +39,8 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocument = caseEntity.getDocumentById({
-    documentId: docketEntryMeta.documentId,
+  const originalDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: docketEntryMeta.documentId,
   });
 
   const editableFields = {
@@ -75,18 +75,18 @@ exports.updateDocketEntryMetaInteractor = async ({
     trialLocation: docketEntryMeta.trialLocation,
   };
 
-  if (originalDocument) {
+  if (originalDocketEntry) {
     const servedAtUpdated =
       editableFields.servedAt &&
-      editableFields.servedAt !== originalDocument.servedAt;
+      editableFields.servedAt !== originalDocketEntry.servedAt;
     const filingDateUpdated =
       editableFields.filingDate &&
-      editableFields.filingDate !== originalDocument.filingDate;
+      editableFields.filingDate !== originalDocketEntry.filingDate;
     const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
     const docketEntryEntity = new DocketEntry(
       {
-        ...originalDocument,
+        ...originalDocketEntry,
         ...editableFields,
         filedBy: undefined, // allow constructor to re-generate
         ...caseEntity.getCaseContacts({
@@ -103,8 +103,8 @@ exports.updateDocketEntryMetaInteractor = async ({
       // servedAt or filingDate has changed, generate a new coversheet
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: originalDocketEntry.documentId,
         docketNumber: caseEntity.docketNumber,
-        documentId: originalDocument.documentId,
       });
     }
   }

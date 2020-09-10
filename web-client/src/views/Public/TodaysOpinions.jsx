@@ -64,7 +64,7 @@ export const TodaysOpinions = connect(
                           });
                         }}
                       >
-                        {opinion.formattedDocumentType}
+                        {opinion.documentType}
                       </Button>
                     </td>
                     <td>{opinion.numberOfPages}</td>

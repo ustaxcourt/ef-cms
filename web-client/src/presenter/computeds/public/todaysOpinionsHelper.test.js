@@ -31,7 +31,6 @@ describe('todaysOpinionsHelper', () => {
     expect(result.formattedOpinions).toMatchObject([
       {
         caseCaption: 'Sauceboss, Petitioner',
-        formattedDocumentType: 'Memorandum Opinion',
         formattedFilingDate: '06/11/20',
         formattedJudgeName: 'Fieri',
       },

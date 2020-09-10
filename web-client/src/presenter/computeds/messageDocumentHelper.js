@@ -21,7 +21,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   }
 
   const {
-    archivedDocuments = [],
+    archivedDocketEntries = [],
     archivedCorrespondences = [],
     correspondence,
     docketEntries,
@@ -31,7 +31,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     [
       ...correspondence,
       ...docketEntries,
-      ...archivedDocuments,
+      ...archivedDocketEntries,
       ...archivedCorrespondences,
     ].find(d => d.documentId === viewerDocumentToDisplay.documentId) || {};
 

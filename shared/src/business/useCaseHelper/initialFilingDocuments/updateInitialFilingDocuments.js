@@ -59,7 +59,7 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  caseEntity.deleteDocumentById({
+  caseEntity.deleteDocketEntryById({
     documentId: originalCaseDocument.documentId,
   });
 

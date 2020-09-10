@@ -95,14 +95,14 @@ exports.updateSecondaryContactInteractor = async ({
         },
       });
 
-    const newDocumentId = applicationContext.getUniqueId();
+    const newDocketEntryId = applicationContext.getUniqueId();
 
     const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocumentId,
+        documentId: newDocketEntryId,
         documentTitle: changeOfAddressDocumentTypeToGenerate.title,
         documentType: changeOfAddressDocumentTypeToGenerate.title,
         eventCode: changeOfAddressDocumentTypeToGenerate.eventCode,
@@ -125,7 +125,7 @@ exports.updateSecondaryContactInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -157,14 +157,14 @@ exports.updateSecondaryContactInteractor = async ({
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
-      documentId: newDocumentId,
+      key: newDocketEntryId,
     });
 
     await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({

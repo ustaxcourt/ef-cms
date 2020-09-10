@@ -6,16 +6,16 @@ const { remove } = require('./requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
- * @param {string} providers.documentId the id of document no longer pending
+ * @param {string} providers.docketEntryId the id of docket entry no longer pending
  * @returns {Promise<object>} the updated case data
  */
 exports.removeCasePendingItemInteractor = ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   return remove({
     applicationContext,
-    endpoint: `/cases/${docketNumber}/remove-pending/${documentId}`,
+    endpoint: `/cases/${docketNumber}/remove-pending/${docketEntryId}`,
   });
 };

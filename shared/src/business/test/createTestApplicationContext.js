@@ -19,7 +19,7 @@ const {
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -59,7 +59,6 @@ const {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getServedPartiesCode,
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
@@ -125,7 +124,6 @@ const {
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { DocketEntry } = require('../entities/DocketEntry');
 const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
@@ -213,7 +211,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.formatDateString),
     formatDocketEntry: jest.fn().mockImplementation(formatDocketEntry),
-    formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
@@ -229,12 +226,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
-    getFormattedDocumentType: jest
+    getPetitionDocketEntryFromDocketEntries: jest
       .fn()
-      .mockImplementation(DocketEntry.getFormattedType),
-    getPetitionDocumentFromDocuments: jest
-      .fn()
-      .mockImplementation(getPetitionDocumentFromDocuments),
+      .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
