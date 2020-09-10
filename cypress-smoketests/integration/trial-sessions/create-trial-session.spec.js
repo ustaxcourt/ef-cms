@@ -1,8 +1,14 @@
-const { getUserToken, login } = require('../../support/pages/login');
-const { migrateGeneratedCase } = require('../../support/pages/case-migration');
+const faker = require('faker');
+const {
+  getRestApi,
+  getUserToken,
+  login,
+} = require('../../support/pages/login');
+const { BASE_CASE } = require('../../fixtures/caseMigrations');
 
 let token = null;
 let trialSessionId;
+let docketNumber;
 
 describe('Petitions Clerk', () => {
   before(async () => {
@@ -15,6 +21,36 @@ describe('Petitions Clerk', () => {
 
   it('should be able to login', () => {
     login(token);
+  });
+
+  describe('create a case via migration', () => {
+    let migrateUserToken, migrateRestApi;
+    before(async () => {
+      migrateRestApi = await getRestApi();
+      const results = await getUserToken(
+        'migrator@example.com',
+        'Testing1234$',
+      );
+      migrateUserToken = results.AuthenticationResult.IdToken;
+      faker.seed(faker.random.number());
+
+      const docketNumberYear = faker.random.number({ max: 99, min: 80 });
+      const docketNumberPrefix = faker.random.number({ max: 99999, min: 101 });
+
+      docketNumber = `${docketNumberPrefix}-${docketNumberYear}`;
+    });
+
+    it('should be able to POST a basic migrated case to the endpoint for use with trial sessions', () => {
+      cy.request({
+        body: { ...BASE_CASE, docketNumber },
+        headers: {
+          Authorization: `Bearer ${migrateUserToken}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        url: `${migrateRestApi}/migrate/case`,
+      });
+    });
   });
 
   describe('should be able to create a trial session', () => {
@@ -70,27 +106,69 @@ describe('Petitions Clerk', () => {
     });
   });
 
-  describe.only('should find a new case and associate it with the new trial session', () => {
-    let result;
-    before(async () => {
-      result = await migrateGeneratedCase();
+  describe('after a new trial session is created', () => {
+    before(() => {});
+
+    it('a newly-created case is found', () => {
+      cy.get('#search-field').type(docketNumber);
+      cy.get('#search-input button').click();
+      cy.get('#case-title').should('exist');
     });
 
-    it('finds a new case', () => {
-      cy.visit(`/case-detail/${result.docketNumber}`);
-      cy.get('#reports-btn').click();
-      cy.get('#case-inventory-btn').click();
-      cy.get('#select-case-inventory-status').select('New');
-      cy.get('.case-inventory-report-modal .modal-button-confirm').click();
-    });
+    it('it is possible to manually add, view, and remove case from an unset trial session', () => {
+      cy.get('#tab-case-information').click();
+      cy.get('#tab-overview').click();
 
-    it('opens case detail and case information tab', () => {
-      cy.get('.case-inventory tr:first-child > td > a').click();
-      cy.get('#add-to-trial-session-btn').click();
+      cy.get('#add-to-trial-session-btn').should('exist').click();
       cy.get('label[for="show-all-locations-true"]').click();
       cy.get('select#trial-session')
         .select(trialSessionId)
-        .should.have(trialSessionId);
+        .should('have.value', trialSessionId);
+      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get('.usa-alert--success').should(
+        'contain',
+        'Case scheduled for trial.',
+      );
+
+      cy.get('#remove-from-trial-session-btn').should('exist').click();
+      cy.get('#disposition').type('which position?');
+      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get('#add-to-trial-session-btn').should('not.exist');
     });
+
+    it.skip('sets a trial session as calendared', () => {
+      cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
+      const setCalendarSelector =
+        '#main-content > section > div.ustc-ui-tabs.ustc-num-tabs-1 > button'; // todo: use #set-calendar-button
+      cy.get(setCalendarSelector).should('exist').click();
+      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get(setCalendarSelector).should('not.exist');
+    });
+
+    it.skip('manually add, view, and remove case from a set trial session', () => {
+      cy.get('#tab-case-information').click();
+      cy.get('#tab-overview').click();
+
+      cy.get('#add-to-trial-session-btn').should('exist').click();
+      cy.get('label[for="show-all-locations-true"]').click();
+      cy.get('select#trial-session')
+        .select(trialSessionId)
+        .should('have.value', trialSessionId);
+      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get('.usa-alert--success').should(
+        'contain',
+        'Case scheduled for trial.',
+      );
+
+      cy.get('#remove-from-trial-session-btn').should('exist').click();
+      cy.get('#disposition').type('which position?');
+      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get('#add-to-trial-session-btn').should('not.exist');
+    });
+
+    it.skip('Petitions clerk- Set case as High Priority for a trial session', () => {});
+    it.skip('Petitions clerk - Manually block, view (Blocked report), and unblock a case', () => {});
+    it.skip('Petitions clerk: Complete QC of eligible cases and set calendar for trial session', () => {});
+    it.skip('Petitions clerk: Run Trial Session Planning Report', () => {});
   });
 });
