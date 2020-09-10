@@ -88,7 +88,7 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call getCaseByDocketNumber, getUserById, and updateDocument', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and updateDocketEntry', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -108,11 +108,11 @@ describe('strikeDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getUserById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateDocument.mock.calls[0][0]
-        .document,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
     ).toMatchObject({ strickenAt: expect.anything() });
   });
 
@@ -129,7 +129,7 @@ describe('strikeDocketEntryInteractor', () => {
       'Cannot strike a document that is not on the docket record.',
     );
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).not.toHaveBeenCalled();
   });
 });

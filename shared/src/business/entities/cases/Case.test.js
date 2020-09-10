@@ -2029,7 +2029,7 @@ describe('Case entity', () => {
       const documentIdToDelete = MOCK_DOCUMENTS[1].documentId;
       expect(myCase.docketEntries.length).toEqual(4);
       myCase.deleteDocketEntryById({
-        documentId: documentIdToDelete,
+        docketEntryId: documentIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(3);
       expect(
@@ -2044,7 +2044,7 @@ describe('Case entity', () => {
       const documentIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
       expect(myCase.docketEntries.length).toEqual(4);
       myCase.deleteDocketEntryById({
-        documentId: documentIdToDelete,
+        docketEntryId: documentIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(4);
     });
