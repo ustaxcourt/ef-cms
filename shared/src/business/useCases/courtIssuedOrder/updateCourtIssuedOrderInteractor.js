@@ -80,7 +80,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      documentId: docketEntryIdToEdit,
+      docketEntryId: docketEntryIdToEdit,
     });
 
   const docketEntryEntity = new DocketEntry(

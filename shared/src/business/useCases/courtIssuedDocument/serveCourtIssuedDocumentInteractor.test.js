@@ -321,7 +321,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument.mock
         .calls[0][0],
-    ).toMatchObject({ documentId: mockDocumentId });
+    ).toMatchObject({ docketEntryId: mockDocumentId });
   });
 
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {

@@ -4,14 +4,14 @@
  * @param {object} obj the params object
  * @param {string} obj.applicationContext the application context
  * @param {string} obj.docketNumber the docketNumber
- * @param {string} obj.documentId the document id
+ * @param {string} obj.docketEntryId the docket entry id
  * @param {boolean} obj.removeCover if saving should remove the cover sheet
  * @returns {Promise<object>} the document data
  */
 exports.loadPDFForSigningInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
   removeCover = false,
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -21,7 +21,7 @@ exports.loadPDFForSigningInteractor = async ({
     let pdfData = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       docketNumber,
-      documentId,
+      key: docketEntryId,
     });
 
     let formattedArrayBuffer;

@@ -64,7 +64,7 @@ describe('Get case', () => {
       applicationContext.getPersistenceGateway().getDocument,
     ).toHaveBeenCalledWith({
       applicationContext,
-      documentId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
+      key: '0098d177-78ef-4210-88aa-4bbb45c4f048',
       protocol: 'S3',
       useTempBucket: false,
     });
