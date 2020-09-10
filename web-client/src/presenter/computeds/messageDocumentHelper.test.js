@@ -38,6 +38,17 @@ const petitionerUser = {
 };
 
 describe('messageDocumentHelper', () => {
+  const baseDocument = {
+    documentId: '123',
+    entityName: 'Document',
+    isDraft: true,
+  };
+
+  const baseCaseDetail = {
+    correspondence: [],
+    docketEntries: [],
+  };
+
   it('return null if viewerDocumentToDisplay is not set', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
@@ -45,15 +56,8 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          correspondence: [],
-          docketRecord: [],
-          documents: [
-            {
-              documentId: '123',
-              entityName: 'Document',
-              isDraft: true,
-            },
-          ],
+          ...baseCaseDetail,
+          docketEntries: [baseDocument],
         },
       },
     });
@@ -68,15 +72,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -94,15 +91,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -120,15 +110,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(clerkOfCourtUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -146,19 +129,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: false,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [{ ...baseDocument, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -176,19 +148,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: false,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [{ ...baseDocument, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -206,19 +167,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(clerkOfCourtUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: false,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [{ ...baseDocument, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -236,15 +186,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(judgeUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -262,18 +205,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             correspondence: [
               {
                 documentId: '567',
                 documentTitle: 'Test Correspondence',
-              },
-            ],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
               },
             ],
           },
@@ -295,15 +231,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -322,12 +251,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 eventCode: 'SDEC',
                 isDraft: true,
                 signedAt: '2020-06-25T20:49:28.192Z',
@@ -351,13 +278,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
+                ...baseDocument,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -379,15 +303,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionerUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -406,13 +323,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionerUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
+                ...baseDocument,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -434,19 +348,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: false,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [{ ...baseDocument, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -465,16 +368,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 isDraft: false,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
@@ -497,15 +394,13 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: 'abc',
+                ...baseDocument,
                 documentTitle: 'Notice',
                 documentType: 'Notice',
                 eventCode: 'NOT',
-                isDraft: true,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -527,15 +422,13 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: 'abc',
+                ...baseDocument,
                 documentTitle: 'Notice',
                 documentType: 'Notice',
                 eventCode: 'NTD',
-                isDraft: true,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -557,17 +450,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             correspondence: [
               {
                 documentId: '567',
                 documentTitle: 'Test Correspondence',
-              },
-            ],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                isDraft: true,
               },
             ],
           },
@@ -589,13 +476,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
+                ...baseDocument,
                 signedAt: '123',
               },
             ],
@@ -616,14 +500,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 eventCode: 'SDEC',
-                isDraft: true,
                 signedAt: '123',
               },
             ],
@@ -644,15 +525,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -670,18 +544,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             correspondence: [
               {
                 documentId: '567',
                 documentTitle: 'Test Correspondence',
-                isDraft: true,
-              },
-            ],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
                 isDraft: true,
               },
             ],
@@ -702,15 +569,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionerUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -728,19 +588,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: false,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [{ ...baseDocument, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -758,18 +607,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 eventCode: 'NOT',
-                isDraft: true,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -794,18 +636,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             correspondence: [
               {
                 documentId: '567',
                 documentTitle: 'Test Correspondence',
-              },
-            ],
-            docketRecord: [],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
               },
             ],
           },
@@ -825,19 +660,8 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
-                isDraft: true,
-              },
-            ],
+            ...baseCaseDetail,
+            docketEntries: [baseDocument],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -855,18 +679,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 eventCode: 'MISC', // Does not require a signature
-                isDraft: true,
               },
             ],
           },
@@ -884,16 +701,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 eventCode: 'O', // Requires a signature
                 isDraft: false,
               },
@@ -919,16 +730,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                entityName: 'Document',
+                ...baseDocument,
                 eventCode: 'O',
                 isDraft: false,
               },
@@ -948,17 +753,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Order',
-                entityName: 'Document',
                 eventCode: 'O', //court issued document type
                 isDraft: false,
               },
@@ -978,17 +777,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Order',
-                entityName: 'Document',
                 eventCode: 'O',
                 isDraft: false,
               },
@@ -1008,17 +801,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Answer',
-                entityName: 'Document',
                 eventCode: 'A',
                 isDraft: false,
               },
@@ -1038,17 +825,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Answer',
-                entityName: 'Document',
                 eventCode: 'A', // paper filed document
                 isDraft: false,
               },
@@ -1068,27 +849,18 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-              {
-                documentId: '456',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Answer',
-                entityName: 'Document',
                 eventCode: 'A', // paper filed document type
                 isDraft: false,
               },
               {
+                ...baseDocument,
                 documentId: '456',
                 documentType: 'Order',
-                entityName: 'Document',
                 eventCode: 'O', //court issued document type
                 isDraft: false,
               },
@@ -1112,17 +884,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Petition',
-                entityName: 'Document',
                 eventCode: 'P',
                 isDraft: false,
                 servedAt: '2019-03-01T21:40:46.415Z',
@@ -1143,17 +909,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(judgeUser), // does not have SERVE_PETITION permission
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Petition',
-                entityName: 'Document',
                 eventCode: 'P',
                 isDraft: false,
               },
@@ -1173,17 +933,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
           caseDetail: {
-            correspondence: [],
-            docketRecord: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Petition',
-                entityName: 'Document',
                 eventCode: 'P',
                 isDraft: false,
               },
@@ -1205,13 +959,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Miscellaneous',
-                entityName: 'Document',
                 eventCode: 'MISC',
                 isDraft: true,
               },
@@ -1231,13 +983,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Miscellaneous',
-                entityName: 'Document',
                 eventCode: 'MISC',
               },
             ],
@@ -1258,13 +1008,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
                 eventCode: 'PSDE',
               },
             ],
@@ -1283,20 +1031,18 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
                 eventCode: 'PSDE',
               },
               {
+                ...baseDocument,
                 archived: true,
                 documentId: '234',
                 documentType: 'Stipulated Decision',
-                entityName: 'Document',
                 eventCode: 'SDEC',
               },
             ],
@@ -1315,19 +1061,17 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
                 eventCode: 'PSDE',
               },
               {
+                ...baseDocument,
                 documentId: '234',
                 documentType: 'Stipulated Decision',
-                entityName: 'Document',
                 eventCode: 'SDEC',
               },
             ],
@@ -1348,13 +1092,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionerUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Proposed Stipulated Decision',
-                entityName: 'Document',
                 eventCode: 'PSDE',
               },
             ],
@@ -1373,13 +1115,11 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Answer',
-                entityName: 'Document',
                 eventCode: 'A',
               },
             ],
@@ -1400,18 +1140,15 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             archivedDocuments: [
               {
+                ...baseDocument,
                 archived: true,
-                documentId: '123',
                 documentType: 'Answer',
-                entityName: 'Document',
                 eventCode: 'A',
               },
             ],
-            correspondence: [],
-            docketRecord: [],
-            documents: [],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -1427,17 +1164,15 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             archivedCorrespondences: [
               {
+                ...baseDocument,
                 archived: true,
-                documentId: '123',
                 documentTitle: 'My Correspondence',
                 filedBy: 'Docket Clerk',
               },
             ],
-            correspondence: [],
-            docketRecord: [],
-            documents: [],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -1453,16 +1188,14 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
+            ...baseCaseDetail,
             archivedCorrespondences: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentTitle: 'My Correspondence',
                 filedBy: 'Docket Clerk',
               },
             ],
-            correspondence: [],
-            docketRecord: [],
-            documents: [],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -1478,11 +1211,10 @@ describe('messageDocumentHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            correspondence: [],
-            docketRecord: [],
-            documents: [
+            ...baseCaseDetail,
+            docketEntries: [
               {
-                documentId: '123',
+                ...baseDocument,
                 documentType: 'Answer',
                 entityName: 'Document',
                 eventCode: 'A',

@@ -17,7 +17,7 @@ exports.deleteDocument = async ({
     applicationContext,
     key: {
       pk: `case|${docketNumber}`,
-      sk: `document|${documentId}`,
+      sk: `docket-entry|${documentId}`,
     },
   });
 };

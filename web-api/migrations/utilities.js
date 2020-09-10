@@ -8,6 +8,8 @@ const isUserCaseMappingRecord = item =>
   item.pk.startsWith('user|') && item.sk.startsWith('case|');
 const isNewUserCaseMappingRecord = item =>
   !!item.gsi1pk && item.gsi1pk.startsWith('user-case|');
+const isDocketEntryRecord = item =>
+  item.pk.startsWith('case|') && item.sk.startsWith('docket-entry|');
 const isDocumentRecord = item =>
   item.pk.startsWith('case|') && item.sk.startsWith('document|');
 const isCaseDeadlineRecord = item =>
@@ -67,6 +69,7 @@ module.exports = {
   isCaseDeadlineRecord,
   isCaseMessageRecord,
   isCaseRecord,
+  isDocketEntryRecord,
   isDocumentRecord,
   isEligibleForTrialRecord,
   isNewUserCaseMappingRecord,

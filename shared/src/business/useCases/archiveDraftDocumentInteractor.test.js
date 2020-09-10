@@ -46,7 +46,7 @@ describe('archiveDraftDocumentInteractor', () => {
     });
 
     expect(
-      caseToUpdate.documents.find(
+      caseToUpdate.docketEntries.find(
         d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ),
     ).toBeFalsy();
@@ -60,8 +60,8 @@ describe('archiveDraftDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        documents: [
-          ...MOCK_CASE.documents,
+        docketEntries: [
+          ...MOCK_CASE.docketEntries,
           {
             createdAt: '2019-04-19T17:29:13.120Z',
             docketNumber: '101-20',

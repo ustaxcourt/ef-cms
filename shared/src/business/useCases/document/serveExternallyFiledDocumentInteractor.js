@@ -40,15 +40,15 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
+  const currentDocketEntry = caseEntity.getDocumentById({
     documentId,
   });
 
   const servedParties = aggregatePartiesForService(caseEntity);
-  currentDocument.setAsServed(servedParties.all);
-  currentDocument.setAsProcessingStatusAsCompleted();
+  currentDocketEntry.setAsServed(servedParties.all);
+  currentDocketEntry.setAsProcessingStatusAsCompleted();
 
-  caseEntity.updateDocument(currentDocument);
+  caseEntity.updateDocketEntry(currentDocketEntry);
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -61,7 +61,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   const { pdfData: servedDocWithCover } = await addCoverToPdf({
     applicationContext,
     caseEntity,
-    documentEntity: currentDocument,
+    documentEntity: currentDocketEntry,
     pdfData: pdfData,
   });
 
@@ -113,7 +113,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    documentEntity: currentDocument,
+    documentEntity: currentDocketEntry,
     servedParties,
   });
 

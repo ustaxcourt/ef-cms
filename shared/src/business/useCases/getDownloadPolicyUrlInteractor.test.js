@@ -59,7 +59,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     const duplicatedMockCase = cloneDeep(MOCK_CASE);
-    duplicatedMockCase.documents.push({
+    duplicatedMockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
       docketNumber: '101-18',
       documentId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
@@ -113,9 +113,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        documents: [
+        docketEntries: [
           {
-            ...MOCK_CASE.documents.filter(
+            ...MOCK_CASE.docketEntries.filter(
               d => d.documentId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
             )[0],
             documentType: 'Order that case is assigned',
@@ -190,7 +190,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       userId: 'irsSuperuser',
     });
 
-    MOCK_CASE.documents = [
+    MOCK_CASE.docketEntries = [
       {
         documentType: 'Petition',
       },
@@ -214,7 +214,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       userId: 'irsSuperuser',
     });
 
-    MOCK_CASE.documents = [
+    MOCK_CASE.docketEntries = [
       {
         documentType: 'Petition',
         servedAt: '2019-03-01T21:40:46.415Z',

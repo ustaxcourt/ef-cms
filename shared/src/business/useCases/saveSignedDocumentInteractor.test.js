@@ -99,9 +99,9 @@ describe('saveSignedDocumentInteractor', () => {
       signedDocumentId: mockSignedDocumentId,
     });
 
-    expect(caseEntity.documents.length).toEqual(MOCK_DOCUMENTS.length + 1);
+    expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
 
-    const signedDocumentEntity = caseEntity.documents.find(
+    const signedDocumentEntity = caseEntity.docketEntries.find(
       document =>
         document.documentType === 'Stipulated Decision' &&
         document.documentId === mockSignedDocumentId,
@@ -123,7 +123,7 @@ describe('saveSignedDocumentInteractor', () => {
       signedDocumentId: mockSignedDocumentId,
     });
 
-    const signedDocument = caseEntity.documents.find(
+    const signedDocument = caseEntity.docketEntries.find(
       doc => doc.documentId === mockOriginalDocumentId,
     );
     expect(signedDocument.processingStatus).toBe(
@@ -140,7 +140,7 @@ describe('saveSignedDocumentInteractor', () => {
       signedDocumentId: mockSignedDocumentId,
     });
 
-    const signedDocument = caseEntity.documents.find(
+    const signedDocument = caseEntity.docketEntries.find(
       doc => doc.documentId === mockOriginalDocumentId,
     );
     expect(signedDocument.documentIdBeforeSignature).toBe(
