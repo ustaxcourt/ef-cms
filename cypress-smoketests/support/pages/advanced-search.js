@@ -70,9 +70,20 @@ exports.createOpinion = () => {
     .click();
 };
 
+exports.signOpinion = () => {
+  cy.get(
+    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:last-child > div > div.grid-col-9',
+  ).click();
+  cy.get(
+    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-8 > div > div.message-document-actions > a:nth-child(3)',
+  ).click();
+  cy.url().should('contain', '/edit-order');
+  cy.get('.sign-pdf-interface').click();
+  cy.get('#save-signature-button').click();
+};
 exports.addDocketEntryAndServeOpinion = () => {
   cy.get(
-    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:nth-last-child() > div > div.grid-col-9',
+    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:last-child > div > div.grid-col-9',
   ).click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
@@ -83,8 +94,10 @@ exports.addDocketEntryAndServeOpinion = () => {
     .contains('Memorandum Opinion')
     .click();
   cy.get('#judge').select('Chief Judge Foley');
+  cy.get('#free-text').type('Opinion for a smoke test');
   cy.get('#serve-to-parties-btn').click();
   cy.get('button').contains('Yes, Serve').click();
+  cy.get('#print-paper-service-done-button').click();
   cy.get(
     '#case-detail-internal > div.usa-alert.usa-alert--success.usa-alert-success-message-only',
   ).should('exist');
