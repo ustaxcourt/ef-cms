@@ -224,11 +224,11 @@ exports.addCoversheetInteractor = async ({
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);
 
-  await applicationContext.getPersistenceGateway().updateDocument({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
+    docketEntryId,
     docketNumber: caseEntity.docketNumber,
     document: docketEntryEntity.validate().toRawObject(),
-    documentId: docketEntryId,
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
