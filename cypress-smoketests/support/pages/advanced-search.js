@@ -52,3 +52,40 @@ exports.searchOpinionByKeyword = keyword => {
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
+
+exports.createOpinion = () => {
+  cy.get('#case-detail-menu-button').click();
+  cy.get('#menu-button-upload-pdf').click();
+  cy.get('#upload-description').type('A Smoketest Opinion');
+  cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+  cy.get(
+    '#main-content > section > div > div.grid-row.grid-gap.margin-top-4 > div > button:nth-child(1)',
+  )
+    .scrollIntoView()
+    .click();
+  cy.get(
+    '#main-content > section > div > div.grid-row.grid-gap.margin-top-4 > div > button:nth-child(1)',
+  )
+    .scrollIntoView()
+    .click();
+};
+
+exports.addDocketEntryAndServeOpinion = () => {
+  cy.get(
+    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:nth-last-child() > div > div.grid-col-9',
+  ).click();
+  cy.get('#add-court-issued-docket-entry-button').click();
+  cy.url().should('contain', '/add-court-issued-docket-entry');
+  // #document-type
+  cy.get('#document-type').children().first().click();
+  cy.get('div.select-react-element__menu-list')
+    .find('div')
+    .contains('Memorandum Opinion')
+    .click();
+  cy.get('#judge').select('Chief Judge Foley');
+  cy.get('#serve-to-parties-btn').click();
+  cy.get('button').contains('Yes, Serve').click();
+  cy.get(
+    '#case-detail-internal > div.usa-alert.usa-alert--success.usa-alert-success-message-only',
+  ).should('exist');
+};

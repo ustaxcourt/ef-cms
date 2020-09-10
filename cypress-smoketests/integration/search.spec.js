@@ -1,18 +1,17 @@
 const {
-  addDocketEntryForOrderAndServe,
-} = require('../support/pages/case-detail');
-const {
+  addDocketEntryAndServeOpinion,
+  createOpinion,
   gotoAdvancedPractitionerSearch,
   gotoAdvancedSearch,
   goToOpinionSearch,
-  goToOrderSearch,
   searchByDocketNumber,
   searchByPetitionerName,
   searchByPractitionerbarNumber,
   searchByPractitionerName,
   searchOpinionByKeyword,
-  searchOrderByKeyword,
+  signOpinion,
 } = require('../support/pages/advanced-search');
+const { goToCaseDetail } = require('../support/pages/case-detail');
 
 const { getUserToken, login } = require('../support/pages/login');
 
@@ -21,7 +20,6 @@ const barNumberToSearchBy = 'PT1234';
 let token;
 
 describe('Case Advanced Search', () => {
-  //create a case?
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
@@ -46,7 +44,6 @@ describe('Case Advanced Search', () => {
 });
 
 describe('Practitoner Search', () => {
-  //create a case?
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
@@ -70,34 +67,7 @@ describe('Practitoner Search', () => {
   });
 });
 
-describe('Order Search', () => {
-  //create a case?
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      'Testing1234$',
-    );
-    token = results.AuthenticationResult.IdToken;
-  });
-
-  it('should be able to login and create an order', () => {
-    login(token);
-    cy.get('.ql-editor').type('A created order!');
-    cy.get('#save-order-button').click();
-    cy.url().should('contain', '/sign');
-    cy.get('#sign-pdf-canvas').click();
-    cy.get('#save-signature-button').click();
-    addDocketEntryForOrderAndServe();
-  });
-
-  it('should  search for an order by keyword', () => {
-    goToOrderSearch();
-    searchOrderByKeyword('order');
-  });
-});
-
 describe('Opinion Search', () => {
-  //create a case?
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
@@ -108,6 +78,12 @@ describe('Opinion Search', () => {
 
   it('should be able to login', () => {
     login(token);
+  });
+
+  it('should create an opinion to search for', () => {
+    goToCaseDetail(docketNumberToSearchBy);
+    createOpinion();
+    addDocketEntryAndServeOpinion();
   });
 
   it('should be able to search for an opinion by keyword', () => {
