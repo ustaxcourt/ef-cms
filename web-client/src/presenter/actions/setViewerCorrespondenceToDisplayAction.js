@@ -27,8 +27,8 @@ export const setViewerCorrespondenceToDisplayAction = async ({
       .getDocumentDownloadUrlInteractor({
         applicationContext,
         docketNumber,
-        documentId: viewerCorrespondenceToDisplay.documentId,
         isPublic: false,
+        key: viewerCorrespondenceToDisplay.correspondenceId,
       });
 
     store.set(state.iframeSrc, url);

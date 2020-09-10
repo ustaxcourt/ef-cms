@@ -21,8 +21,8 @@ export const archiveDraftDocumentAction = async ({
     .getUseCases()
     .archiveDraftDocumentInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber,
-      documentId,
     });
 
   store.set(state.alertSuccess, {

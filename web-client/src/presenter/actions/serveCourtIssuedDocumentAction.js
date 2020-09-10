@@ -20,8 +20,8 @@ export const serveCourtIssuedDocumentAction = async ({
     .getUseCases()
     .serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber,
-      documentId,
     });
 
   return {

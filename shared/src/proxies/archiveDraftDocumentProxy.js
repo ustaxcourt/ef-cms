@@ -6,16 +6,16 @@ const { put } = require('./requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.documentId the document id to archive
+ * @param {string} providers.docketEntryId the docket entry id to archive
  * @returns {Promise<*>} the promise of the api call
  */
 exports.archiveDraftDocumentInteractor = ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   return put({
     applicationContext,
-    endpoint: `/case-documents/${docketNumber}/${documentId}`,
+    endpoint: `/case-documents/${docketNumber}/${docketEntryId}`,
   });
 };

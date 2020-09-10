@@ -18,7 +18,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: petitionFile,
-      documentId: petitionFileId,
+      key: petitionFileId,
     });
 
     const stinFile = getFakeFile();
@@ -27,7 +27,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: stinFile,
-      documentId: stinFileId,
+      key: stinFileId,
     });
 
     caseDetail = await applicationContext.getUseCases().createCaseInteractor({
@@ -59,8 +59,8 @@ module.exports.createCase1 = async () => {
     const addCoversheet = document => {
       return applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: document.documentId,
         docketNumber: caseDetail.docketNumber,
-        documentId: document.documentId,
       });
     };
 
@@ -84,7 +84,7 @@ module.exports.createCase1 = async () => {
       richText: '<p>Testing</p>',
     };
 
-    documentMetadata.draftState = { ...documentMetadata };
+    documentMetadata.draftOrderState = { ...documentMetadata };
     const documentId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
 
     caseDetail = await applicationContext
@@ -100,8 +100,8 @@ module.exports.createCase1 = async () => {
       docketNumber,
       //todo - do not hard code a judge
       nameForSigning: 'Maurice B. Foley',
-      originalDocumentId: documentId,
-      signedDocumentId: documentId,
+      originalDocketEntryId: documentId,
+      signedDocketEntryId: documentId,
     });
   });
 
@@ -117,7 +117,7 @@ module.exports.createCase1 = async () => {
       scenario: 'Type A',
     };
 
-    documentMetadata.draftState = { ...documentMetadata };
+    documentMetadata.draftOrderState = { ...documentMetadata };
     const documentId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
 
     caseDetail = await applicationContext

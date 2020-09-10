@@ -27,7 +27,7 @@ describe('archiveCorrespondenceDocumentAction', () => {
         },
         modal: {
           correspondenceToDelete: {
-            documentId: 'abc',
+            correspondenceId: 'abc',
           },
         },
       },
@@ -51,7 +51,7 @@ describe('archiveCorrespondenceDocumentAction', () => {
         },
         modal: {
           correspondenceToDelete: {
-            documentId: 'abc',
+            correspondenceId: 'abc',
           },
         },
       },

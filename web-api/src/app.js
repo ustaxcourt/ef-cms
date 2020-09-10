@@ -427,11 +427,11 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 {
   //GET
   app.get(
-    '/case-documents/:docketNumber/:documentId/document-download-url',
+    '/case-documents/:docketNumber/:key/document-download-url',
     lambdaWrapper(getDocumentDownloadUrlLambda),
   );
   app.get(
-    '/case-documents/:docketNumber/:documentId/download-policy-url',
+    '/case-documents/:docketNumber/:key/download-policy-url',
     lambdaWrapper(downloadPolicyUrlLambda),
   );
   app.get(
@@ -444,23 +444,23 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   // POST
   app.post(
-    '/case-documents/:docketNumber/:documentId/serve-court-issued',
+    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/coversheet',
+    '/case-documents/:docketNumber/:docketEntryId/coversheet',
     lambdaWrapper(addCoversheetLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/remove-signature',
+    '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/sign',
+    '/case-documents/:docketNumber/:docketEntryId/sign',
     lambdaWrapper(saveSignedDocumentLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:documentId/serve',
+    '/case-documents/:docketNumber/:docketEntryId/serve',
     lambdaWrapper(serveExternallyFiledDocumentLambda),
   );
   app.post(
@@ -490,7 +490,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
   // PUT
   app.put(
-    '/case-documents/:docketNumber/court-issued-orders/:documentId',
+    '/case-documents/:docketNumber/court-issued-orders/:docketEntryId',
     lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
   );
   app.put(
@@ -510,20 +510,20 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateCourtIssuedDocketEntryLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/correspondence/:documentId',
+    '/case-documents/:docketNumber/correspondence/:correspondenceId',
     lambdaWrapper(updateCorrespondenceDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:documentId',
+    '/case-documents/:docketNumber/:docketEntryId',
     lambdaWrapper(archiveDraftDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:documentId/strike',
+    '/case-documents/:docketNumber/:docketEntryId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE
   app.delete(
-    '/case-documents/:docketNumber/correspondence/:documentId',
+    '/case-documents/:docketNumber/correspondence/:correspondenceId',
     lambdaWrapper(archiveCorrespondenceDocumentLambda),
   );
 }
@@ -658,7 +658,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
   app.delete(
-    '/cases/:docketNumber/remove-pending/:documentId',
+    '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
   );
   app.get(
