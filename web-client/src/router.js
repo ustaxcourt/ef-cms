@@ -500,12 +500,12 @@ const router = {
     registerRoute(
       '/case-detail/*/correspondence?..',
       ifHasAccess(docketNumber => {
-        const { documentId } = route.query();
+        const { correspondenceId } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
         );
         return app.getSequence('gotoCaseDetailSequence')({
-          correspondenceDocumentId: documentId,
+          correspondenceDocumentId: correspondenceId,
           docketNumber,
           primaryTab: 'correspondence',
         });
@@ -526,27 +526,27 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, correspondenceId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
         );
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+          correspondenceId,
           docketNumber,
-          documentId,
-          redirectUrl: `/case-detail/${docketNumber}/correspondence?documentId=${documentId}`,
+          redirectUrl: `/case-detail/${docketNumber}/correspondence?correspondenceId=${correspondenceId}`,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*/*',
-      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+      ifHasAccess((docketNumber, correspondenceId, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
         );
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+          correspondenceId,
           docketNumber,
-          documentId,
           redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),

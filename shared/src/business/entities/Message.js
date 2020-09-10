@@ -68,7 +68,9 @@ Message.VALIDATION_RULES = {
     .array()
     .items(
       joi.object().keys({
-        documentId: JoiValidationConstants.UUID.required(),
+        documentId: JoiValidationConstants.UUID.required().description(
+          'ID of the document attached; can be either a docketEntryId or correspondenceId depending on the type of document.',
+        ),
         documentTitle: JoiValidationConstants.STRING.max(500).optional(),
       }),
     )

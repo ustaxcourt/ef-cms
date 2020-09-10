@@ -28,7 +28,7 @@ export const setViewerCorrespondenceToDisplayAction = async ({
         applicationContext,
         docketNumber,
         isPublic: false,
-        key: viewerCorrespondenceToDisplay.documentId,
+        key: viewerCorrespondenceToDisplay.correspondenceId,
       });
 
     store.set(state.iframeSrc, url);

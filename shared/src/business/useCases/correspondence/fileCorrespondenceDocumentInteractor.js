@@ -47,7 +47,7 @@ exports.fileCorrespondenceDocumentInteractor = async ({
   const correspondenceEntity = new Correspondence(
     {
       ...documentMetadata,
-      documentId: primaryDocumentFileId,
+      correspondenceId: primaryDocumentFileId,
       filedBy: user.name,
       userId: user.userId,
     },

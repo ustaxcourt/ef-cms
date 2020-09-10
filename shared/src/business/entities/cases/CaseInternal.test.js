@@ -385,7 +385,7 @@ describe('CaseInternal entity', () => {
   it('should populate archivedCorrespondences', () => {
     const mockGuid = applicationContext.getUniqueId();
     const mockCorrespondence = new Correspondence({
-      documentId: mockGuid,
+      correspondenceId: mockGuid,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockGuid,

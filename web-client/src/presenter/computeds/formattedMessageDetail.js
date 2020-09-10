@@ -7,6 +7,7 @@ const formatMessage = ({ applicationContext, caseDetail, message }) => {
   const formattedAttachments = applicationContext
     .getUtilities()
     .formatAttachments({
+      applicationContext,
       attachments: message.attachments || [],
       caseDetail,
     });

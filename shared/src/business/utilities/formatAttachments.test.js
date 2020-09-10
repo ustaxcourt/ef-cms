@@ -14,11 +14,11 @@ describe('formatAttachments', () => {
 
   const mockCorrespondenceDocuments = [
     {
-      documentId: '3',
+      correspondenceId: '3',
       documentTitle: 'Test Correspondence One',
     },
     {
-      documentId: '4',
+      correspondenceId: '4',
       documentType: 'Test Correspondence Two',
     },
   ];
@@ -39,12 +39,12 @@ describe('formatAttachments', () => {
   const mockArchivedCorrespondenceDocuments = [
     {
       archived: true,
-      documentId: '7',
+      correspondenceId: '7',
       documentTitle: 'Test Archived Correspondence One',
     },
     {
       archived: true,
-      documentId: '8',
+      correspondenceId: '8',
       documentType: 'Test Archived Correspondence Two',
     },
   ];
