@@ -9,7 +9,6 @@ const {
   searchByPractitionerbarNumber,
   searchByPractitionerName,
   searchOpinionByKeyword,
-  signOpinion,
 } = require('../support/pages/advanced-search');
 const { goToCaseDetail } = require('../support/pages/case-detail');
 
@@ -88,6 +87,6 @@ describe('Opinion Search', () => {
 
   it('should be able to search for an opinion by keyword', () => {
     goToOpinionSearch();
-    searchOpinionByKeyword('opinion');
+    searchOpinionByKeyword('smoke test');
   });
 });
