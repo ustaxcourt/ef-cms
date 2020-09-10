@@ -46,7 +46,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const docketEntry = caseEntity.getDocketEntryById({
-    documentId,
+    docketEntryId: documentId,
   });
 
   if (!docketEntry) {

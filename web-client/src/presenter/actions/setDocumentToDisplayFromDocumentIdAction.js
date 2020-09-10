@@ -21,8 +21,8 @@ export const setDocumentToDisplayFromDocumentIdAction = async ({
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
     docketNumber,
-    documentId,
     isPublic: false,
+    key: documentId,
   });
 
   store.set(state.iframeSrc, url);

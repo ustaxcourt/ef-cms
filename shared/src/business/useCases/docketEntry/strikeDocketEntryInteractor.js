@@ -40,7 +40,7 @@ exports.strikeDocketEntryInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   if (!docketEntryEntity) {

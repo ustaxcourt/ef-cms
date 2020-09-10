@@ -249,7 +249,7 @@ exports.updatePetitionerInformationInteractor = async ({
       url,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: paperServicePdfId,
+      key: paperServicePdfId,
       useTempBucket: true,
     });
 
