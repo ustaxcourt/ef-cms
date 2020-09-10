@@ -1,7 +1,7 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
-export const docketClerkAddsDocketEntryWithoutFile = (test, overrides) => {
+export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
