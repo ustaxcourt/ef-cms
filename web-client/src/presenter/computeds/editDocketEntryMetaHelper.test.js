@@ -33,7 +33,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            documents: [],
+            docketEntries: [],
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
@@ -53,7 +53,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            documents: [],
+            docketEntries: [],
             partyType: PARTY_TYPES.petitioner,
           },
           form: {

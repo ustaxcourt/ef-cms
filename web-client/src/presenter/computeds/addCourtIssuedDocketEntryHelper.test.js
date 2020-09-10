@@ -36,7 +36,7 @@ const state = {
   caseDetail: {
     contactPrimary: { name: 'Banzai' },
     contactSecondary: { name: 'Timon' },
-    documents: [{ documentId: '123' }],
+    docketEntries: [{ documentId: '123' }],
     irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
     privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
   },
@@ -164,7 +164,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       state: {
         caseDetail: {
           ...state.caseDetail,
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               signedAt: '2019-03-01T21:40:46.415Z',
@@ -184,7 +184,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       state: {
         caseDetail: {
           ...state.caseDetail,
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               signedAt: '2019-03-01T21:40:46.415Z',

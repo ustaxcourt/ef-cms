@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 
@@ -70,7 +70,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     trialLocation: documentMeta.trialLocation,
   };
 
-  const documentEntity = new Document(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
@@ -83,18 +83,18 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const { workItem } = documentEntity;
+  const { workItem } = docketEntryEntity;
 
   Object.assign(workItem, {
     document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
   });
 
-  documentEntity.setWorkItem(workItem);
+  docketEntryEntity.setWorkItem(workItem);
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

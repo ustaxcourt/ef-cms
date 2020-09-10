@@ -19,7 +19,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.documents.find(
+    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 
@@ -86,12 +86,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.documents.find(
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       doc => doc.documentId === documentId,
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',
@@ -104,7 +104,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     });
 
     expect(test.getState('form')).toMatchObject({
-      date: '2002-01-01',
+      date: '2002-01-01T05:00:00.000Z',
       day: '1',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       documentType: 'Notice of Trial',

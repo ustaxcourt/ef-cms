@@ -44,17 +44,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      docketRecord: [
-        {
-          description: 'first record',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-          eventCode: 'P',
-          filingDate: '2018-03-01T00:01:00.000Z',
-          index: 1,
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -113,6 +103,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -298,7 +289,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[5],
+        .caseToUpdate.docketEntries[5],
     ).toMatchObject({
       secondaryDate: '2019-03-01T21:40:46.415Z',
     });
@@ -322,10 +313,12 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     const lastDocumentIndex =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length - 1;
+        .caseToUpdate.docketEntries.length - 1;
 
     const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.documents[lastDocumentIndex];
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
+      lastDocumentIndex
+    ];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,

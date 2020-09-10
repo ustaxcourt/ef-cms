@@ -10,7 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -130,7 +130,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     if (documentId && metadata) {
       // TODO: Double check what is auto-generated here,
       // as this may not be entirely necessary
-      const rawDocument = new Document(
+      const rawDocument = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
@@ -149,7 +149,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           caseEntity.docketNumber,
         );
 
-        const documentEntity = new Document(
+        const docketEntryEntity = new DocketEntry(
           {
             ...rawDocument,
             ...caseEntity.getCaseContacts({
@@ -162,7 +162,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           },
         );
 
-        const isAutoServed = documentEntity.isAutoServed();
+        const isAutoServed = docketEntryEntity.isAutoServed();
 
         if (isFilingDocumentForCase) {
           const isCaseForWorkItem =
@@ -184,8 +184,8 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                 docketNumber: caseEntity.docketNumber,
                 docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
                 document: {
-                  ...documentEntity.toRawObject(),
-                  createdAt: documentEntity.createdAt,
+                  ...docketEntryEntity.toRawObject(),
+                  createdAt: docketEntryEntity.createdAt,
                 },
                 section: DOCKET_SECTION,
                 sentBy: user.name,
@@ -194,7 +194,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               { applicationContext },
             );
 
-            documentEntity.setWorkItem(workItem);
+            docketEntryEntity.setWorkItem(workItem);
 
             if (metadata.isPaper) {
               workItem.setAsCompleted({
@@ -222,17 +222,17 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
             );
           }
 
-          caseEntity.addDocument(documentEntity);
+          caseEntity.addDocketEntry(docketEntryEntity);
 
           if (isAutoServed) {
-            documentEntity.setAsServed(servedParties.all);
+            docketEntryEntity.setAsServed(servedParties.all);
 
             await applicationContext
               .getUseCaseHelpers()
               .sendServedPartiesEmails({
                 applicationContext,
                 caseEntity,
-                documentEntity,
+                documentEntity: docketEntryEntity,
                 servedParties,
               });
           }

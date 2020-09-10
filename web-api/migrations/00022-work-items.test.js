@@ -33,6 +33,7 @@ describe('work items array to object', () => {
     documentType: 'Answer',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    isOnDocketRecord: false,
     pk: `case|${MOCK_CASE.docketNumber}`,
     sk: 'document|2ffd0350-65a3-4aea-a395-4a9665a05d91',
     userId: '82d199bd-6d7d-4655-993a-3fe76be43b63',
@@ -219,12 +220,6 @@ describe('work items array to object', () => {
           {
             ...mockCaseRecord,
           },
-          {
-            docketRecordId: 'f499ee5f-303f-46fc-9c3c-1b1dc3debfe9',
-            documentId: mockDocumentRecord.documentId,
-            pk: mockCaseRecord.pk,
-            sk: 'docket-record|f499ee5f-303f-46fc-9c3c-1b1dc3debfe9',
-          },
         ],
       }),
     });
@@ -232,6 +227,7 @@ describe('work items array to object', () => {
       ...mockDocumentRecord,
       archived: false,
       documentType: 'Order',
+      isOnDocketRecord: true,
     };
     mockItems = [mockDocument];
 

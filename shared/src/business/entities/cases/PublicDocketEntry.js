@@ -13,47 +13,47 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
- * PublicDocument
+ * PublicDocketEntry
  *
- * @param {object} rawDocument the raw document
+ * @param {object} rawDocketEntry the raw docket entry
  * @constructor
  */
-function PublicDocument() {}
-PublicDocument.prototype.init = function init(rawDocument) {
-  this.additionalInfo = rawDocument.additionalInfo;
-  this.additionalInfo2 = rawDocument.additionalInfo2;
-  this.createdAt = rawDocument.createdAt;
-  this.description = rawDocument.description;
-  this.docketNumber = rawDocument.docketNumber;
-  this.documentId = rawDocument.documentId;
-  this.documentTitle = rawDocument.documentTitle;
-  this.documentType = rawDocument.documentType;
-  this.eventCode = rawDocument.eventCode;
-  this.filedBy = rawDocument.filedBy;
-  this.filingDate = rawDocument.filingDate;
-  this.index = rawDocument.index;
-  this.isMinuteEntry = rawDocument.isMinuteEntry;
-  this.isOnDocketRecord = rawDocument.isOnDocketRecord;
-  this.isPaper = rawDocument.isPaper;
-  this.isStricken = rawDocument.isStricken;
-  this.numberOfPages = rawDocument.numberOfPages;
-  this.processingStatus = rawDocument.processingStatus;
-  this.receivedAt = rawDocument.receivedAt;
-  this.servedAt = rawDocument.servedAt;
-  this.servedParties = rawDocument.servedParties;
+function PublicDocketEntry() {}
+PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
+  this.additionalInfo = rawDocketEntry.additionalInfo;
+  this.additionalInfo2 = rawDocketEntry.additionalInfo2;
+  this.createdAt = rawDocketEntry.createdAt;
+  this.description = rawDocketEntry.description;
+  this.docketNumber = rawDocketEntry.docketNumber;
+  this.documentId = rawDocketEntry.documentId;
+  this.documentTitle = rawDocketEntry.documentTitle;
+  this.documentType = rawDocketEntry.documentType;
+  this.eventCode = rawDocketEntry.eventCode;
+  this.filedBy = rawDocketEntry.filedBy;
+  this.filingDate = rawDocketEntry.filingDate;
+  this.index = rawDocketEntry.index;
+  this.isMinuteEntry = rawDocketEntry.isMinuteEntry;
+  this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord;
+  this.isPaper = rawDocketEntry.isPaper;
+  this.isStricken = rawDocketEntry.isStricken;
+  this.numberOfPages = rawDocketEntry.numberOfPages;
+  this.processingStatus = rawDocketEntry.processingStatus;
+  this.receivedAt = rawDocketEntry.receivedAt;
+  this.servedAt = rawDocketEntry.servedAt;
+  this.servedParties = rawDocketEntry.servedParties;
 
   if (this.isOnDocketRecord) {
-    this.description = rawDocument.description;
-    this.documentId = rawDocument.documentId;
-    this.filedBy = rawDocument.filedBy;
-    this.filingDate = rawDocument.filingDate;
-    this.index = rawDocument.index;
-    this.isStricken = rawDocument.isStricken;
-    this.numberOfPages = rawDocument.numberOfPages;
+    this.description = rawDocketEntry.description;
+    this.documentId = rawDocketEntry.documentId;
+    this.filedBy = rawDocketEntry.filedBy;
+    this.filingDate = rawDocketEntry.filingDate;
+    this.index = rawDocketEntry.index;
+    this.isStricken = rawDocketEntry.isStricken;
+    this.numberOfPages = rawDocketEntry.numberOfPages;
   }
 };
 
-PublicDocument.VALIDATION_RULES = joi.object().keys({
+PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
@@ -84,6 +84,10 @@ PublicDocument.VALIDATION_RULES = joi.object().keys({
     .optional(),
 });
 
-joiValidationDecorator(PublicDocument, PublicDocument.VALIDATION_RULES, {});
+joiValidationDecorator(
+  PublicDocketEntry,
+  PublicDocketEntry.VALIDATION_RULES,
+  {},
+);
 
-module.exports = { PublicDocument: validEntityDecorator(PublicDocument) };
+module.exports = { PublicDocketEntry: validEntityDecorator(PublicDocketEntry) };
