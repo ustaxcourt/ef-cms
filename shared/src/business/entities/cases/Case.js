@@ -776,7 +776,9 @@ Case.prototype.archiveDocketEntry = function (
   });
   docketEntryToArchive.archive();
   this.archivedDocketEntries.push(docketEntryToArchive);
-  this.deleteDocketEntryById({ documentId: docketEntryToArchive.documentId });
+  this.deleteDocketEntryById({
+    docketEntryId: docketEntryToArchive.documentId,
+  });
 };
 
 /**
@@ -1018,15 +1020,15 @@ Case.prototype.getCorrespondenceById = function ({ documentId }) {
 };
 
 /**
- * deletes the docket entry with id documentId from the docketEntries array
+ * deletes the docket entry with id docketEntryId from the docketEntries array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the docket entry to remove from the docketEntries array
+ * @params {string} params.docketEntryId the id of the docket entry to remove from the docketEntries array
  * @returns {Case} the updated case entity
  */
-Case.prototype.deleteDocketEntryById = function ({ documentId }) {
+Case.prototype.deleteDocketEntryById = function ({ docketEntryId }) {
   this.docketEntries = this.docketEntries.filter(
-    item => item.documentId !== documentId,
+    item => item.documentId !== docketEntryId,
   );
 
   return this;
