@@ -55,7 +55,7 @@ export const TodaysOpinions = connect(
                     <td>
                       <Button
                         link
-                        aria-label={`View PDF: ${opinion.description}`}
+                        aria-label={`View PDF: ${opinion.descriptionDisplay}`}
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
                             docketNumber: opinion.docketNumber,

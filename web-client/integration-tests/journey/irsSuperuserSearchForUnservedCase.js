@@ -17,7 +17,7 @@ export const irsSuperuserSearchForUnservedCase = test => {
     });
 
     const petitionDocketEntry = formattedCase.formattedDocketEntries.find(
-      entry => entry.description === 'Petition',
+      entry => entry.documentTitle === 'Petition',
     );
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     // irsSuperuser should NOT see a link to a petition

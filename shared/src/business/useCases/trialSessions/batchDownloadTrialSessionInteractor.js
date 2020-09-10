@@ -90,7 +90,7 @@ const batchDownloadTrialSessionInteractor = async ({
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
         const fileName = sanitize(
-          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+          `${docDate}_${docNum}_${aDocketRecord.documentTitle}.pdf`,
         );
         const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
         s3Ids.push(myDoc.documentId);

@@ -34,7 +34,7 @@ export const FilingsAndProceedings = connect(
           <NonMobile>
             <Button
               link
-              aria-label={`View PDF: ${entry.description}`}
+              aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(
                 entry.isStricken && 'stricken-docket-record',
               )}
@@ -83,7 +83,7 @@ export const FilingsAndProceedings = connect(
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
-            {entry.description}
+            {entry.descriptionDisplay}
           </>
         )}
 

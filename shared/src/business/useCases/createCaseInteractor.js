@@ -179,6 +179,7 @@ exports.createCaseInteractor = async ({
   const stinDocketEntryEntity = new DocketEntry(
     {
       documentId: stinFileId,
+      documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filingDate: caseToAdd.createdAt,

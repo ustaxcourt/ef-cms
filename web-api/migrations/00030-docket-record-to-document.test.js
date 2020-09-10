@@ -53,7 +53,6 @@ describe('merge docket record records into document records', () => {
     sk: `docket-record|${DOCKET_RECORD_ID_1}`,
   };
   const mockDocketRecord2 = {
-    description: 'Request for Place of Trial at Boise, Idaho',
     docketRecordId: DOCKET_RECORD_ID_2,
     documentId: DOCUMENT_ID_2,
     eventCode: 'RQT',
@@ -62,7 +61,6 @@ describe('merge docket record records into document records', () => {
     sk: `docket-record|${DOCKET_RECORD_ID_2}`,
   };
   const mockDocketRecord3 = {
-    description: 'first record',
     docketRecordId: DOCKET_RECORD_ID_3,
     documentId: DOCUMENT_ID_3,
     entityName: 'DocketRecord',
@@ -138,13 +136,11 @@ describe('merge docket record records into document records', () => {
 
     expect(putStub).toBeCalledTimes(3);
     expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      description: validDocument.documentType,
       index: 1,
       isOnDocketRecord: true,
       sk: `document|${DOCUMENT_ID_1}`,
     });
     expect(putStub.mock.calls[1][0].Item).toMatchObject({
-      description: 'Request for Place of Trial at Boise, Idaho',
       documentTitle: 'Request for Place of Trial at Boise, Idaho',
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
@@ -157,7 +153,6 @@ describe('merge docket record records into document records', () => {
       userId: MOCK_CASE.userId,
     });
     expect(putStub.mock.calls[2][0].Item).toMatchObject({
-      description: 'first record',
       documentTitle: 'first record',
       documentType: 'Petition',
       eventCode: 'P',

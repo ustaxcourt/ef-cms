@@ -372,7 +372,7 @@ describe('DocketRecord', () => {
     expect(rowEl.text()).toContain(entries[0].index);
     expect(rowEl.text()).toContain(entries[0].createdAtFormatted);
     expect(rowEl.text()).toContain(entries[0].eventCode);
-    expect(rowEl.text()).toContain(entries[0].description);
+    expect(rowEl.text()).toContain(entries[0].descriptionDisplay);
     expect(rowEl.text()).toContain(entries[0].filingsAndProceedings);
     expect(rowEl.text()).toContain(entries[0].filedBy);
     expect(rowEl.text()).toContain(entries[0].action);
@@ -391,7 +391,7 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      `${entries[0].description} ${entries[0].filingsAndProceedings} ${entries[0].additionalInfo2}`,
+      `${entries[0].descriptionDisplay} ${entries[0].filingsAndProceedings} ${entries[0].additionalInfo2}`,
     );
   });
 
@@ -409,7 +409,7 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      entries[0].description,
+      entries[0].descriptionDisplay,
     );
   });
 
@@ -426,7 +426,7 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      `${entries[0].description} ${entries[0].filingsAndProceedings}`,
+      `${entries[0].descriptionDisplay} ${entries[0].filingsAndProceedings}`,
     );
   });
 
@@ -443,7 +443,7 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      `${entries[0].description} ${entries[0].additionalInfo2}`,
+      `${entries[0].descriptionDisplay} ${entries[0].additionalInfo2}`,
     );
   });
 
