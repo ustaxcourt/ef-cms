@@ -153,27 +153,27 @@ export const getWorkItemDocumentLink = ({
 }) => {
   const result = cloneDeep(workItem);
 
-  const formattedDocument = applicationContext
+  const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, result.document);
+    .formatDocketEntry(applicationContext, result.document);
 
   const isInProgress = workItem.inProgress;
 
   const qcWorkItemsUntouched =
     !isInProgress &&
-    formattedDocument &&
+    formattedDocketEntry &&
     !result.isRead &&
     !result.completedAt &&
     !result.isCourtIssuedDocument;
 
   const showDocumentEditLink =
-    formattedDocument &&
+    formattedDocketEntry &&
     permissions.UPDATE_CASE &&
-    (!formattedDocument.isInProgress ||
-      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress) ||
+    (!formattedDocketEntry.isInProgress ||
+      (permissions.DOCKET_ENTRY && formattedDocketEntry.isInProgress) ||
       (permissions.QC_PETITION &&
-        formattedDocument.isPetition &&
-        formattedDocument.isInProgress));
+        formattedDocketEntry.isPetition &&
+        formattedDocketEntry.isInProgress));
 
   const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
@@ -182,7 +182,7 @@ export const getWorkItemDocumentLink = ({
   if (showDocumentEditLink) {
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
-        formattedDocument,
+        formattedDocument: formattedDocketEntry,
         isInProgress,
         qcWorkItemsUntouched,
         result,
@@ -192,7 +192,10 @@ export const getWorkItemDocumentLink = ({
       } else {
         editLink = documentViewLink;
       }
-    } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
+    } else if (
+      formattedDocketEntry.isPetition &&
+      !formattedDocketEntry.servedAt
+    ) {
       if (result.caseIsInProgress) {
         editLink += '/review';
       } else {

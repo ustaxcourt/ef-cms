@@ -37,7 +37,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [],
       },
-      documentEntity: {
+      docketEntryEntity: {
         documentId: '35479520-e2d6-4357-b72f-5b46f16a708a',
         documentType: 'The Document',
         eventCode: 'P',
@@ -79,7 +79,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           },
         ],
       },
-      documentEntity: {
+      docketEntryEntity: {
         documentId: 'test-document-id',
         documentType: 'The Document',
         eventCode: 'P',
@@ -115,7 +115,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           },
         ],
       },
-      documentEntity: {
+      docketEntryEntity: {
         documentId: 'test-document-id',
         documentType: 'The Document',
         eventCode: 'P',
@@ -149,7 +149,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumber: '123-20',
         privatePractitioners: [],
       },
-      documentEntity: {
+      docketEntryEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
       },
     });
@@ -174,7 +174,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
       },
-      documentEntity: {
+      docketEntryEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
       },
     });
@@ -199,7 +199,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: '',
         privatePractitioners: [],
       },
-      documentEntity: {
+      docketEntryEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
       },
     });

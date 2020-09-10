@@ -11,13 +11,13 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.documentIdToEdit the id of the document to update
+ * @param {object} providers.docketEntryIdToEdit the id of the docket entry to update
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the document is updated
  */
 exports.updateCourtIssuedOrderInteractor = async ({
   applicationContext,
-  documentIdToEdit,
+  docketEntryIdToEdit,
   documentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -40,8 +40,8 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId: documentIdToEdit,
+  const currentDocument = caseEntity.getDocketEntryById({
+    docketEntryId: docketEntryIdToEdit,
   });
 
   if (!currentDocument) {
@@ -53,38 +53,41 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState.richText,
+      richText: documentMetadata.draftOrderState.richText,
     };
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
-      documentId: documentContentsId,
+      key: documentContentsId,
       useTempBucket: false,
     });
 
     delete documentMetadata.documentContents;
-    delete documentMetadata.draftState.documentContents;
-    delete documentMetadata.draftState.richText;
-    delete documentMetadata.draftState.editorDelta;
+    delete documentMetadata.draftOrderState.documentContents;
+    delete documentMetadata.draftOrderState.richText;
+    delete documentMetadata.draftOrderState.editorDelta;
   }
 
   const editableFields = {
     documentTitle: documentMetadata.documentTitle,
     documentType: documentMetadata.documentType,
-    draftState: documentMetadata.draftState,
+    draftOrderState: documentMetadata.draftOrderState,
     freeText: documentMetadata.freeText,
   };
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
+    .countPagesInDocument({
+      applicationContext,
+      documentId: docketEntryIdToEdit,
+    });
 
   const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
-      documentId: documentIdToEdit,
+      documentId: docketEntryIdToEdit,
       filedBy: user.name,
       numberOfPages,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

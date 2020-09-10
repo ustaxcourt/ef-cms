@@ -31,7 +31,7 @@ export const setPdfPreviewUrlForCompleteDocketEntryAction = async ({
       .getDocumentDownloadUrlInteractor({
         applicationContext,
         docketNumber: caseDetail.docketNumber,
-        documentId,
+        key: documentId,
       });
 
     store.set(state.pdfPreviewUrl, url);

@@ -7,8 +7,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.archiveCorrespondenceDocumentInteractor = async ({
   applicationContext,
+  correspondenceId,
   docketNumber,
-  documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -18,7 +18,7 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
 
   await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
     applicationContext,
-    key: documentId,
+    key: correspondenceId,
   });
 
   const caseToUpdate = await applicationContext
@@ -27,7 +27,7 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
   const correspondenceToArchive = caseEntity.correspondence.find(
-    c => c.documentId === documentId,
+    c => c.correspondenceId === correspondenceId,
   );
 
   caseEntity.archiveCorrespondence(correspondenceToArchive, {

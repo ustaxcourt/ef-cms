@@ -21,8 +21,8 @@ export const servePaperFiledDocumentAction = async ({
     .getUseCases()
     .serveExternallyFiledDocumentInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber,
-      documentId,
     });
 
   return {

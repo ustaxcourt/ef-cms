@@ -232,7 +232,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               .sendServedPartiesEmails({
                 applicationContext,
                 caseEntity,
-                documentEntity: docketEntryEntity,
+                docketEntryEntity,
                 servedParties,
               });
           }
