@@ -36,7 +36,7 @@ const router = {
     window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
     // eslint-disable-next-line no-underscore-dangle
-    window.__cy_route = path => router.route(path || '/');
+    window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     const ifHasAccess = (cb, permissionToCheck) => {
