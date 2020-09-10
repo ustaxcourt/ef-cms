@@ -147,7 +147,11 @@ const TrialInformation = ({
         <div className="grid-row">
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
-            <p>{caseDetail.formattedTrialCity}</p>
+            <p>
+              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+                {caseDetail.formattedTrialCity}
+              </a>
+            </p>
           </div>
           <div className="grid-col-4">
             <p className="label">Trial date</p>
@@ -294,7 +298,11 @@ const TrialInformation = ({
         <div className="grid-row">
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
-            <p>{caseDetail.formattedTrialCity}</p>
+            <p>
+              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+                {caseDetail.formattedTrialCity}
+              </a>
+            </p>
           </div>
           <div className="grid-col-4">
             <p className="label">Trial date</p>
