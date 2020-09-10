@@ -427,11 +427,11 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 {
   //GET
   app.get(
-    '/case-documents/:docketNumber/:documentId/document-download-url',
+    '/case-documents/:docketNumber/:key/document-download-url',
     lambdaWrapper(getDocumentDownloadUrlLambda),
   );
   app.get(
-    '/case-documents/:docketNumber/:documentId/download-policy-url',
+    '/case-documents/:docketNumber/:key/download-policy-url',
     lambdaWrapper(downloadPolicyUrlLambda),
   );
   app.get(

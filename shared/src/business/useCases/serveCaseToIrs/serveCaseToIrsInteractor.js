@@ -298,7 +298,7 @@ exports.serveCaseToIrsInteractor = async ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: caseConfirmationPdfName,
+      key: caseConfirmationPdfName,
       useTempBucket: false,
     }));
   }

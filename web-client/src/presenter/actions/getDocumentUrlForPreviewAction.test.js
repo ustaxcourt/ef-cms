@@ -38,7 +38,7 @@ describe('getDocumentUrlForPreviewAction', () => {
         .calls[0][0],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
-      documentId: mockDocumentId,
+      key: mockDocumentId,
     });
   });
 

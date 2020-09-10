@@ -41,7 +41,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -103,7 +103,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
       url,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: paperServicePdfId,
+      key: paperServicePdfId,
       useTempBucket: true,
     });
 

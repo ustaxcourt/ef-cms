@@ -319,7 +319,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     pdfUrl = (
       await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
         applicationContext,
-        documentId,
+        key: documentId,
         useTempBucket: true,
       })
     ).url;

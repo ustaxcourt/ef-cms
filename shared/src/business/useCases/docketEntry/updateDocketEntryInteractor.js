@@ -48,7 +48,7 @@ exports.updateDocketEntryInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    documentId: primaryDocumentFileId,
+    docketEntryId: primaryDocumentFileId,
   });
 
   const editableFields = {

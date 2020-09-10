@@ -22,7 +22,7 @@ export const getDocumentUrlForPreviewAction = async ({
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
     docketNumber,
-    documentId: documentInS3.documentId,
+    key: documentInS3.documentId,
   });
 
   return { documentId: documentInS3.documentId, pdfUrl: url };
