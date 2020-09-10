@@ -55,11 +55,11 @@ exports.strikeDocketEntryInteractor = async ({
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateDocument({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
+    docketEntryId,
     docketNumber,
     document: docketEntryEntity.validate().toRawObject(),
-    documentId: docketEntryId,
   });
 
   return caseEntity.toRawObject();
