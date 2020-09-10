@@ -14,7 +14,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -120,7 +120,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const createDocumentForChange = async ({
+  const createDocketEntryForChange = async ({
     contactName,
     documentType,
     newData,
@@ -146,7 +146,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
     const newDocumentId = applicationContext.getUniqueId();
 
-    const changeOfAddressDocument = new Document(
+    const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactName}`,
@@ -163,16 +163,16 @@ exports.updatePetitionerInformationInteractor = async ({
       },
       { applicationContext },
     );
-    changeOfAddressDocument.setAsServed(servedParties.all);
+    changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocument,
+      documentEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 
-    caseEntity.addDocument(changeOfAddressDocument);
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
@@ -183,7 +183,7 @@ exports.updatePetitionerInformationInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocument,
+      documentEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -194,7 +194,7 @@ exports.updatePetitionerInformationInteractor = async ({
   let secondaryPdf;
   let paperServicePdfUrl;
   if (primaryChange) {
-    primaryPdf = await createDocumentForChange({
+    primaryPdf = await createDocketEntryForChange({
       contactName: primaryEditableFields.name,
       documentType: primaryChange,
       newData: primaryEditableFields,
@@ -202,7 +202,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
   }
   if (secondaryChange) {
-    secondaryPdf = await createDocumentForChange({
+    secondaryPdf = await createDocketEntryForChange({
       contactName: secondaryEditableFields.name,
       documentType: secondaryChange,
       newData: secondaryEditableFields,

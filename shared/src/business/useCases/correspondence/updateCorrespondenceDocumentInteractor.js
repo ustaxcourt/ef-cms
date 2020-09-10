@@ -45,7 +45,7 @@ exports.updateCorrespondenceDocumentInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocument(updatedCorrespondenceEntity);
+  caseEntity.updateCorrespondence(updatedCorrespondenceEntity);
 
   const caseEntityRaw = caseEntity.validate().toRawObject();
 

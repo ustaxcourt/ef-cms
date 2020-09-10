@@ -8,7 +8,7 @@ const {
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -68,7 +68,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 
-  const documentEntity = new Document(
+  const docketEntryEntity = new DocketEntry(
     {
       ...omit(document, 'filedBy'),
       attachments: documentMeta.attachments,
@@ -104,8 +104,8 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       docketNumber: caseToUpdate.docketNumber,
       docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
       document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
       hideFromPendingMessages: true,
       inProgress: true,
@@ -120,8 +120,8 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     workItem.setAsCompleted({ message: 'completed', user });
   }
 
-  documentEntity.setWorkItem(workItem);
-  caseEntity.updateDocument(documentEntity);
+  docketEntryEntity.setWorkItem(workItem);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   workItem.assignToUser({
     assigneeId: user.userId,

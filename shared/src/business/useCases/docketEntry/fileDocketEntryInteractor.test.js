@@ -35,8 +35,7 @@ describe('fileDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      documents: [
+      docketEntries: [
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -65,6 +64,7 @@ describe('fileDocketEntryInteractor', () => {
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',

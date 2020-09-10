@@ -31,9 +31,8 @@ describe('getCaseByDocketNumber', () => {
       archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
+      docketEntries: [],
       docketNumber: '123-20',
-      docketRecord: [],
-      documents: [],
       irsPractitioners: [],
       pk: 'case|123-20',
       privatePractitioners: [],
@@ -64,21 +63,16 @@ describe('getCaseByDocketNumber', () => {
               userId: 'abc-123',
             },
             {
-              docketRecordId: 'abc-123',
-              pk: 'case|123-20',
-              sk: 'docket-record|123',
-            },
-            {
               archived: true,
               documentId: 'abc-123',
               pk: 'case|123-20',
-              sk: 'document|123',
+              sk: 'docket-entry|123',
             },
             {
               archived: false,
               documentId: 'abc-124',
               pk: 'case|123-20',
-              sk: 'document|124',
+              sk: 'docket-entry|124',
             },
             {
               archived: true,
@@ -115,7 +109,7 @@ describe('getCaseByDocketNumber', () => {
           archived: true,
           documentId: 'abc-123',
           pk: 'case|123-20',
-          sk: 'document|123',
+          sk: 'docket-entry|123',
         },
       ],
       correspondence: [
@@ -126,22 +120,15 @@ describe('getCaseByDocketNumber', () => {
           sk: 'correspondence|124',
         },
       ],
-      docketNumber: '123-20',
-      docketRecord: [
-        {
-          docketRecordId: 'abc-123',
-          pk: 'case|123-20',
-          sk: 'docket-record|123',
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           archived: false,
           documentId: 'abc-124',
           pk: 'case|123-20',
-          sk: 'document|124',
+          sk: 'docket-entry|124',
         },
       ],
+      docketNumber: '123-20',
       irsPractitioners: [
         { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
@@ -172,8 +159,7 @@ describe('getCaseByDocketNumber', () => {
       archivedCorrespondences: [],
       archivedDocuments: [],
       correspondence: [],
-      docketRecord: [],
-      documents: [],
+      docketEntries: [],
       irsPractitioners: [],
       privatePractitioners: [],
     });

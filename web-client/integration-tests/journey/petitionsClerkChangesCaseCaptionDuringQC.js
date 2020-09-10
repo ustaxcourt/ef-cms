@@ -47,7 +47,7 @@ export const petitionsClerkChangesCaseCaptionDuringQC = test => {
       docketNumber: test.docketNumber,
     });
 
-    const documents = test.getState('caseDetail.documents');
+    const documents = test.getState('caseDetail.docketEntries');
 
     const caseAmended = documents.find(entry =>
       entry.description.startsWith('Caption of case is amended'),

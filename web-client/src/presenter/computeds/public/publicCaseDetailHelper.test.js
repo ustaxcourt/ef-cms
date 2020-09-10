@@ -19,21 +19,33 @@ describe('publicCaseDetailHelper', () => {
   beforeEach(() => {
     state = {
       caseDetail: {
+        docketEntries: [],
         docketNumber: '123-45',
-        docketRecord: [],
-        documents: [],
       },
     };
   });
 
-  describe('formattedDocketEntries', () => {
-    it('should return the formattedDocketEntries as an array', () => {
+  describe('formattedDocketEntriesOnDocketRecord', () => {
+    it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
       const result = runCompute(publicCaseDetailHelper, { state });
-      expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
+      expect(
+        Array.isArray(result.formattedDocketEntriesOnDocketRecord),
+      ).toBeTruthy();
     });
 
     it('should return hasDocument false if the document is a minute entry', () => {
-      state.caseDetail.documents = [
+      state.caseDetail.docketEntries = [
+        {
+          description: 'Request for Place of Trial at Flavortown, TN',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+      ];
+      state.caseDetail.docketEntries = [
         {
           description: 'Request for Place of Trial at Flavortown, TN',
           documentType:
@@ -46,7 +58,7 @@ describe('publicCaseDetailHelper', () => {
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
       });
@@ -60,7 +72,7 @@ describe('publicCaseDetailHelper', () => {
   });
 
   it('should format docket entries with documents and sort chronologically', () => {
-    state.caseDetail.documents = [
+    state.caseDetail.docketEntries = [
       {
         action: 'something',
         createdAt: '2018-11-21T20:49:28.192Z',
@@ -167,8 +179,108 @@ describe('publicCaseDetailHelper', () => {
         servedAt: '2019-12-24T21:49:28.192Z',
       },
     ];
+    state.caseDetail.docketEntries = [
+      {
+        action: 'something',
+        createdAt: '2018-11-21T20:49:28.192Z',
+        description: 'first record',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        documentTitle: 'Petition',
+        documentType: 'Petition',
+        eventCode: 'P',
+        filingDate: '2018-11-21T20:49:28.192Z',
+        index: 4,
+        isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+      },
+      {
+        additionalInfo: 'additionalInfo!',
+        additionalInfo2: 'additional info 2!',
+        attachments: true,
+        createdAt: '2018-10-21T20:49:28.192Z',
+        description: 'second record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+        documentTitle: 'Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Petrs. Dylan Fowler & Jaquelyn Estes',
+        filingDate: '2018-10-21T20:49:28.192Z',
+        index: 1,
+        isOnDocketRecord: true,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+      },
+      {
+        createdAt: '2018-10-25T20:49:28.192Z',
+        description: 'third record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405413',
+        documentTitle: 'Order to do something',
+        documentType: 'Order',
+        eventCode: 'O',
+        filingDate: '2018-10-25T20:49:28.192Z',
+        index: 3,
+        isOnDocketRecord: true,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: '2018-11-27T20:49:28.192Z',
+        status: 'served',
+      },
+      {
+        createdAt: '2018-10-25T20:49:28.192Z',
+        description: 'fourth record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405414',
+        documentTitle: 'Order to do something else',
+        documentType: 'Order',
+        eventCode: 'O',
+        filingDate: '2018-10-25T20:49:28.192Z',
+        index: 2,
+        isOnDocketRecord: true,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+        signatory: 'abc',
+      },
+      {
+        createdAt: '2018-12-25T20:49:28.192Z',
+        description: 'fifth record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405415',
+        documentType: 'Request for Place of Trial',
+        eventCode: 'RQT',
+        filingDate: '2018-12-25T20:49:28.192Z',
+        index: 5,
+        isOnDocketRecord: true,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      },
+      {
+        createdAt: '2018-12-25T20:49:28.192Z',
+        description: 'sixth record',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
+        documentType: 'Transcript',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        filingDate: '2018-12-25T20:49:28.192Z',
+        index: 6,
+        isOnDocketRecord: true,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: '2018-11-27T20:49:28.192Z',
+      },
+      {
+        createdAt: '2019-12-24T20:49:28.192Z',
+        description: 'seventh record',
+        documentId: 'e47e365d-6349-4d23-98b4-421efb4d8009',
+        documentType: 'Transcript',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        filingDate: '2019-12-24T20:49:28.192Z',
+        index: 7,
+        isOnDocketRecord: true,
+        isStricken: true,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: '2019-12-24T21:49:28.192Z',
+      },
+    ];
     const result = runCompute(publicCaseDetailHelper, { state });
-    expect(result.formattedDocketEntries).toMatchObject([
+    expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: '10/21/18',
         description: 'second record additionalInfo!',

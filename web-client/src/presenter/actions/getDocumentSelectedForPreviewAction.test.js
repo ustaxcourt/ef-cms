@@ -42,7 +42,7 @@ describe('getDocumentSelectedForPreviewAction', () => {
           documentSelectedForPreview: 'petitionFile',
         },
         form: {
-          documents: [mockPetitionFile],
+          docketEntries: [mockPetitionFile],
         },
       },
     });

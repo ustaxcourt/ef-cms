@@ -481,15 +481,15 @@ describe('fileDocumentHelper', () => {
     state.caseDetail.consolidatedCases = [
       {
         ...MOCK_CASE,
+        docketEntries: null,
         docketNumber: '101-19',
         docketRecord: null,
-        documents: null,
       },
       {
         ...MOCK_CASE,
+        docketEntries: null,
         docketNumber: '102-19',
         docketRecord: null,
-        documents: null,
       },
     ];
     const result = runCompute(fileDocumentHelper, { state });

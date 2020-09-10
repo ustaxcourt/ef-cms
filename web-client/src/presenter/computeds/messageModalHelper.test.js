@@ -25,7 +25,7 @@ describe('messageModalHelper', () => {
           documentTitle: 'Test Correspondence',
         },
       ],
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           documentType: 'Petition',
@@ -105,7 +105,7 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [{ documentId: '123' }],
-          documents: [],
+          docketEntries: [],
         },
         modal: {
           form: {},
@@ -124,7 +124,7 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          documents: [],
+          docketEntries: [],
         },
         modal: {
           form: {},
@@ -138,12 +138,12 @@ describe('messageModalHelper', () => {
     expect(result.hasDocuments).toEqual(false);
   });
 
-  it('returns hasDocuments true when there are documents with files attached on the case', () => {
+  it('returns hasDocuments true when there are docketEntries with files attached on the case', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               index: 1,
@@ -165,12 +165,12 @@ describe('messageModalHelper', () => {
     expect(result.hasDocuments).toEqual(true);
   });
 
-  it('returns hasDocuments false when there are NO documents on the case', () => {
+  it('returns hasDocuments false when there are NO docketEntries on the case', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
-          documents: [],
+          docketEntries: [],
         },
         modal: {
           form: {},
@@ -189,7 +189,7 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          documents: [
+          docketEntries: [
             { documentId: '123', documentType: 'Order', isDraft: true },
           ],
         },
@@ -210,7 +210,7 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [{ documentId: '234' }],
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               documentType: 'Order',

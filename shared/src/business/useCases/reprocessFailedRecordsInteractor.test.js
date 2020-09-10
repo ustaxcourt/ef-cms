@@ -123,7 +123,7 @@ describe('reprocessFailedRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({
-        documents: [],
+        docketEntries: [],
       });
 
     applicationContext

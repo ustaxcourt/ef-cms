@@ -72,7 +72,6 @@ describe('merge docket record records into document records', () => {
     pk: `case|${MOCK_CASE.docketNumber}`,
     sk: `docket-record|${DOCKET_RECORD_ID_3}`,
   };
-
   beforeEach(() => {
     mockItems = [
       mockCaseRecord,

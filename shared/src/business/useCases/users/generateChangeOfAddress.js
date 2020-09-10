@@ -14,7 +14,7 @@ const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { clone } = require('lodash');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -160,18 +160,18 @@ exports.generateChangeOfAddress = async ({
           documentData.partyIrsPractitioner = true;
         }
 
-        const changeOfAddressDocument = new Document(documentData, {
+        const changeOfAddressDocketEntry = new DocketEntry(documentData, {
           applicationContext,
         });
 
         const servedParties = aggregatePartiesForService(caseEntity);
 
-        changeOfAddressDocument.setAsServed(servedParties.all);
+        changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocument,
+          documentEntity: changeOfAddressDocketEntry,
           servedParties,
         });
 
@@ -186,8 +186,8 @@ exports.generateChangeOfAddress = async ({
             docketNumber: caseEntity.docketNumber,
             docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
             document: {
-              ...changeOfAddressDocument.toRawObject(),
-              createdAt: changeOfAddressDocument.createdAt,
+              ...changeOfAddressDocketEntry.toRawObject(),
+              createdAt: changeOfAddressDocketEntry.createdAt,
             },
             section: DOCKET_SECTION,
             sentBy: user.name,
@@ -196,14 +196,14 @@ exports.generateChangeOfAddress = async ({
           { applicationContext },
         );
 
-        changeOfAddressDocument.setWorkItem(workItem);
+        changeOfAddressDocketEntry.setWorkItem(workItem);
 
-        caseEntity.addDocument(changeOfAddressDocument);
+        caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocument,
+          documentEntity: changeOfAddressDocketEntry,
           pdfData: changeOfAddressPdf,
         });
 

@@ -207,7 +207,7 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.documents.find(
+    const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
       entry => entry.documentId === documentId && entry.isOnDocketRecord,
     );
 

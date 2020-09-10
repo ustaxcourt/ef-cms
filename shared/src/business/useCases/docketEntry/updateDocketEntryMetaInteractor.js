@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -85,7 +85,7 @@ exports.updateDocketEntryMetaInteractor = async ({
       editableFields.filingDate !== originalDocument.filingDate;
     const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
-    const documentEntity = new Document(
+    const docketEntryEntity = new DocketEntry(
       {
         ...originalDocument,
         ...editableFields,
@@ -102,7 +102,7 @@ exports.updateDocketEntryMetaInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.updateDocument(documentEntity);
+    caseEntity.updateDocketEntry(docketEntryEntity);
 
     if (shouldGenerateCoversheet) {
       // servedAt or filingDate has changed, generate a new coversheet

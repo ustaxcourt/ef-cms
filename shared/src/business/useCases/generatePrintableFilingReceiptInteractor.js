@@ -1,9 +1,9 @@
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
 const getDocumentInfo = ({ applicationContext, documentData }) => {
-  const document = new Document(documentData, {
+  const document = new DocketEntry(documentData, {
     applicationContext,
   });
 
@@ -45,7 +45,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     documentData: documentsFiled,
   });
 
-  const primaryDocumentRecord = caseEntity.documents.find(
+  const primaryDocumentRecord = caseEntity.docketEntries.find(
     doc => doc.documentId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;

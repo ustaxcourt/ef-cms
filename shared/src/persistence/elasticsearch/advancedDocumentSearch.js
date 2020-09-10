@@ -129,7 +129,7 @@ exports.advancedDocumentSearch = async ({
         bool: {
           must: [
             { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'document|' } },
+            { match: { 'sk.S': 'docket-entry|' } },
             {
               exists: {
                 field: 'servedAt',
@@ -141,7 +141,7 @@ exports.advancedDocumentSearch = async ({
       },
       size: 5000,
     },
-    index: 'efcms-document',
+    index: 'efcms-docket-entry',
   };
 
   const { results } = await search({

@@ -15,13 +15,13 @@ const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
-  return caseRecord.documents.find(
+  return caseRecord.docketEntries.find(
     document => document.documentType === NOTICE_OF_TRIAL.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
-  return caseRecord.documents.find(
+  return caseRecord.docketEntries.find(
     document =>
       document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
       document.documentType === STANDING_PRETRIAL_ORDER.documentType,
@@ -214,7 +214,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.documents.find(
+      return caseRecord.docketEntries.find(
         entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
       );
     };
@@ -360,7 +360,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.documents.find(
+      return caseRecord.docketEntries.find(
         entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
       );
     };

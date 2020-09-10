@@ -68,7 +68,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
             },
