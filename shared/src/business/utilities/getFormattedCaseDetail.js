@@ -421,9 +421,9 @@ const byIndexSortFunction = (a, b) => {
   if (!a.index && !b.index) {
     return 0;
   } else if (!a.index) {
-    return -1;
-  } else if (!b.index) {
     return 1;
+  } else if (!b.index) {
+    return -1;
   }
   return a.index - b.index;
 };
