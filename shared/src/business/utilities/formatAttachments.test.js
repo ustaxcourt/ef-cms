@@ -1,4 +1,5 @@
-import { formatAttachments } from './formatAttachments';
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { formatAttachments } = require('./formatAttachments');
 
 describe('formatAttachments', () => {
   const mockDocuments = [
@@ -51,6 +52,7 @@ describe('formatAttachments', () => {
 
   it('formats docketEntries in the attachments array based on meta from docketEntries in the docketEntries, correspondence, archivedDocketEntries, and archivedCorrespondences arrays', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [
         { documentId: '1' },
         { documentId: '3' },
@@ -83,6 +85,7 @@ describe('formatAttachments', () => {
 
   it('sets the documentTitle from documentType if documentTitle is not set on the document meta', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [
         { documentId: '2' },
         { documentId: '4' },
@@ -113,21 +116,9 @@ describe('formatAttachments', () => {
     ]);
   });
 
-  it('defaults the archivedDocketEntries, archivedCorrespondences, and correspondence arrays to empty arrays if they are not on caseDetail', () => {
-    const result = formatAttachments({
-      attachments: [{ documentId: '1' }],
-      caseDetail: {
-        docketEntries: mockDocuments,
-      },
-    });
-
-    expect(result).toEqual([
-      { archived: false, documentId: '1', documentTitle: 'Test Document One' },
-    ]);
-  });
-
   it('returns a placeholder document if an attachment is not found in the aggregated docketEntries', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [{ documentId: '999' }],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
@@ -148,6 +139,7 @@ describe('formatAttachments', () => {
 
   it('returns an empty array if there are no attachments', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
