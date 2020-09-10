@@ -29,6 +29,7 @@ module.exports = {
       rules: {
         'jest/expect-expect': 'off',
         'jest/valid-expect': 'off',
+        'jest/valid-expect-in-promise': 'off',
         'promise/always-return': 'off',
         'promise/catch-or-return': 'off',
       },
