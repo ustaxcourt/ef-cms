@@ -63,7 +63,7 @@ const correspondenceCase = {
   },
   correspondence: [
     {
-      documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
+      correspondenceId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
       documentTitle: 'Receipt',
       filingDate: '2014-01-14T09:53:55.513-05:00',
       userId: '337d6ccc-0f5f-447d-a688-a925da37f252',

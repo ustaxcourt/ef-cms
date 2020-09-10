@@ -1,11 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateMessageModalAttachmentsAction } from './updateMessageModalAttachmentsAction';
 
 describe('updateMessageModalAttachmentsAction', () => {
   const caseDetail = {
+    archivedCorrespondences: [],
+    archivedDocketEntries: [],
     correspondence: [
       {
-        documentId: '234',
+        correspondenceId: '234',
         documentTitle: 'Test Correspondence',
       },
     ],
@@ -17,8 +21,13 @@ describe('updateMessageModalAttachmentsAction', () => {
     ],
   };
 
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('appends the given document meta from props to the form.modal.attachments array', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
       props: {
         documentId: '123',
       },
@@ -39,6 +48,7 @@ describe('updateMessageModalAttachmentsAction', () => {
 
   it('appends the given document meta from state to the form.modal.attachments array', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
       state: {
         caseDetail,
         documentId: '123',
@@ -57,6 +67,7 @@ describe('updateMessageModalAttachmentsAction', () => {
 
   it('can return case correspondence from the available documents', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
       props: {
         documentId: '234', // correspondence doc
       },
@@ -77,6 +88,7 @@ describe('updateMessageModalAttachmentsAction', () => {
 
   it('does not modify the array if no documentId is given', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
       props: {
         documentId: '',
         documentTitle: '',
@@ -96,6 +108,7 @@ describe('updateMessageModalAttachmentsAction', () => {
 
   it('sets the form subject field if this is the first attachment to be added', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
       props: {
         documentId: '123',
       },
@@ -114,6 +127,7 @@ describe('updateMessageModalAttachmentsAction', () => {
 
   it('does NOT set the form subject field if this is NOT the first attachment to be added', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
       props: {
         documentId: '123',
       },

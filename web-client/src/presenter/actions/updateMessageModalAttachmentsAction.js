@@ -8,15 +8,23 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const updateMessageModalAttachmentsAction = ({ get, props, store }) => {
+export const updateMessageModalAttachmentsAction = ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
   const { attachments } = get(state.modal.form);
-  const { correspondence, docketEntries } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.documentId);
 
   if (documentId) {
-    const document = [...docketEntries, ...correspondence].find(
-      d => d.documentId === documentId,
-    );
+    const document = applicationContext
+      .getUtilities()
+      .getAttachmentDocumentById({
+        caseDetail,
+        documentId,
+      });
 
     const documentTitle = document.documentTitle || document.documentType;
 
