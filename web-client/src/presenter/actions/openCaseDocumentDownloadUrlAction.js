@@ -19,8 +19,8 @@ export const openCaseDocumentDownloadUrlAction = async ({
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
     docketNumber,
-    documentId,
     isPublic,
+    key: documentId,
   });
 
   if (isForIFrame) {

@@ -25,7 +25,7 @@ exports.saveFileAndGenerateUrl = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId: fileId,
+    key: fileId,
     useTempBucket,
   });
   return { fileId, url };

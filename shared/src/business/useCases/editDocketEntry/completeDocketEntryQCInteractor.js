@@ -271,7 +271,7 @@ exports.completeDocketEntryQCInteractor = async ({
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
-          documentId: paperServicePdfId,
+          key: paperServicePdfId,
           useTempBucket: true,
         });
 
@@ -364,7 +364,7 @@ exports.completeDocketEntryQCInteractor = async ({
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
-          documentId: paperServicePdfId,
+          key: paperServicePdfId,
           useTempBucket: true,
         });
 

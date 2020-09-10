@@ -100,7 +100,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId: key,
+    key,
     useTempBucket: true,
   });
 

@@ -103,7 +103,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
       url,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: paperServicePdfId,
+      key: paperServicePdfId,
       useTempBucket: true,
     });
 
