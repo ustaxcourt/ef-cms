@@ -72,7 +72,7 @@ export const DocumentViewer = connect(
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
-                              {entry.description}
+                              {entry.descriptionDisplay}
                             </span>
                             {entry.isStricken && ' (STRICKEN)'}
                           </div>

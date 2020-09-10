@@ -90,7 +90,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
+      descriptionDisplay:
         'Certificate of Service Petition 05-05-2015 some additional info',
     });
 
