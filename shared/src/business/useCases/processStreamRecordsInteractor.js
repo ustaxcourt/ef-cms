@@ -58,7 +58,7 @@ const filterRecords = async ({ applicationContext, records }) => {
             .getPersistenceGateway()
             .getDocument({
               applicationContext,
-              documentId: document.documentContentsId,
+              key: document.documentContentsId,
               protocol: 'S3',
               useTempBucket: false,
             });
