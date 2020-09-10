@@ -33,11 +33,15 @@ const getItemCount = async () => {
   }
 };
 
-const sendSegmentMessage = async ({ numSegments, segment }) => {
+const sendSegmentMessage = async ({
+  deduplicationId,
+  numSegments,
+  segment,
+}) => {
   const messageBody = { segment, totalSegments: numSegments };
   const params = {
     MessageBody: JSON.stringify(messageBody),
-    MessageDeduplicationId: `${segment}`,
+    MessageDeduplicationId: `${deduplicationId}`,
     MessageGroupId: 'MigrationSegments',
     QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}.fifo`,
   };
@@ -54,7 +58,9 @@ const sendSegmentMessage = async ({ numSegments, segment }) => {
 
   const numSegments = Math.ceil(itemCount / SEGMENT_SIZE);
 
+  const deduplicationId = Date.now().toString();
+
   for (let segment = 0; segment < numSegments; segment++) {
-    await sendSegmentMessage({ numSegments, segment });
+    await sendSegmentMessage({ deduplicationId, numSegments, segment });
   }
 })();

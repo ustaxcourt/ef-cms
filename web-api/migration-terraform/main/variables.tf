@@ -5,3 +5,7 @@ variable "aws_region" {
 variable "environment" {
   type = string
 }
+
+variable "stream_arn" {
+  type = string
+}
