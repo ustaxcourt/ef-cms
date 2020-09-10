@@ -21,7 +21,7 @@ describe('setFileDocumentFormValueAction', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               documentTitle: 'Test Document Title One',
@@ -49,7 +49,7 @@ describe('setFileDocumentFormValueAction', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               documentTitle: 'Test Document Title One',

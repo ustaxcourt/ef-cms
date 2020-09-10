@@ -33,8 +33,8 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
+          docketEntries: [],
           docketNumber: '123-45',
-          documents: [],
           irsNoticeDate: '2009-10-13',
         },
       },
@@ -61,7 +61,7 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
-          documents: [],
+          docketEntries: [],
         },
       },
       state: {
@@ -94,7 +94,7 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
-          documents: [],
+          docketEntries: [],
         },
       },
       state: {
@@ -128,8 +128,8 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
+          docketEntries: [],
           docketNumber: '123-45',
-          documents: [],
           irsNoticeDate: '2009-10-13',
           isPaper: true,
         },
@@ -151,12 +151,12 @@ describe('validateCaseDetail', () => {
       },
       props: {
         formWithComputedDates: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             { documentType: 'Petition' },
             { documentType: 'Statement of Taxpayer Identification' },
             { documentType: 'Application for Waiver of Filing Fee' },
           ],
+          docketNumber: '123-45',
           irsNoticeDate: '2009-10-13',
           isPaper: true,
         },

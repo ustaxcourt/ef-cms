@@ -31,10 +31,10 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
       `${test.docketNumber}${docketNumberSuffix}`,
     );
-    expect(caseDetail.documents.length).toEqual(documentCount);
+    expect(caseDetail.docketEntries.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
-    expect(caseDetailFormatted.documents).toEqual(
+    expect(caseDetailFormatted.formattedDocketEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ eventCode: 'P' }),
         expect.objectContaining({
@@ -43,8 +43,8 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
       ]),
     );
 
-    const rqtDocument = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => entry.record.eventCode === 'RQT',
+    const rqtDocument = caseDetailFormatted.formattedDocketEntries.find(
+      entry => entry.eventCode === 'RQT',
     );
     expect(rqtDocument).toBeTruthy();
 

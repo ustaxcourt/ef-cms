@@ -21,7 +21,7 @@ exports.sendServedPartiesEmails = async ({
     servedAt,
   } = documentEntity;
 
-  const docketEntry = caseEntity.documents.find(
+  const docketEntry = caseEntity.docketEntries.find(
     entry => entry.documentId === documentId,
   );
 

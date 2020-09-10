@@ -14,7 +14,7 @@ export const scanHelper = (get, applicationContext) => {
     SCAN_MODES,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
-  const formCaseDocuments = get(state.form.documents);
+  const formCaseDocuments = get(state.form.docketEntries);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
 

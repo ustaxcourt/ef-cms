@@ -23,31 +23,29 @@ export const documentViewerHelper = (get, applicationContext) => {
 
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
-    formattedCaseDetail.docketRecordWithDocument.find(
-      entry =>
-        entry.document &&
-        entry.document.documentId === viewerDocumentToDisplay.documentId,
+    formattedCaseDetail.formattedDocketEntries.find(
+      entry => entry && entry.documentId === viewerDocumentToDisplay.documentId,
     );
   if (!formattedDocumentToDisplay) {
     return {};
   }
 
-  const filedLabel = formattedDocumentToDisplay.document.filedBy
-    ? `Filed ${formattedDocumentToDisplay.document.createdAtFormatted} by ${formattedDocumentToDisplay.document.filedBy}`
+  const filedLabel = formattedDocumentToDisplay.filedBy
+    ? `Filed ${formattedDocumentToDisplay.createdAtFormatted} by ${formattedDocumentToDisplay.filedBy}`
     : '';
 
-  const { servedAtFormatted } = formattedDocumentToDisplay.document;
+  const { servedAtFormatted } = formattedDocumentToDisplay;
   const servedLabel = servedAtFormatted ? `Served ${servedAtFormatted}` : '';
 
   const showNotServed = getShowNotServedForDocument({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
-    documentId: formattedDocumentToDisplay.document.documentId,
+    documentId: formattedDocumentToDisplay.documentId,
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    formattedDocumentToDisplay.document.documentType,
+    formattedDocumentToDisplay.documentType,
   );
   const showServeCourtIssuedDocumentButton =
     showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
@@ -55,18 +53,18 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showServePaperFiledDocumentButton =
     showNotServed &&
     !isCourtIssuedDocument &&
-    !formattedDocumentToDisplay.document.isPetition &&
+    !formattedDocumentToDisplay.isPetition &&
     permissions.SERVE_DOCUMENT;
 
   const showServePetitionButton =
     showNotServed &&
-    formattedDocumentToDisplay.document.isPetition &&
+    formattedDocumentToDisplay.isPetition &&
     permissions.SERVE_PETITION;
 
   const showSignStipulatedDecisionButton =
-    formattedDocumentToDisplay.document.eventCode ===
+    formattedDocumentToDisplay.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    !formattedCaseDetail.documents.find(
+    !formattedCaseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
@@ -75,19 +73,19 @@ export const documentViewerHelper = (get, applicationContext) => {
   if (viewerDocumentToDisplay.isStricken !== undefined) {
     showStricken = viewerDocumentToDisplay.isStricken;
   } else {
-    const entry = formattedCaseDetail.docketRecordWithDocument.find(
+    const entry = formattedCaseDetail.formattedDocketEntries.find(
       docketEntry =>
-        docketEntry.record.documentId === viewerDocumentToDisplay.documentId,
+        docketEntry.documentId === viewerDocumentToDisplay.documentId,
     );
-    showStricken = entry.document.isStricken || entry.record.isStricken;
+    showStricken = entry.isStricken;
   }
 
   return {
-    description: formattedDocumentToDisplay.record.description,
+    description: formattedDocumentToDisplay.description,
     filedLabel,
     servedLabel,
     showNotServed,
-    showSealedInBlackstone: formattedDocumentToDisplay.document.isLegacySealed,
+    showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,

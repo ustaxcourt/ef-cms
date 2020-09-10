@@ -33,13 +33,13 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should add a new initial filing document to the case when the document does not exist on the original case', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, documents: [] },
+      { ...MOCK_CASE, docketEntries: [] },
       { applicationContext },
     );
 
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
     };
 
     await updateInitialFilingDocuments({
@@ -49,7 +49,7 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const rqtFile = mockOriginalCase.documents.find(
+    const rqtFile = mockOriginalCase.docketEntries.find(
       d => d.documentId === mockRQT.documentId,
     );
     expect(rqtFile).toBeDefined();
@@ -57,13 +57,13 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should set isFileAttached and isPaper to true', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, documents: [] },
+      { ...MOCK_CASE, docketEntries: [] },
       { applicationContext },
     );
 
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
     };
 
     await updateInitialFilingDocuments({
@@ -73,7 +73,7 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const filedDocument = mockOriginalCase.documents.find(
+    const filedDocument = mockOriginalCase.docketEntries.find(
       d => d.documentId === mockRQT.documentId,
     );
     expect(filedDocument.isFileAttached).toBeTruthy();
@@ -91,7 +91,7 @@ describe('addNewInitialFilingToCase', () => {
           postalCode: '12345',
           state: 'TX',
         },
-        documents: [],
+        docketEntries: [],
         partyType: PARTY_TYPES.petitionerSpouse,
       },
       { applicationContext },
@@ -106,7 +106,7 @@ describe('addNewInitialFilingToCase', () => {
         postalCode: '12345',
         state: 'TX',
       },
-      documents: [...MOCK_CASE.documents, mockRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
       partyType: PARTY_TYPES.petitionerSpouse,
     };
 
@@ -117,7 +117,7 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const filedDocument = mockOriginalCase.documents.find(
+    const filedDocument = mockOriginalCase.docketEntries.find(
       d => d.documentId === mockRQT.documentId,
     );
     expect(filedDocument.partyPrimary).toBeTruthy();
@@ -125,11 +125,11 @@ describe('addNewInitialFilingToCase', () => {
   });
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
-    mockCaseToUpdate = { ...MOCK_CASE, documents: [] };
+    mockCaseToUpdate = { ...MOCK_CASE, docketEntries: [] };
     mockOriginalCase = new Case(
       {
         ...MOCK_CASE,
-        documents: [...MOCK_CASE.documents, mockRQT],
+        docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
       },
       { applicationContext },
     );
@@ -141,7 +141,7 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const rqtFile = mockOriginalCase.documents.find(
+    const rqtFile = mockOriginalCase.docketEntries.find(
       d => d.documentId === mockRQT.documentId,
     );
     expect(rqtFile).toBeUndefined();
@@ -149,7 +149,7 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should remove the original document and add the new one to the case when the document has been re-added', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, documents: [...MOCK_CASE.documents, mockRQT] },
+      { ...MOCK_CASE, docketEntries: [...MOCK_CASE.docketEntries, mockRQT] },
       { applicationContext },
     );
 
@@ -159,7 +159,7 @@ describe('addNewInitialFilingToCase', () => {
     };
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockNewRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockNewRQT],
     };
 
     await updateInitialFilingDocuments({
@@ -169,11 +169,11 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const oldRqtFile = mockOriginalCase.documents.find(
+    const oldRqtFile = mockOriginalCase.docketEntries.find(
       d => d.documentId === mockRQT.documentId,
     );
     expect(oldRqtFile).toBeUndefined();
-    const newRqtFile = mockOriginalCase.documents.find(
+    const newRqtFile = mockOriginalCase.docketEntries.find(
       d => d.documentId === mockNewRQT.documentId,
     );
     expect(newRqtFile).toBeDefined();

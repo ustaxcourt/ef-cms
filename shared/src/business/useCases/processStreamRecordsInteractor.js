@@ -50,9 +50,9 @@ const filterRecords = async ({ applicationContext, records }) => {
         eventName: 'MODIFY',
       });
 
-      //also reindex all of the documents on the case
-      const { documents } = fullCase;
-      for (const document of documents) {
+      //also reindex all of the docketEntries on the case
+      const { docketEntries } = fullCase;
+      for (const document of docketEntries) {
         if (document.documentContentsId) {
           const buffer = await applicationContext
             .getPersistenceGateway()
@@ -70,10 +70,9 @@ const filterRecords = async ({ applicationContext, records }) => {
         const documentWithCaseInfo = {
           ...AWS.DynamoDB.Converter.marshall(fullCase),
           ...AWS.DynamoDB.Converter.marshall(document),
-          docketRecord: undefined,
-          documents: undefined,
-          entityName: { S: 'Document' },
-          sk: { S: `document|${document.documentId}` },
+          docketEntries: undefined,
+          entityName: { S: 'DocketEntry' },
+          sk: { S: `docket-entry|${document.documentId}` },
         };
 
         filteredRecords.push({
@@ -83,7 +82,7 @@ const filterRecords = async ({ applicationContext, records }) => {
                 S: caseRecord.dynamodb.Keys.pk.S,
               },
               sk: {
-                S: `document|${document.documentId}`,
+                S: `docket-entry|${document.documentId}`,
               },
             },
             NewImage: documentWithCaseInfo,

@@ -1,7 +1,9 @@
 export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
   return it('Petitions clerk bulk assigns cases', async () => {
     const selectedWorkItems = createdCases.map(newCase => {
-      const firstDocument = newCase.documents.find(entry => entry.index === 1);
+      const firstDocument = newCase.docketEntries.find(
+        entry => entry.index === 1,
+      );
 
       return {
         workItemId: firstDocument.workItem.workItemId,

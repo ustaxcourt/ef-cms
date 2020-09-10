@@ -19,7 +19,7 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               description: 'Petition',
               documentId: 'abc',
@@ -44,7 +44,7 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               description: 'Petition',
               documentId: 'abc',
@@ -54,7 +54,6 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -70,13 +69,14 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
               description: 'Petition',
               documentId: 'abc',
               documentType: 'Petition',
               filedBy: 'Test Petitioner',
+              filingDate: '2018-11-21T20:49:28.192Z',
               index: 1,
               isOnDocketRecord: true,
             },
@@ -85,7 +85,6 @@ describe('documentViewerHelper', () => {
         permissions: {
           SERVE_DOCUMENT: false,
         },
-
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -98,7 +97,7 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               createdAt: '2018-11-22T20:49:28.192Z',
               description: 'Petition',
@@ -109,7 +108,6 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -125,7 +123,7 @@ describe('documentViewerHelper', () => {
     let result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               description: 'Petition',
               documentId: 'abc',
@@ -136,7 +134,6 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -150,7 +147,7 @@ describe('documentViewerHelper', () => {
     result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Petition',
@@ -159,7 +156,6 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -175,7 +171,7 @@ describe('documentViewerHelper', () => {
     let result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               description: 'Petition',
               documentId: 'abc',
@@ -198,7 +194,7 @@ describe('documentViewerHelper', () => {
     result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Petition',
@@ -207,7 +203,6 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
         permissions: {
           SERVE_DOCUMENT: false,
         },
@@ -226,7 +221,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -252,7 +247,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -278,7 +273,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -309,7 +304,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -335,7 +330,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -361,7 +356,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -388,7 +383,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -419,7 +414,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -445,7 +440,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -471,7 +466,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -498,7 +493,7 @@ describe('documentViewerHelper', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
                 documentId,
                 documentTitle: 'Some Stuff',
@@ -527,7 +522,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Petition',
@@ -555,7 +550,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Petition',
@@ -582,7 +577,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Petition',
@@ -611,7 +606,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
@@ -636,7 +631,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
@@ -668,7 +663,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Proposed Stipulated Decision',
@@ -699,7 +694,7 @@ describe('documentViewerHelper', () => {
         state: {
           caseDetail: {
             correspondence: [],
-            documents: [
+            docketEntries: [
               {
                 documentId: '123',
                 documentType: 'Answer',
@@ -724,7 +719,7 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               description: 'Petition',
               documentId: 'abc',
@@ -751,7 +746,7 @@ describe('documentViewerHelper', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               description: 'Petition',
               documentId: 'abc',

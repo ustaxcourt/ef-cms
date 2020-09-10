@@ -5,17 +5,25 @@ const {
   batchGet,
   batchWrite,
   delete: deleteObj,
+  describeDeployTable,
+  describeTable,
   get,
   put,
   query,
   updateConsistent,
 } = require('./dynamodbClientService');
 
-const MOCK_ITEM = {
-  docketNumber: '123-20',
-};
-
 describe('dynamodbClientService', function () {
+  const MOCK_ITEM = {
+    docketNumber: '123-20',
+  };
+
+  const mockDynamoClient = {
+    describeTable: jest.fn().mockImplementation(() => {
+      return { promise: async () => null };
+    }),
+  };
+
   beforeEach(() => {
     applicationContext.getDocumentClient().batchGet.mockReturnValue({
       promise: () =>
@@ -84,6 +92,10 @@ describe('dynamodbClientService', function () {
         });
       },
     });
+
+    applicationContext.getDynamoClient = jest
+      .fn()
+      .mockImplementation(() => mockDynamoClient);
   });
 
   describe('put', () => {
@@ -212,6 +224,34 @@ describe('dynamodbClientService', function () {
       ).toEqual({
         Key: { pk: '123-20' },
         TableName: 'efcms-local',
+      });
+    });
+  });
+
+  describe('describeTable', () => {
+    it("should return information on the environment's table", async () => {
+      await describeTable({
+        applicationContext,
+      });
+
+      expect(
+        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
+      ).toEqual({
+        TableName: 'efcms-local',
+      });
+    });
+  });
+
+  describe('describeDeployTable', () => {
+    it("should return information on the environment's table", async () => {
+      await describeDeployTable({
+        applicationContext,
+      });
+
+      expect(
+        applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
+      ).toEqual({
+        TableName: 'efcms-deploy-local',
       });
     });
   });
