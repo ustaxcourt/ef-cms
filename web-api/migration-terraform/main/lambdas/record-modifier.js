@@ -82,6 +82,9 @@ exports.handler = async event => {
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
+
+  console.log(`about to process ${segment} of ${totalSegments}`);
+
   await scanTableSegment(segment, totalSegments);
   await sqs
     .deleteMessage({

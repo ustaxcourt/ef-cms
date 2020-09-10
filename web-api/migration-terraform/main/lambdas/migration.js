@@ -14,13 +14,17 @@ exports.handler = async event => {
   for (let item of newItems) {
     // TODO - handle case if put request fails
     // TODO - investigate using batchWrite
-    await documentClient
-      .put({
-        Item: {
-          ...item,
-        },
-        TableName: process.env.DESTINATION_TABLE,
-      })
-      .promise();
+    try {
+      await documentClient
+        .put({
+          Item: {
+            ...item,
+          },
+          TableName: process.env.DESTINATION_TABLE,
+        })
+        .promise();
+    } catch (e) {
+      console.log('error writing to migration destination table: ', e);
+    }
   }
 };
