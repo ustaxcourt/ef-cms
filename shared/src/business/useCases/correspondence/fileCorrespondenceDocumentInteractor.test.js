@@ -13,8 +13,6 @@ const {
 const { createISODateString } = require('../../utilities/DateHandler');
 
 describe('fileCorrespondenceDocumentInteractor', () => {
-  const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-
   const mockUser = {
     name: 'Docket Clerk',
     role: ROLES.docketClerk,
@@ -36,7 +34,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     docketEntries: [
       {
         description: 'Docket Record 1',
-        documentId: mockDocumentId,
+        documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
         filingDate: createISODateString(),
@@ -116,7 +114,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       correspondence: {
-        documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
+        correspondenceId: '14bb669b-0962-4781-87a0-50718f556e2b',
         documentTitle: 'A title',
         filedBy: mockUser.name,
         filingDate: '2001-02-01',
@@ -144,7 +142,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       ...mockCase,
       correspondence: [
         {
-          documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
+          correspondenceId: '14bb669b-0962-4781-87a0-50718f556e2b',
           documentTitle: 'A title',
           filedBy: mockUser.name,
           filingDate: '2001-02-01',

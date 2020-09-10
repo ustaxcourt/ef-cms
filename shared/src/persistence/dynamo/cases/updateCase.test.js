@@ -92,7 +92,7 @@ describe('updateCase', () => {
   function addArchivedCorrespondences() {
     firstQueryStub.push({
       archived: true,
-      documentId: 'archived-correspondence-id-existing-123',
+      correspondenceId: 'archived-correspondence-id-existing-123',
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       pk: 'case|101-18',
@@ -101,7 +101,7 @@ describe('updateCase', () => {
     });
     firstQueryStub.push({
       archived: true,
-      documentId: mockCorrespondenceId,
+      correspondenceId: mockCorrespondenceId,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       pk: 'case|101-18',
@@ -529,7 +529,7 @@ describe('updateCase', () => {
           archivedCorrespondences: [
             {
               archived: true,
-              documentId: mockCorrespondenceId,
+              correspondenceId: mockCorrespondenceId,
               documentTitle: 'My Correspondence',
               filedBy: 'Docket clerk',
               userId: 'user-id-existing-234',
@@ -563,14 +563,14 @@ describe('updateCase', () => {
           archivedCorrespondences: [
             {
               archived: true,
-              documentId: mockCorrespondenceId,
+              correspondenceId: mockCorrespondenceId,
               documentTitle: 'My Correspondence',
               filedBy: 'Docket clerk',
               userId: 'user-id-existing-234',
             },
             {
               archived: true,
-              documentId: 'archived-correspondence-id-existing-123',
+              correspondenceId: 'archived-correspondence-id-existing-123',
               documentTitle: 'My Correspondence',
               filedBy: 'Docket clerk',
               userId: 'user-id-existing-234',
@@ -611,7 +611,7 @@ describe('updateCase', () => {
           correspondence: [
             {
               archived: true,
-              documentId: mockCorrespondenceId,
+              correspondenceId: mockCorrespondenceId,
               documentTitle: 'My Correspondence',
               filedBy: 'Docket clerk',
               userId: 'user-id-existing-234',
@@ -645,14 +645,14 @@ describe('updateCase', () => {
           correspondence: [
             {
               archived: true,
-              documentId: mockCorrespondenceId,
+              correspondenceId: mockCorrespondenceId,
               documentTitle: 'My Correspondence',
               filedBy: 'Docket clerk',
               userId: 'user-id-existing-234',
             },
             {
               archived: true,
-              documentId: 'archived-correspondence-id-existing-123',
+              correspondenceId: 'archived-correspondence-id-existing-123',
               documentTitle: 'My Correspondence',
               filedBy: 'Docket clerk',
               userId: 'user-id-existing-234',

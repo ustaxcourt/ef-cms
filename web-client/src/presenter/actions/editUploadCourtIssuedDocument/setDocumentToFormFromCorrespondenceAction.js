@@ -9,24 +9,24 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void} sets the document on state
  */
-export const setDocumentToFormAction = ({
+export const setDocumentToFormFromCorrespondenceAction = ({
   applicationContext,
   props,
   store,
 }) => {
-  const { caseDetail, documentId } = props;
+  const { caseDetail, correspondenceId } = props;
 
   const documentToSet = applicationContext
     .getUtilities()
     .getAttachmentDocumentById({
       caseDetail,
-      documentId,
+      documentId: correspondenceId,
     });
 
   if (documentToSet) {
     store.set(state.form, {
       ...documentToSet,
-      documentIdToEdit: documentId,
+      documentIdToEdit: correspondenceId,
       primaryDocumentFile: true,
     });
   }
