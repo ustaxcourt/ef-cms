@@ -9,3 +9,7 @@ variable "environment" {
 variable "stream_arn" {
   type = string
 }
+
+variable "destination_table" {
+  type = string
+}
