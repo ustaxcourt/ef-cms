@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -484,6 +485,33 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(test);
+
+  loginAs(test, 'docketclerk@example.com');
+  const today = applicationContext.getUtilities().formatNow('MMDDYYYY');
+  const [todayMonth, todayDay, todayYear] = today.split('/');
+
+  docketClerkAddsDocketEntryWithoutFile(test, {
+    dateReceivedDay: todayDay,
+    dateReceivedMonth: todayMonth,
+    dateReceivedYear: todayYear,
+  });
+  it('verifies the docket record after filing a paper document without a file', async () => {
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
+
+    expect(formattedDocketEntriesOnDocketRecord.length).toEqual(4);
+    const entry = formattedDocketEntriesOnDocketRecord[3];
+
+    expect(entry.index).toBeUndefined();
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'ADMR',
+      isInProgress: true,
+      showNotServed: true,
+      showServed: false,
+    });
+  });
 
   loginAs(test, 'petitioner@example.com');
   petitionerFilesADocumentForCase(test, fakeFile);
