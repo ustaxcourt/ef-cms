@@ -87,12 +87,12 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     },
   });
 
-  const documentId = applicationContext.getUniqueId();
+  const key = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: pdf,
-    documentId,
+    key,
     useTempBucket: true,
   });
 
@@ -100,7 +100,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId,
+    documentId: key,
     useTempBucket: true,
   });
 

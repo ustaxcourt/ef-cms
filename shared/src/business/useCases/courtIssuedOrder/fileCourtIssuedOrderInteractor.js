@@ -95,7 +95,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
-      documentId: documentContentsId,
+      key: documentContentsId,
       useTempBucket: false,
     });
 
