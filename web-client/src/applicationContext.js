@@ -7,7 +7,7 @@ import {
 
 import {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } from '../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
@@ -100,7 +100,6 @@ import {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
@@ -557,7 +556,6 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocketEntry,
-      formatDocument,
       formatDollars,
       formatJudgeName,
       formatNow,
@@ -565,9 +563,8 @@ const applicationContext = {
       getCaseCaption: Case.getCaseCaption,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
-      getFormattedDocumentType: DocketEntry.getFormattedType,
       getJudgeLastName,
-      getPetitionDocumentFromDocuments,
+      getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,

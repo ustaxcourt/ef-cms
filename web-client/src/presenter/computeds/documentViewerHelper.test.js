@@ -23,6 +23,7 @@ describe('documentViewerHelper', () => {
             {
               description: 'Petition',
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               index: 1,
               isOnDocketRecord: true,
@@ -47,7 +48,9 @@ describe('documentViewerHelper', () => {
           docketEntries: [
             {
               description: 'Petition',
+              descriptionDisplay: 'Petition',
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               index: 1,
               isOnDocketRecord: true,
@@ -74,6 +77,7 @@ describe('documentViewerHelper', () => {
               createdAt: '2018-11-21T20:49:28.192Z',
               description: 'Petition',
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               filedBy: 'Test Petitioner',
               filingDate: '2018-11-21T20:49:28.192Z',
@@ -102,6 +106,7 @@ describe('documentViewerHelper', () => {
               createdAt: '2018-11-22T20:49:28.192Z',
               description: 'Petition',
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Order',
               index: 1,
               isOnDocketRecord: true,
@@ -127,6 +132,7 @@ describe('documentViewerHelper', () => {
             {
               description: 'Petition',
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               index: 1,
               isLegacySealed: false,
@@ -150,6 +156,7 @@ describe('documentViewerHelper', () => {
           docketEntries: [
             {
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               isLegacySealed: true,
               isOnDocketRecord: true,
@@ -175,6 +182,7 @@ describe('documentViewerHelper', () => {
             {
               description: 'Petition',
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               index: 1,
               isOnDocketRecord: true,
@@ -197,6 +205,7 @@ describe('documentViewerHelper', () => {
           docketEntries: [
             {
               documentId: 'abc',
+              documentTitle: 'Petition',
               documentType: 'Petition',
               isOnDocketRecord: true,
               servedAt: '2018-11-21T20:49:28.192Z',

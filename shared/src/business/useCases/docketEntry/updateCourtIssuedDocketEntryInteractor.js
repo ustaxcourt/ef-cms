@@ -39,11 +39,11 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId,
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: documentId,
   });
 
-  if (!currentDocument) {
+  if (!currentDocketEntry) {
     throw new NotFoundError('Document not found');
   }
 
@@ -72,7 +72,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   const docketEntryEntity = new DocketEntry(
     {
-      ...currentDocument,
+      ...currentDocketEntry,
       ...editableFields,
       documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),

@@ -10,7 +10,7 @@ const {
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
-  formatDocument,
+  formatDocketEntry,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
 const {
@@ -71,8 +71,8 @@ exports.completeDocketEntryQCInteractor = async ({
     record => record.documentId === documentId,
   );
 
-  const currentDocketEntry = caseEntity.getDocumentById({
-    documentId,
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: documentId,
   });
 
   const editableFields = {
@@ -126,7 +126,7 @@ exports.completeDocketEntryQCInteractor = async ({
     updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
   }
   updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocument(applicationContext, updatedDocketEntry),
+    formatDocketEntry(applicationContext, updatedDocketEntry),
   )}`;
   if (updatedDocketEntry.additionalInfo2) {
     updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
@@ -137,7 +137,7 @@ exports.completeDocketEntryQCInteractor = async ({
     currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
   }
   currentDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocument(applicationContext, currentDocketEntry),
+    formatDocketEntry(applicationContext, currentDocketEntry),
   )}`;
   if (currentDocketEntry.additionalInfo2) {
     currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;
@@ -261,7 +261,7 @@ exports.completeDocketEntryQCInteractor = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
-        documentId: paperServicePdfId,
+        key: paperServicePdfId,
         useTempBucket: true,
       });
 
@@ -271,7 +271,7 @@ exports.completeDocketEntryQCInteractor = async ({
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
-          documentId: paperServicePdfId,
+          key: paperServicePdfId,
           useTempBucket: true,
         });
 
@@ -324,13 +324,13 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: newPdfData,
-      documentId: noticeUpdatedDocketEntry.documentId,
+      key: noticeUpdatedDocketEntry.documentId,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeUpdatedDocketEntry,
+      docketEntryEntity: noticeUpdatedDocketEntry,
       servedParties,
     });
 
@@ -354,7 +354,7 @@ exports.completeDocketEntryQCInteractor = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
-        documentId: paperServicePdfId,
+        key: paperServicePdfId,
         useTempBucket: true,
       });
 
@@ -364,7 +364,7 @@ exports.completeDocketEntryQCInteractor = async ({
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
-          documentId: paperServicePdfId,
+          key: paperServicePdfId,
           useTempBucket: true,
         });
 
@@ -381,8 +381,8 @@ exports.completeDocketEntryQCInteractor = async ({
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber: caseEntity.docketNumber,
-      documentId,
     });
   }
 

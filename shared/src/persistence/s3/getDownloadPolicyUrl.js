@@ -2,14 +2,10 @@
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.documentId the document id to get
+ * @param {string} providers.key the key of the document to get
  * @returns {Promise<any>} the promise of the call to the storage client
  */
-exports.getDownloadPolicyUrl = ({
-  applicationContext,
-  documentId,
-  useTempBucket,
-}) => {
+exports.getDownloadPolicyUrl = ({ applicationContext, key, useTempBucket }) => {
   const bucketName = useTempBucket
     ? applicationContext.getTempDocumentsBucketName()
     : applicationContext.getDocumentsBucketName();
@@ -20,7 +16,7 @@ exports.getDownloadPolicyUrl = ({
       {
         Bucket: bucketName,
         Expires: 120,
-        Key: documentId,
+        Key: key,
       },
       (err, data) => {
         if (err) {

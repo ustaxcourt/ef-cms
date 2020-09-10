@@ -88,11 +88,11 @@
                     options: 
                       version: 
                         - "uuidv4"
-    archivedDocuments: 
+    archivedDocketEntries: 
       type: "array"
       flags: 
         presence: "optional"
-        description: "List of Document Entities that were archived instead of added to the docket record."
+        description: "List of DocketEntry Entities that were archived instead of added to the docket record."
       items: 
         - 
           type: "object"
@@ -645,7 +645,7 @@
                 - "U.S.C.A"
                 - "Unsworn Declaration under Penalty of Perjury in Support"
                 - "Writ of Habeas Corpus Ad Testificandum"
-            draftState: 
+            draftOrderState: 
               type: "object"
               flags: 
                 presence: "optional"
@@ -4716,7 +4716,7 @@
                 - "U.S.C.A"
                 - "Unsworn Declaration under Penalty of Perjury in Support"
                 - "Writ of Habeas Corpus Ad Testificandum"
-            draftState: 
+            draftOrderState: 
               type: "object"
               flags: 
                 presence: "optional"

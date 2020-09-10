@@ -1642,7 +1642,7 @@ describe('DocketEntry entity', () => {
       const document = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          draftState: {
+          draftOrderState: {
             documentContents: 'Yee to the haw',
           },
         },
@@ -1651,7 +1651,7 @@ describe('DocketEntry entity', () => {
       document.setAsServed();
 
       expect(document.servedAt).toBeDefined();
-      expect(document.draftState).toEqual(null);
+      expect(document.draftOrderState).toEqual(null);
     });
 
     it('sets the Document as served with served parties', () => {
@@ -1669,19 +1669,6 @@ describe('DocketEntry entity', () => {
       ]);
       expect(document.servedAt).toBeDefined();
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
-    });
-  });
-
-  describe('getFormattedType', () => {
-    it('strips out the dash and returns the verbiage after it', () => {
-      expect(DocketEntry.getFormattedType('T.C. Opinion')).toEqual(
-        'T.C. Opinion',
-      );
-    });
-    it("returns the verbiage if there's no dash", () => {
-      expect(DocketEntry.getFormattedType('Summary Opinion')).toEqual(
-        'Summary Opinion',
-      );
     });
   });
 

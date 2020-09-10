@@ -23,7 +23,7 @@ describe('formatAttachments', () => {
     },
   ];
 
-  const mockArchivedDocuments = [
+  const mockArchivedDocketEntries = [
     {
       archived: true,
       documentId: '5',
@@ -49,7 +49,7 @@ describe('formatAttachments', () => {
     },
   ];
 
-  it('formats docketEntries in the attachments array based on meta from docketEntries in the docketEntries, correspondence, archivedDocuments, and archivedCorrespondences arrays', () => {
+  it('formats docketEntries in the attachments array based on meta from docketEntries in the docketEntries, correspondence, archivedDocketEntries, and archivedCorrespondences arrays', () => {
     const result = formatAttachments({
       attachments: [
         { documentId: '1' },
@@ -59,7 +59,7 @@ describe('formatAttachments', () => {
       ],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
         docketEntries: mockDocuments,
       },
@@ -91,7 +91,7 @@ describe('formatAttachments', () => {
       ],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
         docketEntries: mockDocuments,
       },
@@ -113,7 +113,7 @@ describe('formatAttachments', () => {
     ]);
   });
 
-  it('defaults the archivedDocuments, archivedCorrespondences, and correspondence arrays to empty arrays if they are not on caseDetail', () => {
+  it('defaults the archivedDocketEntries, archivedCorrespondences, and correspondence arrays to empty arrays if they are not on caseDetail', () => {
     const result = formatAttachments({
       attachments: [{ documentId: '1' }],
       caseDetail: {
@@ -131,7 +131,7 @@ describe('formatAttachments', () => {
       attachments: [{ documentId: '999' }],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
         docketEntries: mockDocuments,
       },
@@ -151,7 +151,7 @@ describe('formatAttachments', () => {
       attachments: [],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
         docketEntries: mockDocuments,
       },
