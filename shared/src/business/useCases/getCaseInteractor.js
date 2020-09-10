@@ -21,7 +21,7 @@ const getDocumentContentsForDocuments = async ({
           .getPersistenceGateway()
           .getDocument({
             applicationContext,
-            documentId: document.documentContentsId,
+            key: document.documentContentsId,
             protocol: 'S3',
             useTempBucket: false,
           });

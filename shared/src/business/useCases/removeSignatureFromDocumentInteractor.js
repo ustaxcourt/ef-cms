@@ -31,7 +31,7 @@ exports.removeSignatureFromDocumentInteractor = async ({
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      documentId: docketEntryToUnsign.documentIdBeforeSignature,
+      key: docketEntryToUnsign.documentIdBeforeSignature,
       protocol: 'S3',
       useTempBucket: false,
     });

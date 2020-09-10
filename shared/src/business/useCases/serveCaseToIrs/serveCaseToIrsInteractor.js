@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: doc.documentId,
+          docketEntryId: doc.documentId,
         });
     }
   }
