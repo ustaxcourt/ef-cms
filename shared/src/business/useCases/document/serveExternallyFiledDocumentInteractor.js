@@ -68,7 +68,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: servedDocWithCover,
-    documentId: docketEntryId,
+    key: docketEntryId,
   });
 
   let paperServicePdfUrl;
@@ -95,7 +95,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
-      documentId: paperServicePdfId,
+      key: paperServicePdfId,
       useTempBucket: true,
     });
 

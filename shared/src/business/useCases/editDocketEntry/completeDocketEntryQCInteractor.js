@@ -261,7 +261,7 @@ exports.completeDocketEntryQCInteractor = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
-        documentId: paperServicePdfId,
+        key: paperServicePdfId,
         useTempBucket: true,
       });
 
@@ -324,7 +324,7 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: newPdfData,
-      documentId: noticeUpdatedDocketEntry.documentId,
+      key: noticeUpdatedDocketEntry.documentId,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -354,7 +354,7 @@ exports.completeDocketEntryQCInteractor = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
-        documentId: paperServicePdfId,
+        key: paperServicePdfId,
         useTempBucket: true,
       });
 

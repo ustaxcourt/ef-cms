@@ -17,7 +17,7 @@ exports.saveFileAndGenerateUrl = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: file,
-    documentId: fileId,
+    key: fileId,
     useTempBucket,
   });
 

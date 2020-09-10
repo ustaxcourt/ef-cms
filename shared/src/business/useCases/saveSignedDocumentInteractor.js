@@ -24,7 +24,7 @@ const saveOriginalDocumentWithNewId = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: originalDocument,
-    documentId: documentIdBeforeSignature,
+    key: documentIdBeforeSignature,
   });
 
   return documentIdBeforeSignature;
@@ -47,7 +47,7 @@ const replaceOriginalWithSignedDocument = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: signedDocument,
-    documentId: originalDocketEntryId,
+    key: originalDocketEntryId,
   });
 };
 

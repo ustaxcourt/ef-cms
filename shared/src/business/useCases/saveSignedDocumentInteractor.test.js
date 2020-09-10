@@ -69,7 +69,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({
-      documentId: mockDocumentIdBeforeSignature,
+      key: mockDocumentIdBeforeSignature,
     });
   });
 
@@ -86,7 +86,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[1][0],
     ).toMatchObject({
-      documentId: mockOriginalDocketEntryId,
+      key: mockOriginalDocketEntryId,
     });
   });
 

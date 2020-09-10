@@ -144,7 +144,7 @@ exports.updatePetitionerInformationInteractor = async ({
         },
       });
 
-    const newDocumentId = applicationContext.getUniqueId();
+    const newDocketEntryId = applicationContext.getUniqueId();
 
     const changeOfAddressDocketEntry = new DocketEntry(
       {
@@ -152,7 +152,7 @@ exports.updatePetitionerInformationInteractor = async ({
         additionalInfo: `for ${contactName}`,
         description: documentType.title,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocumentId,
+        documentId: newDocketEntryId,
         documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,
@@ -177,7 +177,7 @@ exports.updatePetitionerInformationInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
-      documentId: newDocumentId,
+      key: newDocketEntryId,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -241,7 +241,7 @@ exports.updatePetitionerInformationInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
-      documentId: paperServicePdfId,
+      key: paperServicePdfId,
       useTempBucket: true,
     });
 
