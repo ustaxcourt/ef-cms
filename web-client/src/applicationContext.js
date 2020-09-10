@@ -179,6 +179,7 @@ import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/ser
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
@@ -387,6 +388,7 @@ const allUseCases = {
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
   setItemInteractor,
+  setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
