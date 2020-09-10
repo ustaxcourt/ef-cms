@@ -45,7 +45,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
     ).toMatchObject({
-      documentId: mockDocumentIdBeforeSignature,
+      key: mockDocumentIdBeforeSignature,
       protocol: 'S3',
       useTempBucket: false,
     });

@@ -136,7 +136,7 @@ const batchDownloadTrialSessionInteractor = async ({
       .getDocument({
         applicationContext,
         docketNumber: sessionCase.docketNumber,
-        documentId: result.fileId,
+        key: result.fileId,
         protocol: 'S3',
         useTempBucket: true,
       });

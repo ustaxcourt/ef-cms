@@ -23,8 +23,8 @@ export const getPDFForPreviewAction = async ({
     .getUseCases()
     .loadPDFForPreviewInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber,
-      documentId,
     });
   return { file: pdfObj };
 };

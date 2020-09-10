@@ -162,7 +162,7 @@ exports.updateDocketEntryInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: primaryDocumentFileId,
+          docketEntryId: primaryDocumentFileId,
         });
 
       Object.assign(workItem, {
