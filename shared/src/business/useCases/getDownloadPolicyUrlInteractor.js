@@ -51,7 +51,9 @@ exports.getDownloadPolicyUrlInteractor = async ({
         document => document.documentId === documentId,
       );
 
-      const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
+      const docketEntryEntity = caseEntity.getDocketEntryById({
+        docketEntryId: documentId,
+      });
 
       const documentIsAvailable = documentMeetsAgeRequirements(
         selectedDocketEntry,

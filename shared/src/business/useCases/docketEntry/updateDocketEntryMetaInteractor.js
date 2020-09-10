@@ -40,7 +40,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
-    documentId: docketEntryMeta.documentId,
+    docketEntryId: docketEntryMeta.documentId,
   });
 
   const editableFields = {

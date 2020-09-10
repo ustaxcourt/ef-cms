@@ -41,7 +41,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   const servedParties = aggregatePartiesForService(caseEntity);
