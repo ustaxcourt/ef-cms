@@ -1,26 +1,39 @@
-resource "aws_iam_group" "developers" {
-  name = "developers"
+resource "aws_cognito_user_pool" "log_viewers" {
+  name = "log_viewers"
+  password_policy {
+    minimum_length = 8
+  }
 }
 
-resource "aws_iam_policy" "es_admin_access" {
-  name = "es_admin_access_policy"
-  description = "A policy that grants an IAM user admin access to Elasticsearch service"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": "es:*",
-        "Resource": "*"
-      }
-    ]
-}
-EOF
+resource "aws_cognito_user_pool_domain" "log_viewers" {
+  domain       = "ef-cms-info"
+  user_pool_id = aws_cognito_user_pool.log_viewers.id
 }
 
-resource "aws_iam_group_policy_attachment" "es_admin_policy_attachment" {
-  group      = aws_iam_group.developers.name
-  policy_arn = aws_iam_policy.es_admin_access.arn
+resource "aws_cognito_identity_pool" "log_viewers" {
+  identity_pool_name = "kibana dashboard identity pool"
+  allow_unauthenticated_identities = false
+}
+
+resource "aws_iam_role" "es_kibana_role" {
+  name = "es_kibana_role"
+  assume_role_policy = <<CONFIG
+  {
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "es.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+CONFIG
+}
+
+resource "aws_iam_role_policy_attachment" "es_cognito_auth" {
+  role       = aws_iam_role.es_kibana_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonESCognitoAccess"
 }
