@@ -52,4 +52,5 @@ module.exports = [
     url: 'http://localhost:5678/',
   },
   'http://localhost:5678/todays-opinions',
+  'http://localhost:5678/health',
 ];

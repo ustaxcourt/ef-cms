@@ -6,7 +6,7 @@ const { Case } = require('../../entities/cases/Case');
 exports.sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
   caseEntity,
-  documentEntity,
+  docketEntryEntity,
 }) => {
   const {
     caseCaption,
@@ -25,11 +25,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     eventCode,
     filingDate,
     servedAt,
-  } = documentEntity;
-
-  const docketEntry = caseEntity.documents.find(
-    entry => entry.documentId === documentId,
-  );
+  } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
     const representing = [];
@@ -69,7 +65,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       contactPrimary,
       contactSecondary,
       currentDate,
-      docketEntryNumber: docketEntry && docketEntry.index,
+      docketEntryNumber: docketEntryEntity.index,
       documentDetail: {
         documentId,
         documentTitle: documentType,

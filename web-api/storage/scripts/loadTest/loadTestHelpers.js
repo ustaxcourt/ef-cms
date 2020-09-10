@@ -85,13 +85,13 @@ const createCase = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: petitionFile,
-        documentId: petitionFileId,
+        key: petitionFileId,
       });
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: stinFile,
-        documentId: stinFileId,
+        key: stinFileId,
       });
     } catch (e) {
       console.log('e', e);
@@ -132,12 +132,12 @@ const createCase = async ({
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: document.documentId,
       docketNumber: caseDetail.docketNumber,
-      documentId: document.documentId,
     });
   };
 
-  for (const document of caseDetail.documents) {
+  for (const document of caseDetail.docketEntries) {
     if (shouldUpload) {
       await addCoversheet(document);
     }

@@ -26,7 +26,7 @@ describe('deleteDocument', () => {
     expect(client.delete.mock.calls[0][0]).toMatchObject({
       key: {
         pk: `case|${mockDocketNumber}`,
-        sk: `document|${mockDocumentId}`,
+        sk: `docket-entry|${mockDocumentId}`,
       },
     });
   });

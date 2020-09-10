@@ -21,19 +21,20 @@ describe('publicCaseDetailHelper', () => {
       caseDetail: {
         docketEntries: [],
         docketNumber: '123-45',
-        documents: [],
       },
     };
   });
 
-  describe('formattedDocketEntries', () => {
-    it('should return the formattedDocketEntries as an array', () => {
+  describe('formattedDocketEntriesOnDocketRecord', () => {
+    it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
       const result = runCompute(publicCaseDetailHelper, { state });
-      expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
+      expect(
+        Array.isArray(result.formattedDocketEntriesOnDocketRecord),
+      ).toBeTruthy();
     });
 
     it('should return hasDocument false if the document is a minute entry', () => {
-      state.caseDetail.documents = [
+      state.caseDetail.docketEntries = [
         {
           description: 'Request for Place of Trial at Flavortown, TN',
           documentType:
@@ -57,7 +58,7 @@ describe('publicCaseDetailHelper', () => {
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
       });
@@ -71,7 +72,7 @@ describe('publicCaseDetailHelper', () => {
   });
 
   it('should format docket entries with documents and sort chronologically', () => {
-    state.caseDetail.documents = [
+    state.caseDetail.docketEntries = [
       {
         action: 'something',
         createdAt: '2018-11-21T20:49:28.192Z',
@@ -279,7 +280,7 @@ describe('publicCaseDetailHelper', () => {
       },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
-    expect(result.formattedDocketEntries).toMatchObject([
+    expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: '10/21/18',
         description: 'second record additionalInfo!',

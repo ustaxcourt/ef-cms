@@ -13,7 +13,7 @@ export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
       address1: test.updatedPractitionerAddress,
     });
 
-    const documents = test.getState('caseDetail.documents');
+    const documents = test.getState('caseDetail.docketEntries');
 
     const changeOfAddressDocument = documents.find(
       document => document.documentType === 'Notice of Change of Address',

@@ -104,12 +104,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         trialSessionId: trialSessionEntity.trialSessionId,
       });
 
-    const newNoticeOfTrialIssuedDocumentId = applicationContext.getUniqueId();
+    const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: noticeOfTrialIssuedFile,
-      documentId: newNoticeOfTrialIssuedDocumentId,
+      key: newNoticeOfTrialIssuedDocketEntryId,
     });
 
     const trialSessionStartDate = applicationContext
@@ -118,10 +118,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocumentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
 
-    const noticeOfTrialDocument = new DocketEntry(
+    const noticeOfTrialDocketEntry = new DocketEntry(
       {
         description: noticeOfTrialDocumentTitle,
-        documentId: newNoticeOfTrialIssuedDocumentId,
+        documentId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
@@ -133,7 +133,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(noticeOfTrialDocument);
+    caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
     caseEntity.setNoticeOfTrialDate();
 
     // Standing Pretrial Notice/Order
@@ -167,18 +167,18 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
     }
 
-    const newStandingPretrialDocumentId = applicationContext.getUniqueId();
+    const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: standingPretrialFile,
-      documentId: newStandingPretrialDocumentId,
+      key: newStandingPretrialDocketEntryId,
     });
 
-    const standingPretrialDocument = new DocketEntry(
+    const standingPretrialDocketEntry = new DocketEntry(
       {
         description: standingPretrialDocumentTitle,
-        documentId: newStandingPretrialDocumentId,
+        documentId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
@@ -189,22 +189,22 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(standingPretrialDocument);
+    caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
     // Serve notice
     const servedParties = await serveNoticesForCase({
       caseEntity,
-      noticeDocumentEntity: noticeOfTrialDocument,
+      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
       noticeDocumentPdfData: noticeOfTrialIssuedFile,
-      standingPretrialDocumentEntity: standingPretrialDocument,
+      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
       standingPretrialPdfData: standingPretrialFile,
     });
 
-    noticeOfTrialDocument.setAsServed(servedParties.all);
-    standingPretrialDocument.setAsServed(servedParties.all);
+    noticeOfTrialDocketEntry.setAsServed(servedParties.all);
+    standingPretrialDocketEntry.setAsServed(servedParties.all);
 
-    caseEntity.updateDocument(noticeOfTrialDocument); // to generate an index
-    caseEntity.updateDocument(standingPretrialDocument); // to generate an index
+    caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
+    caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -221,17 +221,17 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    *
    * @param {object} deconstructed function arguments
    * @param {object} deconstructed.caseEntity the case entity
-   * @param {object} deconstructed.noticeDocumentEntity the notice document entity
+   * @param {object} deconstructed.noticeDocketEntryEntity the notice document entity
    * @param {Uint8Array} deconstructed.noticeDocumentPdfData the pdf data of the notice doc
-   * @param {object} deconstructed.standingPretrialDocumentEntity the standing pretrial document entity
+   * @param {object} deconstructed.standingPretrialDocketEntryEntity the standing pretrial document entity
    * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data of the standing pretrial doc
    * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticesForCase = async ({
     caseEntity,
-    noticeDocumentEntity,
+    noticeDocketEntryEntity,
     noticeDocumentPdfData,
-    standingPretrialDocumentEntity,
+    standingPretrialDocketEntryEntity,
     standingPretrialPdfData,
   }) => {
     const servedParties = aggregatePartiesForService(caseEntity);
@@ -239,14 +239,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeDocumentEntity,
+      docketEntryEntity: noticeDocketEntryEntity,
       servedParties,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: standingPretrialDocumentEntity,
+      docketEntryEntity: standingPretrialDocketEntryEntity,
       servedParties,
     });
 
@@ -311,7 +311,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
-      documentId,
+      key: documentId,
       useTempBucket: true,
     });
     hasPaper = true;
@@ -319,7 +319,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     pdfUrl = (
       await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
         applicationContext,
-        documentId,
+        key: documentId,
         useTempBucket: true,
       })
     ).url;

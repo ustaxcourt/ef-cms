@@ -49,7 +49,7 @@ export const docketClerkAddsDocketEntryFromMessage = test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    const caseOrderDocketEntry = caseDetailFormatted.formattedDocuments.find(
+    const caseOrderDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
       d => d.documentId === orderDocument.documentId,
     );
     expect(caseOrderDocketEntry).toBeDefined();

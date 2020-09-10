@@ -29,10 +29,10 @@ describe('getCaseByDocketNumber', () => {
 
     expect(result).toEqual({
       archivedCorrespondences: [],
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       correspondence: [],
+      docketEntries: [],
       docketNumber: '123-20',
-      documents: [],
       irsPractitioners: [],
       pk: 'case|123-20',
       privatePractitioners: [],
@@ -66,13 +66,13 @@ describe('getCaseByDocketNumber', () => {
               archived: true,
               documentId: 'abc-123',
               pk: 'case|123-20',
-              sk: 'document|123',
+              sk: 'docket-entry|123',
             },
             {
               archived: false,
               documentId: 'abc-124',
               pk: 'case|123-20',
-              sk: 'document|124',
+              sk: 'docket-entry|124',
             },
             {
               archived: true,
@@ -104,12 +104,12 @@ describe('getCaseByDocketNumber', () => {
           sk: 'correspondence|123',
         },
       ],
-      archivedDocuments: [
+      archivedDocketEntries: [
         {
           archived: true,
           documentId: 'abc-123',
           pk: 'case|123-20',
-          sk: 'document|123',
+          sk: 'docket-entry|123',
         },
       ],
       correspondence: [
@@ -120,15 +120,15 @@ describe('getCaseByDocketNumber', () => {
           sk: 'correspondence|124',
         },
       ],
-      docketNumber: '123-20',
-      documents: [
+      docketEntries: [
         {
           archived: false,
           documentId: 'abc-124',
           pk: 'case|123-20',
-          sk: 'document|124',
+          sk: 'docket-entry|124',
         },
       ],
+      docketNumber: '123-20',
       irsPractitioners: [
         { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
@@ -157,9 +157,9 @@ describe('getCaseByDocketNumber', () => {
 
     expect(result).toEqual({
       archivedCorrespondences: [],
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       correspondence: [],
-      documents: [],
+      docketEntries: [],
       irsPractitioners: [],
       privatePractitioners: [],
     });

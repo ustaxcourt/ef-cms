@@ -6,10 +6,10 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     .pop();
 
   const documents = caseAndCaseItems.filter(
-    item => item.sk.startsWith('document|') && !item.archived,
+    item => item.sk.startsWith('docket-entry|') && !item.archived,
   );
-  const archivedDocuments = caseAndCaseItems.filter(
-    item => item.sk.startsWith('document|') && item.archived,
+  const archivedDocketEntries = caseAndCaseItems.filter(
+    item => item.sk.startsWith('docket-entry|') && item.archived,
   );
   const privatePractitioners = caseAndCaseItems.filter(item =>
     item.sk.startsWith('privatePractitioner|'),
@@ -25,7 +25,10 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   );
 
   const sortedDocuments = sortBy(documents, 'createdAt');
-  const sortedArchivedDocuments = sortBy(archivedDocuments, 'createdAt');
+  const sortedArchivedDocketEntries = sortBy(
+    archivedDocketEntries,
+    'createdAt',
+  );
   const sortedCorrespondences = sortBy(correspondences, 'filingDate');
   const sortedArchivedCorrespondences = sortBy(
     archivedCorrespondences,
@@ -35,9 +38,9 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   return {
     ...theCase,
     archivedCorrespondences: sortedArchivedCorrespondences,
-    archivedDocuments: sortedArchivedDocuments,
+    archivedDocketEntries: sortedArchivedDocketEntries,
     correspondence: sortedCorrespondences,
-    documents: sortedDocuments,
+    docketEntries: sortedDocuments,
     irsPractitioners,
     privatePractitioners,
   };

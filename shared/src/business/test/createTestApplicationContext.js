@@ -19,7 +19,7 @@ const {
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -50,13 +50,15 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  documentUrlTranslator,
+} = require('../../../src/business/utilities/documentUrlTranslator');
+const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getServedPartiesCode,
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
@@ -185,6 +187,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
       .mockImplementation(compareCasesByDocketNumber),
@@ -208,7 +211,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.formatDateString),
     formatDocketEntry: jest.fn().mockImplementation(formatDocketEntry),
-    formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
@@ -224,9 +226,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
-    getPetitionDocumentFromDocuments: jest
+    getPetitionDocketEntryFromDocketEntries: jest
       .fn()
-      .mockImplementation(getPetitionDocumentFromDocuments),
+      .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
@@ -389,11 +391,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(() => new Uint8Array([])),
     docketNumberGenerator: mockCreateDocketNumberGenerator,
+    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
+      appEndpoint: 'localhost:1234',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     filterCaseMetadata: jest.fn(),
+    getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),

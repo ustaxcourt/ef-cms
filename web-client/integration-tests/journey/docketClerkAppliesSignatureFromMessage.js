@@ -48,7 +48,7 @@ export const docketClerkAppliesSignatureFromMessage = test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    const caseOrderDocument = caseDetailFormatted.formattedDocuments.find(
+    const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       d => d.documentId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toBeDefined();

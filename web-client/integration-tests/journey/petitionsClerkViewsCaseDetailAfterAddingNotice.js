@@ -13,12 +13,12 @@ export const petitionsClerkViewsCaseDetailAfterAddingNotice = (
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
 
-    expect(test.getState('caseDetail.documents').length).toEqual(
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(
       expectedDocumentCount,
     );
     expect(
       test
-        .getState('caseDetail.documents')
+        .getState('caseDetail.docketEntries')
         .find(d => d.documentTitle === 'Notice to Need a Nap'),
     ).toBeDefined();
   });

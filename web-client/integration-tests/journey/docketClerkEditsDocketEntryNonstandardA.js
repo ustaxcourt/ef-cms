@@ -132,7 +132,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       description: 'Notice of No Objection to Petition',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocuments.find(
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({

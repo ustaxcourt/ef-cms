@@ -30,7 +30,7 @@ describe('updateDocumentProcessingStatus', () => {
       documentId: 3,
     });
     expect(client.update.mock.calls[0][0]).toMatchObject({
-      Key: { pk: 'case|123-20', sk: 'document|3' },
+      Key: { pk: 'case|123-20', sk: 'docket-entry|3' },
       UpdateExpression: 'SET #processingStatus = :status',
     });
   });

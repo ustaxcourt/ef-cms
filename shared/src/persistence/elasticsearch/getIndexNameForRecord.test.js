@@ -25,16 +25,16 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-case');
   });
 
-  it('returns efcms-document for Document records', () => {
+  it('returns efcms-docket-entry for DocketEntry records', () => {
     const record = {
       entityName: {
-        S: 'Document',
+        S: 'DocketEntry',
       },
     };
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual('efcms-document');
+    expect(result).toEqual('efcms-docket-entry');
   });
 
   it('returns efcms-user for User records', () => {

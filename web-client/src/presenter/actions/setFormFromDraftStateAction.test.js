@@ -10,7 +10,7 @@ describe('setFormFromDraftStateAction', () => {
     documentType: 'Order',
   };
 
-  documentToMatch.draftState = { ...documentToMatch };
+  documentToMatch.draftOrderState = { ...documentToMatch };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -23,14 +23,14 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
         documentIdToEdit: documentIdToEdit,
       },
@@ -47,14 +47,14 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
       },
     });
@@ -62,20 +62,20 @@ describe('setFormFromDraftStateAction', () => {
     expect(result.state.form).toBeUndefined();
   });
 
-  it('sets state.form to the documentIdToEdit if draftState does not exist for the selected document', async () => {
+  it('sets state.form to the documentIdToEdit if draftOrderState does not exist for the selected document', async () => {
     const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
         documentIdToEdit: '321',
       },

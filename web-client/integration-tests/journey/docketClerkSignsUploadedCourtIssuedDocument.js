@@ -19,7 +19,7 @@ export const docketClerkSignsUploadedCourtIssuedDocument = test => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDocument = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(d => d.documentId === test.documentId);
 
     expect(caseDocument.signedAt).toBeTruthy();

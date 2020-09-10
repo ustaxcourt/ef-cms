@@ -27,8 +27,8 @@ export const setViewerDraftDocumentToDisplayAction = async ({
       .getDocumentDownloadUrlInteractor({
         applicationContext,
         docketNumber,
-        documentId: viewerDraftDocumentToDisplay.documentId,
         isPublic: false,
+        key: viewerDraftDocumentToDisplay.documentId,
       });
 
     store.set(state.iframeSrc, url);

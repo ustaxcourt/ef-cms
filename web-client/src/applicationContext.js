@@ -7,7 +7,7 @@ import {
 
 import {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } from '../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
@@ -48,6 +48,7 @@ import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/tr
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
   calculateISODate,
+  checkDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
@@ -99,7 +100,6 @@ import {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
@@ -539,6 +539,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
@@ -555,7 +556,6 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocketEntry,
-      formatDocument,
       formatDollars,
       formatJudgeName,
       formatNow,
@@ -564,7 +564,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
-      getPetitionDocumentFromDocuments,
+      getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,

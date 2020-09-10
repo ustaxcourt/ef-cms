@@ -51,7 +51,7 @@ const addNewInitialFilingToCase = ({
 
   const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
 
-  caseEntity.documents.push(documentToAdd);
+  caseEntity.docketEntries.push(documentToAdd);
 };
 
 const deleteInitialFilingFromCase = async ({
@@ -59,7 +59,7 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  caseEntity.deleteDocumentById({
+  caseEntity.deleteDocketEntryById({
     documentId: originalCaseDocument.documentId,
   });
 
@@ -88,10 +88,10 @@ exports.updateInitialFilingDocuments = async ({
 
   for (const key of Object.keys(initialDocumentTypesWithoutPetition)) {
     const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
-    const originalCaseDocument = caseEntity.documents.find(
+    const originalCaseDocument = caseEntity.docketEntries.find(
       doc => doc.documentType === documentType,
     );
-    const currentCaseDocument = caseToUpdate.documents.find(
+    const currentCaseDocument = caseToUpdate.docketEntries.find(
       doc => doc.documentType === documentType,
     );
 

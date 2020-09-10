@@ -13,8 +13,8 @@ describe('servePaperFiledDocumentAction', () => {
 
   beforeAll(() => {
     caseDetail = {
+      docketEntries: [],
       docketNumber,
-      documents: [],
     };
   });
 
@@ -45,7 +45,7 @@ describe('servePaperFiledDocumentAction', () => {
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][0],
-    ).toMatchObject({ docketNumber, documentId });
+    ).toMatchObject({ docketEntryId: documentId, docketNumber });
 
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
@@ -81,7 +81,7 @@ describe('servePaperFiledDocumentAction', () => {
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][0],
-    ).toMatchObject({ docketNumber, documentId });
+    ).toMatchObject({ docketEntryId: documentId, docketNumber });
 
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },

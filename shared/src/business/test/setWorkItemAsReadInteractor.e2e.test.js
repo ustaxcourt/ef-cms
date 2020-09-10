@@ -67,7 +67,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
       docketNumber,
     });
 
-    const { workItem } = createdCase.documents.find(
+    const { workItem } = createdCase.docketEntries.find(
       d => d.documentType === 'Petition',
     );
 
