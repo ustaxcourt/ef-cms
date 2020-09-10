@@ -1993,7 +1993,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       const result = myCase.getDocketEntryById({
-        documentId: MOCK_DOCUMENTS[0].documentId,
+        docketEntryId: MOCK_DOCUMENTS[0].documentId,
       });
       expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
     });

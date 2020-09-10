@@ -22,7 +22,7 @@ exports.removeSignatureFromDocumentInteractor = async ({
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
   const docketEntryToUnsign = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   docketEntryToUnsign.unsignDocument();

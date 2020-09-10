@@ -72,7 +72,7 @@ exports.completeDocketEntryQCInteractor = async ({
   );
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    documentId,
+    docketEntryId: documentId,
   });
 
   const editableFields = {

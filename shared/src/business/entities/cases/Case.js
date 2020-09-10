@@ -992,15 +992,15 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 };
 
 /**
- * gets the docketEntry with id documentId from the docketEntries array
+ * gets the docketEntry with id docketEntryId from the docketEntries array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the docketEntry to retrieve
+ * @params {string} params.docketEntryId the id of the docketEntry to retrieve
  * @returns {object} the retrieved docketEntry
  */
-Case.prototype.getDocketEntryById = function ({ documentId }) {
+Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
   return this.docketEntries.find(
-    docketEntry => docketEntry.documentId === documentId,
+    docketEntry => docketEntry.documentId === docketEntryId,
   );
 };
 

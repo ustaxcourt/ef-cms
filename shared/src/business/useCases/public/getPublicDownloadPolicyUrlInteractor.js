@@ -26,7 +26,9 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
 
   const caseEntity = new Case(caseToCheck, { applicationContext });
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId: documentId,
+  });
 
   const isPrivate = isPrivateDocument(
     docketEntryEntity,

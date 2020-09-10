@@ -83,7 +83,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const courtIssuedDocument = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   if (!courtIssuedDocument) {
@@ -98,7 +98,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     });
 
   const docketEntry = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   // Serve on all parties

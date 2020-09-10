@@ -194,7 +194,7 @@ exports.addCoversheetInteractor = async ({
   const caseEntity = new Case(caseRecord, { applicationContext });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
-    documentId: docketEntryId,
+    docketEntryId,
   });
 
   let pdfData;
