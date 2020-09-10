@@ -19,7 +19,7 @@ resource "aws_lambda_function" "migration_lambda" {
   environment {
     variables = {
       ENVIRONMENT = var.environment
-      DESTINATION_TABLE = "exp1-migration"
+      DESTINATION_TABLE = var.destination_table
     }
   }
 }
