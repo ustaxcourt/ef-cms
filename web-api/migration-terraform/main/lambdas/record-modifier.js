@@ -1,35 +1,11 @@
 const AWS = require('aws-sdk');
-const { chunk, isEmpty } = require('lodash');
-const CHUNK_SIZE = 25;
+const promiseRetry = require('promise-retry');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
 });
 const sqs = new AWS.SQS({ region: 'us-east-1' });
-
-let unprocessedItems = [];
-
-const reprocess = async items => {
-  const moreUnprocessedItems = [];
-
-  for (let item of items) {
-    await documentClient
-      .batchWrite({
-        RequestItems: item,
-      })
-      .promise()
-      .then(results => {
-        if (!isEmpty(results.UnprocessedItems)) {
-          moreUnprocessedItems.push(results.UnprocessedItems);
-        }
-      });
-  }
-
-  if (moreUnprocessedItems.length) {
-    reprocess(moreUnprocessedItems);
-  }
-};
 
 const scanTableSegment = async (segment, totalSegments) => {
   let hasMoreResults = true;
@@ -48,34 +24,29 @@ const scanTableSegment = async (segment, totalSegments) => {
       .then(async results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
+        for (let item of results.Items) {
+          try {
+            await promiseRetry(function (retry, number) {
+              console.log('attempt number', number);
 
-        const chunks = chunk(results.Items, CHUNK_SIZE);
-        for (let c of chunks) {
-          // eslint-disable-next-line promise/no-nesting
-          await documentClient
-            .batchWrite({
-              RequestItems: {
-                [`efcms-${process.env.ENVIRONMENT}`]: c.map(item => ({
-                  PutRequest: {
-                    Item: {
-                      ...item,
-                      migrate: true,
-                    },
+              // eslint-disable-next-line promise/no-nesting
+              return documentClient
+                .put({
+                  Item: {
+                    ...item,
+                    migrate: 'goodbye',
                   },
-                })),
-              },
-            })
-            .promise()
-            .then(results => {
-              if (!isEmpty(results.UnprocessedItems)) {
-                unprocessedItems.push(results.UnprocessedItems);
-              }
+                  TableName: `efcms-${process.env.ENVIRONMENT}`,
+                })
+                .promise()
+                .catch(retry);
             });
+          } catch (e) {
+            console.log('error processing segment items', e);
+          }
         }
       });
   }
-
-  await reprocess(unprocessedItems);
 };
 
 exports.handler = async event => {

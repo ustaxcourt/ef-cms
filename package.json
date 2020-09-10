@@ -97,6 +97,7 @@
     "pdf-lib": "^1.10.0",
     "pdfjs-dist": "2.3.200",
     "prettier": "^2.1.1",
+    "promise-retry": "^2.0.1",
     "prop-types": "^15.7.2",
     "pug": "^3.0.0",
     "puppeteer": "^4.0.1",
