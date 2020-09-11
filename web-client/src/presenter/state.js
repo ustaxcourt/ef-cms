@@ -278,6 +278,7 @@ export const baseState = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
+  sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],

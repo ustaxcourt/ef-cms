@@ -9,7 +9,7 @@ import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { parallel } from 'cerebral/factories';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
-import { setSectionInboxCountAction } from '../actions/setSectionInboxCountAction';
+import { setSectionBoxCountAction } from '../actions/setSectionBoxCountAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
@@ -25,12 +25,12 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         documentqcmyinProgress: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
-          setSectionInboxCountAction,
+          setSectionBoxCountAction,
         ],
         documentqcmyinbox: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
-          setSectionInboxCountAction,
+          setSectionBoxCountAction,
         ],
         documentqcmyoutbox: [
           getDocumentQCServedForUserAction,
@@ -39,12 +39,12 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         documentqcsectioninProgress: [
           getDocumentQCInboxForSectionAction,
           setWorkItemsAction,
-          setSectionInboxCountAction,
+          setSectionBoxCountAction,
         ],
         documentqcsectioninbox: [
           getDocumentQCInboxForSectionAction,
           setWorkItemsAction,
-          setSectionInboxCountAction,
+          setSectionBoxCountAction,
         ],
         documentqcsectionoutbox: [
           getDocumentQCServedForSectionAction,
