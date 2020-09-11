@@ -148,7 +148,7 @@
   },
   {
     "eventCode": "P",
-    "documentTitle": "Petition",
+    "description": "Petition",
     "index": 1,
     "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "numberOfPages": 1,
@@ -160,7 +160,7 @@
   },
   {
     "eventCode": "RQT",
-    "documentTitle": "Request for Place of Trial at Nashville, Tennessee",
+    "description": "Request for Place of Trial at Nashville, Tennessee",
     "index": 2,
     "filingDate": "2020-01-21T16:41:39.474Z",
     "docketRecordId": "f15a6532-9805-479b-ae45-e8f112153d2a",

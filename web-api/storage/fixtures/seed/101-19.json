@@ -5,7 +5,7 @@
     "docketRecordId": "af1aa3f3-e2e3-43e6-885d-4ce341588c76",
     "numberOfPages": 2,
     "filingDate": "2019-03-01T21:40:46.415Z",
-    "documentTitle": "Petition",
+    "description": "Petition",
     "filedBy": "Test Petitioner",
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "eventCode": "P",
@@ -16,7 +16,7 @@
     "sk": "docket-record|331aa3f3-e2e3-43e6-885d-4ce341588c76",
     "docketRecordId": "331aa3f3-e2e3-43e6-885d-4ce341588c76",
     "filingDate": "2019-03-01T21:40:46.415Z",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
     "eventCode": "RQT",
     "index": 2
   },
