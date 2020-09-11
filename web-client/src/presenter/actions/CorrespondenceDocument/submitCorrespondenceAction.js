@@ -34,12 +34,12 @@ export const submitCorrespondenceAction = async ({
 
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
-    documentId: correspondenceId,
+    key: correspondenceId,
   });
 
   await applicationContext.getUseCases().validatePdfInteractor({
     applicationContext,
-    documentId: correspondenceId,
+    key: correspondenceId,
   });
 
   if (documentIdToEdit) {
@@ -47,7 +47,7 @@ export const submitCorrespondenceAction = async ({
       .getUseCases()
       .updateCorrespondenceDocumentInteractor({
         applicationContext,
-        documentId: documentIdToEdit,
+        correspondenceId: documentIdToEdit,
         documentMetadata,
       });
   } else {

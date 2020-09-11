@@ -51,7 +51,7 @@ export const saveCaseDetailInternalEditAction = async ({
           .uploadDocumentAndMakeSafeInteractor({
             applicationContext,
             document: caseToUpdate[key],
-            documentId: oldPetitionDocument.documentId,
+            key: oldPetitionDocument.documentId,
             onUploadProgress: progressFunctions[key],
           });
       } else {
