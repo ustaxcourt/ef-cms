@@ -3,6 +3,7 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   { formattedMessages: state.formattedMessages.messages },
@@ -25,8 +26,7 @@ export const MessagesIndividualInbox = connect(
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
-            const isUnread = !message.isRead;
-            const unreadClass = isUnread ? 'text-bold' : '';
+            const unreadClass = message.isRead ? '' : 'text-bold';
 
             return (
               <tbody key={idx}>
@@ -41,7 +41,7 @@ export const MessagesIndividualInbox = connect(
                     </span>
                   </td>
                   <td className="message-unread-column">
-                    {isUnread && (
+                    {!message.isRead && (
                       <Icon
                         aria-label="create message"
                         className="fa-icon-blue"
@@ -54,7 +54,7 @@ export const MessagesIndividualInbox = connect(
                     <div className="message-document-title">
                       <Button
                         link
-                        className={`padding-0 ${unreadClass}`}
+                        className={classNames('padding-0', unreadClass)}
                         href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
