@@ -11,8 +11,8 @@ describe('setMessageAsReadAction', () => {
   it('should set message as read', async () => {
     await runAction(setMessageAsReadAction, {
       modules: { presenter },
-      state: {
-        messageDetail: [
+      props: {
+        messageToMarkRead: [
           {
             docketNumber: '123-45',
             messageId: '123',

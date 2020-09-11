@@ -25,17 +25,21 @@ describe('getShouldMarkMessageAsReadAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        messageDetail: [
-          {
-            isRead: false,
-            toUserId: '123',
-          },
-        ],
+      props: {
+        mostRecentMessage: {
+          isRead: false,
+          toUserId: '123',
+        },
       },
     });
 
     expect(markReadStub.mock.calls.length).toEqual(1);
+    expect(markReadStub).toHaveBeenCalledWith({
+      messageToMarkRead: {
+        isRead: false,
+        toUserId: '123',
+      },
+    });
   });
 
   it('should return the noAction path the message is already read', async () => {
@@ -47,13 +51,11 @@ describe('getShouldMarkMessageAsReadAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        messageDetail: [
-          {
-            isRead: true,
-            toUserId: '123',
-          },
-        ],
+      props: {
+        mostRecentMessage: {
+          isRead: true,
+          toUserId: '123',
+        },
       },
     });
 
@@ -69,13 +71,11 @@ describe('getShouldMarkMessageAsReadAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        messageDetail: [
-          {
-            isRead: false,
-            toUserId: '321',
-          },
-        ],
+      props: {
+        mostRecentMessage: {
+          isRead: false,
+          toUserId: '321',
+        },
       },
     });
 
