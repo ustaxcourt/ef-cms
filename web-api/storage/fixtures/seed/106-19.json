@@ -402,7 +402,7 @@
     "associatedJudge": "Chief Judge"
   },
   {
-    "description": "Petition",
+    "documentTitle": "Petition",
     "eventCode": "P",
     "index": 1,
     "numberOfPages": 1,
@@ -414,7 +414,7 @@
     "sk": "docket-record|8e1e8b98-d070-4d1d-8bb6-e5c3c6146a98"
   },
   {
-    "description": "Request for Place of Trial at Lubbock, Texas",
+    "documentTitle": "Request for Place of Trial at Lubbock, Texas",
     "filingDate": "2019-07-12T17:09:41.026Z",
     "eventCode": "RQT",
     "index": 2,

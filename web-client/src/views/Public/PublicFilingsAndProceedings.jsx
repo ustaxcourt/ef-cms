@@ -22,7 +22,7 @@ export const PublicFilingsAndProceedings = connect(
         {entry.showLinkToDocument && (
           <Button
             link
-            aria-label={`View PDF: ${entry.description}`}
+            aria-label={`View PDF: ${entry.descriptionDisplay}`}
             onClick={() => {
               openCaseDocumentDownloadUrlSequence({
                 docketNumber: caseDetail.docketNumber,
@@ -36,7 +36,7 @@ export const PublicFilingsAndProceedings = connect(
                 <FontAwesomeIcon icon={['fas', 'file-alt']} />
               </span>
             )}
-            {entry.description}
+            {entry.descriptionDisplay}
           </Button>
         )}
 

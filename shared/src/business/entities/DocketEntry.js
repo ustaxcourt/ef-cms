@@ -90,10 +90,6 @@ DocketEntry.prototype.init = function init(
   this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
   this.createdAt = rawDocketEntry.createdAt || createISODateString();
   this.date = rawDocketEntry.date;
-  this.description =
-    rawDocketEntry.description ||
-    rawDocketEntry.documentTitle ||
-    rawDocketEntry.documentType;
   this.docketNumber = rawDocketEntry.docketNumber;
   this.docketNumbers = rawDocketEntry.docketNumbers;
   this.documentContentsId = rawDocketEntry.documentContentsId;
@@ -223,12 +219,6 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .allow(null)
     .description(
       'An optional date used when generating a fully concatenated document title.',
-    ),
-  description: joi
-    .string() //TODO 636 - delete this field (temporary validation)
-    .optional()
-    .description(
-      'Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value.',
     ),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'Docket Number of the associated Case in XXXXX-YY format.',

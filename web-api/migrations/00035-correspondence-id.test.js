@@ -1,7 +1,7 @@
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00035-correspondence-id');
 
-describe('renames draftState to draftOrderState', () => {
+describe('renames correspondenceId to documentId', () => {
   let documentClient;
   let scanStub;
   let putStub;

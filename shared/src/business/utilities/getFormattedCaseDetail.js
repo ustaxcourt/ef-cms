@@ -158,8 +158,12 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry,
   );
 
+  if (!formattedEntry.descriptionDisplay) {
+    formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
+  }
+
   if (formattedEntry.additionalInfo) {
-    formattedEntry.description += ` ${formattedEntry.additionalInfo}`;
+    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
   }
 
   if (formattedEntry.lodged) {
