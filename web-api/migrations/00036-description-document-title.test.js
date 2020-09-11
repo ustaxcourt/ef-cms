@@ -9,6 +9,7 @@ describe('Docket Entry: renames description to documentTitle if documentTitle do
 
   const DOCUMENT_ID_1 = '56ab686e-bf8f-4de9-a405-5f7ce8f9ca98';
   const DOCUMENT_ID_2 = '56ab686e-bf8f-4de9-a405-5f7ce8f9ca99';
+  const USER_ID = '31bc321f-bf8f-4de9-a405-5f7ce8f9ca99';
 
   beforeAll(() => {
     records = [
@@ -20,14 +21,22 @@ describe('Docket Entry: renames description to documentTitle if documentTitle do
         description: 'Guy Fieri has an Answer',
         documentId: DOCUMENT_ID_1,
         documentTitle: 'Guy Fieri has an Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Guy Fieri',
         pk: 'case|95b46eae-70f0-45df-91de-febdc610fed9',
         sk: `docket-entry|${DOCUMENT_ID_1}`,
+        userId: USER_ID,
       },
       {
         description: 'Guy Fieri has another Answer',
         documentId: DOCUMENT_ID_2,
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Guy Fieri',
         pk: 'case|95b46eae-70f0-45df-91de-febdc610fed9',
         sk: `docket-entry|${DOCUMENT_ID_2}`,
+        userId: USER_ID,
       },
     ];
 
