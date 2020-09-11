@@ -53,7 +53,6 @@ describe('completeDocketEntryQCInteractor', () => {
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
-          description: 'Answer Docket Record Entry',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',

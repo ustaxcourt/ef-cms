@@ -142,10 +142,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
       numberOfPages: 0,
       ...entry,
       createdAtFormatted: entry.createdAtFormatted,
-      description:
-        entry.description || entry.documentTitle || entry.documentType,
-      descriptionDisplay:
-        entry.description || entry.documentTitle || entry.documentType,
     };
 
     let showDocumentLinks = false;

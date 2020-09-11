@@ -69,7 +69,7 @@ exports.updatePetitionDetailsInteractor = async ({
       newCase.addDocketEntry(
         new DocketEntry(
           {
-            description: 'Filing Fee Paid',
+            documentTitle: 'Filing Fee Paid',
             documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
             eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
             filingDate: newCase.petitionPaymentDate,
@@ -86,7 +86,7 @@ exports.updatePetitionDetailsInteractor = async ({
       newCase.addDocketEntry(
         new DocketEntry(
           {
-            description: 'Filing Fee Waived',
+            documentTitle: 'Filing Fee Waived',
             documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
             eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
             filingDate: newCase.petitionPaymentWaivedDate,

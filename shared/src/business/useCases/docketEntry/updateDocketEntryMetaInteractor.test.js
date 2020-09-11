@@ -15,8 +15,8 @@ describe('updateDocketEntryMetaInteractor', () => {
   beforeEach(() => {
     docketEntries = [
       {
-        description: 'Test Entry 0',
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        documentTitle: 'Test Entry 0',
         documentType: 'Petition',
         eventCode: 'P',
         filedBy: 'Test Petitioner',
@@ -29,8 +29,8 @@ describe('updateDocketEntryMetaInteractor', () => {
         userId: mockUserId,
       },
       {
-        description: 'Test Entry 1',
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+        documentTitle: 'Test Entry 1',
         documentType: 'Order',
         eventCode: 'O',
         filingDate: '2019-01-01T00:01:00.000Z',
@@ -120,7 +120,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       docketEntryMeta: {
         ...docketEntries[0],
-        description: 'Updated Description',
+        documentTitle: 'Updated Description',
       },
       docketNumber: '101-20',
     });
@@ -128,7 +128,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.description).toEqual('Updated Description');
+    expect(updatedDocketEntry.documentTitle).toEqual('Updated Description');
   });
 
   it('should update the docket record and document filedBy', async () => {
@@ -277,7 +277,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       docketEntryMeta: {
         ...docketEntries[0],
-        description: 'Updated Description',
+        documentTitle: 'Updated Description',
       },
       docketNumber: '101-20',
     });
@@ -295,7 +295,7 @@ describe('updateDocketEntryMetaInteractor', () => {
           ...docketEntries[0],
           action: 'asdf',
           certificateOfServiceDate: null,
-          description: 'Request for Place of Trial at Houston, Texas',
+          documentTitle: 'Request for Place of Trial at Houston, Texas',
           eventCode: 'RQT',
           filingDate: '2020-02-03T08:06:07.539Z',
         },

@@ -122,8 +122,8 @@ exports.createCaseFromPaperInteractor = async ({
   const petitionDocketEntryEntity = new DocketEntry(
     {
       createdAt: caseToAdd.receivedAt,
-      description: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentId: petitionFileId,
+      documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.receivedAt,
@@ -158,8 +158,6 @@ exports.createCaseFromPaperInteractor = async ({
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        description:
-          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
         documentId: applicationForWaiverOfFilingFeeFileId,
         documentTitle,
         documentType:
@@ -197,7 +195,6 @@ exports.createCaseFromPaperInteractor = async ({
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        description: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         documentId: requestForPlaceOfTrialFileId,
         documentTitle,
         documentType:
@@ -226,8 +223,8 @@ exports.createCaseFromPaperInteractor = async ({
     const stinDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        description: INITIAL_DOCUMENT_TYPES.stin.documentType,
         documentId: stinFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
         filingDate: caseToAdd.receivedAt,
@@ -253,8 +250,8 @@ exports.createCaseFromPaperInteractor = async ({
     const odsDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        description: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentId: ownershipDisclosureFileId,
+        documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.receivedAt,
