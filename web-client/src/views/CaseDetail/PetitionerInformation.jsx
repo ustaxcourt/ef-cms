@@ -307,7 +307,7 @@ const PetitionerInformation = connect(
                       </p>
                     )}
 
-                  {practitioner.representingNames.map((item, index) => (
+                  {practitioner.representingFormatted.map((item, index) => (
                     <p key={index}>
                       <span>{item.name}</span>
                       {item.secondaryName && (
