@@ -32,6 +32,7 @@ export const setSectionBoxCountAction = ({
         !item.caseIsInProgress,
     ).length,
   );
+
   store.set(
     state.sectionInProgressCount,
     props.workItems.filter(
