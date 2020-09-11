@@ -45,7 +45,7 @@
     "status": "Submitted"
   },
   {
-    "documentTitle": "Petition",
+    "description": "Petition",
     "eventCode": "P",
     "index": 1,
     "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -58,7 +58,7 @@
   },
   {
     "eventCode": "RQT",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
     "index": 2,
     "filingDate": "2019-12-11T15:25:09.284Z",
     "docketRecordId": "decc1a72-5e38-4b66-8781-ad7bc5bd5a9e",

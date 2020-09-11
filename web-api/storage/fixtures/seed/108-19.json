@@ -140,7 +140,7 @@
     "status": "Calendared"
   },
   {
-    "documentTitle": "Petition",
+    "description": "Petition",
     "eventCode": "P",
     "index": 1,
     "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
@@ -154,7 +154,7 @@
   },
   {
     "eventCode": "RQT",
-    "documentTitle": "Request for Place of Trial at Houston, Texas",
+    "description": "Request for Place of Trial at Houston, Texas",
     "index": 2,
     "filingDate": "2019-08-16T19:21:46.146Z",
     "docketRecordId": "65f2871e-a123-4406-91e0-f5344cd530ac",

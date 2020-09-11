@@ -189,7 +189,7 @@
     "associatedJudge": "Chief Judge"
   },
   {
-    "documentTitle": "Petition",
+    "description": "Petition",
     "eventCode": "P",
     "index": 1,
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
@@ -203,7 +203,7 @@
   },
   {
     "eventCode": "RQT",
-    "documentTitle": "Request for Place of Trial at Las Vegas, Nevada",
+    "description": "Request for Place of Trial at Las Vegas, Nevada",
     "index": 2,
     "filingDate": "2019-08-16T17:29:10.132Z",
     "docketRecordId": "b3352d0e-8686-4206-955c-d1659570f26b",
@@ -211,7 +211,7 @@
     "sk": "docket-record|b3352d0e-8686-4206-955c-d1659570f26b"
   },
   {
-    "documentTitle": "Ownership Disclosure Statement",
+    "description": "Ownership Disclosure Statement",
     "eventCode": "DISC",
     "index": 3,
     "numberOfPages": 2,

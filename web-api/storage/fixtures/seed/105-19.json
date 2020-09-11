@@ -45,7 +45,7 @@
     "associatedJudge": "Chief Judge"
   },
   {
-    "documentTitle": "Petition",
+    "description": "Petition",
     "eventCode": "P",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "numberOfPages": 1,
@@ -57,7 +57,7 @@
     "sk": "docket-record|8b86bf30-0118-4b85-bb4f-5bfbf7cb2baf"
   },
   {
-    "documentTitle": "Request for Place of Trial at Jackson, Mississippi",
+    "description": "Request for Place of Trial at Jackson, Mississippi",
     "filingDate": "2019-03-27T21:53:00.297Z",
     "eventCode": "RQT",
     "index": 2,

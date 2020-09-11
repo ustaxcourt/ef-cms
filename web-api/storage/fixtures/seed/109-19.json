@@ -51,7 +51,7 @@
   },
   {
     "filingDate": "2019-03-01T21:40:46.415Z",
-    "documentTitle": "Petition",
+    "description": "Petition",
     "eventCode": "P",
     "filedBy": "Test Petitioner",
     "index": 1,
@@ -62,7 +62,7 @@
   },
   {
     "filingDate": "2019-03-01T21:40:46.415Z",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "description": "Request for Place of Trial at Birmingham, Alabama",
     "eventCode": "RQT",
     "index": 2,
     "docketRecordId": "42649425-7325-41b8-a927-82a46e071663",
