@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,6 +22,7 @@ export const RecentMessagesInbox = connect(
                 <span className="padding-left-2px">Docket Number</span>
               </th>
               <th className="small">Received</th>
+              <th className="message-unread-column"></th>
               <th>Message</th>
               <th>Case Title</th>
               <th className="no-wrap">Case Status</th>
@@ -29,6 +31,9 @@ export const RecentMessagesInbox = connect(
             </tr>
           </thead>
           {recentMessagesHelper.recentMessages.map((item, idx) => {
+            const isUnread = !item.isRead;
+            const unreadClass = isUnread ? 'text-bold' : '';
+
             return (
               <tbody key={idx}>
                 <tr>
@@ -36,11 +41,21 @@ export const RecentMessagesInbox = connect(
                   <td className="message-queue-row small">
                     {item.docketNumberWithSuffix}
                   </td>
+                  <td className="message-unread-column">
+                    {isUnread && (
+                      <Icon
+                        aria-label="create message"
+                        className="fa-icon-blue"
+                        icon="envelope"
+                        size="1x"
+                      />
+                    )}
+                  </td>
                   <td>
                     <div className="message-document-title">
                       <Button
                         link
-                        className="padding-0"
+                        className={`padding-0 ${unreadClass}`}
                         href={`/messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
                       >
                         {item.subject}
