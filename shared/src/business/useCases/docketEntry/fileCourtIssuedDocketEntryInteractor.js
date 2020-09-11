@@ -64,7 +64,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId });
+    .countPagesInDocument({ applicationContext, docketEntryId: documentId });
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 

@@ -124,7 +124,7 @@ exports.fileDocketEntryInteractor = async ({
           .getUseCaseHelpers()
           .countPagesInDocument({
             applicationContext,
-            documentId,
+            docketEntryId: documentId,
           });
       }
 
