@@ -259,10 +259,10 @@ const formatCase = (applicationContext, caseDetail) => {
     counsel.formattedName = formattedName;
 
     if (counsel.representing) {
-      counsel.representingNames = [];
+      counsel.representingFormatted = [];
 
       if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingNames.push({
+        counsel.representingFormatted.push({
           name: caseDetail.contactPrimary.name,
           secondaryName: caseDetail.contactPrimary.secondaryName,
           title: caseDetail.contactPrimary.title,
@@ -273,7 +273,7 @@ const formatCase = (applicationContext, caseDetail) => {
         caseDetail.contactSecondary &&
         counsel.representing.includes(caseDetail.contactSecondary.contactId)
       ) {
-        counsel.representingNames.push({
+        counsel.representingFormatted.push({
           name: caseDetail.contactSecondary.name,
           secondaryName: caseDetail.contactSecondary.secondaryName,
           title: caseDetail.contactSecondary.title,
@@ -282,7 +282,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
       caseDetail.otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
-          counsel.representingNames.push({
+          counsel.representingFormatted.push({
             name: otherPetitioner.name,
             secondaryName: otherPetitioner.secondaryName,
             title: otherPetitioner.title,
@@ -292,7 +292,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
       caseDetail.otherFilers.forEach(otherFiler => {
         if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingNames.push({
+          counsel.representingFormatted.push({
             name: otherFiler.name,
             secondaryName: otherFiler.secondaryName,
             title: otherFiler.title,
