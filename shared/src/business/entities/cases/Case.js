@@ -776,7 +776,9 @@ Case.prototype.archiveDocketEntry = function (
   });
   docketEntryToArchive.archive();
   this.archivedDocketEntries.push(docketEntryToArchive);
-  this.deleteDocketEntryById({ documentId: docketEntryToArchive.documentId });
+  this.deleteDocketEntryById({
+    docketEntryId: docketEntryToArchive.documentId,
+  });
 };
 
 /**
@@ -794,7 +796,7 @@ Case.prototype.archiveCorrespondence = function (
   correspondenceToArchive.archived = true;
   this.archivedCorrespondences.push(correspondenceToArchive);
   this.deleteCorrespondenceById({
-    correspondenceId: correspondenceToArchive.documentId,
+    correspondenceId: correspondenceToArchive.correspondenceId,
   });
 };
 
@@ -1005,35 +1007,64 @@ Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
 };
 
 /**
- * gets the correspondence with id documentId from the correspondence array
+ * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the correspondence to retrieve
+ * @params {string} params.correspondenceId the id of the correspondence to retrieve
  * @returns {object} the retrieved correspondence
  */
-Case.prototype.getCorrespondenceById = function ({ documentId }) {
+Case.prototype.getCorrespondenceById = function ({ correspondenceId }) {
   return this.correspondence.find(
-    correspondence => correspondence.documentId === documentId,
+    correspondence => correspondence.correspondenceId === correspondenceId,
   );
 };
 
 /**
- * deletes the docket entry with id documentId from the docketEntries array
+ * gets a document from docketEntries or correspondence arrays
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the docket entry to remove from the docketEntries array
+ * @params {string} params.correspondenceId the id of the correspondence to retrieve
+ * @returns {object} the retrieved correspondence
+ */
+Case.getAttachmentDocumentById = function ({
+  caseDetail,
+  documentId,
+  useArchived = false,
+}) {
+  let allCaseDocuments = [
+    ...caseDetail.correspondence,
+    ...caseDetail.docketEntries,
+  ];
+  if (useArchived) {
+    allCaseDocuments = [
+      ...allCaseDocuments,
+      ...caseDetail.archivedDocketEntries,
+      ...caseDetail.archivedCorrespondences,
+    ];
+  }
+  return allCaseDocuments.find(
+    d =>
+      d && (d.documentId === documentId || d.correspondenceId === documentId),
+  );
+};
+
+/**
+ * deletes the docket entry with id docketEntryId from the docketEntries array
+ *
+ * @params {object} params the params object
+ * @params {string} params.docketEntryId the id of the docket entry to remove from the docketEntries array
  * @returns {Case} the updated case entity
  */
-Case.prototype.deleteDocketEntryById = function ({ documentId }) {
+Case.prototype.deleteDocketEntryById = function ({ docketEntryId }) {
   this.docketEntries = this.docketEntries.filter(
-    item => item.documentId !== documentId,
+    item => item.documentId !== docketEntryId,
   );
 
   return this;
 };
 
 /**
- * deletes the correspondence with id documentId from the correspondence array
+ * deletes the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
  * @params {string} params.correspondenceId the id of the correspondence to remove from the correspondence array
@@ -1041,7 +1072,7 @@ Case.prototype.deleteDocketEntryById = function ({ documentId }) {
  */
 Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   this.correspondence = this.correspondence.filter(
-    item => item.documentId !== correspondenceId,
+    item => item.correspondenceId !== correspondenceId,
   );
 
   return this;
@@ -1671,7 +1702,8 @@ Case.prototype.fileCorrespondence = function (correspondenceEntity) {
  */
 Case.prototype.updateCorrespondence = function (correspondenceEntity) {
   const foundCorrespondence = this.correspondence.find(
-    document => document.documentId === correspondenceEntity.documentId,
+    correspondence =>
+      correspondence.correspondenceId === correspondenceEntity.correspondenceId,
   );
 
   if (foundCorrespondence)

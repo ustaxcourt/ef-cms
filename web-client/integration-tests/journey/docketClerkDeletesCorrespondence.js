@@ -1,7 +1,7 @@
 export const docketClerkDeletesCorrespondence = (test, correspondenceTitle) =>
   it('docketclerk deletes correspondence', async () => {
     await test.runSequence('openConfirmDeleteCorrespondenceModalSequence', {
-      documentId: test.correspondenceDocument.documentId,
+      correspondenceId: test.correspondenceDocument.correspondenceId,
       documentTitle: correspondenceTitle,
     });
 

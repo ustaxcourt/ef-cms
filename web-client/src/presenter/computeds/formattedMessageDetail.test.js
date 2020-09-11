@@ -15,6 +15,9 @@ describe('formattedMessageDetail', () => {
   const { PETITIONS_SECTION } = getConstants();
 
   const mockCaseDetail = {
+    archivedCorrespondences: [],
+    archivedDocketEntries: [],
+    correspondence: [],
     docketEntries: [
       {
         documentId: '98065bac-b35c-423c-b649-122a09bb65b9',
@@ -245,6 +248,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            ...mockCaseDetail,
             docketEntries: [
               {
                 documentId,
@@ -276,6 +280,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            ...mockCaseDetail,
             docketEntries: [
               {
                 documentId,
@@ -307,6 +312,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            ...mockCaseDetail,
             docketEntries: [
               {
                 documentId,
@@ -339,6 +345,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            ...mockCaseDetail,
             docketEntries: [
               {
                 documentId,
@@ -375,6 +382,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            ...mockCaseDetail,
             docketEntries: [
               {
                 archived: true,
@@ -407,6 +415,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            ...mockCaseDetail,
             docketEntries: [
               {
                 documentId,

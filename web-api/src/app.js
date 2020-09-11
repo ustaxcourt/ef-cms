@@ -510,7 +510,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateCourtIssuedDocketEntryLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/correspondence/:documentId',
+    '/case-documents/:docketNumber/correspondence/:correspondenceId',
     lambdaWrapper(updateCorrespondenceDocumentLambda),
   );
   app.put(
@@ -523,7 +523,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   // DELETE
   app.delete(
-    '/case-documents/:docketNumber/correspondence/:documentId',
+    '/case-documents/:docketNumber/correspondence/:correspondenceId',
     lambdaWrapper(archiveCorrespondenceDocumentLambda),
   );
 }

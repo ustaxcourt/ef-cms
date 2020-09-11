@@ -14,6 +14,18 @@ const getDocumentOption = document => {
   );
 };
 
+const getCorrespondenceOption = document => {
+  const title = document.documentTitle || document.documentType;
+  return (
+    <option
+      key={document.correspondenceId}
+      value={`${document.correspondenceId}`}
+    >
+      {title}
+    </option>
+  );
+};
+
 export const MessageModalAttachments = connect(
   {
     form: state.modal.form,
@@ -91,7 +103,9 @@ export const MessageModalAttachments = connect(
 
               {messageModalHelper.hasCorrespondence && (
                 <optgroup label="Correspondence">
-                  {messageModalHelper.correspondence.map(getDocumentOption)}
+                  {messageModalHelper.correspondence.map(
+                    getCorrespondenceOption,
+                  )}
                 </optgroup>
               )}
             </select>
