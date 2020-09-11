@@ -123,7 +123,7 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
+      descriptionDisplay:
         'Declaration of Bob Barker in Support of Petition some additional info',
     });
 

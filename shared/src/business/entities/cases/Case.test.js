@@ -1444,13 +1444,13 @@ describe('Case entity', () => {
           caseCaption: 'A Very Berry New Caption',
           docketEntries: [
             {
-              description:
+              documentTitle:
                 "Docket Number is amended from '123-19A' to '123-19B'",
               index: 1,
               isOnDocketRecord: true,
             },
             {
-              description:
+              documentTitle:
                 "Docket Number is amended from '123-19B' to '123-19P'",
               index: 2,
               isOnDocketRecord: true,
@@ -1468,7 +1468,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(caseToVerify.docketEntries.length).toEqual(3);
-      expect(caseToVerify.docketEntries[2].description).toEqual(
+      expect(caseToVerify.docketEntries[2].documentTitle).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
       expect(caseToVerify.docketEntries[2].eventCode).toEqual('MIND');
@@ -1541,13 +1541,13 @@ describe('Case entity', () => {
           caseCaption: 'A Very New Caption',
           docketEntries: [
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 1,
               isOnDocketRecord: true,
             },
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 2,
               isOnDocketRecord: true,
@@ -1570,13 +1570,13 @@ describe('Case entity', () => {
           caseCaption: 'A Very Berry New Caption',
           docketEntries: [
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 1,
               isOnDocketRecord: true,
             },
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 2,
               isOnDocketRecord: true,

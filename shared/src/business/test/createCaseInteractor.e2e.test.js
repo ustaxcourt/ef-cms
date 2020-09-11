@@ -79,7 +79,9 @@ describe('createCase integration test', () => {
           },
         },
         {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
+          documentTitle: 'Request for Place of Trial at Aberdeen, South Dakota',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: 'RQT',
         },
         {

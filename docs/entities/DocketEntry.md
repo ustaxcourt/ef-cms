@@ -110,11 +110,6 @@
         description: "An optional date used when generating a fully concatenated document title."
       allow: 
         - null
-    description: 
-      type: "string"
-      flags: 
-        presence: "optional"
-        description: "Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value."
     docketEntryId: 
       type: "string"
       flags: 

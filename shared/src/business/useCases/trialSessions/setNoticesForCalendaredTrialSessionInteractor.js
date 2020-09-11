@@ -120,7 +120,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocketEntry = new DocketEntry(
       {
-        description: noticeOfTrialDocumentTitle,
         documentId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
@@ -177,7 +176,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
-        description: standingPretrialDocumentTitle,
         documentId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,

@@ -74,7 +74,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     {
       ...currentDocketEntry,
       ...editableFields,
-      description: editableFields.documentTitle,
+      documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       secondaryDate,

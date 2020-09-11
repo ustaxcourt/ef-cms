@@ -81,7 +81,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   }
 
   return {
-    description: formattedDocumentToDisplay.description,
+    description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
     servedLabel,
     showNotServed,

@@ -71,7 +71,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
+      descriptionDisplay:
         'Motion to Change Place of Hearing of Disclosure Case To Boise, Idaho some additional info',
     });
 

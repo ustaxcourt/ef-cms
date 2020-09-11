@@ -81,7 +81,7 @@ export const docketClerkEditsDocketEntryNonstandardF = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description: 'First Supplement to Petition some additional info',
+      descriptionDisplay: 'First Supplement to Petition some additional info',
     });
 
     const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(

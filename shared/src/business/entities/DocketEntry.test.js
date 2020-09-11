@@ -1800,7 +1800,6 @@ describe('DocketEntry entity', () => {
     it('creates minute entry', () => {
       const document = new DocketEntry(
         {
-          description: 'Request for Place of Trial at Flavortown, TN',
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
@@ -1820,7 +1819,6 @@ describe('DocketEntry entity', () => {
     it('sets the number of pages', () => {
       const document = new DocketEntry(
         {
-          description: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -1838,7 +1836,6 @@ describe('DocketEntry entity', () => {
     it('strikes a document if isOnDocketRecord is true', () => {
       const document = new DocketEntry(
         {
-          description: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -1863,7 +1860,6 @@ describe('DocketEntry entity', () => {
     it('throws an error if isOnDocketRecord is false', () => {
       const document = new DocketEntry(
         {
-          description: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
