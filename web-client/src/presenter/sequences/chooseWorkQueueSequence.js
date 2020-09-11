@@ -25,10 +25,12 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         documentqcmyinProgress: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
+          setSectionInboxCountAction,
         ],
         documentqcmyinbox: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
+          setSectionInboxCountAction,
         ],
         documentqcmyoutbox: [
           getDocumentQCServedForUserAction,
