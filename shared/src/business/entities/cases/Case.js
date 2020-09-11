@@ -908,8 +908,8 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   const caseCaptionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastCaption = this.initialCaption;
 
-  this.docketEntries.forEach(document => {
-    const result = caseCaptionRegex.exec(document.documentTitle);
+  this.docketEntries.forEach(docketEntry => {
+    const result = caseCaptionRegex.exec(docketEntry.documentTitle);
     if (result) {
       const [, , changedCaption] = result;
       lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
@@ -958,8 +958,8 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  this.docketEntries.forEach(document => {
-    const result = docketNumberRegex.exec(document.documentTitle);
+  this.docketEntries.forEach(docketEntry => {
+    const result = docketNumberRegex.exec(docketEntry.documentTitle);
     if (result) {
       const [, , changedDocketNumber] = result;
       lastDocketNumber = changedDocketNumber;
