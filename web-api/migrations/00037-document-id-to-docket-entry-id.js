@@ -6,7 +6,7 @@ const { isDocketEntryRecord, upGenerator } = require('./utilities');
 
 const applicationContext = createApplicationContext({});
 
-const mutateRecord = async item => {
+const mutateRecord = async (item, documentClient, tableName) => {
   if (isDocketEntryRecord(item)) {
     if (!item.docketEntryId) {
       item.docketEntryId = item.documentId;
@@ -16,6 +16,19 @@ const mutateRecord = async item => {
     if (item.previousDocument && !item.previousDocument.docketEntryId) {
       item.previousDocument.docketEntryId = item.previousDocument.documentId;
       delete item.previousDocument.documentId;
+    }
+
+    if (!item.sk.includes(item.docketEntryId)) {
+      await documentClient
+        .delete({
+          Key: {
+            pk: item.pk,
+            sk: item.sk,
+          },
+          TableName: tableName,
+        })
+        .promise();
+      item.sk = `docket-entry|${item.docketEntryId}`;
     }
 
     const newDocketEntry = new DocketEntry(item, { applicationContext })
