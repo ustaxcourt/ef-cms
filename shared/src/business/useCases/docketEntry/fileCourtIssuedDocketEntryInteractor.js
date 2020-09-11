@@ -45,12 +45,12 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const document = caseEntity.getDocumentById({
-    documentId,
+  const docketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: documentId,
   });
 
-  if (!document) {
-    throw new NotFoundError('Document not found');
+  if (!docketEntry) {
+    throw new NotFoundError('Docket entry not found');
   }
 
   const user = await applicationContext
@@ -64,13 +64,13 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId });
+    .countPagesInDocument({ applicationContext, docketEntryId: documentId });
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 
   const docketEntryEntity = new DocketEntry(
     {
-      ...omit(document, 'filedBy'),
+      ...omit(docketEntry, 'filedBy'),
       attachments: documentMeta.attachments,
       date: documentMeta.date,
       description: documentMeta.generatedDocumentTitle,

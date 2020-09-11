@@ -59,14 +59,14 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  caseEntity.deleteDocumentById({
-    documentId: originalCaseDocument.documentId,
+  caseEntity.deleteDocketEntryById({
+    docketEntryId: originalCaseDocument.documentId,
   });
 
-  await applicationContext.getPersistenceGateway().deleteDocument({
+  await applicationContext.getPersistenceGateway().deleteDocketEntry({
     applicationContext,
+    docketEntryId: originalCaseDocument.documentId,
     docketNumber: caseEntity.docketNumber,
-    documentId: originalCaseDocument.documentId,
   });
 
   await applicationContext.getPersistenceGateway().deleteDocumentFromS3({

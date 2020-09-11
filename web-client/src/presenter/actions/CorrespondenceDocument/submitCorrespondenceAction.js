@@ -17,7 +17,7 @@ export const submitCorrespondenceAction = async ({
 }) => {
   let caseDetail;
   const docketNumber = get(state.caseDetail.docketNumber);
-  const { primaryDocumentFileId: documentId } = props;
+  const { primaryDocumentFileId: correspondenceId } = props;
   const formData = get(state.form);
 
   const { documentIdToEdit } = formData;
@@ -34,12 +34,12 @@ export const submitCorrespondenceAction = async ({
 
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
-    documentId,
+    documentId: correspondenceId,
   });
 
   await applicationContext.getUseCases().validatePdfInteractor({
     applicationContext,
-    documentId,
+    documentId: correspondenceId,
   });
 
   if (documentIdToEdit) {
@@ -56,13 +56,13 @@ export const submitCorrespondenceAction = async ({
       .fileCorrespondenceDocumentInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: correspondenceId,
       });
   }
 
   return {
     caseDetail,
+    correspondenceId,
     docketNumber,
-    documentId,
   };
 };

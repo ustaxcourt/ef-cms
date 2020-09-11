@@ -29,7 +29,7 @@ describe('overwriteCorrespondenceFileAction', () => {
       },
       state: {
         documentToEdit: {
-          documentId: 'document-id-123',
+          correspondenceId: 'document-id-123',
         },
         form: {
           primaryDocumentFile: {},
@@ -57,7 +57,7 @@ describe('overwriteCorrespondenceFileAction', () => {
       modules: { presenter },
       state: {
         documentToEdit: {
-          documentId: 'document-id-123',
+          correspondenceId: 'document-id-123',
         },
         form: {
           primaryDocumentFile: {},

@@ -39,8 +39,8 @@ export const submitCourtIssuedDocketEntryAction = async ({
   ) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: documentId,
       docketNumber,
-      documentId,
     });
   }
 };

@@ -1,4 +1,6 @@
 {
+  "experimentalNetworkStubbing": true,
+  "baseUrl": "https://app.dev.ustc-case-mgmt.flexion.us",
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true

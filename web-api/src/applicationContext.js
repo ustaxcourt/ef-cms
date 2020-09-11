@@ -213,8 +213,8 @@ const {
   deleteDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
-  deleteDocument,
-} = require('../../shared/src/persistence/dynamo/documents/deleteDocument');
+  deleteDocketEntry,
+} = require('../../shared/src/persistence/dynamo/documents/deleteDocketEntry');
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
@@ -260,6 +260,9 @@ const {
 const {
   DocketEntry,
 } = require('../../shared/src/business/entities/DocketEntry');
+const {
+  documentUrlTranslator,
+} = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
@@ -877,17 +880,17 @@ const {
   updateDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateDeficiencyStatisticInteractor');
 const {
+  updateDocketEntry,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntry');
+const {
   updateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocument,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocument');
-const {
-  updateDocumentProcessingStatus,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+  updateDocketEntryProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
@@ -992,6 +995,9 @@ const {
 const execPromise = util.promisify(exec);
 
 const environment = {
+  appEndpoint: process.env.EFCMS_DOMAIN
+    ? `app.${process.env.EFCMS_DOMAIN}`
+    : 'localhost:1234',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   elasticsearchEndpoint:
@@ -1142,8 +1148,8 @@ const gatewayMethods = {
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocument,
-    updateDocumentProcessingStatus,
+    updateDocketEntry,
+    updateDocketEntryProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,
     updateMessage,
     updatePractitionerUser,
@@ -1161,7 +1167,7 @@ const gatewayMethods = {
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
-  deleteDocument,
+  deleteDocketEntry,
   deleteDocumentFromS3,
   deleteElasticsearchReindexRecord,
   deleteRecord,
@@ -1241,7 +1247,11 @@ module.exports = appContextUser => {
   return {
     barNumberGenerator,
     docketNumberGenerator,
+    documentUrlTranslator,
     environment,
+    getAppEndpoint: () => {
+      return environment.appEndpoint;
+    },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getCognito: () => {
