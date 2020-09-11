@@ -17,8 +17,8 @@ exports.goToOpinionSearch = () => {
   cy.get('button#tab-opinion').click();
 };
 
-exports.searchByPetitionerName = () => {
-  cy.get('input#petitioner-name').type('test');
+exports.searchByPetitionerName = petitionerName => {
+  cy.get('input#petitioner-name').type(petitionerName);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
