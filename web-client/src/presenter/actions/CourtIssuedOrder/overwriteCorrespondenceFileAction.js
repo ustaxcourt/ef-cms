@@ -23,7 +23,7 @@ export const overwriteCorrespondenceFileAction = async ({
       .uploadCorrespondenceDocumentInteractor({
         applicationContext,
         documentFile: primaryDocumentFile,
-        documentIdToOverwrite: documentToEdit.correspondenceId,
+        keyToOverwrite: documentToEdit.correspondenceId,
       });
 
     return path.success({

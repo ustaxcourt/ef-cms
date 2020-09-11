@@ -34,17 +34,17 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     ).toEqual(mockDocument);
   });
 
-  it('calls upload with the given documentId if set', async () => {
+  it('calls upload with the given key if set', async () => {
     await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
-      documentId: '123',
+      key: '123',
       onUploadProgress: () => {},
     });
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[0][0].documentId,
+        .calls[0][0].key,
     ).toEqual('123');
   });
 
@@ -56,8 +56,8 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
     expect(
       applicationContext.getUseCases().virusScanPdfInteractor.mock.calls[0][0]
-        .documentId,
-    ).toEqual(mockDocument.documentId);
+        .key,
+    ).toEqual(mockDocument.key);
   });
 
   it('validates the provided document', async () => {
@@ -68,7 +68,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
     expect(
       applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][0]
-        .documentId,
-    ).toEqual(mockDocument.documentId);
+        .key,
+    ).toEqual(mockDocument.key);
   });
 });
