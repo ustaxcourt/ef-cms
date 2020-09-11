@@ -43,6 +43,7 @@ export const validateStartCaseWizardAction = ({
       'phone',
       'procedureType',
       'preferredTrialLocation',
+      'inCareOf',
     ];
 
     return path.error({
