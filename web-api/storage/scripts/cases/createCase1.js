@@ -56,18 +56,18 @@ module.exports.createCase1 = async () => {
       stinFileId,
     });
 
-    const addCoversheet = document => {
+    const addCoversheet = docketEntry => {
       return applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        docketEntryId: document.documentId,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: caseDetail.docketNumber,
       });
     };
 
     const coversheets = [];
 
-    for (const document of caseDetail.docketEntries) {
-      coversheets.push(addCoversheet(document));
+    for (const docketEntry of caseDetail.docketEntries) {
+      coversheets.push(addCoversheet(docketEntry));
     }
 
     await Promise.all(coversheets);
@@ -85,14 +85,14 @@ module.exports.createCase1 = async () => {
     };
 
     documentMetadata.draftOrderState = { ...documentMetadata };
-    const documentId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
+    const docketEntryId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
 
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
 
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
@@ -100,8 +100,8 @@ module.exports.createCase1 = async () => {
       docketNumber,
       //todo - do not hard code a judge
       nameForSigning: 'Maurice B. Foley',
-      originalDocketEntryId: documentId,
-      signedDocketEntryId: documentId,
+      originalDocketEntryId: docketEntryId,
+      signedDocketEntryId: docketEntryId,
     });
   });
 
@@ -118,14 +118,14 @@ module.exports.createCase1 = async () => {
     };
 
     documentMetadata.draftOrderState = { ...documentMetadata };
-    const documentId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
+    const docketEntryId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
 
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
   });
 };

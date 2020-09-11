@@ -14,19 +14,19 @@ export const setDocumentToFormAction = ({
   props,
   store,
 }) => {
-  const { caseDetail, documentId } = props;
+  const { caseDetail, docketEntryId } = props;
 
   const documentToSet = applicationContext
     .getUtilities()
     .getAttachmentDocumentById({
       caseDetail,
-      documentId,
+      docketEntryId,
     });
 
   if (documentToSet) {
     store.set(state.form, {
       ...documentToSet,
-      documentIdToEdit: documentId,
+      docketEntryIdToEdit: docketEntryId,
       primaryDocumentFile: true,
     });
   }

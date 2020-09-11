@@ -220,9 +220,9 @@ const formatCase = (applicationContext, caseDetail) => {
         ...formatDocketEntry(applicationContext, docketEntry),
         editUrl:
           docketEntry.documentType === 'Miscellaneous'
-            ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${docketEntry.documentId}`
-            : `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.documentId}`,
-        signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.documentId}/sign`,
+            ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
+            : `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}`,
+        signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
         signedAtFormatted: applicationContext
           .getUtilities()
           .formatDateString(docketEntry.signedAt, 'MMDDYY'),

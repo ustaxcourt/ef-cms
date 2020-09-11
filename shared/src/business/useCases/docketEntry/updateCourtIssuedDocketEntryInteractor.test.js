@@ -35,32 +35,32 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
+          docketEntryId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           docketNumber: '45678-18',
-          documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
+          docketEntryId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           docketNumber: '45678-18',
-          documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
           eventCode: 'O',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -81,8 +81,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           },
         },
         {
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           docketNumber: '45678-18',
-          documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
           eventCode: TRANSCRIPT_EVENT_CODE,
@@ -126,8 +126,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
@@ -146,8 +146,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
           eventCode: 'O',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -168,8 +168,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -201,8 +201,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       applicationContext,
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         docketNumber: caseRecord.docketNumber,
-        documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
@@ -232,8 +232,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',
         objections: OBJECTIONS_OPTIONS_MAP.NO,

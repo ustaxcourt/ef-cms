@@ -330,20 +330,7 @@
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
                 presence: "optional"
-            docketNumber: 
-              type: "string"
-              flags: 
-                presence: "optional"
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "pattern"
-                  args: 
-                    regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-            documentId: 
+            docketEntryId: 
               type: "string"
               flags: 
                 presence: "optional"
@@ -358,6 +345,19 @@
                     options: 
                       version: 
                         - "uuidv4"
+            docketNumber: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "pattern"
+                  args: 
+                    regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
             documentTitle: 
               type: "string"
               flags: 

@@ -15,7 +15,7 @@ const { createISODateString } = require('../../utilities/DateHandler');
 
 describe('updateCorrespondenceDocumentInteractor', () => {
   let mockUser;
-  const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
+  const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockUserFixture = {
     name: 'Docket Clerk',
     role: ROLES.docketClerk,
@@ -43,7 +43,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     correspondence: [mockCorrespondence],
     docketEntries: [
       {
-        documentId: mockDocumentId,
+        docketEntryId: mockDocketEntryId,
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',

@@ -8,10 +8,10 @@ import { state } from 'cerebral';
  * @returns {object} object containing viewerDocumentToDisplay
  */
 export const getDefaultDocketViewerDocumentToDisplayAction = ({ get }) => {
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   let viewerDocumentToDisplay = null;
 
-  if (!documentId) {
+  if (!docketEntryId) {
     viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   }
 
@@ -24,9 +24,9 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({ get }) => {
   );
 
   if (entriesWithDocument && entriesWithDocument.length) {
-    if (documentId) {
+    if (docketEntryId) {
       viewerDocumentToDisplay = entriesWithDocument.find(
-        d => d.documentId === documentId,
+        d => d.docketEntryId === docketEntryId,
       );
     } else {
       viewerDocumentToDisplay = entriesWithDocument[0];

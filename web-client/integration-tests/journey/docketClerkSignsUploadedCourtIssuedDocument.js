@@ -1,8 +1,8 @@
 export const docketClerkSignsUploadedCourtIssuedDocument = test => {
   return it('Docket Clerk signs an uploaded court issued document', async () => {
     await test.runSequence('gotoSignOrderSequence', {
+      docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: test.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('SignOrder');
@@ -20,7 +20,7 @@ export const docketClerkSignsUploadedCourtIssuedDocument = test => {
 
     const caseDocument = test
       .getState('caseDetail.docketEntries')
-      .find(d => d.documentId === test.documentId);
+      .find(d => d.docketEntryId === test.docketEntryId);
 
     expect(caseDocument.signedAt).toBeTruthy();
   });

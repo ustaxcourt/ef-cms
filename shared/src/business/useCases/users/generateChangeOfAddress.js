@@ -137,8 +137,8 @@ exports.generateChangeOfAddress = async ({
         const documentData = {
           addToCoversheet: true,
           additionalInfo: `for ${name}`,
+          docketEntryId: newDocketEntryId,
           docketNumber: caseEntity.docketNumber,
-          documentId: newDocketEntryId,
           documentTitle: documentType.title,
           documentType: documentType.title,
           eventCode: documentType.eventCode,

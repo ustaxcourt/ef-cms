@@ -77,7 +77,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         primaryDocumentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         scenario: 'Nonstandard H',
         secondaryDocument: {
-          documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           eventCode: 'BRF',
@@ -86,7 +86,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
-            documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+            docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -100,7 +100,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
           {
-            documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+            docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -137,7 +137,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       contactSecondary: {},
       docketEntries: [
         {
-          documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
+          docketEntryId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
           filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -148,7 +148,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber,
             docketNumberWithSuffix: '101-19S',
             document: {
-              documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
+              docketEntryId: '92eac064-9ca5-4c56-80a0-c5852c752277',
               documentType: 'Petition',
               filedBy: 'Petr. Test Petitioner',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -160,14 +160,13 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         },
         {
-          documentId: expect.anything(),
-          documentTitle: 'Request for Place of Trial at Aberdeen, South Dakota',
+          docketEntryId: expect.anything(),
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
-          documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -175,8 +174,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           attachments: false,
           certificateOfService: false,
+          docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           docketNumber,
-          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
@@ -197,8 +196,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
               attachments: false,
               certificateOfService: false,
               certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
+              docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
               docketNumber,
-              documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle:
                 'Motion for Leave to File Brief in Support of Petition',
               documentType: 'Motion for Leave to File',
@@ -213,7 +212,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         },
         {
-          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
           isOnDocketRecord: true,
@@ -231,7 +230,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber,
             docketNumberWithSuffix: '101-19S',
             document: {
-              documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+              docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',
               partyPrimary: true,
@@ -248,7 +247,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         },
         {
-          documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           isOnDocketRecord: true,
@@ -264,7 +263,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber,
             docketNumberWithSuffix: '101-19S',
             document: {
-              documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+              docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Petition',
               documentType: 'Brief in Support',
               lodged: true,
@@ -279,7 +278,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         },
         {
-          documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
           isOnDocketRecord: true,
@@ -298,7 +297,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber,
             docketNumberWithSuffix: '101-19S',
             document: {
-              documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+              docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',
               lodged: true,
@@ -362,8 +361,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
         document: {
           attachments: false,
           certificateOfService: false,
+          docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           docketNumber,
-          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
@@ -383,7 +382,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
-          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
           partyPrimary: true,
@@ -405,7 +404,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
-          documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           lodged: true,
@@ -425,7 +424,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber,
         docketNumberWithSuffix: '101-19S',
         document: {
-          documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
           lodged: true,
@@ -487,7 +486,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         representingPrimary: true,
         scenario: 'Nonstandard H',
         secondaryDocument: {
-          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+          docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
           eventCode: 'BRF',
@@ -496,7 +495,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
-            documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+            docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',
@@ -510,7 +509,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
           {
-            documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+            docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
             documentTitle: 'Brief in Support of Amended Answer',
             documentType: 'Brief in Support',
             eventCode: 'BRF',

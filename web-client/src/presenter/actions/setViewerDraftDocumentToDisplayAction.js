@@ -28,7 +28,7 @@ export const setViewerDraftDocumentToDisplayAction = async ({
         applicationContext,
         docketNumber,
         isPublic: false,
-        key: viewerDraftDocumentToDisplay.documentId,
+        key: viewerDraftDocumentToDisplay.docketEntryId,
       });
 
     store.set(state.iframeSrc, url);

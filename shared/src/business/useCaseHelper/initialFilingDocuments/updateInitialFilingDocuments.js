@@ -60,18 +60,18 @@ const deleteInitialFilingFromCase = async ({
   originalCaseDocument,
 }) => {
   caseEntity.deleteDocketEntryById({
-    docketEntryId: originalCaseDocument.documentId,
+    docketEntryId: originalCaseDocument.docketEntryId,
   });
 
   await applicationContext.getPersistenceGateway().deleteDocketEntry({
     applicationContext,
-    docketEntryId: originalCaseDocument.documentId,
+    docketEntryId: originalCaseDocument.docketEntryId,
     docketNumber: caseEntity.docketNumber,
   });
 
   await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
     applicationContext,
-    key: originalCaseDocument.documentId,
+    key: originalCaseDocument.docketEntryId,
   });
 };
 
@@ -96,7 +96,9 @@ exports.updateInitialFilingDocuments = async ({
     );
 
     if (originalCaseDocument && currentCaseDocument) {
-      if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
+      if (
+        originalCaseDocument.docketEntryId !== currentCaseDocument.docketEntryId
+      ) {
         addNewInitialFilingToCase({
           applicationContext,
           caseEntity,

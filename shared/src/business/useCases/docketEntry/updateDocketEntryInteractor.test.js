@@ -18,7 +18,7 @@ describe('updateDocketEntryInteractor', () => {
   const workItem = {
     docketNumber: '45678-18',
     document: {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
       eventCode: 'A',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -31,8 +31,8 @@ describe('updateDocketEntryInteractor', () => {
 
   const docketEntries = [
     {
+      docketEntryId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
       docketNumber: '45678-18',
-      documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
       documentType: 'Petition',
       eventCode: 'P',
       filedBy: 'Test Petitioner',
@@ -40,8 +40,8 @@ describe('updateDocketEntryInteractor', () => {
       workItems: [workItem],
     },
     {
+      docketEntryId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
       docketNumber: '45678-18',
-      documentId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
       documentType: 'Record on Appeal',
       eventCode: 'ROA',
       filedBy: 'Test Petitioner',
@@ -49,8 +49,8 @@ describe('updateDocketEntryInteractor', () => {
       workItems: [workItem],
     },
     {
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '45678-18',
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
       eventCode: 'A',
       filedBy: 'Test Petitioner',
@@ -58,8 +58,8 @@ describe('updateDocketEntryInteractor', () => {
       workItem,
     },
     {
+      docketEntryId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
       docketNumber: '45678-18',
-      documentId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
       documentType: 'Record on Appeal',
       eventCode: 'ROA',
       filedBy: 'Test Petitioner',
@@ -67,8 +67,8 @@ describe('updateDocketEntryInteractor', () => {
       workItems: [workItem],
     },
     {
+      docketEntryId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
       docketNumber: '45678-18',
-      documentId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',

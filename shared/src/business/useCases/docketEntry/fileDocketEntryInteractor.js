@@ -64,9 +64,9 @@ exports.fileDocketEntryInteractor = async ({
   ];
 
   for (let document of documentsToFile) {
-    const [documentId, metadata, relationship] = document;
+    const [docketEntryId, metadata, relationship] = document;
 
-    if (documentId && metadata) {
+    if (docketEntryId && metadata) {
       const docketRecordEditState =
         metadata.isFileAttached === false ? documentMetadata : {};
 
@@ -74,7 +74,7 @@ exports.fileDocketEntryInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
-          documentId,
+          docketEntryId,
           documentTitle: metadata.documentTitle,
           documentType: metadata.documentType,
           editState: JSON.stringify(docketRecordEditState),
@@ -124,7 +124,7 @@ exports.fileDocketEntryInteractor = async ({
           .getUseCaseHelpers()
           .countPagesInDocument({
             applicationContext,
-            docketEntryId: documentId,
+            docketEntryId: docketEntryId,
           });
       }
 

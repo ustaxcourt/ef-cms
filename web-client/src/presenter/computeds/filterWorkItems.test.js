@@ -76,7 +76,7 @@ const generateWorkItem = (data, document) => {
     docketNumber: '100-01',
     document: {
       createdAt: '2018-12-27T18:05:54.164Z',
-      documentId: '456',
+      docketEntryId: '456',
       documentType: 'Answer',
       ...document,
     },

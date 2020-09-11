@@ -8,7 +8,7 @@ presenter.providers.applicationContext = applicationContext;
 describe('servePaperFiledDocumentAction', () => {
   let caseDetail;
   const docketNumber = '123-45';
-  const documentId = '456';
+  const docketEntryId = '456';
   const paperServicePdfUrl = 'www.example.com';
 
   beforeAll(() => {
@@ -34,8 +34,8 @@ describe('servePaperFiledDocumentAction', () => {
       },
       state: {
         caseDetail,
+        docketEntryId,
         document: '123-456-789-abc',
-        documentId,
         form: {
           primaryDocumentFile: {},
         },
@@ -45,7 +45,7 @@ describe('servePaperFiledDocumentAction', () => {
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][0],
-    ).toMatchObject({ docketEntryId: documentId, docketNumber });
+    ).toMatchObject({ docketEntryId: docketEntryId, docketNumber });
 
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
@@ -70,8 +70,8 @@ describe('servePaperFiledDocumentAction', () => {
       },
       state: {
         caseDetail,
+        docketEntryId,
         document: '123-456-789-abc',
-        documentId,
         form: {
           primaryDocumentFile: {},
         },
@@ -81,7 +81,7 @@ describe('servePaperFiledDocumentAction', () => {
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
         .mock.calls[0][0],
-    ).toMatchObject({ docketEntryId: documentId, docketNumber });
+    ).toMatchObject({ docketEntryId: docketEntryId, docketNumber });
 
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },

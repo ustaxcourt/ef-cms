@@ -87,13 +87,13 @@ describe('Docket Clerk edits a paper filing journey', () => {
       eventCode: 'A',
       isFileAttached: true,
     });
-    test.documentId = caseDocument.documentId;
+    test.docketEntryId = caseDocument.docketEntryId;
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: test.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');

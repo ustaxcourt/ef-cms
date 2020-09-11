@@ -132,7 +132,7 @@ exports.createCaseInteractor = async ({
 
   const petitionDocketEntryEntity = new DocketEntry(
     {
-      documentId: petitionFileId,
+      docketEntryId: petitionFileId,
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
@@ -178,8 +178,7 @@ exports.createCaseInteractor = async ({
 
   const stinDocketEntryEntity = new DocketEntry(
     {
-      documentId: stinFileId,
-      documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
+      docketEntryId: stinFileId,
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filingDate: caseToAdd.createdAt,
@@ -201,7 +200,7 @@ exports.createCaseInteractor = async ({
   if (ownershipDisclosureFileId) {
     const odsDocketEntryEntity = new DocketEntry(
       {
-        documentId: ownershipDisclosureFileId,
+        docketEntryId: ownershipDisclosureFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,

@@ -60,7 +60,7 @@ exports.uploadExternalDocumentsInteractor = async ({
   );
 
   if (documentFiles.secondary) {
-    documentMetadata.secondaryDocument.documentId = await uploadDocumentAndMakeSafeInteractor(
+    documentMetadata.secondaryDocument.docketEntryId = await uploadDocumentAndMakeSafeInteractor(
       'secondary',
     );
   }
@@ -69,7 +69,7 @@ exports.uploadExternalDocumentsInteractor = async ({
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
       documentMetadata.supportingDocuments[
         i
-      ].documentId = await uploadDocumentAndMakeSafeInteractor(
+      ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `primarySupporting${i}`,
       );
     }
@@ -83,7 +83,7 @@ exports.uploadExternalDocumentsInteractor = async ({
     ) {
       documentMetadata.secondarySupportingDocuments[
         i
-      ].documentId = await uploadDocumentAndMakeSafeInteractor(
+      ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `secondarySupporting${i}`,
       );
     }

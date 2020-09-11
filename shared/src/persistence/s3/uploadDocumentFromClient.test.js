@@ -4,7 +4,7 @@ const {
 const { uploadDocumentFromClient } = require('./uploadDocumentFromClient');
 
 describe('uploadDocument', () => {
-  it('returns the expected documentId after the upload was successful', async () => {
+  it('returns the expected key after the upload was successful', async () => {
     const KEY = 'abc';
     applicationContext.getUniqueId.mockReturnValue(KEY);
     applicationContext

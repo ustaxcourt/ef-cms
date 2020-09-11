@@ -19,7 +19,7 @@ describe('setViewerDraftDocumentToDisplayAction', () => {
         presenter,
       },
       props: {
-        viewerDraftDocumentToDisplay: { documentId: '1234' },
+        viewerDraftDocumentToDisplay: { docketEntryId: '1234' },
       },
       state: {
         caseDetail: {
@@ -29,7 +29,7 @@ describe('setViewerDraftDocumentToDisplayAction', () => {
       },
     });
     expect(result.state.viewerDraftDocumentToDisplay).toEqual({
-      documentId: '1234',
+      docketEntryId: '1234',
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });

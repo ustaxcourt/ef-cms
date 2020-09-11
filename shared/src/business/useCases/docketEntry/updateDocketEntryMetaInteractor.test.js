@@ -15,7 +15,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   beforeEach(() => {
     docketEntries = [
       {
-        documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        docketEntryId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         documentTitle: 'Test Entry 0',
         documentType: 'Petition',
         eventCode: 'P',
@@ -29,7 +29,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         userId: mockUserId,
       },
       {
-        documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+        docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentTitle: 'Test Entry 1',
         documentType: 'Order',
         eventCode: 'O',
@@ -145,7 +145,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.documentId === updatedDocketEntry.documentId,
+      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocketEntry.filedBy).toEqual('Petr. Test Petitioner');
     expect(updatedDocument.filedBy).toEqual('Petr. Test Petitioner');
@@ -181,7 +181,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.documentId === updatedDocketEntry.documentId,
+      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
   });
@@ -201,7 +201,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.documentId === updatedDocketEntry.documentId,
+      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.hasOtherFilingParty).toBe(true);
     expect(updatedDocument.otherFilingParty).toBe('Brianna Noble');
@@ -221,7 +221,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.documentId === updatedDocketEntry.documentId,
+      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.freeText).toBeUndefined();
   });

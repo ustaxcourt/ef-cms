@@ -2,7 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 
 describe('getShowNotServedForDocument', () => {
-  const documentId = applicationContext.getUniqueId();
+  const docketEntryId = applicationContext.getUniqueId();
 
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 
@@ -13,14 +13,14 @@ describe('getShowNotServedForDocument', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId,
+              docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
               eventCode: 'O',
             },
           ],
         },
-        documentId,
+        docketEntryId,
         draftDocuments: [],
       });
 
@@ -33,14 +33,14 @@ describe('getShowNotServedForDocument', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId,
+              docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Corrected Transcript',
               eventCode: 'CTRA',
             },
           ],
         },
-        documentId,
+        docketEntryId,
         draftDocuments: [],
       });
 
@@ -53,7 +53,7 @@ describe('getShowNotServedForDocument', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId,
+              docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
               eventCode: 'O',
@@ -61,7 +61,7 @@ describe('getShowNotServedForDocument', () => {
             },
           ],
         },
-        documentId,
+        docketEntryId,
         draftDocuments: [],
       });
 
@@ -74,15 +74,15 @@ describe('getShowNotServedForDocument', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId,
+              docketEntryId,
               documentTitle: 'Some Stuff',
               documentType: 'Order',
               eventCode: 'O',
             },
           ],
         },
-        documentId,
-        draftDocuments: [{ documentId }],
+        docketEntryId,
+        draftDocuments: [{ docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -94,8 +94,8 @@ describe('getShowNotServedForDocument', () => {
         caseDetail: {
           docketEntries: [],
         },
-        documentId,
-        draftDocuments: [{ documentId }],
+        docketEntryId,
+        draftDocuments: [{ docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);
@@ -108,10 +108,10 @@ describe('getShowNotServedForDocument', () => {
       const showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail: {
-          docketEntries: [{ documentId }],
+          docketEntries: [{ docketEntryId }],
         },
-        documentId: correspondenceDocumentId,
-        draftDocuments: [{ documentId }],
+        docketEntryId: correspondenceDocumentId,
+        draftDocuments: [{ docketEntryId }],
       });
 
       expect(showNotServed).toEqual(false);

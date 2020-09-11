@@ -12,14 +12,14 @@ export const removeCaseDetailPendingItemAction = async ({
 }) => {
   const {
     caseDetail: { docketNumber },
-    documentId,
+    docketEntryId,
   } = props;
 
   const caseDetail = await applicationContext
     .getUseCases()
     .removeCasePendingItemInteractor({
       applicationContext,
-      docketEntryId: documentId,
+      docketEntryId: docketEntryId,
       docketNumber,
     });
   return { caseDetail };

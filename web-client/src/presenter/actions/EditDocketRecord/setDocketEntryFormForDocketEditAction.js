@@ -17,10 +17,12 @@ export const setDocketEntryFormForDocketEditAction = ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const { documentId } = props;
+  const { docketEntryId } = props;
 
   const docketEntry = omit(
-    caseDetail.docketEntries.find(entry => entry.documentId === documentId),
+    caseDetail.docketEntries.find(
+      entry => entry.docketEntryId === docketEntryId,
+    ),
     ['workItem'],
   );
 
