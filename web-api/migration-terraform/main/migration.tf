@@ -13,12 +13,11 @@ resource "aws_lambda_function" "migration_lambda" {
   source_code_hash = data.archive_file.migration_zip.output_base64sha256
 
   runtime     = "nodejs12.x"
-  timeout     = "30"
+  timeout     = "900"
   memory_size = "3008"
 
   environment {
     variables = {
-      ENVIRONMENT       = var.environment
       DESTINATION_TABLE = var.destination_table
     }
   }
@@ -82,5 +81,5 @@ EOF
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
   event_source_arn  = var.stream_arn
   function_name     = aws_lambda_function.migration_lambda.arn
-  starting_position = "TRIM_HORIZON"
+  starting_position = "LATEST"
 }

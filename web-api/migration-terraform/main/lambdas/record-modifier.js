@@ -7,7 +7,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 });
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-const scanTableSegment = async (segment, totalSegments) => {
+const scanTableSegment = async (segment, totalSegments, timestamp) => {
   let hasMoreResults = true;
   let lastKey = null;
   while (hasMoreResults) {
@@ -26,15 +26,13 @@ const scanTableSegment = async (segment, totalSegments) => {
         lastKey = results.LastEvaluatedKey;
         for (let item of results.Items) {
           try {
-            await promiseRetry(function (retry, number) {
-              console.log('attempt number', number);
-
+            await promiseRetry(function (retry) {
               // eslint-disable-next-line promise/no-nesting
               return documentClient
                 .put({
                   Item: {
                     ...item,
-                    migrate: 'goodbye',
+                    migrate: timestamp,
                   },
                   TableName: `efcms-${process.env.ENVIRONMENT}`,
                 })
@@ -52,11 +50,11 @@ const scanTableSegment = async (segment, totalSegments) => {
 exports.handler = async event => {
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
-  const { segment, totalSegments } = JSON.parse(body);
+  const { segment, timestamp, totalSegments } = JSON.parse(body);
 
   console.log(`about to process ${segment} of ${totalSegments}`);
 
-  await scanTableSegment(segment, totalSegments);
+  await scanTableSegment(segment, totalSegments, timestamp);
   await sqs
     .deleteMessage({
       QueueUrl: process.env.SEGMENTS_QUEUE_URL,
