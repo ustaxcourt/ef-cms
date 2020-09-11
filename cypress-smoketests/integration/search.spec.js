@@ -44,7 +44,7 @@ describe('Create and serve a case to search for', () => {
     goToMyDocumentQC();
     goToCreateCase();
     closeScannerSetupDialog();
-    fillInCreateCaseFromPaperForm();
+    fillInCreateCaseFromPaperForm(testData);
     goToReviewCase(testData);
     serveCaseToIrs();
   });
@@ -65,7 +65,7 @@ describe('Case Advanced Search', () => {
 
   it('should be able to search for case by practitioner name', () => {
     gotoAdvancedSearch();
-    searchByPetitionerName();
+    searchByPetitionerName(testData.testPetitionerName);
   });
 
   it('should be able to search for case by docket number', () => {
