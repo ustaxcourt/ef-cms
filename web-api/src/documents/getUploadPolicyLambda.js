@@ -10,6 +10,6 @@ exports.getUploadPolicyLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().getUploadPolicyInteractor({
       applicationContext,
-      documentId: event.pathParameters.documentId,
+      key: event.pathParameters.key,
     });
   });

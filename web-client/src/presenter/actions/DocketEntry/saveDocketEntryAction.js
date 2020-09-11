@@ -53,12 +53,12 @@ export const saveDocketEntryAction = async ({
   if (isFileAttachedNow) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
-      documentId,
+      key: documentId,
     });
 
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
-      documentId,
+      key: documentId,
     });
   }
 
