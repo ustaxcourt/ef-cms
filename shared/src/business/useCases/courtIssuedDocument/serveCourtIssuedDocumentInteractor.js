@@ -53,13 +53,13 @@ const completeWorkItem = async ({
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document to serve
- * @param {string} providers.documentId the document id of the signed stipulated decision document
+ * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {object} the updated case after the document was served
  */
 exports.serveCourtIssuedDocumentInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -82,22 +82,24 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const courtIssuedDocument = caseEntity.getDocumentById({
-    documentId,
+  const courtIssuedDocument = caseEntity.getDocketEntryById({
+    docketEntryId,
   });
 
   if (!courtIssuedDocument) {
-    throw new NotFoundError(`Document ${documentId} was not found.`);
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
 
   courtIssuedDocument.numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      documentId,
+      docketEntryId,
     });
 
-  const document = caseEntity.getDocumentById({ documentId });
+  const docketEntry = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
 
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -108,7 +110,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
+      Key: docketEntryId,
     })
     .promise();
 
@@ -136,7 +138,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
-    documentId,
+    key: docketEntryId,
   });
 
   const workItemToUpdate = courtIssuedDocument.workItem;
@@ -149,7 +151,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   const updatedDocketEntryEntity = new DocketEntry(
     {
-      ...document,
+      ...docketEntry,
       filingDate: createISODateString(),
       isOnDocketRecord: true,
     },
@@ -208,7 +210,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    documentEntity: courtIssuedDocument,
+    docketEntryEntity: courtIssuedDocument,
     servedParties,
   });
 

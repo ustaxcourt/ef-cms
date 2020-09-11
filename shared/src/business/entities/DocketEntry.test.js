@@ -250,6 +250,95 @@ describe('DocketEntry entity', () => {
       expect(error).toBeDefined();
     });
 
+    it('should not throw an error on valid documents', () => {
+      let error;
+      try {
+        new DocketEntry(
+          {
+            createdAt: '2019-03-27T00:00:00.000-04:00',
+            documentId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
+            documentTitle:
+              'ORDER THAT PETR. BY 4/18/19 FILE, UNDER SEAL, A RESPONSE TO THIS ORDER AS STATED HEREIN.',
+            documentType: 'Order',
+            entityName: 'Document',
+            eventCode: 'O',
+            filedBy: null,
+            filingDate: '2019-03-27T00:00:00.000-04:00',
+            isDraft: false,
+            isFileAttached: true,
+            isLegacy: true,
+            isLegacySealed: false,
+            isSealed: false,
+            judge: 'Mock Judge',
+            pending: false,
+            processingStatus: 'pending',
+            receivedAt: '2020-08-21T20:07:44.018Z',
+            servedAt: '2019-03-28T00:00:00.000-04:00',
+            servedParties: [
+              {
+                name: 'Bernard Lowe',
+              },
+              {
+                name: 'IRS',
+                role: 'irsSuperuser',
+              },
+            ],
+            signedAt: 'Not in Blackstone',
+            signedByUserId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
+            signedJudgeName: 'Mock Signed Judge',
+            userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
+          },
+          { applicationContext },
+        ).validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeUndefined();
+
+      try {
+        new DocketEntry(
+          {
+            createdAt: '2019-03-27T00:00:00.000-04:00',
+            documentId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
+            documentTitle:
+              'ORDER THAT PETR. BY 4/18/19 FILE, UNDER SEAL, A RESPONSE TO THIS ORDER AS STATED HEREIN.',
+            documentType: 'Order',
+            entityName: 'Document',
+            eventCode: 'O',
+            filedBy: '',
+            filingDate: '2019-03-27T00:00:00.000-04:00',
+            isDraft: false,
+            isFileAttached: true,
+            isLegacy: true,
+            isLegacySealed: false,
+            isSealed: false,
+            judge: 'Mock Judge',
+            pending: false,
+            processingStatus: 'pending',
+            receivedAt: '2020-08-21T20:07:44.018Z',
+            servedAt: '2019-03-28T00:00:00.000-04:00',
+            servedParties: [
+              {
+                name: 'Bernard Lowe',
+              },
+              {
+                name: 'IRS',
+                role: 'irsSuperuser',
+              },
+            ],
+            signedAt: 'Not in Blackstone',
+            signedByUserId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
+            signedJudgeName: 'Mock Signed Judge',
+            userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
+          },
+          { applicationContext },
+        ).validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeUndefined();
+    });
+
     it('should correctly validate with a secondaryDate', () => {
       const document = new DocketEntry(
         {
@@ -1553,7 +1642,7 @@ describe('DocketEntry entity', () => {
       const document = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          draftState: {
+          draftOrderState: {
             documentContents: 'Yee to the haw',
           },
         },
@@ -1562,7 +1651,7 @@ describe('DocketEntry entity', () => {
       document.setAsServed();
 
       expect(document.servedAt).toBeDefined();
-      expect(document.draftState).toEqual(null);
+      expect(document.draftOrderState).toEqual(null);
     });
 
     it('sets the Document as served with served parties', () => {
@@ -1580,19 +1669,6 @@ describe('DocketEntry entity', () => {
       ]);
       expect(document.servedAt).toBeDefined();
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
-    });
-  });
-
-  describe('getFormattedType', () => {
-    it('strips out the dash and returns the verbiage after it', () => {
-      expect(DocketEntry.getFormattedType('T.C. Opinion')).toEqual(
-        'T.C. Opinion',
-      );
-    });
-    it("returns the verbiage if there's no dash", () => {
-      expect(DocketEntry.getFormattedType('Summary Opinion')).toEqual(
-        'Summary Opinion',
-      );
     });
   });
 

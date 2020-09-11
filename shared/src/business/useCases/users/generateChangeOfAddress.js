@@ -132,14 +132,14 @@ exports.generateChangeOfAddress = async ({
             },
           });
 
-        const newDocumentId = applicationContext.getUniqueId();
+        const newDocketEntryId = applicationContext.getUniqueId();
 
         const documentData = {
           addToCoversheet: true,
           additionalInfo: `for ${name}`,
           description: documentType.title,
           docketNumber: caseEntity.docketNumber,
-          documentId: newDocumentId,
+          documentId: newDocketEntryId,
           documentTitle: documentType.title,
           documentType: documentType.title,
           eventCode: documentType.eventCode,
@@ -171,7 +171,7 @@ exports.generateChangeOfAddress = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocketEntry,
+          docketEntryEntity: changeOfAddressDocketEntry,
           servedParties,
         });
 
@@ -203,7 +203,7 @@ exports.generateChangeOfAddress = async ({
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocketEntry,
+          docketEntryEntity: changeOfAddressDocketEntry,
           pdfData: changeOfAddressPdf,
         });
 
@@ -212,7 +212,7 @@ exports.generateChangeOfAddress = async ({
           .saveDocumentFromLambda({
             applicationContext,
             document: changeOfAddressPdfWithCover,
-            documentId: newDocumentId,
+            key: newDocketEntryId,
           });
 
         await applicationContext

@@ -10,7 +10,7 @@ export const docketClerkEditsCorrespondence = test =>
     expect(test.getState('caseDetail.correspondence')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentId: test.correspondenceDocument.documentId,
+          correspondenceId: test.correspondenceDocument.correspondenceId,
           documentTitle: 'My edited correspondence',
         }),
       ]),

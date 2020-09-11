@@ -14,8 +14,8 @@ describe('saveSignedDocumentInteractor', () => {
 
   const mockSigningName = 'Guy Fieri';
   const mockDocumentIdBeforeSignature = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3857';
-  const mockSignedDocumentId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
-  const mockOriginalDocumentId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const mockSignedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
+  const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockParentMessageId = 'b3bc3773-6ddd-439d-a3c9-60d6beceff99';
 
   beforeAll(() => {
@@ -60,8 +60,8 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
-      originalDocumentId: mockOriginalDocumentId,
-      signedDocumentId: mockSignedDocumentId,
+      originalDocketEntryId: mockOriginalDocketEntryId,
+      signedDocketEntryId: mockSignedDocketEntryId,
     });
 
     expect(applicationContext.getUniqueId).toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({
-      documentId: mockDocumentIdBeforeSignature,
+      key: mockDocumentIdBeforeSignature,
     });
   });
 
@@ -78,15 +78,15 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
-      originalDocumentId: mockOriginalDocumentId,
-      signedDocumentId: mockSignedDocumentId,
+      originalDocketEntryId: mockOriginalDocketEntryId,
+      signedDocketEntryId: mockSignedDocketEntryId,
     });
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[1][0],
     ).toMatchObject({
-      documentId: mockOriginalDocumentId,
+      key: mockOriginalDocketEntryId,
     });
   });
 
@@ -95,23 +95,23 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: 'Guy Fieri',
-      originalDocumentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      signedDocumentId: mockSignedDocumentId,
+      originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      signedDocketEntryId: mockSignedDocketEntryId,
     });
 
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
 
-    const signedDocumentEntity = caseEntity.docketEntries.find(
+    const signedDocketEntryEntity = caseEntity.docketEntries.find(
       document =>
         document.documentType === 'Stipulated Decision' &&
-        document.documentId === mockSignedDocumentId,
+        document.documentId === mockSignedDocketEntryId,
     );
 
-    expect(signedDocumentEntity.isPaper).toEqual(false);
-    expect(signedDocumentEntity.documentId).toEqual(mockSignedDocumentId);
-    expect(signedDocumentEntity.isDraft).toEqual(true);
-    expect(signedDocumentEntity.signedJudgeName).toEqual('Guy Fieri');
-    expect(signedDocumentEntity.documentType).toEqual('Stipulated Decision');
+    expect(signedDocketEntryEntity.isPaper).toEqual(false);
+    expect(signedDocketEntryEntity.documentId).toEqual(mockSignedDocketEntryId);
+    expect(signedDocketEntryEntity.isDraft).toEqual(true);
+    expect(signedDocketEntryEntity.signedJudgeName).toEqual('Guy Fieri');
+    expect(signedDocketEntryEntity.documentType).toEqual('Stipulated Decision');
   });
 
   it("should set the document's processing status to complete", async () => {
@@ -119,12 +119,12 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
-      originalDocumentId: mockOriginalDocumentId,
-      signedDocumentId: mockSignedDocumentId,
+      originalDocketEntryId: mockOriginalDocketEntryId,
+      signedDocketEntryId: mockSignedDocketEntryId,
     });
 
     const signedDocument = caseEntity.docketEntries.find(
-      doc => doc.documentId === mockOriginalDocumentId,
+      doc => doc.documentId === mockOriginalDocketEntryId,
     );
     expect(signedDocument.processingStatus).toBe(
       DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -136,12 +136,12 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
-      originalDocumentId: mockOriginalDocumentId,
-      signedDocumentId: mockSignedDocumentId,
+      originalDocketEntryId: mockOriginalDocketEntryId,
+      signedDocketEntryId: mockSignedDocketEntryId,
     });
 
     const signedDocument = caseEntity.docketEntries.find(
-      doc => doc.documentId === mockOriginalDocumentId,
+      doc => doc.documentId === mockOriginalDocketEntryId,
     );
     expect(signedDocument.documentIdBeforeSignature).toBe(
       mockDocumentIdBeforeSignature,
@@ -153,9 +153,9 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       docketNumber: mockCase.docketNumber,
       nameForSigning: 'Guy Fieri',
-      originalDocumentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       parentMessageId: mockParentMessageId,
-      signedDocumentId: mockSignedDocumentId,
+      signedDocketEntryId: mockSignedDocketEntryId,
     });
 
     expect(
@@ -167,7 +167,7 @@ describe('saveSignedDocumentInteractor', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: mockSignedDocumentId,
+          documentId: mockSignedDocketEntryId,
           documentTitle: 'Stipulated Decision',
         },
       ],

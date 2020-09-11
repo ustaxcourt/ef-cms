@@ -155,13 +155,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            documentEntity: initialDocketEntry,
+            docketEntryEntity: initialDocketEntry,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: initialDocketEntry,
+          docketEntryEntity: initialDocketEntry,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
@@ -228,8 +228,8 @@ exports.serveCaseToIrsInteractor = async ({
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: doc.documentId,
         docketNumber: caseEntity.docketNumber,
-        documentId: doc.documentId,
         replaceCoversheet: !caseEntity.isPaper,
         useInitialData: !caseEntity.isPaper,
       });
@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: doc.documentId,
+          docketEntryId: doc.documentId,
         });
     }
   }
@@ -298,7 +298,7 @@ exports.serveCaseToIrsInteractor = async ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: caseConfirmationPdfName,
+      key: caseConfirmationPdfName,
       useTempBucket: false,
     }));
   }

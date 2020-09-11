@@ -4,21 +4,18 @@ export const formattedDocument = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const documentId = get(state.documentId);
 
-  const allCaseDocuments = [
-    ...(caseDetail.docketEntries || []),
-    ...(caseDetail.correspondence || []),
-  ];
-  const document = allCaseDocuments.find(
-    item => item.documentId === documentId,
-  );
+  const document = applicationContext.getUtilities().getAttachmentDocumentById({
+    caseDetail,
+    documentId,
+  });
 
   if (!document) {
     return;
   }
 
-  const documentFormatted = applicationContext
+  const docketEntryFormatted = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, document);
+    .formatDocketEntry(applicationContext, document);
 
-  return documentFormatted;
+  return docketEntryFormatted;
 };

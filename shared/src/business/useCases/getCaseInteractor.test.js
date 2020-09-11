@@ -31,7 +31,7 @@ describe('Get case', () => {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Petition',
           documentType: 'Petition',
-          draftState: {},
+          draftOrderState: {},
           eventCode: 'P',
           filedBy: 'Test Petitioner',
           processingStatus: 'pending',
@@ -64,13 +64,13 @@ describe('Get case', () => {
       applicationContext.getPersistenceGateway().getDocument,
     ).toHaveBeenCalledWith({
       applicationContext,
-      documentId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
+      key: '0098d177-78ef-4210-88aa-4bbb45c4f048',
       protocol: 'S3',
       useTempBucket: false,
     });
     expect(caseRecord.docketEntries[0]).toMatchObject({
       documentContents: 'the contents!',
-      draftState: {
+      draftOrderState: {
         documentContents: 'the contents!',
         richText: '<b>the contents!</b>',
       },

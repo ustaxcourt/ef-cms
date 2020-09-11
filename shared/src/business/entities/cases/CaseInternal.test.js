@@ -31,7 +31,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocuments: [],
+          archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -73,7 +73,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with partyType Corporation and an ods file', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocuments: [],
+          archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -108,7 +108,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with partyType Corporation and an order for ods instead of an ods file', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocuments: [],
+          archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -307,7 +307,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocuments: [],
+          archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -345,7 +345,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if only orderDesignatingPlaceOfTrial is present and it is false', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocuments: [],
+          archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
@@ -385,7 +385,7 @@ describe('CaseInternal entity', () => {
   it('should populate archivedCorrespondences', () => {
     const mockGuid = applicationContext.getUniqueId();
     const mockCorrespondence = new Correspondence({
-      documentId: mockGuid,
+      correspondenceId: mockGuid,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockGuid,

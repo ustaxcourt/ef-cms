@@ -26,7 +26,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: MOCK_CASE.docketNumber,
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -44,7 +44,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: MOCK_CASE.docketNumber,
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -78,7 +78,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: MOCK_CASE.docketNumber,
-        documentId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
+        key: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       }),
     ).rejects.toThrow('Unauthorized to view document at this time');
   });
@@ -95,7 +95,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
   });
@@ -127,7 +127,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
   });
@@ -144,7 +144,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'case-101-18-confirmation.pdf',
+      key: 'case-101-18-confirmation.pdf',
     });
     expect(url).toEqual('localhost');
   });
@@ -162,7 +162,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: MOCK_CASE.docketNumber, //docket number is 101-18
-        documentId: 'case-101-20-confirmation.pdf',
+        key: 'case-101-20-confirmation.pdf',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -179,7 +179,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
   });
@@ -203,7 +203,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: MOCK_CASE.docketNumber,
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized to view case documents at this time');
   });
@@ -227,7 +227,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(url).toEqual('localhost');
   });

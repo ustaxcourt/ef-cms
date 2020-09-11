@@ -124,7 +124,7 @@ exports.fileDocketEntryInteractor = async ({
           .getUseCaseHelpers()
           .countPagesInDocument({
             applicationContext,
-            documentId,
+            docketEntryId: documentId,
           });
       }
 
@@ -139,7 +139,7 @@ exports.fileDocketEntryInteractor = async ({
           await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
             applicationContext,
             caseEntity,
-            documentEntity: docketEntryEntity,
+            docketEntryEntity,
             servedParties,
           });
         }

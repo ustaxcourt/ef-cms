@@ -73,6 +73,7 @@ export const AddTrialSession = connect(
             </div>
 
             <Button
+              id="submit-trial-session"
               type="button"
               onClick={() => {
                 submitTrialSessionSequence();
@@ -82,6 +83,7 @@ export const AddTrialSession = connect(
             </Button>
             <Button
               link
+              id="cancel"
               type="button"
               onClick={() => {
                 formCancelToggleCancelSequence();

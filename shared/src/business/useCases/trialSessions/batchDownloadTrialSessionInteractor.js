@@ -69,16 +69,16 @@ const batchDownloadTrialSessionInteractor = async ({
     });
 
   sessionCases.forEach(caseToBatch => {
-    const documentMap = caseToBatch.docketEntries.reduce((acc, document) => {
+    const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
+      d => d.isOnDocketRecord,
+    );
+
+    const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
       acc[document.documentId] = document;
       return acc;
     }, {});
 
-    caseToBatch.docketEntries.forEach(aDocketRecord => {
-      if (!aDocketRecord.isOnDocketRecord) {
-        return; // TODO 636
-      }
-
+    docketEntriesOnDocketRecord.forEach(aDocketRecord => {
       let myDoc;
       if (
         aDocketRecord.documentId &&
@@ -136,7 +136,7 @@ const batchDownloadTrialSessionInteractor = async ({
       .getDocument({
         applicationContext,
         docketNumber: sessionCase.docketNumber,
-        documentId: result.fileId,
+        key: result.fileId,
         protocol: 'S3',
         useTempBucket: true,
       });
@@ -205,7 +205,7 @@ const batchDownloadTrialSessionInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId: zipName,
+    key: zipName,
     useTempBucket: true,
   });
 
