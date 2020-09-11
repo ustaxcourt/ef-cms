@@ -4,10 +4,14 @@ resource "aws_sqs_queue" "migration_segments_queue" {
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.migration_segments_dl_queue.arn
-    maxReceiveCount     = 4
+    maxReceiveCount     = 3
   })
 }
 
 resource "aws_sqs_queue" "migration_segments_dl_queue" {
   name = "migration_segments_dl_queue_${var.environment}"
+}
+
+resource "aws_sqs_queue" "migration_failure_queue" {
+  name = "migration_failure_queue_${var.environment}"
 }

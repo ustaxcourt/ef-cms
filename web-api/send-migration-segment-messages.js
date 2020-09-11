@@ -52,7 +52,7 @@ const now = Date.now().toString();
 
 (async () => {
   const itemCount = await getItemCount();
-  // let waitTime = 5000;
+  let waitTime = 10000;
 
   const totalSegments = Math.ceil(itemCount / SEGMENT_SIZE);
 
@@ -69,9 +69,9 @@ const now = Date.now().toString();
     await sendSegmentMessage(segment);
     console.log(`Message ${sent}/${totalSegments} sent successfully.`);
     sent++;
-    // waitTime = Math.max(0, waitTime - 500);
-    // await new Promise(resolve => {
-    //   setTimeout(resolve, waitTime);
-    // });
+    waitTime = Math.max(0, waitTime - 500);
+    await new Promise(resolve => {
+      setTimeout(resolve, waitTime);
+    });
   }
 })();

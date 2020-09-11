@@ -6,6 +6,8 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
+const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
+
 exports.handler = async event => {
   const { Records } = event;
   const newItems = Records.map(item =>
@@ -24,7 +26,15 @@ exports.handler = async event => {
           .catch(retry);
       });
     } catch (e) {
-      console.log('error writing to migration destination table: ', e);
+      await sqs
+        .sendMessage({
+          MessageBody: JSON.stringify(item),
+          QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_failure_queue_${process.env.ENVIRONMENT}`,
+        })
+        .promise()
+        .catch(err => {
+          console.log('error writing to failure queue: ', err);
+        });
     }
   }
 };
