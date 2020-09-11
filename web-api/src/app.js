@@ -361,6 +361,7 @@ const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
+const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -712,6 +713,7 @@ app.post(
     '/messages/:parentMessageId/complete',
     lambdaWrapper(completeMessageLambda),
   );
+  app.post('/messages/:messageId/read', lambdaWrapper(setMessageAsReadLambda));
   app.get('/messages/:parentMessageId', lambdaWrapper(getMessageThreadLambda));
   app.get(
     '/messages/case/:docketNumber',

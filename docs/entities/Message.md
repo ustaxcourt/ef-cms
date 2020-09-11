@@ -405,6 +405,10 @@
               presence: "optional"
             allow: 
               - null
+    isRead: 
+      type: "boolean"
+      flags: 
+        presence: "required"
     isRepliedTo: 
       type: "boolean"
       flags: 
