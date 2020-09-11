@@ -23,7 +23,6 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.additionalInfo = rawDocketEntry.additionalInfo;
   this.additionalInfo2 = rawDocketEntry.additionalInfo2;
   this.createdAt = rawDocketEntry.createdAt;
-  this.description = rawDocketEntry.description;
   this.docketNumber = rawDocketEntry.docketNumber;
   this.documentId = rawDocketEntry.documentId;
   this.documentTitle = rawDocketEntry.documentTitle;
@@ -43,7 +42,6 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.servedParties = rawDocketEntry.servedParties;
 
   if (this.isOnDocketRecord) {
-    this.description = rawDocketEntry.description;
     this.documentId = rawDocketEntry.documentId;
     this.filedBy = rawDocketEntry.filedBy;
     this.filingDate = rawDocketEntry.filingDate;
@@ -57,7 +55,6 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
-  description: JoiValidationConstants.STRING.max(500).optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   documentId: JoiValidationConstants.UUID.optional(),
   documentTitle: JoiValidationConstants.STRING.max(500).optional(),

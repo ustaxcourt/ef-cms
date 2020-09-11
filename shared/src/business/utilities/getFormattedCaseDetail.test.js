@@ -328,8 +328,8 @@ describe('formatCase', () => {
         {
           additionalInfo: 'additional information',
           createdAt: getDateISO(),
-          description: 'desc',
           documentId: 'd-1-2-3',
+          documentTitle: 'desc',
           documentType: 'Petition',
           index: '1',
           isOnDocketRecord: true,
@@ -338,7 +338,7 @@ describe('formatCase', () => {
       ],
     });
 
-    expect(result.formattedDocketEntries[0].description).toEqual(
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
       'desc additional information',
     );
   });

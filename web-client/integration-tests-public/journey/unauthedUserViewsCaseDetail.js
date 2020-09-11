@@ -25,27 +25,28 @@ export const unauthedUserViewsCaseDetail = test => {
     expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(4);
     expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
-        description: 'Petition',
+        descriptionDisplay: 'Petition',
         hasDocument: true,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: false,
       },
       {
-        description: 'Request for Place of Trial at Seattle, Washington',
+        descriptionDisplay: 'Request for Place of Trial at Seattle, Washington',
         hasDocument: false,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
       },
       {
-        description: 'Order of Dismissal Entered, Judge Buch for Something',
+        descriptionDisplay:
+          'Order of Dismissal Entered, Judge Buch for Something',
         hasDocument: true,
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
         showServed: true,
       },
       {
-        description: 'Transcript of Anything on 01-01-2019',
+        descriptionDisplay: 'Transcript of Anything on 01-01-2019',
         hasDocument: true,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
