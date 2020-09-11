@@ -34,7 +34,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber, documentId } = documentMeta;
+  const { docketEntryId, docketNumber } = documentMeta;
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -46,7 +46,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const docketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: documentId,
+    docketEntryId,
   });
 
   if (!docketEntry) {
@@ -64,7 +64,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId: documentId });
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 

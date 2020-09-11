@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting loadPDFForSigning
- * @param {Function} providers.props used for getting documentId
+ * @param {Function} providers.props used for getting docketEntryId
  * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.pdfjsObj
 
  */
@@ -14,9 +14,9 @@ export const setPDFForSigningAction = async ({
   props,
   store,
 }) => {
-  const { caseDetail, documentId } = props;
+  const { caseDetail, docketEntryId } = props;
 
-  store.set(state.pdfForSigning.documentId, documentId);
+  store.set(state.pdfForSigning.docketEntryId, docketEntryId);
 
   if (process.env.CI === 'true') {
     return;
@@ -28,7 +28,7 @@ export const setPDFForSigningAction = async ({
 
   if (caseDetail && Array.isArray(caseDetail.docketEntries)) {
     const document = caseDetail.docketEntries.find(
-      caseDocument => caseDocument.documentId === documentId,
+      caseDocument => caseDocument.docketEntryId === docketEntryId,
     );
 
     if (document && document.documentType === 'Proposed Stipulated Decision') {
@@ -47,7 +47,7 @@ export const setPDFForSigningAction = async ({
 
   pdfObj = await applicationContext.getUseCases().loadPDFForSigningInteractor({
     applicationContext,
-    docketEntryId: documentId,
+    docketEntryId: docketEntryId,
     removeCover,
   });
 

@@ -36,11 +36,11 @@ const state = {
   caseDetail: {
     contactPrimary: { name: 'Banzai' },
     contactSecondary: { name: 'Timon' },
-    docketEntries: [{ documentId: '123' }],
+    docketEntries: [{ docketEntryId: '123' }],
     irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
     privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
   },
-  documentId: '123',
+  docketEntryId: '123',
   form: {
     generatedDocumentTitle: 'Circle of Life',
   },
@@ -166,12 +166,12 @@ describe('addCourtIssuedDocketEntryHelper', () => {
           ...state.caseDetail,
           docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
         },
-        documentId: '123',
+        docketEntryId: '123',
         form: {
           eventCode: 'RUHROH',
         },
@@ -186,12 +186,12 @@ describe('addCourtIssuedDocketEntryHelper', () => {
           ...state.caseDetail,
           docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
         },
-        documentId: '123',
+        docketEntryId: '123',
         form: {
           eventCode: 'O',
         },

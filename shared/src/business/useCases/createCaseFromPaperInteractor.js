@@ -122,7 +122,7 @@ exports.createCaseFromPaperInteractor = async ({
   const petitionDocketEntryEntity = new DocketEntry(
     {
       createdAt: caseToAdd.receivedAt,
-      documentId: petitionFileId,
+      docketEntryId: petitionFileId,
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
@@ -158,7 +158,7 @@ exports.createCaseFromPaperInteractor = async ({
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        documentId: applicationForWaiverOfFilingFeeFileId,
+        docketEntryId: applicationForWaiverOfFilingFeeFileId,
         documentTitle,
         documentType:
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
@@ -195,7 +195,7 @@ exports.createCaseFromPaperInteractor = async ({
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        documentId: requestForPlaceOfTrialFileId,
+        docketEntryId: requestForPlaceOfTrialFileId,
         documentTitle,
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -223,7 +223,7 @@ exports.createCaseFromPaperInteractor = async ({
     const stinDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        documentId: stinFileId,
+        docketEntryId: stinFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -250,7 +250,7 @@ exports.createCaseFromPaperInteractor = async ({
     const odsDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
-        documentId: ownershipDisclosureFileId,
+        docketEntryId: ownershipDisclosureFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,

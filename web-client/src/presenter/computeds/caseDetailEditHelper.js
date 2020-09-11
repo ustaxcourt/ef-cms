@@ -35,7 +35,7 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     });
     showOwnershipDisclosureStatement = true;
     if (odsDocs[0]) {
-      ownershipDisclosureStatementDocumentId = odsDocs[0].documentId;
+      ownershipDisclosureStatementDocumentId = odsDocs[0].docketEntryId;
     }
   }
 
@@ -44,7 +44,7 @@ export const caseDetailEditHelper = (get, applicationContext) => {
       return document.documentType.includes('Request for Place of Trial');
     });
     if (rptDocs[0]) {
-      requestForPlaceOfTrialDocumentId = rptDocs[0].documentId;
+      requestForPlaceOfTrialDocumentId = rptDocs[0].docketEntryId;
       requestForPlaceOfTrialDocumentTitle = rptDocs[0].documentTitle;
     }
   }

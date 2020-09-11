@@ -28,7 +28,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber, documentId } = documentMeta;
+  const { docketEntryId, docketNumber } = documentMeta;
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -40,7 +40,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: documentId,
+    docketEntryId,
   });
 
   if (!currentDocketEntry) {

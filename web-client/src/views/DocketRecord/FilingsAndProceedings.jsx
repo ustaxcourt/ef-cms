@@ -40,8 +40,8 @@ export const FilingsAndProceedings = connect(
               )}
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
+                  docketEntryId: entry.docketEntryId,
                   docketNumber: caseDetail.docketNumber,
-                  documentId: entry.documentId,
                 })
               }
             >
@@ -99,7 +99,7 @@ export const FilingsAndProceedings = connect(
             onClick={() =>
               changeTabAndSetViewerDocumentToDisplaySequence({
                 docketRecordTab: 'documentView',
-                viewerDocumentToDisplay: { documentId: entry.documentId },
+                viewerDocumentToDisplay: { docketEntryId: entry.docketEntryId },
               })
             }
           >

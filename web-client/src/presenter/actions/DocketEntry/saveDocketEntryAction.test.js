@@ -50,8 +50,8 @@ describe('saveDocketEntryAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
+      docketEntryId: 'document-id-123',
       docketNumber: caseDetail.docketNumber,
-      documentId: 'document-id-123',
       overridePaperServiceAddress: true,
     });
   });
@@ -92,8 +92,8 @@ describe('saveDocketEntryAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
+      docketEntryId: 'document-id-123',
       docketNumber: caseDetail.docketNumber,
-      documentId: 'document-id-123',
       overridePaperServiceAddress: true,
     });
   });
@@ -131,8 +131,8 @@ describe('saveDocketEntryAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      docketNumber: caseDetail.docketNumber,
-      documentId: expect.anything(), // uuidv4
+      docketEntryId: expect.anything(),
+      docketNumber: caseDetail.docketNumber, // uuidv4
       overridePaperServiceAddress: true,
     });
   });
@@ -151,7 +151,7 @@ describe('saveDocketEntryAction', () => {
       },
       state: {
         caseDetail,
-        documentId: 'document-id-123',
+        docketEntryId: 'document-id-123',
         form: {
           isFileAttached: true,
           primaryDocumentFile: {},
@@ -174,8 +174,8 @@ describe('saveDocketEntryAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
+      docketEntryId: 'document-id-123',
       docketNumber: caseDetail.docketNumber,
-      documentId: 'document-id-123',
       overridePaperServiceAddress: true,
     });
   });
@@ -194,8 +194,8 @@ describe('saveDocketEntryAction', () => {
       },
       state: {
         caseDetail,
+        docketEntryId: 'document-id-123',
         document: '123-456-789-abc',
-        documentId: 'document-id-123',
         form: {},
         isEditingDocketEntry: true,
       },
@@ -215,8 +215,8 @@ describe('saveDocketEntryAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
+      docketEntryId: 'document-id-123',
       docketNumber: caseDetail.docketNumber,
-      documentId: 'document-id-123',
       overridePaperServiceAddress: true,
     });
   });
@@ -227,7 +227,7 @@ describe('saveDocketEntryAction', () => {
       .updateDocketEntryInteractor.mockReturnValue(caseDetail);
 
     caseDetail.docketEntries.push({
-      documentId: 'document-id-123',
+      docketEntryId: 'document-id-123',
       isFileAttached: true,
     });
 
@@ -240,8 +240,8 @@ describe('saveDocketEntryAction', () => {
       },
       state: {
         caseDetail,
+        docketEntryId: 'document-id-123',
         document: '123-456-789-abc',
-        documentId: 'document-id-123',
         form: {
           isFileAttached: true,
         },
@@ -263,8 +263,8 @@ describe('saveDocketEntryAction', () => {
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
+      docketEntryId: 'document-id-123',
       docketNumber: caseDetail.docketNumber,
-      documentId: 'document-id-123',
       overridePaperServiceAddress: true,
     });
   });

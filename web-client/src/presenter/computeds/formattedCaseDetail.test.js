@@ -73,7 +73,7 @@ describe('formattedCaseDetail', () => {
   const simpleDocketEntries = [
     {
       createdAt: getDateISO(),
-      documentId: '123',
+      docketEntryId: '123',
       documentTitle: 'Petition',
       filedBy: 'Jessica Frase Marine',
       filingDate: '2019-02-28T21:14:39.488Z',
@@ -87,7 +87,7 @@ describe('formattedCaseDetail', () => {
       category: 'Petition',
       certificateOfService: false,
       createdAt: '2019-04-19T17:29:13.120Z',
-      documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+      docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
       documentTitle: 'Amended Petition',
       documentType: 'Amended Petition',
       eventCode: 'PAP',
@@ -110,7 +110,7 @@ describe('formattedCaseDetail', () => {
       category: 'Miscellaneous',
       certificateOfService: false,
       createdAt: '2019-04-19T18:24:09.515Z',
-      documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+      docketEntryId: 'c501a558-7632-497e-87c1-0c5f39f66718',
       documentTitle:
         'First Amended Unsworn Declaration under Penalty of Perjury in Support',
       documentType: 'Amended',
@@ -140,7 +140,7 @@ describe('formattedCaseDetail', () => {
       certificateOfServiceMonth: '6',
       certificateOfServiceYear: '2018',
       createdAt: '2019-04-19T17:39:10.476Z',
-      documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
+      docketEntryId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
       documentTitle:
         'Motion for Leave to File Computation for Entry of Decision',
       documentType: 'Motion for Leave to File',
@@ -167,7 +167,7 @@ describe('formattedCaseDetail', () => {
       additionalInfo2: 'Additional Info2',
       category: 'Supporting Document',
       createdAt: '2019-04-19T17:29:13.122Z',
-      documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+      docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
       documentTitle:
         'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
       documentType: 'Unsworn Declaration under Penalty of Perjury in Support',
@@ -186,7 +186,7 @@ describe('formattedCaseDetail', () => {
     },
     {
       createdAt: '2019-04-19T17:29:13.122Z',
-      documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
+      docketEntryId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
       documentTitle: 'Hearing Exhibits for asdfasdfasdf',
       documentType: 'Hearing Exhibits',
       eventCode: 'HE',
@@ -255,7 +255,7 @@ describe('formattedCaseDetail', () => {
         validationErrors: {},
       },
     });
-    expect(result.formattedDocketEntries[0].documentId).toEqual('123');
+    expect(result.formattedDocketEntries[0].docketEntryId).toEqual('123');
   });
 
   it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
@@ -377,8 +377,7 @@ describe('formattedCaseDetail', () => {
 
     const baseDocument = {
       createdAt: '2019-04-19T17:29:13.120Z',
-      description: 'Amended Petition',
-      documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+      docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
       documentTitle: 'Amended Petition',
       documentType: 'Amended Petition',
       eventCode: 'PAP',
@@ -470,16 +469,16 @@ describe('formattedCaseDetail', () => {
       correspondence: [],
       docketEntries: [
         {
-          description: 'Motion for Leave to File Administrative Record',
-          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          documentTitle: 'Motion for Leave to File Administrative Record',
           documentType: 'Motion for Leave to File Administrative Record',
           eventCode: 'M115',
           filingDate: '2020-07-08T16:33:41.180Z',
           lodged: true,
         },
         {
-          description: 'Motion for Leave to File Administrative Record',
-          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          documentTitle: 'Motion for Leave to File Administrative Record',
           documentType: 'Motion for Leave to File Administrative Record',
           eventCode: 'M115',
           filingDate: '2020-07-08T16:33:41.180Z',
@@ -499,10 +498,10 @@ describe('formattedCaseDetail', () => {
     });
 
     const lodgedDocument = result.formattedDocketEntries.find(
-      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
     );
     const unlodgedDocument = result.formattedDocketEntries.find(
-      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+      d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
     );
 
     expect(lodgedDocument.eventCode).toEqual('MISCL');
@@ -520,8 +519,8 @@ describe('formattedCaseDetail', () => {
         docketEntries: [
           {
             createdAt: '2019-02-28T21:14:39.488Z',
-            description: 'Petition',
-            documentId: 'Petition',
+            docketEntryId: 'Petition',
+            documentTitle: 'Petition',
             documentType: 'Petition',
             filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28T21:10:55.488Z',
@@ -531,8 +530,8 @@ describe('formattedCaseDetail', () => {
             status: 'served',
           },
           {
-            description: 'Request for Place of Trial',
-            documentId: 'Request for Place of Trial',
+            docketEntryId: 'Request for Place of Trial',
+            documentTitle: 'Request for Place of Trial',
             filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28T21:10:33.488Z',
             index: 2,
@@ -540,8 +539,8 @@ describe('formattedCaseDetail', () => {
           },
           {
             createdAt: '2019-03-28T21:14:39.488Z',
-            description: 'Ownership Disclosure Statement',
-            documentId: 'Ownership Disclosure Statement',
+            docketEntryId: 'Ownership Disclosure Statement',
+            documentTitle: 'Ownership Disclosure Statement',
             documentType: 'Ownership Disclosure Statement',
             filedBy: 'Jessica Frase Marine',
             filingDate: '2019-03-28T21:14:39.488Z',
@@ -552,8 +551,8 @@ describe('formattedCaseDetail', () => {
           },
           {
             createdAt: '2019-01-01T21:14:39.488Z',
-            description: 'Other',
-            documentId: 'Other',
+            docketEntryId: 'Other',
+            documentTitle: 'Other',
             documentType: 'Other',
             filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28',
@@ -581,7 +580,7 @@ describe('formattedCaseDetail', () => {
         documentType: 'Petition',
       });
       expect(result.formattedDocketEntries[1]).toMatchObject({
-        description: 'Request for Place of Trial',
+        documentTitle: 'Request for Place of Trial',
       });
       expect(result.formattedDocketEntries[2]).toMatchObject({
         documentType: 'Other',
@@ -925,7 +924,7 @@ describe('formattedCaseDetail', () => {
         {
           createdAt: '2019-02-28T21:14:39.488Z',
           description: 'Petition',
-          documentId: 'Petition',
+          docketEntryId: 'Petition',
           documentType: 'Petition',
           filedBy: 'Jessica Frase Marine',
           filingDate: '2019-02-28T21:14:39.488Z',
@@ -937,7 +936,7 @@ describe('formattedCaseDetail', () => {
         {
           archived: false,
           createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'd-1-2-3',
+          docketEntryId: 'd-1-2-3',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           isDraft: true,
@@ -946,7 +945,7 @@ describe('formattedCaseDetail', () => {
         {
           archived: false,
           createdAt: '2019-02-28T21:14:39.488Z',
-          documentId: 'd-2-3-4',
+          docketEntryId: 'd-2-3-4',
           documentTitle: 'Stipulated Decision',
           documentType: 'Stipulated Decision',
           isDraft: true,
@@ -975,7 +974,7 @@ describe('formattedCaseDetail', () => {
         {
           createdAtFormatted: '02/28/19',
           descriptionDisplay: 'Order to do something',
-          documentId: 'd-1-2-3',
+          docketEntryId: 'd-1-2-3',
           documentType: 'Order',
           isCourtIssuedDocument: true,
           isInProgress: false,
@@ -989,7 +988,7 @@ describe('formattedCaseDetail', () => {
         {
           createdAtFormatted: '02/28/19',
           descriptionDisplay: 'Stipulated Decision',
-          documentId: 'd-2-3-4',
+          docketEntryId: 'd-2-3-4',
           documentType: 'Stipulated Decision',
           isCourtIssuedDocument: true,
           isInProgress: false,
@@ -1096,7 +1095,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
@@ -1118,7 +1117,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'System Generated',
-            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            docketEntryId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
@@ -1130,7 +1129,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Not Served',
-            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            docketEntryId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
             documentType: 'Order',
             eventCode: 'O',
@@ -1144,7 +1143,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Served',
-            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
             documentType: 'Order',
             eventCode: 'O',
@@ -1160,7 +1159,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Unservable',
-            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'U.S.C.A',
             documentType: 'U.S.C.A.',
             eventCode: 'USCA',
@@ -1336,7 +1335,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
@@ -1357,7 +1356,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'System Generated',
-            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            docketEntryId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
@@ -1371,7 +1370,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Not Served',
-            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            docketEntryId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
             documentType: 'Order',
             eventCode: 'O',
@@ -1387,7 +1386,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Served',
-            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
             documentType: 'Order',
             eventCode: 'O',
@@ -1451,7 +1450,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
@@ -1464,7 +1463,7 @@ describe('formattedCaseDetail', () => {
           },
           {
             description: 'Filing Fee Paid',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffb1',
+            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffb1',
             filingDate: '2019-06-19T17:29:13.120Z',
             isFileAttached: false,
             isOnDocketRecord: true,
@@ -1474,7 +1473,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'System Generated',
-            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            docketEntryId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
@@ -1488,7 +1487,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Not Served',
-            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            docketEntryId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
             documentType: 'Order',
             eventCode: 'O',
@@ -1504,7 +1503,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Court Issued - Served',
-            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
             documentType: 'Order',
             eventCode: 'O',
@@ -1602,7 +1601,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
@@ -1898,7 +1897,7 @@ describe('formattedCaseDetail', () => {
             certificateOfService: false,
             createdAt: '2019-06-19T17:29:13.120Z',
             description: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',

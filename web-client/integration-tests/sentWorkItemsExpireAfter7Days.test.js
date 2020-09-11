@@ -60,7 +60,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       docketNumberSuffix: null,
       document: {
         createdAt: '2019-06-25T15:14:11.924Z',
-        documentId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+        docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
         documentType: 'Petition',
       },
       isInitializeCase: false,

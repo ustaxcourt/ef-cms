@@ -58,8 +58,8 @@ export const TodaysOpinions = connect(
                         aria-label={`View PDF: ${opinion.descriptionDisplay}`}
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
+                            docketEntryId: opinion.docketEntryId,
                             docketNumber: opinion.docketNumber,
-                            documentId: opinion.documentId,
                             isPublic: true,
                           });
                         }}

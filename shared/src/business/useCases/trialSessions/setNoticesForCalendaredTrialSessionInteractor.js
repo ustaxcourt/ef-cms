@@ -120,7 +120,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocketEntry = new DocketEntry(
       {
-        documentId: newNoticeOfTrialIssuedDocketEntryId,
+        docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
@@ -176,7 +176,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
-        documentId: newStandingPretrialDocketEntryId,
+        description: standingPretrialDocumentTitle,
+        docketEntryId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
@@ -301,15 +302,15 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   }
 
   let hasPaper = newPdfDoc.getPages().length;
-  let documentId = null;
+  let docketEntryId = null;
   let pdfUrl = null;
   if (hasPaper) {
     const paperServicePdfData = await newPdfDoc.save();
-    documentId = applicationContext.getUniqueId();
+    docketEntryId = applicationContext.getUniqueId();
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
-      key: documentId,
+      key: docketEntryId,
       useTempBucket: true,
     });
     hasPaper = true;
@@ -317,7 +318,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     pdfUrl = (
       await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
         applicationContext,
-        key: documentId,
+        key: docketEntryId,
         useTempBucket: true,
       })
     ).url;
@@ -327,7 +328,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      documentId,
+      docketEntryId,
       hasPaper,
       pdfUrl,
     },

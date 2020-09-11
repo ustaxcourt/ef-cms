@@ -14,12 +14,12 @@ describe('completeDocumentSigningAction', () => {
 
   const docketNumber = '123';
 
-  const mockDocumentId = applicationContext.getUniqueId();
+  const mockDocketEntryId = applicationContext.getUniqueId();
 
   applicationContext
     .getUseCases()
     .saveSignedDocumentInteractor.mockReturnValue({
-      signedDocketEntryId: mockDocumentId,
+      signedDocketEntryId: mockDocketEntryId,
     });
 
   beforeAll(() => {
@@ -63,7 +63,7 @@ describe('completeDocumentSigningAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
                 messages: [
                   {
@@ -79,7 +79,7 @@ describe('completeDocumentSigningAction', () => {
           messageId: '123',
         },
         pdfForSigning: {
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
           pdfjsLib: {},
           signatureData: {
@@ -99,7 +99,7 @@ describe('completeDocumentSigningAction', () => {
     ).toBe(1);
     expect(result.output).toMatchObject({
       docketNumber,
-      redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${mockDocumentId}`,
+      redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockDocketEntryId}`,
       tab: 'docketRecord',
     });
   });
@@ -113,7 +113,7 @@ describe('completeDocumentSigningAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
                 messages: [
                   {
@@ -129,7 +129,7 @@ describe('completeDocumentSigningAction', () => {
           messageId: '123',
         },
         pdfForSigning: {
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
           pdfjsLib: {},
         },
@@ -159,7 +159,7 @@ describe('completeDocumentSigningAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
                 messages: [
                   {
@@ -176,7 +176,7 @@ describe('completeDocumentSigningAction', () => {
         },
         parentMessageId,
         pdfForSigning: {
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
           pdfjsLib: {},
           signatureData: {
@@ -189,7 +189,7 @@ describe('completeDocumentSigningAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockDocumentId}`,
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?docketEntryId=${mockDocketEntryId}`,
     });
   });
 
@@ -202,7 +202,7 @@ describe('completeDocumentSigningAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
                 messages: [
                   {
@@ -218,7 +218,7 @@ describe('completeDocumentSigningAction', () => {
           messageId: '123',
         },
         pdfForSigning: {
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
           pdfjsLib: {},
           signatureData: {
@@ -231,7 +231,7 @@ describe('completeDocumentSigningAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${mockDocumentId}`,
+      redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockDocketEntryId}`,
     });
   });
 });

@@ -22,14 +22,14 @@ const caseDetail = {
   },
   docketEntries: [
     {
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     },
     {
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
     },
     {
       additionalInfo2: 'Additional Info 2',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
       isStatusServed: true,
       servedAtFormatted: '03/27/19',
     },

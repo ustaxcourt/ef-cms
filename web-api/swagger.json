@@ -6350,7 +6350,7 @@
           "type": "boolean",
           "description": "the user name who filed the docket entry"
         },
-        "documentId": {
+        "docketEntryId": {
           "type": "string",
           "description": "id of rawDocketEntry"
         },
@@ -6392,7 +6392,7 @@
             "documentType": {
               "type": "string"
             },
-            "documentId": {
+            "docketEntryId": {
               "type": "string"
             },
             "createAt": {
@@ -6512,7 +6512,7 @@
                 "type": "object",
                 "properties": {}
               },
-              "documentId": {
+              "docketEntryId": {
                 "type": "string"
               }
             }

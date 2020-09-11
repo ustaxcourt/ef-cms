@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  */
 export const setPropsForRemoveSignatureAction = ({ get }) => {
   const caseDetail = get(state.caseDetail);
-  const documentIdToEdit = get(state.modal.documentIdToEdit);
+  const docketEntryIdToEdit = get(state.modal.docketEntryIdToEdit);
 
-  return { caseDetail, documentIdToEdit };
+  return { caseDetail, docketEntryIdToEdit };
 };

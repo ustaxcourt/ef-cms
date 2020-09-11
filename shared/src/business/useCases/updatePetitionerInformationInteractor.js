@@ -150,8 +150,8 @@ exports.updatePetitionerInformationInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactName}`,
+        docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocketEntryId,
         documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,

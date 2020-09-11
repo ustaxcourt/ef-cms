@@ -132,7 +132,7 @@ const createCase = async ({
   const addCoversheet = docketEntry => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: docketEntry.documentId,
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
   };
@@ -146,7 +146,7 @@ const createCase = async ({
       .getPersistenceGateway()
       .updateDocketEntryProcessingStatus({
         applicationContext,
-        docketEntryId: docketEntry.documentId,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: caseDetail.docketNumber,
       });
   }

@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @returns {object} the return props
  */
 export const setPrimaryDocumentFileIdPropAction = ({ get }) => {
-  const primaryDocumentFileId = get(state.form.documentId);
+  const primaryDocumentFileId = get(state.form.docketEntryId);
   return { primaryDocumentFileId };
 };

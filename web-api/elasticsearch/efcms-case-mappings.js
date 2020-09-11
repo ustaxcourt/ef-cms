@@ -57,7 +57,7 @@ module.exports = {
     'documents.L.M.createdAt.S': {
       type: 'date',
     },
-    'documents.L.M.documentId.S': {
+    'documents.L.M.docketEntryId.S': {
       type: 'text',
     },
     'documents.L.M.documentType.S': {

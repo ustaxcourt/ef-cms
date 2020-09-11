@@ -38,16 +38,16 @@ describe('archiveDraftDocumentInteractor', () => {
 
     expect(
       caseToUpdate.archivedDocketEntries.find(
-        d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        d => d.docketEntryId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ),
     ).toMatchObject({
       archived: true,
-      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
 
     expect(
       caseToUpdate.docketEntries.find(
-        d => d.documentId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        d => d.docketEntryId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ),
     ).toBeFalsy();
   });
@@ -64,8 +64,8 @@ describe('archiveDraftDocumentInteractor', () => {
           ...MOCK_CASE.docketEntries,
           {
             createdAt: '2019-04-19T17:29:13.120Z',
+            docketEntryId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
             docketNumber: '101-20',
-            documentId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
             documentTitle: 'Order',
             documentType: 'Order',
             eventCode: 'O',

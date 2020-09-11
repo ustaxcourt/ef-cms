@@ -175,8 +175,8 @@ export const getWorkItemDocumentLink = ({
         formattedDocketEntry.isPetition &&
         formattedDocketEntry.isInProgress));
 
-  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
-  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
+  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.docketEntryId}`;
+  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.document.docketEntryId}`;
 
   let editLink = documentDetailLink;
   if (showDocumentEditLink) {

@@ -8,7 +8,7 @@ describe('navigateToCreateOrderAction', () => {
   const documentType = 'Order';
   const eventCode = 'O';
   const parentMessageId = '02bb9dd7-391b-4aa7-9647-489184084e8b';
-  const documentId = '02bb9dd7-391b-4aa7-9647-489184084e8b';
+  const docketEntryId = '02bb9dd7-391b-4aa7-9647-489184084e8b';
 
   let routeStub;
 
@@ -30,7 +30,7 @@ describe('navigateToCreateOrderAction', () => {
           docketNumber,
         },
         modal: {
-          documentId,
+          docketEntryId,
           documentTitle,
           documentType,
           eventCode,
@@ -40,7 +40,7 @@ describe('navigateToCreateOrderAction', () => {
 
     expect(routeStub).toHaveBeenCalled();
     expect(routeStub.mock.calls[0][0]).toEqual(
-      `/case-detail/${docketNumber}/create-order?documentId=${documentId}&documentTitle=${documentTitle}&documentType=${documentType}&eventCode=${eventCode}`,
+      `/case-detail/${docketNumber}/create-order?docketEntryId=${docketEntryId}&documentTitle=${documentTitle}&documentType=${documentType}&eventCode=${eventCode}`,
     );
   });
 
@@ -54,7 +54,7 @@ describe('navigateToCreateOrderAction', () => {
           docketNumber,
         },
         modal: {
-          documentId,
+          docketEntryId,
           documentTitle,
           documentType,
           eventCode,
@@ -65,7 +65,7 @@ describe('navigateToCreateOrderAction', () => {
 
     expect(routeStub).toHaveBeenCalled();
     expect(routeStub.mock.calls[0][0]).toEqual(
-      `/case-detail/${docketNumber}/create-order/${parentMessageId}?documentId=${documentId}&documentTitle=${documentTitle}&documentType=${documentType}&eventCode=${eventCode}`,
+      `/case-detail/${docketNumber}/create-order/${parentMessageId}?docketEntryId=${docketEntryId}&documentTitle=${documentTitle}&documentType=${documentType}&eventCode=${eventCode}`,
     );
   });
 });

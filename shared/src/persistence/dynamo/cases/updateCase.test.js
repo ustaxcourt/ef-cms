@@ -705,7 +705,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         pk: 'case|101-18',
-        sk: `docket-entry|${MOCK_DOCUMENTS[0].documentId}`,
+        sk: `docket-entry|${MOCK_DOCUMENTS[0].docketEntryId}`,
         userId: MOCK_DOCUMENTS[0].userId,
       });
     });
@@ -731,7 +731,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         pk: 'case|101-18',
-        sk: `docket-entry|${MOCK_DOCUMENTS[0].documentId}`,
+        sk: `docket-entry|${MOCK_DOCUMENTS[0].docketEntryId}`,
         userId: MOCK_DOCUMENTS[0].userId,
       });
     });

@@ -84,7 +84,7 @@ exports.updateDocketEntryInteractor = async ({
       ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      documentId: primaryDocumentFileId,
+      docketEntryId: primaryDocumentFileId,
       documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,

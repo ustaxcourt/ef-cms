@@ -72,7 +72,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
-          documentId: '225d5474-b02b-4137-a78e-2043f7a0f806',
+          docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f806',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -126,7 +126,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const updatedCaseDocument = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.documentId === DOCKET_ENTRY_ID,
+        d => d.docketEntryId === DOCKET_ENTRY_ID,
       );
     expect(updatedCaseDocument).toMatchObject({
       servedAt: expect.anything(),

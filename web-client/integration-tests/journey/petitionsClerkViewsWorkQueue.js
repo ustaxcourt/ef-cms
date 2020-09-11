@@ -19,7 +19,7 @@ export const petitionsClerkViewsWorkQueue = test => {
       );
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
-    test.documentId = workItem.document.documentId;
+    test.docketEntryId = workItem.document.docketEntryId;
     test.workItemId = workItem.workItemId;
   });
 };

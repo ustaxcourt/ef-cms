@@ -19,7 +19,7 @@ describe('completeWorkItemForDocumentSigningAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
                 messages: [
                   {
@@ -35,7 +35,7 @@ describe('completeWorkItemForDocumentSigningAction', () => {
           messageId: '123',
         },
         pdfForSigning: {
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
           pdfjsLib: {},
         },
@@ -54,7 +54,7 @@ describe('completeWorkItemForDocumentSigningAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
               workItem: {
                 messages: [
                   {
@@ -68,7 +68,7 @@ describe('completeWorkItemForDocumentSigningAction', () => {
         },
         currentViewMetadata: {},
         pdfForSigning: {
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
           pdfjsLib: {},
         },

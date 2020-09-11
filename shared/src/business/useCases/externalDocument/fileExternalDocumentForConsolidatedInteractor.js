@@ -95,7 +95,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        supportingDocuments[i].documentId,
+        supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
@@ -106,7 +106,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     secondaryDocument.lodged = true;
 
     documentsToAdd.push([
-      secondaryDocument.documentId,
+      secondaryDocument.docketEntryId,
       secondaryDocument,
       DOCUMENT_RELATIONSHIPS.SECONDARY,
     ]);
@@ -115,7 +115,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        secondarySupportingDocuments[i].documentId,
+        secondarySupportingDocuments[i].docketEntryId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
@@ -126,15 +126,15 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   const saveWorkItems = [];
   const sendEmails = [];
 
-  for (let [documentId, metadata, relationship] of documentsToAdd) {
-    if (documentId && metadata) {
+  for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
+    if (docketEntryId && metadata) {
       // TODO: Double check what is auto-generated here,
       // as this may not be entirely necessary
       const rawDocument = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
-          documentId,
+          docketEntryId,
           documentTitle: metadata.documentTitle,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
