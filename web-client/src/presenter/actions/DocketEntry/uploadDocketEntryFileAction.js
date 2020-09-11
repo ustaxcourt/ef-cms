@@ -31,7 +31,7 @@ export const uploadDocketEntryFileAction = async ({
       .uploadDocumentInteractor({
         applicationContext,
         documentFile: primaryDocumentFile,
-        documentId,
+        key: documentId,
         onUploadProgress: progressFunctions.primary,
       });
 

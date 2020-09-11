@@ -28,7 +28,7 @@ exports.addDocketEntryForPaymentStatus = ({
     caseEntity.addDocketEntry(
       new DocketEntry(
         {
-          description: 'Filing Fee Paid',
+          documentTitle: 'Filing Fee Paid',
           documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
           eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
           filingDate: caseEntity.petitionPaymentDate,
@@ -45,7 +45,7 @@ exports.addDocketEntryForPaymentStatus = ({
     caseEntity.addDocketEntry(
       new DocketEntry(
         {
-          description: 'Filing Fee Waived',
+          documentTitle: 'Filing Fee Waived',
           documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
           eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
           filingDate: caseEntity.petitionPaymentWaivedDate,
@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: doc.documentId,
+          docketEntryId: doc.documentId,
         });
     }
   }

@@ -94,7 +94,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      documentId: docketEntryId,
+      docketEntryId,
     });
 
   const docketEntry = caseEntity.getDocketEntryById({

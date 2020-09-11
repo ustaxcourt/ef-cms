@@ -18,6 +18,7 @@
     "subject": "message to myself",
     "to": "Test Petitionsclerk",
     "toSection": "petitions",
+    "isRead": false,
     "isRepliedTo": false,
     "toUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
   }

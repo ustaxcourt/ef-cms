@@ -805,6 +805,12 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  setMessageAsRead,
+} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
+const {
+  setMessageAsReadInteractor,
+} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -1143,6 +1149,7 @@ const gatewayMethods = {
     saveWorkItemForDocketEntryInProgress,
     saveWorkItemForNonPaper,
     saveWorkItemForPaper,
+    setMessageAsRead,
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
     updateCase,
@@ -1587,6 +1594,7 @@ module.exports = appContextUser => {
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
+        setMessageAsReadInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

@@ -52,8 +52,8 @@ describe('submitCorrespondenceAction', () => {
         correspondence: [],
         docketNumber: '101-20',
       },
+      correspondenceId: 'correspondence-document-id-123',
       docketNumber: '101-20',
-      documentId: 'correspondence-document-id-123',
     });
   });
 
@@ -88,8 +88,8 @@ describe('submitCorrespondenceAction', () => {
         correspondence: [],
         docketNumber: '101-20',
       },
+      correspondenceId: 'correspondence-document-id-123',
       docketNumber: '101-20',
-      documentId: 'correspondence-document-id-123',
     });
   });
 });

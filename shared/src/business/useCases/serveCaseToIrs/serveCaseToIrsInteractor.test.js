@@ -459,12 +459,12 @@ describe('addDocketEntryForPaymentStatus', () => {
         .caseToUpdate.docketEntries,
     ).toMatchObject([
       {
-        description: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
+        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
         index: 1,
         isOnDocketRecord: true,
       },
       {
-        description:
+        documentTitle:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
         index: 2,
         isOnDocketRecord: true,

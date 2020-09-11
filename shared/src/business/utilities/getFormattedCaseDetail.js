@@ -158,8 +158,12 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry,
   );
 
+  if (!formattedEntry.descriptionDisplay) {
+    formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
+  }
+
   if (formattedEntry.additionalInfo) {
-    formattedEntry.description += ` ${formattedEntry.additionalInfo}`;
+    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
   }
 
   if (formattedEntry.lodged) {
@@ -421,9 +425,9 @@ const byIndexSortFunction = (a, b) => {
   if (!a.index && !b.index) {
     return 0;
   } else if (!a.index) {
-    return -1;
-  } else if (!b.index) {
     return 1;
+  } else if (!b.index) {
+    return -1;
   }
   return a.index - b.index;
 };

@@ -73,8 +73,8 @@ describe('formattedCaseDetail', () => {
   const simpleDocketEntries = [
     {
       createdAt: getDateISO(),
-      description: 'Petition',
       documentId: '123',
+      documentTitle: 'Petition',
       filedBy: 'Jessica Frase Marine',
       filingDate: '2019-02-28T21:14:39.488Z',
       isOnDocketRecord: true,
@@ -87,7 +87,6 @@ describe('formattedCaseDetail', () => {
       category: 'Petition',
       certificateOfService: false,
       createdAt: '2019-04-19T17:29:13.120Z',
-      description: 'Amended Petition',
       documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
       documentTitle: 'Amended Petition',
       documentType: 'Amended Petition',
@@ -111,8 +110,6 @@ describe('formattedCaseDetail', () => {
       category: 'Miscellaneous',
       certificateOfService: false,
       createdAt: '2019-04-19T18:24:09.515Z',
-      description:
-        'First Amended Unsworn Declaration under Penalty of Perjury in Support',
       documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
       documentTitle:
         'First Amended Unsworn Declaration under Penalty of Perjury in Support',
@@ -143,7 +140,6 @@ describe('formattedCaseDetail', () => {
       certificateOfServiceMonth: '6',
       certificateOfServiceYear: '2018',
       createdAt: '2019-04-19T17:39:10.476Z',
-      description: 'Motion for Leave to File Computation for Entry of Decision',
       documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
       documentTitle:
         'Motion for Leave to File Computation for Entry of Decision',
@@ -171,8 +167,6 @@ describe('formattedCaseDetail', () => {
       additionalInfo2: 'Additional Info2',
       category: 'Supporting Document',
       createdAt: '2019-04-19T17:29:13.122Z',
-      description:
-        'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
       documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
       documentTitle:
         'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
@@ -192,7 +186,6 @@ describe('formattedCaseDetail', () => {
     },
     {
       createdAt: '2019-04-19T17:29:13.122Z',
-      description: 'Hearing Exhibits for asdfasdfasdf',
       documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
       documentTitle: 'Hearing Exhibits for asdfasdfasdf',
       documentType: 'Hearing Exhibits',
@@ -289,34 +282,34 @@ describe('formattedCaseDetail', () => {
     });
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        description: 'Amended Petition',
+        descriptionDisplay: 'Amended Petition',
         filingsAndProceedings: '(No Objection)',
       },
       {
-        description:
+        descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
         filingsAndProceedings: '(Exhibit(s))',
       },
       {
-        description:
+        descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
         filingsAndProceedings:
           '(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
       },
       {
-        description:
+        descriptionDisplay:
           'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
         filingsAndProceedings: '(Lodged)',
       },
       {
-        description: 'Hearing Exhibits for asdfasdfasdf',
+        descriptionDisplay: 'Hearing Exhibits for asdfasdfasdf',
         filingsAndProceedings: '',
       },
     ]);
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        description: 'Amended Petition',
+        descriptionDisplay: 'Amended Petition',
         filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
@@ -325,7 +318,7 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
       {
-        description:
+        descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
         filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
         isInProgress: false,
@@ -335,7 +328,7 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
       {
-        description:
+        descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
         filingsAndProceedingsWithAdditionalInfo:
           ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
@@ -356,7 +349,7 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
       {
-        description: 'Hearing Exhibits for asdfasdfasdf',
+        descriptionDisplay: 'Hearing Exhibits for asdfasdfasdf',
         filingsAndProceedingsWithAdditionalInfo: '',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,

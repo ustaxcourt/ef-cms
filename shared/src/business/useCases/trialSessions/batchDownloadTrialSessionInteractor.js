@@ -90,7 +90,7 @@ const batchDownloadTrialSessionInteractor = async ({
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
         const fileName = sanitize(
-          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+          `${docDate}_${docNum}_${aDocketRecord.documentTitle}.pdf`,
         );
         const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
         s3Ids.push(myDoc.documentId);
@@ -136,7 +136,7 @@ const batchDownloadTrialSessionInteractor = async ({
       .getDocument({
         applicationContext,
         docketNumber: sessionCase.docketNumber,
-        documentId: result.fileId,
+        key: result.fileId,
         protocol: 'S3',
         useTempBucket: true,
       });
