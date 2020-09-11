@@ -180,6 +180,7 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
+        selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -234,5 +235,37 @@ describe('workQueueHelper', () => {
 
     expect(result.showProcessedByColumn).toEqual(true);
     expect(result.showInProgressTab).toEqual(true);
+  });
+
+  it('returns the inboxCount for the work queue based on the value of state.sectionInboxCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        sectionInboxCount: 3,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.inboxCount).toBe(3);
+  });
+
+  it('returns the inProgressCount for the work queue based on the value of state.sectionInProgressCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        sectionInProgressCount: 10,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.inProgressCount).toBe(10);
   });
 });

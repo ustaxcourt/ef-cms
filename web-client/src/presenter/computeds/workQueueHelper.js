@@ -19,8 +19,9 @@ export const workQueueHelper = (get, applicationContext) => {
     USER_ROLES.docketClerk,
     USER_ROLES.petitionsClerk,
   ].includes(user.role);
-  const workQueueTitle = `${showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
-    }Document QC`;
+  const workQueueTitle = `${
+    showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
+  }Document QC`;
   const permissions = get(state.permissions);
 
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
