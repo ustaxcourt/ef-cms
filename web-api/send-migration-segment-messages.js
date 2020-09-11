@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { shuffle } = require('lodash');
 
 // Seth said 200 for segment constant?
 const [ENV, SEGMENT_SIZE] = process.argv.slice(2);
@@ -33,8 +34,8 @@ const getItemCount = async () => {
   }
 };
 
-const sendSegmentMessage = async ({ numSegments, segment }) => {
-  const messageBody = { segment, totalSegments: numSegments };
+const sendSegmentMessage = async ({ segment, totalSegments }) => {
+  const messageBody = { segment, totalSegments: totalSegments };
   const params = {
     MessageBody: JSON.stringify(messageBody),
     QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
@@ -42,18 +43,35 @@ const sendSegmentMessage = async ({ numSegments, segment }) => {
 
   try {
     await sqs.sendMessage(params).promise();
-    console.log(`Message ${segment}/${numSegments} sent successfully.`);
   } catch (e) {
-    console.error(`Error sending message ${segment}/${numSegments}.`, e);
+    console.error(`Error sending message ${segment + 1}/${totalSegments}.`, e);
   }
 };
 
+const now = Date.now().toString();
+
 (async () => {
   const itemCount = await getItemCount();
+  // let waitTime = 5000;
 
-  const numSegments = Math.ceil(itemCount / SEGMENT_SIZE);
+  const totalSegments = Math.ceil(itemCount / SEGMENT_SIZE);
 
-  for (let segment = 0; segment < numSegments; segment++) {
-    await sendSegmentMessage({ numSegments, segment });
+  const segments = shuffle(
+    new Array(totalSegments).fill(null).map((v, i) => ({
+      segment: i,
+      timestamp: now,
+      totalSegments: totalSegments,
+    })),
+  );
+
+  let sent = 0;
+  for (let segment of segments) {
+    await sendSegmentMessage(segment);
+    console.log(`Message ${sent}/${totalSegments} sent successfully.`);
+    sent++;
+    // waitTime = Math.max(0, waitTime - 500);
+    // await new Promise(resolve => {
+    //   setTimeout(resolve, waitTime);
+    // });
   }
 })();

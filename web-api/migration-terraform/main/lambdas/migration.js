@@ -13,17 +13,11 @@ exports.handler = async event => {
   );
 
   for (let item of newItems) {
-    // TODO - handle case if put request fails
-    // TODO - investigate using batchWrite
     try {
-      await promiseRetry(function (retry, number) {
-        console.log('attempt number', number);
-
+      await promiseRetry(function (retry) {
         return documentClient
           .put({
-            Item: {
-              ...item,
-            },
+            Item: item,
             TableName: process.env.DESTINATION_TABLE,
           })
           .promise()
