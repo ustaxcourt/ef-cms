@@ -138,7 +138,7 @@ Message.VALIDATION_RULES = {
     .boolean()
     .required()
     .description('Whether the message thread has been completed.'),
-  isRead: joi.boolean().optional(),
+  isRead: joi.boolean().required(),
   isRepliedTo: joi
     .boolean()
     .required()

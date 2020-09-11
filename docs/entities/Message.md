@@ -407,7 +407,7 @@
     isRead: 
       type: "boolean"
       flags: 
-        presence: "optional"
+        presence: "required"
     isRepliedTo: 
       type: "boolean"
       flags: 
