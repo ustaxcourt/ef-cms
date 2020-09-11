@@ -59,7 +59,7 @@ describe('formattedDocument', () => {
     });
   });
 
-  it('should return undefined if the docketEntryId is not present in the caseDetail documents', () => {
+  it('should return undefined if the docketEntryId is not present in the caseDetail docketEntries', () => {
     const result = runCompute(formattedDocument, {
       state: {
         caseDetail: {

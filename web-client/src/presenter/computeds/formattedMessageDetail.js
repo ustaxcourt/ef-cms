@@ -58,7 +58,7 @@ export const formattedMessageDetail = (get, applicationContext) => {
       attachment.showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
         caseDetail,
-        documentId: attachment.documentId,
+        docketEntryId: attachment.documentId,
         draftDocuments,
       });
     });

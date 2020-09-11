@@ -603,16 +603,16 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.formattedDocketEntries[3]).toMatchObject({
-        documentType: 'Petition',
+        documentTitle: 'Petition',
       });
       expect(result.formattedDocketEntries[2]).toMatchObject({
-        description: 'Request for Place of Trial',
+        documentTitle: 'Request for Place of Trial',
       });
       expect(result.formattedDocketEntries[1]).toMatchObject({
-        documentType: 'Other',
+        documentTitle: 'Other',
       });
       expect(result.formattedDocketEntries[0]).toMatchObject({
-        documentType: 'Ownership Disclosure Statement',
+        documentTitle: 'Ownership Disclosure Statement',
       });
     });
 
@@ -629,16 +629,16 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.formattedDocketEntries[0]).toMatchObject({
-        documentType: 'Petition',
+        documentTitle: 'Petition',
       });
       expect(result.formattedDocketEntries[1]).toMatchObject({
-        description: 'Request for Place of Trial',
+        documentTitle: 'Request for Place of Trial',
       });
       expect(result.formattedDocketEntries[3]).toMatchObject({
-        documentType: 'Ownership Disclosure Statement',
+        documentTitle: 'Ownership Disclosure Statement',
       });
       expect(result.formattedDocketEntries[2]).toMatchObject({
-        documentType: 'Other',
+        documentTitle: 'Other',
       });
     });
 
@@ -655,16 +655,16 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.formattedDocketEntries[0]).toMatchObject({
-        description: 'Ownership Disclosure Statement',
+        documentTitle: 'Ownership Disclosure Statement',
       });
       expect(result.formattedDocketEntries[1]).toMatchObject({
-        description: 'Other',
+        documentTitle: 'Other',
       });
       expect(result.formattedDocketEntries[2]).toMatchObject({
-        description: 'Request for Place of Trial',
+        documentTitle: 'Request for Place of Trial',
       });
       expect(result.formattedDocketEntries[3]).toMatchObject({
-        description: 'Petition',
+        documentTitle: 'Petition',
       });
     });
   });

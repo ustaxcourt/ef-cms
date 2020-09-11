@@ -15,7 +15,7 @@ describe('setDocumentToFormAction', () => {
     docketEntryIdToEdit = '123';
     documentToMatch = {
       docketEntryId: docketEntryIdToEdit,
-      docketEntryIdToEdit: docketEntryIdToEdit,
+      docketEntryIdToEdit,
       documentType: 'Order',
       primaryDocumentFile: true,
     };
