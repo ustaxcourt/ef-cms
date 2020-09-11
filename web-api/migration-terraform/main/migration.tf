@@ -81,7 +81,10 @@ EOF
 }
 
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
-  event_source_arn  = var.stream_arn
-  function_name     = aws_lambda_function.migration_lambda.arn
-  starting_position = "LATEST"
+  event_source_arn              = var.stream_arn
+  function_name                 = aws_lambda_function.migration_lambda.arn
+  starting_position             = "LATEST"
+  maximum_retry_attempts        = 0
+  parallelization_factor        = 2
+  maximum_record_age_in_seconds = 604800
 }
