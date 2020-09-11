@@ -1,5 +1,5 @@
 const { forAllRecords } = require('./utilities');
-const { up } = require('./00036-document-id-to-docket-entry-id');
+const { up } = require('./00037-document-id-to-docket-entry-id');
 
 describe('docket entry documentId -> docketEntryId', () => {
   let documentClient;
