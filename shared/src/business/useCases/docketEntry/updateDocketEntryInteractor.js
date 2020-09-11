@@ -84,8 +84,8 @@ exports.updateDocketEntryInteractor = async ({
       ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      description: editableFields.documentTitle,
       documentId: primaryDocumentFileId,
+      documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -162,7 +162,7 @@ exports.updateDocketEntryInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: primaryDocumentFileId,
+          docketEntryId: primaryDocumentFileId,
         });
 
       Object.assign(workItem, {

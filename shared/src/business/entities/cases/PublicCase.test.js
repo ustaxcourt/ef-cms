@@ -126,8 +126,8 @@ describe('PublicCase', () => {
         createdAt: 'testing',
         docketEntries: [
           {
-            description: 'Order',
             documentId: '123',
+            documentTitle: 'Order',
             documentType: 'Order that case is assigned',
             isMinuteEntry: false,
             isOnDocketRecord: true,
@@ -153,9 +153,8 @@ describe('PublicCase', () => {
           additionalInfo: undefined,
           additionalInfo2: undefined,
           createdAt: undefined,
-          description: 'Order',
           documentId: '123',
-          documentTitle: undefined,
+          documentTitle: 'Order',
           documentType: 'Order that case is assigned',
           eventCode: undefined,
           filedBy: undefined,
@@ -313,61 +312,61 @@ describe('PublicCase', () => {
         },
         correspondence: [
           {
-            documentId: '2929afe9-2711-4383-bef8-669dcfb8ccf9',
+            correspondenceId: '2929afe9-2711-4383-bef8-669dcfb8ccf9',
             documentTitle: 'Correspondence',
             filingDate: '2015-06-19T08:09:39.893-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '71f2bedf-37a0-4b08-bec9-fb988f43b535',
+            correspondenceId: '71f2bedf-37a0-4b08-bec9-fb988f43b535',
             documentTitle: 'receipt',
             filingDate: '2015-06-19T08:10:36.140-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '59ba117a-3d62-4630-aa4a-55492503e6ba',
+            correspondenceId: '59ba117a-3d62-4630-aa4a-55492503e6ba',
             documentTitle: 'Cover Sheet/Receipt',
             filingDate: '2015-06-22T08:07:36.583-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '4dd46e89-0ee5-4073-b5c4-8cb680023b10',
+            correspondenceId: '4dd46e89-0ee5-4073-b5c4-8cb680023b10',
             documentTitle: 'Final Status Report',
             filingDate: '2016-01-12T11:21:16.140-05:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '1a915903-081f-4b04-b11c-0a409d6fd0b5',
+            correspondenceId: '1a915903-081f-4b04-b11c-0a409d6fd0b5',
             documentTitle: 'Final Status Report',
             filingDate: '2016-12-21T08:20:04.780-05:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '6309cc32-0804-4a4e-9932-cf94ab332d5f',
+            correspondenceId: '6309cc32-0804-4a4e-9932-cf94ab332d5f',
             documentTitle: 'Final Status Report',
             filingDate: '2018-01-02T09:40:48.743-05:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: 'd8efbfd3-7d23-4002-9bdb-72d8530c9fe9',
+            correspondenceId: 'd8efbfd3-7d23-4002-9bdb-72d8530c9fe9',
             documentTitle: 'Clinic Letter',
             filingDate: '2018-07-27T09:10:27.943-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '2bf78619-62f9-4761-bb41-3e45c49bb56b',
+            correspondenceId: '2bf78619-62f9-4761-bb41-3e45c49bb56b',
             documentTitle: 'Land off career pressure',
             filingDate: '2018-09-07T12:15:51.496-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '738765ab-248b-4b94-8bf0-7bdd952be81f',
+            correspondenceId: '738765ab-248b-4b94-8bf0-7bdd952be81f',
             documentTitle: 'Correspondence',
             filingDate: '2018-09-27T08:55:41.130-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           },
           {
-            documentId: '653191d6-69ea-4857-a072-e9bb3967e9b7',
+            correspondenceId: '653191d6-69ea-4857-a072-e9bb3967e9b7',
             documentTitle: 'Because of sing floor',
             filingDate: '2018-10-10T08:18:47.233-04:00',
             userId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
@@ -377,8 +376,6 @@ describe('PublicCase', () => {
         docketEntries: [
           {
             createdAt: '2015-06-18T00:00:00.000-04:00',
-            description:
-              'STATE STATEMENT DIFFERENCE EARLY PULL COLLECTION ALREADY SPEAK ANYTHING GENERAL',
             documentId: '70513f53-153b-4f68-b609-ab979a487387',
             documentTitle:
               'STATE STATEMENT DIFFERENCE EARLY PULL COLLECTION ALREADY SPEAK ANYTHING GENERAL',
@@ -406,7 +403,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2015-06-18T00:00:00.000-04:00',
-            description: 'PRETTY TREAT MENTION LAWYER HAVE LIGHT FALL',
             documentId: '92f335b6-babc-441a-9b57-7f057e3200eb',
             documentTitle: 'PRETTY TREAT MENTION LAWYER HAVE LIGHT FALL',
             documentType: 'Request for Place of Trial',
@@ -433,7 +429,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2015-08-10T00:00:00.000-04:00',
-            description: 'ANSWER BY RESP.',
             documentId: '49887660-22eb-4882-9543-96b7778583f0',
             documentTitle: 'ANSWER BY RESP.',
             documentType: 'Answer',
@@ -460,7 +455,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-01-12T00:00:00.000-05:00',
-            description: 'FIRE PHONE SEAT SMILE STAY STEP',
             documentId: '6b99af0a-600e-4103-b1db-b736d5707c51',
             documentTitle: 'FIRE PHONE SEAT SMILE STAY STEP',
             documentType: 'Notice of Trial',
@@ -489,7 +483,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-01-12T00:00:00.000-05:00',
-            description: 'COURT CAPITAL FACT CHARGE INCREASE',
             documentId: '93e7b5f3-8066-4f17-9947-3c7c9508d4e2',
             documentTitle: 'COURT CAPITAL FACT CHARGE INCREASE',
             documentType: 'Standing Pretrial Order',
@@ -518,8 +511,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-05-27T00:00:00.000-04:00',
-            description:
-              'LAST LISTEN COULD MOTHER ONLY COACH CUSTOMER DRUG FRONT OPEN VOICE ROCK\nMISSION BREAK FREE DETERMINE GET HEART REPUBLICAN BEHIND',
             documentId: '214b9e68-ef34-47e6-aa36-836bc3ca08d2',
             documentTitle:
               'LAST LISTEN COULD MOTHER ONLY COACH CUSTOMER DRUG FRONT OPEN VOICE ROCK\nMISSION BREAK FREE DETERMINE GET HEART REPUBLICAN BEHIND',
@@ -545,7 +536,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-05-27T00:00:00.000-04:00',
-            description: 'PLAYER SPEAK COUPLE CHECK',
             documentId: 'faf77932-f8f2-413b-b6d1-c94fb8b42169',
             documentTitle: 'PLAYER SPEAK COUPLE CHECK',
             documentType: 'Pretrial Memorandum',
@@ -572,7 +562,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-06-01T00:00:00.000-04:00',
-            description: 'THOUGH PIECE FLY MUST RESEARCH NORTH RESULT RANGE',
             documentId: '65ac4461-fec8-4930-a29b-617315a7553d',
             documentTitle: 'THOUGH PIECE FLY MUST RESEARCH NORTH RESULT RANGE',
             documentType: 'Pretrial Memorandum',
@@ -599,8 +588,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-06-01T00:00:00.000-04:00',
-            description:
-              'DEMOCRATIC BILL WRITER PRODUCTION EFFECT RISK EDUCATION',
             documentId: '9472413d-bc39-40db-b917-b966fad74548',
             documentTitle:
               'DEMOCRATIC BILL WRITER PRODUCTION EFFECT RISK EDUCATION',
@@ -630,7 +617,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-07-29T00:00:00.000-04:00',
-            description: 'SPECIAL RED RELATE PROFESSOR WINDOW HUMAN MIGHT',
             documentId: 'a0a92706-3f18-4650-8136-69941451abcd',
             documentTitle: 'SPECIAL RED RELATE PROFESSOR WINDOW HUMAN MIGHT',
             documentType: 'Status Report',
@@ -655,7 +641,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-08-03T00:00:00.000-04:00',
-            description: 'QUICKLY FORCE PART EITHER EXPLAIN NEVER',
             documentId: '9528b4ca-f9ec-41ba-a355-b3e55b215b01',
             documentTitle: 'QUICKLY FORCE PART EITHER EXPLAIN NEVER',
             documentType: 'Order',
@@ -684,8 +669,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-09-29T00:00:00.000-04:00',
-            description:
-              'PRETTY BOX SHAKE APPLY INTERESTING NOT LOSS ROCK SINCE',
             documentId: '9c88a4ef-b5b0-42d9-93aa-0999cecfb99b',
             documentTitle:
               'PRETTY BOX SHAKE APPLY INTERESTING NOT LOSS ROCK SINCE',
@@ -712,7 +695,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-10-04T00:00:00.000-04:00',
-            description: 'TEACH CUSTOMER ABOUT STAFF MISS FULL LOOK',
             documentId: 'a666faf8-a2ff-472f-b128-13f27a57a7a2',
             documentTitle: 'TEACH CUSTOMER ABOUT STAFF MISS FULL LOOK',
             documentType: 'Order',
@@ -741,7 +723,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-12-05T00:00:00.000-05:00',
-            description: 'ENTER SUDDENLY MIDDLE ARTICLE SCIENCE FEW WHERE',
             documentId: '2ba6755c-6c8c-4526-8414-95347551acd9',
             documentTitle: 'ENTER SUDDENLY MIDDLE ARTICLE SCIENCE FEW WHERE',
             documentType: 'Status Report',
@@ -768,7 +749,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-12-05T00:00:00.000-05:00',
-            description: 'BILLION CUSTOMER',
             documentId: '4ad75fb0-8672-4857-9cf0-83b314148253',
             documentTitle: 'BILLION CUSTOMER',
             documentType: 'Status Report',
@@ -795,8 +775,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-12-07T00:00:00.000-05:00',
-            description:
-              'DEMOCRATIC LATER SUDDENLY PERHAPS OIL GENERATION END NUMBER CUT MAJORITY DISCUSSION SON',
             documentId: '3c205840-cac6-4545-9e17-66cc6f097fa9',
             documentTitle:
               'DEMOCRATIC LATER SUDDENLY PERHAPS OIL GENERATION END NUMBER CUT MAJORITY DISCUSSION SON',
@@ -826,7 +804,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-12-21T00:00:00.000-05:00',
-            description: 'PLAY HEAVY STRONG EAST THROUGHOUT ALMOST POWER',
             documentId: '86ddec94-114f-4416-8a95-5075a21269e4',
             documentTitle: 'PLAY HEAVY STRONG EAST THROUGHOUT ALMOST POWER',
             documentType: 'Standing Pretrial Order',
@@ -855,7 +832,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2016-12-21T00:00:00.000-05:00',
-            description: 'FUTURE COVER TEND TRIAL ITS CHALLENGE',
             documentId: 'c383e35d-5850-4508-8ef7-6d8aa8bea6b0',
             documentTitle: 'FUTURE COVER TEND TRIAL ITS CHALLENGE',
             documentType: 'Notice of Trial',
@@ -884,7 +860,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-05-05T00:00:00.000-04:00',
-            description: 'ANY STAFF FLY HOUR CAREER',
             documentId: '52995ab0-6281-487e-b98c-19ece98a4585',
             documentTitle: 'ANY STAFF FLY HOUR CAREER',
             documentType: 'Pretrial Memorandum',
@@ -911,8 +886,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-05-08T00:00:00.000-04:00',
-            description:
-              'OUR COMMUNITY DIFFICULT SORT KIND STILL SEVEN SHOW THAN INVOLVE',
             documentId: '7b351cf6-32ff-4161-b4f7-8385a9e10054',
             documentTitle:
               'OUR COMMUNITY DIFFICULT SORT KIND STILL SEVEN SHOW THAN INVOLVE',
@@ -940,7 +913,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-05-10T00:00:00.000-04:00',
-            description: 'OUR GROUP LAW SOUND MISSION',
             documentId: '6b30c44f-651a-48e3-9012-b499f64baaa0',
             documentTitle: 'OUR GROUP LAW SOUND MISSION',
             documentType: 'Order that jurisdiction is retained',
@@ -969,7 +941,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-07-26T00:00:00.000-04:00',
-            description: 'WHY SHE COLLECTION',
             documentId: '71740b34-13d4-4e4f-94ff-9bf37395f1e0',
             documentTitle: 'WHY SHE COLLECTION',
             documentType: 'Status Report',
@@ -996,7 +967,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-08-08T00:00:00.000-04:00',
-            description: 'TRUTH OPERATION NOR STOCK PM AGAIN SING HUNDRED',
             documentId: 'fa64de8f-4d77-4693-a9da-a18777d9c3cf',
             documentTitle: 'TRUTH OPERATION NOR STOCK PM AGAIN SING HUNDRED',
             documentType: 'Status Report',
@@ -1023,7 +993,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-08-09T00:00:00.000-04:00',
-            description: 'CHANCE PARTICULARLY NOT MANAGE TEAM MISSION',
             documentId: '66a7e752-b7bf-41da-83f2-35f21cca01ec',
             documentTitle: 'CHANCE PARTICULARLY NOT MANAGE TEAM MISSION',
             documentType: 'Order',
@@ -1052,7 +1021,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-10-10T00:00:00.000-04:00',
-            description: 'NAME DESCRIBE CHAIR COLLEGE ABLE',
             documentId: '56315a1b-3f59-43d1-81db-19ecdca06124',
             documentTitle: 'NAME DESCRIBE CHAIR COLLEGE ABLE',
             documentType: 'Status Report',
@@ -1079,7 +1047,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-10-10T00:00:00.000-04:00',
-            description: 'PART CENTRAL MEMORY',
             documentId: 'a552154d-9182-4ca5-b9ff-0ccd6c880e8d',
             documentTitle: 'PART CENTRAL MEMORY',
             documentType: 'Status Report',
@@ -1106,7 +1073,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-10-12T00:00:00.000-04:00',
-            description: 'MOVIE UNTIL PRESIDENT MAGAZINE',
             documentId: 'ddd2cb11-0a26-43cf-aaaa-47a0876a9c72',
             documentTitle: 'MOVIE UNTIL PRESIDENT MAGAZINE',
             documentType: 'Order',
@@ -1135,7 +1101,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-12-08T00:00:00.000-05:00',
-            description: 'VIEW WHITE ABLE AWAY',
             documentId: '3e7c1cf7-7a65-4e0f-8ccd-2ead85d8daee',
             documentTitle: 'VIEW WHITE ABLE AWAY',
             documentType: 'Status Report',
@@ -1162,7 +1127,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-12-11T00:00:00.000-05:00',
-            description: 'COLOR CONTAIN FACE THAT SMALL GROUND DEVELOP',
             documentId: 'ba15d23d-35d6-4ca5-8e1e-134a50008c64',
             documentTitle: 'COLOR CONTAIN FACE THAT SMALL GROUND DEVELOP',
             documentType: 'Status Report',
@@ -1189,8 +1153,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2017-12-13T00:00:00.000-05:00',
-            description:
-              'TRADE EXPERT RECORD MEASURE MEASURE MOVEMENT RATE ARTICLE TEND BECAUSE SIZE AGREEMENT',
             documentId: 'c56fb52e-8bb8-41b9-bef6-c02b6e013f5a',
             documentTitle:
               'TRADE EXPERT RECORD MEASURE MEASURE MOVEMENT RATE ARTICLE TEND BECAUSE SIZE AGREEMENT',
@@ -1220,7 +1182,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-01-02T00:00:00.000-05:00',
-            description: 'SIMILAR LATE ME CELL RANGE',
             documentId: '7c5a1b4b-0f54-41c7-9174-b2538450b810',
             documentTitle: 'SIMILAR LATE ME CELL RANGE',
             documentType: 'Notice of Trial',
@@ -1249,7 +1210,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-01-02T00:00:00.000-05:00',
-            description: 'SCIENTIST HOTEL SEEM FINALLY',
             documentId: '920f6b02-c809-4c11-8bc7-dcf15b9983e4',
             documentTitle: 'SCIENTIST HOTEL SEEM FINALLY',
             documentType: 'Standing Pretrial Order',
@@ -1278,7 +1238,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-04-25T00:00:00.000-04:00',
-            description: 'WIN WRONG PUBLIC SEASON SOMEBODY VIEW NEWS ELSE',
             documentId: 'a6a3bea6-87d0-4c74-b8d4-cd35ab576aa9',
             documentTitle: 'WIN WRONG PUBLIC SEASON SOMEBODY VIEW NEWS ELSE',
             documentType: 'Notice',
@@ -1308,7 +1267,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-05-21T00:00:00.000-04:00',
-            description: 'HAVE GOAL HOLD SEA GROUP',
             documentId: '6dc8ebeb-c0b3-4226-aa7d-1767b177f9ab',
             documentTitle: 'HAVE GOAL HOLD SEA GROUP',
             documentType: 'Pretrial Memorandum',
@@ -1335,8 +1293,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-05-21T00:00:00.000-04:00',
-            description:
-              'DROP INSTITUTION DESPITE TERM MOST TV MEET SEVEN HERSELF TRY PATTERN',
             documentId: '82ece893-98c1-4782-a9df-7a5081e5c640',
             documentTitle:
               'DROP INSTITUTION DESPITE TERM MOST TV MEET SEVEN HERSELF TRY PATTERN',
@@ -1364,8 +1320,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-05-29T00:00:00.000-04:00',
-            description:
-              'CARE ESPECIALLY JOIN BLUE MEMBER NEARLY TEACH LEG\nREACH GAS RIGHT RESPONSE SOUTH',
             documentId: '82afcb01-0f78-4a00-8d0f-88432bc0f26d',
             documentTitle:
               'CARE ESPECIALLY JOIN BLUE MEMBER NEARLY TEACH LEG\nREACH GAS RIGHT RESPONSE SOUTH',
@@ -1395,7 +1349,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-05-29T00:00:00.000-04:00',
-            description: 'CUP HUSBAND ELSE WIND TROUBLE',
             documentId: '9779ff85-cdf4-4c54-8f5c-276c1f0e9f7c',
             documentTitle: 'CUP HUSBAND ELSE WIND TROUBLE',
             documentType: 'Standing Pretrial Order',
@@ -1424,7 +1377,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-06-25T00:00:00.000-04:00',
-            description: 'AHEAD BEHAVIOR CHANGE SCIENCE SENIOR',
             documentId: '6b7c163e-77d6-408a-be1c-5f183ee2b3fe',
             documentTitle: 'AHEAD BEHAVIOR CHANGE SCIENCE SENIOR',
             documentType: 'Request for Admissions',
@@ -1453,8 +1405,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-07-23',
             createdAt: '2018-07-23T00:00:00.000-04:00',
-            description:
-              'CANDIDATE FEAR HOWEVER STEP TROUBLE THREAT TELL CUSTOMER JOIN COMMERCIAL AFFECT ME BALL WHOLE LOCAL AGENT STATE',
             documentId: '74259812-c2fc-4587-83d8-ca96cb82dcf2',
             documentTitle:
               'CANDIDATE FEAR HOWEVER STEP TROUBLE THREAT TELL CUSTOMER JOIN COMMERCIAL AFFECT ME BALL WHOLE LOCAL AGENT STATE',
@@ -1485,7 +1435,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-07-24',
             createdAt: '2018-07-24T00:00:00.000-04:00',
-            description: 'FOLLOW LEAST PATTERN BROTHER PHONE COST COUPLE WEAR',
             documentId: '078596ed-aa2b-4820-9ab2-19e2d41f549b',
             documentTitle:
               'FOLLOW LEAST PATTERN BROTHER PHONE COST COUPLE WEAR',
@@ -1512,8 +1461,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-07-24T00:00:00.000-04:00',
-            description:
-              'MAJOR SHOULD STUDENT AT STAY TABLE BAR TALK WEAR EVEN SEASON',
             documentId: '2695f447-5a03-4d44-8fec-415d32f74429',
             documentTitle:
               'MAJOR SHOULD STUDENT AT STAY TABLE BAR TALK WEAR EVEN SEASON',
@@ -1544,8 +1491,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-07-25T00:00:00.000-04:00',
-            description:
-              'NOT FORM ACCOUNT MATERIAL BUDGET EXAMPLE CUSTOMER TALK POSITIVE THOSE INSTITUTION ME OFTEN TAKE SCENE BECAUSE EVERYONE',
             documentId: 'be8c092e-6818-4b34-a321-083cd72be19c',
             documentTitle:
               'NOT FORM ACCOUNT MATERIAL BUDGET EXAMPLE CUSTOMER TALK POSITIVE THOSE INSTITUTION ME OFTEN TAKE SCENE BECAUSE EVERYONE',
@@ -1575,8 +1520,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-07-26T00:00:00.000-04:00',
-            description:
-              'WRITER FAMILY NEVER ALTHOUGH THOUSAND BEHIND HOWEVER DAUGHTER EFFORT COMPUTER POPULAR BECAUSE ROAD',
             documentId: '1037dce3-e67d-4aec-b099-c00e60dff1a7',
             documentTitle:
               'WRITER FAMILY NEVER ALTHOUGH THOUSAND BEHIND HOWEVER DAUGHTER EFFORT COMPUTER POPULAR BECAUSE ROAD',
@@ -1606,8 +1549,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-07-27',
             createdAt: '2018-07-27T00:00:00.000-04:00',
-            description:
-              'HEALTH MOMENT WEEK AROUND OTHERS FROM CHARACTER BAR ASK DOOR',
             documentId: '73bdaf81-9bdc-4fdf-b2ed-9197e251bf0b',
             documentTitle:
               'HEALTH MOMENT WEEK AROUND OTHERS FROM CHARACTER BAR ASK DOOR',
@@ -1635,7 +1576,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-07-27T00:00:00.000-04:00',
-            description: 'VIEW CHALLENGE PER OFFICE OUR',
             documentId: 'ae37d4b5-1563-4bf3-9f34-d125cb4a642c',
             documentTitle: 'VIEW CHALLENGE PER OFFICE OUR',
             documentType: 'Notice',
@@ -1667,7 +1607,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-07-27',
             createdAt: '2018-07-27T00:00:00.000-04:00',
-            description: 'LIKE CONTROL SOUTH PARTICIPANT TERM DISCUSSION SIZE',
             documentId: 'c072236e-5655-406a-b851-1ba1709aa54e',
             documentTitle:
               'LIKE CONTROL SOUTH PARTICIPANT TERM DISCUSSION SIZE',
@@ -1694,8 +1633,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-07-30T00:00:00.000-04:00',
-            description:
-              'PUT STRATEGY SOME AUTHOR SPORT THEMSELVES ENVIRONMENTAL RECENTLY OUR MAJORITY MOVEMENT FINANCIAL MONEY',
             documentId: '121058d4-979a-43a3-962b-e700c152931a',
             documentTitle:
               'PUT STRATEGY SOME AUTHOR SPORT THEMSELVES ENVIRONMENTAL RECENTLY OUR MAJORITY MOVEMENT FINANCIAL MONEY',
@@ -1725,8 +1662,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-07-31T00:00:00.000-04:00',
-            description:
-              'POLICE RATHER GROUND MIDDLE DRIVE SOON MOVIE STATION CULTURAL BOX DEEP GARDEN INVESTMENT LESS STAGE SEEM HIM WITHOUT GENERAL WAR\nSEND TASK POLITICS CAREER CHALLENGE RED INVOLVE MORNING POSSIBLE SUMMER CONCERN GUY LITTLE DREAM CITIZEN SIGNIFICANT BEAT DEAL SERIES\nANIMAL TECHNOLOGY FIRM ANSWER PAPER TRADE DECADE OPTION LEVEL COMMON MEMBER PIECE\nUNDERSTAND ANALYSIS EACH CHOOSE WOMAN CHANGE ACCOUNT MEETING QUESTION',
             documentId: '31063146-c5af-4f7b-9eba-ea70321cd29a',
             documentTitle:
               'POLICE RATHER GROUND MIDDLE DRIVE SOON MOVIE STATION CULTURAL BOX DEEP GARDEN INVESTMENT LESS STAGE SEEM HIM WITHOUT GENERAL WAR\nSEND TASK POLITICS CAREER CHALLENGE RED INVOLVE MORNING POSSIBLE SUMMER CONCERN GUY LITTLE DREAM CITIZEN SIGNIFICANT BEAT DEAL SERIES\nANIMAL TECHNOLOGY FIRM ANSWER PAPER TRADE DECADE OPTION LEVEL COMMON MEMBER PIECE\nUNDERSTAND ANALYSIS EACH CHOOSE WOMAN CHANGE ACCOUNT MEETING QUESTION',
@@ -1758,7 +1693,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-07-31',
             createdAt: '2018-07-31T00:00:00.000-04:00',
-            description: 'NATURAL I PLACE THEY CULTURE CAUSE',
             documentId: 'b55ab2b6-db89-417d-a57a-00deafaa5a85',
             documentTitle: 'NATURAL I PLACE THEY CULTURE CAUSE',
             documentType: 'Status Report',
@@ -1784,8 +1718,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-08-06T00:00:00.000-04:00',
-            description:
-              'HALF PAGE THESE DEEP DRUG RECOGNIZE BLACK ASSUME GENERATION THIRD SOME',
             documentId: 'bcc11445-312f-4f71-b319-3972c05c4bdb',
             documentTitle:
               'HALF PAGE THESE DEEP DRUG RECOGNIZE BLACK ASSUME GENERATION THIRD SOME',
@@ -1811,8 +1743,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-08-08T00:00:00.000-04:00',
-            description:
-              'LIKE DECADE GENERAL PROGRAM MODERN REAL QUALITY IF CATCH PARTICIPANT LOOK SISTER ACTUALLY WORRY',
             documentId: 'dd43e90c-d86c-4786-9259-38fdd5ee8e7d',
             documentTitle:
               'LIKE DECADE GENERAL PROGRAM MODERN REAL QUALITY IF CATCH PARTICIPANT LOOK SISTER ACTUALLY WORRY',
@@ -1842,7 +1772,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-08-15',
             createdAt: '2018-08-15T00:00:00.000-04:00',
-            description: 'SOUTHERN MORNING READY LAND',
             documentId: 'c273f929-4ecd-4153-b9e5-52258b468f81',
             documentTitle: 'SOUTHERN MORNING READY LAND',
             documentType: 'Status Report',
@@ -1868,8 +1797,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-08-16T00:00:00.000-04:00',
-            description:
-              'PAGE BEHAVIOR KITCHEN MINUTE BED SUCH CARE VISIT GLASS YOUR NEW LOSE MEDICAL POINT FEAR LEADER WHOLE PARTY\nMARRIAGE TRUE QUALITY ALTHOUGH PROVE APPROACH I RUN VARIOUS DURING TERM PAINTING OPERATION',
             documentId: '7c55ad7d-bdc1-45fa-9f41-00f8d10ebd55',
             documentTitle:
               'PAGE BEHAVIOR KITCHEN MINUTE BED SUCH CARE VISIT GLASS YOUR NEW LOSE MEDICAL POINT FEAR LEADER WHOLE PARTY\nMARRIAGE TRUE QUALITY ALTHOUGH PROVE APPROACH I RUN VARIOUS DURING TERM PAINTING OPERATION',
@@ -1899,8 +1826,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-08-17T00:00:00.000-04:00',
-            description:
-              'ACCOUNT COST WE AT TYPE WORK SCIENTIST COMPARE STORY OFFICE MORE MANAGER',
             documentId: '1670a43c-4418-4a2b-a467-934a71d23e38',
             documentTitle:
               'ACCOUNT COST WE AT TYPE WORK SCIENTIST COMPARE STORY OFFICE MORE MANAGER',
@@ -1930,7 +1855,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-08-27',
             createdAt: '2018-08-27T00:00:00.000-04:00',
-            description: 'WAY LONG FLOOR INCLUDING',
             documentId: '115e0811-9ab4-4a00-b777-37e9e59de049',
             documentTitle: 'WAY LONG FLOOR INCLUDING',
             documentType: 'Pretrial Memorandum',
@@ -1956,7 +1880,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-08-27T00:00:00.000-04:00',
-            description: 'FILM REGION ANALYSIS OTHER OWN CALL OPERATION COLOR',
             documentId: '68654b02-6bca-4ff5-8606-1f6d3984e8f7',
             documentTitle:
               'FILM REGION ANALYSIS OTHER OWN CALL OPERATION COLOR',
@@ -1986,8 +1909,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-08-30',
             createdAt: '2018-08-30T00:00:00.000-04:00',
-            description:
-              'DEEP HEAD EVERYONE REASON FACT HERSELF GUY THEORY ALWAYS BEAUTIFUL PUSH CHILD',
             documentId: '8ca1eaf9-abf8-4ba8-9964-bb7b92adba08',
             documentTitle:
               'DEEP HEAD EVERYONE REASON FACT HERSELF GUY THEORY ALWAYS BEAUTIFUL PUSH CHILD',
@@ -2014,7 +1935,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-08-31T00:00:00.000-04:00',
-            description: 'TOWARD BAG TOTAL MODERN AND CARRY HAND',
             documentId: 'd205c910-09ef-457e-93f3-7e5eb10e63b6',
             documentTitle: 'TOWARD BAG TOTAL MODERN AND CARRY HAND',
             documentType: 'Order',
@@ -2043,8 +1963,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-09-07T00:00:00.000-04:00',
-            description:
-              'DOWN ELECTION WIN QUITE PLACE MOMENT CLASS TEAM PIECE DEVELOP EVERYBODY FALL NUMBER NOTICE ACTIVITY INTEREST SOCIAL RESULT WRITER',
             documentId: '2401f42f-9fe9-4d94-a99a-d34ff81d0aba',
             documentTitle:
               'DOWN ELECTION WIN QUITE PLACE MOMENT CLASS TEAM PIECE DEVELOP EVERYBODY FALL NUMBER NOTICE ACTIVITY INTEREST SOCIAL RESULT WRITER',
@@ -2074,7 +1992,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-09-07T00:00:00.000-04:00',
-            description: 'LIKE ATTENTION GROWTH',
             documentId: 'ef3d132e-119f-44ae-9b0c-9ed48eaa2731',
             documentTitle: 'LIKE ATTENTION GROWTH',
             documentType: 'Standing Pretrial Order',
@@ -2103,8 +2020,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-09-25T00:00:00.000-04:00',
-            description:
-              'DATA GOVERNMENT STYLE HISTORY WIN MACHINE WEEK MYSELF BASE RELATIONSHIP BLACK',
             documentId: '8a096448-0ece-4991-93a3-6cfece02894f',
             documentTitle:
               'DATA GOVERNMENT STYLE HISTORY WIN MACHINE WEEK MYSELF BASE RELATIONSHIP BLACK',
@@ -2132,8 +2047,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-09-27T00:00:00.000-04:00',
-            description:
-              'DREAM CAUSE RETURN SERIOUS ELECTION PART TELEVISION WRITE READY COURSE HOUR STATE',
             documentId: '3bccfcc7-e01c-4932-81d3-add912b0cb94',
             documentTitle:
               'DREAM CAUSE RETURN SERIOUS ELECTION PART TELEVISION WRITE READY COURSE HOUR STATE',
@@ -2162,8 +2075,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-04T00:00:00.000-04:00',
-            description:
-              'MONEY NEVER MANAGE BE IMPORTANT CAMERA MUST WAR EVEN MOVE PROVIDE MODEL',
             documentId: 'b493080d-c559-4360-9cbd-782773efd41c',
             documentTitle:
               'MONEY NEVER MANAGE BE IMPORTANT CAMERA MUST WAR EVEN MOVE PROVIDE MODEL',
@@ -2193,8 +2104,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-10-16',
             createdAt: '2018-10-16T00:00:00.000-04:00',
-            description:
-              'RESPOND PUBLIC OFFICIAL ADDRESS VALUE FALL OPPORTUNITY SOON',
             documentId: 'e93eb5c0-c5b3-4705-a12c-eed933553b2a',
             documentTitle:
               'RESPOND PUBLIC OFFICIAL ADDRESS VALUE FALL OPPORTUNITY SOON',
@@ -2221,7 +2130,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-17T00:00:00.000-04:00',
-            description: 'BEHAVIOR WORRY FACTOR WAY',
             documentId: 'a3208645-f955-4d0e-9295-820cfbcf8f04',
             documentTitle: 'BEHAVIOR WORRY FACTOR WAY',
             documentType: 'Order',
@@ -2250,8 +2158,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-17T00:00:00.000-04:00',
-            description:
-              'ARGUE MEDICAL ACTUALLY STATE LIVE LIFE DIRECTOR MEASURE MODEL',
             documentId: 'b1b8330a-7ce6-4426-a540-a9de7260cb99',
             documentTitle:
               'ARGUE MEDICAL ACTUALLY STATE LIVE LIFE DIRECTOR MEASURE MODEL',
@@ -2282,7 +2188,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2018-10-22',
             createdAt: '2018-10-22T00:00:00.000-04:00',
-            description: 'BY STEP TURN SOMEONE REALIZE',
             documentId: '49caa019-0f5e-4ed6-b7bd-234a2e1e9303',
             documentTitle: 'BY STEP TURN SOMEONE REALIZE',
             documentType: 'Report',
@@ -2308,7 +2213,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-22T00:00:00.000-04:00',
-            description: 'MATTER WONDER OUT EVER CAMPAIGN KITCHEN',
             documentId: 'bf89fba2-8057-4c52-a019-a53039a20b6a',
             documentTitle: 'MATTER WONDER OUT EVER CAMPAIGN KITCHEN',
             documentType: 'Entry of Appearance',
@@ -2335,8 +2239,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'CARD ART SO EVENT LATE WIDE CHARGE ALTHOUGH HOT FOR PARTICULAR METHOD IDEA',
             documentId: '0881cdbe-2bae-4dc1-a9a8-9a52b4cab92f',
             documentTitle:
               'CARD ART SO EVENT LATE WIDE CHARGE ALTHOUGH HOT FOR PARTICULAR METHOD IDEA',
@@ -2362,8 +2264,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'THIS STATION DOOR EARLY ONTO OUTSIDE CRIME FACT PULL BUY SET\nNUMBER EXECUTIVE YOUR SCORE PICK FIVE GO TAX',
             documentId: '0ce9bbfa-cdcd-44ed-86f4-4d7094f08b7c',
             documentTitle:
               'THIS STATION DOOR EARLY ONTO OUTSIDE CRIME FACT PULL BUY SET\nNUMBER EXECUTIVE YOUR SCORE PICK FIVE GO TAX',
@@ -2390,8 +2290,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'EIGHT THEN SIMPLE TOWARD\nPROTECT THAT DECISION KID SUCCESSFUL HIGH EXAMPLE\nREACH MILLION CASE SHAKE CATCH TRADITIONAL SOCIAL',
             documentId: '1d392af4-5069-4c2c-93d8-1cc10402ca53',
             documentTitle:
               'EIGHT THEN SIMPLE TOWARD\nPROTECT THAT DECISION KID SUCCESSFUL HIGH EXAMPLE\nREACH MILLION CASE SHAKE CATCH TRADITIONAL SOCIAL',
@@ -2417,8 +2315,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'NEAR PROVIDE APPEAR DESPITE INTERNATIONAL BEFORE MEMORY PROVE DETERMINE LIKELY CUSTOMER MACHINE ANSWER IF',
             documentId: '463db618-037e-4a3b-aa47-e7d8840dba39',
             documentTitle:
               'NEAR PROVIDE APPEAR DESPITE INTERNATIONAL BEFORE MEMORY PROVE DETERMINE LIKELY CUSTOMER MACHINE ANSWER IF',
@@ -2444,8 +2340,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'OFFICER RESPONSIBILITY MEASURE BIG WIDE BAG FIRM BOX STATEMENT WAY PERFORMANCE',
             documentId: '46add94b-1016-447a-8b28-95ffe4d841a3',
             documentTitle:
               'OFFICER RESPONSIBILITY MEASURE BIG WIDE BAG FIRM BOX STATEMENT WAY PERFORMANCE',
@@ -2472,7 +2366,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description: 'NEAR TOWARD NEWS THREAT PICTURE BASE REALITY FACTOR',
             documentId: '49a5cdbf-fb5b-4d7d-9b3d-09952be60f64',
             documentTitle:
               'NEAR TOWARD NEWS THREAT PICTURE BASE REALITY FACTOR',
@@ -2498,8 +2391,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'CONSIDER SUBJECT ANALYSIS MOUTH ITS JOB BEFORE STRUCTURE OFF EDGE CULTURE REST HAND PROVE\nCOMMUNITY DROP RADIO THE THING RICH CHOOSE DEVELOPMENT CHARACTER DEVELOP ANALYSIS OLD ROCK WORRY',
             documentId: '5d91a565-7f28-4ae8-8ec6-4518853a85e0',
             documentTitle:
               'CONSIDER SUBJECT ANALYSIS MOUTH ITS JOB BEFORE STRUCTURE OFF EDGE CULTURE REST HAND PROVE\nCOMMUNITY DROP RADIO THE THING RICH CHOOSE DEVELOPMENT CHARACTER DEVELOP ANALYSIS OLD ROCK WORRY',
@@ -2524,8 +2415,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'NEWSPAPER PROGRAM ATTENTION DESIGN EVIDENCE OPTION MISSION CONTAIN PATTERN CENTER',
             documentId: '778bdbc5-18e7-4e5d-b21a-4490b8220185',
             documentTitle:
               'NEWSPAPER PROGRAM ATTENTION DESIGN EVIDENCE OPTION MISSION CONTAIN PATTERN CENTER',
@@ -2551,8 +2440,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'USUALLY THOUGH CAMPAIGN HEALTH NEW TREE CAREER OPEN IDENTIFY SERVICE TREATMENT RESPOND ADDRESS LIKELY ARGUE NEW FLY CENTER',
             documentId: '9058feb6-38ad-45f5-8d4a-74dbdf1257b8',
             documentTitle:
               'USUALLY THOUGH CAMPAIGN HEALTH NEW TREE CAREER OPEN IDENTIFY SERVICE TREATMENT RESPOND ADDRESS LIKELY ARGUE NEW FLY CENTER',
@@ -2579,8 +2466,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'TREE RESPOND SINGLE SUGGEST IT THAT NATION ADD COVER BUSINESS ITSELF TREAT STORE AFTER',
             documentId: '941c36ad-ed11-4996-a826-7c995480a81e',
             documentTitle:
               'TREE RESPOND SINGLE SUGGEST IT THAT NATION ADD COVER BUSINESS ITSELF TREAT STORE AFTER',
@@ -2606,8 +2491,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'YEAH TELEVISION THIRD ACTUALLY BEYOND CAMPAIGN BUILDING PARTICULARLY PERFORM PARTNER WHY TAKE',
             documentId: 'a2a9bfab-e9ac-4074-b1fb-71a09ae96fd1',
             documentTitle:
               'YEAH TELEVISION THIRD ACTUALLY BEYOND CAMPAIGN BUILDING PARTICULARLY PERFORM PARTNER WHY TAKE',
@@ -2634,8 +2517,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'LIST PROPERTY GROUND AREA EXIST COMMERCIAL POLICY MANAGER USE RADIO PAY SIMILAR FEDERAL YEAH',
             documentId: 'c8845403-85c5-4df7-8436-b242dc38b67e',
             documentTitle:
               'LIST PROPERTY GROUND AREA EXIST COMMERCIAL POLICY MANAGER USE RADIO PAY SIMILAR FEDERAL YEAH',
@@ -2661,7 +2542,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description: 'SHOULD WELL SITE RISE',
             documentId: 'dfc5ee20-ba3b-4f11-91cf-c4b857f1f4b3',
             documentTitle: 'SHOULD WELL SITE RISE',
             documentType: 'Trial Exhibits',
@@ -2685,8 +2565,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'ACCOUNT GENERAL WEAR ATTENTION DEMOCRATIC ATTENTION QUICKLY MATTER THOUSAND IF ANIMAL GROWTH',
             documentId: 'e738b7d7-0b6f-4c8e-94a8-7a33cb4b1815',
             documentTitle:
               'ACCOUNT GENERAL WEAR ATTENTION DEMOCRATIC ATTENTION QUICKLY MATTER THOUSAND IF ANIMAL GROWTH',
@@ -2712,8 +2590,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'LEAVE LOSS AROUND FAMILY REALLY SEEM TREATMENT WALL HOT MEET WELL CHOICE',
             documentId: 'f6e4864e-f847-498a-b948-d0f3d08fc7a9',
             documentTitle:
               'LEAVE LOSS AROUND FAMILY REALLY SEEM TREATMENT WALL HOT MEET WELL CHOICE',
@@ -2739,8 +2615,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-10-30T00:00:00.000-04:00',
-            description:
-              'BASE DAUGHTER POSITIVE SMALL PART THREE THREE SPEND TO TRY HUSBAND',
             documentId: 'fa4e78fe-715c-46ed-8316-2b00c5695847',
             documentTitle:
               'BASE DAUGHTER POSITIVE SMALL PART THREE THREE SPEND TO TRY HUSBAND',
@@ -2767,8 +2641,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-11-29T00:00:00.000-05:00',
-            description:
-              'CARRY ACTIVITY CULTURAL MIND KEY RULE YARD REPRESENT BOARD DEGREE AIR IMAGE',
             documentId: 'f8831f7d-9f82-41ab-a16b-f4e1414c998f',
             documentTitle:
               'CARRY ACTIVITY CULTURAL MIND KEY RULE YARD REPRESENT BOARD DEGREE AIR IMAGE',
@@ -2796,7 +2668,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-11-30T00:00:00.000-05:00',
-            description: 'CENTER TYPE AFFECT AGE',
             documentId: '5932ac2a-eeea-4651-8736-41178b8238e0',
             documentTitle: 'CENTER TYPE AFFECT AGE',
             documentType: 'Transcript',
@@ -2820,7 +2691,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-11-30T00:00:00.000-05:00',
-            description: 'YOUR STEP TEACH TRUTH ALTHOUGH PRESIDENT',
             documentId: '62eb9abf-ff7a-449d-908f-a18fbff38118',
             documentTitle: 'YOUR STEP TEACH TRUTH ALTHOUGH PRESIDENT',
             documentType: 'Transcript',
@@ -2844,7 +2714,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-11-30T00:00:00.000-05:00',
-            description: 'FOOT IN STUFF NEXT BETWEEN',
             documentId: '7840ba64-be22-4674-acc3-46587703d199',
             documentTitle: 'FOOT IN STUFF NEXT BETWEEN',
             documentType: 'Transcript',
@@ -2868,7 +2737,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-11-30T00:00:00.000-05:00',
-            description: 'NOT OIL CHURCH KEY STRATEGY ATTENTION',
             documentId: '9fdeb557-7583-4f42-bfe9-6ac29fd9e47b',
             documentTitle: 'NOT OIL CHURCH KEY STRATEGY ATTENTION',
             documentType: 'Transcript',
@@ -2892,7 +2760,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-12-03T00:00:00.000-05:00',
-            description: 'EARLY RECEIVE INVESTMENT BEHIND CAN SMILE',
             documentId: '2d0918bb-919b-435b-a618-35dddde02da2',
             documentTitle: 'EARLY RECEIVE INVESTMENT BEHIND CAN SMILE',
             documentType: 'Transcript',
@@ -2916,8 +2783,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2018-12-03T00:00:00.000-05:00',
-            description:
-              'SHARE PHYSICAL WAY STYLE CONSIDER FINANCIAL POLITICAL PICTURE NIGHT POOR SUCCESS PARTICULAR GLASS PRESSURE SIX LEAVE',
             documentId: 'e448482f-423e-4c8c-bc96-2cfd1c387807',
             documentTitle:
               'SHARE PHYSICAL WAY STYLE CONSIDER FINANCIAL POLITICAL PICTURE NIGHT POOR SUCCESS PARTICULAR GLASS PRESSURE SIX LEAVE',
@@ -2947,8 +2812,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-01-07T00:00:00.000-05:00',
-            description:
-              'CONTAIN GET OR AS ANIMAL GENERAL SPEECH REST LOW RESPONSE CONGRESS PAY REPORT READY BODY',
             documentId: 'f8b73245-1e03-4d96-b5ed-19132a52a671',
             documentTitle:
               'CONTAIN GET OR AS ANIMAL GENERAL SPEECH REST LOW RESPONSE CONGRESS PAY REPORT READY BODY',
@@ -2976,8 +2839,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-01-11T00:00:00.000-05:00',
-            description:
-              'RUN STAFF USE ALSO FIGHT RESPOND MAINTAIN LIGHT DIFFICULT PRESSURE FORWARD CITIZEN DESPITE SIT FEELING PRODUCT DEAL',
             documentId: 'd6deee76-3e44-4ae7-b35d-5e81ca75aed8',
             documentTitle:
               'RUN STAFF USE ALSO FIGHT RESPOND MAINTAIN LIGHT DIFFICULT PRESSURE FORWARD CITIZEN DESPITE SIT FEELING PRODUCT DEAL',
@@ -3005,8 +2866,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-01-30T00:00:00.000-05:00',
-            description:
-              'SOCIAL THESE HERSELF EASY MODERN MEMORY EDGE SURFACE ESPECIALLY MAN ALWAYS TABLE\nEACH PROGRAM TOWN FEW SORT FEELING PLAYER RESPOND PURPOSE AGENCY LOT WITHIN SUDDENLY BASE PROCESS BOX NEVER SPORT PER THOSE\nTOO OPERATION ACROSS THEY SAFE WILL RELIGIOUS GUY SELL\nPARTICULAR WIND BAR SOURCE POINT MILLION OUTSIDE RICH AS MILLION SENIOR FATHER NOW WORRY VALUE WHOM MOMENT TURN MR SPECIAL PROBABLY',
             documentId: 'f549a752-5858-4cd9-a871-d0a7552d36bb',
             documentTitle:
               'SOCIAL THESE HERSELF EASY MODERN MEMORY EDGE SURFACE ESPECIALLY MAN ALWAYS TABLE\nEACH PROGRAM TOWN FEW SORT FEELING PLAYER RESPOND PURPOSE AGENCY LOT WITHIN SUDDENLY BASE PROCESS BOX NEVER SPORT PER THOSE\nTOO OPERATION ACROSS THEY SAFE WILL RELIGIOUS GUY SELL\nPARTICULAR WIND BAR SOURCE POINT MILLION OUTSIDE RICH AS MILLION SENIOR FATHER NOW WORRY VALUE WHOM MOMENT TURN MR SPECIAL PROBABLY',
@@ -3038,7 +2897,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-03-28',
             createdAt: '2019-03-28T00:00:00.000-04:00',
-            description: 'DIFFERENT NETWORK COMMUNITY NEVER FUTURE',
             documentId: '431ab35d-6bef-4e2a-a207-6fc85f27b119',
             documentTitle: 'DIFFERENT NETWORK COMMUNITY NEVER FUTURE',
             documentType: 'Seriatim Opening Brief',
@@ -3064,8 +2922,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-04-09T00:00:00.000-04:00',
-            description:
-              'VOTE DECIDE DIFFICULT WITHOUT CUT SERIOUS ANOTHER PRODUCT STAFF SIMILAR NO BUILD',
             documentId: '1d5b7f77-84ba-4dbd-a077-13d1cdb80c3a',
             documentTitle:
               'VOTE DECIDE DIFFICULT WITHOUT CUT SERIOUS ANOTHER PRODUCT STAFF SIMILAR NO BUILD',
@@ -3093,7 +2949,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-04-10T00:00:00.000-04:00',
-            description: 'DAUGHTER LESS PROFESSIONAL LATER FLY',
             documentId: 'dd15c32e-724d-4c24-9542-a3eb2365fed2',
             documentTitle: 'DAUGHTER LESS PROFESSIONAL LATER FLY',
             documentType: 'Order',
@@ -3124,8 +2979,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-04-18',
             createdAt: '2019-04-18T00:00:00.000-04:00',
-            description:
-              'DATA POLICE ADDRESS FORWARD CREATE ACTIVITY YOU FEW COLOR',
             documentId: '915d280a-ee3f-481d-a866-92da221030fb',
             documentTitle:
               'DATA POLICE ADDRESS FORWARD CREATE ACTIVITY YOU FEW COLOR',
@@ -3152,7 +3005,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-04-19T00:00:00.000-04:00',
-            description: 'NOTE MILITARY MAJOR CLEARLY RECORD FIRE',
             documentId: '6c207a9a-bf4d-423d-82c9-00bf2d8c241e',
             documentTitle: 'NOTE MILITARY MAJOR CLEARLY RECORD FIRE',
             documentType: 'Order',
@@ -3181,7 +3033,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-05-03T00:00:00.000-04:00',
-            description: 'FINISH DATA QUALITY FOREIGN FIRM DECISION HOUR',
             documentId: '3d10b70e-0ef3-4e28-b5b0-8989dad5f97b',
             documentTitle: 'FINISH DATA QUALITY FOREIGN FIRM DECISION HOUR',
             documentType: 'Seriatim Answering Brief',
@@ -3210,7 +3061,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-05-29',
             createdAt: '2019-05-29T00:00:00.000-04:00',
-            description: 'AGREE MEAN NO STRONG EAST',
             documentId: '0aa9aee9-f5af-4fcd-a12e-08e7b5d2e1d0',
             documentTitle: 'AGREE MEAN NO STRONG EAST',
             documentType: 'Seriatim Reply Brief',
@@ -3236,8 +3086,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-10-23T00:00:00.000-04:00',
-            description:
-              'ACTION LETTER WHO CARD SON LEVEL AHEAD HEAVY PRESSURE TRY BAR DEVELOP ADMINISTRATION',
             documentId: '8dbaf968-fd94-4a86-b7ab-892522d5b60b',
             documentTitle:
               'ACTION LETTER WHO CARD SON LEVEL AHEAD HEAVY PRESSURE TRY BAR DEVELOP ADMINISTRATION',
@@ -3268,8 +3116,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-11-22T00:00:00.000-05:00',
-            description:
-              'WHOSE SHOW OPEN INTO CITIZEN HERSELF SPACE MAN WATCH SUPPORT KITCHEN FILL',
             documentId: '6c8f60ad-c5c3-4803-803c-fd58706bb7f8',
             documentTitle:
               'WHOSE SHOW OPEN INTO CITIZEN HERSELF SPACE MAN WATCH SUPPORT KITCHEN FILL',
@@ -3299,8 +3145,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-11-22',
             createdAt: '2019-11-22T00:00:00.000-05:00',
-            description:
-              'TRY NATURAL BENEFIT ACTUALLY RECOGNIZE INSIDE PART WITHIN BLUE BORN APPLY BUDGET TYPE HEALTH GO CONTROL SING FINE',
             documentId: '82d890c5-ed6a-4866-9901-d7290b74b6dd',
             documentTitle:
               'TRY NATURAL BENEFIT ACTUALLY RECOGNIZE INSIDE PART WITHIN BLUE BORN APPLY BUDGET TYPE HEALTH GO CONTROL SING FINE',
@@ -3330,8 +3174,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-11-25T00:00:00.000-05:00',
-            description:
-              'SEAT YOURSELF COUPLE TASK US MENTION SON PAY MOVEMENT EARLY\nTOTAL RISK FULL SAME DATA PREVENT STAND CELL SEEK INVESTMENT STAY POLITICAL MAJOR TONIGHT SUPPORT YOURSELF',
             documentId: 'b7c14885-0ffc-44bb-9014-20cabcead9f9',
             documentTitle:
               'SEAT YOURSELF COUPLE TASK US MENTION SON PAY MOVEMENT EARLY\nTOTAL RISK FULL SAME DATA PREVENT STAND CELL SEEK INVESTMENT STAY POLITICAL MAJOR TONIGHT SUPPORT YOURSELF',
@@ -3363,8 +3205,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-12-04',
             createdAt: '2019-12-04T00:00:00.000-05:00',
-            description:
-              'CASE SKIN KID TEACHER SEASON SUMMER TOWN LAWYER UPON ITEM FINALLY MOTHER SYSTEM',
             documentId: 'a8d8a08e-4f20-4835-812d-0bf20d2bcf36',
             documentTitle:
               'CASE SKIN KID TEACHER SEASON SUMMER TOWN LAWYER UPON ITEM FINALLY MOTHER SYSTEM',
@@ -3395,8 +3235,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-12-05',
             createdAt: '2019-12-05T00:00:00.000-05:00',
-            description:
-              'ESPECIALLY INTERNATIONAL POWER MILLION RELATE HUSBAND HARD NO IDENTIFY BRING LAWYER SOON',
             documentId: '4f16d86c-0ae1-4b18-870d-2e62cff2b2aa',
             documentTitle:
               'ESPECIALLY INTERNATIONAL POWER MILLION RELATE HUSBAND HARD NO IDENTIFY BRING LAWYER SOON',
@@ -3425,8 +3263,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-12-08',
             createdAt: '2019-12-08T00:00:00.000-05:00',
-            description:
-              'GROW PAY FIRST FIGHT SHARE CALL FAR CERTAIN OCCUR FEDERAL CONDITION',
             documentId: '0f9767e8-4d68-4638-827a-114824666208',
             documentTitle:
               'GROW PAY FIRST FIGHT SHARE CALL FAR CERTAIN OCCUR FEDERAL CONDITION',
@@ -3457,8 +3293,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2003-12-08',
             createdAt: '2019-12-08T00:00:00.000-05:00',
-            description:
-              'BUY HOT REAL MORNING COACH AGO WIN SOCIETY THESE WAY REGION SIDE\nTOGETHER ENTIRE BAG WRONG MENTION THOUGHT BREAK COLOR OK IDEA DRAW MANAGER',
             documentId: '2e9bff14-2dba-4df0-b7fe-1cbcc220ea21',
             documentTitle:
               'BUY HOT REAL MORNING COACH AGO WIN SOCIETY THESE WAY REGION SIDE\nTOGETHER ENTIRE BAG WRONG MENTION THOUGHT BREAK COLOR OK IDEA DRAW MANAGER',
@@ -3490,8 +3324,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2019-12-10',
             createdAt: '2019-12-10T00:00:00.000-05:00',
-            description:
-              'NORTH AUDIENCE SONG OFFICE PROBABLY THERE SEAT EIGHT INTEREST PRESSURE WILL PARTICIPANT FOUR WHOSE THANK LIKE',
             documentId: '8b35c9cb-2670-458b-884d-245dd71c53e9',
             documentTitle:
               'NORTH AUDIENCE SONG OFFICE PROBABLY THERE SEAT EIGHT INTEREST PRESSURE WILL PARTICIPANT FOUR WHOSE THANK LIKE',
@@ -3520,8 +3352,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-12-19T00:00:00.000-05:00',
-            description:
-              'STAND FRIEND HE CAN TODAY YEAH POLICY BOARD STORY TURN CIVIL SENSE EVEN LIVE CONSUMER DECIDE ASSUME LONG FACE PLAY\nTHESE COMMON YOURSELF EXAMPLE WHERE COLLECTION STOCK HIT FLY NIGHT SEA STAR EVIDENCE WE SERIOUS HUMAN PERSONAL\nWEAR FINAL STUFF RISK TODAY FAMILY POLITICS NEW\nCAUSE FEAR OPERATION BALL YET FORMER OK PROGRAM JOIN ENVIRONMENT ARM ANOTHER NAME PART SOURCE ART EXECUTIVE',
             documentId: '3b944701-545b-487b-bbd1-791f1af36c6b',
             documentTitle:
               'STAND FRIEND HE CAN TODAY YEAH POLICY BOARD STORY TURN CIVIL SENSE EVEN LIVE CONSUMER DECIDE ASSUME LONG FACE PLAY\nTHESE COMMON YOURSELF EXAMPLE WHERE COLLECTION STOCK HIT FLY NIGHT SEA STAR EVIDENCE WE SERIOUS HUMAN PERSONAL\nWEAR FINAL STUFF RISK TODAY FAMILY POLITICS NEW\nCAUSE FEAR OPERATION BALL YET FORMER OK PROGRAM JOIN ENVIRONMENT ARM ANOTHER NAME PART SOURCE ART EXECUTIVE',
@@ -3551,8 +3381,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2019-12-19T00:00:00.000-05:00',
-            description:
-              'NEARLY ABLE TOP PAY ENTER WORRY RESULT TROUBLE\nPROVE THROW LARGE STAR BLACK NATURAL THROUGHOUT NATURAL RISK FINANCIAL SUDDENLY',
             documentId: 'd47b678b-1605-4d1b-92c8-222440725181',
             documentTitle:
               'NEARLY ABLE TOP PAY ENTER WORRY RESULT TROUBLE\nPROVE THROW LARGE STAR BLACK NATURAL THROUGHOUT NATURAL RISK FINANCIAL SUDDENLY',
@@ -3582,7 +3410,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2020-01-12',
             createdAt: '2020-01-12T00:00:00.000-05:00',
-            description: 'LIFE WHETHER NOW STILL KIND SOMETIMES',
             documentId: 'df5e24d5-da12-422a-be8e-ede249eaaa5e',
             documentTitle: 'LIFE WHETHER NOW STILL KIND SOMETIMES',
             documentType: 'Motion in Limine',
@@ -3610,7 +3437,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2020-01-14T00:00:00.000-05:00',
-            description: 'PAGE VIEW HAPPEN LONG TEAM AVOID SMILE',
             documentId: '7de87cfa-1833-41a3-bb73-d6f25500a236',
             documentTitle: 'PAGE VIEW HAPPEN LONG TEAM AVOID SMILE',
             documentType: 'Order',
@@ -3641,7 +3467,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2004-01-14',
             createdAt: '2020-01-14T00:00:00.000-05:00',
-            description: 'FACTOR COMPUTER CENTRAL PARTY NATURE PURPOSE',
             documentId: 'c75d6686-248e-4d7e-a192-409e0f10f783',
             documentTitle: 'FACTOR COMPUTER CENTRAL PARTY NATURE PURPOSE',
             documentType: 'Motion to Compel Production of Documents',
@@ -3669,8 +3494,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2020-01-15T00:00:00.000-05:00',
-            description:
-              'INDUSTRY BEAUTIFUL MOUTH ME HOTEL SUPPORT DAUGHTER MILLION BOARD YEAH DRAW BILLION ALONE SURE',
             documentId: 'f21601ca-332a-4d98-87ce-49958ac66c70',
             documentTitle:
               'INDUSTRY BEAUTIFUL MOUTH ME HOTEL SUPPORT DAUGHTER MILLION BOARD YEAH DRAW BILLION ALONE SURE',
@@ -3702,7 +3525,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2020-01-21',
             createdAt: '2020-01-21T00:00:00.000-05:00',
-            description: 'TODAY COLD THEY READY',
             documentId: '66bb5367-52f2-4ad6-955c-1bbb98f78882',
             documentTitle: 'TODAY COLD THEY READY',
             documentType: 'Motion for Extension of Time',
@@ -3728,8 +3550,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2020-01-23T00:00:00.000-05:00',
-            description:
-              'OK THOSE MILITARY BILLION ALWAYS STAND HALF THE HAPPEN QUICKLY ELECTION THROW KNOWLEDGE',
             documentId: 'ec4bffbb-f1cb-49ea-8384-8681ea8568a7',
             documentTitle:
               'OK THOSE MILITARY BILLION ALWAYS STAND HALF THE HAPPEN QUICKLY ELECTION THROW KNOWLEDGE',
@@ -3762,8 +3582,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2020-01-26',
             createdAt: '2020-01-26T00:00:00.000-05:00',
-            description:
-              'LEVEL SAVE LEFT TOP CAUSE MONTH DISCUSSION SIMILAR BRING WRITER TV',
             documentId: '2bb975b1-cecf-494e-8ba0-bbacfd01bf87',
             documentTitle:
               'LEVEL SAVE LEFT TOP CAUSE MONTH DISCUSSION SIMILAR BRING WRITER TV',
@@ -3794,7 +3612,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2020-01-27',
             createdAt: '2020-01-27T00:00:00.000-05:00',
-            description: 'COLOR POSSIBLE CARRY TREAT',
             documentId: '9ec05c07-bb59-4ca7-a312-dd59687f4a4b',
             documentTitle: 'COLOR POSSIBLE CARRY TREAT',
             documentType: 'Status Report',
@@ -3822,7 +3639,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2020-01-27',
             createdAt: '2020-01-27T00:00:00.000-05:00',
-            description: 'FIGURE MAJORITY CHARGE CLEAR RAISE SOUTHERN',
             documentId: 'c0ad72b7-e77c-4e2e-ba40-3317abc3865a',
             documentTitle: 'FIGURE MAJORITY CHARGE CLEAR RAISE SOUTHERN',
             documentType: 'Computation for Entry of Decision',
@@ -3848,8 +3664,6 @@ describe('PublicCase', () => {
           },
           {
             createdAt: '2020-01-28T00:00:00.000-05:00',
-            description:
-              'SITUATION BOY AFFECT MENTION EXPERT RESOURCE ONCE MEET PICK HALF AMERICAN COLOR WHOSE TEST ENVIRONMENTAL SHARE OLD\nHOME LISTEN SIMPLY CUP MOST DEMOCRAT BAG INDEED ANSWER INVESTMENT',
             documentId: '437bd2ce-297e-4760-95f7-e71cda268fdd',
             documentTitle:
               'SITUATION BOY AFFECT MENTION EXPERT RESOURCE ONCE MEET PICK HALF AMERICAN COLOR WHOSE TEST ENVIRONMENTAL SHARE OLD\nHOME LISTEN SIMPLY CUP MOST DEMOCRAT BAG INDEED ANSWER INVESTMENT',
@@ -3881,8 +3695,6 @@ describe('PublicCase', () => {
             certificateOfService: true,
             certificateOfServiceDate: '2020-01-27',
             createdAt: '2020-01-28T00:00:00.000-05:00',
-            description:
-              'LOT POLITICAL ANSWER TROUBLE LIKELY OF FILL BABY FIRE AUTHORITY SUCCESS ENOUGH FEELING',
             documentId: '84337fbe-e1dc-4c13-a145-c00b723c8bd0',
             documentTitle:
               'LOT POLITICAL ANSWER TROUBLE LIKELY OF FILL BABY FIRE AUTHORITY SUCCESS ENOUGH FEELING',

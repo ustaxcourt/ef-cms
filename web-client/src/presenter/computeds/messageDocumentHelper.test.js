@@ -44,7 +44,14 @@ describe('messageDocumentHelper', () => {
     isDraft: true,
   };
 
+  const baseCorrespondence = {
+    correspondenceId: '456',
+    documentTitle: 'The Correspondence',
+  };
+
   const baseCaseDetail = {
+    archivedCorrespondences: [],
+    archivedDocketEntries: [],
     correspondence: [],
     docketEntries: [],
   };
@@ -208,7 +215,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
               },
             ],
@@ -453,7 +460,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
               },
             ],
@@ -547,7 +554,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
                 isDraft: true,
               },
@@ -639,7 +646,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
               },
             ],
@@ -1145,13 +1152,14 @@ describe('messageDocumentHelper', () => {
               {
                 ...baseDocument,
                 archived: true,
+                documentId: '789',
                 documentType: 'Answer',
                 eventCode: 'A',
               },
             ],
           },
           viewerDocumentToDisplay: {
-            documentId: '123',
+            documentId: '789',
           },
         },
       });
@@ -1167,15 +1175,16 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             archivedCorrespondences: [
               {
-                ...baseDocument,
+                ...baseCorrespondence,
                 archived: true,
+                documentId: '098',
                 documentTitle: 'My Correspondence',
                 filedBy: 'Docket Clerk',
               },
             ],
           },
           viewerDocumentToDisplay: {
-            documentId: '123',
+            documentId: '098',
           },
         },
       });
@@ -1191,14 +1200,14 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             archivedCorrespondences: [
               {
-                ...baseDocument,
+                ...baseCorrespondence,
                 documentTitle: 'My Correspondence',
                 filedBy: 'Docket Clerk',
               },
             ],
           },
           viewerDocumentToDisplay: {
-            documentId: '123',
+            documentId: '456',
           },
         },
       });

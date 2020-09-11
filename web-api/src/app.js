@@ -361,6 +361,7 @@ const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
+const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -510,7 +511,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateCourtIssuedDocketEntryLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/correspondence/:documentId',
+    '/case-documents/:docketNumber/correspondence/:correspondenceId',
     lambdaWrapper(updateCorrespondenceDocumentLambda),
   );
   app.put(
@@ -523,7 +524,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   // DELETE
   app.delete(
-    '/case-documents/:docketNumber/correspondence/:documentId',
+    '/case-documents/:docketNumber/correspondence/:correspondenceId',
     lambdaWrapper(archiveCorrespondenceDocumentLambda),
   );
 }
@@ -680,9 +681,9 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  * documents
  */
 {
-  app.post('/documents/:documentId/validate', lambdaWrapper(validatePdfLambda));
+  app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
   app.get(
-    '/documents/:documentId/upload-policy',
+    '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
   );
   app.post(
@@ -692,7 +693,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 }
 
 app.post(
-  '/clamav/documents/:documentId/virus-scan',
+  '/clamav/documents/:key/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
 );
 
@@ -712,6 +713,7 @@ app.post(
     '/messages/:parentMessageId/complete',
     lambdaWrapper(completeMessageLambda),
   );
+  app.post('/messages/:messageId/read', lambdaWrapper(setMessageAsReadLambda));
   app.get('/messages/:parentMessageId', lambdaWrapper(getMessageThreadLambda));
   app.get(
     '/messages/case/:docketNumber',

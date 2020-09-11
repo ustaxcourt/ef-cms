@@ -283,7 +283,6 @@ describe('publicCaseDetailHelper', () => {
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: '10/21/18',
-        description: 'second record additionalInfo!',
         descriptionDisplay: 'Answer',
         documentId: '8675309b-28d0-43ec-bafb-654e83405412',
         eventCode: 'A',

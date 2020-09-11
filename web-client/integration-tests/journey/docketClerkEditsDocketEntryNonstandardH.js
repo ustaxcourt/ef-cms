@@ -91,7 +91,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
+      descriptionDisplay:
         'Motion for Leave to File First Amended Petition some additional info',
     });
 

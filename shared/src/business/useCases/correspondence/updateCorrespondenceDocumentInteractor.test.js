@@ -22,7 +22,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
   const mockCorrespondence = new Correspondence({
-    documentId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
+    correspondenceId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
     documentTitle: 'old document title',
     filedBy: 'docket clerk',
     userId: '5980d666-641d-455a-8386-18908d50c98e',
@@ -43,8 +43,8 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     correspondence: [mockCorrespondence],
     docketEntries: [
       {
-        description: 'Docket Record 1',
         documentId: mockDocumentId,
+        documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
         filingDate: createISODateString(),
@@ -87,8 +87,8 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
+        correspondenceId: mockCorrespondence.correspondenceId,
         docketNumber: mockCase.docketNumber,
-        documentId: mockCorrespondence.documentId,
         documentTitle: 'A title that has been updated',
       },
     });
@@ -109,8 +109,8 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     const result = await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
+        correspondenceId: mockCorrespondence.correspondenceId,
         docketNumber: mockCase.docketNumber,
-        documentId: mockCorrespondence.documentId,
         documentTitle: 'A title that has been updated',
       },
     });

@@ -24,7 +24,7 @@
               flags: 
                 presence: "optional"
                 description: "A correspondence document that was archived."
-            documentId: 
+            correspondenceId: 
               type: "string"
               flags: 
                 presence: "required"
@@ -211,11 +211,6 @@
                 description: "An optional date used when generating a fully concatenated document title."
               allow: 
                 - null
-            description: 
-              type: "string"
-              flags: 
-                presence: "optional"
-                description: "Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value."
             docketNumber: 
               type: "string"
               flags: 
