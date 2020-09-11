@@ -30,9 +30,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [true],
         workQueueToDisplay: { box: 'inbox', queue: 'section' },
       },
@@ -55,9 +52,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -80,9 +74,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'my',
@@ -102,9 +93,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
@@ -124,9 +112,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
@@ -146,9 +131,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -166,9 +148,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -186,9 +165,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -204,10 +180,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
-        selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -222,9 +194,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -240,9 +209,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -258,9 +224,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           box: 'inProgress',
