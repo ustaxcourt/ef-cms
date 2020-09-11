@@ -74,7 +74,7 @@ describe('Case Advanced Search', () => {
   });
 });
 
-describe('Practitoner Search', () => {
+describe('Practitioner Search', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
