@@ -2,8 +2,8 @@ const client = require('../../dynamodbClientService');
 
 exports.setMessageAsRead = async ({
   applicationContext,
+  docketNumber,
   messageId,
-  userId,
 }) => {
   await client.update({
     ExpressionAttributeNames: {
@@ -13,7 +13,7 @@ exports.setMessageAsRead = async ({
       ':isRead': true,
     },
     Key: {
-      pk: `user|${userId}`,
+      pk: `case|${docketNumber}`,
       sk: `message|${messageId}`,
     },
     UpdateExpression: 'SET #isRead = :isRead',

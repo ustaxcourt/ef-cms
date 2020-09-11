@@ -13,16 +13,16 @@ describe('setMessageAsRead', () => {
   it('invokes the persistence for setting a message as read', async () => {
     await setMessageAsRead({
       applicationContext,
-      messageId: 'abc',
-      userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
+      docketNumber: '123-45',
+      messageId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
     });
 
     expect(
       applicationContext.getDocumentClient().update.mock.calls[0][0],
     ).toMatchObject({
       Key: {
-        pk: 'user|15adf875-8c3c-4e94-91e9-a4c1bff51291',
-        sk: 'message|abc',
+        pk: 'case|123-45',
+        sk: 'message|15adf875-8c3c-4e94-91e9-a4c1bff51291',
       },
     });
   });

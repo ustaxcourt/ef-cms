@@ -14,6 +14,7 @@ describe('setMessageAsReadInteractor', () => {
     await expect(
       setMessageAsReadInteractor({
         applicationContext,
+        docketNumber: '123-45',
         messageId: '123',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -30,6 +31,7 @@ describe('setMessageAsReadInteractor', () => {
 
     await setMessageAsReadInteractor({
       applicationContext,
+      docketNumber: '123-45',
       messageId: '123',
     });
 
@@ -37,8 +39,8 @@ describe('setMessageAsReadInteractor', () => {
       applicationContext.getPersistenceGateway().setMessageAsRead,
     ).toHaveBeenCalledWith({
       applicationContext,
+      docketNumber: '123-45',
       messageId: '123',
-      userId: 'petitionsClerk',
     });
   });
 });

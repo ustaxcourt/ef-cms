@@ -14,6 +14,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.setMessageAsReadInteractor = async ({
   applicationContext,
+  docketNumber,
   messageId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -24,5 +25,5 @@ exports.setMessageAsReadInteractor = async ({
 
   return applicationContext
     .getPersistenceGateway()
-    .setMessageAsRead({ applicationContext, messageId, userId: user.userId });
+    .setMessageAsRead({ applicationContext, docketNumber, messageId });
 };
