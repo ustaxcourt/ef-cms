@@ -20,9 +20,7 @@ export const HeaderDashboardInternal = connect(
           <span
             aria-label="unread work item count"
             className="unread margin-right-2"
-          >
-            {workQueueHelper.inboxCount}
-          </span>
+          ></span>
           {workQueueHelper.showIndividualWorkQueue && (
             <Button
               link

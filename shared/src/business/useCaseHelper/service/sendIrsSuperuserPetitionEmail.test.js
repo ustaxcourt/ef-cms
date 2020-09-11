@@ -127,11 +127,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
 
     expect(practitioners).toMatchObject([
       {
-        representing: 'Joe Exotic',
+        representingFormatted: 'Joe Exotic',
         representingPrimary: true,
       },
       {
-        representing: 'Joe Exotic, Carol Baskin',
+        representingFormatted: 'Joe Exotic, Carol Baskin',
         representingPrimary: true,
       },
     ]);

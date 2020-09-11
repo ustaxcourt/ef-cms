@@ -84,7 +84,7 @@ export const PetitionService = ({
                 <RenderContactAddress contact={practitioner} />
                 <div>{practitioner.phoneNumber}</div>
                 <div>{practitioner.email}</div>
-                <div>Representing: {practitioner.representing}</div>
+                <div>Representing: {practitioner.representingFormatted}</div>
                 <br />
               </div>
             );
