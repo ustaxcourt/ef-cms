@@ -20,7 +20,7 @@ export const setDocumentToFormAction = ({
     .getUtilities()
     .getAttachmentDocumentById({
       caseDetail,
-      docketEntryId,
+      documentId: docketEntryId,
     });
 
   if (documentToSet) {

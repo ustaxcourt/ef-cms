@@ -6,7 +6,7 @@ export const formattedDocument = (get, applicationContext) => {
 
   const document = applicationContext.getUtilities().getAttachmentDocumentById({
     caseDetail,
-    docketEntryId,
+    documentId: docketEntryId,
   });
 
   if (!document) {

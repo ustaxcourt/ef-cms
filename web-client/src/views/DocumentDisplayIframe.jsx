@@ -20,7 +20,7 @@ export const DocumentDisplayIframe = connect(
   }) {
     useEffect(() => {
       openCaseDocumentDownloadUrlSequence({
-        docketEntryId: docketEntryId,
+        docketEntryId,
         docketNumber: caseDetail.docketNumber,
         isForIFrame: true,
       });
