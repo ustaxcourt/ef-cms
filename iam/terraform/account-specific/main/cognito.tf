@@ -6,7 +6,7 @@ resource "aws_cognito_user_pool" "log_viewers" {
 }
 
 resource "aws_cognito_user_pool_domain" "log_viewers" {
-  domain       = "ef-cms-info"
+  domain       = "auth.ef-cms-info"
   user_pool_id = aws_cognito_user_pool.log_viewers.id
 }
 
