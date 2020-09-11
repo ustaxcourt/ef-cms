@@ -5,16 +5,16 @@ const { uploadDocumentFromClient } = require('./uploadDocumentFromClient');
 
 describe('uploadDocument', () => {
   it('returns the expected documentId after the upload was successful', async () => {
-    const DOCUMENT_ID = 'abc';
-    applicationContext.getUniqueId.mockReturnValue(DOCUMENT_ID);
+    const KEY = 'abc';
+    applicationContext.getUniqueId.mockReturnValue(KEY);
     applicationContext
       .getPersistenceGateway()
-      .uploadPdfFromClient.mockReturnValue(DOCUMENT_ID);
+      .uploadPdfFromClient.mockReturnValue(KEY);
 
-    const documentId = await uploadDocumentFromClient({
+    const key = await uploadDocumentFromClient({
       applicationContext,
     });
 
-    expect(documentId).toEqual(DOCUMENT_ID);
+    expect(key).toEqual(KEY);
   });
 });

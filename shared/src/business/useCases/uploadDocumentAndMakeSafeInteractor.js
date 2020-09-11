@@ -8,26 +8,26 @@
 exports.uploadDocumentAndMakeSafeInteractor = async ({
   applicationContext,
   document,
-  documentId,
+  key,
   onUploadProgress,
 }) => {
-  const uploadedDocumentId = await applicationContext
+  const uploadedKey = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
       applicationContext,
       document,
-      documentId,
+      key,
       onUploadProgress,
     });
 
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
-    documentId: uploadedDocumentId,
+    key: uploadedKey,
   });
   await applicationContext.getUseCases().validatePdfInteractor({
     applicationContext,
-    documentId: uploadedDocumentId,
+    key: uploadedKey,
   });
 
-  return uploadedDocumentId;
+  return uploadedKey;
 };

@@ -2344,7 +2344,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/document-download-url": {
+    "/case-documents/{docketNumber}/{key}/document-download-url": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2353,7 +2353,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2397,7 +2397,7 @@
         }
       }
     },
-    "/public-api/{docketNumber}/{documentId}/public-document-download-url": {
+    "/public-api/{docketNumber}/{key}/public-document-download-url": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2406,7 +2406,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2450,10 +2450,10 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/download-policy-url": {
+    "/case-documents/{docketNumber}/{key}/download-policy-url": {
       "parameters": [
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2552,10 +2552,10 @@
         }
       }
     },
-    "/documents/{documentId}/virus-scan": {
+    "/documents/{key}/virus-scan": {
       "parameters": [
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2601,10 +2601,10 @@
         }
       }
     },
-    "/documents/{documentId}/validate": {
+    "/documents/{key}/validate": {
       "parameters": [
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -6340,7 +6340,7 @@
       "properties": {
         "createdAt": {
           "type": "string",
-          "description": "date document created"
+          "description": "date docket entry was created"
         },
         "documentType": {
           "type": "string",
@@ -6348,22 +6348,22 @@
         },
         "filedBy": {
           "type": "boolean",
-          "description": "the user name who filed the document"
+          "description": "the user name who filed the docket entry"
         },
         "documentId": {
           "type": "string",
-          "description": "id of rawDocument"
+          "description": "id of rawDocketEntry"
         },
         "userId": {
           "type": "string",
-          "description": "id of user who created the document"
+          "description": "id of user who created the docket entry"
         },
         "status": {
           "type": "string",
-          "description": "the status of the document"
+          "description": "the status of the docket entry"
         }
       },
-      "description": "a document response"
+      "description": "a docket entry response"
     },
     "unprocessableEntityError": {
       "type": "object",
@@ -6499,9 +6499,9 @@
           "type": "string",
           "description": "date case created"
         },
-        "documents": {
+        "docketEntries": {
           "type": "array",
-          "description": "array of rawDocument ids and types associated with the case",
+          "description": "array of rawDocketEntry ids and types associated with the case",
           "items": {
             "type": "object",
             "properties": {
