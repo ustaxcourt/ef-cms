@@ -8,9 +8,16 @@ const { post } = require('../requests');
  * @param {string} providers.messageId the id of the message to set as read
  * @returns {Promise<*>} the promise of the api call
  */
-exports.setMessageAsReadInteractor = ({ applicationContext, messageId }) => {
+exports.setMessageAsReadInteractor = ({
+  applicationContext,
+  docketNumber,
+  messageId,
+}) => {
   return post({
     applicationContext,
+    body: {
+      docketNumber,
+    },
     endpoint: `/messages/${messageId}/read`,
   });
 };

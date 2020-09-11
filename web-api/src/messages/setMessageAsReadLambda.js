@@ -13,5 +13,6 @@ exports.setMessageAsReadLambda = event =>
     return await applicationContext.getUseCases().setMessageAsReadInteractor({
       applicationContext,
       messageId,
+      ...JSON.parse(event.body),
     });
   });

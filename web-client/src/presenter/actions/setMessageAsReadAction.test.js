@@ -9,7 +9,17 @@ describe('setMessageAsReadAction', () => {
   });
 
   it('should set message as read', async () => {
-    await runAction(setMessageAsReadAction, { modules: { presenter } });
+    await runAction(setMessageAsReadAction, {
+      modules: { presenter },
+      state: {
+        messageDetail: [
+          {
+            docketNumber: '123-45',
+            messageId: '123',
+          },
+        ],
+      },
+    });
 
     expect(
       applicationContext.getUseCases().setMessageAsReadInteractor,
