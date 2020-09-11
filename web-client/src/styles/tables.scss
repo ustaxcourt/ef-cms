@@ -287,6 +287,12 @@ table.work-queue {
     label {
       margin: 0;
     }
+
+    &.message-unread-column {
+      width: 20px;
+      padding: 15px 0;
+      text-align: right;
+    }
   }
 
   tr {
