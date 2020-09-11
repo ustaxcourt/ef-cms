@@ -15,14 +15,14 @@ exports.uploadOrderDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const orderDocumentId = await applicationContext
+  const orderDocketEntryId = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
       applicationContext,
       document: documentFile,
-      documentId: documentIdToOverwrite,
+      key: documentIdToOverwrite,
       onUploadProgress: () => {},
     });
 
-  return orderDocumentId;
+  return orderDocketEntryId;
 };

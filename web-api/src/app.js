@@ -681,9 +681,9 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  * documents
  */
 {
-  app.post('/documents/:documentId/validate', lambdaWrapper(validatePdfLambda));
+  app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
   app.get(
-    '/documents/:documentId/upload-policy',
+    '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
   );
   app.post(
@@ -693,7 +693,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 }
 
 app.post(
-  '/clamav/documents/:documentId/virus-scan',
+  '/clamav/documents/:key/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
 );
 
