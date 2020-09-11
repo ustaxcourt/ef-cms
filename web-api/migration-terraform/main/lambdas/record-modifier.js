@@ -1,10 +1,16 @@
 const AWS = require('aws-sdk');
-const promiseRetry = require('promise-retry');
+
+const dynamodb = new AWS.DynamoDB({
+  maxRetries: 10,
+  retryDelayOptions: { base: 300 },
+});
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
+  service: dynamodb,
 });
+
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const scanTableSegment = async (segment, totalSegments, timestamp) => {
@@ -26,19 +32,34 @@ const scanTableSegment = async (segment, totalSegments, timestamp) => {
         lastKey = results.LastEvaluatedKey;
         for (let item of results.Items) {
           try {
-            await promiseRetry(function (retry) {
-              // eslint-disable-next-line promise/no-nesting
-              return documentClient
-                .put({
-                  Item: {
-                    ...item,
-                    migrate: timestamp,
-                  },
-                  TableName: `efcms-${process.env.ENVIRONMENT}`,
-                })
-                .promise()
-                .catch(retry);
-            });
+            // eslint-disable-next-line promise/no-nesting
+            await documentClient
+              .put({
+                Item: {
+                  ...item,
+                  migrate: timestamp,
+                },
+                TableName: `efcms-${process.env.ENVIRONMENT}`,
+              })
+              .promise();
+            // eslint-disable-next-line promise/no-nesting
+            await documentClient
+              .update({
+                ExpressionAttributeNames: {
+                  '#a': 'ingest',
+                },
+                ExpressionAttributeValues: {
+                  ':x': 1,
+                },
+                Key: {
+                  pk: `migration-${process.env.ENVIRONMENT}`,
+                  sk: `migration-${process.env.ENVIRONMENT}`,
+                },
+                ReturnValues: 'UPDATED_NEW',
+                TableName: `efcms-deploy-${process.env.ENVIRONMENT}`,
+                UpdateExpression: 'ADD #a :x',
+              })
+              .promise();
           } catch (e) {
             console.log('error processing segment items', e);
           }

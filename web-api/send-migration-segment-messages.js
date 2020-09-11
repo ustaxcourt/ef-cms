@@ -34,8 +34,8 @@ const getItemCount = async () => {
   }
 };
 
-const sendSegmentMessage = async ({ segment, totalSegments }) => {
-  const messageBody = { segment, totalSegments: totalSegments };
+const sendSegmentMessage = async ({ segment, timestamp, totalSegments }) => {
+  const messageBody = { segment, timestamp, totalSegments };
   const params = {
     MessageBody: JSON.stringify(messageBody),
     QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
@@ -43,6 +43,7 @@ const sendSegmentMessage = async ({ segment, totalSegments }) => {
 
   try {
     await sqs.sendMessage(params).promise();
+    console.log(params);
   } catch (e) {
     console.error(`Error sending message ${segment + 1}/${totalSegments}.`, e);
   }

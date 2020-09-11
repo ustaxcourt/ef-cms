@@ -22,7 +22,7 @@ else
 fi
 
 pushd ../main/lambdas
-npx parcel build record-modifier.js migration.js --target node --bundle-node-modules --no-minify
+npx parcel build record-modifier.js migration.js --target node --bundle-node-modules --no-minify --no-cache
 popd
 
 # exit on any failure
