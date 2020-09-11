@@ -20,6 +20,8 @@ const createFutureDate = () => {
   return `${month}/${day}/${year}`;
 };
 
+const preferredTrialCity = 'Cheyenne, Wyoming';
+
 const createDocketNumber = () => {
   const docketNumberYear = faker.random.number({ max: 99, min: 80 });
   const docketNumberPrefix = faker.random.number({
@@ -85,7 +87,7 @@ describe('Petitions Clerk', () => {
       migrateUserToken = results.AuthenticationResult.IdToken;
     });
 
-    it('should create cases for use with trial sessions smoke-tests', () => {
+    it('should create two cases for use with trial sessions smoke-tests', () => {
       [firstDocketNumber, secondDocketNumber].forEach(docketNumber => {
         const migrateCase = {
           ...BASE_CASE,
@@ -95,6 +97,7 @@ describe('Petitions Clerk', () => {
           },
           docketNumber,
           docketNumberWithSuffix: docketNumber,
+          preferredTrialCity,
         };
         cy.request({
           body: migrateCase,
@@ -109,7 +112,7 @@ describe('Petitions Clerk', () => {
     });
   });
 
-  describe('should be able to create a trial session', () => {
+  describe('should be able to create two trial sessions', () => {
     beforeEach(() => {
       cy.server();
       cy.route({ method: 'POST', url: '/trial-sessions' }).as(
@@ -135,7 +138,7 @@ describe('Petitions Clerk', () => {
         cy.get('#max-cases').type(faker.random.number({ max: 100, min: 10 }));
 
         // location information
-        cy.get('#trial-location').select(BASE_CASE.preferredTrialCity);
+        cy.get('#trial-location').select(preferredTrialCity);
         cy.get('#courthouse-name').type(faker.commerce.productName());
         cy.get('#address1').type(faker.address.streetAddress());
         cy.get('#city').type(faker.address.city());
@@ -165,19 +168,16 @@ describe('Petitions Clerk', () => {
     createTrialSession();
     createTrialSession();
 
-    it('navigates to newly-created trial session', () => {
+    it('navigates to the first newly-created trial session', () => {
+      trialSessionId = trialSessionIds[0];
       cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).click();
     });
   });
 
   describe('after a new trial session is created', () => {
-    before(() => {});
-
-    it('a newly-created case is found', () => {
+    it('it is possible to manually add, view, and remove first case from an UNSET trial session', () => {
       gotoCaseOverview(firstDocketNumber);
-    });
-
-    it('it is possible to manually add, view, and remove case from an UNSET trial session', () => {
+      trialSessionId = trialSessionIds[0]; // the first trial session
       cy.get('#add-to-trial-session-btn').should('exist').click();
       cy.get('label[for="show-all-locations-true"]').click();
       cy.get('select#trial-session')
@@ -192,16 +192,29 @@ describe('Petitions Clerk', () => {
       removeFromTrialSession();
     });
 
-    it('sets a trial session as calendared', () => {
+    it('manually block second case', () => {
+      // block it
+      gotoCaseOverview(secondDocketNumber);
+      cy.get('#tabContent-overview .block-from-trial-btn').click();
+      cy.get('.modal-dialog #reason').type(faker.company.catchPhrase());
+      cy.get('.modal-dialog .modal-button-confirm').click();
+      cy.contains('Blocked From Trial');
+
+      // do this well before we look for it on blocked cases report...
+    });
+
+    it('sets the first trial session as calendared', () => {
+      trialSessionId = trialSessionIds[0]; // the first trial session
       cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
       cy.get('#set-calendar-button').should('exist').click();
       cy.get('#modal-root .modal-button-confirm').click();
       cy.get('#set-calendar-button').should('not.exist');
     });
 
-    it('manually add, view, and remove case from a SET trial session', () => {
+    it('manually add, view, and remove first case case from the SET trial session', () => {
       gotoCaseOverview(firstDocketNumber);
 
+      trialSessionId = trialSessionIds[0]; // the first trial session
       cy.get('#add-to-trial-session-btn').should('exist').click();
       cy.get('label[for="show-all-locations-true"]').click();
       cy.get('select#trial-session')
@@ -213,21 +226,14 @@ describe('Petitions Clerk', () => {
       removeFromTrialSession();
     });
 
-    it('manually block, view Blocked report, and unblock a case', () => {
-      // block it
-      gotoCaseOverview(secondDocketNumber);
-      cy.get('#tabContent-overview .block-from-trial-btn').click();
-      cy.get('.modal-dialog #reason').type(faker.company.catchPhrase());
-      cy.get('.modal-dialog .modal-button-confirm').click();
-      cy.contains('Blocked From Trial');
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(3000); // wait so that it will appear in reports (blocking is async?)
-
+    it('view Blocked report containing second case, and unblock second case', () => {
+      // enough time has elapsed since we blocked second case. look for it on blocked cases report
+      // warning: if there are elasticsearch delays, this test might be brittle...
       // view blocked report
       cy.get('#reports-btn').click();
       cy.get('#all-blocked-cases').click();
-      cy.get('#trial-location').select(BASE_CASE.preferredTrialCity);
-      cy.get(`a[href="/case-detail/${secondDocketNumber}`).should('exist');
+      cy.get('#trial-location').select(preferredTrialCity);
+      cy.get(`a[href="/case-detail/${secondDocketNumber}"]`).should('exist');
 
       // unblock it
       gotoCaseOverview(secondDocketNumber);
@@ -236,7 +242,7 @@ describe('Petitions Clerk', () => {
       cy.contains('Block removed.');
     });
 
-    it('set case as High Priority for a trial session', () => {
+    it('set second case as High Priority for a trial session', () => {
       gotoCaseOverview(secondDocketNumber);
 
       cy.get('.high-priority-btn').click();
@@ -246,7 +252,7 @@ describe('Petitions Clerk', () => {
       cy.contains('High Priority').should('exist');
     });
 
-    it('Petitions clerk: Complete QC of eligible cases and set calendar for trial session', () => {
+    it('complete QC of eligible (second) case and set calendar for second trial session', () => {
       trialSessionId = trialSessionIds[1];
       cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
       cy.get(
@@ -255,14 +261,14 @@ describe('Petitions Clerk', () => {
 
       // set as calendared
       cy.get('#set-calendar-button').should('exist').click();
-      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get('.modal-dialog .modal-button-confirm').click();
       cy.get('#set-calendar-button').should('not.exist');
       cy.get(
         `#open-cases-tab-content a[href="/case-detail/${secondDocketNumber}"]`,
       ).should('exist');
     });
 
-    it('Petitions clerk: Run Trial Session Planning Report', () => {
+    it('run Trial Session Planning Report', () => {
       const nextYear = new Date().getUTCFullYear() + 1;
       cy.get('#reports-btn').click();
       cy.get('#trial-session-planning-btn').click();
@@ -274,6 +280,7 @@ describe('Petitions Clerk', () => {
         .should('have.value', `${nextYear}`);
       cy.get('.modal-button-confirm').click();
       cy.url().should('contain', '/trial-session-planning-report');
+      cy.contains('Trial Session Planning Report');
     });
   });
 });
