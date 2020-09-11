@@ -85,7 +85,7 @@ export const saveDocketEntryAction = async ({
   if (generateCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: docketEntryId,
+      docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
   }
