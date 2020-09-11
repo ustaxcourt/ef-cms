@@ -8,10 +8,12 @@ const applicationContext = createApplicationContext({});
 
 const mutateRecord = async item => {
   if (isDocketEntryRecord(item)) {
-    item.docketEntryId = item.documentId;
-    delete item.documentId;
+    if (!item.docketEntryId) {
+      item.docketEntryId = item.documentId;
+      delete item.documentId;
+    }
 
-    if (item.previousDocument && item.previousDocument.documentId) {
+    if (item.previousDocument && !item.previousDocument.docketEntryId) {
       item.previousDocument.docketEntryId = item.previousDocument.documentId;
       delete item.previousDocument.documentId;
     }

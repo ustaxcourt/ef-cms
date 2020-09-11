@@ -40,7 +40,7 @@ describe('handle', () => {
     const response = await handle(
       {
         queryStringParameters: {
-          fields: 'docketNumber,docketEntryId',
+          fields: 'docketEntryId,docketNumber',
         },
       },
       async () => ({
@@ -64,7 +64,7 @@ describe('handle', () => {
     const response = await handle(
       {
         queryStringParameters: {
-          fields: 'docketNumber,docketEntryId',
+          fields: 'docketEntryId,docketNumber',
         },
       },
       async () => [
