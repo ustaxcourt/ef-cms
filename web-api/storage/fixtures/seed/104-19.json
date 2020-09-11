@@ -55,7 +55,7 @@
     "associatedJudge": "Chief Judge"
   },
   {
-    "description": "Petition",
+    "documentTitle": "Petition",
     "eventCode": "P",
     "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
     "numberOfPages": 1,
@@ -67,7 +67,7 @@
     "sk": "docket-record|f4198234-df8b-4b98-b2f5-23154b3d8127"
   },
   {
-    "description": "Request for Place of Trial at Birmingham, Alabama",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
     "eventCode": "RQT",
     "filingDate": "2019-03-05T17:34:13.490Z",
     "index": 2,
@@ -76,7 +76,7 @@
     "sk": "docket-record|3ba240e5-55ae-42a9-94e0-877da6e927bd"
   },
   {
-    "description": "Ownership Disclosure Statement",
+    "documentTitle": "Ownership Disclosure Statement",
     "eventCode": "DISC",
     "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
     "numberOfPages": 1,

@@ -62,7 +62,7 @@
   },
   {
     "filingDate": "2019-03-01T21:42:29.073Z",
-    "description": "Petition",
+    "documentTitle": "Petition",
     "eventCode": "P",
     "filedBy": "Test Petitioner",
     "index": 1,
@@ -74,7 +74,7 @@
   },
   {
     "filingDate": "2019-03-01T21:42:29.073Z",
-    "description": "Request for Place of Trial at Boise, Idaho",
+    "documentTitle": "Request for Place of Trial at Boise, Idaho",
     "eventCode": "RQT",
     "index": 2,
     "docketRecordId": "654441a9-e6d3-414e-b0dd-60b2898c298e",

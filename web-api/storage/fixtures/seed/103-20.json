@@ -278,7 +278,7 @@
   },
   {
     "eventCode": "P",
-    "description": "Petition",
+    "documentTitle": "Petition",
     "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
     "numberOfPages": 1,
     "index": 1,
@@ -290,7 +290,7 @@
   },
   {
     "eventCode": "RQT",
-    "description": "Request for Place of Trial at Houston, Texas",
+    "documentTitle": "Request for Place of Trial at Houston, Texas",
     "index": 2,
     "filingDate": "2020-01-23T21:44:54.034Z",
     "docketRecordId": "2a3825e3-9144-446c-96c1-3c2b2f4b7b1c",
@@ -299,7 +299,7 @@
   },
   {
     "eventCode": "NTD",
-    "description": "Notice of Trial",
+    "documentTitle": "Notice of Trial",
     "index": 3,
     "numberOfPages": 1,
     "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
@@ -311,7 +311,7 @@
   },
   {
     "eventCode": "ADMR",
-    "description": "Administrative Record",
+    "documentTitle": "Administrative Record",
     "index": 4,
     "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
     "numberOfPages": 1,

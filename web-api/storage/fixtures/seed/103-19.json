@@ -41,7 +41,7 @@
     "associatedJudge": "Chief Judge"
   },
   {
-    "description": "Petition",
+    "documentTitle": "Petition",
     "eventCode": "P",
     "index": 1,
     "filingDate": "2019-03-01T22:53:50.098Z",
@@ -53,7 +53,7 @@
     "sk": "docket-record|9aff1148-8a28-4a9d-82ea-100d3cde192d"
   },
   {
-    "description": "Request for Place of Trial at Mobile, Alabama",
+    "documentTitle": "Request for Place of Trial at Mobile, Alabama",
     "eventCode": "RQT",
     "filingDate": "2019-03-01T22:53:50.097Z",
     "index": 2,
@@ -68,14 +68,14 @@
     "filingDate": "2019-03-01T22:54:05.993Z",
     "entityName": "DocketRecord",
     "sk": "docket-record|261725bd-4976-4e2b-9ce9-53540f4eff06",
-    "description": "Answer",
+    "documentTitle": "Answer",
     "index": 3,
     "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
     "filedBy": "Test Respondent",
     "pk": "case|103-19"
   },
   {
-    "description": "Simultaneous Answering Brief",
+    "documentTitle": "Simultaneous Answering Brief",
     "eventCode": "SIAB",
     "index": 4,
     "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
