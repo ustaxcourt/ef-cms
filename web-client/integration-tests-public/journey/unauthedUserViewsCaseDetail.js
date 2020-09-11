@@ -22,11 +22,6 @@ export const unauthedUserViewsCaseDetail = test => {
       state: test.getState(),
     });
 
-    console.log(
-      'helper.formattedDocketEntriesOnDocketRecord',
-      helper.formattedDocketEntriesOnDocketRecord,
-    );
-
     expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(4);
     expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -58,8 +53,6 @@ export const unauthedUserViewsCaseDetail = test => {
         showServed: true,
       },
     ]);
-
-    console.log('docketEntries', helper.formattedCaseDetail.docketEntries);
 
     expect(helper.formattedCaseDetail.docketEntries.length).toEqual(4);
     expect(helper.formattedCaseDetail.docketEntries).toEqual(
