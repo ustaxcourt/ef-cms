@@ -11,7 +11,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
-import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
+import { setPrimaryCorrespondenceFileIdPropAction } from '../actions/CorrespondenceDocument/setPrimaryCorrespondenceFileIdPropAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -53,7 +53,7 @@ export const editCorrespondenceDocumentSequence = [
       clearAlertsAction,
       chooseByTruthyStateActionFactory('screenMetadata.documentReset'),
       {
-        no: [setPrimaryDocumentFileIdPropAction, onSuccess],
+        no: [setPrimaryCorrespondenceFileIdPropAction, onSuccess],
         yes: [
           overwriteCorrespondenceFileAction,
           {

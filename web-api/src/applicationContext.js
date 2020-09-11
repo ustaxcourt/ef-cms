@@ -213,8 +213,8 @@ const {
   deleteDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
-  deleteDocument,
-} = require('../../shared/src/persistence/dynamo/documents/deleteDocument');
+  deleteDocketEntry,
+} = require('../../shared/src/persistence/dynamo/documents/deleteDocketEntry');
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
@@ -880,17 +880,17 @@ const {
   updateDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateDeficiencyStatisticInteractor');
 const {
+  updateDocketEntry,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntry');
+const {
   updateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocument,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocument');
-const {
-  updateDocumentProcessingStatus,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+  updateDocketEntryProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
@@ -1148,8 +1148,8 @@ const gatewayMethods = {
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocument,
-    updateDocumentProcessingStatus,
+    updateDocketEntry,
+    updateDocketEntryProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,
     updateMessage,
     updatePractitionerUser,
@@ -1167,7 +1167,7 @@ const gatewayMethods = {
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
-  deleteDocument,
+  deleteDocketEntry,
   deleteDocumentFromS3,
   deleteElasticsearchReindexRecord,
   deleteRecord,

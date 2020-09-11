@@ -129,25 +129,25 @@ const createCase = async ({
       stinFileId,
     });
 
-  const addCoversheet = document => {
+  const addCoversheet = docketEntry => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: document.documentId,
+      docketEntryId: docketEntry.documentId,
       docketNumber: caseDetail.docketNumber,
     });
   };
 
-  for (const document of caseDetail.docketEntries) {
+  for (const docketEntry of caseDetail.docketEntries) {
     if (shouldUpload) {
-      await addCoversheet(document);
+      await addCoversheet(docketEntry);
     }
 
     await applicationContext
       .getPersistenceGateway()
-      .updateDocumentProcessingStatus({
+      .updateDocketEntryProcessingStatus({
         applicationContext,
+        docketEntryId: docketEntry.documentId,
         docketNumber: caseDetail.docketNumber,
-        documentId: document.documentId,
       });
   }
 

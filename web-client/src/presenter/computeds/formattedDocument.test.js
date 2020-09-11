@@ -13,6 +13,7 @@ describe('formattedDocument', () => {
     const result = runCompute(formattedDocument, {
       state: {
         caseDetail: {
+          correspondence: [],
           docketEntries: [
             {
               createdAt: '2019-03-01T21:40:46.415Z',
@@ -39,19 +40,20 @@ describe('formattedDocument', () => {
         caseDetail: {
           correspondence: [
             {
+              correspondenceId: '123',
               createdAt: '2019-03-01T21:40:46.415Z',
-              documentId: '123',
               documentTitle: 'Correspondence',
               documentType: 'Correspondence',
             },
           ],
+          docketEntries: [],
         },
         documentId: '123',
       },
     });
     expect(result).toMatchObject({
+      correspondenceId: '123',
       createdAtFormatted: '03/01/19',
-      documentId: '123',
       documentTitle: 'Correspondence',
       documentType: 'Correspondence',
     });
@@ -61,6 +63,7 @@ describe('formattedDocument', () => {
     const result = runCompute(formattedDocument, {
       state: {
         caseDetail: {
+          correspondence: [],
           docketEntries: [
             {
               createdAt: '2019-03-01T21:40:46.415Z',

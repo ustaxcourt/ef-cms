@@ -19,13 +19,13 @@ describe('getDefaultViewerCorrespondenceToDisplayAction', () => {
           caseDetail: {
             correspondence: [
               {
-                documentId: '123',
+                correspondenceId: '123',
               },
               {
-                documentId: '234',
+                correspondenceId: '234',
               },
               {
-                documentId: '345',
+                correspondenceId: '345',
               },
             ],
           },
@@ -33,7 +33,7 @@ describe('getDefaultViewerCorrespondenceToDisplayAction', () => {
       },
     );
     expect(result.output).toMatchObject({
-      viewerCorrespondenceToDisplay: { documentId: '123' },
+      viewerCorrespondenceToDisplay: { correspondenceId: '123' },
     });
   });
 
@@ -56,27 +56,27 @@ describe('getDefaultViewerCorrespondenceToDisplayAction', () => {
     });
   });
 
-  it('returns the correct document if props.documentId is set', async () => {
+  it('returns the correct document if props.correspondenceId is set', async () => {
     const result = await runAction(
       getDefaultViewerCorrespondenceToDisplayAction,
       {
         modules: {
           presenter,
         },
-        props: { documentId: '345' },
+        props: { correspondenceId: '345' },
         state: {
           caseDetail: {
             correspondence: [
               {
-                documentId: '123',
+                correspondenceId: '123',
                 documentType: 'Petition',
               },
               {
-                documentId: '234',
+                correspondenceId: '234',
                 documentType: 'Order',
               },
               {
-                documentId: '345',
+                correspondenceId: '345',
                 documentType: 'Notice',
                 isDraft: true,
               },
@@ -86,7 +86,7 @@ describe('getDefaultViewerCorrespondenceToDisplayAction', () => {
       },
     );
     expect(result.output).toMatchObject({
-      viewerCorrespondenceToDisplay: { documentId: '345' },
+      viewerCorrespondenceToDisplay: { correspondenceId: '345' },
     });
   });
 });

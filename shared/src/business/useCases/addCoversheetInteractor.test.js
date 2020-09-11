@@ -131,7 +131,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(params);
 
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();
   });
 
@@ -151,7 +151,7 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(params);
 
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();
   });
 
