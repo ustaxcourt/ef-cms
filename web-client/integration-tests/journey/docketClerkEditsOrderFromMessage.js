@@ -25,7 +25,7 @@ export const docketClerkEditsOrderFromMessage = test => {
     expect(orderDocument.documentTitle).toEqual('Order');
 
     await test.runSequence('openConfirmEditModalSequence', {
-      docketEntryIdToEdit: orderDocument.docketEntryId,
+      docketEntryIdToEdit: orderDocument.documentId,
       docketNumber: test.docketNumber,
       parentMessageId: test.parentMessageId,
       redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
@@ -59,7 +59,7 @@ export const docketClerkEditsOrderFromMessage = test => {
       state: test.getState(),
     });
     const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
-      d => d.docketEntryId === orderDocument.docketEntryId,
+      d => d.docketEntryId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toEqual(null);
     expect(caseOrderDocument.documentTitle).toBeDefined();
