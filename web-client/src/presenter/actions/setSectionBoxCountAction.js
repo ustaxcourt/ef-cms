@@ -2,7 +2,7 @@ import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAsso
 import { state } from 'cerebral';
 
 /**
- * sets the state.sectionInboxCount based on the current user and work queue to display
+ * sets the state.sectionInboxCount and state.sectionInProgressCount based on the current user and work queue to display
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setSectionInboxCountAction = ({
+export const setSectionBoxCountAction = ({
   applicationContext,
   get,
   props,
@@ -26,7 +26,20 @@ export const setSectionInboxCountAction = ({
   store.set(
     state.sectionInboxCount,
     props.workItems.filter(
-      item => item.document.isFileAttached !== false && additionalFilters(item),
+      item =>
+        item.document.isFileAttached !== false &&
+        additionalFilters(item) &&
+        !item.caseIsInProgress,
+    ).length,
+  );
+
+  store.set(
+    state.sectionInProgressCount,
+    props.workItems.filter(
+      item =>
+        item.document.isFileAttached !== false &&
+        additionalFilters(item) &&
+        item.caseIsInProgress,
     ).length,
   );
 };
