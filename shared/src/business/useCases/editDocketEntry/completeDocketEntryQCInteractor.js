@@ -381,7 +381,7 @@ exports.completeDocketEntryQCInteractor = async ({
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: docketEntryId,
+      docketEntryId,
       docketNumber: caseEntity.docketNumber,
     });
   }

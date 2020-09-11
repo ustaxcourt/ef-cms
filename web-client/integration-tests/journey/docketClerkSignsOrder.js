@@ -3,7 +3,7 @@ export const docketClerkSignsOrder = (test, draftOrderIndex) => {
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     await test.runSequence('gotoSignOrderSequence', {
-      docketEntryId: docketEntryId,
+      docketEntryId,
       docketNumber: test.docketNumber,
     });
 
