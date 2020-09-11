@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
@@ -12,11 +13,14 @@ const {
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-function Statistic(rawStatistic, { applicationContext }) {
+function Statistic() {
+  this.entityName = 'Statistic';
+}
+
+Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'Statistic';
 
   this.determinationDeficiencyAmount =
     rawStatistic.determinationDeficiencyAmount;
@@ -28,7 +32,7 @@ function Statistic(rawStatistic, { applicationContext }) {
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
   this.statisticId =
     rawStatistic.statisticId || applicationContext.getUniqueId();
-}
+};
 
 Statistic.validationName = 'Statistic';
 
@@ -66,7 +70,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
     .description(
       'The total amount of penalties for the period or year determined by the Court.',
     ),
-  entityName: joi.string().valid('Statistic').required(),
+  entityName: JoiValidationConstants.STRING.valid('Statistic').required(),
   irsDeficiencyAmount: joi
     .number()
     .required()
@@ -98,9 +102,7 @@ Statistic.VALIDATION_RULES = joi.object().keys({
       then: joi.required(),
     })
     .description('The year of the statistics period.'),
-  yearOrPeriod: joi
-    .string()
-    .required()
+  yearOrPeriod: JoiValidationConstants.STRING.required()
     .valid('Year', 'Period')
     .description('Whether the statistics are for a year or period.'),
 });
@@ -111,4 +113,4 @@ joiValidationDecorator(
   Statistic.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { Statistic };
+exports.Statistic = validEntityDecorator(Statistic);

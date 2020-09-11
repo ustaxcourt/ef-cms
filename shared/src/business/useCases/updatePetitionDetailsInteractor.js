@@ -2,9 +2,12 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { PAYMENT_STATUS } = require('../entities/EntityConstants');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -63,23 +66,35 @@ exports.updatePetitionDetailsInteractor = async ({
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCase.addDocketRecord(
-        new DocketRecord(
+      newCase.addDocketEntry(
+        new DocketEntry(
           {
             description: 'Filing Fee Paid',
-            eventCode: 'FEE',
+            documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+            eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
             filingDate: newCase.petitionPaymentDate,
+            isFileAttached: false,
+            isMinuteEntry: true,
+            isOnDocketRecord: true,
+            processingStatus: 'complete',
+            userId: user.userId,
           },
           { applicationContext },
         ),
       );
     } else if (isWaived) {
-      newCase.addDocketRecord(
-        new DocketRecord(
+      newCase.addDocketEntry(
+        new DocketEntry(
           {
             description: 'Filing Fee Waived',
-            eventCode: 'FEEW',
+            documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+            eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
             filingDate: newCase.petitionPaymentWaivedDate,
+            isFileAttached: false,
+            isMinuteEntry: true,
+            isOnDocketRecord: true,
+            processingStatus: 'complete',
+            userId: user.userId,
           },
           { applicationContext },
         ),

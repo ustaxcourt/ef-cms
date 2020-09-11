@@ -17,7 +17,7 @@ describe('fetchPendingItems', () => {
   beforeEach(() => {
     const mockDataOne = {
       caseCaption: 'Test Petitioner, Petitioner',
-      documents: [
+      docketEntries: [
         {
           documentId: 'def',
           pending: true,
@@ -30,7 +30,7 @@ describe('fetchPendingItems', () => {
     };
     const mockDataTwo = {
       caseCaption: 'Another Test Petitioner, Petitioner',
-      documents: [
+      docketEntries: [
         {
           documentId: 'abc',
           pending: true,
@@ -66,12 +66,12 @@ describe('fetchPendingItems', () => {
     ]);
   });
 
-  it('calls search function and returns no records if cases lack documents', async () => {
+  it('calls search function and returns no records if cases lack docketEntries', async () => {
     applicationContext
       .getPersistenceGateway()
       .fetchPendingItems.mockReturnValue([
         {
-          documents: undefined,
+          docketEntries: undefined,
         },
       ]);
     const results = await fetchPendingItems({

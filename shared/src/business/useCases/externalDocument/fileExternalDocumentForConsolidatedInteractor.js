@@ -10,8 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -19,7 +18,6 @@ const { WorkItem } = require('../../entities/WorkItem');
 exports.fileExternalDocumentForConsolidatedInteractor = async ({
   applicationContext,
   docketNumbersForFiling,
-  documentIds,
   documentMetadata,
   leadDocketNumber,
   //filingPartyNames? filingPartyMap?,
@@ -80,9 +78,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     'docketNumber',
   ]);
 
-  if (secondaryDocument) {
-    secondaryDocument.lodged = true;
-  }
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
@@ -91,7 +86,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   const documentsToAdd = [
     [
-      documentIds.shift(),
+      documentMetadata.primaryDocumentId,
       primaryDocumentMetadata,
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
@@ -100,23 +95,27 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        supportingDocuments[i].documentId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
     }
   }
 
-  documentsToAdd.push([
-    documentIds.shift(),
-    secondaryDocument,
-    DOCUMENT_RELATIONSHIPS.SECONDARY,
-  ]);
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.documentId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
+  }
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        documentIds.shift(),
+        secondarySupportingDocuments[i].documentId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
@@ -131,12 +130,14 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     if (documentId && metadata) {
       // TODO: Double check what is auto-generated here,
       // as this may not be entirely necessary
-      const rawDocument = new Document(
+      const rawDocument = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
+          description: metadata.documentTitle,
           documentId,
           documentType: metadata.documentType,
+          isOnDocketRecord: true,
           relationship,
           userId: user.userId,
         },
@@ -148,7 +149,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           caseEntity.docketNumber,
         );
 
-        const documentEntity = new Document(
+        const docketEntryEntity = new DocketEntry(
           {
             ...rawDocument,
             ...caseEntity.getCaseContacts({
@@ -161,7 +162,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           },
         );
 
-        const isAutoServed = documentEntity.isAutoServed();
+        const isAutoServed = docketEntryEntity.isAutoServed();
 
         if (isFilingDocumentForCase) {
           const isCaseForWorkItem =
@@ -183,8 +184,8 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                 docketNumber: caseEntity.docketNumber,
                 docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
                 document: {
-                  ...documentEntity.toRawObject(),
-                  createdAt: documentEntity.createdAt,
+                  ...docketEntryEntity.toRawObject(),
+                  createdAt: docketEntryEntity.createdAt,
                 },
                 section: DOCKET_SECTION,
                 sentBy: user.name,
@@ -193,7 +194,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
               { applicationContext },
             );
 
-            documentEntity.setWorkItem(workItem);
+            docketEntryEntity.setWorkItem(workItem);
 
             if (metadata.isPaper) {
               workItem.setAsCompleted({
@@ -221,33 +222,21 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
             );
           }
 
-          caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+          caseEntity.addDocketEntry(docketEntryEntity);
 
           if (isAutoServed) {
-            documentEntity.setAsServed(servedParties.all);
+            docketEntryEntity.setAsServed(servedParties.all);
 
             await applicationContext
               .getUseCaseHelpers()
               .sendServedPartiesEmails({
                 applicationContext,
                 caseEntity,
-                documentEntity,
+                documentEntity: docketEntryEntity,
                 servedParties,
               });
           }
         }
-
-        const docketRecordEntity = new DocketRecord(
-          {
-            description: metadata.documentTitle,
-            documentId: documentEntity.documentId,
-            eventCode: documentEntity.eventCode,
-            filingDate: documentEntity.receivedAt,
-          },
-          { applicationContext },
-        );
-
-        caseEntity.addDocketRecord(docketRecordEntity);
 
         saveCasesMap[
           caseEntity.docketNumber

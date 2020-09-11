@@ -4,6 +4,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 const { remove } = require('lodash');
@@ -16,11 +17,15 @@ const { remove } = require('lodash');
  * @param {object} providers.rawScan the raw scan data
  * @constructor
  */
-function Scan({ applicationContext, rawScan }) {
+function Scan() {
+  this.entityName = 'Scan';
+}
+
+Scan.prototype.init = function init({ applicationContext, rawScan }) {
   this.batches = rawScan.batches || [];
   this.createdAt = rawScan.createdAt || createISODateString();
   this.scanId = rawScan.scanId || applicationContext.getUniqueId();
-}
+};
 
 Scan.validationName = 'Scan';
 
@@ -84,4 +89,4 @@ Scan.schema = joi.object().keys({
 
 joiValidationDecorator(Scan, Scan.schema, Scan.VALIDATION_ERROR_MESSAGES);
 
-module.exports = { Scan };
+exports.Scan = validEntityDecorator(Scan);

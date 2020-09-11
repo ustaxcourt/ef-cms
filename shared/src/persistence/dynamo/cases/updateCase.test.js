@@ -59,7 +59,6 @@ describe('updateCase', () => {
 
     mockCase = {
       docketNumberSuffix: null,
-      docketRecord: [],
       inProgress: false,
       irsPractitioners: [],
       pk: 'case|101-18',
@@ -118,12 +117,12 @@ describe('updateCase', () => {
     firstQueryStub.push({
       ...MOCK_DOCUMENTS[0],
       pk: 'case|101-18',
-      sk: 'document|a-document-id-123',
+      sk: 'docket-entry|a-document-id-123',
     });
     firstQueryStub.push({
       ...MOCK_DOCUMENTS[1],
       pk: 'case|101-18',
-      sk: 'document|a-document-id-456',
+      sk: 'docket-entry|a-document-id-456',
     });
   }
 
@@ -685,15 +684,15 @@ describe('updateCase', () => {
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockResolvedValue({
           ...mockCase,
-          documents: [],
+          docketEntries: [],
         });
 
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          docketEntries: [MOCK_DOCUMENTS[0]],
           docketNumber: '101-18',
           docketNumberSuffix: null,
-          documents: [MOCK_DOCUMENTS[0]],
           status: CASE_STATUS_TYPES.generalDocket,
         },
       });
@@ -706,7 +705,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         pk: 'case|101-18',
-        sk: `document|${MOCK_DOCUMENTS[0].documentId}`,
+        sk: `docket-entry|${MOCK_DOCUMENTS[0].documentId}`,
         userId: MOCK_DOCUMENTS[0].userId,
       });
     });
@@ -717,9 +716,9 @@ describe('updateCase', () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
+          docketEntries: [MOCK_DOCUMENTS[0], MOCK_DOCUMENTS[1]],
           docketNumber: '101-18',
           docketNumberSuffix: null,
-          documents: [MOCK_DOCUMENTS[0], MOCK_DOCUMENTS[1]],
           status: CASE_STATUS_TYPES.generalDocket,
         },
       });
@@ -732,7 +731,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         pk: 'case|101-18',
-        sk: `document|${MOCK_DOCUMENTS[0].documentId}`,
+        sk: `docket-entry|${MOCK_DOCUMENTS[0].documentId}`,
         userId: MOCK_DOCUMENTS[0].userId,
       });
     });

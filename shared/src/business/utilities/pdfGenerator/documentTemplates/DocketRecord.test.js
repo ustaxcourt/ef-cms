@@ -89,22 +89,18 @@ describe('DocketRecord', () => {
 
     entries = [
       {
-        document: {
-          additionalInfo2: 'Addl Info',
-          filedBy: 'Test Filer',
-          isNotServedDocument: false,
-          isStatusServed: true,
-          servedAtFormatted: '02/02/20',
-          servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
-        },
+        action: 'Axun',
+        additionalInfo2: 'Addl Info',
+        createdAtFormatted: '01/01/20',
+        description: 'Test Description',
+        eventCode: 'T',
+        filedBy: 'Test Filer',
+        filingsAndProceedings: 'Test Filings And Proceedings',
         index: 1,
-        record: {
-          action: 'Axun',
-          createdAtFormatted: '01/01/20',
-          description: 'Test Description',
-          eventCode: 'T',
-          filingsAndProceedings: 'Test Filings And Proceedings',
-        },
+        isNotServedDocument: false,
+        isStatusServed: true,
+        servedAtFormatted: '02/02/20',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       },
     ];
   });
@@ -197,7 +193,8 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
   });
 
-  it('renders private practitioner contact information if present', () => {
+  it('renders private practitioner contact information when present and options.includePartyDetail is true', () => {
+    options.includePartyDetail = true;
     caseDetail.privatePractitioners = []; // No private practitioners
 
     let wrapper = mount(
@@ -241,6 +238,22 @@ describe('DocketRecord', () => {
     expect(contactEl.text()).not.toContain('Representing');
   });
 
+  it('does not render private practitioner contact information when present and options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+    caseDetail.privatePractitioners = [privatePractitioner];
+
+    let wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('#private-practitioner-contacts')).toEqual({});
+  });
+
   it('displays represented parties with each practitioner', () => {
     const privatePractitioner2 = {
       ...privatePractitioner,
@@ -280,7 +293,8 @@ describe('DocketRecord', () => {
     expect(practitioner2El.text()).toContain(contactSecondary.name);
   });
 
-  it('renders irs practitioner contact information if present', () => {
+  it('renders irs practitioner contact information when present and options.includePartyDetail is true', () => {
+    options.includePartyDetail = true;
     caseDetail.irsPractitioners = []; // No irs practitioners
 
     let wrapper = mount(
@@ -324,6 +338,22 @@ describe('DocketRecord', () => {
     expect(contactEl.text()).not.toContain('Representing');
   });
 
+  it('does not render irs practitioner contact information when present and options.includePartyDetail is false', () => {
+    options.includePartyDetail = false;
+    caseDetail.irsPractitioners = [irsPractitioner];
+
+    let wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('#irs-practitioner-contacts')).toEqual({});
+  });
+
   it('renders a table with docket record data', () => {
     const wrapper = mount(
       <DocketRecord
@@ -340,14 +370,14 @@ describe('DocketRecord', () => {
     const rowEl = docketRecord.find('tbody tr').at(0);
 
     expect(rowEl.text()).toContain(entries[0].index);
-    expect(rowEl.text()).toContain(entries[0].record.createdAtFormatted);
-    expect(rowEl.text()).toContain(entries[0].record.eventCode);
-    expect(rowEl.text()).toContain(entries[0].record.description);
-    expect(rowEl.text()).toContain(entries[0].record.filingsAndProceedings);
-    expect(rowEl.text()).toContain(entries[0].document.filedBy);
-    expect(rowEl.text()).toContain(entries[0].record.action);
-    expect(rowEl.text()).toContain(entries[0].document.servedAtFormatted);
-    expect(rowEl.text()).toContain(entries[0].document.servedPartiesCode);
+    expect(rowEl.text()).toContain(entries[0].createdAtFormatted);
+    expect(rowEl.text()).toContain(entries[0].eventCode);
+    expect(rowEl.text()).toContain(entries[0].description);
+    expect(rowEl.text()).toContain(entries[0].filingsAndProceedings);
+    expect(rowEl.text()).toContain(entries[0].filedBy);
+    expect(rowEl.text()).toContain(entries[0].action);
+    expect(rowEl.text()).toContain(entries[0].servedAtFormatted);
+    expect(rowEl.text()).toContain(entries[0].servedPartiesCode);
   });
 
   it('displays the record description, filingsAndProceedings, and additionalInfo2', () => {
@@ -361,13 +391,13 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      `${entries[0].record.description} ${entries[0].record.filingsAndProceedings} ${entries[0].document.additionalInfo2}`,
+      `${entries[0].description} ${entries[0].filingsAndProceedings} ${entries[0].additionalInfo2}`,
     );
   });
 
   it('displays only the record description if no filingsAndProceedings or additionalInfo2', () => {
-    entries[0].document.additionalInfo2 = null;
-    entries[0].record.filingsAndProceedings = null;
+    entries[0].additionalInfo2 = null;
+    entries[0].filingsAndProceedings = null;
 
     const wrapper = mount(
       <DocketRecord
@@ -379,12 +409,12 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      entries[0].record.description,
+      entries[0].description,
     );
   });
 
   it('displays the record description and filingsAndProceedings if no additionalInfo2', () => {
-    entries[0].document.additionalInfo2 = null;
+    entries[0].additionalInfo2 = null;
 
     const wrapper = mount(
       <DocketRecord
@@ -396,12 +426,12 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      `${entries[0].record.description} ${entries[0].record.filingsAndProceedings}`,
+      `${entries[0].description} ${entries[0].filingsAndProceedings}`,
     );
   });
 
   it('displays the record description and additionalInfo2 if no filingsAndProceedings', () => {
-    entries[0].record.filingsAndProceedings = null;
+    entries[0].filingsAndProceedings = null;
 
     const wrapper = mount(
       <DocketRecord
@@ -413,13 +443,13 @@ describe('DocketRecord', () => {
     );
 
     expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
-      `${entries[0].record.description} ${entries[0].document.additionalInfo2}`,
+      `${entries[0].description} ${entries[0].additionalInfo2}`,
     );
   });
 
   it('displays `Not Served` in the served column if the document is an unserved court-issued document', () => {
-    entries[0].document.isStatusServed = false;
-    entries[0].document.isNotServedDocument = true;
+    entries[0].isStatusServed = false;
+    entries[0].isNotServedDocument = true;
 
     const wrapper = mount(
       <DocketRecord
@@ -434,8 +464,6 @@ describe('DocketRecord', () => {
 
     expect(documentRow.text()).toContain('Not served');
 
-    expect(documentRow.text()).not.toContain(
-      entries[0].document.servedAtFormatted,
-    );
+    expect(documentRow.text()).not.toContain(entries[0].servedAtFormatted);
   });
 });

@@ -57,7 +57,7 @@ export const updateDocketEntryWizardDataAction = ({
         if (filedDocumentIds.length === 1) {
           const caseDetail = get(state.caseDetail);
 
-          const previousDocument = find(caseDetail.documents, doc =>
+          const previousDocument = find(caseDetail.docketEntries, doc =>
             includes(filedDocumentIds, doc.documentId),
           );
           if (previousDocument) {
@@ -112,7 +112,7 @@ export const updateDocketEntryWizardDataAction = ({
         const previousDocument =
           props.value &&
           find(
-            caseDetail.documents,
+            caseDetail.docketEntries,
             doc =>
               includes(filedDocumentIds, doc.documentId) &&
               (doc.documentTitle || doc.documentType) === props.value,

@@ -1,11 +1,22 @@
 const {
+  entityName: irsPractitionerEntityName,
+  IrsPractitioner,
+} = require('../../entities/IrsPractitioner');
+const {
+  entityName: practitionerEntityName,
+  Practitioner,
+} = require('../../entities/Practitioner');
+const {
+  entityName: privatePractitionerEntityName,
+  PrivatePractitioner,
+} = require('../../entities/PrivatePractitioner');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { isEqual } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * updateUserContactInformationInteractor
@@ -43,10 +54,28 @@ const updateUserContactInformationInteractor = async ({
     return;
   }
 
-  const userEntity = new User({
-    ...user,
-    contact: { ...contactInfo },
-  });
+  let userEntity;
+  if (user.entityName === privatePractitionerEntityName) {
+    userEntity = new PrivatePractitioner({
+      ...user,
+      contact: { ...contactInfo },
+      isUpdatingInformation: true,
+    });
+  } else if (user.entityName === irsPractitionerEntityName) {
+    userEntity = new IrsPractitioner({
+      ...user,
+      contact: { ...contactInfo },
+      isUpdatingInformation: true,
+    });
+  } else if (user.entityName === practitionerEntityName) {
+    userEntity = new Practitioner({
+      ...user,
+      contact: { ...contactInfo },
+      isUpdatingInformation: true,
+    });
+  } else {
+    throw new Error(`Unrecognized entityType ${user.entityName}`);
+  }
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
@@ -73,6 +102,13 @@ const updateUserContactInformationInteractor = async ({
       action: 'user_contact_full_update_complete',
     },
     userId: user.userId,
+  });
+
+  userEntity.isUpdatingInformation = false;
+
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: userEntity.validate().toRawObject(),
   });
 };
 
@@ -113,7 +149,7 @@ exports.updateUserContactInformationInteractor = async ({
       applicationContext,
       message: {
         action: 'user_contact_update_error',
-        error,
+        error: error.toString(),
       },
       userId,
     });
