@@ -63,11 +63,6 @@ exports.createOpinion = () => {
   )
     .scrollIntoView()
     .click();
-  cy.get(
-    '#main-content > section > div > div.grid-row.grid-gap.margin-top-4 > div > button:nth-child(1)',
-  )
-    .scrollIntoView()
-    .click();
 };
 
 exports.signOpinion = () => {
@@ -87,7 +82,6 @@ exports.addDocketEntryAndServeOpinion = () => {
   ).click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  // #document-type
   cy.get('#document-type').children().first().click();
   cy.get('div.select-react-element__menu-list')
     .find('div')

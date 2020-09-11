@@ -10,13 +10,45 @@ const {
   searchByPractitionerName,
   searchOpinionByKeyword,
 } = require('../support/pages/advanced-search');
-const { goToCaseDetail } = require('../support/pages/case-detail');
-
+const {
+  closeScannerSetupDialog,
+  goToCreateCase,
+  goToReviewCase,
+  serveCaseToIrs,
+} = require('../support/pages/create-paper-case');
+const {
+  fillInCreateCaseFromPaperForm,
+} = require('../../cypress/support/pages/create-paper-petition');
 const { getUserToken, login } = require('../support/pages/login');
+const { goToCaseDetail } = require('../support/pages/case-detail');
+const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
-const docketNumberToSearchBy = '103-20';
 const barNumberToSearchBy = 'PT1234';
+let testData = {};
 let token;
+
+describe('Create and serve a case to search for', () => {
+  before(async () => {
+    const results = await getUserToken(
+      'petitionsclerk1@example.com',
+      'Testing1234$',
+    );
+    token = results.AuthenticationResult.IdToken;
+  });
+
+  it('should be able to login', () => {
+    login(token);
+  });
+
+  it('should be able to create a case and serve to IRS', () => {
+    goToMyDocumentQC();
+    goToCreateCase();
+    closeScannerSetupDialog();
+    fillInCreateCaseFromPaperForm();
+    goToReviewCase(testData);
+    serveCaseToIrs();
+  });
+});
 
 describe('Case Advanced Search', () => {
   before(async () => {
@@ -38,7 +70,7 @@ describe('Case Advanced Search', () => {
 
   it('should be able to search for case by docket number', () => {
     gotoAdvancedSearch();
-    searchByDocketNumber(docketNumberToSearchBy);
+    searchByDocketNumber(testData.createdPaperDocketNumber);
   });
 });
 
@@ -80,7 +112,7 @@ describe('Opinion Search', () => {
   });
 
   it('should create an opinion to search for', () => {
-    goToCaseDetail(docketNumberToSearchBy);
+    goToCaseDetail(testData.createdPaperDocketNumber);
     createOpinion();
     addDocketEntryAndServeOpinion();
   });
