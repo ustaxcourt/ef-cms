@@ -1,4 +1,8 @@
 const faker = require('faker');
+const uuid = require('uuid');
+const {
+  COUNTRY_TYPES,
+} = require('../../../shared/src/business/entities/EntityConstants');
 const {
   getRestApi,
   getUserToken,
@@ -6,9 +10,56 @@ const {
 } = require('../../support/pages/login');
 const { BASE_CASE } = require('../../fixtures/caseMigrations');
 
+faker.seed(faker.random.number());
+
+const createFutureDate = () => {
+  const month = faker.random.number({ max: 12, min: 1 });
+  const day = faker.random.number({ max: 28, min: 1 });
+  const year =
+    new Date().getUTCFullYear() + faker.random.number({ max: 5, min: 1 });
+  return `${month}/${day}/${year}`;
+};
+
+const createDocketNumber = () => {
+  const docketNumberYear = faker.random.number({ max: 99, min: 80 });
+  const docketNumberPrefix = faker.random.number({
+    max: 99999,
+    min: 101,
+  });
+
+  return `${docketNumberPrefix}-${docketNumberYear}`;
+};
+
+const createRandomContact = () => ({
+  address1: faker.address.streetAddress(),
+  city: faker.address.city(),
+  contactId: uuid.v4(),
+  countryType: COUNTRY_TYPES.DOMESTIC,
+  email: `${faker.internet.userName()}@example.com`,
+  name: faker.name.findName(),
+  phone: faker.phone.phoneNumber(),
+  postalCode: faker.address.zipCode(),
+  state: faker.address.stateAbbr(),
+});
+
+const gotoCaseOverview = docketNumber => {
+  cy.goToRoute(`/case-detail/${docketNumber}`);
+  cy.get('#tab-case-information').click();
+  cy.get('#tab-overview').click();
+};
+
+const removeFromTrialSession = () => {
+  cy.get('#remove-from-trial-session-btn').should('exist').click();
+  cy.get('#disposition').type(faker.company.catchPhrase());
+  cy.get('#modal-root .modal-button-confirm').click();
+  cy.get('#add-to-trial-session-btn').should('not.exist');
+};
+
 let token = null;
 let trialSessionId;
-let docketNumber;
+let trialSessionIds = [];
+const firstDocketNumber = createDocketNumber();
+const secondDocketNumber = createDocketNumber();
 
 describe('Petitions Clerk', () => {
   before(async () => {
@@ -23,83 +74,96 @@ describe('Petitions Clerk', () => {
     login(token);
   });
 
-  describe('create a case via migration', () => {
+  describe('create cases via migration', () => {
     let migrateUserToken, migrateRestApi;
-    before(async () => {
+    beforeEach(async () => {
       migrateRestApi = await getRestApi();
       const results = await getUserToken(
         'migrator@example.com',
         'Testing1234$',
       );
       migrateUserToken = results.AuthenticationResult.IdToken;
-      faker.seed(faker.random.number());
-
-      const docketNumberYear = faker.random.number({ max: 99, min: 80 });
-      const docketNumberPrefix = faker.random.number({ max: 99999, min: 101 });
-
-      docketNumber = `${docketNumberPrefix}-${docketNumberYear}`;
     });
 
-    it('should be able to POST a basic migrated case to the endpoint for use with trial sessions', () => {
-      cy.request({
-        body: { ...BASE_CASE, docketNumber },
-        headers: {
-          Authorization: `Bearer ${migrateUserToken}`,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        url: `${migrateRestApi}/migrate/case`,
+    it('should create cases for use with trial sessions smoke-tests', () => {
+      [firstDocketNumber, secondDocketNumber].forEach(docketNumber => {
+        const migrateCase = {
+          ...BASE_CASE,
+          contactPrimary: {
+            ...BASE_CASE.contactPrimary,
+            ...createRandomContact(),
+          },
+          docketNumber,
+          docketNumberWithSuffix: docketNumber,
+        };
+        cy.request({
+          body: migrateCase,
+          headers: {
+            Authorization: `Bearer ${migrateUserToken}`,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          url: `${migrateRestApi}/migrate/case`,
+        });
       });
     });
   });
 
   describe('should be able to create a trial session', () => {
-    before(() => {
+    beforeEach(() => {
       cy.server();
       cy.route({ method: 'POST', url: '/trial-sessions' }).as(
         'postTrialSession',
       );
     });
-    it('creates a trial session', () => {
-      cy.get('a[href="/trial-sessions"]').click();
-      cy.get('a[href="/add-a-trial-session"]').click();
 
-      // session information
-      cy.get('#start-date-date').type('09/09/2029');
-      cy.get('#start-time-hours').clear().type('1');
-      cy.get('#start-time-minutes').clear().type('30');
-      cy.get('label[for="startTimeExtension-pm"]').click();
-      cy.get('label[for="session-type-Hybrid"]').click();
-      cy.get('#max-cases').type('20');
+    const createTrialSession = () => {
+      it('creates a trial session', () => {
+        cy.get('a[href="/trial-sessions"]').click();
+        cy.get('a[href="/add-a-trial-session"]').click();
 
-      // location information
-      cy.get('#trial-location').select('Phoenix, Arizona');
-      cy.get('#courthouse-name').type("Judge Wapner's Chambers");
-      cy.get('#address1').type('100 West Main St');
-      cy.get('#address2').type('Suite 500');
-      cy.get('#city').type('Sun Prairie');
-      cy.get('#state').select('WI');
-      cy.get('#postal-code').type('90210');
+        // session information
+        cy.get('#start-date-date').type(createFutureDate());
+        cy.get('#start-time-hours')
+          .clear()
+          .type(faker.random.number({ max: 11, min: 6 }));
+        cy.get('#start-time-minutes')
+          .clear()
+          .type(faker.random.arrayElement(['00', '15', '30', '45']));
+        cy.get('label[for="startTimeExtension-pm"]').click();
+        cy.get('label[for="session-type-Hybrid"]').click();
+        cy.get('#max-cases').type(faker.random.number({ max: 100, min: 10 }));
 
-      // session assignments
-      cy.get('#judgeId').select('Chief Judge Foley');
-      cy.get('#trial-clerk').select('Test trialclerk1');
-      cy.get('#court-reporter').type('Jimmy');
-      cy.get('#irs-calendar-administrator').type('Cal Ender');
-      cy.get('#notes').type('One bowl of M&Ms, all red ones removed.');
+        // location information
+        cy.get('#trial-location').select(BASE_CASE.preferredTrialCity);
+        cy.get('#courthouse-name').type(faker.commerce.productName());
+        cy.get('#address1').type(faker.address.streetAddress());
+        cy.get('#city').type(faker.address.city());
+        cy.get('#state').select(faker.address.stateAbbr());
+        cy.get('#postal-code').type(faker.address.zipCode());
 
-      // cy.get('#submit-trial-session').click(); // TODO: use this instead of the following after button has ID
-      cy.get('#main-content > section > div > button:nth-child(10)').click();
+        // session assignments
+        cy.get('#judgeId').select('Chief Judge Foley');
+        cy.get('#trial-clerk').select('Test trialclerk1');
+        cy.get('#court-reporter').type(faker.name.findName());
+        cy.get('#irs-calendar-administrator').type(faker.name.findName());
+        cy.get('#notes').type(faker.company.catchPhrase());
 
-      // set up listener for POST call, get trialSessionId
-      cy.wait('@postTrialSession').then(xhr => {
-        ({ trialSessionId } = xhr.response.body);
-        cy.get('#new-trial-sessions-tab').click();
-        cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).should(
-          'exist',
-        );
+        cy.get('#submit-trial-session').click();
+
+        // set up listener for POST call, get trialSessionId
+        cy.wait('@postTrialSession').then(xhr => {
+          ({ trialSessionId } = xhr.response.body);
+          trialSessionIds.push(trialSessionId);
+          cy.get('#new-trial-sessions-tab').click();
+          cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).should(
+            'exist',
+          );
+        });
       });
-    });
+    };
+    createTrialSession();
+    createTrialSession();
 
     it('navigates to newly-created trial session', () => {
       cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).click();
@@ -110,15 +174,10 @@ describe('Petitions Clerk', () => {
     before(() => {});
 
     it('a newly-created case is found', () => {
-      cy.get('#search-field').type(docketNumber);
-      cy.get('#search-input button').click();
-      cy.get('#case-title').should('exist');
+      gotoCaseOverview(firstDocketNumber);
     });
 
-    it('it is possible to manually add, view, and remove case from an unset trial session', () => {
-      cy.get('#tab-case-information').click();
-      cy.get('#tab-overview').click();
-
+    it('it is possible to manually add, view, and remove case from an UNSET trial session', () => {
       cy.get('#add-to-trial-session-btn').should('exist').click();
       cy.get('label[for="show-all-locations-true"]').click();
       cy.get('select#trial-session')
@@ -130,24 +189,18 @@ describe('Petitions Clerk', () => {
         'Case scheduled for trial.',
       );
 
-      cy.get('#remove-from-trial-session-btn').should('exist').click();
-      cy.get('#disposition').type('which position?');
-      cy.get('#modal-root .modal-button-confirm').click();
-      cy.get('#add-to-trial-session-btn').should('not.exist');
+      removeFromTrialSession();
     });
 
-    it.skip('sets a trial session as calendared', () => {
+    it('sets a trial session as calendared', () => {
       cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
-      const setCalendarSelector =
-        '#main-content > section > div.ustc-ui-tabs.ustc-num-tabs-1 > button'; // todo: use #set-calendar-button
-      cy.get(setCalendarSelector).should('exist').click();
+      cy.get('#set-calendar-button').should('exist').click();
       cy.get('#modal-root .modal-button-confirm').click();
-      cy.get(setCalendarSelector).should('not.exist');
+      cy.get('#set-calendar-button').should('not.exist');
     });
 
-    it.skip('manually add, view, and remove case from a set trial session', () => {
-      cy.get('#tab-case-information').click();
-      cy.get('#tab-overview').click();
+    it('manually add, view, and remove case from a SET trial session', () => {
+      gotoCaseOverview(firstDocketNumber);
 
       cy.get('#add-to-trial-session-btn').should('exist').click();
       cy.get('label[for="show-all-locations-true"]').click();
@@ -155,20 +208,72 @@ describe('Petitions Clerk', () => {
         .select(trialSessionId)
         .should('have.value', trialSessionId);
       cy.get('#modal-root .modal-button-confirm').click();
-      cy.get('.usa-alert--success').should(
-        'contain',
-        'Case scheduled for trial.',
-      );
+      cy.get('.usa-alert--success').should('contain', 'Case set for trial.');
 
-      cy.get('#remove-from-trial-session-btn').should('exist').click();
-      cy.get('#disposition').type('which position?');
-      cy.get('#modal-root .modal-button-confirm').click();
-      cy.get('#add-to-trial-session-btn').should('not.exist');
+      removeFromTrialSession();
     });
 
-    it.skip('Petitions clerk- Set case as High Priority for a trial session', () => {});
-    it.skip('Petitions clerk - Manually block, view (Blocked report), and unblock a case', () => {});
-    it.skip('Petitions clerk: Complete QC of eligible cases and set calendar for trial session', () => {});
-    it.skip('Petitions clerk: Run Trial Session Planning Report', () => {});
+    it('manually block, view Blocked report, and unblock a case', () => {
+      // block it
+      gotoCaseOverview(secondDocketNumber);
+      cy.get('#tabContent-overview .block-from-trial-btn').click();
+      cy.get('.modal-dialog #reason').type(faker.company.catchPhrase());
+      cy.get('.modal-dialog .modal-button-confirm').click();
+      cy.contains('Blocked From Trial');
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(3000); // wait so that it will appear in reports (blocking is async?)
+
+      // view blocked report
+      cy.get('#reports-btn').click();
+      cy.get('#all-blocked-cases').click();
+      cy.get('#trial-location').select(BASE_CASE.preferredTrialCity);
+      cy.get(`a[href="/case-detail/${secondDocketNumber}`).should('exist');
+
+      // unblock it
+      gotoCaseOverview(secondDocketNumber);
+      cy.get('button.red-warning').click(); // TODO: #remove-block
+      cy.get('.modal-button-confirm').click();
+      cy.contains('Block removed.');
+    });
+
+    it('set case as High Priority for a trial session', () => {
+      gotoCaseOverview(secondDocketNumber);
+
+      cy.get('.high-priority-btn').click();
+      cy.get('#reason').type(faker.company.catchPhrase());
+      cy.get('.modal-button-confirm').click();
+      cy.get('.modal-dialog').should('not.exist');
+      cy.contains('High Priority').should('exist');
+    });
+
+    it('Petitions clerk: Complete QC of eligible cases and set calendar for trial session', () => {
+      trialSessionId = trialSessionIds[1];
+      cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
+      cy.get(
+        `#upcoming-sessions label[for="${secondDocketNumber}-complete"]`,
+      ).click();
+
+      // set as calendared
+      cy.get('#set-calendar-button').should('exist').click();
+      cy.get('#modal-root .modal-button-confirm').click();
+      cy.get('#set-calendar-button').should('not.exist');
+      cy.get(
+        `#open-cases-tab-content a[href="/case-detail/${secondDocketNumber}"]`,
+      ).should('exist');
+    });
+
+    it('Petitions clerk: Run Trial Session Planning Report', () => {
+      const nextYear = new Date().getUTCFullYear() + 1;
+      cy.get('#reports-btn').click();
+      cy.get('#trial-session-planning-btn').click();
+      cy.get('#modal-root select[name="term"]')
+        .select('Winter')
+        .should('have.value', 'winter');
+      cy.get('#modal-root select[name="year"]')
+        .select(`${nextYear}`)
+        .should('have.value', `${nextYear}`);
+      cy.get('.modal-button-confirm').click();
+      cy.url().should('contain', '/trial-session-planning-report');
+    });
   });
 });
