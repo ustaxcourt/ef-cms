@@ -194,6 +194,7 @@ const TrialInformation = ({
                 link
                 className="red-warning margin-top-0 padding-0 push-right"
                 icon="trash"
+                id="remove-block"
                 onClick={() => {
                   openUnblockFromTrialModalSequence();
                 }}
