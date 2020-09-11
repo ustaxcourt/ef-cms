@@ -39,8 +39,8 @@ describe('getPDFForPreviewAction', () => {
       applicationContext.getUseCases().loadPDFForPreviewInteractor,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      docketEntryId: '456',
       docketNumber: '123-20',
-      documentId: '456',
     });
   });
 });
