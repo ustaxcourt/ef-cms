@@ -8,16 +8,17 @@ const applicationContext = createApplicationContext({});
 
 const mutateRecord = async item => {
   if (isDocketEntryRecord(item) && !item.documentTitle) {
-    item.documentTitle = item.description;
-    delete item.description;
     const docketEntryToUpdate = new DocketEntry(
-      { ...item },
+      {
+        ...item,
+        documentTitle: item.description,
+      },
       { applicationContext },
     )
       .validate()
       .toRawObject();
 
-    return { ...item, docketEntryToUpdate };
+    return { ...item, ...docketEntryToUpdate };
   }
 };
 
