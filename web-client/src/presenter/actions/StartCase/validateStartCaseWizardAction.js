@@ -36,6 +36,7 @@ export const validateStartCaseWizardAction = ({
       'petitionFile',
       'hasIrsNotice',
       'name',
+      'inCareOf',
       'address1',
       'city',
       'state',
@@ -43,7 +44,6 @@ export const validateStartCaseWizardAction = ({
       'phone',
       'procedureType',
       'preferredTrialLocation',
-      'inCareOf',
     ];
 
     return path.error({

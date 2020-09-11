@@ -74,6 +74,7 @@ describe('validateStartCaseWizardAction', () => {
       'petitionFile',
       'hasIrsNotice',
       'name',
+      'inCareOf',
       'address1',
       'city',
       'state',
@@ -81,7 +82,6 @@ describe('validateStartCaseWizardAction', () => {
       'phone',
       'procedureType',
       'preferredTrialLocation',
-      'inCareOf',
     ]);
   });
 });
