@@ -6,7 +6,7 @@ export const editDocketEntryHelper = (get, applicationContext) => {
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
 
   const currentDocument = caseDetail.docketEntries.find(
-    document => document.docketEntryId === docketEntryId,
+    docketEntry => docketEntry.docketEntryId === docketEntryId,
   );
 
   let showPaperServiceWarning = false;
