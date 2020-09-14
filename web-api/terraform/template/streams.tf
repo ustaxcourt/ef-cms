@@ -1,7 +1,7 @@
 data "archive_file" "zip_streams" {
   type        = "zip"
   output_path = "${path.module}/lambdas/streams.js.zip"
-  source_file = "${path.module}/lambdas/dist/streams.js"
+  source_file = "${path.module}/lambdas/streams.js"
 }
 
 resource "aws_lambda_function" "zip_streams" {
