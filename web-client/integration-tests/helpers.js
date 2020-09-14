@@ -197,7 +197,7 @@ export const createCourtIssuedDocketEntry = async ({
 export const getInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
-  }).inboxCount;
+  }).inboxCount; // TODO 6069
 };
 
 export const findWorkItemByDocketNumber = (queue, docketNumber) => {

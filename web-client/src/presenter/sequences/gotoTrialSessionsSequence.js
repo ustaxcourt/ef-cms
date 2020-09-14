@@ -21,7 +21,7 @@ const gotoTrialSessions = [
   closeMobileMenuAction,
   clearErrorAlertsAction,
   parallel([
-    [getNotificationsAction, setNotificationsAction],
+    [getNotificationsAction, setNotificationsAction], // TODO 6069 (judge must be set first)
     [getTrialSessionsAction, setTrialSessionsAction],
     [getUsersInSectionAction({ section: 'judge' }), setUsersAction],
     [getJudgeForCurrentUserAction, setJudgeUserAction],
