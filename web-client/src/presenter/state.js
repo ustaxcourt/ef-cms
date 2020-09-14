@@ -245,6 +245,8 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  messagesInboxCount: 0,
+  messagesSectionCount: 0,
   modal: {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display

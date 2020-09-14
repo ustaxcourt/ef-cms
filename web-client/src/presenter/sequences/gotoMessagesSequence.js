@@ -10,7 +10,9 @@ import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForU
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setInboxMessageCountAction } from '../actions/setInboxMessageCountAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { setSectionInboxMessageCountAction } from '../actions/setSectionInboxMessageCountAction';
 
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
@@ -19,10 +21,20 @@ const goToMessages = [
   chooseMessageBoxAction,
   {
     mycompleted: [getCompletedMessagesForUserAction],
-    myinbox: [getInboxMessagesForUserAction],
+    myinbox: [
+      getInboxMessagesForSectionAction,
+      setSectionInboxMessageCountAction,
+      getInboxMessagesForUserAction,
+      setInboxMessageCountAction,
+    ],
     myoutbox: [getOutboxMessagesForUserAction],
     sectioncompleted: [getCompletedMessagesForSectionAction],
-    sectioninbox: [getInboxMessagesForSectionAction],
+    sectioninbox: [
+      getInboxMessagesForUserAction,
+      setInboxMessageCountAction,
+      getInboxMessagesForSectionAction,
+      setSectionInboxMessageCountAction,
+    ],
     sectionoutbox: [getOutboxMessagesForSectionAction],
   },
   setMessagesAction,

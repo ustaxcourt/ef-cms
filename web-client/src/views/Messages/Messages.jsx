@@ -15,17 +15,11 @@ import React from 'react';
 
 export const Messages = connect(
   {
-    inboxCount: state.inboxCount || 0,
     messagesHelper: state.messagesHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.messageBoxToDisplay.queue,
   },
-  function Messages({
-    inboxCount,
-    messagesHelper,
-    navigateToPathSequence,
-    queue,
-  }) {
+  function Messages({ messagesHelper, navigateToPathSequence, queue }) {
     return (
       <>
         <div className="big-blue-header">
@@ -35,7 +29,7 @@ export const Messages = connect(
               aria-label="unread messages count"
               className="unread margin-right-2"
             >
-              {inboxCount}
+              {messagesHelper.inboxCount}
             </span>
             {messagesHelper.showIndividualMessages && (
               <Button
@@ -71,7 +65,11 @@ export const Messages = connect(
               });
             }}
           >
-            <Tab id="inbox-tab" tabName="inbox" title="Inbox">
+            <Tab
+              id="inbox-tab"
+              tabName="inbox"
+              title={`Inbox (${messagesHelper.inboxCount})`}
+            >
               <div id="inbox-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <MessagesIndividualInbox />
