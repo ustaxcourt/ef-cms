@@ -18,7 +18,11 @@ exports.getNotificationsInteractor = async ({ applicationContext }) => {
     throw new UnauthorizedError('Unauthorized to get inbox counts');
   }
 
-  const { section, userId } = applicationContext.getCurrentUser();
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const { section, userId } = user;
 
   const documentQCInbox = await applicationContext
     .getPersistenceGateway()

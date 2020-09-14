@@ -19,6 +19,12 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      role: ROLES.docketClerk,
+      section: 'docket',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+    });
+
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
