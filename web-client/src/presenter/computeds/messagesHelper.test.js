@@ -63,7 +63,7 @@ describe('messagesHelper', () => {
       expect(result.inboxCount).toEqual(5);
     });
 
-    it("should return section inbox count * user inbox count if the message box is the user's section", () => {
+    it("should return section inbox count if the message box is the user's section", () => {
       const result = runCompute(messagesHelper, {
         state: {
           messageBoxToDisplay: {
