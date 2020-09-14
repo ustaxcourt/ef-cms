@@ -1,6 +1,7 @@
 import { chooseMessageBoxAction } from '../actions/chooseMessageBoxAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCompletedMessagesForSectionAction } from '../actions/getCompletedMessagesForSectionAction';
 import { getCompletedMessagesForUserAction } from '../actions/getCompletedMessagesForUserAction';
 import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
@@ -10,31 +11,22 @@ import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForU
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setInboxMessageCountAction } from '../actions/setInboxMessageCountAction';
+import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
-import { setSectionInboxMessageCountAction } from '../actions/setSectionInboxMessageCountAction';
 
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
+  fetchUserNotificationsSequence,
+  setMessageCountsAction,
   chooseMessageBoxAction,
   {
     mycompleted: [getCompletedMessagesForUserAction],
-    myinbox: [
-      getInboxMessagesForSectionAction,
-      setSectionInboxMessageCountAction,
-      getInboxMessagesForUserAction,
-      setInboxMessageCountAction,
-    ],
+    myinbox: [getInboxMessagesForUserAction],
     myoutbox: [getOutboxMessagesForUserAction],
     sectioncompleted: [getCompletedMessagesForSectionAction],
-    sectioninbox: [
-      getInboxMessagesForUserAction,
-      setInboxMessageCountAction,
-      getInboxMessagesForSectionAction,
-      setSectionInboxMessageCountAction,
-    ],
+    sectioninbox: [getInboxMessagesForSectionAction],
     sectionoutbox: [getOutboxMessagesForSectionAction],
   },
   setMessagesAction,
