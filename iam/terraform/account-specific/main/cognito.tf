@@ -6,7 +6,7 @@ resource "aws_cognito_user_pool" "log_viewers" {
 }
 
 resource "aws_cognito_user_pool_domain" "log_viewers" {
-  domain       = "auth-ef-cms-info"
+  domain       = "ef-cms-info"
   user_pool_id = aws_cognito_user_pool.log_viewers.id
 }
 
@@ -18,7 +18,7 @@ resource "aws_cognito_identity_pool" "log_viewers" {
 resource "aws_iam_role" "es_kibana_role" {
   name = "es_kibana_role"
   assume_role_policy = <<CONFIG
-  {
+{
   "Version": "2012-10-17",
   "Statement": [
     {
