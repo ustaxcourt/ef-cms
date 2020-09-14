@@ -15,6 +15,9 @@ import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
+const {
+  filterQcItemsByAssociatedJudge,
+} = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
@@ -552,6 +555,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,
+      filterQcItemsByAssociatedJudge,
       formatAttachments,
       formatCase,
       formatCaseDeadlines,

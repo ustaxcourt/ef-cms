@@ -18,19 +18,17 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   getJudgeForCurrentUserAction,
   setJudgeUserAction,
   parallel([
-    [getNotificationsAction, setNotificationsAction],
+    [getNotificationsAction, setNotificationsAction, setSectionBoxCountAction],
     [
       chooseWorkQueueAction,
       {
         documentqcmyinProgress: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
-          setSectionBoxCountAction,
         ],
         documentqcmyinbox: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
-          setSectionBoxCountAction,
         ],
         documentqcmyoutbox: [
           getDocumentQCServedForUserAction,
@@ -39,12 +37,10 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
         documentqcsectioninProgress: [
           getDocumentQCInboxForSectionAction,
           setWorkItemsAction,
-          setSectionBoxCountAction,
         ],
         documentqcsectioninbox: [
           getDocumentQCInboxForSectionAction,
           setWorkItemsAction,
-          setSectionBoxCountAction,
         ],
         documentqcsectionoutbox: [
           getDocumentQCServedForSectionAction,

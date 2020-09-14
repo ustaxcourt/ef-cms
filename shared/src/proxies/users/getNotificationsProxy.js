@@ -7,9 +7,10 @@ const { get } = require('../requests');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getNotificationsInteractor = ({ applicationContext }) => {
+exports.getNotificationsInteractor = ({ applicationContext, judgeUser }) => {
   return get({
     applicationContext,
     endpoint: '/api/notifications',
+    judgeUser,
   });
 };

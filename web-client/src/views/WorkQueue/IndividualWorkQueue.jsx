@@ -34,7 +34,7 @@ export const IndividualWorkQueue = connect(
         <Tab
           id="individual-inbox-tab"
           tabName="inbox"
-          title={`Inbox (${workQueueHelper.inboxCount})`}
+          title={`Inbox (${workQueueHelper.individualInboxCount})`}
         >
           <div id="individual-inbox-tab-content">
             <IndividualWorkQueueInbox />
@@ -44,7 +44,7 @@ export const IndividualWorkQueue = connect(
           <Tab
             id="section-in-progress-tab"
             tabName="inProgress"
-            title={`In Progress (${workQueueHelper.inProgressCount})`}
+            title={`In Progress (${workQueueHelper.individialInProgressCount})`}
           >
             <div id="section-in-progress-tab-content">
               <IndividualWorkQueueInProgress />

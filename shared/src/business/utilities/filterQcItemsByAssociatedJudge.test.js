@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../test/createTestApplicationContext';
 import { filterQcItemsByAssociatedJudge } from './filterQcItemsByAssociatedJudge';
 
 let currentUser;

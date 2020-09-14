@@ -10,8 +10,12 @@ export const workQueueHelper = (get, applicationContext) => {
   const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
-  const inboxCount = get(state.sectionInboxCount);
-  const inProgressCount = get(state.sectionInProgressCount);
+  //const inboxCount = get(state.sectionInboxCount); // TODO 6069 integration test fails
+  //const inProgressCount = get(state.sectionInProgressCount); // TODO 6069 integration test fails
+  const individualInboxCount = get(state.individualInboxCount);
+  const individialInProgressCount = get(state.individualInProgressCount);
+  const sectionInboxCount = get(state.sectionInboxCount);
+  const sectionInProgressCount = get(state.sectionInProgressCount);
   const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
@@ -36,9 +40,11 @@ export const workQueueHelper = (get, applicationContext) => {
     hideCaseStatusColumn: userIsPetitionsClerk,
     hideFiledByColumn: !userIsDocketClerk,
     hideIconColumn: userIsOther,
-    inProgressCount,
-    inboxCount,
+    individialInProgressCount,
+    individualInboxCount,
     outboxFiledByColumnLabel,
+    sectionInProgressCount,
+    sectionInboxCount,
     sentTitle: userIsDocketClerk ? 'Processed' : 'Served',
     showAssignedToColumn:
       !showIndividualWorkQueue && (showInbox || showInProgress) && !userIsOther,

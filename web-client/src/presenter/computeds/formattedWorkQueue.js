@@ -3,7 +3,6 @@ import {
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
-import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 const isDateToday = (date, applicationContext) => {
@@ -224,10 +223,12 @@ export const filterWorkItems = ({
     docQCUserSection = DOCKET_SECTION;
   }
 
-  let additionalFilters = filterQcItemsByAssociatedJudge({
-    applicationContext,
-    judgeUser,
-  });
+  let additionalFilters = applicationContext
+    .getUtilities()
+    .filterQcItemsByAssociatedJudge({
+      applicationContext,
+      judgeUser,
+    });
 
   const filters = {
     my: {

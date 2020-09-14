@@ -291,6 +291,9 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  filterQcItemsByAssociatedJudge,
+} = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
+const {
   formatAndSortConsolidatedCases,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
 const {
@@ -1638,6 +1641,7 @@ module.exports = appContextUser => {
         compareISODateStrings,
         compareStrings,
         createISODateString,
+        filterQcItemsByAssociatedJudge,
         formatCaseForTrialSession,
         formatDateString,
         formatJudgeName,
