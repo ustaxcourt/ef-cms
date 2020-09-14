@@ -1,5 +1,9 @@
+const createApplicationContext = require('../src/applicationContext');
 const { cloneDeep } = require('lodash');
 const { isWorkItemOrWorkQueueRecord, upGenerator } = require('./utilities');
+const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
+
+const applicationContext = createApplicationContext();
 
 const mutateRecord = async item => {
   if (isWorkItemOrWorkQueueRecord(item)) {
@@ -8,7 +12,13 @@ const mutateRecord = async item => {
       item.docketEntry.docketEntryId = item.document.documentId;
       delete item.document;
 
-      return { ...item };
+      const updatedWorkItem = new WorkItem(item, {
+        applicationContext,
+      })
+        .validate()
+        .toRawObject();
+
+      return { ...item, ...updatedWorkItem };
     }
   }
 };
