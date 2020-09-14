@@ -9,7 +9,7 @@ const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
  * @returns {Function} a filter for the given user work queue
  */
 
-export const filterQcItemsByAssociatedJudge = ({
+exports.filterQcItemsByAssociatedJudge = ({
   applicationContext,
   judgeUser,
 }) => {

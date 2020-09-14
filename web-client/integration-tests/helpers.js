@@ -194,10 +194,28 @@ export const createCourtIssuedDocketEntry = async ({
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getInboxCount = test => {
+export const getIndividualInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
-  }).inboxCount; // TODO 6069
+  }).individualInboxCount;
+};
+
+export const getSectionInboxCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInboxCount;
+};
+
+export const getSectionInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInProgressCount;
+};
+
+export const getIndividualInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).individualInProgressCount;
 };
 
 export const findWorkItemByDocketNumber = (queue, docketNumber) => {
@@ -407,7 +425,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
                 innerHTML: 'something',
               },
             ],
-            querySelector: () => {},
+            querySelector: () => { },
           };
         },
       };
@@ -416,7 +434,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
       createObjectURL: () => {
         return fakeData;
       },
-      revokeObjectURL: () => {},
+      revokeObjectURL: () => { },
     },
     document: {},
     localStorage: {
@@ -501,7 +519,7 @@ export const gotoRoute = (routes, routeToGoTo) => {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
-        '$',
+      '$',
     );
     if (routeToGoTo.match(regex)) {
       const match = regex.exec(routeToGoTo);
