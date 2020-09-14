@@ -13,3 +13,7 @@ variable "stream_arn" {
 variable "destination_table" {
   type = string
 }
+
+variable "source_table" {
+  type = string
+}

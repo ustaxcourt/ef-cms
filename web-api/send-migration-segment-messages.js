@@ -16,6 +16,10 @@ if (!process.env.AWS_ACCOUNT_ID) {
   throw new Error('Please set AWS_ACCOUNT_ID in your environment.');
 }
 
+if (!process.env.SOURCE_TABLE) {
+  throw new Error('Please set SOURCE_TABLE in your environment.');
+}
+
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
 
 const getItemCount = async () => {
@@ -26,7 +30,7 @@ const getItemCount = async () => {
 
   try {
     const { Table } = await dynamo
-      .describeTable({ TableName: `efcms-${ENV}` })
+      .describeTable({ TableName: process.env.SOURCE_TABLE })
       .promise();
     return Table.ItemCount;
   } catch (e) {
@@ -53,7 +57,6 @@ const now = Date.now().toString();
 
 (async () => {
   const itemCount = await getItemCount();
-  let waitTime = 10000;
 
   const totalSegments = Math.ceil(itemCount / SEGMENT_SIZE);
 
@@ -68,11 +71,7 @@ const now = Date.now().toString();
   let sent = 0;
   for (let segment of segments) {
     await sendSegmentMessage(segment);
-    console.log(`Message ${sent}/${totalSegments} sent successfully.`);
+    console.log(`Message ${sent + 1}/${totalSegments} sent successfully.`);
     sent++;
-    waitTime = Math.max(0, waitTime - 500);
-    await new Promise(resolve => {
-      setTimeout(resolve, waitTime);
-    });
   }
 })();
