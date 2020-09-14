@@ -19,7 +19,7 @@ export const setWorkItemsCountAction = ({ get, store }) => {
     notifications.qcSectionInProgressCount,
   );
 
-  store.set(state.individualInboxCount, notifications.qcIndividialInboxCount);
+  store.set(state.individualInboxCount, notifications.qcIndividualInboxCount);
 
   store.set(
     state.individualInProgressCount,

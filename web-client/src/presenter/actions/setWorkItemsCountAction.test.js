@@ -4,132 +4,56 @@ import { runAction } from 'cerebral/test';
 import { setWorkItemsCountAction } from './setWorkItemsCountAction';
 
 describe('setWorkItemsCountAction', () => {
-  const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
-
-  let workItems;
+  const state = {
+    notifications: {
+      qcIndividualInProgressCount: 9,
+      qcIndividualInboxCount: 10,
+      qcSectionInProgressCount: 8,
+      qcSectionInboxCount: 7,
+    },
+  };
 
   beforeAll(() => {
-    workItems = [
-      {
-        associatedJudge: 'Judge Barker',
-        caseIsInProgress: false,
-        docketEntry: {
-          isFileAttached: true,
-        },
-      },
-      {
-        associatedJudge: 'Judge Carey',
-        caseIsInProgress: false,
-        docketEntry: {
-          isFileAttached: true,
-        },
-      },
-      {
-        associatedJudge: CHIEF_JUDGE,
-        caseIsInProgress: false,
-        docketEntry: {
-          isFileAttached: true,
-        },
-      },
-      {
-        associatedJudge: 'Judge Barker',
-        caseIsInProgress: true,
-        docketEntry: {
-          isFileAttached: true,
-        },
-      },
-      {
-        associatedJudge: 'Judge Barker',
-        caseIsInProgress: false,
-        docketEntry: {
-          isFileAttached: false,
-        },
-      },
-    ];
-
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets sectionInboxCount for a docketClerk user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.docketClerk,
-    });
-
+  it('sets state.sectionInboxCount from notifications.qcSectionInboxCount', async () => {
     const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
-      props: {
-        workItems,
-      },
-      state: {
-        judgeUser: undefined,
-        workQueueToDisplay: {},
-      },
+      state,
     });
-    expect(result.state.sectionInboxCount).toEqual(3);
+    expect(result.state.sectionInboxCount).toEqual(7);
   });
 
-  it('sets sectionInProgressCount for a docketClerk user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: USER_ROLES.docketClerk,
-    });
-
+  it('sets state.sectionInProgressCount from notifications.qcSectionInProgressCount', async () => {
     const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
-      props: {
-        workItems,
-      },
-      state: {
-        judgeUser: undefined,
-        workQueueToDisplay: {},
-      },
+      state,
     });
-    expect(result.state.sectionInProgressCount).toEqual(1);
+    expect(result.state.sectionInProgressCount).toEqual(8);
   });
 
-  it('sets sectionInboxCount for a judge user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Judge Barker',
-      role: USER_ROLES.judge,
-    });
-
+  it('sets state.individualInboxCount from notifications.qcIndividualInboxCount', async () => {
     const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
-      props: {
-        workItems,
-      },
-      state: {
-        judgeUser: {
-          name: 'Judge Barker',
-        },
-        workQueueToDisplay: {},
-      },
+      state,
     });
-    expect(result.state.sectionInboxCount).toEqual(1);
+    expect(result.state.individualInboxCount).toEqual(10);
   });
 
-  it('sets sectionInboxCount for a chambers user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'ADC',
-      role: USER_ROLES.adc,
-    });
-
+  it('sets state.individualInProgressCount from notifications.qcIndividualInProgressCount', async () => {
     const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
-      props: {
-        workItems,
-      },
-      state: {
-        workQueueToDisplay: {},
-      },
+      state,
     });
-    expect(result.state.sectionInboxCount).toEqual(1);
+    expect(result.state.individualInProgressCount).toEqual(9);
   });
 });
