@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets based on the current user and work queue to display
+ * sets individual and section inbox and in progress work items counts
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
@@ -9,8 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 
-// TODO 6069 - Rename to setBoxCount
-export const setSectionBoxCountAction = ({ get, store }) => {
+export const setWorkItemsCountAction = ({ get, store }) => {
   const notifications = get(state.notifications);
 
   store.set(state.sectionInboxCount, notifications.qcSectionInboxCount);
