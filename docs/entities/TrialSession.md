@@ -7,28 +7,73 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     address2: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     city: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     courtReporter: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     courthouseName: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - ""
     createdAt: 
@@ -43,12 +88,26 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "TrialSession"
     irsCalendarAdministrator: 
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     isCalendared: 
       type: "boolean"
       flags: 
@@ -57,6 +116,35 @@
       type: "object"
       flags: 
         presence: "optional"
+      keys: 
+        name: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+        userId: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
     maxCases: 
       type: "number"
       flags: 
@@ -74,6 +162,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 400
@@ -90,6 +182,10 @@
         presence: "optional"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
@@ -98,6 +194,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Regular"
         - "Small"
@@ -115,15 +216,86 @@
       type: "string"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/"
     state: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
-        - ""
+        - "AK"
+        - "AL"
+        - "AR"
+        - "AZ"
+        - "CA"
+        - "CO"
+        - "CT"
+        - "DC"
+        - "DE"
+        - "FL"
+        - "GA"
+        - "HI"
+        - "IA"
+        - "ID"
+        - "IL"
+        - "IN"
+        - "KS"
+        - "KY"
+        - "LA"
+        - "MA"
+        - "MD"
+        - "ME"
+        - "MI"
+        - "MN"
+        - "MO"
+        - "MS"
+        - "MT"
+        - "NC"
+        - "ND"
+        - "NE"
+        - "NH"
+        - "NJ"
+        - "NM"
+        - "NV"
+        - "NY"
+        - "OH"
+        - "OK"
+        - "OR"
+        - "PA"
+        - "RI"
+        - "SC"
+        - "SD"
+        - "TN"
+        - "TX"
+        - "UT"
+        - "VA"
+        - "VT"
+        - "WA"
+        - "WI"
+        - "WV"
+        - "WY"
+        - "AA"
+        - "AE"
+        - "AP"
+        - "AS"
+        - "FM"
+        - "GU"
+        - "MH"
+        - "MP"
+        - "PR"
+        - "PW"
+        - "VI"
     swingSession: 
       type: "boolean"
       flags: 
@@ -131,6 +303,10 @@
     swingSessionId: 
       type: "string"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -159,11 +335,21 @@
             type: "string"
             flags: 
               presence: "optional"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
     term: 
       type: "string"
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Winter"
         - "Fall"
@@ -173,19 +359,160 @@
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 4
     trialClerk: 
       type: "object"
       flags: 
         presence: "optional"
+      keys: 
+        name: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "max"
+              args: 
+                limit: 100
+        userId: 
+          type: "string"
+          flags: 
+            presence: "required"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
     trialLocation: 
-      type: "string"
+      type: "alternatives"
       flags: 
         presence: "required"
+      matches: 
+        - 
+          schema: 
+            type: "string"
+            flags: 
+              only: true
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+            allow: 
+              - "Fresno, California"
+              - "Tallahassee, Florida"
+              - "Pocatello, Idaho"
+              - "Peoria, Illinois"
+              - "Wichita, Kansas"
+              - "Shreveport, Louisiana"
+              - "Portland, Maine"
+              - "Billings, Montana"
+              - "Albany, New York"
+              - "Syracuse, New York"
+              - "Bismarck, North Dakota"
+              - "Aberdeen, South Dakota"
+              - "Burlington, Vermont"
+              - "Roanoke, Virginia"
+              - "Cheyenne, Wyoming"
+              - "Birmingham, Alabama"
+              - "Mobile, Alabama"
+              - "Anchorage, Alaska"
+              - "Phoenix, Arizona"
+              - "Little Rock, Arkansas"
+              - "Los Angeles, California"
+              - "San Diego, California"
+              - "San Francisco, California"
+              - "Denver, Colorado"
+              - "Hartford, Connecticut"
+              - "Washington, District of Columbia"
+              - "Jacksonville, Florida"
+              - "Miami, Florida"
+              - "Tampa, Florida"
+              - "Atlanta, Georgia"
+              - "Honolulu, Hawaii"
+              - "Boise, Idaho"
+              - "Chicago, Illinois"
+              - "Indianapolis, Indiana"
+              - "Des Moines, Iowa"
+              - "Louisville, Kentucky"
+              - "New Orleans, Louisiana"
+              - "Baltimore, Maryland"
+              - "Boston, Massachusetts"
+              - "Detroit, Michigan"
+              - "St. Paul, Minnesota"
+              - "Jackson, Mississippi"
+              - "Kansas City, Missouri"
+              - "St. Louis, Missouri"
+              - "Helena, Montana"
+              - "Omaha, Nebraska"
+              - "Las Vegas, Nevada"
+              - "Reno, Nevada"
+              - "Albuquerque, New Mexico"
+              - "Buffalo, New York"
+              - "New York City, New York"
+              - "Winston-Salem, North Carolina"
+              - "Cincinnati, Ohio"
+              - "Cleveland, Ohio"
+              - "Columbus, Ohio"
+              - "Oklahoma City, Oklahoma"
+              - "Portland, Oregon"
+              - "Philadelphia, Pennsylvania"
+              - "Pittsburgh, Pennsylvania"
+              - "Columbia, South Carolina"
+              - "Knoxville, Tennessee"
+              - "Memphis, Tennessee"
+              - "Nashville, Tennessee"
+              - "Dallas, Texas"
+              - "El Paso, Texas"
+              - "Houston, Texas"
+              - "Lubbock, Texas"
+              - "San Antonio, Texas"
+              - "Salt Lake City, Utah"
+              - "Richmond, Virginia"
+              - "Seattle, Washington"
+              - "Spokane, Washington"
+              - "Charleston, West Virginia"
+              - "Milwaukee, Wisconsin"
+              - null
+        - 
+          schema: 
+            type: "string"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "pattern"
+                args: 
+                  regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
     trialSessionId: 
       type: "string"
       flags: 
         presence: "optional"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "guid"
           args: 
@@ -205,6 +532,10 @@
                 description: "Docket number of the case."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "pattern"
                   args: 
                     regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -218,6 +549,15 @@
                 presence: "optional"
             disposition: 
               type: "string"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
               whens: 
                 - 
                   ref: 

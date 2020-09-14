@@ -28,7 +28,7 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
 
   const documentEntity = caseEntity.getDocumentById({ documentId });
 
-  const isPrivate = isPrivateDocument(documentEntity, caseEntity.docketRecord);
+  const isPrivate = isPrivateDocument(documentEntity, caseEntity.docketEntries);
 
   if (isPrivate) {
     throw new UnauthorizedError('Unauthorized to access private document');

@@ -10,6 +10,10 @@
         description: "Unique Case Deadline ID only used by the system."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "guid"
           args: 
             options: 
@@ -52,6 +56,10 @@
         description: "Docket number of the case containing the Case Deadline."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "pattern"
           args: 
             regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -60,6 +68,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "CaseDeadline"
 

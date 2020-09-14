@@ -13,7 +13,7 @@ describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
 
-  beforeAll(() => {
+  beforeEach(() => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -28,27 +28,20 @@ describe('strikeDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      docketRecord: [
+      docketEntries: [
         {
           description: 'first record',
-          docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-          eventCode: 'P',
-          filingDate: '2018-03-01T00:01:00.000Z',
-          index: 1,
-        },
-      ],
-      documents: [
-        {
           docketNumber: '45678-18',
           documentId: '8675309b-18d0-43ec-bafb-654e83405411',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          index: 1,
+          isOnDocketRecord: true,
           userId: mockUserId,
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -74,7 +67,7 @@ describe('strikeDocketEntryInteractor', () => {
       strikeDocketEntryInteractor({
         applicationContext,
         docketNumber: caseRecord.docketNumber,
-        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -92,10 +85,10 @@ describe('strikeDocketEntryInteractor', () => {
         docketNumber: caseRecord.docketNumber,
         docketRecordId: 'does-not-exist',
       }),
-    ).rejects.toThrow('Docket Record not found');
+    ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call getCaseByDocketNumber, getUserById, and updateDocketRecord', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and updateDocument', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -105,7 +98,7 @@ describe('strikeDocketEntryInteractor', () => {
     await strikeDocketEntryInteractor({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
+      documentId: '8675309b-18d0-43ec-bafb-654e83405411',
     });
 
     expect(
@@ -115,7 +108,28 @@ describe('strikeDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getUserById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateDocketRecord,
+      applicationContext.getPersistenceGateway().updateDocument,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocument.mock.calls[0][0]
+        .document,
+    ).toMatchObject({ strickenAt: expect.anything() });
+  });
+
+  it('should throw an error if the document is not on the docket record', async () => {
+    caseRecord.docketEntries[0].isOnDocketRecord = false;
+
+    await expect(
+      strikeDocketEntryInteractor({
+        applicationContext,
+        docketNumber: caseRecord.docketNumber,
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+      }),
+    ).rejects.toThrow(
+      'Cannot strike a document that is not on the docket record.',
+    );
+    expect(
+      applicationContext.getPersistenceGateway().updateDocument,
+    ).not.toHaveBeenCalled();
   });
 });

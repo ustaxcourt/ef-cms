@@ -38,7 +38,9 @@ describe('uploadExternalDocumentsInteractor', () => {
         documentFiles: {
           primary: 'something',
         },
-        documentMetadata: {},
+        documentMetadata: {
+          primaryDocumentFile: {},
+        },
         progressFunctions: {
           primary: 'something',
         },
@@ -64,6 +66,8 @@ describe('uploadExternalDocumentsInteractor', () => {
         documentMetadata: {
           hasSecondarySupportingDocuments: true,
           hasSupportingDocuments: true,
+          primaryDocumentFile: {},
+          secondaryDocument: {},
           secondarySupportingDocuments: [{ supportingDocument: 'something' }],
           supportingDocuments: [{ supportingDocument: 'something' }],
         },
@@ -92,7 +96,10 @@ describe('uploadExternalDocumentsInteractor', () => {
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-        documentMetadata: {},
+        documentMetadata: {
+          primaryDocumentFile: {},
+          secondaryDocument: {},
+        },
         progressFunctions: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -112,7 +119,10 @@ describe('uploadExternalDocumentsInteractor', () => {
         secondary: 'something2',
         secondarySupporting0: 'something4',
       },
-      documentMetadata: {},
+      documentMetadata: {
+        primaryDocumentFile: {},
+        secondaryDocument: {},
+      },
       leadDocketNumber: '123-20',
       progressFunctions: {
         primary: 'something',

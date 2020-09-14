@@ -77,6 +77,6 @@ export const respondentAddsStipulatedDecision = (test, fakeFile) => {
 
     await test.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('caseDetail.documents').length).toEqual(4);
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(6);
   });
 };

@@ -39,7 +39,7 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
       },
     );
 
-    const selectedDocument = caseDetailFormatted.documents.find(
+    const selectedDocument = caseDetailFormatted.formattedDocketEntries.find(
       document => document.documentId === documentId,
     );
 

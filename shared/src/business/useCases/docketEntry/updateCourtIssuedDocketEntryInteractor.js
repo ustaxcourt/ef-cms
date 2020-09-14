@@ -3,10 +3,8 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { omit } = require('lodash');
 const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 
 /**
@@ -72,45 +70,31 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     trialLocation: documentMeta.trialLocation,
   };
 
-  const documentEntity = new Document(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
+      description: editableFields.documentTitle,
+      editState: JSON.stringify(editableFields),
+      isOnDocketRecord: true,
       secondaryDate,
       userId: user.userId,
     },
     { applicationContext },
   );
 
-  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
-    documentEntity.documentId,
-  );
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const docketRecordEntry = new DocketRecord(
-    {
-      ...existingDocketRecordEntry,
-      description: editableFields.documentTitle,
-      documentId: documentEntity.documentId,
-      editState: JSON.stringify(editableFields),
-      eventCode: documentEntity.eventCode,
-      filingDate: documentEntity.receivedAt,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
-  caseEntity.updateDocument(documentEntity);
-
-  const { workItem } = documentEntity;
+  const { workItem } = docketEntryEntity;
 
   Object.assign(workItem, {
     document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
   });
 
-  documentEntity.setWorkItem(workItem);
+  docketEntryEntity.setWorkItem(workItem);
 
   const saveItems = [
     applicationContext.getPersistenceGateway().createUserInboxRecord({

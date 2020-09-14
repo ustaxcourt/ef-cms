@@ -6,7 +6,7 @@ export const getShowNotServedForDocument = ({
 }) => {
   let showNotServed = false;
 
-  const caseDocument = caseDetail.documents.find(
+  const caseDocument = caseDetail.docketEntries.find(
     document => document.documentId === documentId,
   );
 

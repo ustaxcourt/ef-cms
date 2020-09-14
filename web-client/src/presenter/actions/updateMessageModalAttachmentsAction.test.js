@@ -9,7 +9,7 @@ describe('updateMessageModalAttachmentsAction', () => {
         documentTitle: 'Test Correspondence',
       },
     ],
-    documents: [
+    docketEntries: [
       {
         documentId: '123',
         documentType: 'Petition',

@@ -5,6 +5,7 @@ const {
   generateTrialCalendarPdfInteractor,
 } = require('./generateTrialCalendarPdfInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { US_STATES } = require('../../entities/EntityConstants');
 
 describe('generateTrialCalendarPdfInteractor', () => {
   const mockPdfUrl = { url: 'www.example.com' };
@@ -27,7 +28,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       .getTrialSessionById.mockReturnValue({
         address1: '123 Some Street',
         address2: 'Suite B',
-        city: 'New York',
+        city: US_STATES.NY,
         courtReporter: 'Lois Lane',
         courthouseName: 'Test Courthouse',
         irsCalendarAdministrator: 'iCalRS Admin',

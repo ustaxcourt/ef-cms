@@ -77,7 +77,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     expect(transcriptDocuments[1].showLinkToDocument).toEqual(false);
     expect(transcriptDocuments[1].isUnservable).toEqual(true);
 
-    const transDocketRecord = formattedCase.docketRecord.find(
+    const transDocketRecord = formattedCase.docketEntries.find(
       record => record.eventCode === TRANSCRIPT_EVENT_CODE,
     );
     expect(transDocketRecord.index).toBeTruthy();

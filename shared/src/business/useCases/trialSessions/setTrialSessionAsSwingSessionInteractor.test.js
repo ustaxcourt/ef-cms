@@ -22,7 +22,7 @@ const OTHER_MOCK_TRIAL_SESSION = {
   startDate: '3000-03-03T00:00:00.000Z',
   term: 'Fall',
   termYear: '3000',
-  trialLocation: 'Huntsville, AL',
+  trialLocation: 'Birmingham, Alabama',
   trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
 };
 

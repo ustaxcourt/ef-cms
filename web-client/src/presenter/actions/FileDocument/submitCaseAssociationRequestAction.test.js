@@ -29,6 +29,9 @@ describe('submitCaseAssociationRequestAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        documentsFiled: { primaryDocumentId: applicationContext.getUniqueId() },
+      },
       state: {
         caseDetail: {},
         form: {
@@ -46,6 +49,9 @@ describe('submitCaseAssociationRequestAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        documentsFiled: { primaryDocumentId: applicationContext.getUniqueId() },
+      },
       state: {
         caseDetail: {},
         form: {
@@ -58,5 +64,25 @@ describe('submitCaseAssociationRequestAction', () => {
     expect(
       submitPendingCaseAssociationRequestInteractor.mock.calls.length,
     ).toEqual(1);
+  });
+
+  it('should return the documentId of the uploaded document as documentsFiled.primaryDocumentId', async () => {
+    const { output } = await runAction(submitCaseAssociationRequestAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        documentsFiled: { primaryDocumentId: applicationContext.getUniqueId() },
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          documentType: 'Notice of Intervention',
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(output.documentsFiled.primaryDocumentId).toBeDefined();
   });
 });

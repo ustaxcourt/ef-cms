@@ -76,16 +76,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(createdCase).toMatchObject({
       caseCaption: 'Bob Jones2, Petitioner',
       createdAt: RECEIVED_DATE,
-      docketNumber: '101-19',
-      docketNumberWithSuffix: '101-19',
-      docketRecord: [
-        {
-          description: 'Petition',
-          filedBy: 'Petr. Bob Jones',
-          filingDate: RECEIVED_DATE,
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
@@ -117,6 +108,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
           receivedAt: RECEIVED_DATE,
         },
       ],
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19',
       initialCaption: 'Bob Jones2, Petitioner',
       initialDocketNumberSuffix: '_',
       noticeOfAttachments: false,

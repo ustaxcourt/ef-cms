@@ -7,23 +7,26 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
- * @param {object} providers.props the cerebral props object
  */
 export const setAddEditUserCaseNoteModalStateFromDetailAction = ({
   applicationContext,
   get,
   store,
 }) => {
-  const notes = get(state.caseDetail.judgesNote.notes);
-  const { caseCaption, docketNumber, docketNumberSuffix } = get(
+  const currentUser = applicationContext.getCurrentUser();
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  const { caseCaption, docketNumber, docketNumberWithSuffix } = get(
     state.caseDetail,
   );
+  const notes = get(state.caseDetail.judgesNote.notes);
   const caseTitle = applicationContext.getCaseTitle(caseCaption || '');
+  const notesLabel =
+    currentUser.role === USER_ROLES.trialClerk ? 'Notes' : 'Judge’s notes';
 
-  store.set(
-    state.modal.docketNumber,
-    `${docketNumber}${docketNumberSuffix ? docketNumberSuffix : ''}`,
-  );
   store.set(state.modal.caseTitle, caseTitle);
+  store.set(state.modal.docketNumber, docketNumber);
+  store.set(state.modal.docketNumberWithSuffix, docketNumberWithSuffix);
   store.set(state.modal.notes, notes);
+  store.set(state.modal.notesLabel, notesLabel);
 };

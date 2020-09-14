@@ -14,14 +14,20 @@ describe('batchDownloadTrialSessionInteractor', () => {
       ...MOCK_CASE,
     };
 
-    mockCase.docketRecord = [
-      ...mockCase.docketRecord,
+    mockCase.docketEntries = [
+      ...mockCase.docketEntries,
       {
         description: 'fourth record',
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        documentType: 'Stipulated Decision',
+        entityName: 'DocketEntry',
         eventCode: 'SDEC',
         filingDate: '2018-03-01T00:03:00.000Z',
         index: 4,
+        isDraft: false,
+        isMinuteEntry: false,
+        isOnDocketRecord: true,
+        userId: 'abc-123',
       },
     ];
 

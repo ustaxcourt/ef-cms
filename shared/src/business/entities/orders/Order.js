@@ -1,6 +1,10 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
 
@@ -8,11 +12,13 @@ const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
  * @param {object} rawOrder the raw order data
  * @constructor
  */
-function Order(rawOrder) {
+function Order() {}
+
+Order.prototype.init = function init(rawOrder) {
   this.documentTitle = rawOrder.documentTitle;
   this.documentType = rawOrder.documentType;
   this.orderBody = rawOrder.orderBody;
-}
+};
 
 Order.VALIDATION_ERROR_MESSAGES = {
   documentTitle: 'Enter the title of this order',
@@ -22,16 +28,12 @@ Order.VALIDATION_ERROR_MESSAGES = {
 };
 
 Order.VALIDATION_RULES = {
-  documentTitle: joi.string().max(100).required(),
-  documentType: joi
-    .string()
-    .valid(...ALL_DOCUMENT_TYPES)
-    .required(),
-  eventCode: joi
-    .string()
-    .valid(...ALL_EVENT_CODES)
-    .optional(),
-  orderBody: joi.string().max(500).required(),
+  documentTitle: JoiValidationConstants.STRING.max(100).required(),
+  documentType: JoiValidationConstants.STRING.valid(
+    ...ALL_DOCUMENT_TYPES,
+  ).required(),
+  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
+  orderBody: JoiValidationConstants.STRING.max(500).required(),
 };
 
 joiValidationDecorator(
@@ -40,4 +42,4 @@ joiValidationDecorator(
   Order.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { Order };
+module.exports = { Order: validEntityDecorator(Order) };

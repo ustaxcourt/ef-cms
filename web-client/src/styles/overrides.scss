@@ -25,6 +25,8 @@ option:first-child {
     position: relative;
     padding-right: 2rem;
     padding-left: 2rem;
+    color: color($theme-color-base-darkest);
+    font-size: 17px;
     svg {
       position: absolute;
       left: 0;
@@ -121,11 +123,11 @@ option:first-child {
 }
 
 .usa-alert--info {
-  background-color: $color-primary-alt-lightest;
+  background-color: color($theme-color-base-lightest);
   background-image: url('images/alerts/info.svg');
 
   &::before {
-    background-color: color($theme-color-accent-cool-dark);
+    background-color: color($theme-color-base-lightest);
   }
 }
 
@@ -156,6 +158,7 @@ option:first-child {
 
   .usa-alert__body {
     display: block;
+    padding-left: 2.5rem;
   }
 
   .usa-alert__action {

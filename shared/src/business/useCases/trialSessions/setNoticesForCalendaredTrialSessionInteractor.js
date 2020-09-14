@@ -12,7 +12,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -118,12 +118,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocumentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
 
-    const noticeOfTrialDocument = new Document(
+    const noticeOfTrialDocketEntry = new DocketEntry(
       {
+        description: noticeOfTrialDocumentTitle,
         documentId: newNoticeOfTrialIssuedDocumentId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
+        isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
         userId: user.userId,
@@ -131,9 +133,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(noticeOfTrialDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
     caseEntity.setNoticeOfTrialDate();
 
     // Standing Pretrial Notice/Order
@@ -175,33 +175,36 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       documentId: newStandingPretrialDocumentId,
     });
 
-    const standingPretrialDocument = new Document(
+    const standingPretrialDocketEntry = new DocketEntry(
       {
+        description: standingPretrialDocumentTitle,
         documentId: newStandingPretrialDocumentId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
+        isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
     );
 
-    caseEntity.addDocument(standingPretrialDocument, {
-      applicationContext,
-    });
+    caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
     // Serve notice
     const servedParties = await serveNoticesForCase({
       caseEntity,
-      noticeDocumentEntity: noticeOfTrialDocument,
+      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
       noticeDocumentPdfData: noticeOfTrialIssuedFile,
-      standingPretrialDocumentEntity: standingPretrialDocument,
+      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
       standingPretrialPdfData: standingPretrialFile,
     });
 
-    noticeOfTrialDocument.setAsServed(servedParties.all);
-    standingPretrialDocument.setAsServed(servedParties.all);
+    noticeOfTrialDocketEntry.setAsServed(servedParties.all);
+    standingPretrialDocketEntry.setAsServed(servedParties.all);
+
+    caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
+    caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -218,17 +221,17 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    *
    * @param {object} deconstructed function arguments
    * @param {object} deconstructed.caseEntity the case entity
-   * @param {object} deconstructed.noticeDocumentEntity the notice document entity
+   * @param {object} deconstructed.noticeDocketEntryEntity the notice document entity
    * @param {Uint8Array} deconstructed.noticeDocumentPdfData the pdf data of the notice doc
-   * @param {object} deconstructed.standingPretrialDocumentEntity the standing pretrial document entity
+   * @param {object} deconstructed.standingPretrialDocketEntryEntity the standing pretrial document entity
    * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data of the standing pretrial doc
    * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticesForCase = async ({
     caseEntity,
-    noticeDocumentEntity,
+    noticeDocketEntryEntity,
     noticeDocumentPdfData,
-    standingPretrialDocumentEntity,
+    standingPretrialDocketEntryEntity,
     standingPretrialPdfData,
   }) => {
     const servedParties = aggregatePartiesForService(caseEntity);
@@ -236,14 +239,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeDocumentEntity,
+      documentEntity: noticeDocketEntryEntity,
       servedParties,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: standingPretrialDocumentEntity,
+      documentEntity: standingPretrialDocketEntryEntity,
       servedParties,
     });
 

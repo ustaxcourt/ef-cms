@@ -1,6 +1,10 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -12,12 +16,14 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function ExternalDocumentNonStandardA(rawProps) {
+function ExternalDocumentNonStandardA() {}
+
+ExternalDocumentNonStandardA.prototype.init = function init(rawProps) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.previousDocument = rawProps.previousDocument;
-}
+};
 
 ExternalDocumentNonStandardA.prototype.getDocumentTitle = function () {
   return replaceBracketed(
@@ -31,14 +37,14 @@ ExternalDocumentNonStandardA.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardA.schema = {
-  category: joi.string().required(),
-  documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  category: JoiValidationConstants.STRING.required(),
+  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentType: JoiValidationConstants.STRING.required(),
   previousDocument: joi
     .object()
     .keys({
-      documentTitle: joi.string().optional(),
-      documentType: joi.string().required(),
+      documentTitle: JoiValidationConstants.STRING.optional(),
+      documentType: JoiValidationConstants.STRING.required(),
     })
     .required(),
 };
@@ -49,4 +55,6 @@ joiValidationDecorator(
   ExternalDocumentNonStandardA.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { ExternalDocumentNonStandardA };
+exports.ExternalDocumentNonStandardA = validEntityDecorator(
+  ExternalDocumentNonStandardA,
+);

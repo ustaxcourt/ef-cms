@@ -134,8 +134,11 @@ describe('Create a work item', () => {
 
     await test.runSequence('completeDocketEntryQCSequence');
 
-    const noticeDocument = test.getState('caseDetail.documents.5');
-    expect(noticeDocument.documentType).toEqual('Notice of Docket Change');
+    const noticeDocument = test
+      .getState('caseDetail.docketEntries')
+      .find(doc => doc.documentType === 'Notice of Docket Change');
+
+    expect(noticeDocument).toBeTruthy();
     expect(noticeDocument.servedAt).toBeDefined();
     expect(test.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',

@@ -11,13 +11,13 @@ export const formatAttachments = ({ attachments, caseDetail }) => {
     archivedDocuments = [],
     archivedCorrespondences = [],
     correspondence = [],
-    documents,
+    docketEntries,
   } = caseDetail;
 
   const allDocuments = [
     ...archivedDocuments,
     ...archivedCorrespondences,
-    ...documents,
+    ...docketEntries,
     ...correspondence,
   ];
 

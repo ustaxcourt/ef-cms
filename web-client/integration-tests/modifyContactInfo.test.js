@@ -61,8 +61,8 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-    documentCount: 5,
-  });
+    documentCount: 6,
+  }); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
   petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactAddress(test);
   petitionerNavigatesToEditSecondaryContact(test);

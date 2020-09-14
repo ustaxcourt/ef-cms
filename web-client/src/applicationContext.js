@@ -9,7 +9,7 @@ import {
   Case,
   getPetitionDocumentFromDocuments,
 } from '../../shared/src/business/entities/cases/Case';
-import { Document } from '../../shared/src/business/entities/Document';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   compareISODateStrings,
@@ -26,8 +26,9 @@ import { generatePrintablePendingReportInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
-import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
+import { validateDocumentInteractor } from '../../shared/src/business/useCases/validateDocumentInteractor';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
@@ -47,6 +48,7 @@ import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/tr
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
   calculateISODate,
+  checkDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
@@ -97,12 +99,12 @@ import { formatAttachments } from '../../shared/src/business/utilities/formatAtt
 import {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
+  formatDocketEntry,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
@@ -338,6 +340,7 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
+  getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
@@ -431,7 +434,7 @@ const allUseCases = {
   validateCourtIssuedDocketEntryInteractor,
   validateCreateMessageInteractor,
   validateDocketEntryInteractor,
-  validateDocketRecordInteractor,
+  validateDocumentInteractor,
   validateEditPrivatePractitionerInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
@@ -537,6 +540,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
@@ -552,7 +556,7 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
-      formatDocketRecordWithDocument,
+      formatDocketEntry,
       formatDocument,
       formatDollars,
       formatJudgeName,
@@ -567,12 +571,12 @@ const applicationContext = {
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
-      isPendingOnCreation: Document.isPendingOnCreation,
+      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
-      sortDocketRecords,
+      sortDocketEntries,
     };
   },
   initHoneybadger: async () => {

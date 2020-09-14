@@ -10,7 +10,6 @@ export const unassociatedUserViewsCaseDetailForSealedCase = test => {
     //this user should NOT see any case details because they are not associated with the case
     expect(test.getState('caseDetail.sealedDate')).toBeUndefined();
     expect(test.getState('caseDetail.caseCaption')).toBeUndefined();
-    expect(test.getState('caseDetail.documents')).toEqual([]);
-    expect(test.getState('caseDetail.docketRecord')).toEqual([]);
+    expect(test.getState('caseDetail.docketEntries')).toEqual([]);
   });
 };

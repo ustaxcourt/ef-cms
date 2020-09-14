@@ -50,15 +50,18 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  documentUrlTranslator,
+} = require('../../../src/business/utilities/documentUrlTranslator');
+const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
+  formatDocketEntry,
   formatDocument,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
@@ -185,6 +188,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
       .mockImplementation(compareCasesByDocketNumber),
@@ -207,9 +211,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
-    formatDocketRecordWithDocument: jest
-      .fn()
-      .mockImplementation(formatDocketRecordWithDocument),
+    formatDocketEntry: jest.fn().mockImplementation(formatDocketEntry),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
@@ -244,7 +246,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
-    sortDocketRecords: jest.fn().mockImplementation(sortDocketRecords),
+    sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
   });
 
   const mockGetHttpClientReturnValue = {
@@ -318,8 +320,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteSectionOutboxRecord,
-    deleteUserOutboxRecord,
+    deleteSectionOutboxRecord: jest
+      .fn()
+      .mockImplementation(deleteSectionOutboxRecord),
+    deleteUserOutboxRecord: jest
+      .fn()
+      .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
     getAllCaseDeadlines: jest.fn(),
@@ -387,11 +393,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(() => new Uint8Array([])),
     docketNumberGenerator: mockCreateDocketNumberGenerator,
+    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
+      appEndpoint: 'localhost:1234',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     filterCaseMetadata: jest.fn(),
+    getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),

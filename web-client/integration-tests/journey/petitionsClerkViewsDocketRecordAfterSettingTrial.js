@@ -7,17 +7,17 @@ export const petitionsClerkViewsDocketRecordAfterSettingTrial = (
       docketNumber: test.docketNumber,
     });
 
-    const docketRecord = test.getState('caseDetail.docketRecord');
+    const documents = test.getState('caseDetail.docketEntries');
 
-    const noticeOfTrial = docketRecord.find(
-      entry => entry.description === 'Notice of Trial',
+    const noticeOfTrial = documents.find(
+      entry => entry.documentType === 'Notice of Trial',
     );
 
     const standingPretrialDocTitle =
       overrides.documentTitle || 'Standing Pretrial Order';
 
-    const standingPretrialDoc = docketRecord.find(
-      entry => entry.description === standingPretrialDocTitle,
+    const standingPretrialDoc = documents.find(
+      entry => entry.documentTitle === standingPretrialDocTitle,
     );
 
     expect(noticeOfTrial).toBeTruthy();

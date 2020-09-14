@@ -28,19 +28,7 @@ describe('updateCase', () => {
       state: 'CA',
     },
     createdAt: new Date().toISOString(),
-    docketNumber: '56789-18',
-    docketRecord: [
-      {
-        description: 'Petition',
-        docketRecordId: '000ba5a9-b37b-479d-9201-067ec6e33000',
-        documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        eventCode: 'P',
-        filedBy: 'Test User',
-        filingDate: '2019-01-01T00:01:00.000Z',
-        index: 1,
-      },
-    ],
-    documents: [
+    docketEntries: [
       {
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Petition',
@@ -71,6 +59,7 @@ describe('updateCase', () => {
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
     ],
+    docketNumber: '56789-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     petitioners: [{ name: 'Test Petitioner' }],
@@ -162,8 +151,8 @@ describe('updateCase', () => {
       docketNumber: caseToUpdate.docketNumber,
     });
 
-    const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
-    const documentToMatch = omit(MOCK_CASE.documents[0], 'createdAt');
+    const returnedDocument = omit(updatedCase.docketEntries[0], 'createdAt');
+    const documentToMatch = omit(MOCK_CASE.docketEntries[0], 'createdAt');
     expect(returnedDocument).toMatchObject(documentToMatch);
   });
 
@@ -271,7 +260,7 @@ describe('updateCase', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        documents: [...MOCK_CASE.documents, mockRQT],
+        docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
         isPaper: true,
       });
 
@@ -279,7 +268,7 @@ describe('updateCase', () => {
       applicationContext,
       caseToUpdate: {
         ...MOCK_CASE,
-        documents: [...MOCK_CASE.documents, mockRQT],
+        docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
         isPaper: true,
         mailingDate: 'yesterday',
       },

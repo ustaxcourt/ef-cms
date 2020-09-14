@@ -9,7 +9,7 @@ export const Hint = connect(function Hint(props) {
   return (
     <div
       className={classNames(
-        'alert-gold add-bottom-margin',
+        'alert-info add-bottom-margin',
         fullWidth && 'full-width',
         wider && 'wider',
         className,
@@ -17,7 +17,11 @@ export const Hint = connect(function Hint(props) {
     >
       <span className="usa-hint ustc-form-hint-with-svg">
         {!exclamation && (
-          <FontAwesomeIcon className="fa-icon-gold" icon="flag" size="lg" />
+          <FontAwesomeIcon
+            className="fa-icon-blue-vivid"
+            icon="info-circle"
+            size="lg"
+          />
         )}
         {exclamation && (
           <FontAwesomeIcon

@@ -1,4 +1,7 @@
-import { DOCUMENT_EXTERNAL_CATEGORIES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  INITIAL_DOCUMENT_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
@@ -6,51 +9,51 @@ import { runCompute } from 'cerebral/test';
 import { selectDocumentTypeHelper as selectDocumentTypeHelperComputed } from './selectDocumentTypeHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const CATEGORY_MAP = cloneDeep(DOCUMENT_EXTERNAL_CATEGORIES_MAP); // end-around deep-freeze of constants for purposes of test
-
-// external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
-CATEGORY_MAP['Miscellaneous'].push({
-  category: 'Miscellaneous',
-  documentTitle: '[First, Second, etc.] Something to [anything]',
-  documentType: 'Something [anything]',
-  eventCode: 'ABCD',
-  labelFreeText: 'What is this something for?',
-  labelFreeText2: '',
-  labelPreviousDocument: '',
-  ordinalField: 'What iteration is this filing?',
-  scenario: 'Nonstandard I',
-});
-
-CATEGORY_MAP['Decision'].push({
-  category: 'Decision',
-  documentTitle: 'Stipulated Decision Entered [judge] [anything]',
-  documentType: 'Stipulated Decision',
-  eventCode: 'SDEC',
-  labelFreeText: "Judge's Name",
-  labelFreeText2: 'Decision Notes',
-  labelPreviousDocument: '',
-  ordinalField: '',
-  scenario: 'Nonstandard J',
-});
-
-const selectDocumentTypeHelper = withAppContextDecorator(
-  selectDocumentTypeHelperComputed,
-  {
-    ...applicationContext,
-    getConstants: () => {
-      return {
-        ...applicationContext.getConstants(),
-        CATEGORY_MAP,
-      };
-    },
-  },
-);
-
-const state = {
-  caseDetail: MOCK_CASE,
-};
-
 describe('selectDocumentTypeHelper', () => {
+  const CATEGORY_MAP = cloneDeep(DOCUMENT_EXTERNAL_CATEGORIES_MAP); // end-around deep-freeze of constants for purposes of test
+
+  // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
+  CATEGORY_MAP['Miscellaneous'].push({
+    category: 'Miscellaneous',
+    documentTitle: '[First, Second, etc.] Something to [anything]',
+    documentType: 'Something [anything]',
+    eventCode: 'ABCD',
+    labelFreeText: 'What is this something for?',
+    labelFreeText2: '',
+    labelPreviousDocument: '',
+    ordinalField: 'What iteration is this filing?',
+    scenario: 'Nonstandard I',
+  });
+
+  CATEGORY_MAP['Decision'].push({
+    category: 'Decision',
+    documentTitle: 'Stipulated Decision Entered [judge] [anything]',
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+    labelFreeText: "Judge's Name",
+    labelFreeText2: 'Decision Notes',
+    labelPreviousDocument: '',
+    ordinalField: '',
+    scenario: 'Nonstandard J',
+  });
+
+  const selectDocumentTypeHelper = withAppContextDecorator(
+    selectDocumentTypeHelperComputed,
+    {
+      ...applicationContext,
+      getConstants: () => {
+        return {
+          ...applicationContext.getConstants(),
+          CATEGORY_MAP,
+        };
+      },
+    },
+  );
+
+  const state = {
+    caseDetail: MOCK_CASE,
+  };
+
   it('should return an empty object if no case detail is available', () => {
     const result = runCompute(selectDocumentTypeHelper, {
       state: {},
@@ -95,44 +98,9 @@ describe('selectDocumentTypeHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel: 'Which document are you objecting to?',
-        previouslyFiledDocuments: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            eventCode: 'P',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Answer',
-            documentType: 'Answer',
-            eventCode: 'A',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Proposed Stipulated Decision',
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
         showNonstandardForm: true,
       },
     });
@@ -167,44 +135,9 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel:
           'Which document is this affidavit in support of?',
-        previouslyFiledDocuments: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            eventCode: 'P',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Answer',
-            documentType: 'Answer',
-            eventCode: 'A',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Proposed Stipulated Decision',
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: 'Who signed this?',
@@ -224,44 +157,9 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel:
           'Which document is this Certificate of Service for?',
-        previouslyFiledDocuments: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            eventCode: 'P',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Answer',
-            documentType: 'Answer',
-            eventCode: 'A',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Proposed Stipulated Decision',
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
         showDateFields: true,
         showNonstandardForm: true,
         textInputLabel: 'Date of service',
@@ -299,44 +197,9 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         ordinalField: 'What iteration is this filing?',
         previousDocumentSelectLabel: 'Which document is this a supplement to?',
-        previouslyFiledDocuments: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            eventCode: 'P',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Answer',
-            documentType: 'Answer',
-            eventCode: 'A',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketNumber: '101-18',
-            documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentTitle: 'Proposed Stipulated Decision',
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            filedBy: 'Test Petitioner',
-            isFileAttached: true,
-            processingStatus: 'pending',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
         showNonstandardForm: true,
       },
     });

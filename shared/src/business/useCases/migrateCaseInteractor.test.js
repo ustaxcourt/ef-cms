@@ -61,13 +61,12 @@ describe('migrateCaseInteractor', () => {
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner1@example.com',
         name: 'Diana Prince',
-        phone: '+1 (215) 128-6587',
+        phone: '128-6587',
         postalCode: '69580',
-        state: 'AR',
+        state: 'WI',
       },
+      docketEntries: MOCK_CASE.docketEntries,
       docketNumber: '00101-00',
-      docketRecord: MOCK_CASE.docketRecord,
-      documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
       partyType: PARTY_TYPES.petitioner,
@@ -157,18 +156,6 @@ describe('migrateCaseInteractor', () => {
       ).rejects.toThrow('The Case entity was invalid');
     });
 
-    it('should fail to migrate a case when the docket record is invalid', async () => {
-      await expect(
-        migrateCaseInteractor({
-          applicationContext,
-          caseMetadata: {
-            ...caseMetadata,
-            docketRecord: [{}],
-          },
-        }),
-      ).rejects.toThrow('The Case entity was invalid');
-    });
-
     it('should provide developer-friendly feedback when the case is invalid', async () => {
       let error, results;
       try {
@@ -176,8 +163,10 @@ describe('migrateCaseInteractor', () => {
           applicationContext,
           caseMetadata: {
             ...MOCK_CASE,
+            docketEntries: [
+              { ...MOCK_CASE.docketEntries[0], documentId: 'invalid' },
+            ],
             docketNumber: 'ABC',
-            documents: [{ ...MOCK_CASE.documents[0], documentId: 'invalid' }],
           },
         });
       } catch (e) {
@@ -189,7 +178,7 @@ describe('migrateCaseInteractor', () => {
         "'docketNumber' with value 'ABC' fails to match the required pattern",
       );
       expect(error.message).toContain(
-        "'documents[0].documentId' must be a valid GUID",
+        "'docketEntries[0].documentId' must be a valid GUID",
       );
     });
   });
@@ -394,7 +383,7 @@ describe('migrateCaseInteractor', () => {
       ).toBeCalled();
       expect(
         applicationContext.getPersistenceGateway().deleteDocumentFromS3,
-      ).toBeCalledTimes(4); // MOCK_CASE has 4 documents
+      ).toBeCalledTimes(0); // MOCK_CASE has 4 documents
       expect(result).toBeDefined();
       expect(
         applicationContext.getPersistenceGateway().createCase,
@@ -431,5 +420,31 @@ describe('migrateCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw an exception when contacts are invalid', async () => {
+    await expect(
+      migrateCaseInteractor({
+        applicationContext,
+        caseMetadata: {
+          ...caseMetadata,
+          contactPrimary: {
+            address1: '64731 Moss Ridge Suite 997',
+            address2: null,
+            address3: null,
+            city: 'Landrychester',
+            contactId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+            country: 'U.S.A.',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Griffith, Moore and Freeman (f.k.a Herring-Benitez)',
+            postalCode: '73301',
+            state: 'TX',
+          },
+          contactSecondary: undefined,
+          partyType:
+            'Partnership (as a partner other than Tax Matters Partner)',
+        },
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
   });
 });

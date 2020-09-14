@@ -19,4 +19,13 @@ describe('reactTemplateGenerator', () => {
     expect(React.createElement).toHaveBeenCalled();
     expect(ReactDOM.renderToString).toHaveBeenCalled();
   });
+
+  it('calls the react render method and renders nothing with no data', () => {
+    reactTemplateGenerator({
+      componentName: 'SomeComponent',
+    });
+
+    expect(React.createElement).toHaveBeenCalled();
+    expect(ReactDOM.renderToString).toHaveBeenCalled();
+  });
 });

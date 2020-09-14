@@ -518,7 +518,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(archiveDraftDocumentLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/:docketRecordId/strike',
+    '/case-documents/:docketNumber/:documentId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
   // DELETE
@@ -743,6 +743,7 @@ app.post(
   );
   app.post('/messages', lambdaWrapper(createMessageLambda));
 }
+
 /**
  * migrate
  */
@@ -796,6 +797,7 @@ app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
     lambdaWrapper(runTrialSessionPlanningReportLambda),
   );
 }
+
 /**
  * sections
  */

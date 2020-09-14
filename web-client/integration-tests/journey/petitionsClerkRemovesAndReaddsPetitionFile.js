@@ -20,10 +20,10 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
 
     const documentIdToReplace = test.getState('documentId');
     const previousPetitionDocument = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(entry => entry.documentId === documentIdToReplace);
     const previousDocketRecordEntry = test
-      .getState('caseDetail.docketRecord')
+      .getState('caseDetail.docketEntries')
       .find(entry => entry.documentId === documentIdToReplace);
     const previousPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
@@ -35,7 +35,7 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
     await test.runSequence('deleteUploadedPdfSequence');
 
     const deletedDocument = test
-      .getState('form.documents')
+      .getState('form.docketEntries')
       .find(doc => doc.documentId === documentIdToReplace);
     expect(deletedDocument).toBeUndefined();
     expect(test.getState('pdfPreviewUrl')).toBeUndefined();
@@ -58,10 +58,10 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({});
 
     const updatedPetitionDocument = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode);
     const updatedDocketRecordEntry = test
-      .getState('caseDetail.docketRecord')
+      .getState('caseDetail.docketEntries')
       .find(entry => entry.documentId === documentIdToReplace);
     const updatedPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),

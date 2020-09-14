@@ -9,7 +9,7 @@ export const pdfSignerHelper = (get, applicationContext) => {
   const documentId = get(state.documentId);
   const pdfForSigning = get(state.pdfForSigning);
   const { isPdfAlreadySigned, signatureApplied, signatureData } = pdfForSigning;
-  const caseDocument = caseDetail.documents.find(
+  const caseDocument = caseDetail.docketEntries.find(
     doc => doc.documentId === documentId,
   );
 

@@ -17,7 +17,7 @@ export const docketClerkSavesAndServesDocketEntry = test => {
       },
     );
 
-    test.docketRecordEntry = caseDetailFormatted.docketRecord.find(
+    test.docketRecordEntry = caseDetailFormatted.formattedDocketEntries.find(
       entry => entry.eventCode === 'ADMR',
     );
 

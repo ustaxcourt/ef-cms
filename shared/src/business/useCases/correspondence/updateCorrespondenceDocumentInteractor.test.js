@@ -41,28 +41,21 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       state: 'TN',
     },
     correspondence: [mockCorrespondence],
-    docketNumber: '123-45',
-    docketRecord: [
+    docketEntries: [
       {
         description: 'Docket Record 1',
-        docketRecordId: mockDocumentId,
-        documentId: mockDocumentId,
-        eventCode: 'OAJ',
-        filingDate: createISODateString(),
-        index: 0,
-      },
-    ],
-    documents: [
-      {
         documentId: mockDocumentId,
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
+        filingDate: createISODateString(),
+        index: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: '611dc444-fd8f-43a0-8844-c4d57745c718',
         signedJudgeName: 'Judy',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
     ],
+    docketNumber: '123-45',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',

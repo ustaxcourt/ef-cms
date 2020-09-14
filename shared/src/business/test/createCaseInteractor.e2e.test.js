@@ -57,19 +57,7 @@ describe('createCase integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Rick Petitioner, Petitioner',
-      docketNumber: '101-19',
-      docketNumberWithSuffix: '101-19S',
-      docketRecord: [
-        {
-          description: 'Petition',
-          filedBy: 'Petr. Rick Petitioner',
-        },
-        {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
-          eventCode: 'RQT',
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           documentType: 'Petition',
           eventCode: 'P',
@@ -91,12 +79,18 @@ describe('createCase integration test', () => {
           },
         },
         {
+          description: 'Request for Place of Trial at Aberdeen, South Dakota',
+          eventCode: 'RQT',
+        },
+        {
           documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19S',
       initialCaption: 'Rick Petitioner, Petitioner',
       initialDocketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       noticeOfAttachments: false,

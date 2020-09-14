@@ -30,6 +30,10 @@
                 presence: "required"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -41,6 +45,10 @@
                 presence: "required"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 500
@@ -49,6 +57,10 @@
               flags: 
                 presence: "optional"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -74,6 +86,10 @@
                 presence: "required"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -88,6 +104,22 @@
         - 
           type: "object"
           keys: 
+            action: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "Action taken in response to this Docket Record item."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
+              allow: 
+                - null
             addToCoversheet: 
               type: "boolean"
               flags: 
@@ -98,6 +130,10 @@
                 presence: "optional"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 500
@@ -106,6 +142,10 @@
               flags: 
                 presence: "optional"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -171,12 +211,21 @@
                 description: "An optional date used when generating a fully concatenated document title."
               allow: 
                 - null
+            description: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value."
             docketNumber: 
               type: "string"
               flags: 
                 presence: "optional"
                 description: "Docket Number of the associated Case in XXXXX-YY format."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "pattern"
                   args: 
@@ -188,6 +237,10 @@
                 description: "Optional Docket Number text used when generating a fully concatenated document title."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 500
@@ -197,6 +250,10 @@
                 presence: "optional"
                 description: "The S3 ID containing the text contents of the document."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -210,6 +267,10 @@
                 description: "ID of the associated PDF document in the S3 bucket."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -221,6 +282,10 @@
                 presence: "optional"
                 description: "The id for the original document that was uploaded."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -234,6 +299,10 @@
                 description: "The title of this document."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 3000
@@ -243,6 +312,11 @@
                 only: true
                 presence: "required"
                 description: "The type of this document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "Administrative Record"
                 - "Affidavit in Support"
@@ -271,6 +345,7 @@
                 - "Bond"
                 - "Bounced Electronic Service"
                 - "Brief in Support"
+                - "Caption of case is amended"
                 - "Certificate as to the Genuineness of the Administrative Record"
                 - "Certificate of Service"
                 - "Civil Penalty Approval Form"
@@ -279,9 +354,12 @@
                 - "Decision"
                 - "Declaration in Support"
                 - "Designation of Counsel to Receive Service"
+                - "Docket Number is amended"
                 - "Entry of Appearance"
                 - "Evidence"
                 - "Exhibit(s)"
+                - "Filing Fee Paid"
+                - "Filing Fee Waived"
                 - "Further Trial before"
                 - "Hearing Exhibits"
                 - "Hearing before"
@@ -585,18 +663,48 @@
                 presence: "optional"
               allow: 
                 - null
+            editState: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "JSON representation of the in-progress edit of this item."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 4000
+              allow: 
+                - null
+              metas: 
+                - 
+                  tags: 
+                    - "Restricted"
             entityName: 
               type: "string"
               flags: 
                 only: true
                 presence: "required"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
-                - "Document"
+                - "DocketEntry"
             eventCode: 
               type: "string"
               flags: 
                 only: true
                 presence: "required"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "A"
                 - "AAAP"
@@ -942,6 +1050,10 @@
                 description: "The party who filed the document, either the petitioner or respondent on the case."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 500
@@ -954,6 +1066,11 @@
                     type: "string"
                     flags: 
                       only: true
+                    rules: 
+                      - 
+                        name: "min"
+                        args: 
+                          limit: 1
                     allow: 
                       - "Answer"
                       - "Answer to Amended Petition"
@@ -1239,6 +1356,11 @@
                           type: "string"
                           flags: 
                             only: true
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
                           allow: 
                             - "Notice of Change of Address"
                             - "Notice of Change of Address and Telephone Number"
@@ -1272,6 +1394,7 @@
                                   presence: "optional"
                                 allow: 
                                   - ""
+                                  - null
                         otherwise: 
                           type: "any"
                           flags: 
@@ -1282,6 +1405,7 @@
                       presence: "optional"
                     allow: 
                       - ""
+                      - null
             filingDate: 
               type: "date"
               flags: 
@@ -1301,6 +1425,10 @@
                 presence: "optional"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 500
@@ -1309,6 +1437,10 @@
               flags: 
                 presence: "optional"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -1322,6 +1454,14 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+            index: 
+              type: "number"
+              flags: 
+                presence: "optional"
+                description: "Index of this item in the Docket Record list."
+              rules: 
+                - 
+                  name: "integer"
             isAutoGenerated: 
               type: "boolean"
               flags: 
@@ -1376,6 +1516,14 @@
               flags: 
                 presence: "optional"
                 description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
+            isMinuteEntry: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            isOnDocketRecord: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
             isPaper: 
               type: "boolean"
               flags: 
@@ -1409,11 +1557,41 @@
                     type: "any"
                     flags: 
                       presence: "optional"
+            isStricken: 
+              type: "boolean"
+              flags: 
+                description: "Indicates the item has been removed from the docket record."
+              whens: 
+                - 
+                  ref: 
+                    path: 
+                      - "isLegacy"
+                  is: 
+                    type: "any"
+                    flags: 
+                      only: true
+                      presence: "required"
+                    allow: 
+                      - 
+                        override: true
+                      - true
+                  then: 
+                    type: "any"
+                    flags: 
+                      presence: "required"
+                  otherwise: 
+                    type: "any"
+                    flags: 
+                      presence: "optional"
             judge: 
               type: "string"
               flags: 
                 description: "The judge associated with the document."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -1429,6 +1607,11 @@
                     type: "string"
                     flags: 
                       only: true
+                    rules: 
+                      - 
+                        name: "min"
+                        args: 
+                          limit: 1
                     allow: 
                       - "Memorandum Opinion"
                       - "Summary Opinion"
@@ -1452,6 +1635,10 @@
                 presence: "optional"
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 100
@@ -1466,6 +1653,11 @@
               flags: 
                 only: true
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "Yes"
                 - "No"
@@ -1474,11 +1666,20 @@
               type: "string"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
             otherFilingParty: 
               type: "string"
               flags: 
                 description: "When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -1535,6 +1736,10 @@
                     description: "The ID of the previous document."
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -1547,6 +1752,10 @@
                     description: "The title of the previous document."
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "max"
                       args: 
                         limit: 3000
@@ -1556,6 +1765,11 @@
                     only: true
                     presence: "optional"
                     description: "The type of the previous document."
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "Administrative Record"
                     - "Affidavit in Support"
@@ -1584,6 +1798,7 @@
                     - "Bond"
                     - "Bounced Electronic Service"
                     - "Brief in Support"
+                    - "Caption of case is amended"
                     - "Certificate as to the Genuineness of the Administrative Record"
                     - "Certificate of Service"
                     - "Civil Penalty Approval Form"
@@ -1592,9 +1807,12 @@
                     - "Decision"
                     - "Declaration in Support"
                     - "Designation of Counsel to Receive Service"
+                    - "Docket Number is amended"
                     - "Entry of Appearance"
                     - "Evidence"
                     - "Exhibit(s)"
+                    - "Filing Fee Paid"
+                    - "Filing Fee Waived"
                     - "Further Trial before"
                     - "Hearing Exhibits"
                     - "Hearing before"
@@ -1907,6 +2125,10 @@
                         presence: "required"
                       rules: 
                         - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                        - 
                           name: "max"
                           args: 
                             limit: 100
@@ -1915,6 +2137,11 @@
               flags: 
                 only: true
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "complete"
                 - "pending"
@@ -1930,6 +2157,10 @@
               flags: 
                 presence: "optional"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -1950,6 +2181,11 @@
               flags: 
                 only: true
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "primaryDocument"
                 - "primarySupportingDocument"
@@ -1961,6 +2197,11 @@
               flags: 
                 only: true
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "Standard"
                 - "Nonstandard A"
@@ -2021,6 +2262,10 @@
                     description: "The title of the secondary document."
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "max"
                       args: 
                         limit: 500
@@ -2030,6 +2275,11 @@
                     only: true
                     presence: "required"
                     description: "The type of the secondary document."
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "Administrative Record"
                     - "Affidavit in Support"
@@ -2058,6 +2308,7 @@
                     - "Bond"
                     - "Bounced Electronic Service"
                     - "Brief in Support"
+                    - "Caption of case is amended"
                     - "Certificate as to the Genuineness of the Administrative Record"
                     - "Certificate of Service"
                     - "Civil Penalty Approval Form"
@@ -2066,9 +2317,12 @@
                     - "Decision"
                     - "Declaration in Support"
                     - "Designation of Counsel to Receive Service"
+                    - "Docket Number is amended"
                     - "Entry of Appearance"
                     - "Evidence"
                     - "Exhibit(s)"
+                    - "Filing Fee Paid"
+                    - "Filing Fee Waived"
                     - "Further Trial before"
                     - "Hearing Exhibits"
                     - "Hearing before"
@@ -2372,6 +2626,11 @@
                     only: true
                     presence: "required"
                     description: "The event code of the secondary document."
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "A"
                     - "AAAP"
@@ -2773,6 +3032,10 @@
                         presence: "optional"
                       rules: 
                         - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                        - 
                           name: "email"
                           args: 
                             options: 
@@ -2788,6 +3051,10 @@
                         description: "The name of a party from a contact, or \"IRS\""
                       rules: 
                         - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                        - 
                           name: "max"
                           args: 
                             limit: 100
@@ -2797,6 +3064,11 @@
                         only: true
                         presence: "optional"
                         description: "Currently only required for the IRS"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
                       allow: 
                         - "adc"
                         - "admin"
@@ -2813,6 +3085,22 @@
                         - "petitionsclerk"
                         - "privatePractitioner"
                         - "trialclerk"
+            servedPartiesCode: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+                description: "Served parties code to override system-computed code."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "B"
+                - "P"
+                - "R"
+                - null
             serviceDate: 
               type: "date"
               flags: 
@@ -2832,11 +3120,20 @@
               type: "string"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
             signedAt: 
               type: "string"
               flags: 
                 description: "The time at which the document was signed."
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -2930,6 +3227,10 @@
                 description: "The judge who signed the document."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 100
@@ -2958,6 +3259,11 @@
                           type: "string"
                           flags: 
                             only: true
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
                           allow: 
                             - "O"
                             - "OAJ"
@@ -3035,6 +3341,10 @@
                       presence: "required"
                     rules: 
                       - 
+                        name: "min"
+                        args: 
+                          limit: 1
+                      - 
                         name: "guid"
                         args: 
                           options: 
@@ -3046,6 +3356,10 @@
                       presence: "optional"
                     rules: 
                       - 
+                        name: "min"
+                        args: 
+                          limit: 1
+                      - 
                         name: "guid"
                         args: 
                           options: 
@@ -3053,11 +3367,46 @@
                               - "uuidv4"
                     allow: 
                       - null
+            strickenAt: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
+                presence: "optional"
+                description: "Date that this Docket Record item was stricken."
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
+            strickenBy: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+            strickenByUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
             supportingDocument: 
               type: "string"
               flags: 
                 presence: "optional"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "max"
                   args: 
@@ -3071,6 +3420,10 @@
                 description: "An optional trial location used when generating a fully concatenated document title."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "max"
                   args: 
                     limit: 100
@@ -3081,6 +3434,10 @@
               flags: 
                 presence: "required"
               rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
                 - 
                   name: "guid"
                   args: 
@@ -3098,6 +3455,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -3111,6 +3472,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "max"
                       args: 
                         limit: 100
@@ -3121,6 +3486,10 @@
                   flags: 
                     presence: "required"
                   rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                     - 
                       name: "max"
                       args: 
@@ -3134,6 +3503,11 @@
                   flags: 
                     only: true
                     presence: "optional"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "Assigned - Case"
                     - "Assigned - Motion"
@@ -3153,6 +3527,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "max"
                       args: 
                         limit: 500
@@ -3169,6 +3547,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "max"
                       args: 
                         limit: 100
@@ -3179,6 +3561,10 @@
                   flags: 
                     presence: "optional"
                   rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                     - 
                       name: "guid"
                       args: 
@@ -3192,6 +3578,10 @@
                   flags: 
                     presence: "optional"
                   rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                     - 
                       name: "max"
                       args: 
@@ -3212,6 +3602,10 @@
                     description: "Unique case identifier in XXXXX-YY format."
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "pattern"
                       args: 
                         regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
@@ -3220,6 +3614,11 @@
                   flags: 
                     presence: "optional"
                     description: "Auto-generated from docket number and the suffix."
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                 document: 
                   type: "object"
                   flags: 
@@ -3229,6 +3628,11 @@
                   flags: 
                     only: true
                     presence: "required"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "WorkItem"
                 hideFromPendingMessages: 
@@ -3256,6 +3660,11 @@
                   flags: 
                     only: true
                     presence: "required"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "adc"
                     - "admissions"
@@ -3316,6 +3725,10 @@
                     description: "The name of the user that sent the WorkItem"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "max"
                       args: 
                         limit: 100
@@ -3324,6 +3737,11 @@
                   flags: 
                     only: true
                     presence: "optional"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
                   allow: 
                     - "adc"
                     - "admissions"
@@ -3382,6 +3800,10 @@
                     presence: "optional"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -3409,6 +3831,10 @@
                     presence: "required"
                   rules: 
                     - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
                       name: "guid"
                       args: 
                         options: 
@@ -3420,6 +3846,10 @@
         presence: "required"
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 4700
@@ -3428,6 +3858,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "CDP (Lien/Levy)"
         - "Deficiency"
@@ -3458,6 +3893,11 @@
       flags: 
         only: true
         presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Myself"
         - "Myself and my spouse"
@@ -3489,6 +3929,10 @@
       flags: 
         presence: "required"
       rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
         - 
           name: "max"
           args: 
@@ -3538,6 +3982,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Conservator"
         - "Corporation"
@@ -3679,6 +4128,11 @@
         only: true
         presence: "required"
         description: "Status of the case fee payment."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Paid"
         - "Not Paid"
@@ -3784,6 +4238,10 @@
         description: "How the petitioner paid the case fee."
       rules: 
         - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
           name: "max"
           args: 
             limit: 50
@@ -3859,6 +4317,11 @@
             type: "string"
             flags: 
               presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
           otherwise: 
             type: "any"
             flags: 
@@ -3870,6 +4333,11 @@
       flags: 
         only: true
         presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
       allow: 
         - "Regular"
         - "Small"
@@ -4050,6 +4518,11 @@
               flags: 
                 only: true
                 presence: "required"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "Statistic"
             irsDeficiencyAmount: 
@@ -4069,6 +4542,10 @@
                 description: "Unique statistic ID only used by the system."
               rules: 
                 - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
                   name: "guid"
                   args: 
                     options: 
@@ -4080,6 +4557,11 @@
                 presence: "required"
                 only: true
                 description: "Whether the statistics are for a year or period."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - "Year"
                 - "Period"

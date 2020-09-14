@@ -6,7 +6,7 @@ export const petitionsClerkViewsDocketRecordAfterServing = test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('caseDetail.docketRecord')).toContainEqual({
+    expect(test.getState('caseDetail.docketEntries')).toContainEqual({
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
       filingDate: '2018-12-24T05:00:00.000Z',

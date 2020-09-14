@@ -29,7 +29,7 @@ exports.removeCasePendingItemInteractor = async ({
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  caseToUpdate.documents.forEach(document => {
+  caseToUpdate.docketEntries.forEach(document => {
     if (document.documentId === documentId) {
       document.pending = false;
     }

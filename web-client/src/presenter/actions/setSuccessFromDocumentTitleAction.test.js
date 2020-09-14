@@ -13,7 +13,7 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentTitle: 'Order',
@@ -35,7 +35,7 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Order',
@@ -57,7 +57,7 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Order',
@@ -81,7 +81,7 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId: 'abc',
               documentType: 'Proposed Stipulated Decision',

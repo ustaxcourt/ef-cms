@@ -6,9 +6,12 @@ const {
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-
 CaseSearch.validationName = 'CaseSearch';
 
 /**
@@ -17,13 +20,14 @@ CaseSearch.validationName = 'CaseSearch';
  * @param {object} rawProps the raw case search data
  * @constructor
  */
-function CaseSearch(rawProps) {
+function CaseSearch() {}
+CaseSearch.prototype.init = function init(rawProps) {
   this.petitionerName = rawProps.petitionerName;
   this.yearFiledMin = rawProps.yearFiledMin || CASE_SEARCH_MIN_YEAR;
   this.yearFiledMax = rawProps.yearFiledMax || undefined;
   this.petitionerState = rawProps.petitionerState || undefined;
   this.countryType = rawProps.countryType || undefined;
-}
+};
 
 CaseSearch.VALIDATION_ERROR_MESSAGES = {
   petitionerName: 'Enter a name',
@@ -38,15 +42,15 @@ CaseSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseSearch.schema = joi.object().keys({
-  countryType: joi
-    .string()
-    .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
-    .optional(),
-  petitionerName: joi.string().max(500).required(),
-  petitionerState: joi
-    .string()
-    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
-    .optional(),
+  countryType: JoiValidationConstants.STRING.valid(
+    COUNTRY_TYPES.DOMESTIC,
+    COUNTRY_TYPES.INTERNATIONAL,
+  ).optional(),
+  petitionerName: JoiValidationConstants.STRING.max(500).required(),
+  petitionerState: JoiValidationConstants.STRING.valid(
+    ...Object.keys(US_STATES),
+    ...US_STATES_OTHER,
+  ).optional(),
   yearFiledMax: joi
     .number()
     .integer()
@@ -66,4 +70,4 @@ joiValidationDecorator(
   CaseSearch.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CaseSearch };
+module.exports = { CaseSearch: validEntityDecorator(CaseSearch) };
