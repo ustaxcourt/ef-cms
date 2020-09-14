@@ -12,6 +12,7 @@ mockUsers.forEach(userRecord => {
     'email',
     'name',
     'role',
+    'section',
     'userId',
     'barNumber',
     'contact',
