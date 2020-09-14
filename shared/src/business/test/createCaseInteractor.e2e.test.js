@@ -66,12 +66,12 @@ describe('createCase integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber: '101-19',
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               documentType: 'Petition',
               filedBy: 'Petr. Rick Petitioner',
             },
+            docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19S',
             isInitializeCase: true,
             section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
@@ -123,14 +123,14 @@ describe('createCase integration test', () => {
       {
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19S',
         isInitializeCase: true,
         section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',

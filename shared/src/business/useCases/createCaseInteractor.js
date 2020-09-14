@@ -28,12 +28,12 @@ const addPetitionDocketEntryToCase = ({
       caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      document: {
+      docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketNumber: caseToAdd.docketNumber,
+      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       isInitializeCase: true,
       section: PETITIONS_SECTION,
       sentBy: user.name,

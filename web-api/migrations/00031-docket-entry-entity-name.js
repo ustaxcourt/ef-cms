@@ -9,7 +9,7 @@ const applicationContext = createApplicationContext({});
 const mutateRecord = async item => {
   if (isDocumentRecord(item) && item.entityName !== 'DocketEntry') {
     const newDocketEntry = new DocketEntry(
-      { ...item, docketEntryId: item.documentId },
+      { ...item, docketEntryId: item.docketEntryId || item.documentId },
       { applicationContext },
     )
       .validate()

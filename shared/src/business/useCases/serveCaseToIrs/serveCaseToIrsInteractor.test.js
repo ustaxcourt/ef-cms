@@ -28,13 +28,13 @@ describe('serveCaseToIrsInteractor', () => {
     completedBy: PARTY_TYPES.petitioner,
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     createdAt: '2018-12-27T18:06:02.971Z',
-    docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    document: {
+    docketEntry: {
       createdAt: '2018-12-27T18:06:02.968Z',
       docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
+    docketNumber: '101-18',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     isInitializeCase: true,
     messages: [
       {
@@ -351,7 +351,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateWorkItem.mock.calls[0][0]
-        .workItemToUpdate.document.servedAt,
+        .workItemToUpdate.docketEntry.servedAt,
     ).toBeDefined();
   });
 });

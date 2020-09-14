@@ -46,7 +46,7 @@ describe('completeDocumentSigningAction', () => {
     );
     getInboxMessagesForUserInteractor.mockReturnValue([
       {
-        document: {
+        docketEntry: {
           documentType: 'Proposed Stipulated Decision',
         },
         workItemId: '1',

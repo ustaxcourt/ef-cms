@@ -15,11 +15,11 @@ export const petitionsClerkViewsWorkQueue = test => {
       .find(
         workItem =>
           workItem.docketNumber === test.docketNumber &&
-          workItem.document.documentType === 'Petition',
+          workItem.docketEntry.documentType === 'Petition',
       );
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
-    test.docketEntryId = workItem.document.docketEntryId;
+    test.docketEntryId = workItem.docketEntry.docketEntryId;
     test.workItemId = workItem.workItemId;
   });
 };
