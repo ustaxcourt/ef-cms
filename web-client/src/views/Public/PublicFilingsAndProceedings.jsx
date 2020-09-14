@@ -25,8 +25,8 @@ export const PublicFilingsAndProceedings = connect(
             aria-label={`View PDF: ${entry.descriptionDisplay}`}
             onClick={() => {
               openCaseDocumentDownloadUrlSequence({
+                docketEntryId: entry.docketEntryId,
                 docketNumber: caseDetail.docketNumber,
-                documentId: entry.documentId,
                 isPublic: true,
               });
             }}

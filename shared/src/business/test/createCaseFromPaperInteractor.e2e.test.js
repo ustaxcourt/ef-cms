@@ -90,7 +90,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
             createdAt: RECEIVED_DATE,
             docketNumber: '101-19',
             document: {
-              documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
+              docketEntryId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
               documentType: 'Petition',
               filedBy: 'Petr. Bob Jones',
             },

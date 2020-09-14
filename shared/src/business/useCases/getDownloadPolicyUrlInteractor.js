@@ -48,7 +48,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
       }
     } else {
       const selectedDocketEntry = caseData.docketEntries.find(
-        document => document.documentId === key,
+        document => document.docketEntryId === key,
       );
 
       const docketEntryEntity = caseEntity.getDocketEntryById({

@@ -35,7 +35,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     return {};
   }
   const showDateReceivedEdit = caseDetail.isPaper;
-  const documentIdWhitelist = get(state.screenMetadata.filedDocumentIds);
+  const docketEntryIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
@@ -66,7 +66,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   const previouslyFiledWizardDocuments = getPreviouslyFiledDocuments(
     applicationContext,
     caseDetail,
-    documentIdWhitelist,
+    docketEntryIdWhitelist,
   );
 
   const selectedEventCode = form.eventCode;

@@ -53,7 +53,7 @@ describe('formatted work queue computed', () => {
     docketNumberWithSuffix: '101-18S',
     document: {
       attachments: true,
-      documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
     isCourtIssuedDocument: false,
@@ -93,7 +93,7 @@ describe('formatted work queue computed', () => {
     document: {
       attachments: true,
       createdAt: '2018-12-27T18:05:54.164Z',
-      documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
     section: PETITIONS_SECTION,
@@ -559,7 +559,7 @@ describe('formatted work queue computed', () => {
     };
     const baseDocument = {
       createdAt: '2019-12-16T16:48:02.888Z',
-      documentId: '6db35185-2445-4952-9449-5479a5cadab0',
+      docketEntryId: '6db35185-2445-4952-9449-5479a5cadab0',
       filedBy: 'Petr. Ori Petersen',
       partyPrimary: true,
       partySecondary: false,
@@ -570,7 +570,7 @@ describe('formatted work queue computed', () => {
     const baseWorkItemEditLink =
       '/case-detail/114-19/documents/6db35185-2445-4952-9449-5479a5cadab0';
     const documentViewLink =
-      '/case-detail/114-19/document-view?documentId=6db35185-2445-4952-9449-5479a5cadab0';
+      '/case-detail/114-19/document-view?docketEntryId=6db35185-2445-4952-9449-5479a5cadab0';
 
     it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
@@ -714,7 +714,7 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual(
-        `/case-detail/${baseWorkItem.docketNumber}/document-view?documentId=${baseDocument.documentId}`,
+        `/case-detail/${baseWorkItem.docketNumber}/document-view?docketEntryId=${baseDocument.docketEntryId}`,
       );
     });
 
@@ -751,7 +751,7 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual(
-        `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocument.documentId}/complete`,
+        `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocument.docketEntryId}/complete`,
       );
     });
 

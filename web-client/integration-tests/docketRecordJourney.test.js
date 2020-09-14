@@ -283,8 +283,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const uploadedDocument = test.draftOrders[0];
 
     await createCourtIssuedDocketEntry({
+      docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: uploadedDocument.documentId,
       eventCode: 'HEAR',
       test,
       trialLocation: 'Brimingham, AL',
@@ -295,7 +295,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     } = await getFormattedCaseDetailForTest(test);
 
     const docketEntry = formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.documentId === uploadedDocument.documentId,
+      entry => entry.docketEntryId === uploadedDocument.docketEntryId,
     );
     expect(docketEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
@@ -412,7 +412,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     const entry = formattedDocketEntriesOnDocketRecord[6];
 
-    test.documentId = entry.documentId;
+    test.docketEntryId = entry.docketEntryId;
 
     expect(entry.index).toBeUndefined();
     expect(entry).toMatchObject({
@@ -428,7 +428,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
 
     await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      documentId: test.documentId,
+      docketEntryId: test.docketEntryId,
     });
 
     await test.runSequence('servePaperFiledDocumentSequence');
@@ -438,7 +438,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     } = await getFormattedCaseDetailForTest(test);
 
     const servedEntry = formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.documentId === test.documentId,
+      entry => entry.docketEntryId === test.docketEntryId,
     );
 
     expect(servedEntry).toMatchObject({

@@ -104,11 +104,13 @@ describe('saveSignedDocumentInteractor', () => {
     const signedDocketEntryEntity = caseEntity.docketEntries.find(
       document =>
         document.documentType === 'Stipulated Decision' &&
-        document.documentId === mockSignedDocketEntryId,
+        document.docketEntryId === mockSignedDocketEntryId,
     );
 
     expect(signedDocketEntryEntity.isPaper).toEqual(false);
-    expect(signedDocketEntryEntity.documentId).toEqual(mockSignedDocketEntryId);
+    expect(signedDocketEntryEntity.docketEntryId).toEqual(
+      mockSignedDocketEntryId,
+    );
     expect(signedDocketEntryEntity.isDraft).toEqual(true);
     expect(signedDocketEntryEntity.signedJudgeName).toEqual('Guy Fieri');
     expect(signedDocketEntryEntity.documentType).toEqual('Stipulated Decision');
@@ -124,7 +126,7 @@ describe('saveSignedDocumentInteractor', () => {
     });
 
     const signedDocument = caseEntity.docketEntries.find(
-      doc => doc.documentId === mockOriginalDocketEntryId,
+      doc => doc.docketEntryId === mockOriginalDocketEntryId,
     );
     expect(signedDocument.processingStatus).toBe(
       DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -141,7 +143,7 @@ describe('saveSignedDocumentInteractor', () => {
     });
 
     const signedDocument = caseEntity.docketEntries.find(
-      doc => doc.documentId === mockOriginalDocketEntryId,
+      doc => doc.docketEntryId === mockOriginalDocketEntryId,
     );
     expect(signedDocument.documentIdBeforeSignature).toBe(
       mockDocumentIdBeforeSignature,

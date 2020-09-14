@@ -36,7 +36,7 @@ describe('PetitionService', () => {
   const docketEntryNumber = 1;
 
   const documentDetail = {
-    documentId: '1234',
+    docketEntryId: '1234',
     documentTitle: 'Petition',
     eventCode: 'P',
     filingDate: '02/05/20',
@@ -230,7 +230,7 @@ describe('PetitionService', () => {
 
     expect(irs.text()).toContain(caseDetail.docketNumber);
     expect(irs.text()).toContain(docketEntryNumber);
-    expect(irs.text()).toContain(documentDetail.documentId);
+    expect(irs.text()).toContain(documentDetail.docketEntryId);
     expect(irs.text()).toContain(documentDetail.eventCode);
   });
 });

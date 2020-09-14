@@ -17,18 +17,18 @@ describe('formattedDocument', () => {
           docketEntries: [
             {
               createdAt: '2019-03-01T21:40:46.415Z',
-              documentId: '123',
+              docketEntryId: '123',
               documentTitle: 'Answer',
               documentType: 'Answer',
             },
           ],
         },
-        documentId: '123',
+        docketEntryId: '123',
       },
     });
     expect(result).toMatchObject({
       createdAtFormatted: '03/01/19',
-      documentId: '123',
+      docketEntryId: '123',
       documentTitle: 'Answer',
       documentType: 'Answer',
     });
@@ -48,7 +48,7 @@ describe('formattedDocument', () => {
           ],
           docketEntries: [],
         },
-        documentId: '123',
+        docketEntryId: '123',
       },
     });
     expect(result).toMatchObject({
@@ -59,7 +59,7 @@ describe('formattedDocument', () => {
     });
   });
 
-  it('should return undefined if the documentId is not present in the caseDetail documents', () => {
+  it('should return undefined if the docketEntryId is not present in the caseDetail docketEntries', () => {
     const result = runCompute(formattedDocument, {
       state: {
         caseDetail: {
@@ -67,13 +67,13 @@ describe('formattedDocument', () => {
           docketEntries: [
             {
               createdAt: '2019-03-01T21:40:46.415Z',
-              documentId: '123',
+              docketEntryId: '123',
               documentTitle: 'Answer',
               documentType: 'Answer',
             },
           ],
         },
-        documentId: '234',
+        docketEntryId: '234',
       },
     });
     expect(result).toEqual(undefined);

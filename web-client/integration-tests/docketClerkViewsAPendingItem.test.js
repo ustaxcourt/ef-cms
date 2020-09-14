@@ -85,7 +85,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
       docketRecordTab: 'documentView',
       viewerDocumentToDisplay: {
-        documentId: formatted.pendingItemsDocketEntries[0].documentId,
+        docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
       },
     });
 

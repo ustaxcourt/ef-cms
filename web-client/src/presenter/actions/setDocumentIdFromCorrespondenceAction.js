@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for passing the props.correspondenceId
  */
 export const setDocumentIdFromCorrespondenceAction = ({ props, store }) => {
-  store.set(state.documentId, props.correspondenceId);
+  store.set(state.docketEntryId, props.correspondenceId); // TODO 636 - state.docketEntryId should be more generic
 };

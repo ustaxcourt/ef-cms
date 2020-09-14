@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the iframeSrc to the document download url for the document in state.documentId
+ * sets the iframeSrc to the document download url for the document in state.docketEntryId
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -14,7 +14,7 @@ export const setDocumentToDisplayFromDocumentIdAction = async ({
   store,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
 
   const {
     url,
@@ -22,7 +22,7 @@ export const setDocumentToDisplayFromDocumentIdAction = async ({
     applicationContext,
     docketNumber,
     isPublic: false,
-    key: documentId,
+    key: docketEntryId,
   });
 
   store.set(state.iframeSrc, url);

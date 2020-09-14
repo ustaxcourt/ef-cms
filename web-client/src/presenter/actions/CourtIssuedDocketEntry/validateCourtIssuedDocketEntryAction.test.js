@@ -14,7 +14,7 @@ describe('validateCourtIssuedDocketEntryAction', () => {
 
     mockDocketEntry = {
       data: 'hello world',
-      documentId: '123',
+      docketEntryId: '123',
     };
 
     presenter.providers.applicationContext = applicationContext;
@@ -70,11 +70,11 @@ describe('validateCourtIssuedDocketEntryAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
             },
           ],
         },
-        documentId: '123',
+        docketEntryId: '123',
         form: {
           eventCode: 'O', // Event code requiring a signature
           mockDocketEntry,

@@ -74,15 +74,15 @@ const batchDownloadTrialSessionInteractor = async ({
     );
 
     const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
-      acc[document.documentId] = document;
+      acc[document.docketEntryId] = document;
       return acc;
     }, {});
 
     docketEntriesOnDocketRecord.forEach(aDocketRecord => {
       let myDoc;
       if (
-        aDocketRecord.documentId &&
-        (myDoc = documentMap[aDocketRecord.documentId])
+        aDocketRecord.docketEntryId &&
+        (myDoc = documentMap[aDocketRecord.docketEntryId])
       ) {
         const docDate = formatDateString(
           aDocketRecord.filingDate,
@@ -93,7 +93,7 @@ const batchDownloadTrialSessionInteractor = async ({
           `${docDate}_${docNum}_${aDocketRecord.documentTitle}.pdf`,
         );
         const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
-        s3Ids.push(myDoc.documentId);
+        s3Ids.push(myDoc.docketEntryId);
         fileNames.push(pdfTitle);
       }
     });

@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.users
  */
 export const unsetDocumentIdAction = ({ store }) => {
-  store.unset(state.documentId);
+  store.unset(state.docketEntryId);
 };

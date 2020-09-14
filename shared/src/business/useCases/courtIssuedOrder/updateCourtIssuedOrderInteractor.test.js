@@ -33,25 +33,25 @@ describe('updateCourtIssuedOrderInteractor', () => {
     createdAt: '',
     docketEntries: [
       {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
       {
+        docketEntryId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         docketNumber: '45678-18',
-        documentId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
       {
+        docketEntryId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         docketNumber: '45678-18',
-        documentId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',

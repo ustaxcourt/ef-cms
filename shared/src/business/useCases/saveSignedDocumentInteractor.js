@@ -80,7 +80,7 @@ exports.saveSignedDocumentInteractor = async ({
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
-    document => document.documentId === originalDocketEntryId,
+    docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
 
   let signedDocketEntryEntity;
@@ -90,7 +90,7 @@ exports.saveSignedDocumentInteractor = async ({
     signedDocketEntryEntity = new DocketEntry(
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
-        documentId: signedDocketEntryId,
+        docketEntryId: signedDocketEntryId,
         documentTitle:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         documentType:
@@ -123,7 +123,7 @@ exports.saveSignedDocumentInteractor = async ({
         applicationContext,
       }).validate();
       messageEntity.addAttachment({
-        documentId: signedDocketEntryEntity.documentId,
+        documentId: signedDocketEntryEntity.docketEntryId,
         documentTitle: signedDocketEntryEntity.documentTitle,
       });
 
@@ -166,6 +166,6 @@ exports.saveSignedDocumentInteractor = async ({
 
   return {
     caseEntity,
-    signedDocketEntryId: signedDocketEntryEntity.documentId,
+    signedDocketEntryId: signedDocketEntryEntity.docketEntryId,
   };
 };

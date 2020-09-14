@@ -45,7 +45,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   let editUrl = '';
   const formattedDocument = draftDocuments.find(
-    doc => doc.documentId === viewerDocumentToDisplay.documentId,
+    doc => doc.docketEntryId === viewerDocumentToDisplay.documentId,
   );
 
   if (formattedDocument) {
@@ -91,7 +91,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showNotServed = getShowNotServedForDocument({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
-    documentId: caseDocument.documentId,
+    docketEntryId: caseDocument.docketEntryId,
     draftDocuments,
   });
 

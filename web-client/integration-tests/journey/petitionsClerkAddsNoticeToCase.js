@@ -56,8 +56,8 @@ export const petitionsClerkAddsNoticeToCase = test => {
     });
 
     const firstDraftDocument = first(draftDocuments);
-    test.documentId = firstDraftDocument
-      ? firstDraftDocument.documentId
+    test.docketEntryId = firstDraftDocument
+      ? firstDraftDocument.docketEntryId
       : undefined;
 
     if (firstDraftDocument) {

@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 export const DocumentDisplayIframe = connect(
   {
     caseDetail: state.caseDetail,
-    documentId: state.documentId,
+    docketEntryId: state.docketEntryId,
     formattedDocument: state.formattedDocument,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
@@ -13,15 +13,15 @@ export const DocumentDisplayIframe = connect(
   },
   function DocumentDisplayIframe({
     caseDetail,
-    documentId,
+    docketEntryId,
     formattedDocument,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
   }) {
     useEffect(() => {
       openCaseDocumentDownloadUrlSequence({
+        docketEntryId,
         docketNumber: caseDetail.docketNumber,
-        documentId: documentId,
         isForIFrame: true,
       });
     }, [caseDetail]);

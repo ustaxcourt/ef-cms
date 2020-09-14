@@ -19,7 +19,7 @@ const MOCK_WORK_ITEM = {
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   document: {
     createdAt: '2018-12-27T18:06:02.968Z',
-    documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
+    docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
     documentType: 'Stipulated Decision',
   },
   messages: [

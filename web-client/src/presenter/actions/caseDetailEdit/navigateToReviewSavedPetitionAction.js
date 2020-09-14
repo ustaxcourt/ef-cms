@@ -7,12 +7,12 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const navigateToReviewSavedPetitionAction = async ({ get, router }) => {
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  if (documentId && docketNumber) {
+  if (docketEntryId && docketNumber) {
     await router.route(
-      `/case-detail/${docketNumber}/documents/${documentId}/review`,
+      `/case-detail/${docketNumber}/documents/${docketEntryId}/review`,
     );
   }
 };
