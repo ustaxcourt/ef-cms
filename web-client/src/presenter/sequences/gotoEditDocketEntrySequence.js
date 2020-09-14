@@ -10,7 +10,7 @@ import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocketRecord/setQCWorkItemIdToMarkAsReadIfNeededAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { state } from 'cerebral';
@@ -28,7 +28,7 @@ export const gotoEditDocketEntry = [
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   setQCWorkItemIdToMarkAsReadIfNeededAction,
   set(state.currentViewMetadata.tab, 'Document Info'),
   setCurrentPageAction('EditDocketEntry'),
