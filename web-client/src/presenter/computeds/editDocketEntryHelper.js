@@ -2,11 +2,11 @@ import { state } from 'cerebral';
 
 export const editDocketEntryHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
 
   const currentDocument = caseDetail.docketEntries.find(
-    document => document.documentId === documentId,
+    docketEntry => docketEntry.docketEntryId === docketEntryId,
   );
 
   let showPaperServiceWarning = false;

@@ -3,7 +3,7 @@
  *
  * @param {object} document the documentFile
  * @param {Function} onUploadProgress the progressFunction
- * @returns {Promise<string>} the documentId returned from a successful upload
+ * @returns {Promise<string>} the key returned from a successful upload
  */
 exports.uploadDocumentAndMakeSafeInteractor = async ({
   applicationContext,

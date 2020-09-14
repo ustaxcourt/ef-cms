@@ -87,7 +87,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     {
       ...currentDocument,
       ...editableFields,
-      documentId: docketEntryIdToEdit,
+      docketEntryId: docketEntryIdToEdit,
       filedBy: user.name,
       numberOfPages,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

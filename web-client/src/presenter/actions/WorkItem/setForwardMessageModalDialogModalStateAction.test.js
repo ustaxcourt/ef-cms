@@ -38,7 +38,7 @@ describe('setForwardMessageModalDialogModalStateAction', () => {
             correspondence: [],
             docketEntries: [
               {
-                documentId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
+                docketEntryId: 'a5273185-f694-4d9c-bc90-71eddc5e5937',
                 documentTitle: 'Petition',
               },
             ],

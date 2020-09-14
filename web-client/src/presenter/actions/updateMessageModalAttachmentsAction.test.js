@@ -15,7 +15,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     ],
     docketEntries: [
       {
-        documentId: '123',
+        docketEntryId: '123',
         documentType: 'Petition',
       },
     ],

@@ -33,24 +33,24 @@ describe('fileCourtIssuedOrderInteractor', () => {
     createdAt: '',
     docketEntries: [
       {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
       {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
       {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',

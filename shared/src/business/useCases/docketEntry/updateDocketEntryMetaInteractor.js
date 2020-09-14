@@ -40,7 +40,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: docketEntryMeta.documentId,
+    docketEntryId: docketEntryMeta.docketEntryId,
   });
 
   const editableFields = {
@@ -103,7 +103,7 @@ exports.updateDocketEntryMetaInteractor = async ({
       // servedAt or filingDate has changed, generate a new coversheet
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        docketEntryId: originalDocketEntry.documentId,
+        docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
       });
     }

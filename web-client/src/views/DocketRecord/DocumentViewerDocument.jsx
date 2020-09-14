@@ -88,8 +88,8 @@ export const DocumentViewerDocument = connect(
                   iconColor="white"
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
-                      documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${viewerDocumentToDisplay.documentId}`,
+                      docketEntryId: viewerDocumentToDisplay.docketEntryId,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
                     });
                   }}
                 >
@@ -104,8 +104,8 @@ export const DocumentViewerDocument = connect(
                   iconColor="white"
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
-                      documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${viewerDocumentToDisplay.documentId}`,
+                      docketEntryId: viewerDocumentToDisplay.docketEntryId,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
                     });
                   }}
                 >
@@ -116,7 +116,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePetitionButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.documentId}`}
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`}
                   icon="paper-plane"
                   iconColor="white"
                 >
@@ -127,7 +127,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showSignStipulatedDecisionButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign`}
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.docketEntryId}/sign`}
                   icon="pencil-alt"
                 >
                   Sign Stipulated Decision
@@ -140,8 +140,8 @@ export const DocumentViewerDocument = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
+                    docketEntryId: viewerDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                    documentId: viewerDocumentToDisplay.documentId,
                   })
                 }
               >

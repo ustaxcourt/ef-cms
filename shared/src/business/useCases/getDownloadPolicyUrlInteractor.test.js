@@ -61,8 +61,8 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const duplicatedMockCase = cloneDeep(MOCK_CASE);
     duplicatedMockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      docketEntryId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       docketNumber: '101-18',
-      documentId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       documentTitle: 'Transcript of [anything] on [date]',
       documentType: 'Transcript',
       eventCode: TRANSCRIPT_EVENT_CODE,
@@ -116,7 +116,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         docketEntries: [
           {
             ...MOCK_CASE.docketEntries.filter(
-              d => d.documentId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
             )[0],
             documentType: 'Order that case is assigned',
             servedAt: new Date().toISOString(),

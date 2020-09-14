@@ -101,8 +101,8 @@ exports.updateSecondaryContactInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,
+        docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocketEntryId,
         documentTitle: changeOfAddressDocumentTypeToGenerate.title,
         documentType: changeOfAddressDocumentTypeToGenerate.title,
         eventCode: changeOfAddressDocumentTypeToGenerate.eventCode,

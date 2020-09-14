@@ -16,7 +16,7 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
-  const mockDocumentId = applicationContext.getUniqueId();
+  const mockDocketEntryId = applicationContext.getUniqueId();
 
   let caseRecord;
 
@@ -37,8 +37,8 @@ describe('fileExternalDocumentInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: '45678-18',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
           documentTitle: 'first record',
           documentType: 'Petition',
           eventCode: 'P',
@@ -49,24 +49,24 @@ describe('fileExternalDocumentInteractor', () => {
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -119,7 +119,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocumentId,
+        primaryDocumentId: mockDocketEntryId,
       },
     });
 
@@ -148,7 +148,7 @@ describe('fileExternalDocumentInteractor', () => {
         primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         scenario: 'Nonstandard H',
         secondaryDocument: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentTitle: 'Motion for Judgment on the Pleadings',
           documentType: 'Motion for Judgment on the Pleadings',
           eventCode: 'M121',
@@ -156,7 +156,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
         secondarySupportingDocuments: [
           {
-            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
             documentTitle: 'Motion for in Camera Review',
             documentType: 'Motion for in Camera Review',
             eventCode: 'M135',
@@ -165,7 +165,7 @@ describe('fileExternalDocumentInteractor', () => {
         ],
         supportingDocuments: [
           {
-            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
             documentTitle: 'Civil Penalty Approval Form',
             documentType: 'Civil Penalty Approval Form',
             eventCode: 'CIVP',
@@ -208,7 +208,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
@@ -326,7 +326,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: [],
+      docketEntryIds: [],
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,

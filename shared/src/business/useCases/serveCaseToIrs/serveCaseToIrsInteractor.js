@@ -70,10 +70,10 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   if (stinDocument) {
     await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
       applicationContext,
-      key: stinDocument.documentId,
+      key: stinDocument.docketEntryId,
     });
 
-    return stinDocument.documentId;
+    return stinDocument.docketEntryId;
   }
 };
 
@@ -183,12 +183,12 @@ exports.serveCaseToIrsInteractor = async ({
     .validate();
 
   //This functionality will probably change soon
-  //  deletedStinDocumentId = await exports.deleteStinIfAvailable({
+  //  deletedStinDocketEntryId = await exports.deleteStinIfAvailable({
   //   applicationContext,
   //   caseEntity,
   // });
   // caseEntity.docketEntries = caseEntity.docketEntries.filter(
-  //   item => item.documentId !== deletedStinDocumentId,
+  //   item => item.docketEntryId !== deletedStinDocketEntryId,
   // );
 
   const petitionDocument = caseEntity.docketEntries.find(
@@ -228,7 +228,7 @@ exports.serveCaseToIrsInteractor = async ({
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        docketEntryId: doc.documentId,
+        docketEntryId: doc.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         replaceCoversheet: !caseEntity.isPaper,
         useInitialData: !caseEntity.isPaper,
@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          docketEntryId: doc.documentId,
+          docketEntryId: doc.docketEntryId,
         });
     }
   }

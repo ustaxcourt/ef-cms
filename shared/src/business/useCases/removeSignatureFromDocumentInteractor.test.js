@@ -16,8 +16,8 @@ describe('removeSignatureFromDocumentInteractor', () => {
       docketEntries: [
         {
           createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: mockDocketEntryId,
           docketNumber: '101-18',
-          documentId: mockDocketEntryId,
           documentIdBeforeSignature: mockDocumentIdBeforeSignature,
           documentTitle: 'Answer',
           documentType: 'Answer',
@@ -74,7 +74,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
     });
 
     const unsignedDocument = updatedCase.docketEntries.find(
-      doc => doc.documentId === mockDocketEntryId,
+      doc => doc.docketEntryId === mockDocketEntryId,
     );
     expect(unsignedDocument).toMatchObject({
       signedAt: null,

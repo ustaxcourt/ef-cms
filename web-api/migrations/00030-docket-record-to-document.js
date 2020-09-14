@@ -46,6 +46,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
             {
               ...document,
               ...docketEntry,
+              docketEntryId: document.documentId,
               isOnDocketRecord: true,
             },
             { applicationContext },
@@ -81,6 +82,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
           const newDocument = new DocketEntry(
             {
               ...docketEntry,
+              docketEntryId: docketEntry.documentId,
               docketNumber: item.docketNumber,
               documentTitle: docketEntry.description,
               documentType,

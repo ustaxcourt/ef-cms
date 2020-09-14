@@ -20,7 +20,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
 
   const {
-    documentId,
+    docketEntryId,
     documentType,
     eventCode,
     filingDate,
@@ -67,7 +67,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       currentDate,
       docketEntryNumber: docketEntryEntity.index,
       documentDetail: {
-        documentId,
+        docketEntryId,
         documentTitle: documentType,
         eventCode,
         filingDate: filingDateFormatted,

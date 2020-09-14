@@ -12,7 +12,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
   props,
   store,
 }) => {
-  const { docketNumber, documentId, isForIFrame, isPublic } = props;
+  const { docketEntryId, docketNumber, isForIFrame, isPublic } = props;
 
   const {
     url,
@@ -20,7 +20,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
     applicationContext,
     docketNumber,
     isPublic,
-    key: documentId,
+    key: docketEntryId,
   });
 
   if (isForIFrame) {

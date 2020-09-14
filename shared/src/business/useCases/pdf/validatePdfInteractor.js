@@ -9,7 +9,6 @@ const { StringDecoder } = require('string_decoder');
  * @returns {object} errors (null if no errors)
  */
 exports.validatePdfInteractor = async ({ applicationContext, key }) => {
-  console.log('key in validate is', key);
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({

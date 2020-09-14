@@ -123,8 +123,8 @@ describe('Create a work item', () => {
 
   it('docket clerk QCs a document, updates the document title, and generates a Notice of Docket Change', async () => {
     await test.runSequence('gotoEditDocketEntrySequence', {
+      docketEntryId: decisionWorkItem.document.docketEntryId,
       docketNumber: caseDetail.docketNumber,
-      documentId: decisionWorkItem.document.documentId,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

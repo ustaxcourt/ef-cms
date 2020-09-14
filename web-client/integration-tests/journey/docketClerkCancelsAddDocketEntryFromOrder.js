@@ -16,10 +16,10 @@ export const docketClerkCancelsAddDocketEntryFromOrder = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(draftOrderDocument).toBeTruthy();
@@ -40,7 +40,7 @@ export const docketClerkCancelsAddDocketEntryFromOrder = (
     );
 
     const unChangedDraftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
     expect(unChangedDraftOrderDocument).toBeTruthy();
   });

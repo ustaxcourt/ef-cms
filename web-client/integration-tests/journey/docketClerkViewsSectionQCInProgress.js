@@ -15,7 +15,8 @@ export const docketClerkViewsSectionQCInProgress = (test, shouldExist) => {
     const inProgressQueue = test.getState('workQueue');
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
-        workItem.document.documentId === test.docketRecordEntry.documentId,
+        workItem.document.docketEntryId ===
+        test.docketRecordEntry.docketEntryId,
     );
 
     if (shouldExist) {

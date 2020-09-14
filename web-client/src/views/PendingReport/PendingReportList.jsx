@@ -65,7 +65,7 @@ export const PendingReportList = connect(
                 <td>{item.caseTitle}</td>
                 <td>
                   <a
-                    href={`/case-detail/${item.docketNumber}/document-view?documentId=${item.documentId}`}
+                    href={`/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`}
                   >
                     {item.formattedName}
                   </a>

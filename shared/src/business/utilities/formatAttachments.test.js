@@ -2,13 +2,13 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { formatAttachments } = require('./formatAttachments');
 
 describe('formatAttachments', () => {
-  const mockDocuments = [
+  const mockDocketEntries = [
     {
-      documentId: '1',
+      docketEntryId: '1',
       documentTitle: 'Test Document One',
     },
     {
-      documentId: '2',
+      docketEntryId: '2',
       documentType: 'Test Document Two',
     },
   ];
@@ -27,12 +27,12 @@ describe('formatAttachments', () => {
   const mockArchivedDocketEntries = [
     {
       archived: true,
-      documentId: '5',
+      docketEntryId: '5',
       documentTitle: 'Test Archived One',
     },
     {
       archived: true,
-      documentId: '6',
+      docketEntryId: '6',
       documentType: 'Test Archived Two',
     },
   ];
@@ -63,7 +63,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        docketEntries: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
@@ -96,7 +96,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        docketEntries: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
@@ -124,7 +124,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        docketEntries: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
@@ -145,7 +145,7 @@ describe('formatAttachments', () => {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
         archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        docketEntries: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
