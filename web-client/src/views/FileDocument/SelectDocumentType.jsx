@@ -1,9 +1,7 @@
-import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -21,8 +19,6 @@ export const SelectDocumentType = connect(
     completeDocumentSelectSequence,
     fileDocumentHelper,
     formCancelToggleCancelSequence,
-    gotoViewAllDocumentsSequence,
-    reasons,
     showModal,
   }) {
     return (
