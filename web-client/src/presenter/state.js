@@ -248,6 +248,8 @@ export const baseState = {
   },
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  messagesInboxCount: 0,
+  messagesSectionCount: 0,
   modal: {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display

@@ -24,12 +24,12 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       caseIsInProgress: true,
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      document: {
+      docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketNumber: caseToAdd.docketNumber,
+      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       isInitializeCase: true,
       section: user.section,
       sentBy: user.name,

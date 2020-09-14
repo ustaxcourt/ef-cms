@@ -19,10 +19,10 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
       workItem => workItem.docketNumber === test.docketNumber,
     );
     test.proposedStipDecisionDocketEntryId =
-      proposedStipulatedDecision.document.docketEntryId;
+      proposedStipulatedDecision.docketEntry.docketEntryId;
 
     await test.runSequence('gotoEditDocketEntrySequence', {
-      docketEntryId: proposedStipulatedDecision.document.docketEntryId,
+      docketEntryId: proposedStipulatedDecision.docketEntry.docketEntryId,
       docketNumber: test.docketNumber,
     });
 

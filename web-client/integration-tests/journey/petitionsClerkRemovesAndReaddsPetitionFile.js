@@ -27,7 +27,7 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const previousPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
-    }).find(item => item.document.docketEntryId === docketEntryIdToReplace);
+    }).find(item => item.docketEntry.docketEntryId === docketEntryIdToReplace);
 
     expect(docketEntryIdToReplace).toBeDefined();
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
@@ -65,7 +65,7 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const updatedPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
-    }).find(item => item.document.docketEntryId === docketEntryIdToReplace);
+    }).find(item => item.docketEntry.docketEntryId === docketEntryIdToReplace);
 
     expect(previousPetitionDocument).toEqual(updatedPetitionDocument);
     expect(previousDocketRecordEntry).toEqual(updatedDocketRecordEntry);

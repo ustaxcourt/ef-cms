@@ -31,6 +31,8 @@ const mutateRecord = async (item, documentClient, tableName) => {
       item.sk = `docket-entry|${item.docketEntryId}`;
     }
 
+    console.log('modifying docket entry', item.docketEntryId);
+
     const newDocketEntry = new DocketEntry(item, { applicationContext })
       .validate()
       .toRawObject();
