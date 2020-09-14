@@ -8,14 +8,14 @@ import { resetAddDocketEntryAction } from '../actions/resetAddDocketEntryAction'
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
+import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
 export const gotoAddDocketEntry = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
   clearFormAction,
-  unsetDocumentIdAction,
+  unsetDocketEntryIdAction,
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
