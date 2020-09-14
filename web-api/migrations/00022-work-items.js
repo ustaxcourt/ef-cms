@@ -112,7 +112,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
 
     if (isUpdated) {
       const updatedDocument = new DocketEntry(
-        { ...item, docketEntryId: item.documentId },
+        { ...item, docketEntryId: item.docketEntryId || item.documentId },
         { applicationContext },
       )
         .validate()
