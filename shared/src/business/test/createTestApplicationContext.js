@@ -54,6 +54,9 @@ const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
+  filterWorkItemsForUser,
+} = require('../../../src/business/utilities/filterWorkItemsForUser');
+const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
@@ -208,6 +211,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterQcItemsByAssociatedJudge: jest
       .fn()
       .mockImplementation(filterQcItemsByAssociatedJudge),
+    filterWorkItemsForUser: jest
+      .fn()
+      .mockImplementation(filterWorkItemsForUser),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),

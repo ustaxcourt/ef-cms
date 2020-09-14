@@ -58,15 +58,24 @@ exports.getNotificationsInteractor = async ({
   let qcSectionInboxCount = 0;
   let qcSectionInProgressCount = 0;
 
-  documentQCIndividualInbox.forEach(item => {
-    if (item.docketEntry.isFileAttached !== false && additionalFilters(item)) {
-      if (item.caseIsInProgress) {
-        qcIndividualInProgressCount++;
-      } else {
-        qcIndividualInboxCount++;
+  applicationContext
+    .getUtilities()
+    .filterWorkItemsForUser({
+      user: currentUser,
+      workItems: documentQCIndividualInbox,
+    })
+    .forEach(item => {
+      if (
+        item.docketEntry.isFileAttached !== false &&
+        additionalFilters(item)
+      ) {
+        if (item.caseIsInProgress) {
+          qcIndividualInProgressCount++;
+        } else {
+          qcIndividualInboxCount++;
+        }
       }
-    }
-  });
+    });
 
   documentQCSectionInbox.forEach(item => {
     if (item.docketEntry.isFileAttached !== false && additionalFilters(item)) {

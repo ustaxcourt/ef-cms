@@ -294,6 +294,9 @@ const {
   filterQcItemsByAssociatedJudge,
 } = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
 const {
+  filterWorkItemsForUser,
+} = require('../../shared/src/business/utilities/filterWorkItemsForUser');
+const {
   formatAndSortConsolidatedCases,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
 const {
@@ -1642,6 +1645,7 @@ module.exports = appContextUser => {
         compareStrings,
         createISODateString,
         filterQcItemsByAssociatedJudge,
+        filterWorkItemsForUser,
         formatCaseForTrialSession,
         formatDateString,
         formatJudgeName,
