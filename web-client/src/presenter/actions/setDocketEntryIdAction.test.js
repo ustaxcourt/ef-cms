@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { setDocumentIdAction } from './setDocumentIdAction';
+import { setDocketEntryIdAction } from './setDocketEntryIdAction';
 
-describe('setDocumentIdAction', () => {
+describe('setDocketEntryIdAction', () => {
   it('sets state.docketEntryId from props', async () => {
-    const { state } = await runAction(setDocumentIdAction, {
+    const { state } = await runAction(setDocketEntryIdAction, {
       props: {
         docketEntryId: '1234',
       },
