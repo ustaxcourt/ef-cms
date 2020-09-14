@@ -7,10 +7,9 @@ export const messagesHelper = get => {
 
   const messagesInboxCount = get(state.messagesInboxCount);
   const messagesSectionCount = get(state.messagesSectionCount);
-  const inboxCount =
-    messageBoxToDisplay.queue === 'my'
-      ? messagesInboxCount
-      : messagesSectionCount;
+  const inboxCount = showIndividualMessages
+    ? messagesInboxCount
+    : messagesSectionCount;
 
   const messagesTitle = showIndividualMessages
     ? 'My Messages'
