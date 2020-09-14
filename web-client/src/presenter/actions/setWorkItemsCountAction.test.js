@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setSectionBoxCountAction } from './setSectionBoxCountAction';
+import { setWorkItemsCountAction } from './setWorkItemsCountAction';
 
-describe('setSectionBoxCountAction', () => {
+describe('setWorkItemsCountAction', () => {
   const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
 
   let workItems;
@@ -55,7 +55,7 @@ describe('setSectionBoxCountAction', () => {
       role: USER_ROLES.docketClerk,
     });
 
-    const result = await runAction(setSectionBoxCountAction, {
+    const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
@@ -75,7 +75,7 @@ describe('setSectionBoxCountAction', () => {
       role: USER_ROLES.docketClerk,
     });
 
-    const result = await runAction(setSectionBoxCountAction, {
+    const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
@@ -96,7 +96,7 @@ describe('setSectionBoxCountAction', () => {
       role: USER_ROLES.judge,
     });
 
-    const result = await runAction(setSectionBoxCountAction, {
+    const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },
@@ -119,7 +119,7 @@ describe('setSectionBoxCountAction', () => {
       role: USER_ROLES.adc,
     });
 
-    const result = await runAction(setSectionBoxCountAction, {
+    const result = await runAction(setWorkItemsCountAction, {
       modules: {
         presenter,
       },

@@ -9,8 +9,8 @@ import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { parallel } from 'cerebral/factories';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
-import { setSectionBoxCountAction } from '../actions/setSectionBoxCountAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
+import { setWorkItemsCountAction } from '../actions/setWorkItemsCountAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const chooseWorkQueueSequence = showProgressSequenceDecorator([
@@ -18,7 +18,7 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   getJudgeForCurrentUserAction,
   setJudgeUserAction,
   parallel([
-    [getNotificationsAction, setNotificationsAction, setSectionBoxCountAction],
+    [getNotificationsAction, setNotificationsAction, setWorkItemsCountAction],
     [
       chooseWorkQueueAction,
       {
