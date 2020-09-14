@@ -4,6 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { DOCKET_NUMBER_MATCHER } = require('../EntityConstants');
 
@@ -15,11 +16,9 @@ TrialSessionWorkingCopy.validationName = 'TrialSessionWorkingCopy';
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function TrialSessionWorkingCopy(rawSession) {
-  this.init(rawSession);
-}
+function TrialSessionWorkingCopy() {}
 
-TrialSessionWorkingCopy.prototype.init = function (rawSession) {
+TrialSessionWorkingCopy.prototype.init = function init(rawSession) {
   this.entityName = 'TrialSessionWorkingCopy';
 
   this.caseMetadata = rawSession.caseMetadata || {};
@@ -50,11 +49,13 @@ TrialSessionWorkingCopy.validationRules = {
     .pattern(
       DOCKET_NUMBER_MATCHER, // keys are docket numbers
       joi.object().keys({
-        trialStatus: joi.string().optional(),
+        trialStatus: JoiValidationConstants.STRING.optional(),
       }),
     )
     .optional(),
-  entityName: joi.string().valid('TrialSessionWorkingCopy').required(),
+  entityName: JoiValidationConstants.STRING.valid(
+    'TrialSessionWorkingCopy',
+  ).required(),
   filters: joi
     .object()
     .keys({
@@ -70,9 +71,9 @@ TrialSessionWorkingCopy.validationRules = {
       takenUnderAdvisement: joi.boolean().required(),
     })
     .required(),
-  sessionNotes: joi.string().optional(),
-  sort: joi.string().optional(),
-  sortOrder: joi.string().optional(),
+  sessionNotes: JoiValidationConstants.STRING.optional(),
+  sort: JoiValidationConstants.STRING.optional(),
+  sortOrder: JoiValidationConstants.STRING.optional(),
   trialSessionId: JoiValidationConstants.UUID.required(),
   userId: JoiValidationConstants.UUID.required(),
 };
@@ -83,4 +84,6 @@ joiValidationDecorator(
   TrialSessionWorkingCopy.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { TrialSessionWorkingCopy };
+module.exports = {
+  TrialSessionWorkingCopy: validEntityDecorator(TrialSessionWorkingCopy),
+};

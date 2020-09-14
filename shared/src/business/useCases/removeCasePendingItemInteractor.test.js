@@ -51,7 +51,7 @@ describe('removeCasePendingItemInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3].pending,
+        .caseToUpdate.docketEntries[3].pending,
     ).toEqual(false);
   });
 

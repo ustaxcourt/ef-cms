@@ -9,7 +9,7 @@ describe('scanHelper', () => {
 
   const stateWithEmptyFormDocuments = {
     form: {
-      documents: [],
+      docketEntries: [],
     },
   };
 
@@ -93,7 +93,7 @@ describe('scanHelper', () => {
   it('shows the scanner source selection modal', () => {
     const result = runCompute(scanHelper, {
       state: {
-        form: { documents: [] },
+        form: { docketEntries: [] },
         modal: {
           showModal: 'SelectScannerSourceModal',
         },
@@ -106,7 +106,7 @@ describe('scanHelper', () => {
     const mockSources = ['Test Source 1', 'Test Source 2'];
     const result = runCompute(scanHelper, {
       state: {
-        form: { documents: [] },
+        form: { docketEntries: [] },
         scanner: {
           sources: mockSources,
         },
@@ -132,7 +132,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             stinFile: {},
           },
         },
@@ -145,7 +145,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             stinFile: null,
           },
         },
@@ -153,11 +153,11 @@ describe('scanHelper', () => {
       expect(result.stinFileCompleted).toBeFalsy();
     });
 
-    it('should be true when document is in form.documents', () => {
+    it('should be true when document is in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [
+            docketEntries: [
               {
                 documentType: INITIAL_DOCUMENT_TYPES_MAP.stinFile,
               },
@@ -169,11 +169,11 @@ describe('scanHelper', () => {
       expect(result.stinFileCompleted).toBeTruthy();
     });
 
-    it('should be false when document is not in form.documents', () => {
+    it('should be false when document is not in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
           },
         },
       });
@@ -187,7 +187,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             requestForPlaceOfTrialFile: {},
           },
         },
@@ -200,7 +200,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             requestForPlaceOfTrialFile: null,
           },
         },
@@ -208,11 +208,11 @@ describe('scanHelper', () => {
       expect(result.requestForPlaceOfTrialFileCompleted).toBeFalsy();
     });
 
-    it('should be true when document is in form.documents', () => {
+    it('should be true when document is in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [
+            docketEntries: [
               {
                 documentType:
                   INITIAL_DOCUMENT_TYPES_MAP.requestForPlaceOfTrialFile,
@@ -225,11 +225,11 @@ describe('scanHelper', () => {
       expect(result.requestForPlaceOfTrialFileCompleted).toBeTruthy();
     });
 
-    it('should be false when document is not in form.documents', () => {
+    it('should be false when document is not in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
           },
         },
       });
@@ -244,7 +244,7 @@ describe('scanHelper', () => {
         state: {
           form: {
             applicationForWaiverOfFilingFeeFile: {},
-            documents: [],
+            docketEntries: [],
           },
         },
       });
@@ -257,18 +257,18 @@ describe('scanHelper', () => {
         state: {
           form: {
             applicationForWaiverOfFilingFeeFile: null,
-            documents: [],
+            docketEntries: [],
           },
         },
       });
       expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
     });
 
-    it('should be true when document is in form.documents', () => {
+    it('should be true when document is in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [
+            docketEntries: [
               {
                 documentType:
                   INITIAL_DOCUMENT_TYPES_MAP.applicationForWaiverOfFilingFeeFile,
@@ -281,11 +281,11 @@ describe('scanHelper', () => {
       expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
     });
 
-    it('should be false when document is not in form.documents', () => {
+    it('should be false when document is not in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
           },
         },
       });
@@ -299,7 +299,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             petitionFile: {},
           },
         },
@@ -312,7 +312,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             petitionFileCompleted: null,
           },
         },
@@ -320,11 +320,11 @@ describe('scanHelper', () => {
       expect(result.petitionFileCompleted).toBeFalsy();
     });
 
-    it('should be true when document is in form.documents', () => {
+    it('should be true when document is in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [
+            docketEntries: [
               {
                 documentType: INITIAL_DOCUMENT_TYPES_MAP.petitionFile,
               },
@@ -336,11 +336,11 @@ describe('scanHelper', () => {
       expect(result.petitionFileCompleted).toBeTruthy();
     });
 
-    it('should be false when document is not in form.documents', () => {
+    it('should be false when document is not in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
           },
         },
       });
@@ -354,7 +354,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             ownershipDisclosureFile: {},
           },
         },
@@ -367,7 +367,7 @@ describe('scanHelper', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
             ownershipDisclosureFile: null,
           },
         },
@@ -375,11 +375,11 @@ describe('scanHelper', () => {
       expect(result.ownershipDisclosureFileCompleted).toBeFalsy();
     });
 
-    it('should be true when document is in form.documents', () => {
+    it('should be true when document is in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [
+            docketEntries: [
               {
                 documentType:
                   INITIAL_DOCUMENT_TYPES_MAP.ownershipDisclosureFile,
@@ -392,11 +392,11 @@ describe('scanHelper', () => {
       expect(result.ownershipDisclosureFileCompleted).toBeTruthy();
     });
 
-    it('should be false when document is not in form.documents', () => {
+    it('should be false when document is not in form.docketEntries', () => {
       const result = runCompute(scanHelper, {
         state: {
           form: {
-            documents: [],
+            docketEntries: [],
           },
         },
       });

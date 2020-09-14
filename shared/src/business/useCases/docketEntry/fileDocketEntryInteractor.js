@@ -11,8 +11,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -68,12 +67,19 @@ exports.fileDocketEntryInteractor = async ({
     const [documentId, metadata, relationship] = document;
 
     if (documentId && metadata) {
-      const documentEntity = new Document(
+      const docketRecordEditState =
+        metadata.isFileAttached === false ? documentMetadata : {};
+
+      const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
+          description: metadata.documentTitle,
           documentId,
           documentType: metadata.documentType,
+          editState: JSON.stringify(docketRecordEditState),
+          filingDate: metadata.receivedAt,
+          isOnDocketRecord: true,
           mailingDate: metadata.mailingDate,
           relationship,
           userId: user.userId,
@@ -96,8 +102,8 @@ exports.fileDocketEntryInteractor = async ({
           docketNumber: caseToUpdate.docketNumber,
           docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           document: {
-            ...documentEntity.toRawObject(),
-            createdAt: documentEntity.createdAt,
+            ...docketEntryEntity.toRawObject(),
+            createdAt: docketEntryEntity.createdAt,
           },
           inProgress: isSavingForLater,
           isRead: user.role !== ROLES.privatePractitioner,
@@ -108,13 +114,13 @@ exports.fileDocketEntryInteractor = async ({
         { applicationContext },
       );
 
-      documentEntity.setWorkItem(workItem);
+      docketEntryEntity.setWorkItem(workItem);
 
       if (metadata.isFileAttached && !isSavingForLater) {
         const servedParties = aggregatePartiesForService(caseEntity);
-        documentEntity.setAsServed(servedParties.all);
+        docketEntryEntity.setAsServed(servedParties.all);
       } else if (metadata.isFileAttached && isSavingForLater) {
-        documentEntity.numberOfPages = await applicationContext
+        docketEntryEntity.numberOfPages = await applicationContext
           .getUseCaseHelpers()
           .countPagesInDocument({
             applicationContext,
@@ -133,7 +139,7 @@ exports.fileDocketEntryInteractor = async ({
           await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
             applicationContext,
             caseEntity,
-            documentEntity,
+            documentEntity: docketEntryEntity,
             servedParties,
           });
         }
@@ -149,23 +155,7 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       workItems.push(workItem);
-      caseEntity.addDocumentWithoutDocketRecord(documentEntity);
-
-      const docketRecordEditState =
-        documentEntity.isFileAttached === false ? documentMetadata : {};
-
-      caseEntity.addDocketRecord(
-        new DocketRecord(
-          {
-            description: metadata.documentTitle,
-            documentId: documentEntity.documentId,
-            editState: JSON.stringify(docketRecordEditState),
-            eventCode: documentEntity.eventCode,
-            filingDate: documentEntity.receivedAt,
-          },
-          { applicationContext },
-        ),
-      );
+      caseEntity.addDocketEntry(docketEntryEntity);
     }
   }
 

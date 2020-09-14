@@ -4,8 +4,7 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('./getPublicDownloadPolicyUrlInteractor');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
@@ -50,26 +49,18 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         'http://example.com/document/5a3ea70f-c539-4118-81a3-0be94be3b4f1',
       );
 
-    MOCK_CASE.documents.push(
-      new Document(
+    MOCK_CASE.docketEntries.push(
+      new DocketEntry(
         {
           documentId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           eventCode: 'O',
+          isOnDocketRecord: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
       ),
-    );
-    MOCK_CASE.docketRecord.push(
-      new DocketRecord(
-        {
-          documentId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
-        },
-        { applicationContext },
-      ),
-      { applicationContext },
     );
     await expect(
       getPublicDownloadPolicyUrlInteractor({
@@ -96,26 +87,18 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         'http://example.com/document/83813a24-7687-418e-a186-c416b4bb0ad4',
       );
 
-    MOCK_CASE.documents.push(
-      new Document(
+    MOCK_CASE.docketEntries.push(
+      new DocketEntry(
         {
           documentId: '83813a24-7687-418e-a186-c416b4bb0ad4',
           documentTitle: 'Memorandum Opinion',
           documentType: 'Memorandum Opinion',
           eventCode: 'MOP',
+          isOnDocketRecord: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
       ),
-    );
-    MOCK_CASE.docketRecord.push(
-      new DocketRecord(
-        {
-          documentId: '83813a24-7687-418e-a186-c416b4bb0ad4',
-        },
-        { applicationContext },
-      ),
-      { applicationContext },
     );
     const result = await getPublicDownloadPolicyUrlInteractor({
       applicationContext,
@@ -140,26 +123,18 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         'http://example.com/document/8008b288-8b6b-48e3-8239-599266b13b8b',
       );
 
-    MOCK_CASE.documents.push(
-      new Document(
+    MOCK_CASE.docketEntries.push(
+      new DocketEntry(
         {
           documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           eventCode: 'O',
+          isOnDocketRecord: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
       ),
-    );
-    MOCK_CASE.docketRecord.push(
-      new DocketRecord(
-        {
-          documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
-        },
-        { applicationContext },
-      ),
-      { applicationContext },
     );
     const result = await getPublicDownloadPolicyUrlInteractor({
       applicationContext,

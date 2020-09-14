@@ -230,7 +230,7 @@ export const MessageDetail = connect(
                           });
                         }}
                       >
-                        <div className="grid-row margin-left-205">
+                        <div className="grid-row margin-left-205 line-height-standard">
                           <div
                             className={classNames(
                               'grid-col-8',

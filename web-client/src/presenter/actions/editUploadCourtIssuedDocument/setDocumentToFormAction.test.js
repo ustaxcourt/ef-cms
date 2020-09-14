@@ -17,14 +17,14 @@ describe('setDocumentToFormAction', () => {
     const result = await runAction(setDocumentToFormAction, {
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
         documentId: documentIdToEdit,
       },
@@ -44,13 +44,13 @@ describe('setDocumentToFormAction', () => {
       props: {
         caseDetail: {
           correspondence: [mockCorrespondence],
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
         documentId: documentIdToEdit,
       },
@@ -75,14 +75,14 @@ describe('setDocumentToFormAction', () => {
     const result = await runAction(setDocumentToFormAction, {
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
               documentId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
         documentId: '890',
       },

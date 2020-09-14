@@ -4,7 +4,7 @@ export const petitionsClerkRemovesPendingItemFromCase = test => {
       docketNumber: test.docketNumber,
     });
 
-    const documents = test.getState('caseDetail.documents');
+    const documents = test.getState('caseDetail.docketEntries');
 
     const pendingDocument = documents.find(
       document => document.pending === true,
