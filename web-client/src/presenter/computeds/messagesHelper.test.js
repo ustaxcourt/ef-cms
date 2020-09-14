@@ -74,20 +74,6 @@ describe('messagesHelper', () => {
         },
       });
 
-      expect(result.inboxCount).toEqual(15);
-    });
-
-    it("should return section inbox count * 1 if the message box is the user's section and user has nothing in inbox", () => {
-      const result = runCompute(messagesHelper, {
-        state: {
-          messageBoxToDisplay: {
-            queue: 'section',
-          },
-          messagesInboxCount: 0,
-          messagesSectionCount: 3,
-        },
-      });
-
       expect(result.inboxCount).toEqual(3);
     });
   });

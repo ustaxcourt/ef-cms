@@ -6,8 +6,7 @@ export const messagesHelper = get => {
   const showSectionMessages = messageBoxToDisplay.queue === 'section';
 
   const messagesInboxCount = get(state.messagesInboxCount);
-  const messagesSectionCount =
-    get(state.messagesSectionCount) * Math.max(1, messagesInboxCount);
+  const messagesSectionCount = get(state.messagesSectionCount);
   const inboxCount =
     messageBoxToDisplay.queue === 'my'
       ? messagesInboxCount
