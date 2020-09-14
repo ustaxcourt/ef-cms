@@ -137,12 +137,12 @@ exports.updateSecondaryContactInteractor = async ({
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        document: {
+        docketEntry: {
           ...changeOfAddressDocketEntry.toRawObject(),
           createdAt: changeOfAddressDocketEntry.createdAt,
         },
+        docketNumber: caseEntity.docketNumber,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,

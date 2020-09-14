@@ -100,12 +100,12 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-      document: {
+      docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
       hideFromPendingMessages: true,
       inProgress: true,
       section: DOCKET_SECTION,

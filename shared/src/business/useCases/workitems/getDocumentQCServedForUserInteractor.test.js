@@ -19,16 +19,16 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
     applicationContext.getPersistenceGateway().getDocumentQCServedForUser = async () => [
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
@@ -62,16 +62,16 @@ describe('getDocumentQCServedForUserInteractor', () => {
     });
     expect(result).toMatchObject([
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
@@ -92,16 +92,16 @@ describe('getDocumentQCServedForUserInteractor', () => {
     });
     expect(result).toMatchObject([
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
