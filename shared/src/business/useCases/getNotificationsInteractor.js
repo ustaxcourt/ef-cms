@@ -15,7 +15,7 @@ exports.getNotificationsInteractor = async ({ applicationContext }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
-    throw new UnauthorizedError('Unauthorized');
+    throw new UnauthorizedError('Unauthorized to get inbox counts');
   }
 
   const { section, userId } = applicationContext.getCurrentUser();

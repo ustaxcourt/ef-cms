@@ -1,11 +1,44 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getNotificationsInteractor } = require('./getNotificationsInteractor');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('getNotificationsInteractor', () => {
-  it('returns an unread count for my messages', async () => {
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserInboxMessages.mockReturnValue([
+        {
+          messageId: 'message-id-1',
+        },
+      ]);
+    applicationContext
+      .getPersistenceGateway()
+      .getSectionInboxMessages.mockReturnValue([
+        {
+          messageId: 'message-id-1',
+        },
+      ]);
+
     applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
+  });
+
+  it('fails due to being unauthorized', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+    });
+
+    await expect(
+      getNotificationsInteractor({
+        applicationContext,
+      }),
+    ).rejects.toThrow('Unauthorized to get inbox counts');
+  });
+
+  it('returns an unread count for my messages', async () => {
     applicationContext
       .getPersistenceGateway()
       .getDocumentQCInboxForUser.mockReturnValue([
@@ -18,7 +51,11 @@ describe('getNotificationsInteractor', () => {
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ qcUnreadCount: 0 });
+    expect(result).toEqual({
+      qcUnreadCount: 0,
+      userInboxCount: 1,
+      userSectionCount: 1,
+    });
   });
 
   it('returns an unread count for qc messages', async () => {
@@ -34,7 +71,11 @@ describe('getNotificationsInteractor', () => {
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ qcUnreadCount: 1 });
+    expect(result).toEqual({
+      qcUnreadCount: 1,
+      userInboxCount: 1,
+      userSectionCount: 1,
+    });
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
@@ -50,6 +91,11 @@ describe('getNotificationsInteractor', () => {
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ qcUnreadCount: 0 });
+
+    expect(result).toEqual({
+      qcUnreadCount: 0,
+      userInboxCount: 1,
+      userSectionCount: 1,
+    });
   });
 });
