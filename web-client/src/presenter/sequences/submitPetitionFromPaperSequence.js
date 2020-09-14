@@ -13,7 +13,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -53,7 +53,7 @@ export const submitPetitionFromPaperSequence = [
                 setCaseAction,
                 assignPetitionToAuthenticatedUserAction,
                 setPetitionIdAction,
-                setDocumentIdAction,
+                setDocketEntryIdAction,
                 closeFileUploadStatusModalAction,
                 navigateToReviewSavedPetitionAction,
               ],
