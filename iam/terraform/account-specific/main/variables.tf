@@ -3,4 +3,5 @@ variable "aws_region" {
 }
 
 variable "dns_domain" {
+  type = string
 }
