@@ -13,35 +13,35 @@ describe('setSectionBoxCountAction', () => {
       {
         associatedJudge: 'Judge Barker',
         caseIsInProgress: false,
-        document: {
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: 'Judge Carey',
         caseIsInProgress: false,
-        document: {
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: CHIEF_JUDGE,
         caseIsInProgress: false,
-        document: {
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: 'Judge Barker',
         caseIsInProgress: true,
-        document: {
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: 'Judge Barker',
         caseIsInProgress: false,
-        document: {
+        docketEntry: {
           isFileAttached: false,
         },
       },

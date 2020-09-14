@@ -197,7 +197,7 @@ exports.serveCaseToIrsInteractor = async ({
   );
   const initializeCaseWorkItem = petitionDocument.workItem;
 
-  initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
   initializeCaseWorkItem.docketNumberWithSuffix =
     caseEntity.docketNumberWithSuffix;

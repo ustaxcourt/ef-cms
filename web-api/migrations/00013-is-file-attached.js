@@ -16,7 +16,7 @@ const mutateRecord = async item => {
       item.isFileAttached = true;
     }
     const documentToUpdate = new DocketEntry(
-      { ...item, docketEntryId: item.documentId },
+      { ...item, docketEntryId: item.docketEntryId || item.documentId },
       { applicationContext },
     )
       .validate()

@@ -99,12 +99,12 @@ exports.fileDocketEntryInteractor = async ({
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-          document: {
+          docketEntry: {
             ...docketEntryEntity.toRawObject(),
             createdAt: docketEntryEntity.createdAt,
           },
+          docketNumber: caseToUpdate.docketNumber,
+          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           inProgress: isSavingForLater,
           isRead: user.role !== ROLES.privatePractitioner,
           section: DOCKET_SECTION,
@@ -173,9 +173,9 @@ exports.fileDocketEntryInteractor = async ({
 
   const workItemsSaved = [];
   for (let workItem of workItems) {
-    if (workItem.document.isPaper) {
+    if (workItem.docketEntry.isPaper) {
       workItemsSaved.push(
-        workItem.document.isFileAttached && !isSavingForLater
+        workItem.docketEntry.isFileAttached && !isSavingForLater
           ? applicationContext
               .getPersistenceGateway()
               .saveWorkItemForDocketClerkFilingExternalDocument({

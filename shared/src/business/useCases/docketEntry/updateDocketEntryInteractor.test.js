@@ -16,13 +16,13 @@ describe('updateDocketEntryInteractor', () => {
   let mockCurrentUser;
 
   const workItem = {
-    docketNumber: '45678-18',
-    document: {
+    docketEntry: {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
       eventCode: 'A',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },
+    docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     updatedAt: new Date().toISOString(),
@@ -202,7 +202,7 @@ describe('updateDocketEntryInteractor', () => {
   });
 
   it('adds documents and workitems but does not try to delete workitem because they all have files attached', async () => {
-    workItem.document.isFileAttached = true;
+    workItem.docketEntry.isFileAttached = true;
     await expect(
       updateDocketEntryInteractor({
         applicationContext,

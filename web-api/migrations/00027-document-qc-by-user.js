@@ -13,7 +13,7 @@ const mutateRecord = async item => {
       }
 
       const updatedDocument = new DocketEntry(
-        { ...item, docketEntryId: item.documentId },
+        { ...item, docketEntryId: item.docketEntryId || item.documentId },
         { applicationContext },
       )
         .validate()

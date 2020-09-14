@@ -38,7 +38,9 @@ const mutateRecord = async (item, documentClient, tableName) => {
     await Promise.all(
       (documents || []).map(document => {
         const docketEntry = (docketRecord || []).find(
-          d => d.documentId === document.documentId,
+          d =>
+            d.documentId === document.documentId ||
+            d.documentId === document.docketEntryId,
         );
 
         if (docketEntry) {
@@ -46,7 +48,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
             {
               ...document,
               ...docketEntry,
-              docketEntryId: document.documentId,
+              docketEntryId: document.docketEntryId || document.documentId,
               isOnDocketRecord: true,
             },
             { applicationContext },
@@ -59,7 +61,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
               Item: {
                 ...updatedDocument,
                 pk: `case|${item.docketNumber}`,
-                sk: `document|${document.documentId}`,
+                sk: `document|${document.docketEntryId || document.documentId}`,
               },
               TableName: tableName,
             })
@@ -71,7 +73,9 @@ const mutateRecord = async (item, documentClient, tableName) => {
     await Promise.all(
       (docketRecord || []).map(docketEntry => {
         const caseDocument = documents.find(
-          d => d.documentId === docketEntry.documentId,
+          d =>
+            d.documentId === docketEntry.documentId ||
+            d.docketEntryId === docketEntry.documentId,
         );
 
         if (!caseDocument) {

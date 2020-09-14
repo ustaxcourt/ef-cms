@@ -184,12 +184,12 @@ exports.completeDocketEntryQCInteractor = async ({
     Object.assign(workItemToUpdate, {
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
+      docketEntry: {
         ...updatedDocketEntry.toRawObject(),
         createdAt: updatedDocketEntry.createdAt,
       },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     });
 
     if (!workItemToUpdate.completedAt) {
