@@ -1,4 +1,5 @@
 const DateHandler = require('../utilities/DateHandler');
+const filterQcItemsByAssociatedJudge = require('../utilities/filterQcItemsByAssociatedJudge');
 const getAddressPhoneDiff = require('../utilities/generateChangeOfAddressTemplate');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
@@ -204,6 +205,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    filterQcItemsByAssociatedJudge: jest
+      .fn()
+      .mockImplementation(filterQcItemsByAssociatedJudge),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
@@ -336,7 +340,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
-    getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
+    getDocumentQCInboxForSection: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDocumentQCInboxForUser: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForUserPersistence),

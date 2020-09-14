@@ -17,11 +17,12 @@ exports.getNotificationsInteractor = async ({
   judgeUser,
 }) => {
   const currentUser = applicationContext.getCurrentUser();
-  const { section, userId } = currentUser;
 
   if (!isAuthorized(currentUser, ROLE_PERMISSIONS.MESSAGES)) {
     throw new UnauthorizedError('Unauthorized to get inbox counts');
   }
+
+  const { section, userId } = currentUser;
 
   const additionalFilters = applicationContext
     .getUtilities()
