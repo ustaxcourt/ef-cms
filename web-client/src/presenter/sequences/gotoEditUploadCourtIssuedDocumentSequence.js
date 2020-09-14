@@ -5,7 +5,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentToFormAction } from '../actions/editUploadCourtIssuedDocument/setDocumentToFormAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -18,7 +18,7 @@ const gotoEditUploadCourtIssuedDocument = [
   setRedirectUrlAction,
   getCaseAction,
   setCaseAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   setDocumentToFormAction,
   setCurrentPageAction('EditUploadCourtIssuedDocument'),
 ];
