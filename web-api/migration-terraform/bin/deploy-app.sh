@@ -22,7 +22,7 @@ else
 fi
 
 pushd ../main/lambdas
-npx parcel build record-modifier.js migration.js --target node --bundle-node-modules --no-minify --no-cache
+npx parcel build migration-segments.js migration.js --target node --bundle-node-modules --no-minify --no-cache
 popd
 
 # exit on any failure
@@ -30,6 +30,7 @@ set -eo pipefail
 
 export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_stream_arn=$STREAM_ARN
+export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_destination_table=$DESTINATION_TABLE
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
