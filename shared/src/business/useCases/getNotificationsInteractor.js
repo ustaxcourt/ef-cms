@@ -52,7 +52,7 @@ exports.getNotificationsInteractor = async ({
       section,
     });
 
-  let qcIndividialInboxCount = 0;
+  let qcIndividualInboxCount = 0;
   let qcIndividualInProgressCount = 0;
   let qcSectionInboxCount = 0;
   let qcSectionInProgressCount = 0;
@@ -62,7 +62,7 @@ exports.getNotificationsInteractor = async ({
       if (item.caseIsInProgress) {
         qcIndividualInProgressCount++;
       } else {
-        qcIndividialInboxCount++;
+        qcIndividualInboxCount++;
       }
     }
   });
@@ -78,8 +78,8 @@ exports.getNotificationsInteractor = async ({
   });
 
   return {
-    qcIndividialInboxCount,
     qcIndividualInProgressCount,
+    qcIndividualInboxCount,
     qcSectionInProgressCount,
     qcSectionInboxCount,
     qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
