@@ -10,6 +10,7 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   userDecorator,
@@ -17,23 +18,19 @@ const {
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 
+const entityName = 'Practitioner';
+
 /**
  * constructor
  *
  * @param {object} rawUser the raw user data
  * @constructor
  */
-function Practitioner(rawUser) {
-  this.init(rawUser);
+function Practitioner() {
+  this.entityName = entityName;
 }
 
-const roleMap = {
-  DOJ: ROLES.irsPractitioner,
-  IRS: ROLES.irsPractitioner,
-  Private: ROLES.privatePractitioner,
-};
-
-Practitioner.prototype.init = function (rawUser) {
+Practitioner.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
@@ -42,7 +39,6 @@ Practitioner.prototype.init = function (rawUser) {
   this.barNumber = rawUser.barNumber;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
-  this.entityName = 'Practitioner';
   this.firmName = rawUser.firmName;
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
@@ -57,6 +53,12 @@ Practitioner.prototype.init = function (rawUser) {
   } else {
     this.role = ROLES.inactivePractitioner;
   }
+};
+
+const roleMap = {
+  DOJ: ROLES.irsPractitioner,
+  IRS: ROLES.irsPractitioner,
+  Private: ROLES.privatePractitioner,
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -84,9 +86,7 @@ const VALIDATION_ERROR_MESSAGES = {
 
 const practitionerValidation = {
   ...userValidation,
-  additionalPhone: joi
-    .string()
-    .max(100)
+  additionalPhone: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
@@ -95,17 +95,15 @@ const practitionerValidation = {
     .description(
       'The date the practitioner was admitted to the Tax Court bar.',
     ),
-  admissionsStatus: joi
-    .string()
-    .valid(...ADMISSIONS_STATUS_OPTIONS)
+  admissionsStatus: JoiValidationConstants.STRING.valid(
+    ...ADMISSIONS_STATUS_OPTIONS,
+  )
     .required()
     .description('The Tax Court bar admission status for the practitioner.'),
   alternateEmail: JoiValidationConstants.EMAIL.optional()
     .allow(null)
     .description('An alternate email address for the practitioner.'),
-  barNumber: joi
-    .string()
-    .max(100)
+  barNumber: JoiValidationConstants.STRING.max(100)
     .required()
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
@@ -117,57 +115,44 @@ const practitionerValidation = {
     .max(new Date().getFullYear())
     .required()
     .description('The year the practitioner was born.'),
-  employer: joi
-    .string()
-    .valid(...EMPLOYER_OPTIONS)
+  employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
     .required()
     .description('The employer designation for the practitioner.'),
-  entityName: joi.string().valid('Practitioner').required(),
-  firmName: joi
-    .string()
-    .max(100)
+  entityName: JoiValidationConstants.STRING.valid('Practitioner').required(),
+  firmName: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
     .description('The firm name for the practitioner.'),
-  firstName: joi
-    .string()
-    .max(100)
+  firstName: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The first name of the practitioner.'),
-  lastName: joi
-    .string()
-    .max(100)
+  lastName: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The last name of the practitioner.'),
-  middleName: joi
-    .string()
-    .max(100)
+  middleName: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
     .description('The optional middle name of the practitioner.'),
-  originalBarState: joi
-    .string()
-    .max(100)
+  originalBarState: JoiValidationConstants.STRING.max(100)
     .required()
     .description(
       'The state in which the practitioner passed their bar examination.',
     ),
-  practitionerType: joi
-    .string()
-    .valid(...PRACTITIONER_TYPE_OPTIONS)
+  practitionerType: JoiValidationConstants.STRING.valid(
+    ...PRACTITIONER_TYPE_OPTIONS,
+  )
     .required()
     .description('The type of practitioner - either Attorney or Non-Attorney.'),
   role: joi.alternatives().conditional('admissionsStatus', {
     is: joi.valid('Active'),
-    otherwise: joi.string().valid(ROLES.inactivePractitioner).required(),
-    then: joi
-      .string()
-      .valid(...[ROLES.irsPractitioner, ROLES.privatePractitioner])
-      .required(),
+    otherwise: JoiValidationConstants.STRING.valid(
+      ROLES.inactivePractitioner,
+    ).required(),
+    then: JoiValidationConstants.STRING.valid(
+      ...[ROLES.irsPractitioner, ROLES.privatePractitioner],
+    ).required(),
   }),
-  suffix: joi
-    .string()
-    .max(100)
+  suffix: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow('')
     .description('The name suffix of the practitioner.'),
@@ -182,7 +167,9 @@ joiValidationDecorator(
 );
 
 Practitioner.validationName = 'Practitioner';
+
 Practitioner.validationRules = practitionerValidation;
+
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
 
 /**
@@ -202,5 +189,6 @@ Practitioner.getFullName = function (practitionerData) {
 };
 
 module.exports = {
-  Practitioner,
+  Practitioner: validEntityDecorator(Practitioner),
+  entityName,
 };

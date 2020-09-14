@@ -15,13 +15,13 @@ const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
-  return caseRecord.documents.find(
+  return caseRecord.docketEntries.find(
     document => document.documentType === NOTICE_OF_TRIAL.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
-  return caseRecord.documents.find(
+  return caseRecord.docketEntries.find(
     document =>
       document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
       document.documentType === STANDING_PRETRIAL_ORDER.documentType,
@@ -214,13 +214,19 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.docketRecord.find(
-        entry => entry.description === NOTICE_OF_TRIAL.documentType,
+      return caseRecord.docketEntries.find(
+        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
       );
     };
 
-    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeTruthy();
-    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
+      index: expect.anything(),
+      isOnDocketRecord: true,
+    });
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toMatchObject({
+      index: expect.anything(),
+      isOnDocketRecord: true,
+    });
   });
 
   it('Should set the status of the Notice of Trial as served for each case', async () => {
@@ -354,8 +360,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.docketRecord.find(
-        entry => entry.description === NOTICE_OF_TRIAL.documentType,
+      return caseRecord.docketEntries.find(
+        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
       );
     };
 

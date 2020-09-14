@@ -5,7 +5,7 @@ import {
 
 export const petitionsClerkViewsCaseDetail = (
   test,
-  expectedDocumentCount = 2,
+  expectedDocumentCount = 3,
 ) => {
   return it('Petitions clerk views case detail', async () => {
     test.setState('caseDetail', {});
@@ -17,7 +17,7 @@ export const petitionsClerkViewsCaseDetail = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
-    expect(test.getState('caseDetail.documents').length).toEqual(
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(
       expectedDocumentCount,
     );
     expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);

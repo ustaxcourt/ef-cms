@@ -47,30 +47,41 @@ export const DatePickerComponent = ({
     }
   }, [values]);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.addEventListener('change', e => {
-        if (values) {
-          const [year, month, day] = e.target.value.split('-');
-          onChange({
-            key: names.day,
-            value: day,
-          });
-          onChange({
-            key: names.month,
-            value: month,
-          });
-          onChange({
-            key: names.year,
-            value: year,
-          });
-          onBlur();
-        } else {
-          onChange(e);
-          onBlur();
-        }
-      });
+  const splitDate = dateString => {
+    if (dateString.includes('/')) {
+      return dateString.split('/');
+    } else if (dateString.includes('-')) {
+      return dateString.split('-');
+    } else {
+      return [dateString, null, null];
     }
+  };
+
+  // inputRef evaluates to undefined when the date value does not match MM/DD/YYY or MM-DD-YYY,
+  // which is why we need to get the input element by ID
+  useEffect(() => {
+    const input = document.getElementById(`${name}-date`) || inputRef.current;
+    input.addEventListener('change', e => {
+      if (values) {
+        const [month, day, year] = splitDate(e.target.value);
+        onChange({
+          key: names.day,
+          value: day,
+        });
+        onChange({
+          key: names.month,
+          value: month,
+        });
+        onChange({
+          key: names.year,
+          value: year,
+        });
+        onBlur();
+      } else {
+        onChange(e);
+        onBlur();
+      }
+    });
   }, [inputRef]);
 
   return (

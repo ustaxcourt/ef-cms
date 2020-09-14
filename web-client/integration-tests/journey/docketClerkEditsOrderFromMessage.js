@@ -58,7 +58,7 @@ export const docketClerkEditsOrderFromMessage = test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    const caseOrderDocument = caseDetailFormatted.documents.find(
+    const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       d => d.documentId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toEqual(null);

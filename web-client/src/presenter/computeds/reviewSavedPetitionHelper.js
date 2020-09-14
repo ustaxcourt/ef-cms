@@ -5,7 +5,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
 
   const {
-    documents,
+    docketEntries,
     hasVerifiedIrsNotice,
     irsNoticeDate,
     petitionPaymentDate,
@@ -60,7 +60,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       .formatDateString(irsNoticeDate, 'MMDDYY');
   }
 
-  const documentsByType = (documents || []).reduce((acc, document) => {
+  const documentsByType = (docketEntries || []).reduce((acc, document) => {
     acc[document.documentType] = document;
     return acc;
   }, {});

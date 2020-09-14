@@ -10,25 +10,15 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
-
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./externalDocument/ExternalDocumentInformationFactory');
-
-CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-  documentTitleTemplate: 'Select a document',
-  eventCode: 'Select a document',
-  exhibits: 'Enter selection for Exhibits.',
-  representingPrimary: 'Select a party',
-  representingSecondary: 'Select a party',
-  scenario: 'Select a document',
-};
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 /**
  * Case Association Request Factory entity
@@ -37,7 +27,11 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function CaseAssociationRequestFactory(rawProps) {
-  let entityConstructor = function (rawPropsParam) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawPropsParam) {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
@@ -126,23 +120,18 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let schema = {
     certificateOfService: joi.boolean().required(),
-    documentTitle: joi.string().max(500).optional(),
-    documentTitleTemplate: joi.string().max(500).required(),
-    documentType: joi
-      .string()
-      .valid(...ALL_DOCUMENT_TYPES)
-      .required(),
-    eventCode: joi
-      .string()
-      .valid(...ALL_EVENT_CODES)
-      .required(),
+    documentTitle: JoiValidationConstants.STRING.max(500).optional(),
+    documentTitleTemplate: JoiValidationConstants.STRING.max(500).required(),
+    documentType: JoiValidationConstants.STRING.valid(
+      ...ALL_DOCUMENT_TYPES,
+    ).required(),
+    eventCode: JoiValidationConstants.STRING.valid(
+      ...ALL_EVENT_CODES,
+    ).required(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(), // object of type File
-    scenario: joi
-      .string()
-      .valid(...SCENARIOS)
-      .required(),
+    scenario: JoiValidationConstants.STRING.valid(...SCENARIOS).required(),
   };
 
   let schemaOptionalItems = {
@@ -152,10 +141,9 @@ function CaseAssociationRequestFactory(rawProps) {
     ).required(),
     exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
-    objections: joi
-      .string()
-      .valid(...OBJECTIONS_OPTIONS)
-      .required(),
+    objections: JoiValidationConstants.STRING.valid(
+      ...OBJECTIONS_OPTIONS,
+    ).required(),
     representingPrimary: joi.boolean().invalid(false).required(),
     representingSecondary: joi.boolean().invalid(false).required(),
     supportingDocuments: joi.array().optional(), // validated with SupportingDocumentInformationFactory
@@ -199,7 +187,17 @@ function CaseAssociationRequestFactory(rawProps) {
     CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new entityConstructor(rawProps);
+  return new (validEntityDecorator(entityConstructor))(rawProps);
 }
+
+CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
+  ...VALIDATION_ERROR_MESSAGES,
+  documentTitleTemplate: 'Select a document',
+  eventCode: 'Select a document',
+  exhibits: 'Enter selection for Exhibits.',
+  representingPrimary: 'Select a party',
+  representingSecondary: 'Select a party',
+  scenario: 'Select a document',
+};
 
 module.exports = { CaseAssociationRequestFactory };

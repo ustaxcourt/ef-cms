@@ -6,9 +6,12 @@ import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUs
 describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  let user;
+  const { USER_ROLES } = applicationContext.getConstants();
+  applicationContext.getCurrentUser = () => user;
 
   it('should set the modal state from caseDetail and props', async () => {
+    user = { role: USER_ROLES.judge };
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromDetailAction,
       {
@@ -20,19 +23,25 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
           caseDetail: {
             caseCaption: 'Sisqo, Petitioner',
             docketNumber: '101-19',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+            docketNumberWithSuffix: '101-19L',
             judgesNote: { notes: 'i got some notes' },
           },
         },
       },
     );
 
-    expect(result.state.modal.caseTitle).toEqual('Sisqo');
-    expect(result.state.modal.docketNumber).toEqual('101-19L');
-    expect(result.state.modal.notes).toEqual('i got some notes');
+    expect(result.state.modal).toMatchObject({
+      caseTitle: 'Sisqo',
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19L',
+      notes: 'i got some notes',
+      notesLabel: 'Judge’s notes',
+    });
   });
 
   it('should set the modal state when caseCaption and docketNumberSuffix do not exist', async () => {
+    user = { role: USER_ROLES.docketClerk };
+
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromDetailAction,
       {
@@ -43,14 +52,18 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         state: {
           caseDetail: {
             docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19',
             judgesNote: { notes: 'i got some notes' },
           },
         },
       },
     );
-
-    expect(result.state.modal.caseTitle).toEqual('');
-    expect(result.state.modal.docketNumber).toEqual('101-19');
-    expect(result.state.modal.notes).toEqual('i got some notes');
+    expect(result.state.modal).toMatchObject({
+      caseTitle: '',
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19',
+      notes: 'i got some notes',
+      notesLabel: 'Judge’s notes',
+    });
   });
 });

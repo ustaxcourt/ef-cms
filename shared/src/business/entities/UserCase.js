@@ -1,11 +1,13 @@
 const joi = require('joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
-
-UserCase.validationName = 'UserCase';
 
 /**
  * UserCase Entity
@@ -14,15 +16,20 @@ UserCase.validationName = 'UserCase';
  * @param {object} rawUserCase the raw user-case data
  * @constructor
  */
-function UserCase(rawUserCase) {
+function UserCase() {
   this.entityName = 'UserCase';
+}
+
+UserCase.prototype.init = function init(rawUserCase) {
   this.caseCaption = rawUserCase.caseCaption;
   this.createdAt = rawUserCase.createdAt || createISODateString();
   this.docketNumber = rawUserCase.docketNumber;
   this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
   this.leadDocketNumber = rawUserCase.leadDocketNumber;
   this.status = rawUserCase.status;
-}
+};
+
+UserCase.validationName = 'UserCase';
 
 joiValidationDecorator(
   UserCase,
@@ -31,11 +38,11 @@ joiValidationDecorator(
     createdAt: Case.VALIDATION_RULES.createdAt,
     docketNumber: Case.VALIDATION_RULES.docketNumber,
     docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
-    entityName: joi.string().valid('UserCase').required(),
+    entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
     leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
     status: Case.VALIDATION_RULES.status,
   }),
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
-exports.UserCase = UserCase;
+exports.UserCase = validEntityDecorator(UserCase);

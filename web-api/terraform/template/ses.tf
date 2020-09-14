@@ -1,7 +1,7 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
   provider = aws.us-east-1
-  domain   = "mail.${var.dns_domain}"
+  domain   = var.dns_domain
 }
 
 resource "aws_route53_record" "ses_verification_record" {
@@ -20,7 +20,7 @@ resource "aws_ses_domain_identity_verification" "example_verification" {
 
 resource "aws_ses_domain_mail_from" "main" {
   domain           = aws_ses_domain_identity.main.domain
-  mail_from_domain = "noreply.${aws_ses_domain_identity.main.domain}"
+  mail_from_domain = "from.${aws_ses_domain_identity.main.domain}"
 }
 
 #
@@ -84,9 +84,8 @@ resource "aws_route53_record" "txt_dmarc" {
   name    = "_dmarc.${aws_ses_domain_identity.main.domain}"
   type    = "TXT"
   ttl     = "600"
-  records = ["v=DMARC1; p=none; rua=mailto:${var.ses_dmarc_rua};"]
+  records = [var.email_dmarc_policy]
 }
-
 
 # Email Template
 resource "aws_ses_template" "document_served" {

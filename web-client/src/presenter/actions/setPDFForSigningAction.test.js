@@ -34,7 +34,7 @@ describe('setPDFForSigningAction', () => {
       },
       props: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentType: 'Proposed Stipulated Decision',
@@ -63,7 +63,7 @@ describe('setPDFForSigningAction', () => {
       },
       props: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentType: 'Proposed Stipulated Decision',
@@ -91,7 +91,7 @@ describe('setPDFForSigningAction', () => {
       },
       props: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
               documentId,
               documentType: 'Other Document type',

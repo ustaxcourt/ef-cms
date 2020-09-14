@@ -56,7 +56,7 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.docketRecord.find(
+    const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
       entry => entry.documentId === documentId,
     );
 

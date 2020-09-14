@@ -83,18 +83,18 @@ const RenderPractitioner = ({
   );
 };
 
-const RecordDescription = ({ document, record }) => {
-  let additionalDescription = record.filingsAndProceedings
-    ? ` ${record.filingsAndProceedings}`
+const RecordDescription = ({ entry }) => {
+  let additionalDescription = entry.filingsAndProceedings
+    ? ` ${entry.filingsAndProceedings}`
     : '';
 
-  if (document && document.additionalInfo2) {
-    additionalDescription += ` ${document.additionalInfo2}`;
+  if (entry.additionalInfo2) {
+    additionalDescription += ` ${entry.additionalInfo2}`;
   }
 
   return (
     <>
-      <strong>{record.description}</strong>
+      <strong>{entry.description}</strong>
       {additionalDescription}
     </>
   );
@@ -155,28 +155,29 @@ export const DocketRecord = ({
         </div>
       )}
 
-      {caseDetail.privatePractitioners.length > 0 && (
-        <div className="party-info" id="private-practitioner-contacts">
-          <div className="party-info-header">Petitioner Counsel</div>
-          <div className="party-info-content">
-            {caseDetail.privatePractitioners.map(practitioner => {
-              if (practitioner.formattedName) {
-                return (
-                  <RenderPractitioner
-                    contactPrimary={caseDetail.contactPrimary}
-                    contactSecondary={caseDetail.contactSecondary}
-                    countryTypes={countryTypes}
-                    key={practitioner.barNumber}
-                    practitioner={practitioner}
-                  />
-                );
-              }
-            })}
+      {caseDetail.privatePractitioners.length > 0 &&
+        options.includePartyDetail && (
+          <div className="party-info" id="private-practitioner-contacts">
+            <div className="party-info-header">Petitioner Counsel</div>
+            <div className="party-info-content">
+              {caseDetail.privatePractitioners.map(practitioner => {
+                if (practitioner.formattedName) {
+                  return (
+                    <RenderPractitioner
+                      contactPrimary={caseDetail.contactPrimary}
+                      contactSecondary={caseDetail.contactSecondary}
+                      countryTypes={countryTypes}
+                      key={practitioner.barNumber}
+                      practitioner={practitioner}
+                    />
+                  );
+                }
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {caseDetail.irsPractitioners.length > 0 && (
+      {caseDetail.irsPractitioners.length > 0 && options.includePartyDetail && (
         <div className="party-info" id="irs-practitioner-contacts">
           <div className="party-info-header">Respondent Counsel</div>
           <div className="party-info-content">
@@ -208,21 +209,21 @@ export const DocketRecord = ({
         </thead>
         <tbody>
           {entries &&
-            entries.map(({ document, index, record }) => {
+            entries.map(entry => {
               return (
-                <tr key={index}>
-                  <td>{index}</td>
-                  <td>{record.createdAtFormatted || ''}</td>
-                  <td>{record.eventCode || ''}</td>
+                <tr key={entry.index}>
+                  <td>{entry.index}</td>
+                  <td>{entry.createdAtFormatted || ''}</td>
+                  <td>{entry.eventCode || ''}</td>
                   <td className="filings-and-proceedings">
-                    <RecordDescription document={document} record={record} />
+                    <RecordDescription entry={entry} />
                   </td>
-                  <td>{(document && document.filedBy) || ''}</td>
-                  <td>{record.action || ''}</td>
+                  <td>{entry.filedBy || ''}</td>
+                  <td>{entry.action || ''}</td>
                   <td>
-                    <ServedDate document={document} />
+                    <ServedDate document={entry} />
                   </td>
-                  <td>{(document && document.servedPartiesCode) || ''}</td>
+                  <td>{entry.servedPartiesCode || ''}</td>
                 </tr>
               );
             })}
