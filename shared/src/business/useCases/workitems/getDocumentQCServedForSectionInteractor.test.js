@@ -20,16 +20,16 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     applicationContext.getPersistenceGateway().getDocumentQCServedForSection = async () => [
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
@@ -65,18 +65,18 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     expect(result).toMatchObject([
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
-        docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        document: {
+        docketEntry: {
           sentBy: 'petitioner',
         },
+        docketNumber: '101-18',
+        docketNumberWithSuffix: '101-18S',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
@@ -97,18 +97,18 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     expect(result).toMatchObject([
       {
+        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         docketNumberWithSuffix: '101-18S',
-        document: { sentBy: 'petitioner' },
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
-        docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        document: {
+        docketEntry: {
           sentBy: 'petitioner',
         },
+        docketNumber: '101-18',
+        docketNumberWithSuffix: '101-18S',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },

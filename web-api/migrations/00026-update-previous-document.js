@@ -9,7 +9,7 @@ const mutateRecord = async item => {
   if (isDocumentRecord(item)) {
     if (item.previousDocument) {
       const updatedDocument = new DocketEntry(
-        { ...item, docketEntryId: item.documentId },
+        { ...item, docketEntryId: item.docketEntryId || item.documentId },
         { applicationContext },
       )
         .validate()
