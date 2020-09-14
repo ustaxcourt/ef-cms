@@ -44,7 +44,7 @@ export const IndividualWorkQueue = connect(
           <Tab
             id="section-in-progress-tab"
             tabName="inProgress"
-            title={`In Progress (${workQueueHelper.individialInProgressCount})`}
+            title={`In Progress (${workQueueHelper.individualInProgressCount})`}
           >
             <div id="section-in-progress-tab-content">
               <IndividualWorkQueueInProgress />

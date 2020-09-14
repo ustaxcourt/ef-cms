@@ -58,7 +58,7 @@ exports.getNotificationsInteractor = async ({
   let qcSectionInProgressCount = 0;
 
   documentQCIndividualInbox.forEach(item => {
-    if (item.document.isFileAttached !== false && additionalFilters(item)) {
+    if (item.docketEntry.isFileAttached !== false && additionalFilters(item)) {
       if (item.caseIsInProgress) {
         qcIndividualInProgressCount++;
       } else {
@@ -68,7 +68,7 @@ exports.getNotificationsInteractor = async ({
   });
 
   documentQCSectionInbox.forEach(item => {
-    if (item.document.isFileAttached !== false && additionalFilters(item)) {
+    if (item.docketEntry.isFileAttached !== false && additionalFilters(item)) {
       if (item.caseIsInProgress) {
         qcSectionInProgressCount++;
       } else {
