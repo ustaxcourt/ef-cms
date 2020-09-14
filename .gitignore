@@ -35,7 +35,8 @@ web-api/runtimes/clamav/clamav_lambda_layer.zip
 web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
-web-api/migration-terraform/main/lambdas/record-modifier.js.zip
+web-api/migration-terraform/main/lambdas/migration-segments.js.zip
+web-api/migration-terraform/main/lambdas/migration.js.zip
 web-api/terraform/template/lambdas/api-public.js.zip
 web-api/terraform/template/lambdas/api.js.zip
 web-api/terraform/template/lambdas/cognito-authorizer.js.zip
