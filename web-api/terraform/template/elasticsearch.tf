@@ -1,8 +1,3 @@
-module "iam_main" {
-  source = "../../../iam/terraform/account-specific/main"
-  dns_domain = var.dns_domain
-}
-
 resource "aws_cloudwatch_log_group" "elasticsearch_application_logs" {
   name = "/aws/aes/debug_${var.environment}"
 }
