@@ -268,15 +268,15 @@ exports.joiValidationDecorator = function (
  */
 exports.validEntityDecorator = entityFactoryFunction => {
   /* commenting this out until entity constructor refactoring is complete */
-  // const hasInitFunction =
-  //   typeof entityFactoryFunction === 'function' &&
-  //   typeof entityFactoryFunction.prototype.init === 'function';
+  const hasInitFunction =
+    typeof entityFactoryFunction === 'function' &&
+    typeof entityFactoryFunction.prototype.init === 'function';
 
-  // if (!hasInitFunction) {
-  //   console.warn(
-  //     `WARNING: ${entityFactoryFunction.name} prototype has no 'init' function`,
-  //   );
-  // }
+  if (!hasInitFunction) {
+    console.warn(
+      `WARNING: ${entityFactoryFunction.name} prototype has no 'init' function`,
+    );
+  }
 
   const instanceHandler = {
     set(target, prop, value) {
