@@ -267,7 +267,6 @@ exports.joiValidationDecorator = function (
  *   proxy trap for 'set' on the returned instances
  */
 exports.validEntityDecorator = entityFactoryFunction => {
-  /* commenting this out until entity constructor refactoring is complete */
   const hasInitFunction =
     typeof entityFactoryFunction === 'function' &&
     typeof entityFactoryFunction.prototype.init === 'function';
