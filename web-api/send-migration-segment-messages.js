@@ -53,17 +53,29 @@ let sent = 0;
   );
 
   const chunks = chunk(segments, 10);
-
+  let done = 0;
+  const promises = [];
   for (let chunk of chunks) {
-    await sqs
-      .sendMessageBatch({
-        Entries: chunk.map(segment => ({
-          Id: `${sent++}`,
-          MessageBody: JSON.stringify(segment),
-        })),
-        QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
-      })
-      .promise();
-    console.log(`${sent} out of ${totalSegments} messages sent successfully.`);
+    promises.push(
+      sqs
+        .sendMessageBatch({
+          Entries: chunk.map(segment => ({
+            Id: `${sent++}`,
+            MessageBody: JSON.stringify(segment),
+          })),
+          QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
+        })
+        .promise()
+        .then(() => {
+          done += 10;
+          console.log(
+            `${done} out of ${totalSegments} messages sent successfully.`,
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        }),
+    );
   }
+  await Promise.all(promises);
 })();
