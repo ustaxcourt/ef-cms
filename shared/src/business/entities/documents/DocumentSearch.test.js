@@ -6,10 +6,12 @@ describe('Document Search entity', () => {
   it('needs only a keyword and startDate to be valid', () => {
     const opinionSearch = new DocumentSearch({
       keyword: 'Notice',
+      opinionType: 'a Type',
       startDate: '2002-10-01',
     });
     expect(opinionSearch).toMatchObject({
       keyword: 'Notice',
+      opinionType: 'a Type',
     });
     const validationErrors = opinionSearch.getFormattedValidationErrors();
     expect(validationErrors).toEqual(null);
