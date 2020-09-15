@@ -14,15 +14,25 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.getNotificationsInteractor = async ({
   applicationContext,
-  judgeUser,
+  judgeUserId,
 }) => {
   const currentUser = applicationContext.getCurrentUser();
+  let judgeUser = null;
+
+  if (judgeUserId) {
+    judgeUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId: judgeUserId });
+  }
 
   if (!isAuthorized(currentUser, ROLE_PERMISSIONS.MESSAGES)) {
     throw new UnauthorizedError('Unauthorized to get inbox counts');
   }
 
   const { section, userId } = currentUser;
+  const sectionToShow = applicationContext
+    .getUtilities()
+    .getDocQcSectionForUser(currentUser);
 
   const additionalFilters = applicationContext
     .getUtilities()
@@ -30,6 +40,10 @@ exports.getNotificationsInteractor = async ({
       applicationContext,
       judgeUser,
     });
+
+  const filters = applicationContext
+    .getUtilities()
+    .getWorkQueueFilters({ additionalFilters, user: currentUser });
 
   const userInbox = await applicationContext
     .getPersistenceGateway()
@@ -50,7 +64,7 @@ exports.getNotificationsInteractor = async ({
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
-      section,
+      section: sectionToShow,
     });
 
   let qcIndividualInboxCount = 0;
@@ -77,13 +91,11 @@ exports.getNotificationsInteractor = async ({
       }
     });
 
-  documentQCSectionInbox.forEach(item => {
-    if (item.docketEntry.isFileAttached !== false && additionalFilters(item)) {
-      if (item.caseIsInProgress) {
-        qcSectionInProgressCount++;
-      } else {
-        qcSectionInboxCount++;
-      }
+  documentQCSectionInbox.filter(filters['section']['inbox']).forEach(item => {
+    if (item.caseIsInProgress) {
+      qcSectionInProgressCount++;
+    } else {
+      qcSectionInboxCount++;
     }
   });
 
