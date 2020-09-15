@@ -17,5 +17,12 @@ export const Icon = props => {
     iconProps['aria-hidden'] = false;
     iconProps.title = iconProps['aria-label'];
   }
+
+  if (iconProps.children) {
+    return (
+      <FontAwesomeIcon {...iconProps}>{iconProps.children}</FontAwesomeIcon>
+    );
+  }
+
   return <FontAwesomeIcon {...iconProps} />;
 };

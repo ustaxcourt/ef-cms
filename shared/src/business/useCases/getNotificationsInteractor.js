@@ -39,8 +39,12 @@ exports.getNotificationsInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getSectionInboxMessages({ applicationContext, section });
 
+  const unreadMessageCount = userInbox.filter(message => !message.isRead)
+    .length;
+
   return {
     qcUnreadCount: documentQCInbox.filter(item => !item.isRead).length,
+    unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
   };
