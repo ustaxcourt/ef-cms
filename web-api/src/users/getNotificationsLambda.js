@@ -10,6 +10,6 @@ exports.getNotificationsLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().getNotificationsInteractor({
       applicationContext,
-      ...JSON.parse(event.body),
+      ...event.queryStringParameters,
     });
   });

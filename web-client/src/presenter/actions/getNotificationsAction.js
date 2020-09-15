@@ -9,13 +9,13 @@ import { state } from 'cerebral';
  * @returns {object} contains the caseDetail returned from the use case
  */
 export const getNotificationsAction = async ({ applicationContext, get }) => {
-  const judgeUser = get(state.judgeUser);
+  const judgeUserId = get(state.judgeUser.userId);
 
   const notifications = await applicationContext
     .getUseCases()
     .getNotificationsInteractor({
       applicationContext,
-      judgeUser,
+      judgeUserId,
     });
 
   return { notifications };
