@@ -15,13 +15,13 @@ const MOCK_WORK_ITEM = {
   assigneeName: 'bob',
   caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAt: '2018-12-27T18:06:02.971Z',
-  docketNumber: '101-18',
-  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-  document: {
+  docketEntry: {
     createdAt: '2018-12-27T18:06:02.968Z',
-    documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
+    docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
     documentType: 'Stipulated Decision',
   },
+  docketNumber: '101-18',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   messages: [
     {
       createdAt: '2018-12-27T18:06:02.968Z',

@@ -29,7 +29,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         contactSecondary: {},
         docketEntries: [
           {
-            documentId: '35479520-e2d6-4357-b72f-5b46f16a708a',
+            docketEntryId: '35479520-e2d6-4357-b72f-5b46f16a708a',
             index: 0,
           },
         ],
@@ -38,7 +38,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         privatePractitioners: [],
       },
       docketEntryEntity: {
-        documentId: '35479520-e2d6-4357-b72f-5b46f16a708a',
+        docketEntryId: '35479520-e2d6-4357-b72f-5b46f16a708a',
         documentType: 'The Document',
         eventCode: 'P',
         servedAt: '2019-03-01T21:40:46.415Z',
@@ -80,7 +80,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
       },
       docketEntryEntity: {
-        documentId: 'test-document-id',
+        docketEntryId: 'test-document-id',
         documentType: 'The Document',
         eventCode: 'P',
         servedAt: '2019-03-01T21:40:46.415Z',
@@ -116,7 +116,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
       },
       docketEntryEntity: {
-        documentId: 'test-document-id',
+        docketEntryId: 'test-document-id',
         documentType: 'The Document',
         eventCode: 'P',
         servedAt: '2019-03-01T21:40:46.415Z',
@@ -127,11 +127,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
 
     expect(practitioners).toMatchObject([
       {
-        representing: 'Joe Exotic',
+        representingFormatted: 'Joe Exotic',
         representingPrimary: true,
       },
       {
-        representing: 'Joe Exotic, Carol Baskin',
+        representingFormatted: 'Joe Exotic, Carol Baskin',
         representingPrimary: true,
       },
     ]);

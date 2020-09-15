@@ -49,7 +49,7 @@ describe('saveCaseDetailInternalEditAction', () => {
           ...caseDetail,
           docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
             },
           ],
@@ -102,7 +102,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toBeUndefined();
 
     expect(uploadedDocument).toEqual({
-      documentId: mockUploadedKey,
+      docketEntryId: mockUploadedKey,
       documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
     });
   });
@@ -157,7 +157,7 @@ describe('saveCaseDetailInternalEditAction', () => {
 
   it('should upload initial filing documents if they exist on the case', async () => {
     const mockRqtFile = {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',
@@ -190,7 +190,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toMatchObject(
       expect.arrayContaining([
         {
-          documentId: mockUploadedKey,
+          docketEntryId: mockUploadedKey,
           documentType: 'Request for Place of Trial',
         },
       ]),

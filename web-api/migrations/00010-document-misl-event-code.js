@@ -30,7 +30,7 @@ const mutateRecord = async item => {
         item.eventCode = 'MGRTED';
       }
       const documentToUpdate = new DocketEntry(
-        { ...item },
+        { ...item, docketEntryId: item.docketEntryId || item.documentId },
         { applicationContext },
       )
         .validate()

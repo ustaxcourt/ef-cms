@@ -34,11 +34,11 @@ export const docketClerkViewsCaseDetailDocumentView = test => {
     await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
       docketRecordTab: 'documentView',
       viewerDocumentToDisplay: {
-        documentId: formatted.pendingItemsDocketEntries[0].documentId,
+        docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
       },
     });
 
-    test.documentId = formatted.pendingItemsDocketEntries[0].documentId;
+    test.docketEntryId = formatted.pendingItemsDocketEntries[0].docketEntryId;
 
     expect(
       test.getState('currentViewMetadata.caseDetail.docketRecordTab'),

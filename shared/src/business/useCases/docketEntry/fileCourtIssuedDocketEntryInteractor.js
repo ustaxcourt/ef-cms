@@ -34,7 +34,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber, documentId } = documentMeta;
+  const { docketEntryId, docketNumber } = documentMeta;
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -46,7 +46,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const docketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: documentId,
+    docketEntryId,
   });
 
   if (!docketEntry) {
@@ -64,7 +64,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId: documentId });
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 
@@ -100,12 +100,12 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-      document: {
+      docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
       hideFromPendingMessages: true,
       inProgress: true,
       section: DOCKET_SECTION,

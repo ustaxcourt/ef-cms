@@ -11,6 +11,7 @@ const mutateRecord = async item => {
     const docketEntryToUpdate = new DocketEntry(
       {
         ...item,
+        docketEntryId: item.docketEntryId || item.documentId,
         documentTitle: item.description || item.documentType,
       },
       { applicationContext },

@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setSectionInboxCountAction } from './setSectionInboxCountAction';
+import { setSectionBoxCountAction } from './setSectionBoxCountAction';
 
-describe('setSectionInboxCountAction', () => {
+describe('setSectionBoxCountAction', () => {
   const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
 
   let workItems;
@@ -12,31 +12,36 @@ describe('setSectionInboxCountAction', () => {
     workItems = [
       {
         associatedJudge: 'Judge Barker',
-        document: {
+        caseIsInProgress: false,
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: 'Judge Carey',
-        document: {
+        caseIsInProgress: false,
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        document: {
+        caseIsInProgress: false,
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: 'Judge Barker',
-        document: {
+        caseIsInProgress: true,
+        docketEntry: {
           isFileAttached: true,
         },
       },
       {
         associatedJudge: 'Judge Barker',
-        document: {
+        caseIsInProgress: false,
+        docketEntry: {
           isFileAttached: false,
         },
       },
@@ -50,7 +55,7 @@ describe('setSectionInboxCountAction', () => {
       role: USER_ROLES.docketClerk,
     });
 
-    const result = await runAction(setSectionInboxCountAction, {
+    const result = await runAction(setSectionBoxCountAction, {
       modules: {
         presenter,
       },
@@ -62,7 +67,27 @@ describe('setSectionInboxCountAction', () => {
         workQueueToDisplay: {},
       },
     });
-    expect(result.state.sectionInboxCount).toEqual(4);
+    expect(result.state.sectionInboxCount).toEqual(3);
+  });
+
+  it('sets sectionInProgressCount for a docketClerk user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = await runAction(setSectionBoxCountAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        workItems,
+      },
+      state: {
+        judgeUser: undefined,
+        workQueueToDisplay: {},
+      },
+    });
+    expect(result.state.sectionInProgressCount).toEqual(1);
   });
 
   it('sets sectionInboxCount for a judge user', async () => {
@@ -71,7 +96,7 @@ describe('setSectionInboxCountAction', () => {
       role: USER_ROLES.judge,
     });
 
-    const result = await runAction(setSectionInboxCountAction, {
+    const result = await runAction(setSectionBoxCountAction, {
       modules: {
         presenter,
       },
@@ -85,7 +110,7 @@ describe('setSectionInboxCountAction', () => {
         workQueueToDisplay: {},
       },
     });
-    expect(result.state.sectionInboxCount).toEqual(2);
+    expect(result.state.sectionInboxCount).toEqual(1);
   });
 
   it('sets sectionInboxCount for a chambers user', async () => {
@@ -94,7 +119,7 @@ describe('setSectionInboxCountAction', () => {
       role: USER_ROLES.adc,
     });
 
-    const result = await runAction(setSectionInboxCountAction, {
+    const result = await runAction(setSectionBoxCountAction, {
       modules: {
         presenter,
       },

@@ -30,8 +30,8 @@ describe('strikeDocketEntryInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: '45678-18',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
           documentTitle: 'first record',
           documentType: 'Answer',
           eventCode: 'A',

@@ -50,8 +50,8 @@ exports.completeDocketEntryQCInteractor = async ({
   }
 
   const {
+    docketEntryId,
     docketNumber,
-    documentId,
     overridePaperServiceAddress,
   } = entryMetadata;
 
@@ -68,11 +68,11 @@ exports.completeDocketEntryQCInteractor = async ({
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
-    record => record.documentId === documentId,
+    record => record.docketEntryId === docketEntryId,
   );
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
-    docketEntryId: documentId,
+    docketEntryId,
   });
 
   const editableFields = {
@@ -184,12 +184,12 @@ exports.completeDocketEntryQCInteractor = async ({
     Object.assign(workItemToUpdate, {
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
+      docketEntry: {
         ...updatedDocketEntry.toRawObject(),
         createdAt: updatedDocketEntry.createdAt,
       },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     });
 
     if (!workItemToUpdate.completedAt) {
@@ -236,7 +236,7 @@ exports.completeDocketEntryQCInteractor = async ({
         .getStorageClient()
         .getObject({
           Bucket: applicationContext.environment.documentsBucketName,
-          Key: updatedDocketEntry.documentId,
+          Key: updatedDocketEntry.docketEntryId,
         })
         .promise();
 
@@ -279,7 +279,7 @@ exports.completeDocketEntryQCInteractor = async ({
       paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
     }
   } else if (needsNoticeOfDocketChange) {
-    const noticeDocumentId = await generateNoticeOfDocketChangePdf({
+    const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
     });
@@ -287,7 +287,7 @@ exports.completeDocketEntryQCInteractor = async ({
     let noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...NOTICE_OF_DOCKET_CHANGE,
-        documentId: noticeDocumentId,
+        docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
           NOTICE_OF_DOCKET_CHANGE.documentTitle,
           docketChangeInfo.docketEntryIndex,
@@ -306,7 +306,7 @@ exports.completeDocketEntryQCInteractor = async ({
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: noticeUpdatedDocketEntry.documentId,
+        Key: noticeUpdatedDocketEntry.docketEntryId,
       })
       .promise();
 
@@ -324,7 +324,7 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: newPdfData,
-      key: noticeUpdatedDocketEntry.documentId,
+      key: noticeUpdatedDocketEntry.docketEntryId,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -381,7 +381,7 @@ exports.completeDocketEntryQCInteractor = async ({
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: documentId,
+      docketEntryId,
       docketNumber: caseEntity.docketNumber,
     });
   }

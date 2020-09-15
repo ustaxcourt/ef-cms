@@ -63,8 +63,8 @@ describe('validate case detail', () => {
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             eventCode: 'P',
             filedBy: 'Test Petitioner',
@@ -73,8 +73,8 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             eventCode: 'P',
             filedBy: 'Test Petitioner',
@@ -119,8 +119,8 @@ describe('validate case detail', () => {
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             eventCode: 'P',
             filedBy: 'Test Petitioner',
@@ -129,8 +129,8 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             eventCode: 'P',
             filedBy: 'Test Petitioner',
@@ -163,8 +163,8 @@ describe('validate case detail', () => {
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             eventCode: 'P',
             filedBy: 'Test Petitioner',
@@ -173,8 +173,8 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             docketNumber: '101-18',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             eventCode: 'P',
             filedBy: 'Test Petitioner',

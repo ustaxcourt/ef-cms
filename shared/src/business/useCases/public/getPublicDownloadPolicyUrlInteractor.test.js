@@ -52,7 +52,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
-          documentId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
+          docketEntryId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           eventCode: 'O',
@@ -90,7 +90,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
-          documentId: '83813a24-7687-418e-a186-c416b4bb0ad4',
+          docketEntryId: '83813a24-7687-418e-a186-c416b4bb0ad4',
           documentTitle: 'Memorandum Opinion',
           documentType: 'Memorandum Opinion',
           eventCode: 'MOP',
@@ -126,7 +126,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
-          documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
+          docketEntryId: '8008b288-8b6b-48e3-8239-599266b13b8b',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           eventCode: 'O',

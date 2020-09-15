@@ -571,7 +571,7 @@ describe('Case entity', () => {
         {
           docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               documentType: 'testing',
             },
           ],
@@ -1220,7 +1220,7 @@ describe('Case entity', () => {
     beforeEach(() => {
       docketEntryToArchive = {
         archived: undefined,
-        documentId: '79c29d3f-d292-482c-b722-388577154664',
+        docketEntryId: '79c29d3f-d292-482c-b722-388577154664',
         documentType: 'Order',
         eventCode: 'O',
         filedBy: 'Test Petitioner',
@@ -1244,7 +1244,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       const archivedDocketEntry = caseRecord.archivedDocketEntries.find(
-        d => d.documentId === docketEntryToArchive.documentId,
+        d => d.docketEntryId === docketEntryToArchive.docketEntryId,
       );
       expect(archivedDocketEntry.archived).toBeTruthy();
     });
@@ -1256,7 +1256,7 @@ describe('Case entity', () => {
 
       expect(
         caseRecord.archivedDocketEntries.find(
-          d => d.documentId === docketEntryToArchive.documentId,
+          d => d.docketEntryId === docketEntryToArchive.docketEntryId,
         ),
       ).toBeDefined();
     });
@@ -1268,7 +1268,7 @@ describe('Case entity', () => {
 
       expect(
         caseRecord.docketEntries.find(
-          d => d.documentId === docketEntryToArchive.documentId,
+          d => d.docketEntryId === docketEntryToArchive.docketEntryId,
         ),
       ).toBeUndefined();
     });
@@ -1367,13 +1367,13 @@ describe('Case entity', () => {
         },
       );
       caseToVerify.addDocketEntry({
-        documentId: '123',
+        docketEntryId: '123',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
       expect(caseToVerify.docketEntries.length).toEqual(1);
       expect(caseToVerify.docketEntries[0]).toMatchObject({
-        documentId: '123',
+        docketEntryId: '123',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
@@ -1981,9 +1981,9 @@ describe('Case entity', () => {
         applicationContext,
       });
       const result = myCase.getDocketEntryById({
-        docketEntryId: MOCK_DOCUMENTS[0].documentId,
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
       });
-      expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+      expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
     });
   });
 
@@ -2018,9 +2018,9 @@ describe('Case entity', () => {
       });
       const result = Case.getAttachmentDocumentById({
         caseDetail: myCase.toRawObject(),
-        documentId: MOCK_DOCUMENTS[0].documentId,
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
       });
-      expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+      expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
     });
 
     it('should get a correspondence document', () => {
@@ -2062,10 +2062,10 @@ describe('Case entity', () => {
       );
       const result = Case.getAttachmentDocumentById({
         caseDetail: myCase.toRawObject(),
-        documentId: MOCK_DOCUMENTS[0].documentId,
+        documentId: MOCK_DOCUMENTS[0].docketEntryId,
         useArchived: true,
       });
-      expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+      expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
     });
 
     it('should return undefined when attempting to get an archived docket entry and useArchived is not pased in', () => {
@@ -2081,7 +2081,7 @@ describe('Case entity', () => {
       );
       const result = Case.getAttachmentDocumentById({
         caseDetail: myCase.toRawObject(),
-        documentId: MOCK_DOCUMENTS[0].documentId,
+        documentId: MOCK_DOCUMENTS[0].docketEntryId,
       });
       expect(result).toBeUndefined();
     });
@@ -2119,14 +2119,16 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const documentIdToDelete = MOCK_DOCUMENTS[1].documentId;
+      const docketEntryIdToDelete = MOCK_DOCUMENTS[1].docketEntryId;
       expect(myCase.docketEntries.length).toEqual(4);
       myCase.deleteDocketEntryById({
-        docketEntryId: documentIdToDelete,
+        docketEntryId: docketEntryIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(3);
       expect(
-        myCase.docketEntries.find(d => d.documentId === documentIdToDelete),
+        myCase.docketEntries.find(
+          d => d.docketEntryId === docketEntryIdToDelete,
+        ),
       ).toBeUndefined();
     });
 
@@ -2134,10 +2136,10 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const documentIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
+      const docketEntryIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
       expect(myCase.docketEntries.length).toEqual(4);
       myCase.deleteDocketEntryById({
-        docketEntryId: documentIdToDelete,
+        docketEntryId: docketEntryIdToDelete,
       });
       expect(myCase.docketEntries.length).toEqual(4);
     });
@@ -2258,13 +2260,13 @@ describe('Case entity', () => {
       });
 
       myCase.updateDocketEntry({
-        documentId: MOCK_DOCUMENTS[0].documentId,
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(
         myCase.docketEntries.find(
-          d => d.documentId === MOCK_DOCUMENTS[0].documentId,
+          d => d.docketEntryId === MOCK_DOCUMENTS[0].docketEntryId,
         ).processingStatus,
       ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
@@ -2275,7 +2277,7 @@ describe('Case entity', () => {
       });
 
       myCase.updateDocketEntry({
-        documentId: '11001001',
+        docketEntryId: '11001001',
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 

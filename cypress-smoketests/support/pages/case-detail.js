@@ -4,12 +4,14 @@ exports.goToCaseDetail = docketNumber => {
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
 };
 
-exports.createOrder = () => {
-  cy.get('#case-detail-menu-button').click();
-  cy.get('#menu-button-create-order').click();
-  cy.get('.modal-dialog').should('exist');
-  cy.get('#eventCode').select('OSC');
-  cy.get('.modal-button-confirm').click();
+exports.createOrder = ({ docketNumber, token }) => {
+  //we have to log in again here, because otherwise we get a cross-origin request
+  //error when calling the second cy.visit()
+  cy.visit(`/log-in?token=${token}`);
+  cy.get('.progress-indicator').should('not.exist');
+  cy.visit(
+    `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
+  );
   cy.url().should('contain', '/create-order');
   cy.get('.ql-editor').type('A created order!');
   cy.get('#save-order-button').click();

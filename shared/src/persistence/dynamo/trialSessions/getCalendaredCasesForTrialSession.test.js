@@ -40,7 +40,7 @@ describe('getCalendaredCasesForTrialSession', () => {
         userId: 'abc-123',
       },
       {
-        documentId: 'abc-123',
+        docketEntryId: 'abc-123',
         pk: `case|${MOCK_CASE.docketNumber}`,
         sk: 'docket-entry|123',
       },
@@ -59,7 +59,7 @@ describe('getCalendaredCasesForTrialSession', () => {
         disposition: 'something',
         docketEntries: [
           {
-            documentId: 'abc-123',
+            docketEntryId: 'abc-123',
             pk: `case|${MOCK_CASE.docketNumber}`,
             sk: 'docket-entry|123',
           },

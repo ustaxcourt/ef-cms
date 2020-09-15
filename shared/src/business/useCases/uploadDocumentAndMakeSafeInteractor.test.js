@@ -10,15 +10,15 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .uploadDocumentFromClient.mockResolvedValue(mockDocument.documentId);
+      .uploadDocumentFromClient.mockResolvedValue(mockDocument.docketEntryId);
   });
-  it('returns the newly created document ID', async () => {
-    const expectDocumentId = await uploadDocumentAndMakeSafeInteractor({
+  it('returns the newly created docket entry ID', async () => {
+    const expectDocketEntryId = await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       onUploadProgress: () => {},
     });
-    expect(expectDocumentId).toEqual(mockDocument.documentId);
+    expect(expectDocketEntryId).toEqual(mockDocument.docketEntryId);
   });
 
   it('calls upload on the provided document', async () => {

@@ -112,7 +112,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   const docketEntryEntity = new DocketEntry(
     {
       ...documentMetadata,
-      documentId: primaryDocumentFileId,
+      docketEntryId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
       isDraft: true,
@@ -145,7 +145,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       applicationContext,
     }).validate();
     messageEntity.addAttachment({
-      documentId: docketEntryEntity.documentId,
+      documentId: docketEntryEntity.docketEntryId,
       documentTitle: docketEntryEntity.documentTitle,
     });
 

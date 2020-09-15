@@ -63,7 +63,7 @@ DocketEntry.prototype.init = function init(
         : rawDocketEntry.pending;
     if (rawDocketEntry.previousDocument) {
       this.previousDocument = {
-        documentId: rawDocketEntry.previousDocument.documentId,
+        docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
         documentTitle: rawDocketEntry.previousDocument.documentTitle,
         documentType: rawDocketEntry.previousDocument.documentType,
       };
@@ -90,11 +90,11 @@ DocketEntry.prototype.init = function init(
   this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
   this.createdAt = rawDocketEntry.createdAt || createISODateString();
   this.date = rawDocketEntry.date;
+  this.docketEntryId =
+    rawDocketEntry.docketEntryId || applicationContext.getUniqueId();
   this.docketNumber = rawDocketEntry.docketNumber;
   this.docketNumbers = rawDocketEntry.docketNumbers;
   this.documentContentsId = rawDocketEntry.documentContentsId;
-  this.documentId =
-    rawDocketEntry.documentId || applicationContext.getUniqueId();
   this.documentIdBeforeSignature = rawDocketEntry.documentIdBeforeSignature;
   this.documentTitle = rawDocketEntry.documentTitle;
   this.documentType = rawDocketEntry.documentType;
@@ -220,6 +220,9 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     .description(
       'An optional date used when generating a fully concatenated document title.',
     ),
+  docketEntryId: JoiValidationConstants.UUID.required().description(
+    'System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key.',
+  ),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'Docket Number of the associated Case in XXXXX-YY format.',
   ),
@@ -230,9 +233,6 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
     ),
   documentContentsId: JoiValidationConstants.UUID.optional().description(
     'The S3 ID containing the text contents of the document.',
-  ),
-  documentId: JoiValidationConstants.UUID.required().description(
-    'ID of the associated PDF document in the S3 bucket.',
   ),
   documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
     'The id for the original document that was uploaded.',
@@ -388,7 +388,7 @@ DocketEntry.VALIDATION_RULES = joi.object().keys({
   previousDocument: joi
     .object()
     .keys({
-      documentId: JoiValidationConstants.UUID.optional().description(
+      docketEntryId: JoiValidationConstants.UUID.optional().description(
         'The ID of the previous document.',
       ),
       documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(

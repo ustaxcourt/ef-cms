@@ -47,4 +47,34 @@ describe('messagesHelper', () => {
 
     expect(result.messagesTitle).toEqual('Section Messages');
   });
+
+  describe('inbox count', () => {
+    it("should return individual inbox count if the message box is the user's", () => {
+      const result = runCompute(messagesHelper, {
+        state: {
+          messageBoxToDisplay: {
+            queue: 'my',
+          },
+          messagesInboxCount: 5,
+          messagesSectionCount: 3,
+        },
+      });
+
+      expect(result.inboxCount).toEqual(5);
+    });
+
+    it("should return section inbox count if the message box is the user's section", () => {
+      const result = runCompute(messagesHelper, {
+        state: {
+          messageBoxToDisplay: {
+            queue: 'section',
+          },
+          messagesInboxCount: 5,
+          messagesSectionCount: 3,
+        },
+      });
+
+      expect(result.inboxCount).toEqual(3);
+    });
+  });
 });

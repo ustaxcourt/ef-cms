@@ -19,19 +19,19 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
       },
     );
 
-    const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
-    expect(documentId).toBeDefined();
+    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
+    expect(docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId,
       docketNumber: test.docketNumber,
-      documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('documentId')).toEqual(documentId);
+    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     expect(test.getState('form.lodged')).toEqual(false);
 
@@ -82,7 +82,7 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
     });
 
     const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
-      document => document.documentId === documentId,
+      document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Objection Some free text',

@@ -20,11 +20,11 @@ describe('formattedMessageDetail', () => {
     correspondence: [],
     docketEntries: [
       {
-        documentId: '98065bac-b35c-423c-b649-122a09bb65b9',
+        docketEntryId: '98065bac-b35c-423c-b649-122a09bb65b9',
         documentTitle: 'Test Document One',
       },
       {
-        documentId: 'fee3958e-c738-4794-b0a1-bad711506685',
+        docketEntryId: 'fee3958e-c738-4794-b0a1-bad711506685',
         documentTitle: 'Test Document Two',
       },
     ],
@@ -251,7 +251,7 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [
               {
-                documentId,
+                docketEntryId: documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
@@ -283,7 +283,7 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [
               {
-                documentId,
+                docketEntryId: documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Corrected Transcript',
                 eventCode: 'CTRA',
@@ -315,7 +315,7 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [
               {
-                documentId,
+                docketEntryId: documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
@@ -348,7 +348,7 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [
               {
-                documentId,
+                docketEntryId: documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
@@ -386,7 +386,7 @@ describe('formattedMessageDetail', () => {
             docketEntries: [
               {
                 archived: true,
-                documentId,
+                docketEntryId: documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
@@ -418,7 +418,7 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [
               {
-                documentId,
+                docketEntryId: documentId,
                 documentTitle: 'Some Stuff',
                 documentType: 'Corrected Transcript',
                 eventCode: 'CTRA',

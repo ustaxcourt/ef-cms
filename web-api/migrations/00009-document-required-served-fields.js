@@ -26,6 +26,7 @@ const mutateRecord = async item => {
       const documentToUpdate = new DocketEntry(
         {
           ...item,
+          docketEntryId: item.docketEntryId || item.documentId,
           servedAt: item.servedAt || DEFAULT_SERVED_AT_DATE,
           servedParties: item.servedParties || DEFAULT_SERVED_PARTIES,
         },

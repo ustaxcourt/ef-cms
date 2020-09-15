@@ -27,7 +27,7 @@ export const Correspondence = connect(
   }) {
     useEffect(() => {
       loadDefaultViewerCorrespondenceSequence({
-        documentId: correspondenceDocumentId,
+        docketEntryId: correspondenceDocumentId,
       });
       return;
     }, []);

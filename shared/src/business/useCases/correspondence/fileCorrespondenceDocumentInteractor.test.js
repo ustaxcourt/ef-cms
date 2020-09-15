@@ -33,7 +33,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     },
     docketEntries: [
       {
-        documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+        docketEntryId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',

@@ -29,7 +29,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
             archivedCorrespondences: [],
             archivedDocketEntries: [],
             correspondence: [],
-            docketEntries: [{ documentId: '1234' }],
+            docketEntries: [{ docketEntryId: '1234' }],
             docketNumber: '123-45',
           },
           viewerDocumentToDisplay: null,
@@ -59,7 +59,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
             archivedCorrespondences: [],
             archivedDocketEntries: [],
             correspondence: [],
-            docketEntries: [{ documentId: '1234' }],
+            docketEntries: [{ docketEntryId: '1234' }],
             docketNumber: '123-45',
           },
           viewerDocumentToDisplay: null,
@@ -84,7 +84,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
         state: {
           caseDetail: {
             archivedCorrespondences: [],
-            archivedDocketEntries: [{ archived: true, documentId: '1234' }],
+            archivedDocketEntries: [{ archived: true, docketEntryId: '1234' }],
             correspondence: [],
             docketEntries: [],
             docketNumber: '123-45',

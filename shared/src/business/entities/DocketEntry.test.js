@@ -151,16 +151,16 @@ describe('DocketEntry entity', () => {
       expect(() => new DocketEntry({}, {})).toThrow();
     });
 
-    it('Creates a valid document', () => {
+    it('Creates a valid docket entry', () => {
       const myDoc = new DocketEntry(A_VALID_DOCKET_ENTRY, {
         applicationContext,
       });
-      myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+      myDoc.docketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       expect(myDoc.isValid()).toBeTruthy();
       expect(myDoc.entityName).toEqual('DocketEntry');
     });
 
-    it('Creates an invalid document with no document type', () => {
+    it('Creates an invalid docket entry with no document type', () => {
       const myDoc = new DocketEntry(
         {
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
@@ -170,7 +170,7 @@ describe('DocketEntry entity', () => {
       expect(myDoc.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid document with no userId', () => {
+    it('Creates an invalid docket entry with no userId', () => {
       const myDoc = new DocketEntry(
         {
           documentType: 'Petition',
@@ -180,7 +180,7 @@ describe('DocketEntry entity', () => {
       expect(myDoc.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid document with serviceDate of undefined-undefined-undefined', () => {
+    it('Creates an invalid docket entry with serviceDate of undefined-undefined-undefined', () => {
       const myDoc = new DocketEntry(
         {
           serviceDate: 'undefined-undefined-undefined',
@@ -194,7 +194,7 @@ describe('DocketEntry entity', () => {
       const myDoc = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '68584a2f-52d8-4876-8e44-0920f5061428',
+          docketEntryId: '68584a2f-52d8-4876-8e44-0920f5061428',
         },
         { applicationContext },
       );
@@ -204,8 +204,8 @@ describe('DocketEntry entity', () => {
           assigneeName: 'bob',
           caseStatus: CASE_STATUS_TYPES.NEW,
           caseTitle: 'Johnny Joe Jacobson',
+          docketEntry: {},
           docketNumber: '101-18',
-          document: {},
           section: PETITIONS_SECTION,
           sentBy: 'bob',
         },
@@ -221,26 +221,26 @@ describe('DocketEntry entity', () => {
   describe('validate', () => {
     it('should do nothing if valid', () => {
       let error;
-      let document;
+      let docketEntry;
       try {
-        document = new DocketEntry(
+        docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
             documentContents: 'this is the content of the document',
           },
           { applicationContext },
         );
-        document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-        document.validate();
+        docketEntry.docketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+        docketEntry.validate();
       } catch (err) {
         error = err;
       }
 
-      expect(document.documentContents).not.toBeDefined();
+      expect(docketEntry.documentContents).not.toBeDefined();
       expect(error).not.toBeDefined();
     });
 
-    it('should throw an error on invalid documents', () => {
+    it('should throw an error on invalid docket entries', () => {
       let error;
       try {
         new DocketEntry({}, { applicationContext }).validate();
@@ -250,13 +250,13 @@ describe('DocketEntry entity', () => {
       expect(error).toBeDefined();
     });
 
-    it('should not throw an error on valid documents', () => {
+    it('should not throw an error on valid docket entries', () => {
       let error;
       try {
         new DocketEntry(
           {
             createdAt: '2019-03-27T00:00:00.000-04:00',
-            documentId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
+            docketEntryId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
             documentTitle:
               'ORDER THAT PETR. BY 4/18/19 FILE, UNDER SEAL, A RESPONSE TO THIS ORDER AS STATED HEREIN.',
             documentType: 'Order',
@@ -299,7 +299,7 @@ describe('DocketEntry entity', () => {
         new DocketEntry(
           {
             createdAt: '2019-03-27T00:00:00.000-04:00',
-            documentId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
+            docketEntryId: '0ed63e9d-8fb5-4a55-b268-a7cd10d7cbcd',
             documentTitle:
               'ORDER THAT PETR. BY 4/18/19 FILE, UNDER SEAL, A RESPONSE TO THIS ORDER AS STATED HEREIN.',
             documentType: 'Order',
@@ -340,54 +340,54 @@ describe('DocketEntry entity', () => {
     });
 
     it('should correctly validate with a secondaryDate', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           eventCode: TRANSCRIPT_EVENT_CODE,
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
       );
-      expect(document.isValid()).toBeTruthy();
-      expect(document.secondaryDate).toBeDefined();
+      expect(docketEntry.isValid()).toBeTruthy();
+      expect(docketEntry.secondaryDate).toBeDefined();
     });
 
     describe('handling of sealed legacy documents', () => {
       it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             secondaryDate: '2019-03-01T21:40:46.415Z',
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             isLegacySealed: true,
             secondaryDate: '2019-03-01T21:40:46.415Z',
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeFalsy();
-        expect(document.getFormattedValidationErrors()).toMatchObject({
+        expect(docketEntry.isValid()).toBeFalsy();
+        expect(docketEntry.getFormattedValidationErrors()).toMatchObject({
           isLegacy: '"isLegacy" is required',
           isSealed: '"isSealed" is required',
         });
       });
 
       it('should pass validation when "isLegacy" is true, "isLegacySealed" is true, "isSealed" is true', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: ORDER_TYPES[0].documentType,
             eventCode: 'O',
             isLegacy: true,
@@ -400,14 +400,14 @@ describe('DocketEntry entity', () => {
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should pass validation when "isLegacySealed" is false, "isSealed" and "isLegacy" are undefined', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: ORDER_TYPES[0].documentType,
             eventCode: 'O',
             isLegacySealed: false,
@@ -418,14 +418,14 @@ describe('DocketEntry entity', () => {
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
     });
 
     describe('filedBy scenarios', () => {
       let mockDocumentData = {
         ...A_VALID_DOCKET_ENTRY,
-        documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+        docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
         secondaryDate: '2019-03-01T21:40:46.415Z',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
@@ -434,12 +434,12 @@ describe('DocketEntry entity', () => {
 
       describe('documentType is not in the list of documents that require filedBy', () => {
         it('should pass validation when filedBy is undefined', () => {
-          let internalDocument = new DocketEntry(
+          let internalDocketEntry = new DocketEntry(
             { ...mockDocumentData, documentType: 'Petition' },
             { applicationContext },
           );
 
-          expect(internalDocument.isValid()).toBeTruthy();
+          expect(internalDocketEntry.isValid()).toBeTruthy();
         });
       });
 
@@ -447,10 +447,10 @@ describe('DocketEntry entity', () => {
         describe('external filing events', () => {
           describe('that are not autogenerated', () => {
             it('should fail validation when "filedBy" is not provided', () => {
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...A_VALID_DOCKET_ENTRY,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
@@ -459,15 +459,15 @@ describe('DocketEntry entity', () => {
                 },
                 { applicationContext },
               );
-              expect(document.isValid()).toBeFalsy();
-              expect(document.filedBy).toBeUndefined();
+              expect(docketEntry.isValid()).toBeFalsy();
+              expect(docketEntry.filedBy).toBeUndefined();
             });
 
             it('should pass validation when "filedBy" is provided', () => {
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...A_VALID_DOCKET_ENTRY,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
@@ -477,7 +477,7 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.isValid()).toBeTruthy();
+              expect(docketEntry.isValid()).toBeTruthy();
             });
           });
 
@@ -487,10 +487,10 @@ describe('DocketEntry entity', () => {
                 A_VALID_DOCKET_ENTRY,
                 'filedBy',
               );
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   isAutoGenerated: true,
@@ -500,8 +500,8 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.filedBy).toBeUndefined();
-              expect(document.isValid()).toBeTruthy();
+              expect(docketEntry.filedBy).toBeUndefined();
+              expect(docketEntry.isValid()).toBeTruthy();
             });
 
             it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
@@ -509,10 +509,10 @@ describe('DocketEntry entity', () => {
                 A_VALID_DOCKET_ENTRY,
                 'filedBy',
               );
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -520,8 +520,8 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.filedBy).toBeUndefined();
-              expect(document.isValid()).toBeTruthy();
+              expect(docketEntry.filedBy).toBeUndefined();
+              expect(docketEntry.isValid()).toBeTruthy();
             });
 
             it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
@@ -529,10 +529,10 @@ describe('DocketEntry entity', () => {
                 A_VALID_DOCKET_ENTRY,
                 'filedBy',
               );
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   isAutoGenerated: false,
@@ -542,7 +542,7 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.isValid()).toBeFalsy();
+              expect(docketEntry.isValid()).toBeFalsy();
             });
           });
         });
@@ -550,10 +550,10 @@ describe('DocketEntry entity', () => {
         describe('internal filing events', () => {
           describe('that are not autogenerated', () => {
             it('should fail validation when "filedBy" is not provided', () => {
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...A_VALID_DOCKET_ENTRY,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
@@ -562,15 +562,15 @@ describe('DocketEntry entity', () => {
                 },
                 { applicationContext },
               );
-              expect(document.isValid()).toBeFalsy();
-              expect(document.filedBy).toBeUndefined();
+              expect(docketEntry.isValid()).toBeFalsy();
+              expect(docketEntry.filedBy).toBeUndefined();
             });
 
             it('should pass validation when "filedBy" is provided', () => {
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...A_VALID_DOCKET_ENTRY,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
@@ -580,7 +580,7 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.isValid()).toBeTruthy();
+              expect(docketEntry.isValid()).toBeTruthy();
             });
           });
 
@@ -590,10 +590,10 @@ describe('DocketEntry entity', () => {
                 A_VALID_DOCKET_ENTRY,
                 'filedBy',
               );
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   isAutoGenerated: true,
@@ -603,8 +603,8 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.filedBy).toBeUndefined();
-              expect(document.isValid()).toBeTruthy();
+              expect(docketEntry.filedBy).toBeUndefined();
+              expect(docketEntry.isValid()).toBeTruthy();
             });
 
             it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
@@ -612,10 +612,10 @@ describe('DocketEntry entity', () => {
                 A_VALID_DOCKET_ENTRY,
                 'filedBy',
               );
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -623,8 +623,8 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.filedBy).toBeUndefined();
-              expect(document.isValid()).toBeTruthy();
+              expect(docketEntry.filedBy).toBeUndefined();
+              expect(docketEntry.isValid()).toBeTruthy();
             });
 
             it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
@@ -632,10 +632,10 @@ describe('DocketEntry entity', () => {
                 A_VALID_DOCKET_ENTRY,
                 'filedBy',
               );
-              const document = new DocketEntry(
+              const docketEntry = new DocketEntry(
                 {
                   ...documentWithoutFiledBy,
-                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   isAutoGenerated: false,
@@ -645,7 +645,7 @@ describe('DocketEntry entity', () => {
                 { applicationContext },
               );
 
-              expect(document.isValid()).toBeFalsy();
+              expect(docketEntry.isValid()).toBeFalsy();
             });
           });
         });
@@ -654,10 +654,10 @@ describe('DocketEntry entity', () => {
 
     describe('signed property scenarios', () => {
       it('should fail validation when isDraft is false and signedAt is undefined for a document requiring signature', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
@@ -669,14 +669,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeFalsy();
+        expect(docketEntry.isValid()).toBeFalsy();
       });
 
       it('should pass validation when isDraft is false and signedAt is undefined for a document not requiring signature', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Answer',
             eventCode: 'A',
             isDraft: false,
@@ -688,14 +688,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should fail validation when isDraft is false and signedJudgeName is undefined for a document requiring signature', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
@@ -706,14 +706,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeFalsy();
+        expect(docketEntry.isValid()).toBeFalsy();
       });
 
       it('should pass validation when isDraft is false and signedJudgeName is undefined for a document not requiring signature', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Answer',
             eventCode: 'A',
             isDraft: false,
@@ -724,14 +724,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
@@ -744,14 +744,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should pass validation when isDraft is true and signedJudgeName and signedAt are undefined', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: true,
@@ -762,14 +762,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
@@ -777,15 +777,15 @@ describe('DocketEntry entity', () => {
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeFalsy();
-        expect(document.signedJudgeName).toBeUndefined();
+        expect(docketEntry.isValid()).toBeFalsy();
+        expect(docketEntry.signedJudgeName).toBeUndefined();
       });
 
       it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
@@ -797,14 +797,14 @@ describe('DocketEntry entity', () => {
           { applicationContext },
         );
 
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
@@ -815,14 +815,14 @@ describe('DocketEntry entity', () => {
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
 
       it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
@@ -830,15 +830,15 @@ describe('DocketEntry entity', () => {
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeFalsy();
-        expect(document.signedJudgeName).toBeUndefined();
+        expect(docketEntry.isValid()).toBeFalsy();
+        expect(docketEntry.signedJudgeName).toBeUndefined();
       });
 
       it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
-        const document = new DocketEntry(
+        const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
-            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
@@ -849,30 +849,30 @@ describe('DocketEntry entity', () => {
           },
           { applicationContext },
         );
-        expect(document.isValid()).toBeTruthy();
+        expect(docketEntry.isValid()).toBeTruthy();
       });
     });
 
     it('should fail validation when the document type is opinion and judge is not provided', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: OPINION_DOCUMENT_TYPES[0].documentType,
           eventCode: 'MOP',
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
       );
-      expect(document.isValid()).toBeFalsy();
-      expect(document.judge).toBeUndefined();
+      expect(docketEntry.isValid()).toBeFalsy();
+      expect(docketEntry.judge).toBeUndefined();
     });
 
     it('should fail validation when the document has a servedAt date and servedParties is not defined', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
           eventCode: TRANSCRIPT_EVENT_CODE,
           isOrder: true,
@@ -885,17 +885,17 @@ describe('DocketEntry entity', () => {
         { applicationContext },
       );
 
-      expect(document.isValid()).toBeFalsy();
-      expect(document.getFormattedValidationErrors()).toMatchObject({
+      expect(docketEntry.isValid()).toBeFalsy();
+      expect(docketEntry.getFormattedValidationErrors()).toMatchObject({
         servedParties: '"servedParties" is required',
       });
     });
 
     it('should fail validation when the document has servedParties and servedAt is not defined', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
           eventCode: TRANSCRIPT_EVENT_CODE,
           isOrder: true,
@@ -908,8 +908,8 @@ describe('DocketEntry entity', () => {
         { applicationContext },
       );
 
-      expect(document.isValid()).toBeFalsy();
-      expect(document.getFormattedValidationErrors()).toMatchObject({
+      expect(docketEntry.isValid()).toBeFalsy();
+      expect(docketEntry.getFormattedValidationErrors()).toMatchObject({
         servedAt: '"servedAt" is required',
       });
     });
@@ -917,14 +917,14 @@ describe('DocketEntry entity', () => {
 
   describe('generate filed by string', () => {
     it('should generate correct filedBy string for partyPrimary', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
           createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
@@ -940,18 +940,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petr. Bob');
+      expect(docketEntry.filedBy).toEqual('Petr. Bob');
     });
 
     it('should generate correct filedBy string for partyPrimary and otherFilingParty', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
           createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
@@ -968,18 +968,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petr. Bob, Bob Barker');
+      expect(docketEntry.filedBy).toEqual('Petr. Bob, Bob Barker');
     });
 
     it('should generate correct filedBy string for only partySecondary', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
           createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
@@ -996,18 +996,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petr. Bill');
+      expect(docketEntry.filedBy).toEqual('Petr. Bill');
     });
 
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
           createdAt: '2019-04-19T18:24:09.515Z',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          docketEntryId: 'c501a558-7632-497e-87c1-0c5f39f66718',
           documentTitle:
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
@@ -1026,18 +1026,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+      expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
     it('should generate correct filedBy string for partyPrimary, partyIrsPractitioner, and otherFilingParty', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
           createdAt: '2019-04-19T18:24:09.515Z',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          docketEntryId: 'c501a558-7632-497e-87c1-0c5f39f66718',
           documentTitle:
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
@@ -1057,18 +1057,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Petr. Bob, Bob Barker');
+      expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob, Bob Barker');
     });
 
     it('should generate correct filedBy string for only otherFilingParty', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
           createdAt: '2019-04-19T18:24:09.515Z',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          docketEntryId: 'c501a558-7632-497e-87c1-0c5f39f66718',
           documentTitle:
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
@@ -1088,11 +1088,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Bob Barker');
+      expect(docketEntry.filedBy).toEqual('Bob Barker');
     });
 
     it('should generate correct filedBy string for partyPrimary and partySecondary', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: true,
@@ -1103,7 +1103,7 @@ describe('DocketEntry entity', () => {
           certificateOfServiceMonth: '6',
           certificateOfServiceYear: '2018',
           createdAt: '2019-04-19T17:39:10.476Z',
-          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
+          docketEntryId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
           documentTitle:
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
@@ -1123,16 +1123,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petrs. Bob & Bill');
+      expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1151,16 +1151,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp.');
+      expect(docketEntry.filedBy).toEqual('Resp.');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1182,16 +1182,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
+      expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1213,16 +1213,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp.');
+      expect(docketEntry.filedBy).toEqual('Resp.');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1248,18 +1248,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual(
+      expect(docketEntry.filedBy).toEqual(
         'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
       );
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1285,11 +1285,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
+      expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
 
     it('should generate correct filedBy string for partyPrimary in the constructor when called with a contactPrimary property', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -1297,7 +1297,7 @@ describe('DocketEntry entity', () => {
           certificateOfService: false,
           contactPrimary: caseDetail.contactPrimary,
           createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
@@ -1313,11 +1313,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petr. Bob');
+      expect(docketEntry.filedBy).toEqual('Petr. Bob');
     });
 
     it('should generate correct filedBy string for partySecondary in the constructor when called with a contactSecondary property', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
@@ -1325,7 +1325,7 @@ describe('DocketEntry entity', () => {
           certificateOfService: false,
           contactSecondary: caseDetail.contactSecondary,
           createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
@@ -1342,18 +1342,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petr. Bill');
+      expect(docketEntry.filedBy).toEqual('Petr. Bill');
     });
 
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner in the constructor when values are present', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
           createdAt: '2019-04-19T18:24:09.515Z',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          docketEntryId: 'c501a558-7632-497e-87c1-0c5f39f66718',
           documentTitle:
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
@@ -1373,11 +1373,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+      expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
     it('should generate correct filedBy string for partyPrimary and partySecondary in the constructor when values are present', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           attachments: true,
@@ -1388,7 +1388,7 @@ describe('DocketEntry entity', () => {
           certificateOfServiceMonth: '6',
           certificateOfServiceYear: '2018',
           createdAt: '2019-04-19T17:39:10.476Z',
-          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
+          docketEntryId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
           documentTitle:
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
@@ -1409,16 +1409,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Petrs. Bob & Bill');
+      expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1441,16 +1441,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
+      expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1473,16 +1473,16 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp.');
+      expect(docketEntry.filedBy).toEqual('Resp.');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1509,18 +1509,18 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual(
+      expect(docketEntry.filedBy).toEqual(
         'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
       );
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           documentTitle:
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
           documentType:
@@ -1547,49 +1547,49 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
+      expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
   });
 
   describe('unsignDocument', () => {
     it('signs and unsigns the document', () => {
-      const document = new DocketEntry(A_VALID_DOCKET_ENTRY, {
+      const docketEntry = new DocketEntry(A_VALID_DOCKET_ENTRY, {
         applicationContext,
       });
-      document.setSigned('abc-123', 'Joe Exotic');
+      docketEntry.setSigned('abc-123', 'Joe Exotic');
 
-      expect(document.signedByUserId).toEqual('abc-123');
-      expect(document.signedJudgeName).toEqual('Joe Exotic');
-      expect(document.signedAt).toBeDefined();
+      expect(docketEntry.signedByUserId).toEqual('abc-123');
+      expect(docketEntry.signedJudgeName).toEqual('Joe Exotic');
+      expect(docketEntry.signedAt).toBeDefined();
 
-      document.unsignDocument();
+      docketEntry.unsignDocument();
 
-      expect(document.signedByUserId).toEqual(null);
-      expect(document.signedJudgeName).toEqual(null);
-      expect(document.signedAt).toEqual(null);
+      expect(docketEntry.signedByUserId).toEqual(null);
+      expect(docketEntry.signedJudgeName).toEqual(null);
+      expect(docketEntry.signedAt).toEqual(null);
     });
   });
 
   describe('setQCed', () => {
     it('updates the document QC information with user name, id, and date', () => {
-      const document = new DocketEntry(A_VALID_DOCKET_ENTRY, {
+      const docketEntry = new DocketEntry(A_VALID_DOCKET_ENTRY, {
         applicationContext,
       });
       const user = {
         name: 'Jean Luc',
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       };
-      document.setQCed(user);
-      expect(document.qcByUserId).toEqual(
+      docketEntry.setQCed(user);
+      expect(docketEntry.qcByUserId).toEqual(
         '02323349-87fe-4d29-91fe-8dd6916d2fda',
       );
-      expect(document.qcAt).toBeDefined();
+      expect(docketEntry.qcAt).toBeDefined();
     });
   });
 
   describe('isAutoServed', () => {
     it('should return true if the documentType is an external document and the documentTitle does not contain Simultaneous', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Answer to Second Amendment to Petition',
@@ -1597,11 +1597,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.isAutoServed()).toBeTruthy();
+      expect(docketEntry.isAutoServed()).toBeTruthy();
     });
 
     it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Entry of Appearance',
@@ -1609,11 +1609,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.isAutoServed()).toBeTruthy();
+      expect(docketEntry.isAutoServed()).toBeTruthy();
     });
 
     it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Amended Simultaneous Memoranda of Law',
@@ -1621,11 +1621,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.isAutoServed()).toBeFalsy();
+      expect(docketEntry.isAutoServed()).toBeFalsy();
     });
 
     it('should return false if the documentType is an internally-filed document', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Application for Examination Pursuant to Rule 73',
@@ -1633,13 +1633,13 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(document.isAutoServed()).toBeFalsy();
+      expect(docketEntry.isAutoServed()).toBeFalsy();
     });
   });
 
   describe('setAsServed', () => {
     it('sets the Document as served', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           draftOrderState: {
@@ -1648,79 +1648,81 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      document.setAsServed();
+      docketEntry.setAsServed();
 
-      expect(document.servedAt).toBeDefined();
-      expect(document.draftOrderState).toEqual(null);
+      expect(docketEntry.servedAt).toBeDefined();
+      expect(docketEntry.draftOrderState).toEqual(null);
     });
 
     it('sets the Document as served with served parties', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
         },
         { applicationContext },
       );
 
-      document.setAsServed([
+      docketEntry.setAsServed([
         {
           name: 'Served Party',
         },
       ]);
-      expect(document.servedAt).toBeDefined();
-      expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
+      expect(docketEntry.servedAt).toBeDefined();
+      expect(docketEntry.servedParties).toMatchObject([
+        { name: 'Served Party' },
+      ]);
     });
   });
 
   describe('secondaryDocument validation', () => {
     it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Standard',
           secondaryDocument: {},
         },
         { applicationContext },
       );
-      expect(createdDocument.isValid()).toEqual(false);
+      expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(createdDocument.getFormattedValidationErrors()),
+        Object.keys(createdDocketEntry.getFormattedValidationErrors()),
       ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
     });
 
     it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Standard',
           secondaryDocument: undefined,
         },
         { applicationContext },
       );
-      expect(createdDocument.isValid()).toEqual(true);
+      expect(createdDocketEntry.isValid()).toEqual(true);
     });
 
     it('should be valid if secondaryDocument is not present and the scenario is Nonstandard H', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Nonstandard H',
           secondaryDocument: undefined,
         },
         { applicationContext },
       );
 
-      expect(createdDocument.isValid()).toEqual(true);
+      expect(createdDocketEntry.isValid()).toEqual(true);
     });
 
     it('should be valid if secondaryDocument is present and its contents are valid and the scenario is Nonstandard H', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Nonstandard H',
           secondaryDocument: {
             documentTitle: 'Petition',
@@ -1730,29 +1732,29 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(createdDocument.isValid()).toEqual(true);
+      expect(createdDocketEntry.isValid()).toEqual(true);
     });
 
     it('should not be valid if secondaryDocument is present and it is missing fields and the scenario is Nonstandard H', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           scenario: 'Nonstandard H',
           secondaryDocument: {},
         },
         { applicationContext },
       );
-      expect(createdDocument.isValid()).toEqual(false);
+      expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(createdDocument.getFormattedValidationErrors()),
+        Object.keys(createdDocketEntry.getFormattedValidationErrors()),
       ).toEqual(['documentType', 'eventCode']);
     });
     it('should filter out unnecessary values from servedParties', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: applicationContext.getUniqueId(),
+          docketEntryId: applicationContext.getUniqueId(),
           servedAt: Date.now(),
           servedParties: [
             {
@@ -1765,8 +1767,8 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(createdDocument.isValid()).toEqual(true);
-      expect(createdDocument.servedParties).toEqual([
+      expect(createdDocketEntry.isValid()).toEqual(true);
+      expect(createdDocketEntry.servedParties).toEqual([
         {
           email: 'me@example.com',
           name: 'me',
@@ -1775,10 +1777,10 @@ describe('DocketEntry entity', () => {
       ]);
     });
     it('should return an error when servedParties is not an array', () => {
-      const createdDocument = new DocketEntry(
+      const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentId: applicationContext.getUniqueId(),
+          docketEntryId: applicationContext.getUniqueId(),
           servedAt: Date.now(),
           servedParties: {
             email: 'me@example.com',
@@ -1789,8 +1791,8 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      expect(createdDocument.isValid()).toEqual(false);
-      expect(createdDocument.getFormattedValidationErrors()).toEqual({
+      expect(createdDocketEntry.isValid()).toEqual(false);
+      expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
         servedParties: '"servedParties" must be an array',
       });
     });
@@ -1798,7 +1800,7 @@ describe('DocketEntry entity', () => {
 
   describe('minute entries', () => {
     it('creates minute entry', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -1810,14 +1812,14 @@ describe('DocketEntry entity', () => {
         { applicationContext },
       );
 
-      expect(document.isValid()).toBe(true);
-      expect(document.isMinuteEntry).toBe(true);
+      expect(docketEntry.isValid()).toBe(true);
+      expect(docketEntry.isMinuteEntry).toBe(true);
     });
   });
 
   describe('setNumberOfPages', () => {
     it('sets the number of pages', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           documentType: 'Answer',
           eventCode: 'A',
@@ -1827,14 +1829,14 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      document.setNumberOfPages(13);
-      expect(document.numberOfPages).toEqual(13);
+      docketEntry.setNumberOfPages(13);
+      expect(docketEntry.numberOfPages).toEqual(13);
     });
   });
 
   describe('strikeEntry', () => {
     it('strikes a document if isOnDocketRecord is true', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           documentType: 'Answer',
           eventCode: 'A',
@@ -1845,11 +1847,11 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
-      document.strikeEntry({
+      docketEntry.strikeEntry({
         name: 'Test User',
         userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
       });
-      expect(document).toMatchObject({
+      expect(docketEntry).toMatchObject({
         isStricken: true,
         strickenAt: expect.anything(),
         strickenBy: 'Test User',
@@ -1858,7 +1860,7 @@ describe('DocketEntry entity', () => {
     });
 
     it('throws an error if isOnDocketRecord is false', () => {
-      const document = new DocketEntry(
+      const docketEntry = new DocketEntry(
         {
           documentType: 'Answer',
           eventCode: 'A',
@@ -1871,7 +1873,7 @@ describe('DocketEntry entity', () => {
       );
       let error;
       try {
-        document.strikeEntry({
+        docketEntry.strikeEntry({
           name: 'Test User',
           userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
         });
@@ -1881,7 +1883,7 @@ describe('DocketEntry entity', () => {
       expect(error).toEqual(
         new Error('Cannot strike a document that is not on the docket record.'),
       );
-      expect(document).toMatchObject({
+      expect(docketEntry).toMatchObject({
         isStricken: false,
         strickenAt: undefined,
         strickenBy: undefined,

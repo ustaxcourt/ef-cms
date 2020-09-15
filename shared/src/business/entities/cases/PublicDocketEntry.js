@@ -23,8 +23,8 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.additionalInfo = rawDocketEntry.additionalInfo;
   this.additionalInfo2 = rawDocketEntry.additionalInfo2;
   this.createdAt = rawDocketEntry.createdAt;
+  this.docketEntryId = rawDocketEntry.docketEntryId;
   this.docketNumber = rawDocketEntry.docketNumber;
-  this.documentId = rawDocketEntry.documentId;
   this.documentTitle = rawDocketEntry.documentTitle;
   this.documentType = rawDocketEntry.documentType;
   this.eventCode = rawDocketEntry.eventCode;
@@ -42,7 +42,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.servedParties = rawDocketEntry.servedParties;
 
   if (this.isOnDocketRecord) {
-    this.documentId = rawDocketEntry.documentId;
+    this.docketEntryId = rawDocketEntry.docketEntryId;
     this.filedBy = rawDocketEntry.filedBy;
     this.filingDate = rawDocketEntry.filingDate;
     this.index = rawDocketEntry.index;
@@ -55,8 +55,8 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
+  docketEntryId: JoiValidationConstants.UUID.optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
-  documentId: JoiValidationConstants.UUID.optional(),
   documentTitle: JoiValidationConstants.STRING.max(500).optional(),
   documentType: JoiValidationConstants.STRING.valid(
     ...ALL_DOCUMENT_TYPES,

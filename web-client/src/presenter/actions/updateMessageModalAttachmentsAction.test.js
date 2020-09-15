@@ -15,7 +15,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     ],
     docketEntries: [
       {
-        documentId: '123',
+        docketEntryId: '123',
         documentType: 'Petition',
       },
     ],
@@ -49,9 +49,11 @@ describe('updateMessageModalAttachmentsAction', () => {
   it('appends the given document meta from state to the form.modal.attachments array', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
+      props: {
+        documentId: '123',
+      },
       state: {
         caseDetail,
-        documentId: '123',
         modal: {
           form: {
             attachments: [],
