@@ -1,7 +1,17 @@
+const faker = require('faker');
+
+faker.seed(faker.random.number());
+
 exports.goToCaseDetail = docketNumber => {
   cy.get('#search-field').type(docketNumber);
   cy.get('.ustc-search-button').click();
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
+};
+
+exports.goToCaseOverview = docketNumber => {
+  cy.goToRoute(`/case-detail/${docketNumber}`);
+  cy.get('#tab-case-information').click();
+  cy.get('#tab-overview').click();
 };
 
 exports.createOrder = ({ docketNumber, token }) => {
@@ -52,4 +62,52 @@ exports.addDocketEntryForOrderAndServePaper = () => {
   cy.get('button:contains("Order to Show Cause")').click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('div:contains("Served")').should('exist');
+};
+
+exports.manuallyAddCaseToNewTrialSession = trialSessionId => {
+  cy.get('#add-to-trial-session-btn').should('exist').click();
+  cy.get('label[for="show-all-locations-true"]').click();
+  cy.get('select#trial-session')
+    .select(trialSessionId)
+    .should('have.value', trialSessionId);
+  cy.get('#modal-root .modal-button-confirm').click();
+  cy.get('.usa-alert--success').should('contain', 'Case scheduled for trial.');
+};
+
+exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {
+  cy.get('#add-to-trial-session-btn').should('exist').click();
+  cy.get('label[for="show-all-locations-true"]').click();
+  cy.get('select#trial-session')
+    .select(trialSessionId)
+    .should('have.value', trialSessionId);
+  cy.get('#modal-root .modal-button-confirm').click();
+  cy.get('.usa-alert--success').should('contain', 'Case set for trial.');
+};
+
+exports.removeCaseFromTrialSession = () => {
+  cy.get('#remove-from-trial-session-btn').should('exist').click();
+  cy.get('#disposition').type(faker.company.catchPhrase());
+  cy.get('#modal-root .modal-button-confirm').click();
+  cy.get('#add-to-trial-session-btn').should('not.exist');
+};
+
+exports.blockCaseFromTrial = () => {
+  cy.get('#tabContent-overview .block-from-trial-btn').click();
+  cy.get('.modal-dialog #reason').type(faker.company.catchPhrase());
+  cy.get('.modal-dialog .modal-button-confirm').click();
+  cy.contains('Blocked From Trial');
+};
+
+exports.unblockCaseFromTrial = () => {
+  cy.get('button.red-warning').click(); // TODO: #remove-block
+  cy.get('.modal-button-confirm').click();
+  cy.contains('Block removed.');
+};
+
+exports.setCaseAsHighPriority = () => {
+  cy.get('.high-priority-btn').click();
+  cy.get('#reason').type(faker.company.catchPhrase());
+  cy.get('.modal-button-confirm').click();
+  cy.get('.modal-dialog').should('not.exist');
+  cy.contains('High Priority').should('exist');
 };
