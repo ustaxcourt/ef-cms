@@ -93,11 +93,11 @@ export const formatWorkItem = ({
   );
 
   result.receivedAt = isDateToday(
-    result.document.receivedAt,
+    result.docketEntry.receivedAt,
     applicationContext,
   )
-    ? result.document.createdAt
-    : result.document.receivedAt;
+    ? result.docketEntry.createdAt
+    : result.docketEntry.receivedAt;
   result.received = formatDateIfToday(result.receivedAt, applicationContext);
 
   result.sentDateFormatted = formatDateIfToday(
@@ -106,20 +106,22 @@ export const formatWorkItem = ({
   );
 
   result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    result.document.documentType,
+    result.docketEntry.documentType,
   );
-  result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
+  result.isOrder = !!orderDocumentTypes.includes(
+    result.docketEntry.documentType,
+  );
 
-  let descriptionDisplay = result.document.documentType;
+  let descriptionDisplay = result.docketEntry.documentType;
 
-  if (result.document.documentTitle) {
-    descriptionDisplay = result.document.documentTitle;
-    if (result.document.additionalInfo) {
-      descriptionDisplay += ` ${result.document.additionalInfo}`;
+  if (result.docketEntry.documentTitle) {
+    descriptionDisplay = result.docketEntry.documentTitle;
+    if (result.docketEntry.additionalInfo) {
+      descriptionDisplay += ` ${result.docketEntry.additionalInfo}`;
     }
   }
 
-  result.document.descriptionDisplay = descriptionDisplay;
+  result.docketEntry.descriptionDisplay = descriptionDisplay;
 
   return result;
 };
@@ -155,7 +157,7 @@ export const getWorkItemDocumentLink = ({
 
   const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocketEntry(applicationContext, result.document);
+    .formatDocketEntry(applicationContext, result.docketEntry);
 
   const isInProgress = workItem.inProgress;
 
@@ -175,8 +177,8 @@ export const getWorkItemDocumentLink = ({
         formattedDocketEntry.isPetition &&
         formattedDocketEntry.isInProgress));
 
-  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.docketEntryId}`;
-  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.document.docketEntryId}`;
+  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
+  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
   let editLink = documentDetailLink;
   if (showDocumentEditLink) {
@@ -238,7 +240,7 @@ export const filterWorkItems = ({
             user.role === USER_ROLES.docketClerk &&
             !item.completedAt &&
             item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)) ||
+            (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (item.assigneeId === user.userId &&
             user.role === USER_ROLES.petitionsClerk &&
@@ -251,7 +253,7 @@ export const filterWorkItems = ({
           item.assigneeId === user.userId &&
           !item.completedAt &&
           item.section === user.section &&
-          item.document.isFileAttached !== false &&
+          item.docketEntry.isFileAttached !== false &&
           !item.inProgress &&
           item.caseIsInProgress !== true
         );
@@ -272,7 +274,7 @@ export const filterWorkItems = ({
           (!item.completedAt &&
             user.role === USER_ROLES.docketClerk &&
             item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)) ||
+            (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (user.role === USER_ROLES.petitionsClerk &&
             item.caseStatus === STATUS_TYPES.new &&
@@ -283,7 +285,7 @@ export const filterWorkItems = ({
         return (
           !item.completedAt &&
           item.section === docQCUserSection &&
-          item.document.isFileAttached !== false &&
+          item.docketEntry.isFileAttached !== false &&
           !item.inProgress &&
           additionalFilters(item) &&
           item.caseIsInProgress !== true

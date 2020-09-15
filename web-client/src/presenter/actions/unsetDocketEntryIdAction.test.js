@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { unsetDocumentIdAction } from './unsetDocumentIdAction';
+import { unsetDocketEntryIdAction } from './unsetDocketEntryIdAction';
 
-describe('unsetDocumentIdAction', () => {
+describe('unsetDocketEntryIdAction', () => {
   it('unsets docketEntryId', async () => {
-    const result = await runAction(unsetDocumentIdAction, {
+    const result = await runAction(unsetDocketEntryIdAction, {
       state: {
         docketEntryId: 'document-id-123',
       },

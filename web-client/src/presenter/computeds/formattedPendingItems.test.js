@@ -51,9 +51,7 @@ describe('formattedPendingItems', () => {
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         completedMessage: 'completed',
         createdAt: '2019-11-13T00:38:59.048Z',
-        docketNumber: '101-19',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        document: {
+        docketEntry: {
           category: 'Miscellaneous',
           certificateOfServiceDate: null,
           createdAt: '2019-01-10',
@@ -75,6 +73,8 @@ describe('formattedPendingItems', () => {
           scenario: 'Standard',
           userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         isRead: true,
         messages: [
           {
@@ -130,9 +130,7 @@ describe('formattedPendingItems', () => {
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         completedMessage: 'completed',
         createdAt: '2019-11-13T02:26:51.448Z',
-        docketNumber: '101-19',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        document: {
+        docketEntry: {
           category: 'Supporting Document',
           certificateOfServiceDate: null,
           createdAt: '2019-01-20',
@@ -156,6 +154,8 @@ describe('formattedPendingItems', () => {
           scenario: 'Nonstandard C',
           userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         isRead: true,
         messages: [
           {
@@ -211,9 +211,7 @@ describe('formattedPendingItems', () => {
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         completedMessage: 'completed',
         createdAt: '2019-11-13T02:26:51.448Z',
-        docketNumber: '101-19',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        document: {
+        docketEntry: {
           category: 'Supporting Document',
           certificateOfServiceDate: null,
           createdAt: '2019-01-20',
@@ -237,6 +235,8 @@ describe('formattedPendingItems', () => {
           scenario: 'Nonstandard C',
           userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         isRead: true,
         messages: [
           {

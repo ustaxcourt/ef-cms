@@ -16,11 +16,7 @@ export const updateMessageModalAttachmentsAction = ({
 }) => {
   const { attachments } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
-  const documentId =
-    props.docketEntryId ||
-    get(state.docketEntryId) ||
-    props.documentId ||
-    get(state.documentId); // TODO 636 - clean this up - use a single state value
+  const documentId = props.documentId || get(state.docketEntryId);
 
   if (documentId) {
     const document = applicationContext

@@ -3,7 +3,7 @@ import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAct
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setMessageIdAction } from '../actions/setMessageIdAction';
 import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
@@ -16,7 +16,7 @@ export const gotoSignOrderSequence = [
   setRedirectUrlAction,
   getCaseAction,
   setCaseAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   setMessageIdAction,
   clearPDFSignatureDataAction,
   clearFormAction,

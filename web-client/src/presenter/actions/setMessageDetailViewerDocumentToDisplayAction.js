@@ -30,7 +30,7 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
     });
     const formattedAttachment = formattedAttachments.find(
       attachment =>
-        attachment.docketEntryId === viewerDocumentToDisplay.docketEntryId,
+        attachment.documentId === viewerDocumentToDisplay.documentId,
     );
 
     if (!formattedAttachment.archived) {
@@ -42,7 +42,7 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
           applicationContext,
           docketNumber,
           isPublic: false,
-          key: viewerDocumentToDisplay.docketEntryId,
+          key: viewerDocumentToDisplay.documentId,
         });
 
       store.set(state.iframeSrc, url);

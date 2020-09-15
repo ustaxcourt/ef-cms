@@ -20,7 +20,7 @@ import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTa
 import { setDefaultCorrespondenceDocumentIdAction } from '../actions/setDefaultCorrespondenceDocumentIdAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
@@ -32,7 +32,7 @@ const { USER_ROLES } = getConstants();
 const gotoCaseDetailInternal = [
   setDefaultDraftDocumentIdAction,
   setDefaultCorrespondenceDocumentIdAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
@@ -46,7 +46,7 @@ const gotoCaseDetailExternal = [
 ];
 
 const gotoCaseDetailInternalWithNotes = [
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   getJudgesCaseNoteForCaseAction,
   setJudgesCaseNoteOnCaseDetailAction,
   gotoCaseDetailInternal,
