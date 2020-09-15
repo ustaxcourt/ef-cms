@@ -20,14 +20,14 @@ describe('completeDocketEntryQCInteractor', () => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
-      docketNumber: '45678-18',
-      document: {
+      docketEntry: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
+      docketNumber: '45678-18',
       section: DOCKET_SECTION,
       sentBy: 'Test User',
       sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

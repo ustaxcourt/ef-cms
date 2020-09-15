@@ -1,3 +1,9 @@
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../errors/errors');
+
 /**
  * getNotificationsInteractor
  *
@@ -6,14 +12,36 @@
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
 exports.getNotificationsInteractor = async ({ applicationContext }) => {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
+    throw new UnauthorizedError('Unauthorized to get inbox counts');
+  }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const { section, userId } = user;
+
   const documentQCInbox = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCInboxForUser({
       applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
+      userId,
     });
+
+  const userInbox = await applicationContext
+    .getPersistenceGateway()
+    .getUserInboxMessages({ applicationContext, userId });
+
+  const sectionInbox = await applicationContext
+    .getPersistenceGateway()
+    .getSectionInboxMessages({ applicationContext, section });
 
   return {
     qcUnreadCount: documentQCInbox.filter(item => !item.isRead).length,
+    userInboxCount: userInbox.length,
+    userSectionCount: sectionInbox.length,
   };
 };

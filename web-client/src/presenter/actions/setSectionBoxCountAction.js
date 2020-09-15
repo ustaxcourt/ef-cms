@@ -27,7 +27,7 @@ export const setSectionBoxCountAction = ({
     state.sectionInboxCount,
     props.workItems.filter(
       item =>
-        item.document.isFileAttached !== false &&
+        item.docketEntry.isFileAttached !== false &&
         additionalFilters(item) &&
         !item.caseIsInProgress,
     ).length,
@@ -37,7 +37,7 @@ export const setSectionBoxCountAction = ({
     state.sectionInProgressCount,
     props.workItems.filter(
       item =>
-        item.document.isFileAttached !== false &&
+        item.docketEntry.isFileAttached !== false &&
         additionalFilters(item) &&
         item.caseIsInProgress,
     ).length,

@@ -16,11 +16,11 @@ describe('completeWorkItemInteractor', () => {
   const mockWorkItem = {
     assigneeId: applicationContext.getUniqueId(),
     createdAt: '2019-03-11T21:56:01.625Z',
-    docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    document: {
+    docketEntry: {
       sentBy: 'petitioner',
     },
+    docketNumber: '101-18',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     messages: [],
     section: DOCKET_SECTION,
     sentBy: 'docketclerk',

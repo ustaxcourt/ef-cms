@@ -158,12 +158,14 @@ export const SectionWorkQueueInbox = connect(
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.descriptionDisplay}
+                      {item.docketEntry.descriptionDisplay}
                     </a>
                   </div>
                 </td>
                 {!workQueueHelper.hideFiledByColumn && (
-                  <td className="message-queue-row">{item.document.filedBy}</td>
+                  <td className="message-queue-row">
+                    {item.docketEntry.filedBy}
+                  </td>
                 )}
                 <td className="message-queue-row">{item.caseStatus}</td>
                 {workQueueHelper.showAssignedToColumn && (

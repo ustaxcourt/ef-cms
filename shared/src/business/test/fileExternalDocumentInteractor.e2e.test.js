@@ -145,14 +145,14 @@ describe('fileExternalDocumentInteractor integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber,
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               docketEntryId: '92eac064-9ca5-4c56-80a0-c5852c752277',
               documentType: 'Petition',
               filedBy: 'Petr. Test Petitioner',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
+            docketNumber,
+            docketNumberWithSuffix: '101-19S',
             isInitializeCase: true,
             section: PETITIONS_SECTION,
             sentBy: 'Test Petitioner',
@@ -190,9 +190,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber,
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               attachments: false,
               certificateOfService: false,
               certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
@@ -207,6 +205,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
               supportingDocument: 'Brief in Support',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
+            docketNumber,
+            docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
           },
@@ -227,9 +227,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber,
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',
@@ -241,6 +239,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
               scenario: 'Nonstandard A',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
+            docketNumber,
+            docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
@@ -260,9 +260,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber,
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Petition',
               documentType: 'Brief in Support',
@@ -272,6 +270,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
               scenario: 'Nonstandard A',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
+            docketNumber,
+            docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
@@ -294,9 +294,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber,
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',
@@ -309,6 +307,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
               scenario: 'Nonstandard A',
               userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
+            docketNumber,
+            docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
             sentBy: 'Test Petitioner',
             updatedAt: '2019-03-01T22:54:06.000Z',
@@ -356,9 +356,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           attachments: false,
           certificateOfService: false,
           docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -372,6 +370,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           supportingDocument: 'Brief in Support',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber,
+        docketNumberWithSuffix: '101-19S',
         section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
       },
@@ -379,9 +379,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -393,6 +391,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber,
+        docketNumberWithSuffix: '101-19S',
         section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
@@ -401,9 +401,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Petition',
           documentType: 'Brief in Support',
@@ -413,6 +411,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber,
+        docketNumberWithSuffix: '101-19S',
         section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
@@ -421,9 +421,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -436,6 +434,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber,
+        docketNumberWithSuffix: '101-19S',
         section: DOCKET_SECTION,
         sentBy: 'Test Petitioner',
       },
