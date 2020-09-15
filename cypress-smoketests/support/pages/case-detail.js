@@ -136,7 +136,7 @@ exports.blockCaseFromTrial = () => {
 };
 
 exports.unblockCaseFromTrial = () => {
-  cy.get('button.red-warning').click(); // TODO: #remove-block
+  cy.get('#remove-block').click();
   cy.get('.modal-button-confirm').click();
   cy.contains('Block removed.');
 };
