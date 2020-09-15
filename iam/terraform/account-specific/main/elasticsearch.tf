@@ -3,7 +3,7 @@ resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
 }
 
 resource "aws_elasticsearch_domain" "efcms-logs" {
-  domain_name           = "efcms-info"
+  domain_name           = "info"
   elasticsearch_version = "7.4"
 
   cluster_config {
