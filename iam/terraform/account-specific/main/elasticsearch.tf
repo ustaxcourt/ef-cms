@@ -8,7 +8,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 
   cluster_config {
     instance_type = "t2.small.elasticsearch"
-    instance_count = var.es_logs_instance_count
+    instance_count = var.es_logs_instance_count == "" ? "1" : var.es_logs_instance_count
   }
 
   cognito_options {
@@ -69,11 +69,6 @@ data "aws_iam_policy_document" "log_viewers_auth" {
       "cognito-identity:ListIdentityPools",
       "cognito-idp:ListUserPools"
     ]
-
-    principals {
-      type = "AWS"
-      identifiers = [aws_iam_role.log_viewers_auth.arn]
-    }
 
     resources = [aws_elasticsearch_domain.efcms-logs.arn]
   }
@@ -139,7 +134,7 @@ resource "aws_iam_role_policy_attachment" "log_viewers_auth" {
 # }
 
 resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
-  identity_pool_id = module.iam_main.log_viewers_identity_pool_id
+  identity_pool_id = aws_cognito_identity_pool.log_viewers.id
   roles = {
     "authenticated" = aws_iam_role.log_viewers_auth.arn
   }
