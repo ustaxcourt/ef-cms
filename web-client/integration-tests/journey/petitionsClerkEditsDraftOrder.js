@@ -21,8 +21,8 @@ export const petitionsClerkEditsDraftOrder = (
     const draftOrder = formatted.draftDocuments[0];
 
     await test.runSequence('gotoEditOrderSequence', {
+      docketEntryIdToEdit: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
-      documentIdToEdit: draftOrder.documentId,
     });
 
     expect(draftOrder.draftOrderState.richText).toEqual(currentRichText);

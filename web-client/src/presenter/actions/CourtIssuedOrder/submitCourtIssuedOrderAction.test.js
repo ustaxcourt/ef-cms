@@ -55,7 +55,7 @@ describe('submitCourtIssuedOrderAction', () => {
           docketNumber: '111-20',
         },
         form: {
-          documentIdToEdit: '1234',
+          docketEntryIdToEdit: '1234',
           documentType: 'Notice of Intervention',
           primaryDocumentFile: {},
         },

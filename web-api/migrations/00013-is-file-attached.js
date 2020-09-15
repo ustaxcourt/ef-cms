@@ -15,7 +15,10 @@ const mutateRecord = async item => {
     if (item.isFileAttached === undefined) {
       item.isFileAttached = true;
     }
-    const documentToUpdate = new DocketEntry(item, { applicationContext })
+    const documentToUpdate = new DocketEntry(
+      { ...item, docketEntryId: item.docketEntryId || item.documentId },
+      { applicationContext },
+    )
       .validate()
       .toRawObject();
 

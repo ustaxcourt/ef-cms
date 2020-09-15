@@ -196,8 +196,8 @@ const legacyServedDocumentCase = {
     {
       createdAt: '2018-11-21T20:49:28.192Z',
       description: 'Answer',
+      docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
       docketNumber: '101-21',
-      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
       documentTitle: 'Answer',
       documentType: 'Answer',
       eventCode: 'A',

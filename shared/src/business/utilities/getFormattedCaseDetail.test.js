@@ -59,7 +59,7 @@ describe('formatCase', () => {
     const documents = [
       {
         createdAt: getDateISO(),
-        documentId: 'd-1-2-3',
+        docketEntryId: 'd-1-2-3',
         documentType: 'Petition',
         eventCode: 'P',
         index: 1,
@@ -72,7 +72,7 @@ describe('formatCase', () => {
       },
       {
         createdAt: getDateISO(),
-        documentId: 'd-1-4-3',
+        docketEntryId: 'd-1-4-3',
         documentType: 'Amended Answer',
         eventCode: 'ABC',
         index: 2,
@@ -119,7 +119,7 @@ describe('formatCase', () => {
     const docketEntries = [
       {
         createdAt: getDateISO(),
-        documentId: 'd-1-2-3',
+        docketEntryId: 'd-1-2-3',
         documentType: 'Petition',
         eventCode: 'P',
         index: 1,
@@ -128,7 +128,7 @@ describe('formatCase', () => {
       },
       {
         createdAt: getDateISO(),
-        documentId: 'd-1-4-3',
+        docketEntryId: 'd-1-4-3',
         documentType: 'Amended Answer',
         eventCode: 'ABC',
         index: 2,
@@ -168,7 +168,7 @@ describe('formatCase', () => {
     const documents = [
       {
         createdAt: getDateISO(),
-        documentId: '123',
+        docketEntryId: '123',
         index: '1',
         isOnDocketRecord: true,
       },
@@ -190,7 +190,7 @@ describe('formatCase', () => {
     const documents = [
       {
         createdAt: getDateISO(),
-        documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
         documentType: 'Petition',
         filingDate: getDateISO(),
         index: '1',
@@ -212,7 +212,7 @@ describe('formatCase', () => {
     const documents = [
       {
         createdAt: getDateISO(),
-        documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
         documentTitle: 'Order [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
@@ -237,7 +237,7 @@ describe('formatCase', () => {
     const documents = [
       {
         createdAt: getDateISO(),
-        documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
         documentType: 'Administrative Record',
         filingDate: getDateISO(),
         index: '1',
@@ -246,7 +246,7 @@ describe('formatCase', () => {
       },
       {
         createdAt: getDateISO(),
-        documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
+        docketEntryId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
         documentType: 'Administrative Record',
         filingDate: getDateISO(),
         index: '2',
@@ -328,7 +328,7 @@ describe('formatCase', () => {
         {
           additionalInfo: 'additional information',
           createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
+          docketEntryId: 'd-1-2-3',
           documentTitle: 'desc',
           documentType: 'Petition',
           index: '1',
@@ -350,7 +350,7 @@ describe('formatCase', () => {
         {
           certificateOfServiceDate: getDateISO(),
           createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
+          docketEntryId: 'd-1-2-3',
           documentType: 'Petition',
           index: '1',
           servedAt: getDateISO(),
@@ -628,7 +628,7 @@ describe('formatDocketEntry', () => {
       applicationContext,
 
       {
-        documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+        docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
         documentType: 'Motion for Leave to File Administrative Record',
         eventCode: 'M115',
         lodged: true,
@@ -772,21 +772,21 @@ describe('getFormattedCaseDetail', () => {
           {
             archived: false,
             createdAt: getDateISO(),
-            documentId: 'd-1-2-3',
+            docketEntryId: 'd-1-2-3',
             documentType: 'Order',
             isDraft: true,
           },
           {
             archived: false,
             createdAt: getDateISO(),
-            documentId: 'd-2-3-4',
+            docketEntryId: 'd-2-3-4',
             documentType: 'Stipulated Decision',
             isDraft: true,
           },
           {
             archived: false,
             createdAt: getDateISO(),
-            documentId: 'd-3-4-5',
+            docketEntryId: 'd-3-4-5',
             documentType: 'Miscellaneous',
             isDraft: true,
           },

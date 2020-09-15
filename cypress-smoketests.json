@@ -1,7 +1,4 @@
 {
-  "experimentalNetworkStubbing": true,
-  "baseUrl": "https://app.dev.ustc-case-mgmt.flexion.us",
-  "// FIXME": "remove above from commit on dev // FIXME ",
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true

@@ -13,7 +13,7 @@ export const petitionsClerkRemovesPendingItemFromCase = test => {
     await test.runSequence(
       'openConfirmRemoveCaseDetailPendingItemModalSequence',
       {
-        documentId: pendingDocument.documentId,
+        docketEntryId: pendingDocument.docketEntryId,
       },
     );
 

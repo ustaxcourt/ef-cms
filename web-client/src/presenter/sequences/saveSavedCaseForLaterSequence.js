@@ -7,7 +7,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -37,7 +37,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setCaseAction,
       setCaseOnFormAction,
       setPetitionIdAction,
-      setDocumentIdAction,
+      setDocketEntryIdAction,
       navigateToReviewSavedPetitionAction,
     ],
   },

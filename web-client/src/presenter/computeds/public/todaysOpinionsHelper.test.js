@@ -15,8 +15,8 @@ describe('todaysOpinionsHelper', () => {
       todaysOpinions: [
         {
           caseCaption: 'Sauceboss, Petitioner',
+          docketEntryId: 'document-id-123',
           docketNumber: '123-20',
-          documentId: 'document-id-123',
           documentType: 'MOP - Memorandum Opinion',
           filingDate: '2020-06-11T20:17:10.646Z',
           judge: 'Guy Fieri',

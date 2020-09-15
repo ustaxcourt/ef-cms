@@ -4,9 +4,9 @@ import { runAction } from 'cerebral/test';
 import { setDocumentToEditAction } from './setDocumentToEditAction';
 
 describe('setDocumentToEditAction', () => {
-  const documentIdToEdit = '123';
+  const docketEntryIdToEdit = '123';
   const documentToMatch = {
-    documentId: documentIdToEdit,
+    docketEntryId: docketEntryIdToEdit,
     documentType: 'Order',
   };
 
@@ -16,7 +16,7 @@ describe('setDocumentToEditAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.documentToEdit for the given case and documentIdToEdit', async () => {
+  it('sets state.documentToEdit for the given case and docketEntryIdToEdit', async () => {
     const result = await runAction(setDocumentToEditAction, {
       modules: {
         presenter,
@@ -25,20 +25,20 @@ describe('setDocumentToEditAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
           docketNumber: '123-45',
         },
-        documentIdToEdit: documentIdToEdit,
+        docketEntryIdToEdit: docketEntryIdToEdit,
       },
     });
     expect(result.state.documentToEdit).toEqual(documentToMatch);
   });
 
-  it('does nothing if documentIdToEdit is not passed in via props', async () => {
+  it('does nothing if docketEntryIdToEdit is not passed in via props', async () => {
     const result = await runAction(setDocumentToEditAction, {
       modules: {
         presenter,
@@ -47,7 +47,7 @@ describe('setDocumentToEditAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
             documentToMatch,

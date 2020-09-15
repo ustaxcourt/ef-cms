@@ -84,7 +84,7 @@ exports.updateDocketEntryInteractor = async ({
       ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      documentId: primaryDocumentFileId,
+      docketEntryId: primaryDocumentFileId,
       documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
@@ -104,7 +104,7 @@ exports.updateDocketEntryInteractor = async ({
     if (!isSavingForLater) {
       const workItemToDelete =
         currentDocketEntry.workItem &&
-        !currentDocketEntry.workItem.document.isFileAttached;
+        !currentDocketEntry.workItem.docketEntry.isFileAttached;
 
       if (workItemToDelete) {
         await applicationContext
@@ -120,12 +120,12 @@ exports.updateDocketEntryInteractor = async ({
         assigneeName: null,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
+        docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
         inProgress: isSavingForLater,
         section: DOCKET_SECTION,
         sentBy: user.userId,
@@ -170,12 +170,12 @@ exports.updateDocketEntryInteractor = async ({
         assigneeName: null,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
+        docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
         inProgress: isSavingForLater,
         section: DOCKET_SECTION,
         sentBy: user.userId,
@@ -213,12 +213,12 @@ exports.updateDocketEntryInteractor = async ({
       assigneeName: null,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
+      docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
       inProgress: isSavingForLater,
       section: DOCKET_SECTION,
       sentBy: user.userId,

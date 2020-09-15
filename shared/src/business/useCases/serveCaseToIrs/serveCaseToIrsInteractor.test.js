@@ -28,13 +28,13 @@ describe('serveCaseToIrsInteractor', () => {
     completedBy: PARTY_TYPES.petitioner,
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     createdAt: '2018-12-27T18:06:02.971Z',
-    docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    document: {
+    docketEntry: {
       createdAt: '2018-12-27T18:06:02.968Z',
-      documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
+      docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
+    docketNumber: '101-18',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     isInitializeCase: true,
     messages: [
       {
@@ -291,8 +291,8 @@ describe('serveCaseToIrsInteractor', () => {
         ...MOCK_CASE.docketEntries,
         {
           createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           docketNumber: '101-18',
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Request for Place of Trial Flavortown, AR',
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
@@ -302,8 +302,8 @@ describe('serveCaseToIrsInteractor', () => {
         },
         {
           createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           docketNumber: '101-18',
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Application for Waiver of Filing Fee',
           documentType: 'Application for Waiver of Filing Fee',
           eventCode: 'APW',
@@ -351,7 +351,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateWorkItem.mock.calls[0][0]
-        .workItemToUpdate.document.servedAt,
+        .workItemToUpdate.docketEntry.servedAt,
     ).toBeDefined();
   });
 });
@@ -418,8 +418,8 @@ describe('addDocketEntryForPaymentStatus', () => {
         MOCK_CASE.docketEntries[0],
         {
           createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           docketNumber: '101-18',
-          documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
           documentType:
@@ -477,18 +477,18 @@ describe('addDocketEntryForPaymentStatus', () => {
       const caseEntity = {
         docketEntries: [
           {
-            documentId: 'document-id-123',
+            docketEntryId: 'document-id-123',
             documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           },
         ],
       };
 
-      const documentId = await deleteStinIfAvailable({
+      const docketEntryId = await deleteStinIfAvailable({
         applicationContext,
         caseEntity,
       });
 
-      expect(documentId).toEqual('document-id-123');
+      expect(docketEntryId).toEqual('document-id-123');
       expect(
         applicationContext.getPersistenceGateway().deleteDocumentFromS3,
       ).toHaveBeenCalled();
@@ -502,7 +502,7 @@ describe('addDocketEntryForPaymentStatus', () => {
       const caseEntity = {
         docketEntries: [
           {
-            documentId: 'document-id-123',
+            docketEntryId: 'document-id-123',
             documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
           },
         ],

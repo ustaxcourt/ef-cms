@@ -19,7 +19,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         caseDetail: {
           docketNumber: '123-20',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
         form: {
           attachments: false,
           date: '2019-01-01T00:00:00.000Z',
@@ -47,7 +47,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         caseDetail: {
           docketNumber: '123-20',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
         form: {
           attachments: false,
           date: '2019-01-01T00:00:00.000Z',
@@ -75,7 +75,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         caseDetail: {
           docketNumber: '123-20',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
         form: {
           attachments: false,
           date: '2019-01-01T00:00:00.000Z',

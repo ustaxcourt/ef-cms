@@ -1,3 +1,15 @@
+const {
+  entityName: irsPractitionerEntityName,
+  IrsPractitioner,
+} = require('../entities/IrsPractitioner');
+const {
+  entityName: practitionerEntityName,
+  Practitioner,
+} = require('../entities/Practitioner');
+const {
+  entityName: privatePractitionerEntityName,
+  PrivatePractitioner,
+} = require('../entities/PrivatePractitioner');
 const { NotFoundError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -20,5 +32,13 @@ exports.getUserInteractor = async ({ applicationContext }) => {
     );
   }
 
-  return new User(user).validate().toRawObject();
+  if (user.entityName === privatePractitionerEntityName) {
+    return new PrivatePractitioner(user).validate().toRawObject();
+  } else if (user.entityName === irsPractitionerEntityName) {
+    return new IrsPractitioner(user).validate().toRawObject();
+  } else if (user.entityName === practitionerEntityName) {
+    return new Practitioner(user).validate().toRawObject();
+  } else {
+    return new User(user).validate().toRawObject();
+  }
 };

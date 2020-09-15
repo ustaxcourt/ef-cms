@@ -14,12 +14,12 @@ beforeAll(() => {
     caseDetail: {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           eventCode: 'PSDE',
         },
       ],
     },
-    documentId: '123',
+    docketEntryId: '123',
     form: {},
     pdfForSigning: {
       signatureData: true,
@@ -186,12 +186,12 @@ describe('pdfSignerHelper', () => {
           caseDetail: {
             docketEntries: [
               {
-                documentId: '123',
+                docketEntryId: '123',
                 eventCode: 'O',
               },
             ],
           },
-          documentId: '123',
+          docketEntryId: '123',
           form: {
             message: 'a',
           },
@@ -212,12 +212,12 @@ describe('pdfSignerHelper', () => {
           caseDetail: {
             docketEntries: [
               {
-                documentId: '123',
+                docketEntryId: '123',
                 eventCode: 'O',
               },
             ],
           },
-          documentId: '123',
+          docketEntryId: '123',
           form: {
             message: 'a',
           },

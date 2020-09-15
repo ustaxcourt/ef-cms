@@ -51,7 +51,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
             },
@@ -71,7 +71,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -79,7 +79,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -93,7 +93,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               filedBy: 'Test Petitionsclerk',
@@ -102,7 +102,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -116,7 +116,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -124,28 +124,28 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
     expect(result.createdByLabel).toEqual('');
   });
 
-  it('should return empty strings if the provided documentId is not found in draft documents', () => {
+  it('should return empty strings if the provided docketEntryId is not found in draft documents', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
             },
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: '123',
+          docketEntryId: '123',
         },
       },
     });
@@ -161,7 +161,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -169,7 +169,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -186,7 +186,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -194,7 +194,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -211,7 +211,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -219,7 +219,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -236,7 +236,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -244,7 +244,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -261,7 +261,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               eventCode: 'O',
@@ -271,7 +271,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -288,7 +288,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               eventCode: 'O',
@@ -297,7 +297,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -314,7 +314,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -322,7 +322,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -340,7 +340,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -349,7 +349,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -367,7 +367,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -375,7 +375,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -393,7 +393,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NOT',
@@ -403,7 +403,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'NOT',
         },
       },
@@ -421,7 +421,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NTD',
@@ -431,7 +431,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'NTD',
         },
       },
@@ -449,7 +449,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Stipulated Decision',
               documentType: 'Stipulated Decision',
               eventCode: 'SDEC',
@@ -459,7 +459,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'SDEC',
         },
       },
@@ -477,7 +477,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -486,7 +486,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -503,7 +503,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -511,7 +511,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -528,7 +528,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -536,7 +536,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
         },
       },
     });
@@ -553,7 +553,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Notice',
               documentType: 'NOT',
               isDraft: true,
@@ -562,7 +562,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'NOT',
         },
       },
@@ -581,7 +581,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Stipulated Decision',
               documentType: 'Stipulated Decision',
               eventCode: 'SDEC',
@@ -591,7 +591,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'SDEC',
         },
       },
@@ -608,7 +608,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -616,7 +616,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'MISC', // Does not require a signature
         },
       },
@@ -632,7 +632,7 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
               isDraft: true,
@@ -640,7 +640,7 @@ describe('draftDocumentViewerHelper', () => {
           ],
         },
         viewerDraftDocumentToDisplay: {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           eventCode: 'O', // Requires a signature
         },
       },

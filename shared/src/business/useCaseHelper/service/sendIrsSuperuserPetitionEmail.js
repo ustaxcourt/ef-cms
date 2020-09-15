@@ -20,7 +20,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
 
   const {
-    documentId,
+    docketEntryId,
     documentType,
     eventCode,
     filingDate,
@@ -28,18 +28,18 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
-    const representing = [];
+    const representingFormatted = [];
     const { representingPrimary, representingSecondary } = practitioner;
 
     if (representingPrimary) {
-      representing.push(contactPrimary.name);
+      representingFormatted.push(contactPrimary.name);
     }
 
     if (representingSecondary && contactSecondary) {
-      representing.push(contactSecondary.name);
+      representingFormatted.push(contactSecondary.name);
     }
 
-    practitioner.representing = representing.join(', ');
+    practitioner.representingFormatted = representingFormatted.join(', ');
   });
 
   const currentDate = applicationContext
@@ -67,7 +67,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       currentDate,
       docketEntryNumber: docketEntryEntity.index,
       documentDetail: {
-        documentId,
+        docketEntryId,
         documentTitle: documentType,
         eventCode,
         filingDate: filingDateFormatted,

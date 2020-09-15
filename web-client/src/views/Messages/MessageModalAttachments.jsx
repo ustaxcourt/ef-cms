@@ -8,7 +8,7 @@ import React from 'react';
 const getDocumentOption = document => {
   const title = document.documentTitle || document.documentType;
   return (
-    <option key={document.documentId} value={`${document.documentId}`}>
+    <option key={document.docketEntryId} value={`${document.docketEntryId}`}>
       {document.createdAtFormatted} - {title}
     </option>
   );

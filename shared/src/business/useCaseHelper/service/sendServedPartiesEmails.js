@@ -13,7 +13,7 @@ exports.sendServedPartiesEmails = async ({
   const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
 
   const {
-    documentId,
+    docketEntryId,
     documentTitle,
     documentType,
     eventCode,
@@ -46,7 +46,7 @@ exports.sendServedPartiesEmails = async ({
           currentDate,
           docketEntryNumber: docketEntryEntity.index,
           documentDetail: {
-            documentId,
+            docketEntryId,
             documentTitle: documentTitle || documentType,
             eventCode,
             filedBy,

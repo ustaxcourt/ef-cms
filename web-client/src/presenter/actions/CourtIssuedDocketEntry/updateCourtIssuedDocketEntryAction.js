@@ -12,21 +12,21 @@ export const updateCourtIssuedDocketEntryAction = async ({
   applicationContext,
   get,
 }) => {
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
 
   const documentMeta = {
     ...form,
+    docketEntryId,
     docketNumber,
-    documentId,
   };
 
   return await applicationContext
     .getUseCases()
     .updateCourtIssuedDocketEntryInteractor({
       applicationContext,
-      documentId,
+      docketEntryId,
       documentMeta,
     });
 };

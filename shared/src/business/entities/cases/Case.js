@@ -777,7 +777,7 @@ Case.prototype.archiveDocketEntry = function (
   docketEntryToArchive.archive();
   this.archivedDocketEntries.push(docketEntryToArchive);
   this.deleteDocketEntryById({
-    docketEntryId: docketEntryToArchive.documentId,
+    docketEntryId: docketEntryToArchive.docketEntryId,
   });
 };
 
@@ -1002,7 +1002,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
  */
 Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
   return this.docketEntries.find(
-    docketEntry => docketEntry.documentId === docketEntryId,
+    docketEntry => docketEntry.docketEntryId === docketEntryId,
   );
 };
 
@@ -1044,7 +1044,8 @@ Case.getAttachmentDocumentById = function ({
   }
   return allCaseDocuments.find(
     d =>
-      d && (d.documentId === documentId || d.correspondenceId === documentId),
+      d &&
+      (d.docketEntryId === documentId || d.correspondenceId === documentId),
   );
 };
 
@@ -1057,7 +1058,7 @@ Case.getAttachmentDocumentById = function ({
  */
 Case.prototype.deleteDocketEntryById = function ({ docketEntryId }) {
   this.docketEntries = this.docketEntries.filter(
-    item => item.documentId !== docketEntryId,
+    item => item.docketEntryId !== docketEntryId,
   );
 
   return this;
@@ -1116,7 +1117,8 @@ Case.prototype.generateNextDocketRecordIndex = function () {
  */
 Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
   const foundDocketEntry = this.docketEntries.find(
-    docketEntry => docketEntry.documentId === updatedDocketEntry.documentId,
+    docketEntry =>
+      docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
   if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
