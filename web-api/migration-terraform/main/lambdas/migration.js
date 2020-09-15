@@ -59,6 +59,5 @@ exports.handler = async event => {
   const items = Records.map(item =>
     AWS.DynamoDB.Converter.unmarshall(item.dynamodb.NewImage),
   );
-
   await processItems(items);
 };
