@@ -29,6 +29,8 @@ const reprocessItems = async items => {
   }
 
   if (moreUnprocessedItems.length) {
+    console.log(`Reprocessing ${moreUnprocessedItems.length} more items.`);
+
     await reprocessItems(moreUnprocessedItems);
   }
 };
@@ -49,6 +51,7 @@ const processItems = async items => {
       .promise();
 
     if (!isEmpty(results.UnprocessedItems)) {
+      console.log(`Reprocessing ${results.UnprocessedItems.length} items.`);
       await reprocessItems([results.UnprocessedItems]);
     }
   }
