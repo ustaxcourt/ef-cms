@@ -16,7 +16,11 @@ exports.getNotificationsInteractor = async ({
   applicationContext,
   judgeUserId,
 }) => {
-  const currentUser = applicationContext.getCurrentUser();
+  const appContextUser = applicationContext.getCurrentUser();
+  const currentUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: appContextUser.userId });
+
   let judgeUser = null;
 
   if (judgeUserId) {
@@ -69,8 +73,6 @@ exports.getNotificationsInteractor = async ({
 
   let qcIndividualInboxCount = 0;
   let qcIndividualInProgressCount = 0;
-  let qcSectionInboxCount = 0;
-  let qcSectionInProgressCount = 0;
 
   applicationContext
     .getUtilities()
@@ -91,13 +93,12 @@ exports.getNotificationsInteractor = async ({
       }
     });
 
-  documentQCSectionInbox.filter(filters['section']['inbox']).forEach(item => {
-    if (item.caseIsInProgress) {
-      qcSectionInProgressCount++;
-    } else {
-      qcSectionInboxCount++;
-    }
-  });
+  const qcSectionInProgressCount = documentQCSectionInbox.filter(
+    filters['section']['inProgress'],
+  ).length;
+  const qcSectionInboxCount = documentQCSectionInbox.filter(
+    filters['section']['inbox'],
+  ).length;
 
   return {
     qcIndividualInProgressCount,
