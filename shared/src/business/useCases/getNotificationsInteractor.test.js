@@ -8,6 +8,7 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getUserInboxMessages.mockReturnValue([
         {
+          isRead: true,
           messageId: 'message-id-1',
         },
       ]);
@@ -59,6 +60,7 @@ describe('getNotificationsInteractor', () => {
     });
     expect(result).toEqual({
       qcUnreadCount: 0,
+      unreadMessageCount: 0,
       userInboxCount: 1,
       userSectionCount: 1,
     });
@@ -79,6 +81,7 @@ describe('getNotificationsInteractor', () => {
     });
     expect(result).toEqual({
       qcUnreadCount: 1,
+      unreadMessageCount: 0,
       userInboxCount: 1,
       userSectionCount: 1,
     });
@@ -100,7 +103,35 @@ describe('getNotificationsInteractor', () => {
 
     expect(result).toEqual({
       qcUnreadCount: 0,
+      unreadMessageCount: 0,
       userInboxCount: 1,
+      userSectionCount: 1,
+    });
+  });
+
+  it('returns an accurate unread count for my messages', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserInboxMessages.mockReturnValue([
+        {
+          isRead: false,
+          messageId: 'message-id-1',
+        },
+        {
+          isRead: true,
+          messageId: 'message-id-2',
+        },
+      ]);
+
+    const result = await getNotificationsInteractor({
+      applicationContext,
+      userId: 'docketclerk',
+    });
+
+    expect(result).toEqual({
+      qcUnreadCount: 0,
+      unreadMessageCount: 1,
+      userInboxCount: 2,
       userSectionCount: 1,
     });
   });
