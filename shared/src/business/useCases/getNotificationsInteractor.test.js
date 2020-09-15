@@ -10,6 +10,7 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
+    section: 'docket',
   },
   {
     associatedJudge: 'Judge Carey',
@@ -18,6 +19,7 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
+    section: 'docket',
   },
   {
     associatedJudge: CHIEF_JUDGE,
@@ -26,14 +28,26 @@ const workItems = [
       isFileAttached: true,
     },
     isRead: true,
+    section: 'petitions',
+  },
+  {
+    associatedJudge: 'Judge Barker',
+    caseIsInProgress: false,
+    docketEntry: {
+      isFileAttached: true,
+    },
+    isRead: true,
+    section: 'docket',
   },
   {
     associatedJudge: 'Judge Barker',
     caseIsInProgress: true,
     docketEntry: {
-      isFileAttached: true,
+      isFileAttached: false,
     },
+    inProgress: true,
     isRead: true,
+    section: 'docket',
   },
   {
     associatedJudge: 'Judge Barker',
@@ -42,6 +56,7 @@ const workItems = [
       isFileAttached: false,
     },
     isRead: true,
+    section: 'petitions',
   },
 ];
 
@@ -54,10 +69,6 @@ describe('getNotificationsInteractor', () => {
           messageId: 'message-id-1',
         },
       ]);
-
-    applicationContext
-      .getUtilities()
-      .filterQcItemsByAssociatedJudge.mockReturnValue(() => true);
 
     applicationContext
       .getPersistenceGateway()
@@ -81,11 +92,29 @@ describe('getNotificationsInteractor', () => {
         { ...workItems[0], isRead: false },
       ]);
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      role: ROLES.docketClerk,
-      section: 'docket',
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(({ userId }) => {
+        if (userId === 'e8577e31-d6d5-4c4a-adc6-520075f3dde5') {
+          return {
+            role: ROLES.docketClerk,
+            section: 'docket',
+            userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          };
+        } else if (userId === 'ff377e31-d6d5-4c4a-adc6-520075f3dde5') {
+          return {
+            role: ROLES.petitioner,
+            userId: 'ff377e31-d6d5-4c4a-adc6-520075f3dde5',
+          };
+        } else if (userId === 'ee577e31-d6d5-4c4a-adc6-520075f3dde5') {
+          return {
+            name: 'Some Judge',
+            role: ROLES.judge,
+            section: 'someChambers',
+            userId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
+          };
+        }
+      });
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
@@ -96,7 +125,7 @@ describe('getNotificationsInteractor', () => {
   it('fails due to being unauthorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+      userId: 'ff377e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
     await expect(
@@ -111,14 +140,16 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getDocumentQCInboxForUser.mockReturnValue([
         {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          caseIsInProgress: false,
           docketEntry: { isFileAttached: true },
           isRead: true,
+          section: 'docket',
         },
       ]);
 
     const result = await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
     });
     expect(result).toEqual({
       qcIndividualInProgressCount: 0,
@@ -134,7 +165,6 @@ describe('getNotificationsInteractor', () => {
   it('returns the total user inbox count', async () => {
     const result = await await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
     });
 
     expect(result.userInboxCount).toEqual(1);
@@ -143,7 +173,6 @@ describe('getNotificationsInteractor', () => {
   it('returns the total section messages count', async () => {
     const result = await await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
     });
 
     expect(result.userSectionCount).toEqual(2);
@@ -152,45 +181,232 @@ describe('getNotificationsInteractor', () => {
   it('returns an accurate unread count for legacy items marked complete', async () => {
     const result = await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
     });
 
     expect(result.qcUnreadCount).toEqual(1);
   });
 
-  it('returns the qcIndividualInProgressCount for qc individual items with caseIsInProgress true, isFileAttached true and judge filter true', async () => {
-    const result = await await getNotificationsInteractor({
+  it('returns the qcIndividualInProgressCount for qc individual items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser.mockReturnValue([
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Judge Barker',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+      ]);
+
+    const result = await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
+      judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
     expect(result.qcIndividualInProgressCount).toEqual(1);
   });
 
-  it('returns the qcIndividualInboxCount for qc individual items with caseIsInProgress false, isFileAttached true andjudge filter true', async () => {
-    const result = await await getNotificationsInteractor({
+  it('returns the qcIndividualInboxCount for qc individual items with caseIsInProgress false, isFileAttached true and a judgeUserId supplied', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser.mockReturnValue([
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Judge Barker',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+      ]);
+
+    const result = await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
+      judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
-    expect(result.qcIndividualInboxCount).toEqual(4);
+    expect(result.qcIndividualInboxCount).toEqual(1);
   });
 
-  it('returns the qcSectionInProgressCount for qc section items with caseIsInProgress true, isFileAttached true andjudge filter true', async () => {
-    const result = await await getNotificationsInteractor({
+  it('returns the qcSectionInProgressCount for qc section items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForSection.mockReturnValue([
+        {
+          associatedJudge: 'Judge Barker',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          associatedJudge: 'Judge Barker',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'petitions',
+        },
+        {
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+      ]);
+
+    const result = await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
+      judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
-    expect(result.qcSectionInProgressCount).toEqual(1);
+    expect(result.qcSectionInProgressCount).toEqual(2);
   });
 
-  it('returns the qcSectionInboxCount for qc section items with caseIsInProgress true, isFileAttached true andjudge filter true', async () => {
-    const result = await await getNotificationsInteractor({
+  it('returns the qcSectionInboxCount for qc section items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForSection.mockReturnValue([
+        {
+          associatedJudge: 'Judge Barker',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          associatedJudge: 'Judge Barker',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'petitions',
+        },
+        {
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: false,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: false,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+        {
+          associatedJudge: 'Some Judge',
+          caseIsInProgress: true,
+          docketEntry: {
+            isFileAttached: true,
+          },
+          inProgress: true,
+          isRead: true,
+          section: 'docket',
+        },
+      ]);
+
+    const result = await getNotificationsInteractor({
       applicationContext,
-      userId: 'docketclerk',
+      judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
-    expect(result.qcSectionInboxCount).toEqual(3);
+    expect(result.qcSectionInboxCount).toEqual(1);
   });
 });

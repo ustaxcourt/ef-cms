@@ -1,5 +1,4 @@
 const DateHandler = require('../utilities/DateHandler');
-const filterQcItemsByAssociatedJudge = require('../utilities/filterQcItemsByAssociatedJudge');
 const getAddressPhoneDiff = require('../utilities/generateChangeOfAddressTemplate');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
@@ -53,6 +52,9 @@ const {
 const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
+const {
+  filterQcItemsByAssociatedJudge,
+} = require('../utilities/filterQcItemsByAssociatedJudge');
 const {
   filterWorkItemsForUser,
 } = require('../../../src/business/utilities/filterWorkItemsForUser');
