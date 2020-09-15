@@ -1,15 +1,13 @@
 const AWS = require('aws-sdk');
 const { chunk, shuffle } = require('lodash');
 
-// Seth said 200 for segment constant?
-const [ENV, SEGMENT_SIZE] = process.argv.slice(2);
+// We found that 200 seems to be a good number to choose.  Anything too high and migrations stop working well.
+const SEGMENT_SIZE = 200;
+
+const [ENV] = process.argv.slice(2);
 
 if (!ENV) {
   throw new Error('Please provide an environment.');
-}
-
-if (!SEGMENT_SIZE) {
-  throw new Error('Please provide a segment size.');
 }
 
 if (!process.env.AWS_ACCOUNT_ID) {
