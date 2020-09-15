@@ -32,19 +32,6 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('fails due to being unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-    });
-
-    await expect(
-      getNotificationsInteractor({
-        applicationContext,
-      }),
-    ).rejects.toThrow('Unauthorized to get inbox counts');
-  });
-
   it('returns an unread count for my messages', async () => {
     applicationContext
       .getPersistenceGateway()
