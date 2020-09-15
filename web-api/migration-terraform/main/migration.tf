@@ -74,6 +74,15 @@ resource "aws_iam_role_policy" "migration_policy" {
                 "*"
             ],
             "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "sqs:*"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Effect": "Allow"
         }
     ]
 }
@@ -87,4 +96,9 @@ resource "aws_lambda_event_source_mapping" "streams_mapping" {
   maximum_retry_attempts        = 10
   parallelization_factor        = 3
   maximum_record_age_in_seconds = 604800
+  destination_config {
+    on_failure {
+      destination_arn = aws_sqs_queue.migration_failure_queue.arn
+    }
+  }
 }

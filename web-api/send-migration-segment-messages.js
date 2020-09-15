@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { shuffle } = require('lodash');
+const { chunk, shuffle } = require('lodash');
 
 // Seth said 200 for segment constant?
 const [ENV, SEGMENT_SIZE] = process.argv.slice(2);
@@ -38,22 +38,8 @@ const getItemCount = async () => {
   }
 };
 
-const sendSegmentMessage = async ({ segment, timestamp, totalSegments }) => {
-  const messageBody = { segment, timestamp, totalSegments };
-  const params = {
-    MessageBody: JSON.stringify(messageBody),
-    QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
-  };
-
-  try {
-    await sqs.sendMessage(params).promise();
-    console.log(params);
-  } catch (e) {
-    console.error(`Error sending message ${segment + 1}/${totalSegments}.`, e);
-  }
-};
-
 const now = Date.now().toString();
+let sent = 0;
 
 (async () => {
   const itemCount = await getItemCount();
@@ -68,10 +54,18 @@ const now = Date.now().toString();
     })),
   );
 
-  let sent = 0;
-  for (let segment of segments) {
-    await sendSegmentMessage(segment);
-    console.log(`Message ${sent + 1}/${totalSegments} sent successfully.`);
-    sent++;
+  const chunks = chunk(segments, 10);
+
+  for (let chunk of chunks) {
+    await sqs
+      .sendMessageBatch({
+        Entries: chunk.map(segment => ({
+          Id: `${sent++}`,
+          MessageBody: JSON.stringify(segment),
+        })),
+        QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}`,
+      })
+      .promise();
+    console.log(`${sent} out of ${totalSegments} messages sent successfully.`);
   }
 })();
