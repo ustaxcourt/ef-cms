@@ -617,9 +617,6 @@ jobs:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
       - run:
-          name: 'Cypress Public Smoke Tests'
-          command: npm run cypress:smoketests:public
-      - run:
           name: 'Pa11y Smoke Tests'
           command: npm run test:pa11y:smoketests --prefix=web-client/pa11y/
 
