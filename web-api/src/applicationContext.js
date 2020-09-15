@@ -436,6 +436,10 @@ const {
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
 const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../../shared/src/business/utilities/getWorkQueueFilters');
+const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
@@ -1652,8 +1656,10 @@ module.exports = appContextUser => {
         formatNow,
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
+        getDocQcSectionForUser,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getWorkQueueFilters,
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,

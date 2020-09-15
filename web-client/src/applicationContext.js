@@ -28,6 +28,10 @@ import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
+const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../../shared/src/business/utilities/getWorkQueueFilters');
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
@@ -568,12 +572,14 @@ const applicationContext = {
       formattedTrialSessionDetails,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
+      getDocQcSectionForUser,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
       getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
+      getWorkQueueFilters,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,

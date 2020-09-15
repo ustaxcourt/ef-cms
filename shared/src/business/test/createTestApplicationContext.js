@@ -79,6 +79,10 @@ const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../utilities/getWorkQueueFilters');
+const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
@@ -232,6 +236,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getDocQcSectionForUser: jest
+      .fn()
+      .mockImplementation(getDocQcSectionForUser),
     getDocumentTypeForAddressChange: jest
       .fn()
       .mockImplementation(getDocumentTypeForAddressChange),
@@ -243,6 +250,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest

@@ -1,7 +1,3 @@
-import {
-  DOCKET_SECTION,
-  PETITIONS_SECTION,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -216,14 +212,7 @@ export const filterWorkItems = ({
   user,
   workQueueToDisplay,
 }) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
-
   const { box, queue } = workQueueToDisplay;
-  let docQCUserSection = user.section;
-
-  if (user.section !== PETITIONS_SECTION) {
-    docQCUserSection = DOCKET_SECTION;
-  }
 
   let additionalFilters = applicationContext
     .getUtilities()
@@ -232,74 +221,9 @@ export const filterWorkItems = ({
       judgeUser,
     });
 
-  const filters = {
-    my: {
-      inProgress: item => {
-        return (
-          // DocketClerks
-          (item.assigneeId === user.userId &&
-            user.role === USER_ROLES.docketClerk &&
-            !item.completedAt &&
-            item.section === user.section &&
-            (item.docketEntry.isFileAttached === false || item.inProgress)) ||
-          // PetitionsClerks
-          (item.assigneeId === user.userId &&
-            user.role === USER_ROLES.petitionsClerk &&
-            item.caseStatus === STATUS_TYPES.new &&
-            item.caseIsInProgress === true)
-        );
-      },
-      inbox: item => {
-        return (
-          item.assigneeId === user.userId &&
-          !item.completedAt &&
-          item.section === user.section &&
-          item.docketEntry.isFileAttached !== false &&
-          !item.inProgress &&
-          item.caseIsInProgress !== true
-        );
-      },
-      outbox: item => {
-        return (
-          (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
-          item.completedByUserId &&
-          item.completedByUserId === user.userId &&
-          !!item.completedAt
-        );
-      },
-    },
-    section: {
-      inProgress: item => {
-        return (
-          // DocketClerks
-          (!item.completedAt &&
-            user.role === USER_ROLES.docketClerk &&
-            item.section === user.section &&
-            (item.docketEntry.isFileAttached === false || item.inProgress)) ||
-          // PetitionsClerks
-          (user.role === USER_ROLES.petitionsClerk &&
-            item.caseStatus === STATUS_TYPES.new &&
-            item.caseIsInProgress === true)
-        );
-      },
-      inbox: item => {
-        return (
-          !item.completedAt &&
-          item.section === docQCUserSection &&
-          item.docketEntry.isFileAttached !== false &&
-          !item.inProgress &&
-          additionalFilters(item) &&
-          item.caseIsInProgress !== true
-        );
-      },
-      outbox: item => {
-        return (
-          !!item.completedAt &&
-          (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
-        );
-      },
-    },
-  };
+  const filters = applicationContext
+    .getUtilities()
+    .getWorkQueueFilters({ additionalFilters, user });
 
   const composedFilter = filters[queue][box];
   return composedFilter;
