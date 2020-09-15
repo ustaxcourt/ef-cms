@@ -1,8 +1,13 @@
 const {
-  addDocketEntryForOrderAndServe,
+  addDocketEntryForOrderAndSaveForLater,
   addDocketEntryForOrderAndServePaper,
+  addDocketEntryForUploadedPdfAndServe,
+  addDocketEntryForUploadedPdfAndServePaper,
   createOrder,
   editAndSignOrder,
+  goToCaseDetail,
+  serveCourtIssuedDocketEntry,
+  uploadCourtIssuedDocPdf,
 } = require('../support/pages/case-detail');
 const {
   closeScannerSetupDialog,
@@ -96,15 +101,32 @@ describe('Docket Clerk', () => {
     token = results.AuthenticationResult.IdToken;
   });
 
+  it('should be able to login', () => {
+    login(token);
+  });
+
   it('should be able to create an order on the electronically-filed case and serve it', () => {
-    createOrder({ docketNumber: testData.createdDocketNumber, token });
+    createOrder(testData.createdDocketNumber);
     editAndSignOrder();
-    addDocketEntryForOrderAndServe();
+    addDocketEntryForOrderAndSaveForLater();
+    serveCourtIssuedDocketEntry();
   });
 
   it('should be able to create an order on the paper-filed case and serve it', () => {
-    createOrder({ docketNumber: testData.createdPaperDocketNumber, token });
+    createOrder(testData.createdPaperDocketNumber);
     editAndSignOrder();
     addDocketEntryForOrderAndServePaper();
+  });
+
+  it('should be able to upload a court-issued order pdf on the electronically-filed case and serve it', () => {
+    goToCaseDetail(testData.createdDocketNumber);
+    uploadCourtIssuedDocPdf();
+    addDocketEntryForUploadedPdfAndServe();
+  });
+
+  it('should be able to upload a court-issued order pdf on the paper-filed case and serve it', () => {
+    goToCaseDetail(testData.createdPaperDocketNumber);
+    uploadCourtIssuedDocPdf();
+    addDocketEntryForUploadedPdfAndServePaper();
   });
 });
