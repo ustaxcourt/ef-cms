@@ -14,12 +14,8 @@ exports.goToCaseOverview = docketNumber => {
   cy.get('#tab-overview').click();
 };
 
-exports.createOrder = ({ docketNumber, token }) => {
-  //we have to log in again here, because otherwise we get a cross-origin request
-  //error when calling the second cy.visit()
-  cy.visit(`/log-in?token=${token}`);
-  cy.get('.progress-indicator').should('not.exist');
-  cy.visit(
+exports.createOrder = docketNumber => {
+  cy.goToRoute(
     `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
   );
   cy.url().should('contain', '/create-order');
@@ -41,13 +37,19 @@ exports.editAndSignOrder = () => {
   cy.url().should('not.contain', '/sign');
 };
 
-exports.addDocketEntryForOrderAndServe = () => {
+exports.addDocketEntryForOrderAndSaveForLater = () => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  cy.get('#serve-to-parties-btn').click();
-  cy.get('.modal-button-confirm').click();
+  cy.get('#save-entry-button').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
   cy.get('button:contains("Order to Show Cause")').click();
+  cy.get('h3:contains("Order to Show Cause")').should('exist');
+  cy.get('span:contains("Not served")').should('exist');
+};
+
+exports.serveCourtIssuedDocketEntry = () => {
+  cy.get('button:contains("Serve")').click();
+  cy.get('.modal-button-confirm').click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('div:contains("Served")').should('exist');
 };
@@ -62,6 +64,41 @@ exports.addDocketEntryForOrderAndServePaper = () => {
   cy.get('button:contains("Order to Show Cause")').click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('div:contains("Served")').should('exist');
+};
+
+exports.addDocketEntryForUploadedPdfAndServe = () => {
+  cy.get('#add-court-issued-docket-entry-button').click();
+  cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('#serve-to-parties-btn').click();
+  cy.get('.modal-button-confirm').click();
+  cy.url().should('not.contain', '/add-court-issued-docket-entry');
+  cy.get('button:contains("An Uploaded PDF")').click();
+  cy.get('h3:contains("An Uploaded PDF")').should('exist');
+  cy.get('div:contains("Served")').should('exist');
+};
+
+exports.addDocketEntryForUploadedPdfAndServePaper = () => {
+  cy.get('#add-court-issued-docket-entry-button').click();
+  cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('#serve-to-parties-btn').click();
+  cy.get('.modal-button-confirm').click();
+  cy.url().should('contain', '/print-paper-service');
+  cy.get('#print-paper-service-done-button').click();
+  cy.url().should('not.contain', '/print-paper-service');
+  cy.get('button:contains("An Uploaded PDF")').click();
+  cy.get('h3:contains("An Uploaded PDF")').should('exist');
+  cy.get('div:contains("Served")').should('exist');
+};
+
+exports.uploadCourtIssuedDocPdf = () => {
+  cy.get('#case-detail-menu-button').click();
+  cy.get('#menu-button-upload-pdf').click();
+  cy.url().should('contain', '/upload-court-issued');
+  cy.get('#upload-description').type('An Uploaded PDF');
+  cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+  cy.get('#save-uploaded-pdf-button').click();
+  cy.get('h1:contains("Drafts")').should('exist');
+  cy.get('h3:contains("An Uploaded PDF")').should('exist');
 };
 
 exports.manuallyAddCaseToNewTrialSession = trialSessionId => {
