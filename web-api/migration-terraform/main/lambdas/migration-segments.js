@@ -36,17 +36,17 @@ const reprocessItems = async items => {
   }
 };
 
-const processItems = async (items, timestamp) => {
+const processItems = async items => {
+  // TODO: your migration code would go here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
     const results = await documentClient
       .batchWrite({
         RequestItems: {
-          [process.env.SOURCE_TABLE]: c.map(item => ({
+          [process.env.DESTINATION_TABLE]: c.map(item => ({
             PutRequest: {
               Item: {
                 ...item,
-                migrate: timestamp,
               },
             },
           })),
@@ -60,7 +60,7 @@ const processItems = async (items, timestamp) => {
   }
 };
 
-const scanTableSegment = async (segment, totalSegments, timestamp) => {
+const scanTableSegment = async (segment, totalSegments) => {
   let hasMoreResults = true;
   let lastKey = null;
   while (hasMoreResults) {
@@ -78,7 +78,7 @@ const scanTableSegment = async (segment, totalSegments, timestamp) => {
         console.log('got some results', results.Items.length);
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        await processItems(results.Items, timestamp);
+        await processItems(results.Items);
       });
   }
 };
@@ -86,11 +86,11 @@ const scanTableSegment = async (segment, totalSegments, timestamp) => {
 exports.handler = async event => {
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
-  const { segment, timestamp, totalSegments } = JSON.parse(body);
+  const { segment, totalSegments } = JSON.parse(body);
 
   console.log(`about to process ${segment} of ${totalSegments}`);
 
-  await scanTableSegment(segment, totalSegments, timestamp);
+  await scanTableSegment(segment, totalSegments);
   await sqs
     .deleteMessage({
       QueueUrl: process.env.SEGMENTS_QUEUE_URL,

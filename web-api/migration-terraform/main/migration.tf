@@ -13,7 +13,7 @@ resource "aws_lambda_function" "migration_lambda" {
   source_code_hash = data.archive_file.migration_zip.output_base64sha256
 
   runtime     = "nodejs12.x"
-  timeout     = "900"
+  timeout     = "30"
   memory_size = "768"
 
   environment {
@@ -94,7 +94,7 @@ resource "aws_lambda_event_source_mapping" "streams_mapping" {
   function_name                 = aws_lambda_function.migration_lambda.arn
   starting_position             = "LATEST"
   maximum_retry_attempts        = 30
-  parallelization_factor        = 10
+  parallelization_factor        = 1
   maximum_record_age_in_seconds = 604800
   destination_config {
     on_failure {
