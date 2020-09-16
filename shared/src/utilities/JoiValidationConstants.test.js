@@ -85,4 +85,39 @@ describe('JoiValidationConstants', () => {
       }
     });
   });
+
+  describe('docket record', () => {
+    it('validates a valid docket record', () => {
+      let result;
+      result = JoiValidationConstants.DOCKET_RECORD.validate([
+        {
+          index: 1,
+        },
+        {
+          index: 2,
+        },
+      ]);
+
+      expect(result.error).toBeFalsy();
+    });
+
+    it('validates a docket record with no indexes', () => {
+      let result;
+      result = JoiValidationConstants.DOCKET_RECORD.validate([{}, {}]);
+
+      expect(result.error).toBeFalsy();
+    });
+
+    it('invalidates a docket record with non-unique', () => {
+      let result;
+      result = JoiValidationConstants.DOCKET_RECORD.validate([
+        {
+          index: 1,
+        },
+        { index: 1 },
+      ]);
+
+      expect(result.error).toBeTruthy();
+    });
+  });
 });
