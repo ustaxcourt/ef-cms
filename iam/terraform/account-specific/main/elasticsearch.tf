@@ -32,7 +32,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
     log_type                 = "ES_APPLICATION_LOGS"
   }
 
-  access_polices = <<POLICY
+  access_policies = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
