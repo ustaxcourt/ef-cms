@@ -31,7 +31,9 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_kibana_logs.arn
     log_type                 = "ES_APPLICATION_LOGS"
   }
+}
 
+resource "aws_elasticsearch_domain_policy" "kibana_access" {
   access_policies = <<POLICY
 {
   "Version": "2012-10-17",
@@ -39,10 +41,11 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
     {
       "Effect":"Allow",
       "Principal": {
-        "AWS": ["arn:aws:iam::350455059537:role/log_viewers_auth_role"]
+        "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
       },
       "Action": "es:ESHttp*",
-      "Resource":"arn:aws:es:us-east-1:350455059537:domain/*" }
+      "Resource":"${aws_elasticsearch_domain.efcms-logs.arn}
+    }
   ]
 }
 POLICY
