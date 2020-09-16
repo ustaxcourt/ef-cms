@@ -1,3 +1,5 @@
+const { isObject, isString } = require('lodash');
+
 exports.getIndexNameForRecord = record => {
   let index = null;
 
@@ -11,9 +13,9 @@ exports.getIndexNameForRecord = record => {
   const isRecordOfType = (record, type) => {
     let entityName;
 
-    if (record && record.entityName && record.entityName.length) {
+    if (record && record.entityName && isString(record.entityName)) {
       ({ entityName } = record);
-    } else if (record && typeof record.entityName === 'object') {
+    } else if (record && isObject(record.entityName)) {
       entityName = record.entityName.S;
     }
 
