@@ -59,10 +59,16 @@ const NavigationItems = (
       )}
       {headerHelper.showMessages && (
         <li className={classNames('usa-nav__primary-item')}>
+          {headerHelper.unreadMessageCount > 0 && (
+            <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
+              {headerHelper.unreadMessageCount}
+            </div>
+          )}
           <a
             className={classNames(
               'usa-nav__link',
               headerHelper.pageIsMessages && 'usa-current',
+              'display-inline-block',
             )}
             href="/messages/my/inbox"
             onClick={() => toggleMobileMenuSequence()}
@@ -153,6 +159,7 @@ const NavigationItems = (
 
 export const Header = connect(
   {
+    fetchUserNotificationsSequence: sequences.fetchUserNotificationsSequence,
     headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
@@ -165,6 +172,7 @@ export const Header = connect(
     user: state.user,
   },
   function Header({
+    fetchUserNotificationsSequence,
     headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
@@ -179,6 +187,7 @@ export const Header = connect(
     const headerRef = useRef(null);
 
     useEffect(() => {
+      fetchUserNotificationsSequence();
       document.addEventListener('mousedown', reset, false);
       document.addEventListener('keydown', keydown, false);
       return () => {

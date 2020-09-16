@@ -177,6 +177,10 @@
           height: 3px;
         }
 
+        div + a.display-inline-block {
+          display: inline-block;
+        }
+
         .usa-nav__link:hover {
           color: color($theme-color-primary-dark);
         }
