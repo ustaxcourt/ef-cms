@@ -34,6 +34,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 }
 
 resource "aws_elasticsearch_domain_policy" "kibana_access" {
+  domain_name = aws_elasticsearch_domain.efcms-logs.domain_name
   access_policies = <<POLICY
 {
   "Version": "2012-10-17",
@@ -44,7 +45,7 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
         "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
       },
       "Action": "es:ESHttp*",
-      "Resource":"${aws_elasticsearch_domain.efcms-logs.arn}
+      "Resource":"${aws_elasticsearch_domain.efcms-logs.arn}"
     }
   ]
 }

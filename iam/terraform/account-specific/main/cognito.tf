@@ -12,7 +12,7 @@ resource "aws_cognito_user_pool_domain" "log_viewers" {
 
 resource "aws_cognito_user_pool_client" "kibana" {
   name = "kibana"
-
+  generate_secret = true
   user_pool_id = aws_cognito_user_pool.log_viewers.id
 }
 
