@@ -4,7 +4,6 @@ import { state } from 'cerebral';
  * sets individual and section inbox and in progress work items counts
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  */
