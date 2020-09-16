@@ -29,3 +29,31 @@ variable "region" {
 variable "validate" {
   type = number
 }
+
+variable "deploying_color" {
+  type = string
+}
+
+variable "current_color" {
+  type = string
+}
+
+variable "lambda_bucket_id" {
+  type = string
+}
+
+variable "api_object" {
+  type = any
+}
+
+variable "api_public_object" {
+  type = any
+}
+
+variable "websockets_object" {
+  type = any
+}
+
+variable "puppeteer_layer_object" {
+  type = any
+}

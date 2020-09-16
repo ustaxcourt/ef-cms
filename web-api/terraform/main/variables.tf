@@ -35,3 +35,8 @@ variable "honeybadger_key" {
 variable "irs_superuser_email" {
   type = string
 }
+
+variable "deploying_color" {
+  type    = string
+  default = "blue"
+}
