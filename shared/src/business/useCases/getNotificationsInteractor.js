@@ -61,27 +61,12 @@ exports.getNotificationsInteractor = async ({
       section: sectionToShow,
     });
 
-  let qcIndividualInboxCount = 0;
-  let qcIndividualInProgressCount = 0;
-
-  applicationContext
-    .getUtilities()
-    .filterWorkItemsForUser({
-      user: currentUser,
-      workItems: documentQCIndividualInbox,
-    })
-    .forEach(item => {
-      if (
-        item.docketEntry.isFileAttached !== false &&
-        additionalFilters(item)
-      ) {
-        if (item.caseIsInProgress) {
-          qcIndividualInProgressCount++;
-        } else {
-          qcIndividualInboxCount++;
-        }
-      }
-    });
+  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
+    filters['my']['inProgress'],
+  ).length;
+  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
+    filters['my']['inbox'],
+  ).length;
 
   const qcSectionInProgressCount = documentQCSectionInbox.filter(
     filters['section']['inProgress'],
