@@ -10,9 +10,21 @@ resource "aws_cognito_user_pool_domain" "log_viewers" {
   user_pool_id = aws_cognito_user_pool.log_viewers.id
 }
 
+resource "aws_cognito_user_pool_client" "kibana" {
+  name = "kibana"
+
+  user_pool_id = aws_cognito_user_pool.log_viewers.id
+}
+
 resource "aws_cognito_identity_pool" "log_viewers" {
   identity_pool_name = "kibana dashboard identity pool"
   allow_unauthenticated_identities = false
+
+  cognito_identity_providers {
+    client_id               = "${aws_cognito_user_pool_client.kibana.id}"
+    provider_name           = "${aws_cognito_user_pool.kibana.endpoint}"
+    server_side_token_check = false
+  }
 }
 
 resource "aws_iam_role" "es_kibana_role" {
