@@ -68,11 +68,9 @@ const NavigationItems = (
             className={classNames(
               'usa-nav__link',
               headerHelper.pageIsMessages && 'usa-current',
+              'display-inline-block',
             )}
             href="/messages/my/inbox"
-            style={{
-              display: 'inline-block',
-            }}
             onClick={() => toggleMobileMenuSequence()}
           >
             Messages
