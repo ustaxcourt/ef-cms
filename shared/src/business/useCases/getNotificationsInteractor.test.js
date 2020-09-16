@@ -197,7 +197,7 @@ describe('getNotificationsInteractor', () => {
           docketEntry: {
             isFileAttached: true,
           },
-          inProgress: true,
+          inProgress: false,
           isRead: true,
           section: 'docket',
         },
@@ -242,7 +242,7 @@ describe('getNotificationsInteractor', () => {
           associatedJudge: 'Some Judge',
           caseIsInProgress: false,
           docketEntry: {
-            isFileAttached: true,
+            isFileAttached: false,
           },
           inProgress: false,
           isRead: true,
