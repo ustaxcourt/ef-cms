@@ -98,4 +98,42 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
       viewerDraftDocumentToDisplay: { docketEntryId: '345' },
     });
   });
+
+  it('returns the correct document if props.docketEntryId is not set and state.viwerDraftDOcumentToDisplay is set', async () => {
+    const result = await runAction(
+      getDefaultDraftViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Petition',
+              },
+              {
+                docketEntryId: '234',
+                documentType: 'Order',
+              },
+              {
+                docketEntryId: '345',
+                documentType: 'Notice',
+                isDraft: true,
+              },
+            ],
+          },
+          viewerDraftDocumentToDisplay: {
+            docketEntryId: '234',
+            documentType: 'Order',
+          },
+        },
+      },
+    );
+    expect(result.output).toMatchObject({
+      viewerDraftDocumentToDisplay: { docketEntryId: '234' },
+    });
+  });
 });
