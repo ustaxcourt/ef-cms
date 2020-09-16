@@ -30,7 +30,7 @@ const getWorkQueueFilters = ({ additionalFilters = item => item, user }) => {
           (item.assigneeId === user.userId &&
             user.role === ROLES.petitionsClerk &&
             item.caseStatus === CASE_STATUS_TYPES.new &&
-            item.caseIsInProgress === true)
+            item.caseIsInProgress === true) // caseIsInProgress only looked at for petitionsclerks
         );
       },
       inbox: item => {
