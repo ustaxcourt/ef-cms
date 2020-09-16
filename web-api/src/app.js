@@ -389,7 +389,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 {
   app.get('/api/swagger', lambdaWrapper(swaggerLambda));
   app.get('/api/swagger.json', lambdaWrapper(swaggerJsonLambda));
-  app.get('/api/notifications', lambdaWrapper(getNotificationsLambda)); // TODO 6069 update swagger
+  app.get('/api/notifications', lambdaWrapper(getNotificationsLambda));
   app.post(
     '/api/court-issued-order',
     lambdaWrapper(createCourtIssuedOrderPdfFromHtmlLambda),
@@ -713,7 +713,7 @@ app.post(
     '/messages/:parentMessageId/complete',
     lambdaWrapper(completeMessageLambda),
   );
-  app.post('/messages/:messageId/read', lambdaWrapper(setMessageAsReadLambda)); // TODO 6069 update swagger
+  app.post('/messages/:messageId/read', lambdaWrapper(setMessageAsReadLambda));
   app.get('/messages/:parentMessageId', lambdaWrapper(getMessageThreadLambda));
   app.get(
     '/messages/case/:docketNumber',
