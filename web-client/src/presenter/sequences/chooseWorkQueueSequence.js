@@ -22,31 +22,14 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
     [
       chooseWorkQueueAction,
       {
-        documentqcmyinProgress: [
-          getDocumentQCInboxForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcmyinbox: [
-          getDocumentQCInboxForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcmyoutbox: [
-          getDocumentQCServedForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcsectioninProgress: [
-          getDocumentQCInboxForSectionAction,
-          setWorkItemsAction,
-        ],
-        documentqcsectioninbox: [
-          getDocumentQCInboxForSectionAction,
-          setWorkItemsAction,
-        ],
-        documentqcsectionoutbox: [
-          getDocumentQCServedForSectionAction,
-          setWorkItemsAction,
-        ],
+        documentqcmyinProgress: [getDocumentQCInboxForUserAction],
+        documentqcmyinbox: [getDocumentQCInboxForUserAction],
+        documentqcmyoutbox: [getDocumentQCServedForUserAction],
+        documentqcsectioninProgress: [getDocumentQCInboxForSectionAction],
+        documentqcsectioninbox: [getDocumentQCInboxForSectionAction],
+        documentqcsectionoutbox: [getDocumentQCServedForSectionAction],
       },
+      setWorkItemsAction,
     ],
   ]),
 ]);

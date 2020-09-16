@@ -3,7 +3,7 @@ const { DocumentSearch } = require('./DocumentSearch');
 const errorMessages = DocumentSearch.VALIDATION_ERROR_MESSAGES;
 
 describe('Document Search entity', () => {
-  it('needs only a keyword and startDate to be valid', () => {
+  it('needs only a keyword, opinionType and startDate to be valid', () => {
     const opinionSearch = new DocumentSearch({
       keyword: 'Notice',
       opinionType: 'a Type',

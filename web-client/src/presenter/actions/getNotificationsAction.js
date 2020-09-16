@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Fetches the case un-sign the getCase use case using the props.docketNumber
+ * Fetches notifications for a user
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting state.user.token
