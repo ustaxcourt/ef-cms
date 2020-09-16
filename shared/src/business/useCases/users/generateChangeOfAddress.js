@@ -214,6 +214,12 @@ exports.generateChangeOfAddress = async ({
             key: newDocketEntryId,
           });
 
+        changeOfAddressDocketEntry.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+          });
         await applicationContext
           .getPersistenceGateway()
           .saveWorkItemForNonPaper({

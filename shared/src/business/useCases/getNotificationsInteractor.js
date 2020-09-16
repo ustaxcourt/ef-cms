@@ -1,9 +1,3 @@
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
-
 /**
  * getNotificationsInteractor
  *
@@ -27,10 +21,6 @@ exports.getNotificationsInteractor = async ({
     judgeUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId: judgeUserId });
-  }
-
-  if (!isAuthorized(currentUser, ROLE_PERMISSIONS.MESSAGES)) {
-    throw new UnauthorizedError('Unauthorized to get inbox counts');
   }
 
   const { section, userId } = currentUser;
@@ -100,6 +90,9 @@ exports.getNotificationsInteractor = async ({
     filters['section']['inbox'],
   ).length;
 
+  const unreadMessageCount = userInbox.filter(message => !message.isRead)
+    .length;
+
   return {
     qcIndividualInProgressCount,
     qcIndividualInboxCount,
@@ -107,6 +100,7 @@ exports.getNotificationsInteractor = async ({
     qcSectionInboxCount,
     qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
       .length,
+    unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
   };

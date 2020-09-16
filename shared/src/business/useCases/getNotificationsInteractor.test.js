@@ -66,6 +66,7 @@ describe('getNotificationsInteractor', () => {
       .getPersistenceGateway()
       .getUserInboxMessages.mockReturnValue([
         {
+          isRead: true,
           messageId: 'message-id-1',
         },
       ]);
@@ -122,19 +123,6 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('fails due to being unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: 'ff377e31-d6d5-4c4a-adc6-520075f3dde5',
-    });
-
-    await expect(
-      getNotificationsInteractor({
-        applicationContext,
-      }),
-    ).rejects.toThrow('Unauthorized to get inbox counts');
-  });
-
   it('returns an unread count for my messages', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -157,6 +145,7 @@ describe('getNotificationsInteractor', () => {
       qcSectionInProgressCount: 1,
       qcSectionInboxCount: 3,
       qcUnreadCount: 0,
+      unreadMessageCount: 0,
       userInboxCount: 1,
       userSectionCount: 2,
     });
@@ -408,5 +397,29 @@ describe('getNotificationsInteractor', () => {
     });
 
     expect(result.qcSectionInboxCount).toEqual(1);
+  });
+
+  it('returns an accurate unread count for my messages', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserInboxMessages.mockReturnValue([
+        {
+          isRead: false,
+          messageId: 'message-id-1',
+        },
+        {
+          isRead: true,
+          messageId: 'message-id-2',
+        },
+      ]);
+
+    const result = await getNotificationsInteractor({
+      applicationContext,
+      userId: 'docketclerk',
+    });
+
+    expect(result).toMatchObject({
+      userInboxCount: 2,
+    });
   });
 });
