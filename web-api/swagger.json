@@ -6193,6 +6193,71 @@
         }
       }
     },
+    "/messages/{messageId}/read": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "marks a message as read",
+        "description": "Marks a message as read.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/message"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "messageId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "docket number",
+          "description": "the associated docket number",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "docketNumber": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public-api/todays-opinions": {
       "get": {
         "tags": ["case-documents"],
