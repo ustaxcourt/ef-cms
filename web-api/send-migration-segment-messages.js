@@ -36,7 +36,6 @@ const getItemCount = async () => {
   }
 };
 
-const now = Date.now().toString();
 let sent = 0;
 
 (async () => {
@@ -47,7 +46,6 @@ let sent = 0;
   const segments = shuffle(
     new Array(totalSegments).fill(null).map((v, i) => ({
       segment: i,
-      timestamp: now,
       totalSegments: totalSegments,
     })),
   );
