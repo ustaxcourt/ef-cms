@@ -219,4 +219,20 @@ describe('headerHelper', () => {
     });
     expect(result.pageIsReports).toBeTruthy();
   });
+
+  it('should show the number of unread messages for a user', () => {
+    const baseState = getBaseState({ role: ROLES.petitionsClerk });
+    const { notifications: baseNotifications } = baseState;
+    const result = runCompute(headerHelper, {
+      state: {
+        ...baseState,
+        currentPage: 'Messages',
+        notifications: {
+          ...baseNotifications,
+          unreadMessageCount: 2,
+        },
+      },
+    });
+    expect(result.unreadMessageCount).toBe(2);
+  });
 });
