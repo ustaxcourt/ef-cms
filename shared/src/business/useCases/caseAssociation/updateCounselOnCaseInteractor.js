@@ -58,11 +58,11 @@ exports.updateCounselOnCaseInteractor = async ({
       userId,
       ...editableFields,
     });
-    if (caseEntity.representingPrimary) {
+    if (userData.representingPrimary) {
       caseEntity.contactPrimary.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }
-    if (caseEntity.representingSecondary) {
+    if (userData.representingSecondary) {
       caseEntity.contactSecondary.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }
