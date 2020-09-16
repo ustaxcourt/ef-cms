@@ -2,6 +2,16 @@ provider "aws" {
   region = var.aws_region
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us-east-1"
+}
+
+provider "aws" {
+  region = "us-west-1"
+  alias  = "us-west-1"
+}
+
 terraform {
   backend "s3" {
   }
@@ -21,4 +31,5 @@ module "ef-cms_apis" {
   es_instance_count   = var.es_instance_count
   honeybadger_key     = var.honeybadger_key
   irs_superuser_email = var.irs_superuser_email
+  deploying_color     = var.deploying_color
 }
