@@ -11,6 +11,14 @@ exports.generateDocketRecordPdfLambda = event =>
     event,
     async ({ applicationContext }) => {
       const { docketNumber, docketRecordSort } = JSON.parse(event.body);
+      const { userId } = applicationContext.getCurrentUser();
+      const isAssociated = await applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser({
+          applicationContext,
+          docketNumber,
+          userId,
+        });
 
       return await applicationContext
         .getUseCases()
@@ -18,7 +26,7 @@ exports.generateDocketRecordPdfLambda = event =>
           applicationContext,
           docketNumber,
           docketRecordSort,
-          includePartyDetail: true,
+          includePartyDetail: isAssociated,
         });
     },
     { logResults: false },
