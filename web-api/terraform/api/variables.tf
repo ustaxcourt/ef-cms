@@ -57,3 +57,7 @@ variable "websockets_object" {
 variable "puppeteer_layer_object" {
   type = any
 }
+
+variable "public_object_hash" {
+  type = string
+}
