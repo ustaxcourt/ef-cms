@@ -1,6 +1,26 @@
 import { find, includes, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
+const setDocumentPropsFromFormAndBaseDocument = ({
+  applicationContext,
+  eventCode,
+  formProperties,
+  propertyList,
+}) => {
+  let entry;
+  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
+
+  find(
+    INTERNAL_CATEGORY_MAP,
+    entries => (entry = find(entries, { eventCode })),
+  );
+
+  return {
+    ...omit(formProperties, propertyList),
+    ...pick(entry || {}, propertyList),
+  };
+};
+
 /**
  * clears data in the state.form based on which field is being updated
  *
@@ -23,23 +43,16 @@ export const updateDocketEntryWizardDataAction = ({
   } = applicationContext.getConstants();
   let entry, form;
   let supporting = get(state.screenMetadata.supporting);
-  const ENTRY_PROPS = ['category', 'documentType', 'scenario'];
-
-  const updateBaseDocumentProps = eventCode => {
-    find(
-      INTERNAL_CATEGORY_MAP,
-      entries => (entry = find(entries, { eventCode })),
-    );
-    form = {
-      ...omit(get(state.form), ENTRY_PROPS),
-      ...pick(entry || {}, ENTRY_PROPS),
-    };
-    store.set(state.form, form);
-  };
 
   switch (props.key) {
     case 'initEventCode':
-      updateBaseDocumentProps(props.value);
+      form = setDocumentPropsFromFormAndBaseDocument({
+        applicationContext,
+        eventCode: props.value,
+        formProperties: get(state.form),
+        propertyList: ['category', 'documentType', 'scenario'],
+      });
+      store.set(state.form, form);
       break;
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
@@ -48,7 +61,13 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.certificateOfServiceYear);
       break;
     case 'eventCode':
-      updateBaseDocumentProps(props.value);
+      form = setDocumentPropsFromFormAndBaseDocument({
+        applicationContext,
+        eventCode: props.value,
+        formProperties: get(state.form),
+        propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
+      });
+      store.set(state.form, form);
       if (!supporting) {
         store.unset(state.form.previousDocument);
       } else {
@@ -78,14 +97,12 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.pending);
       break;
     case 'secondaryDocument.eventCode':
-      find(
-        INTERNAL_CATEGORY_MAP,
-        entries => (entry = find(entries, { eventCode: props.value })),
-      );
-      form = {
-        ...omit(get(state.form.secondaryDocument), ENTRY_PROPS),
-        ...pick(entry || {}, ENTRY_PROPS),
-      };
+      form = setDocumentPropsFromFormAndBaseDocument({
+        applicationContext,
+        eventCode: props.value,
+        formProperties: get(state.form.secondaryDocument),
+        propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
+      });
       store.set(state.form.secondaryDocument, form);
       store.unset(state.form.secondaryDocument.previousDocument);
       store.unset(state.form.secondaryDocument.serviceDate);
