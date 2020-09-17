@@ -18,13 +18,6 @@ const mockCases = {
   },
   '123-45': mockCase,
 };
-const mockCasesWithoutContact = {
-  '103-20': {
-    docketNumber: '103-20',
-    sealedDate: '2020-01-02T03:04:05.007Z',
-  },
-  '123-45': mockCase,
-};
 
 describe('getPublicCaseInteractor', () => {
   beforeEach(() => {
@@ -69,13 +62,7 @@ describe('getPublicCaseInteractor', () => {
   });
 
   it('should return minimal information when the requested case has been sealed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        return mockCasesWithoutContact[docketNumber];
-      });
-
-    const docketNumber = '103-20';
+    const docketNumber = '102-20';
     const result = await getPublicCaseInteractor({
       applicationContext,
       docketNumber,
