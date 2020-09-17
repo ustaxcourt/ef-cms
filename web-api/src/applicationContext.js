@@ -291,6 +291,12 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  filterQcItemsByAssociatedJudge,
+} = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
+const {
+  filterWorkItemsForUser,
+} = require('../../shared/src/business/utilities/filterWorkItemsForUser');
+const {
   formatAndSortConsolidatedCases,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
 const {
@@ -429,6 +435,10 @@ const {
 const {
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
+const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -1638,14 +1648,18 @@ module.exports = appContextUser => {
         compareISODateStrings,
         compareStrings,
         createISODateString,
+        filterQcItemsByAssociatedJudge,
+        filterWorkItemsForUser,
         formatCaseForTrialSession,
         formatDateString,
         formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
+        getDocQcSectionForUser,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getWorkQueueFilters,
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,

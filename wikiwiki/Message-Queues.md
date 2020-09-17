@@ -6,20 +6,22 @@
 * Completed - newest to oldest by Completed date
 
 ## Unread messages
-* Messages are considered “read” when the user clicks on the item into the Document Detail page from their My Messages inbox  
+* Messages are considered “read” when the user clicks on the item into the Message Detail page from their My Messages inbox  
 
 **Icon in Header**
-* If any messages are unread in the My Messages Inbox, a envelope icon displays next to Messages in the global header
-* Icon in header displays until there are no unread messages in My Messages inbox
+* Displays when unread items are present in the My Messages Inbox
+* Displays number of unread items in My Messages Inbox
+* Is hidden when no unread items are present in My Messages Inbox
 
 **My Messages Inbox**
-* Total number of unread messages is displayed as part of the Inbox tab label (i.e. Inbox (1))
-* Unread messages are indicated by bold text (Document Title) and a closed envelope icon
-* Total messages in My Messages Inbox displays above the message list table
+* Displays closed envelope icon on unread message
+* Message subject line text is displayed in bold
+* Total message count is displayed in Inbox tab label (i.e. Inbox (3))
+
 
 **Section Messages Inbox**
 * Section Messages inbox does not indicate unread messages with an icon
-* Total messages in Section Messages Inbox displays above the message list table
+* Total messages in Inbox is displayed in Inbox tab label = Inbox(#)
 
 ## Sent messages
 * Sent messages are visible in the Sent box for 7 days
@@ -35,6 +37,10 @@
 
 **Comment**
 * Displays text from "Add Comment" field (if applicable)
+
+**Judge/Chambers Dashboard**
+* Displays closed envelope icon on unread message
+* Message subject line text is displayed in bold
 
 
 ## Message icons
