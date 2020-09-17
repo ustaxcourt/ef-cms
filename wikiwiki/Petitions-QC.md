@@ -3,9 +3,12 @@
 # Petitions QC
 **Petitions QC Inbox**
   * Inbox - oldest to newest by Received date
+  * Total documents in Inbox is displayed in inbox tab label: “Inbox (#)”
 
 **Petitions QC In Progress**
- * In Progress - to be added
+ * When Petitions are reviewed but not served (i.e. Save for Later) they display in the In Progress tab
+ * Total petitions in In Progress is displayed in in progress tab label: “In Progress (#)”
+
 
 **Petitions QC Served**
  * Served - newest to oldest by Served date
