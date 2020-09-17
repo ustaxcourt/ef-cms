@@ -76,10 +76,10 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
   }
 }
 
-module "ui-public-certificate-green" {
+module "ui-public-certificate" {
   source = "../../../iam/terraform/shared/certificates"
 
-  domain_name      = "${var.current_color}.${var.dns_domain}"
+  domain_name      = "*.${var.zone_name}"
   hosted_zone_name = "${var.zone_name}."
   certificate_name = "${var.current_color}.${var.dns_domain}"
   environment      = var.environment
@@ -117,7 +117,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = "${var.current_color}.${var.dns_domain}"
+      value = var.dns_domain
     }
   }
 
@@ -135,7 +135,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = "${var.current_color}.${var.dns_domain}"
+      value = var.dns_domain
     }
   }
 
@@ -211,11 +211,11 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
 
   depends_on = [
-    module.ui-public-certificate-green.dns_validation
+    module.ui-public-certificate.dns_validation
   ]
 
   viewer_certificate {
-    acm_certificate_arn = module.ui-public-certificate-green.acm_certificate_arn
+    acm_certificate_arn = module.ui-public-certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
