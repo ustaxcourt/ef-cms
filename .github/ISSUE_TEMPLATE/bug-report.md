@@ -46,16 +46,15 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Additional Context**
-Add any other context about the problem here.
+**Cause of Bug, If Known**
 
-Process for logging bug:
+**Process for logging bug:**
 * Complete the above information
 * Add a severity tag (Critical, High Severity, Medium Severity or Low Severity). See below for priority definition. 
 * For critical and high-severity bugs, communicate immediately to project manager or tech lead
 * For medium or low severity, review daily during stand up
 
-Severity Definition:
+**Severity Definition:**
 * Critical defects usually block an entire system’s or module’s functionality, and testing cannot proceed further without such a defect being fixed. An example of a critical defect is an application’s returning a server error message after a login attempt.
 * High-severity defects affect key functionality of an application, and the app behaves in a way that is strongly different from the one stated in the requirements, for instance, an email service provider does not allow adding more than one email address to the recipient field.
 * Medium-severity defects are identified in case a minor function does not behave in a way stated in the requirements. An example of such a defect is a broken link in an application’s Terms and Requirements section.
