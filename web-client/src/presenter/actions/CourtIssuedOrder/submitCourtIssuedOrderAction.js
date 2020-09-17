@@ -60,10 +60,15 @@ export const submitCourtIssuedOrderAction = async ({
       });
   }
 
+  const viewerDraftDocumentToDisplay = caseDetail.docketEntries.find(
+    entry => entry.docketEntryId === docketEntryId && entry.isDraft,
+  );
+
   return {
     caseDetail,
     docketEntryId,
     docketNumber,
     eventCode: documentMetadata.eventCode,
+    viewerDraftDocumentToDisplay,
   };
 };

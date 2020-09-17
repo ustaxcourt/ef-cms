@@ -246,6 +246,8 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  individualInProgressCount: 0,
+  individualInboxCount: 0,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
