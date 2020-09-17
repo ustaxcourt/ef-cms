@@ -23,7 +23,7 @@ export const updateDocketEntryWizardDataAction = ({
   } = applicationContext.getConstants();
   let entry, form;
   let supporting = get(state.screenMetadata.supporting);
-  const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
+  const ENTRY_PROPS = ['category', 'documentType', 'scenario'];
 
   const updateBaseDocumentProps = eventCode => {
     find(
