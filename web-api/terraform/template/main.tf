@@ -106,7 +106,8 @@ resource "null_resource" "api_public_west_object" {
 resource "null_resource" "puppeteer_layer_east_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
   provisioner "local-exec" {
-    command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
+    #command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
+    command = "echo 'hello'"
   }
 
   triggers = {
@@ -117,12 +118,39 @@ resource "null_resource" "puppeteer_layer_east_object" {
 resource "null_resource" "puppeteer_layer_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
   provisioner "local-exec" {
-    command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
+    #command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
+    command = "echo 'hello'"
   }
 
   triggers = {
     always_run = "${timestamp()}"
   }
+}
+
+data "aws_s3_bucket_object" "api_public_blue_east_object" {
+  depends_on = [null_resource.api_public_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "api_public_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "api_public_blue_west_object" {
+  depends_on = [null_resource.api_public_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "api_public_blue.js.zip"
+  provider   = aws.us-west-1
+}
+
+data "aws_s3_bucket_object" "api_public_green_east_object" {
+  depends_on = [null_resource.api_public_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "api_public_green.js.zip"
+}
+
+data "aws_s3_bucket_object" "api_public_green_west_object" {
+  depends_on = [null_resource.api_public_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "api_public_green.js.zip"
+  provider   = aws.us-west-1
 }
 
 module "api-east-green" {
@@ -144,9 +172,10 @@ module "api-east-green" {
   providers = {
     aws = aws.us-east-1
   }
-  current_color    = "green"
-  deploying_color  = var.deploying_color
-  lambda_bucket_id = aws_s3_bucket.api_lambdas_bucket_east.id
+  current_color      = "green"
+  deploying_color    = var.deploying_color
+  lambda_bucket_id   = aws_s3_bucket.api_lambdas_bucket_east.id
+  public_object_hash = data.aws_s3_bucket_object.api_public_green_east_object.etag
 }
 
 module "api-east-blue" {
@@ -168,9 +197,10 @@ module "api-east-blue" {
   providers = {
     aws = aws.us-east-1
   }
-  current_color    = "blue"
-  deploying_color  = var.deploying_color
-  lambda_bucket_id = aws_s3_bucket.api_lambdas_bucket_east.id
+  current_color      = "blue"
+  deploying_color    = var.deploying_color
+  lambda_bucket_id   = aws_s3_bucket.api_lambdas_bucket_east.id
+  public_object_hash = data.aws_s3_bucket_object.api_public_blue_east_object.etag
 }
 
 module "api-west-green" {
@@ -192,9 +222,10 @@ module "api-west-green" {
   providers = {
     aws = aws.us-west-1
   }
-  current_color    = "green"
-  deploying_color  = var.deploying_color
-  lambda_bucket_id = aws_s3_bucket.api_lambdas_bucket_west.id
+  current_color      = "green"
+  deploying_color    = var.deploying_color
+  lambda_bucket_id   = aws_s3_bucket.api_lambdas_bucket_west.id
+  public_object_hash = data.aws_s3_bucket_object.api_public_green_west_object.etag
 }
 
 module "api-west-blue" {
@@ -216,7 +247,8 @@ module "api-west-blue" {
   providers = {
     aws = aws.us-west-1
   }
-  current_color    = "blue"
-  deploying_color  = var.deploying_color
-  lambda_bucket_id = aws_s3_bucket.api_lambdas_bucket_west.id
+  current_color      = "blue"
+  deploying_color    = var.deploying_color
+  lambda_bucket_id   = aws_s3_bucket.api_lambdas_bucket_west.id
+  public_object_hash = data.aws_s3_bucket_object.api_public_blue_west_object.etag
 }

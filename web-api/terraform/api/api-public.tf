@@ -1,13 +1,13 @@
 resource "aws_lambda_function" "api_public_lambda" {
-  depends_on    = [var.api_public_object]
-  function_name = "api_public_${var.environment}_${var.current_color}"
-  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler       = "api-public.handler"
-  s3_bucket     = var.lambda_bucket_id
-  s3_key        = "api_public_${var.current_color}.js.zip"
-  #source_code_hash = data.archive_file.zip_api_public.output_base64sha256
-  timeout     = "10"
-  memory_size = "3008"
+  depends_on       = [var.api_public_object]
+  function_name    = "api_public_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "api-public.handler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "api_public_${var.current_color}.js.zip"
+  source_code_hash = var.public_object_hash
+  timeout          = "10"
+  memory_size      = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
