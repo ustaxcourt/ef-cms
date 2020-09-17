@@ -4,8 +4,6 @@
 [ -z "${CURRENT_COLOR}" ] && echo "You must have CURRENT_COLOR set in your environment" && exit 1
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 
-# TODO: supply color here
-
 ./web-client/build-dist-public.sh $ENV $CURRENT_COLOR
 
 # public app

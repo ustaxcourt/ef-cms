@@ -6,7 +6,7 @@ provider "aws" {
   alias = "us-west-1"
 }
 
-module "ui-public-green" {
+module "ui-green" {
   source                 = "../ui"
   current_color          = "green"
   environment            = var.environment
@@ -21,7 +21,7 @@ module "ui-public-green" {
   }
 }
 
-module "ui-public-blue" {
+module "ui-blue" {
   source                 = "../ui"
   current_color          = "blue"
   environment            = var.environment
