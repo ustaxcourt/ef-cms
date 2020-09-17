@@ -37,11 +37,8 @@ export const updateDocketEntryWizardDataAction = ({
   props,
   store,
 }) => {
-  const {
-    DOCUMENT_RELATIONSHIPS,
-    INTERNAL_CATEGORY_MAP,
-  } = applicationContext.getConstants();
-  let entry, form;
+  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
+  let form;
   let supporting = get(state.screenMetadata.supporting);
 
   switch (props.key) {
