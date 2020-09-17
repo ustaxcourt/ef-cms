@@ -62,7 +62,7 @@ exports.updateCounselOnCaseInteractor = async ({
       caseEntity.contactPrimary.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }
-    if (userData.representingSecondary) {
+    if (caseEntity.contactSecondary && userData.representingSecondary) {
       caseEntity.contactSecondary.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }
