@@ -45,7 +45,7 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
         "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
       },
       "Action": "es:ESHttp*",
-      "Resource":"${aws_elasticsearch_domain.efcms-logs.arn}"
+      "Resource":"${aws_elasticsearch_domain.efcms-logs.arn}/*"
     }
   ]
 }
@@ -86,7 +86,8 @@ data "aws_iam_policy_document" "log_viewers_auth" {
       "iam:AttachRolePolicy",
       "ec2:DescribeVpcs",
       "cognito-identity:ListIdentityPools",
-      "cognito-idp:ListUserPools"
+      "cognito-idp:ListUserPools",
+      "es:ESHttpGet"
     ]
 
     resources = [aws_elasticsearch_domain.efcms-logs.arn]
