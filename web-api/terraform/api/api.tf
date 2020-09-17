@@ -5,7 +5,7 @@ resource "aws_lambda_function" "api_lambda" {
   handler       = "api.handler"
   s3_bucket     = var.lambda_bucket_id
   s3_key        = "api_${var.current_color}.js.zip"
-  #source_code_hash = data.archive_file.zip_api.output_base64sha256
+  source_code_hash = var.api_object_hash
   timeout     = "29"
   memory_size = "3008"
 

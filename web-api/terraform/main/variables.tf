@@ -38,5 +38,5 @@ variable "irs_superuser_email" {
 
 variable "deploying_color" {
   type    = string
-  default = "green"
+  default = "blue"
 }

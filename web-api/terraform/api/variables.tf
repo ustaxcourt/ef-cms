@@ -61,3 +61,15 @@ variable "puppeteer_layer_object" {
 variable "public_object_hash" {
   type = string
 }
+
+variable "api_object_hash" {
+  type = string
+}
+
+variable "websockets_object_hash" {
+  type = string
+}
+
+variable "puppeteer_object_hash" {
+  type = string
+}

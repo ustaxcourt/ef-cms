@@ -1,3 +1,7 @@
+variable "current_color" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -17,6 +21,10 @@ variable "cloudfront_default_ttl" {
 }
 
 variable "zone_name" {
+  type = string
+}
+
+variable "header_security_arn" {
   type = string
 }
 

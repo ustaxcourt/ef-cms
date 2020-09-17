@@ -40,7 +40,7 @@ const filterEmptyStrings = params => {
 };
 
 const getTableName = ({ applicationContext }) =>
-  `efcms-${
+  `efcms-${applicationContext.environment.currentColor}-${
     (applicationContext.environment || applicationContext.getEnvironment())
       .stage
   }`;

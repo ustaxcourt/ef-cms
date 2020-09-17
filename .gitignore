@@ -53,3 +53,4 @@ web-client/pa11y/pa11y-screenshots/*.png
 web-client/reports
 web-client/terraform/common/cloudfront-edge/index.js.zip
 web-client/tests_output/
+terraform-cache/
