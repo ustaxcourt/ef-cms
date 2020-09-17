@@ -9,7 +9,7 @@ describe('setMessageAsReadAction', () => {
   });
 
   it('should set message as read', async () => {
-    await runAction(setMessageAsReadAction, {
+    const result = await runAction(setMessageAsReadAction, {
       modules: { presenter },
       props: {
         messageToMarkRead: [
@@ -19,10 +19,16 @@ describe('setMessageAsReadAction', () => {
           },
         ],
       },
+      state: {
+        notifications: {
+          unreadMessageCount: 1,
+        },
+      },
     });
 
     expect(
       applicationContext.getUseCases().setMessageAsReadInteractor,
     ).toHaveBeenCalled();
+    expect(result.state.notifications.unreadMessageCount).toBe(0);
   });
 });
