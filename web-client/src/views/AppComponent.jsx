@@ -163,12 +163,14 @@ export const AppComponent = connect(
   {
     currentPage: state.currentPage,
     showModal: state.modal.showModal,
+    token: state.token,
     userContactEditInProgress: state.userContactEditProgress.inProgress,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
   function AppComponent({
     currentPage,
     showModal,
+    token,
     userContactEditInProgress,
     zipInProgress,
   }) {
@@ -195,7 +197,7 @@ export const AppComponent = connect(
           Skip to main content
         </a>
         <UsaBanner />
-        <Header />
+        {token && <Header />}
         <main id="main-content" role="main">
           <CurrentPage />
           {zipInProgress && <BatchDownloadProgress />}
