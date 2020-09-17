@@ -1,16 +1,13 @@
-
 provider "aws" {
-  region = "us-east-1"
-  alias  = "us-east-1"
+  alias = "us-east-1"
 }
 
 provider "aws" {
-  region = "us-west-1"
-  alias  = "us-west-1"
+  alias = "us-west-1"
 }
 
 resource "aws_s3_bucket" "frontend_public" {
-  bucket = var.dns_domain
+  bucket = "${var.current_color}.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.public_policy_bucket.json
 
@@ -25,7 +22,7 @@ resource "aws_s3_bucket" "frontend_public" {
 }
 
 resource "aws_s3_bucket" "failover_public" {
-  bucket = "failover.${var.dns_domain}"
+  bucket = "failover-${var.current_color}.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.public_policy_bucket_failover.json
 
@@ -56,7 +53,7 @@ data "aws_iam_policy_document" "public_policy_bucket" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${var.dns_domain}/*"
+      "arn:aws:s3:::${var.current_color}.${var.dns_domain}/*"
     ]
   }
 }
@@ -74,42 +71,42 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::failover.${var.dns_domain}/*"
+      "arn:aws:s3:::failover-${var.current_color}.${var.dns_domain}/*"
     ]
   }
 }
 
-module "ui-public-certificate" {
+module "ui-public-certificate-green" {
   source = "../../../iam/terraform/shared/certificates"
 
-  domain_name      = var.dns_domain
+  domain_name      = "${var.current_color}.${var.dns_domain}"
   hosted_zone_name = "${var.zone_name}."
-  certificate_name = var.dns_domain
+  certificate_name = "${var.current_color}.${var.dns_domain}"
   environment      = var.environment
-  description      = "Certificate for public facing ${var.dns_domain}"
+  description      = "Certificate for public facing ${var.current_color}.${var.dns_domain}"
   product_domain   = "EFCMS"
 }
 
 resource "aws_cloudfront_distribution" "public_distribution" {
   origin_group {
-    origin_id = "group.${var.dns_domain}"
+    origin_id = "group-${var.current_color}.${var.dns_domain}"
 
     failover_criteria {
       status_codes = [403, 404, 500, 502, 503, 504]
     }
 
     member {
-      origin_id = "primary.${var.dns_domain}"
+      origin_id = "primary-${var.current_color}.${var.dns_domain}"
     }
 
     member {
-      origin_id = "failover.${var.dns_domain}"
+      origin_id = "failover-${var.current_color}.${var.dns_domain}"
     }
   }
 
   origin {
     domain_name = aws_s3_bucket.frontend_public.website_endpoint
-    origin_id   = "primary.${var.dns_domain}"
+    origin_id   = "primary-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
       http_port              = "80"
@@ -120,14 +117,14 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.dns_domain
+      value = "${var.current_color}.${var.dns_domain}"
     }
   }
 
 
   origin {
     domain_name = aws_s3_bucket.failover_public.website_endpoint
-    origin_id   = "failover.${var.dns_domain}"
+    origin_id   = "failover-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
       http_port              = "80"
@@ -138,7 +135,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.dns_domain
+      value = "${var.current_color}.${var.dns_domain}"
     }
   }
 
@@ -157,14 +154,14 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "group.${var.dns_domain}"
+    target_origin_id       = "group-${var.current_color}.${var.dns_domain}"
     min_ttl                = 0
     default_ttl            = var.cloudfront_default_ttl
     max_ttl                = var.cloudfront_max_ttl
 
     lambda_function_association {
       event_type   = "origin-response"
-      lambda_arn   = aws_lambda_function.header_security_lambda.qualified_arn
+      lambda_arn   = var.header_security_arn
       include_body = false
     }
 
@@ -181,11 +178,11 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     path_pattern     = "/index.html"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "group.${var.dns_domain}"
+    target_origin_id = "group-${var.current_color}.${var.dns_domain}"
 
     lambda_function_association {
       event_type   = "origin-response"
-      lambda_arn   = aws_lambda_function.header_security_lambda.qualified_arn
+      lambda_arn   = var.header_security_arn
       include_body = false
     }
 
@@ -204,7 +201,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-  aliases = [var.dns_domain]
+  aliases = ["${var.current_color}.${var.dns_domain}"]
 
   restrictions {
     geo_restriction {
@@ -214,11 +211,11 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
 
   depends_on = [
-    module.ui-public-certificate.dns_validation
+    module.ui-public-certificate-green.dns_validation
   ]
 
   viewer_certificate {
-    acm_certificate_arn = module.ui-public-certificate.acm_certificate_arn
+    acm_certificate_arn = module.ui-public-certificate-green.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
@@ -229,7 +226,7 @@ data "aws_route53_zone" "public_zone" {
 
 resource "aws_route53_record" "public_www" {
   zone_id = data.aws_route53_zone.public_zone.zone_id
-  name    = var.dns_domain
+  name    = "${var.current_color}.${var.dns_domain}"
   type    = "A"
 
   alias {

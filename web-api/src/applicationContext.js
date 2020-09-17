@@ -992,6 +992,7 @@ const {
 const execPromise = util.promisify(exec);
 
 const environment = {
+  currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
   elasticsearchEndpoint:

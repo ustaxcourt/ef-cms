@@ -25,7 +25,7 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
   handler       = "websockets.connectHandler"
   s3_bucket     = var.lambda_bucket_id
   s3_key        = "websockets_${var.deploying_color}.js.zip"
-  #source_code_hash = data.archive_file.zip_websockets.output_base64sha256
+  source_code_hash = var.websockets_object_hash
   timeout     = "29"
   memory_size = "3008"
 
@@ -44,7 +44,7 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
   handler       = "websockets.disconnectHandler"
   s3_bucket     = var.lambda_bucket_id
   s3_key        = "websockets_${var.deploying_color}.js.zip"
-  #source_code_hash = data.archive_file.zip_websockets.output_base64sha256
+  source_code_hash = var.websockets_object_hash
   timeout     = "29"
   memory_size = "3008"
 
