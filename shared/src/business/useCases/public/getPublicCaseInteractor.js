@@ -31,11 +31,11 @@ exports.getPublicCaseInteractor = async ({
     throw error;
   }
 
-  let caseRecord;
+  let caseRecord = rawCaseRecord;
   if (rawCaseRecord.sealedDate) {
-    caseRecord = caseSealedFormatter(rawCaseRecord);
+    caseRecord = caseSealedFormatter(caseRecord);
   }
-  caseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
+  caseRecord = caseContactAddressSealedFormatter(caseRecord, {});
 
   const publicCaseDetail = new PublicCase(caseRecord, {
     applicationContext,
