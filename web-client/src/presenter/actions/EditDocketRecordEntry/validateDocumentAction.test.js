@@ -16,7 +16,7 @@ describe('validateDocumentAction', () => {
     errorStub = jest.fn();
 
     mockDocument = {
-      description: 'hello world',
+      documentTitle: 'hello world',
       eventCode: 'HELLO',
       filingDate: '1990-01-01T05:00:00.000Z',
       index: 1,

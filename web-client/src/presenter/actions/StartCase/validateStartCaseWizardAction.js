@@ -36,6 +36,7 @@ export const validateStartCaseWizardAction = ({
       'petitionFile',
       'hasIrsNotice',
       'name',
+      'inCareOf',
       'address1',
       'city',
       'state',

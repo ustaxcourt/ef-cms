@@ -164,7 +164,7 @@ describe('migrateCaseInteractor', () => {
           caseMetadata: {
             ...MOCK_CASE,
             docketEntries: [
-              { ...MOCK_CASE.docketEntries[0], documentId: 'invalid' },
+              { ...MOCK_CASE.docketEntries[0], docketEntryId: 'invalid' },
             ],
             docketNumber: 'ABC',
           },
@@ -178,7 +178,7 @@ describe('migrateCaseInteractor', () => {
         "'docketNumber' with value 'ABC' fails to match the required pattern",
       );
       expect(error.message).toContain(
-        "'docketEntries[0].documentId' must be a valid GUID",
+        "'docketEntries[0].docketEntryId' must be a valid GUID",
       );
     });
   });
@@ -446,5 +446,62 @@ describe('migrateCaseInteractor', () => {
         },
       }),
     ).rejects.toThrow('The Case entity was invalid');
+  });
+
+  it('should update all correspondence items on the case', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        correspondence: [
+          {
+            correspondenceId: 'c19A4C0E-7267-4A61-A089-2D063E5AB875',
+            documentTitle: 'Correspondence One',
+            userId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+          },
+          {
+            correspondenceId: 'c29A4C0E-7267-4A61-A089-2D063E5AB875',
+            documentTitle: 'Correspondence Two',
+            userId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+          },
+          {
+            correspondenceId: 'c39A4C0E-7267-4A61-A089-2D063E5AB875',
+            documentTitle: 'Correspondence Three',
+            userId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+          },
+        ],
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence,
+    ).toHaveBeenCalledTimes(3);
+  });
+
+  it('should call updateCase if the case has a leadDocketNumber', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        leadDocketNumber: '123-45',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not call updateCase if the case has no leadDocketNumber', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 });

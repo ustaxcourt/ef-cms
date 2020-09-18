@@ -189,9 +189,9 @@ const helpers = {
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   archiveDraftDocument: {
+    docketEntryId: null,
     // used by the delete draft document modal
     docketNumber: null,
-    documentId: null,
     documentTitle: null,
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
@@ -228,9 +228,10 @@ export const baseState = {
       tab: null,
     },
   },
-  docketRecordIndex: 0,
   // needs its own object because it's present when other forms are on screen
-  documentId: null,
+  docketEntryId: null,
+  docketRecordIndex: 0,
+  draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     isUploading: false,
@@ -245,6 +246,10 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  individualInProgressCount: 0,
+  individualInboxCount: 0,
+  messagesInboxCount: 0,
+  messagesSectionCount: 0,
   modal: {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
@@ -253,7 +258,7 @@ export const baseState = {
   notifications: {},
   openCases: [],
   pdfForSigning: {
-    documentId: null,
+    docketEntryId: null,
     nameForSigning: '',
     pageNumber: 1,
     pdfjsObj: null,
@@ -278,6 +283,7 @@ export const baseState = {
     selectedBatchIndex: 0,
   },
   screenMetadata: {},
+  sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],

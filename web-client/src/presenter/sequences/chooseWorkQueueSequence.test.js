@@ -14,7 +14,7 @@ describe('chooseWorkQueueSequence', () => {
     applicationContext
       .getUseCases()
       .getDocumentQCInboxForSectionInteractor.mockReturnValue([
-        { document: { isFileAttached: true } },
+        { docketEntry: { isFileAttached: true } },
       ]);
     applicationContext
       .getUseCases()

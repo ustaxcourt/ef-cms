@@ -27,7 +27,7 @@ describe('validatePdfInteractor', () => {
           timeEnd: () => null,
         },
       },
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
     const result = await validatePdfInteractor(validParams);
     expect(result).toBeTruthy();
@@ -51,7 +51,7 @@ describe('validatePdfInteractor', () => {
           timeEnd: () => null,
         },
       },
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     let error;

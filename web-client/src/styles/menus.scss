@@ -18,10 +18,16 @@
         width: 16px;
       }
 
-      button {
+      button,
+      &.row-button {
         padding: 0.2rem;
         color: color($theme-color-primary);
         font-weight: $font-semibold;
+
+        &.row-button {
+          margin-top: 0;
+          cursor: pointer;
+        }
 
         &:hover {
           text-decoration: underline;

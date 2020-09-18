@@ -19,7 +19,11 @@ const mutateRecord = async item => {
 
     if (documentRequiresFiledBy && !item.filedBy) {
       const documentToUpdate = new DocketEntry(
-        { ...item, filedBy: DEFAULT_FILED_BY },
+        {
+          ...item,
+          docketEntryId: item.docketEntryId || item.documentId,
+          filedBy: DEFAULT_FILED_BY,
+        },
         { applicationContext },
       )
         .validate()

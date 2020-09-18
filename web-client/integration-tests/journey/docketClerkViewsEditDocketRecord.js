@@ -5,8 +5,8 @@ export const docketClerkViewsEditDocketRecord = test => {
     });
 
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId: test.docketRecordEntry.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: test.docketRecordEntry.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');

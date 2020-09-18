@@ -251,6 +251,7 @@ const PetitionerInformation = connect(
                   <address aria-labelledby="practitioner-label">
                     {practitioner.name && (
                       <AddressDisplay
+                        showEmail
                         contact={{
                           ...practitioner,
                           ...practitioner.contact,
@@ -307,7 +308,7 @@ const PetitionerInformation = connect(
                       </p>
                     )}
 
-                  {practitioner.representingNames.map((item, index) => (
+                  {practitioner.representingFormatted.map((item, index) => (
                     <p key={index}>
                       <span>{item.name}</span>
                       {item.secondaryName && (

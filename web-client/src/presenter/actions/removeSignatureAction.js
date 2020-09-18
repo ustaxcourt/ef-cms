@@ -1,5 +1,5 @@
 /**
- * calls use case to remove signature from the document in props.documentIdToEdit
+ * calls use case to remove signature from the document in props.docketEntryIdToEdit
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -8,19 +8,19 @@
  */
 export const removeSignatureAction = async ({ applicationContext, props }) => {
   const { docketNumber } = props.caseDetail;
-  const documentId = props.documentIdToEdit;
+  const docketEntryId = props.docketEntryIdToEdit;
 
   const updatedCase = await applicationContext
     .getUseCases()
     .removeSignatureFromDocumentInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber,
-      documentId,
     });
 
   return {
     alertSuccess: { message: 'Signature removed.' },
     caseDetail: updatedCase,
-    viewerDraftDocumentToDisplay: { documentId },
+    viewerDraftDocumentToDisplay: { docketEntryId },
   };
 };

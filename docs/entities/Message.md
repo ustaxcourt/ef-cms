@@ -16,6 +16,7 @@
               type: "string"
               flags: 
                 presence: "required"
+                description: "ID of the document attached; can be either a docketEntryId or correspondenceId depending on the type of document."
               rules: 
                 - 
                   name: "min"
@@ -404,6 +405,10 @@
               presence: "optional"
             allow: 
               - null
+    isRead: 
+      type: "boolean"
+      flags: 
+        presence: "required"
     isRepliedTo: 
       type: "boolean"
       flags: 

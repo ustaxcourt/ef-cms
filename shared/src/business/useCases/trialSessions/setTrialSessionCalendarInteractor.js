@@ -7,6 +7,33 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
+ * Removes a manually added case from the trial session
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} caseRecord the case to remove from the trial session
+ * @param {object} trialSessionEntity the trial session to remove the case from
+ * @returns {Promise} the promise of the updateCase call
+ */
+const removeManuallyAddedCaseFromTrialSession = ({
+  applicationContext,
+  caseRecord,
+  trialSessionEntity,
+}) => {
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseRecord.docketNumber,
+  });
+
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
+  caseEntity.removeFromTrialWithAssociatedJudge();
+
+  return applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
+};
+
+/**
  * set trial session calendar
  *
  * @param {object} providers the providers object
@@ -48,6 +75,7 @@ exports.setTrialSessionCalendarInteractor = async ({
     });
 
   const manuallyAddedQcCompleteCases = [];
+  const manuallyAddedQcIncompleteCases = [];
 
   // these cases are already on the caseOrder, so if they have not been QCed we have to remove them
   manuallyAddedCases.forEach(manualCase => {
@@ -57,15 +85,13 @@ exports.setTrialSessionCalendarInteractor = async ({
     ) {
       manuallyAddedQcCompleteCases.push(manualCase);
     } else {
-      trialSessionEntity.deleteCaseFromCalendar({
-        docketNumber: manualCase.docketNumber,
-      });
+      manuallyAddedQcIncompleteCases.push(manualCase);
     }
   });
 
   let eligibleCasesLimit = trialSessionEntity.maxCases;
 
-  if (manuallyAddedQcCompleteCases && manuallyAddedQcCompleteCases.length > 0) {
+  if (manuallyAddedQcCompleteCases.length > 0) {
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
   }
 
@@ -141,6 +167,13 @@ exports.setTrialSessionCalendarInteractor = async ({
   };
 
   await Promise.all([
+    ...manuallyAddedQcIncompleteCases.map(caseRecord =>
+      removeManuallyAddedCaseFromTrialSession({
+        applicationContext,
+        caseRecord,
+        trialSessionEntity,
+      }),
+    ),
     ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
     ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
   ]);

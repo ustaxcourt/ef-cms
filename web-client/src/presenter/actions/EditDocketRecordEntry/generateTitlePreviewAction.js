@@ -14,9 +14,9 @@ export const generateTitlePreviewAction = ({
 }) => {
   const documentMetadata = get(state.form);
 
-  const formattedDocument = applicationContext
+  const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, documentMetadata);
+    .formatDocketEntry(applicationContext, documentMetadata);
 
   let updatedDocumentTitle = applicationContext
     .getUseCases()
@@ -25,20 +25,20 @@ export const generateTitlePreviewAction = ({
       documentMetadata,
     });
 
-  if (formattedDocument.additionalInfo) {
-    updatedDocumentTitle += ` ${formattedDocument.additionalInfo}`;
+  if (formattedDocketEntry.additionalInfo) {
+    updatedDocumentTitle += ` ${formattedDocketEntry.additionalInfo}`;
   }
 
   const filingsAndProceedings = applicationContext
     .getUtilities()
-    .getFilingsAndProceedings(formattedDocument);
+    .getFilingsAndProceedings(formattedDocketEntry);
 
   if (filingsAndProceedings) {
     updatedDocumentTitle += ` ${filingsAndProceedings}`;
   }
 
-  if (formattedDocument.additionalInfo2) {
-    updatedDocumentTitle += ` ${formattedDocument.additionalInfo2}`;
+  if (formattedDocketEntry.additionalInfo2) {
+    updatedDocumentTitle += ` ${formattedDocketEntry.additionalInfo2}`;
   }
 
   store.set(state.screenMetadata.documentTitlePreview, updatedDocumentTitle);

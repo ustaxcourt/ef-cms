@@ -6,13 +6,14 @@ export const workQueueHelper = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { USER_ROLES } = applicationContext.getConstants();
   const isJudge = user.role === USER_ROLES.judge;
-  const { qcUnreadCount } = get(state.notifications);
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
+  const individualInboxCount = get(state.individualInboxCount);
+  const individualInProgressCount = get(state.individualInProgressCount);
   const sectionInboxCount = get(state.sectionInboxCount);
-  const myUnreadCount = qcUnreadCount;
+  const sectionInProgressCount = get(state.sectionInProgressCount);
   const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
@@ -37,8 +38,11 @@ export const workQueueHelper = (get, applicationContext) => {
     hideCaseStatusColumn: userIsPetitionsClerk,
     hideFiledByColumn: !userIsDocketClerk,
     hideIconColumn: userIsOther,
-    inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    individualInProgressCount,
+    individualInboxCount,
     outboxFiledByColumnLabel,
+    sectionInProgressCount,
+    sectionInboxCount,
     sentTitle: userIsDocketClerk ? 'Processed' : 'Served',
     showAssignedToColumn:
       !showIndividualWorkQueue && (showInbox || showInProgress) && !userIsOther,

@@ -1,11 +1,11 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openConfirmServeCourtIssuedDocumentSequence = [
   setRedirectUrlAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   clearModalStateAction,
   setShowModalFactoryAction('ConfirmInitiateCourtIssuedDocumentServiceModal'),
 ];

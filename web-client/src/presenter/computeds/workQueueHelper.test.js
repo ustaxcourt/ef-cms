@@ -30,9 +30,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [true],
         workQueueToDisplay: { box: 'inbox', queue: 'section' },
       },
@@ -55,9 +52,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -80,9 +74,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'my',
@@ -102,9 +93,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
@@ -124,9 +112,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           queue: 'section',
@@ -146,9 +131,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -166,9 +148,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -186,9 +165,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -204,9 +180,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -222,9 +195,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -240,9 +210,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
@@ -258,9 +225,6 @@ describe('workQueueHelper', () => {
     const result = runCompute(workQueueHelper, {
       state: {
         ...getBaseState(user),
-        notifications: {
-          qcUnreadCount: 0,
-        },
         selectedWorkItems: [],
         workQueueToDisplay: {
           box: 'inProgress',
@@ -271,5 +235,69 @@ describe('workQueueHelper', () => {
 
     expect(result.showProcessedByColumn).toEqual(true);
     expect(result.showInProgressTab).toEqual(true);
+  });
+
+  it('returns the individualInboxCount for the work queue based on the value of state.individualInboxCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        individualInboxCount: 3,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.individualInboxCount).toBe(3);
+  });
+
+  it('returns the individualInProgressCount for the work queue based on the value of state.individualInProgressCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        individualInProgressCount: 10,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.individualInProgressCount).toBe(10);
+  });
+
+  it('returns the sectionInboxCount for the work queue based on the value of state.sectionInboxCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        sectionInboxCount: 3,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.sectionInboxCount).toBe(3);
+  });
+
+  it('returns the sectionInProgressCount for the work queue based on the value of state.sectionInProgressCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        sectionInProgressCount: 10,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.sectionInProgressCount).toBe(10);
   });
 });

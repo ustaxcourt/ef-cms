@@ -9,8 +9,8 @@ import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { parallel } from 'cerebral/factories';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
-import { setSectionInboxCountAction } from '../actions/setSectionInboxCountAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
+import { setWorkItemsCountAction } from '../actions/setWorkItemsCountAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const chooseWorkQueueSequence = showProgressSequenceDecorator([
@@ -18,37 +18,18 @@ export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   getJudgeForCurrentUserAction,
   setJudgeUserAction,
   parallel([
-    [getNotificationsAction, setNotificationsAction],
+    [getNotificationsAction, setNotificationsAction, setWorkItemsCountAction],
     [
       chooseWorkQueueAction,
       {
-        documentqcmyinProgress: [
-          getDocumentQCInboxForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcmyinbox: [
-          getDocumentQCInboxForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcmyoutbox: [
-          getDocumentQCServedForUserAction,
-          setWorkItemsAction,
-        ],
-        documentqcsectioninProgress: [
-          getDocumentQCInboxForSectionAction,
-          setWorkItemsAction,
-          setSectionInboxCountAction,
-        ],
-        documentqcsectioninbox: [
-          getDocumentQCInboxForSectionAction,
-          setWorkItemsAction,
-          setSectionInboxCountAction,
-        ],
-        documentqcsectionoutbox: [
-          getDocumentQCServedForSectionAction,
-          setWorkItemsAction,
-        ],
+        documentqcmyinProgress: [getDocumentQCInboxForUserAction],
+        documentqcmyinbox: [getDocumentQCInboxForUserAction],
+        documentqcmyoutbox: [getDocumentQCServedForUserAction],
+        documentqcsectioninProgress: [getDocumentQCInboxForSectionAction],
+        documentqcsectioninbox: [getDocumentQCInboxForSectionAction],
+        documentqcsectionoutbox: [getDocumentQCServedForSectionAction],
       },
+      setWorkItemsAction,
     ],
   ]),
 ]);

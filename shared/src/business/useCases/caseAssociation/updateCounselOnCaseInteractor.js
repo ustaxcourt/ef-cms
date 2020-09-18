@@ -2,8 +2,11 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -55,6 +58,14 @@ exports.updateCounselOnCaseInteractor = async ({
       userId,
       ...editableFields,
     });
+    if (userData.representingPrimary) {
+      caseEntity.contactPrimary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
+    if (caseEntity.contactSecondary && userData.representingSecondary) {
+      caseEntity.contactSecondary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
   } else if (userToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
       userId,

@@ -22,8 +22,15 @@ const generatePolicy = (principalId, effect, resource) => {
   return authResponse;
 };
 
-const verify = (methodArn, token, keys, kid, cb) => {
+const verify = (methodArn, token, keys, kid, iss, cb) => {
   const k = keys.keys.find(k => k.kid === kid);
+
+  if (!k) {
+    throw new Error(
+      `The key used to sign the authorization token '${kid}' was not found in user pool keys '${iss}/.well-known/jwks.json'.`,
+    );
+  }
+
   const pem = jwkToPem(k);
 
   jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
@@ -43,7 +50,7 @@ const verify = (methodArn, token, keys, kid, cb) => {
   });
 };
 
-let keys;
+let keyCache = {};
 
 exports.handler = (event, context, cb) => {
   console.log('Auth function invoked');
@@ -59,8 +66,8 @@ exports.handler = (event, context, cb) => {
     const { header, payload } = jwk.decode(requestToken, { complete: true });
     const { iss } = payload;
     const { kid } = header;
-    if (keys) {
-      verify(event.methodArn, requestToken, keys, kid, cb);
+    if (keyCache[iss]) {
+      verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
     } else {
       request(
         { json: true, url: `${iss}/.well-known/jwks.json` },
@@ -69,8 +76,8 @@ exports.handler = (event, context, cb) => {
             console.log('Request error:', error);
             cb('Unauthorized');
           }
-          keys = body;
-          verify(event.methodArn, requestToken, keys, kid, cb);
+          keyCache[iss] = body;
+          verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
         },
       );
     }

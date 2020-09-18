@@ -108,4 +108,14 @@ describe('getIndexNameForRecord', () => {
 
     expect(result).toEqual('efcms-user-case');
   });
+
+  it('returns efcms-case for unmarshalled Case record', () => {
+    const record = {
+      entityName: 'Case',
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-case');
+  });
 });

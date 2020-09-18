@@ -74,7 +74,7 @@ export const CaseDetailPendingReportList = connect(
                     icon="trash"
                     onClick={() =>
                       openConfirmRemoveCaseDetailPendingItemModalSequence({
-                        documentId: entry.documentId,
+                        docketEntryId: entry.docketEntryId,
                       })
                     }
                   >

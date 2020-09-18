@@ -5,8 +5,8 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setDocumentToFormAction } from '../actions/editUploadCourtIssuedDocument/setDocumentToFormAction';
+import { setDocketEntryIdFromCorrespondenceAction } from '../actions/setDocketEntryIdFromCorrespondenceAction';
+import { setDocumentToFormFromCorrespondenceAction } from '../actions/editUploadCourtIssuedDocument/setDocumentToFormFromCorrespondenceAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
@@ -17,8 +17,8 @@ const gotoEditCorrespondenceDocument = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  setDocumentIdAction,
-  setDocumentToFormAction,
+  setDocketEntryIdFromCorrespondenceAction,
+  setDocumentToFormFromCorrespondenceAction,
   setRedirectUrlAction,
   setCurrentPageAction('EditCorrespondenceDocument'),
 ];

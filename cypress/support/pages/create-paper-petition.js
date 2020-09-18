@@ -1,6 +1,10 @@
-exports.fillInCreateCaseFromPaperForm = () => {
+exports.fillInCreateCaseFromPaperForm = testData => {
+  const petitionerName = 'Wile e Coyote';
   cy.get('#party-type').select('Petitioner');
-  cy.get('#name').type('Wile e Coyote');
+  cy.get('#name').type(petitionerName);
+  if (testData) {
+    testData.testPetitionerName = petitionerName;
+  }
   cy.get('input[name="contactPrimary.address1"]').type('123 Roadrunner Lane');
   cy.get('input[name="contactPrimary.city"]').type('Nowhere');
   cy.get('select[name="contactPrimary.state"]').select('WA');

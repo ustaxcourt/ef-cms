@@ -10,6 +10,9 @@ const { PETITIONS_SECTION } = applicationContext.getConstants();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
+  expect(test.getState('messagesSectionCount')).toBe(0);
+  expect(test.getState('messagesInboxCount')).toBe(0);
+
   const getHelper = () => {
     return runCompute(messageModalHelper, {
       state: test.getState(),
@@ -34,10 +37,10 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
     });
 
     const messageDocument = getHelper().documents[0];
-    test.testMessageDocumentId = messageDocument.documentId;
+    test.testMessageDocumentId = messageDocument.docketEntryId;
 
     await test.runSequence('updateMessageModalAttachmentsSequence', {
-      documentId: messageDocument.documentId,
+      documentId: test.testMessageDocumentId,
     });
 
     expect(test.getState('modal.form.subject')).toEqual(
@@ -48,7 +51,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
     for (let i = 0; i < 4; i++) {
       // currently doesn't matter if we add the same document over and over
       await test.runSequence('updateMessageModalAttachmentsSequence', {
-        documentId: messageDocument.documentId,
+        documentId: test.testMessageDocumentId,
       });
     }
 

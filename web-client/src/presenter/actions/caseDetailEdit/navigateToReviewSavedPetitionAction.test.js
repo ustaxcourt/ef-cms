@@ -20,7 +20,7 @@ describe('navigateToReviewSavedPetitionAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '123-20' },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
 

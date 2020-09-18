@@ -7,6 +7,14 @@
   * In Progress  - oldest to newest by Filed date
   * Processed  - newest to oldest by Filed date
 
+
+* Document QC Inbox
+  * Total documents in Inbox is displayed in inbox tab label: “Inbox (#)”
+
+* Document QC In Progress
+  * Total documents in In Progress is displayed in inbox tab label: “In Progress (#)”
+
+
 ### QC Icons
 
 #### QC Icons

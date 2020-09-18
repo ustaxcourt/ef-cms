@@ -19,7 +19,7 @@ import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAct
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -57,7 +57,7 @@ const caseDetailOrPrintPaperService = [
 const afterEntrySaved = [
   setCaseAction,
   closeFileUploadStatusModalAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   getIsSavingForLaterAction,
   {
     no: [completeDocketEntryQCAction, caseDetailOrPrintPaperService],
