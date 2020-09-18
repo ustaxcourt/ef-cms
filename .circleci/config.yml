@@ -695,6 +695,9 @@ workflows:
       - smoketests:
           requires:
             - deploy
+      - switch-colors:
+          requires:
+            - smoketests
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -752,6 +755,22 @@ workflows:
             branches:
               only:
                 - staging
+                - experimental1
+                - experimental2
+      - switch-colors:
+          requires:
+            - smoketests
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - test
+                - migration
+                - master
+                - experimental1
+                - experimental2
+                - dawson
 
   build-and-deploy-with-context:
     jobs:
