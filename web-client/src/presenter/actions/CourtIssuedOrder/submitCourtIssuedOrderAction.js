@@ -13,6 +13,7 @@ export const submitCourtIssuedOrderAction = async ({
   applicationContext,
   get,
   props,
+  store,
 }) => {
   let caseDetail;
   const { docketNumber } = get(state.caseDetail);
@@ -60,15 +61,12 @@ export const submitCourtIssuedOrderAction = async ({
       });
   }
 
-  const viewerDraftDocumentToDisplay = caseDetail.docketEntries.find(
-    entry => entry.docketEntryId === docketEntryId && entry.isDraft,
-  );
+  store.set(state.draftDocumentViewerDocketEntryId, docketEntryId);
 
   return {
     caseDetail,
     docketEntryId,
     docketNumber,
     eventCode: documentMetadata.eventCode,
-    viewerDraftDocumentToDisplay,
   };
 };
