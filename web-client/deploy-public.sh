@@ -7,9 +7,9 @@
 ./web-client/build-dist-public.sh $ENV $CURRENT_COLOR
 
 # public app
-aws s3 sync dist-public s3://${CURRENT_COLOR}.${EFCMS_DOMAIN} --delete
-aws s3 cp s3://${CURRENT_COLOR}.${EFCMS_DOMAIN}/index.html s3://${CURRENT_COLOR}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
+aws s3 sync dist-public s3://${CURRENT_COLOR}-${EFCMS_DOMAIN} --delete
+aws s3 cp s3://${CURRENT_COLOR}-${EFCMS_DOMAIN}/index.html s3://${CURRENT_COLOR}-${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
 
 # failover
-aws s3 sync dist-public s3://failover-${CURRENT_COLOR}.${EFCMS_DOMAIN} --delete --cache-control no-cache
-aws s3 cp s3://failover-${CURRENT_COLOR}.${EFCMS_DOMAIN}/index.html s3://failover-${CURRENT_COLOR}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
+aws s3 sync dist-public s3://failover-${CURRENT_COLOR}-${EFCMS_DOMAIN} --delete --cache-control no-cache
+aws s3 cp s3://failover-${CURRENT_COLOR}-${EFCMS_DOMAIN}/index.html s3://failover-${CURRENT_COLOR}-${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0

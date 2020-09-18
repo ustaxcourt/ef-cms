@@ -28,3 +28,6 @@ variable "header_security_arn" {
   type = string
 }
 
+variable "certificate" {
+  type = any
+}
