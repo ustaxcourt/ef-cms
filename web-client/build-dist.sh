@@ -1,16 +1,16 @@
 #!/bin/bash -e
 
 ENV=$1
-CURRENT_COLOR=$2
+DEPLOYING_COLOR=$2
 
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${ENV}" ] && echo 'You must pass ENV as argument $1' && exit 1
-[ -z "${CURRENT_COLOR}" ] && echo 'You must pass CURRENT_COLOR as argument $2' && exit 1
+[ -z "${DEPLOYING_COLOR}" ] && echo 'You must pass DEPLOYING_COLOR as argument $2' && exit 1
 
 
 REGION="us-east-1"
-API_URL="https://api-${CURRENT_COLOR}.${EFCMS_DOMAIN}"
-WS_URL="wss://ws-${CURRENT_COLOR}.${EFCMS_DOMAIN}"
+API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+WS_URL="wss://ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 COGNITO_REDIRECT_URL="https%3A//app.${EFCMS_DOMAIN}/log-in"
 COGNITO_REDIRECT_URI="https://app.${EFCMS_DOMAIN}/log-in"
 
