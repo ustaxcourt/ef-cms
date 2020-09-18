@@ -23,15 +23,13 @@ const run = async () => {
 
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias =>
-        alias === `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+      alias => alias === `${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
     ),
   );
 
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias =>
-        alias === `app-${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+      alias => alias === `${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
     ),
   );
 
@@ -48,14 +46,14 @@ const run = async () => {
     .promise();
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
-    `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+    `${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
   ];
   currentColorConfig.DistributionConfig.Aliases.Quantity = 1;
 
   deployingColorConfig.DistributionConfig.Aliases.Quantity = 2;
   deployingColorConfig.DistributionConfig.Aliases.Items = [
-    `app-${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
-    `app-${ENV}.ustc-case-mgmt.flexion.us`,
+    `${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+    `${ENV}.ustc-case-mgmt.flexion.us`,
   ];
 
   await cloudfront
@@ -92,12 +90,12 @@ const run = async () => {
                 EvaluateTargetHealth: false,
                 HostedZoneId: 'Z2FDTNDATAQYW2', // this magic number is the zone for all cloud front distributions on AWS
               },
-              Name: `app-${ENV}.ustc-case-mgmt.flexion.us`,
+              Name: `${ENV}.ustc-case-mgmt.flexion.us`,
               Type: 'A',
             },
           },
         ],
-        Comment: `The UI for app-${ENV}.ustc-case-mgmt.flexion.us`,
+        Comment: `The UI for ${ENV}.ustc-case-mgmt.flexion.us`,
       },
       HostedZoneId: zoneId,
     })

@@ -1,5 +1,13 @@
 #!/bin/bash -e
+
 ENV=$1
+CURRENT_COLOR=$2
+
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${ENV}" ] && echo 'You must pass ENV as argument $1' && exit 1
+[ -z "${CURRENT_COLOR}" ] && echo 'You must pass CURRENT_COLOR as argument $2' && exit 1
+
+
 REGION="us-east-1"
 API_URL="https://api-${CURRENT_COLOR}.${EFCMS_DOMAIN}"
 WS_URL="wss://ws-${CURRENT_COLOR}.${EFCMS_DOMAIN}"
