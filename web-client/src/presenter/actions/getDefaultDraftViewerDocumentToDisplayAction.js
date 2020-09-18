@@ -15,8 +15,7 @@ export const getDefaultDraftViewerDocumentToDisplayAction = ({
   get,
   props,
 }) => {
-  const docketEntryId =
-    get(state.draftDocumentViewerDocketEntryId) || props.docketEntryId;
+  const { draftDocketEntryId } = props;
 
   let viewerDraftDocumentToDisplay = null;
   const caseDetail = get(state.caseDetail);
@@ -25,9 +24,9 @@ export const getDefaultDraftViewerDocumentToDisplayAction = ({
     .getUtilities()
     .formatCase(applicationContext, cloneDeep(caseDetail));
 
-  if (docketEntryId) {
+  if (draftDocketEntryId) {
     viewerDraftDocumentToDisplay = draftDocuments.find(
-      d => d.docketEntryId === docketEntryId,
+      d => d.docketEntryId === draftDocketEntryId,
     );
   } else {
     viewerDraftDocumentToDisplay = draftDocuments[0];
