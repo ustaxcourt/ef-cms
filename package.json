@@ -18,7 +18,7 @@
     "@hapi/joi-date": "^2.0.1",
     "archiver": "3.1.1",
     "autoprefixer": "^9.8.6",
-    "aws-sdk": "^2.755.0",
+    "aws-sdk": "^2.756.0",
     "aws-sdk-mock": "^5.0.0",
     "aws-serverless-express": "^3.3.8",
     "axios": "^0.19.2",
