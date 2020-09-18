@@ -734,9 +734,12 @@ workflows:
       - deploy:
           requires:
             - build-client-coverage
-      - smoketests:
+      - migrate:
           requires:
             - deploy
+      - smoketests:
+          requires:
+            - migrate
       - switch-colors:
           requires:
             - smoketests
@@ -790,9 +793,18 @@ workflows:
                 - experimental1
                 - experimental2
                 - dawson
-      - smoketests:
+      - migrate:
           requires:
             - deploy
+          filters:
+            branches:
+              only:
+                - staging
+                - experimental1
+                - experimental2
+      - smoketests:
+          requires:
+            - migrate
           filters:
             branches:
               only:
