@@ -489,7 +489,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export IRS_SUPERUSER_EMAIL=$(./get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -608,7 +609,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
@@ -641,7 +643,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
