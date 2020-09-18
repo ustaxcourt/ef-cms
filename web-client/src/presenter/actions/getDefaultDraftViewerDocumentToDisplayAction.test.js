@@ -65,7 +65,41 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns the correct document if props.docketEntryId is set', async () => {
+  it('returns the correct document when state.draftDocumentViewerDocketEntryId is set', async () => {
+    const result = await runAction(
+      getDefaultDraftViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            draftDocuments: [
+              {
+                docketEntryId: '123',
+                documentType: 'Petition',
+              },
+              {
+                docketEntryId: '123456',
+                documentType: 'Order',
+              },
+              {
+                docketEntryId: '345',
+                documentType: 'Notice',
+                isDraft: true,
+              },
+            ],
+          },
+          draftDocumentViewerDocketEntryId: '123456',
+        },
+      },
+    );
+    expect(result.output).toMatchObject({
+      viewerDraftDocumentToDisplay: { docketEntryId: '123456' },
+    });
+  });
+
+  it('returns the correct document when state.draftDocumentViewerDocketEntryId is not set and props.docketEntryId is set', async () => {
     const result = await runAction(
       getDefaultDraftViewerDocumentToDisplayAction,
       {
@@ -96,44 +130,6 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
     );
     expect(result.output).toMatchObject({
       viewerDraftDocumentToDisplay: { docketEntryId: '345' },
-    });
-  });
-
-  it('returns the correct document if props.docketEntryId is not set and state.viwerDraftDOcumentToDisplay is set', async () => {
-    const result = await runAction(
-      getDefaultDraftViewerDocumentToDisplayAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {},
-        state: {
-          caseDetail: {
-            docketEntries: [
-              {
-                docketEntryId: '123',
-                documentType: 'Petition',
-              },
-              {
-                docketEntryId: '234',
-                documentType: 'Order',
-              },
-              {
-                docketEntryId: '345',
-                documentType: 'Notice',
-                isDraft: true,
-              },
-            ],
-          },
-          viewerDraftDocumentToDisplay: {
-            docketEntryId: '234',
-            documentType: 'Order',
-          },
-        },
-      },
-    );
-    expect(result.output).toMatchObject({
-      viewerDraftDocumentToDisplay: { docketEntryId: '234' },
     });
   });
 });

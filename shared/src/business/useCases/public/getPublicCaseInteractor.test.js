@@ -29,6 +29,10 @@ describe('getPublicCaseInteractor', () => {
   });
 
   it('Should return a Not Found error if the case does not exist', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({ archivedCorrespondences: [] });
+
     await expect(
       getPublicCaseInteractor({
         applicationContext,
@@ -65,7 +69,7 @@ describe('getPublicCaseInteractor', () => {
     });
 
     expect(result).toMatchObject({
-      docketNumber: '102-20',
+      docketNumber,
     });
   });
 
