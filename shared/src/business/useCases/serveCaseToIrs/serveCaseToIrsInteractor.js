@@ -224,14 +224,18 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
 
-  for (const doc of caseEntity.docketEntries) {
+  const caseWithServedDocketEntryInformation = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({ applicationContext, caseToUpdate: caseEntity });
+
+  for (const doc of caseWithServedDocketEntryInformation.docketEntries) {
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
         docketEntryId: doc.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        replaceCoversheet: !caseEntity.isPaper,
-        useInitialData: !caseEntity.isPaper,
+        docketNumber: caseWithServedDocketEntryInformation.docketNumber,
+        replaceCoversheet: !caseWithServedDocketEntryInformation.isPaper,
+        useInitialData: !caseWithServedDocketEntryInformation.isPaper,
       });
 
       doc.numberOfPages = await applicationContext
@@ -243,14 +247,21 @@ exports.serveCaseToIrsInteractor = async ({
     }
   }
 
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
-  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
+    caseWithServedDocketEntryInformation,
+  );
+  const {
+    docketNumberWithSuffix,
+    preferredTrialCity,
+    receivedAt,
+  } = caseWithServedDocketEntryInformation;
 
   const address = {
-    ...caseEntity.contactPrimary,
+    ...caseWithServedDocketEntryInformation.contactPrimary,
     countryName:
-      caseEntity.contactPrimary.countryType !== COUNTRY_TYPES.DOMESTIC
-        ? caseEntity.contactPrimary.country
+      caseWithServedDocketEntryInformation.contactPrimary.countryType !==
+      COUNTRY_TYPES.DOMESTIC
+        ? caseWithServedDocketEntryInformation.contactPrimary.country
         : '',
   };
 
@@ -269,11 +280,14 @@ exports.serveCaseToIrsInteractor = async ({
           .formatDateString(receivedAt, 'MMMM D, YYYY'),
         servedDate: applicationContext
           .getUtilities()
-          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+          .formatDateString(
+            caseWithServedDocketEntryInformation.getIrsSendDate(),
+            'MMMM D, YYYY',
+          ),
       },
     });
 
-  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
+  const caseConfirmationPdfName = caseWithServedDocketEntryInformation.getCaseConfirmationGeneratedPdfFileName();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -291,8 +305,8 @@ exports.serveCaseToIrsInteractor = async ({
 
   let urlToReturn;
 
-  if (caseEntity.isPaper) {
-    addDocketEntries({ caseEntity });
+  if (caseWithServedDocketEntryInformation.isPaper) {
+    addDocketEntries({ caseEntity: caseWithServedDocketEntryInformation });
 
     ({
       url: urlToReturn,
@@ -305,7 +319,7 @@ exports.serveCaseToIrsInteractor = async ({
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseWithServedDocketEntryInformation.validate().toRawObject(),
   });
 
   return urlToReturn;
