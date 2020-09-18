@@ -251,7 +251,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     lambda_function_association {
       event_type   = "origin-request"
-      lambda_arn   = aws_lambda_function.strip_basepath_lambda.qualified_arn
+      lambda_arn   = var.strip_basepath_arn
       include_body = false
     }
 
@@ -277,7 +277,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     lambda_function_association {
       event_type   = "origin-request"
-      lambda_arn   = aws_lambda_function.strip_basepath_lambda.qualified_arn
+      lambda_arn   = var.strip_basepath_arn
       include_body = false
     }
 
