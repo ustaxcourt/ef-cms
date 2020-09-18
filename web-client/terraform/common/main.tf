@@ -27,6 +27,7 @@ module "ui-green" {
   cloudfront_default_ttl = var.cloudfront_default_ttl
   zone_name              = var.zone_name
   header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
+  strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   certificate            = module.ui-public-certificate
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -43,6 +44,7 @@ module "ui-blue" {
   cloudfront_default_ttl = var.cloudfront_default_ttl
   zone_name              = var.zone_name
   header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
+  strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   certificate            = module.ui-public-certificate
   providers = {
     aws.us-east-1 = aws.us-east-1
