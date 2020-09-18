@@ -18,7 +18,6 @@ module "ui-public-certificate" {
   product_domain   = "EFCMS"
 }
 
-
 module "ui-green" {
   source                 = "../ui"
   current_color          = "green"
