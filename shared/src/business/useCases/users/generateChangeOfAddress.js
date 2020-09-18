@@ -132,14 +132,13 @@ exports.generateChangeOfAddress = async ({
             },
           });
 
-        const newDocumentId = applicationContext.getUniqueId();
+        const newDocketEntryId = applicationContext.getUniqueId();
 
         const documentData = {
           addToCoversheet: true,
           additionalInfo: `for ${name}`,
-          description: documentType.title,
+          docketEntryId: newDocketEntryId,
           docketNumber: caseEntity.docketNumber,
-          documentId: newDocumentId,
           documentTitle: documentType.title,
           documentType: documentType.title,
           eventCode: documentType.eventCode,
@@ -171,7 +170,7 @@ exports.generateChangeOfAddress = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocketEntry,
+          docketEntryEntity: changeOfAddressDocketEntry,
           servedParties,
         });
 
@@ -183,12 +182,12 @@ exports.generateChangeOfAddress = async ({
             caseIsInProgress: caseEntity.inProgress,
             caseStatus: caseEntity.status,
             caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-            docketNumber: caseEntity.docketNumber,
-            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-            document: {
+            docketEntry: {
               ...changeOfAddressDocketEntry.toRawObject(),
               createdAt: changeOfAddressDocketEntry.createdAt,
             },
+            docketNumber: caseEntity.docketNumber,
+            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
             section: DOCKET_SECTION,
             sentBy: user.name,
             sentByUserId: user.userId,
@@ -203,7 +202,7 @@ exports.generateChangeOfAddress = async ({
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
           caseEntity,
-          documentEntity: changeOfAddressDocketEntry,
+          docketEntryEntity: changeOfAddressDocketEntry,
           pdfData: changeOfAddressPdf,
         });
 
@@ -212,9 +211,15 @@ exports.generateChangeOfAddress = async ({
           .saveDocumentFromLambda({
             applicationContext,
             document: changeOfAddressPdfWithCover,
-            documentId: newDocumentId,
+            key: newDocketEntryId,
           });
 
+        changeOfAddressDocketEntry.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+          });
         await applicationContext
           .getPersistenceGateway()
           .saveWorkItemForNonPaper({

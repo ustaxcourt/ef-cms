@@ -55,16 +55,16 @@ export const TodaysOpinions = connect(
                     <td>
                       <Button
                         link
-                        aria-label={`View PDF: ${opinion.description}`}
+                        aria-label={`View PDF: ${opinion.descriptionDisplay}`}
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
+                            docketEntryId: opinion.docketEntryId,
                             docketNumber: opinion.docketNumber,
-                            documentId: opinion.documentId,
                             isPublic: true,
                           });
                         }}
                       >
-                        {opinion.formattedDocumentType}
+                        {opinion.documentType}
                       </Button>
                     </td>
                     <td>{opinion.numberOfPages}</td>

@@ -11,8 +11,8 @@ export const docketClerkNavigatesToEditCorrespondence = (
       );
 
     await test.runSequence('gotoEditCorrespondenceDocumentSequence', {
+      correspondenceId: test.correspondenceDocument.correspondenceId,
       docketNumber: test.docketNumber,
-      documentId: test.correspondenceDocument.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('EditCorrespondenceDocument');

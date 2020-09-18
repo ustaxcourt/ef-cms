@@ -1,6 +1,26 @@
 import { find, includes, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
+const setDocumentPropsFromFormAndBaseDocument = ({
+  applicationContext,
+  eventCode,
+  formProperties,
+  propertyList,
+}) => {
+  let entry;
+  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
+
+  find(
+    INTERNAL_CATEGORY_MAP,
+    entries => (entry = find(entries, { eventCode })),
+  );
+
+  return {
+    ...omit(formProperties, propertyList),
+    ...pick(entry || {}, propertyList),
+  };
+};
+
 /**
  * clears data in the state.form based on which field is being updated
  *
@@ -17,29 +37,19 @@ export const updateDocketEntryWizardDataAction = ({
   props,
   store,
 }) => {
-  const {
-    DOCUMENT_RELATIONSHIPS,
-    INTERNAL_CATEGORY_MAP,
-  } = applicationContext.getConstants();
-  let entry, form;
+  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
+  let form;
   let supporting = get(state.screenMetadata.supporting);
-  const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
-
-  const updateBaseDocumentProps = eventCode => {
-    find(
-      INTERNAL_CATEGORY_MAP,
-      entries => (entry = find(entries, { eventCode })),
-    );
-    form = {
-      ...omit(get(state.form), ENTRY_PROPS),
-      ...pick(entry || {}, ENTRY_PROPS),
-    };
-    store.set(state.form, form);
-  };
 
   switch (props.key) {
     case 'initEventCode':
-      updateBaseDocumentProps(props.value);
+      form = setDocumentPropsFromFormAndBaseDocument({
+        applicationContext,
+        eventCode: props.value,
+        formProperties: get(state.form),
+        propertyList: ['category', 'documentType', 'scenario'],
+      });
+      store.set(state.form, form);
       break;
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
@@ -48,17 +58,25 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.certificateOfServiceYear);
       break;
     case 'eventCode':
-      updateBaseDocumentProps(props.value);
+      form = setDocumentPropsFromFormAndBaseDocument({
+        applicationContext,
+        eventCode: props.value,
+        formProperties: get(state.form),
+        propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
+      });
+      store.set(state.form, form);
       if (!supporting) {
         store.unset(state.form.previousDocument);
       } else {
         //if there is only one previously selected doc, default that selection on the form
-        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
-        if (filedDocumentIds.length === 1) {
+        const filedDocketEntryIds = get(
+          state.screenMetadata.filedDocketEntryIds,
+        );
+        if (filedDocketEntryIds.length === 1) {
           const caseDetail = get(state.caseDetail);
 
           const previousDocument = find(caseDetail.docketEntries, doc =>
-            includes(filedDocumentIds, doc.documentId),
+            includes(filedDocketEntryIds, doc.docketEntryId),
           );
           if (previousDocument) {
             store.set(state.form.previousDocument, previousDocument);
@@ -76,14 +94,12 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.pending);
       break;
     case 'secondaryDocument.eventCode':
-      find(
-        INTERNAL_CATEGORY_MAP,
-        entries => (entry = find(entries, { eventCode: props.value })),
-      );
-      form = {
-        ...omit(get(state.form.secondaryDocument), ENTRY_PROPS),
-        ...pick(entry || {}, ENTRY_PROPS),
-      };
+      form = setDocumentPropsFromFormAndBaseDocument({
+        applicationContext,
+        eventCode: props.value,
+        formProperties: get(state.form.secondaryDocument),
+        propertyList: ['category', 'documentType', 'documentTitle', 'scenario'],
+      });
       store.set(state.form.secondaryDocument, form);
       store.unset(state.form.secondaryDocument.previousDocument);
       store.unset(state.form.secondaryDocument.serviceDate);
@@ -107,14 +123,16 @@ export const updateDocketEntryWizardDataAction = ({
 
         //restore previous doc data from screenMetadata onto form
         const caseDetail = get(state.caseDetail);
-        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
+        const filedDocketEntryIds = get(
+          state.screenMetadata.filedDocketEntryIds,
+        );
 
         const previousDocument =
           props.value &&
           find(
             caseDetail.docketEntries,
             doc =>
-              includes(filedDocumentIds, doc.documentId) &&
+              includes(filedDocketEntryIds, doc.docketEntryId) &&
               (doc.documentTitle || doc.documentType) === props.value,
           );
         if (previousDocument.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY) {

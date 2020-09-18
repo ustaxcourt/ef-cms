@@ -37,21 +37,21 @@ export const EditDocketEntryMetaFormNoDocument = connect(
           onChange={updateFormValueSequence}
         />
 
-        <FormGroup errorText={validationErrors.description}>
+        <FormGroup errorText={validationErrors.documentTitle}>
           <label
             className="usa-label"
-            htmlFor="description"
-            id="description-label"
+            htmlFor="documentTitle"
+            id="documentTitle-label"
           >
             Filings and proceedings
           </label>
           <input
-            aria-describedby="description-label"
+            aria-describedby="documentTitle-label"
             className="usa-input"
-            id="description"
-            name="description"
+            id="documentTitle"
+            name="documentTitle"
             type="text"
-            value={form.description || ''}
+            value={form.documentTitle || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,

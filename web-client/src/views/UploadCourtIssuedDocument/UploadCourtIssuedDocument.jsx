@@ -131,6 +131,7 @@ export const UploadCourtIssuedDocument = connect(
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
                 <Button
+                  id="save-uploaded-pdf-button"
                   onClick={() => {
                     uploadCourtIssuedDocumentSequence({
                       tab: 'drafts',

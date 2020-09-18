@@ -25,7 +25,7 @@ describe('getShouldRedirectToSigningAction', () => {
         presenter,
       },
       props: {
-        documentId: '123',
+        docketEntryId: '123',
         eventCode: 'O',
       },
       state: {},
@@ -39,7 +39,7 @@ describe('getShouldRedirectToSigningAction', () => {
         presenter,
       },
       props: {
-        documentId: '123',
+        docketEntryId: '123',
         eventCode: 'NOT',
       },
       state: {},
@@ -53,7 +53,7 @@ describe('getShouldRedirectToSigningAction', () => {
         presenter,
       },
       props: {
-        documentId: '123',
+        docketEntryId: '123',
         eventCode: 'NOT',
       },
       state: {},

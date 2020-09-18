@@ -17,7 +17,7 @@ export const completeDocketEntryQCAction = async ({
   props,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const { overridePaperServiceAddress } = props;
 
   let entryMetadata = omit(
@@ -30,8 +30,8 @@ export const completeDocketEntryQCAction = async ({
   entryMetadata = {
     ...entryMetadata,
     createdAt: entryMetadata.dateReceived,
+    docketEntryId,
     docketNumber,
-    documentId,
     overridePaperServiceAddress,
     receivedAt: entryMetadata.dateReceived,
   };
@@ -47,7 +47,7 @@ export const completeDocketEntryQCAction = async ({
   });
 
   const updatedDocument = caseDetail.docketEntries.filter(
-    doc => doc.documentId === documentId,
+    doc => doc.docketEntryId === docketEntryId,
   )[0];
 
   return {

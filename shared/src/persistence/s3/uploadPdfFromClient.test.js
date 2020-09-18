@@ -9,8 +9,8 @@ describe('uploadPdfFromClient', () => {
 
     await uploadPdfFromClient({
       applicationContext,
-      documentId: '123',
       file: new File([], 'abc'),
+      key: '123',
       onUploadProgress: () => null,
       policy: {
         fields: {
@@ -51,8 +51,8 @@ describe('uploadPdfFromClient', () => {
   it('makes use of defaults when not provided', async () => {
     await uploadPdfFromClient({
       applicationContext,
-      documentId: '123',
       file: new Blob([]),
+      key: '123',
       onUploadProgress: () => null,
       policy: {
         fields: {

@@ -8,7 +8,7 @@ describe('setPropsForRemoveSignatureAction', () => {
         caseDetail: {
           docketNumber: '123-45',
         },
-        modal: { documentIdToEdit: 'abc' },
+        modal: { docketEntryIdToEdit: 'abc' },
       },
     });
 
@@ -16,7 +16,7 @@ describe('setPropsForRemoveSignatureAction', () => {
       caseDetail: {
         docketNumber: '123-45',
       },
-      documentIdToEdit: 'abc',
+      docketEntryIdToEdit: 'abc',
     });
   });
 });

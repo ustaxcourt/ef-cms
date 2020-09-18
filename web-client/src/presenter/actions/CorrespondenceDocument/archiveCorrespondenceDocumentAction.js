@@ -15,15 +15,17 @@ export const archiveCorrespondenceDocumentAction = async ({
   path,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const documentId = get(state.modal.correspondenceToDelete.documentId);
+  const correspondenceId = get(
+    state.modal.correspondenceToDelete.correspondenceId,
+  );
 
   try {
     await applicationContext
       .getUseCases()
       .archiveCorrespondenceDocumentInteractor({
         applicationContext,
+        correspondenceId,
         docketNumber,
-        documentId,
       });
 
     return path.success();

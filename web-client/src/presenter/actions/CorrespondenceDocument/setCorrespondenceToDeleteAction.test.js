@@ -3,20 +3,20 @@ import { runAction } from 'cerebral/test';
 import { setCorrespondenceToDeleteAction } from './setCorrespondenceToDeleteAction';
 
 describe('setCorrespondenceToDeleteAction', () => {
-  it('should set state.modal.correspondenceToDelete documentTitle and documentId', async () => {
+  it('should set state.modal.correspondenceToDelete documentTitle and correspondenceId', async () => {
     const result = await runAction(setCorrespondenceToDeleteAction, {
       modules: {
         presenter,
       },
       props: {
-        documentId: '123',
+        correspondenceId: '123',
         documentTitle: 'correspondence to delete',
       },
       state: {},
     });
 
     expect(result.state.modal.correspondenceToDelete).toMatchObject({
-      documentId: '123',
+      correspondenceId: '123',
       documentTitle: 'correspondence to delete',
     });
   });

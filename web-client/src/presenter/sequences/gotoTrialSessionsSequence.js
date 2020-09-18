@@ -21,10 +21,14 @@ const gotoTrialSessions = [
   closeMobileMenuAction,
   clearErrorAlertsAction,
   parallel([
-    [getNotificationsAction, setNotificationsAction],
+    [
+      getJudgeForCurrentUserAction,
+      setJudgeUserAction,
+      getNotificationsAction,
+      setNotificationsAction,
+    ],
     [getTrialSessionsAction, setTrialSessionsAction],
     [getUsersInSectionAction({ section: 'judge' }), setUsersAction],
-    [getJudgeForCurrentUserAction, setJudgeUserAction],
   ]),
   setTrialSessionsFiltersAction,
   setCurrentPageAction('TrialSessions'),

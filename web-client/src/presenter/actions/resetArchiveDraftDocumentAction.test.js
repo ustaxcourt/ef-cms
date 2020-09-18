@@ -6,8 +6,8 @@ describe('resetArchiveDraftDocumentAction', () => {
     const result = await runAction(resetArchiveDraftDocumentAction, {
       state: {
         archiveDraftDocument: {
+          docketEntryId: 'def-123',
           docketNumber: '123-45',
-          documentId: 'def-123',
           documentTitle: 'Stipulated Decision',
         },
       },
