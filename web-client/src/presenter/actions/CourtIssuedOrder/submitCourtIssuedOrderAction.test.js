@@ -72,22 +72,8 @@ describe('submitCourtIssuedOrderAction', () => {
     });
   });
 
-  it('should set state.draftDocumentViewerDocketEntryId to the docketEntryId from props', async () => {
-    applicationContext
-      .getUseCases()
-      .fileCourtIssuedOrderInteractor.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          ...MOCK_CASE.docketEntries,
-          {
-            docketEntryId: '4234312d-7294-47ae-9f1d-182df17546a1',
-            documentType: 'Notice of Intervention',
-            isDraft: true,
-          },
-        ],
-      });
-
-    const { state } = await runAction(submitCourtIssuedOrderAction, {
+  it('should return the docketEntryId of the submitted court issued order', async () => {
+    const { output } = await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
       },
@@ -104,8 +90,6 @@ describe('submitCourtIssuedOrderAction', () => {
       },
     });
 
-    expect(state.draftDocumentViewerDocketEntryId).toBe(
-      '4234312d-7294-47ae-9f1d-182df17546a1',
-    );
+    expect(output.docketEntryId).toBe('4234312d-7294-47ae-9f1d-182df17546a1');
   });
 });
