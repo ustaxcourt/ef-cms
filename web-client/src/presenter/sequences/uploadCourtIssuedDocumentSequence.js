@@ -41,7 +41,7 @@ export const uploadCourtIssuedDocumentSequence = [
           setupUploadMetadataAction,
           submitCourtIssuedOrderAction,
           setCaseAction,
-          setViewerDraftDocumentToDisplayAction,
+          // setViewerDraftDocumentToDisplayAction,
           getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
