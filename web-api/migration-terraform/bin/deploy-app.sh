@@ -28,6 +28,9 @@ popd
 # exit on any failure
 set -eo pipefail
 
+# get the stream arn
+STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
+
 export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_stream_arn=$STREAM_ARN
 export TF_VAR_source_table=$SOURCE_TABLE
