@@ -35,8 +35,8 @@ exports.createTrialSession = testData => {
   cy.get('#postal-code').type(faker.address.zipCode());
 
   // session assignments
-  cy.get('#judgeId').select('Chief Judge Foley');
-  cy.get('#trial-clerk').select('Test trialclerk1');
+  cy.get('#judgeId').select(testData.judgeName || 'Chief Judge Foley');
+  cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
   cy.get('#court-reporter').type(faker.name.findName());
   cy.get('#irs-calendar-administrator').type(faker.name.findName());
   cy.get('#notes').type(faker.company.catchPhrase());
@@ -71,4 +71,38 @@ exports.verifyOpenCaseOnTrialSession = docketNumber => {
   cy.get(
     `#open-cases-tab-content a[href="/case-detail/${docketNumber}"]`,
   ).should('exist');
+};
+
+exports.goToTrialSessionWorkingCopy = ({
+  docketNumbers,
+  judgeName,
+  trialSessionId,
+}) => {
+  cy.goToRoute(`/trial-session-working-copy/${trialSessionId}`);
+  cy.get(`h2:contains("${judgeName} - Session Copy")`).should('exist');
+  docketNumbers.forEach(docketNumber => {
+    cy.get(`a[href="/case-detail/${docketNumber}"]`).should('exist');
+  });
+};
+
+exports.changeCaseTrialStatus = docketNumber => {
+  cy.get(`#trialSessionWorkingCopy-${docketNumber}`).select('Set for Trial');
+};
+
+exports.filterWorkingCopyByStatus = ({
+  docketNumberShouldExist,
+  docketNumberShouldNotExist,
+}) => {
+  cy.get('label:contains("Set for Trial")').click();
+  cy.get(`#trialSessionWorkingCopy-${docketNumberShouldExist}`).should('exist');
+  cy.get(`#trialSessionWorkingCopy-${docketNumberShouldNotExist}`).should(
+    'not.exist',
+  );
+};
+
+exports.addCaseNote = () => {
+  cy.get('.no-wrap button:contains("Add Note")').click(); //TODO #add-note-${docketNumber}
+  cy.get('#case-notes').type('A case note');
+  cy.get('#confirm').click();
+  cy.get('span:contains("A case note")').should('exist');
 };
