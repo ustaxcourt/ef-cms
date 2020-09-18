@@ -12,7 +12,6 @@ import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
 import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -41,7 +40,6 @@ export const uploadCourtIssuedDocumentSequence = [
           setupUploadMetadataAction,
           submitCourtIssuedOrderAction,
           setCaseAction,
-          // setViewerDraftDocumentToDisplayAction,
           getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
