@@ -1,7 +1,7 @@
 
 resource "aws_dynamodb_table" "efcms-migration-east" {
   provider     = aws.us-east-1
-  name         = "efcms-migration-${var.environment}"
+  name         = "efcms-${var.environment}-1"
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "pk"
@@ -37,7 +37,7 @@ resource "aws_dynamodb_table" "efcms-migration-east" {
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
   tags = {
-    Name        = "efcms-migration-${var.environment}"
+    Name        = "efcms-${var.environment}-1"
     Environment = var.environment
   }
 
@@ -49,7 +49,7 @@ resource "aws_dynamodb_table" "efcms-migration-east" {
 
 resource "aws_dynamodb_table" "efcms-migration-west" {
   provider     = aws.us-west-1
-  name         = "efcms-migration-${var.environment}"
+  name         = "efcms-${var.environment}-1"
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "pk"
@@ -85,7 +85,7 @@ resource "aws_dynamodb_table" "efcms-migration-west" {
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
   tags = {
-    Name        = "efcms-migration-${var.environment}"
+    Name        = "efcms-${var.environment}-1"
     Environment = var.environment
   }
 
@@ -101,7 +101,7 @@ resource "aws_dynamodb_global_table" "efcms-migration-global" {
     aws_dynamodb_table.efcms-migration-west,
   ]
 
-  name = "efcms-migration-${var.environment}"
+  name = "efcms-${var.environment}-1"
 
   replica {
     region_name = "us-east-1"

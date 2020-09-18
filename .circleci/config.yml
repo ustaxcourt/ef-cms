@@ -587,6 +587,48 @@ jobs:
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
+  migrate:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - checkout
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+            npm ci --prefix=web-client/pa11y/
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=true" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./get-source-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: Setup Migration Infrastructure
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              npm run deploy:migration -- ${ENV}
+            fi
+      - run:
+          name: Run Migration
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              npm run start:migration -- ${ENV}
+            fi
+      - run:
+          name: Wait for SQS Queue to Empty
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              ./wait-for-migration-to-finish.sh
+            fi
+
   smoketests:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
