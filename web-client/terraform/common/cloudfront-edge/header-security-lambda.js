@@ -29,7 +29,7 @@ exports.handler = (event, context, callback) => {
     },
   ];
   const applicationUrl = `https://${allowedDomainString}`;
-  const subdomainsUrl = `https://*-${allowedDomainString}`;
+  const subdomainsUrl = `https://*${allowedDomainString}`;
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
   const dynamsoftUrl = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
   const websocketUrl = `wss://*-${allowedDomainString}`;
