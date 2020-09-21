@@ -18,6 +18,10 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
     role_arn = aws_iam_role.es_kibana_role.arn
   }
 
+  domain_endpoint_options {
+    enforce_https = true
+  }
+
   ebs_options{
     ebs_enabled = true
     volume_size = 10
@@ -90,7 +94,7 @@ data "aws_iam_policy_document" "log_viewers_auth" {
       "es:ESHttpGet"
     ]
 
-    resources = [aws_elasticsearch_domain.efcms-logs.arn]
+    resources = ["${aws_elasticsearch_domain.efcms-logs.arn}/*"]
   }
 }
 
@@ -130,28 +134,6 @@ resource "aws_iam_role_policy_attachment" "log_viewers_auth" {
   role = aws_iam_role.log_viewers_auth.name
   policy_arn = aws_iam_policy.log_viewers_auth.arn
 }
-
-# TODO: delete when sure this isn't needed
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect": "Allow",
-#       "Principal": {
-#         "AWS": [
-#         "arn:aws:iam::xxxxxx:role/Cognito_xxxxx_es_id_poolAuth_Role"
-#         ]
-#       },
-#       "Action": "es:*",
-#       "Resource": "arn:aws:es:ap-south-1:xxxxxx:domain/dev-k8s-es/*"
-#     }
-#   ]
-# }
-
-# resource "aws_iam_role" "log_viewers_unauth" {
-#   name = "log_viewers_unauth_role"
-#   assume_role_policy = 
-# }
 
 resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
   identity_pool_id = aws_cognito_identity_pool.log_viewers.id
