@@ -796,18 +796,18 @@ workflows:
                 - staging
                 - experimental1
                 - experimental2
-      - smoketests:
-          # requires:
-          #   - migrate
-          filters:
-            branches:
-              only:
-                - staging
-                - experimental1
-                - experimental2
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - staging
+      #           - experimental1
+      #           - experimental2
       - switch-colors:
           requires:
-            - smoketests
+            - migrate
           filters:
             branches:
               only:
