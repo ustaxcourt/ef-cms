@@ -588,20 +588,10 @@ jobs:
           path: /home/app/cypress-smoketests/videos/
 
   migrate:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    machine:
+      docker_layer_caching: true
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Setup Env
           command: |
@@ -610,6 +600,10 @@ jobs:
             echo "export MIGRATE_FLAG=true" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./get-destination-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./get-source-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Migration Infrastructure
           command: |
