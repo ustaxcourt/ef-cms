@@ -148,7 +148,7 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate.docketEntries[0],
     ).toMatchObject({ numberOfPages: 2 });
   });
@@ -354,6 +354,74 @@ describe('serveCaseToIrsInteractor', () => {
         .workItemToUpdate.docketEntry.servedAt,
     ).toBeDefined();
   });
+
+  it('should make 2 calls to updateCase, once before adding a coversheet and number of pages, and once after', async () => {
+    const mockNumberOfPages = 10;
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APW',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls;
+
+    expect(
+      updateCaseCall[0][0].caseToUpdate.docketEntries.find(
+        p => p.eventCode === 'A',
+      ).numberOfPages,
+    ).toBeUndefined();
+    expect(
+      updateCaseCall[1][0].caseToUpdate.docketEntries.find(
+        p => p.eventCode === 'A',
+      ).numberOfPages,
+    ).toBe(mockNumberOfPages);
+  });
 });
 
 describe('addDocketEntryForPaymentStatus', () => {
@@ -455,7 +523,7 @@ describe('addDocketEntryForPaymentStatus', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate.docketEntries,
     ).toMatchObject([
       {
