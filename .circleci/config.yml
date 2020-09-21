@@ -608,19 +608,19 @@ jobs:
           name: Setup Migration Infrastructure
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run deploy:migration -- ${ENV}
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "STREAM_ARN=${STREAM_ARN}" -e "SOURCE_TABLE=${SOURCE_TABLE}" -e "DESTINATION_TABLE=${DESTINATION_TABLE}" --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
           name: Run Migration
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run start:migration -- ${ENV}
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "STREAM_ARN=${STREAM_ARN}" -e "SOURCE_TABLE=${SOURCE_TABLE}" -e "DESTINATION_TABLE=${DESTINATION_TABLE}" --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
             fi
       - run:
           name: Wait for SQS Queue to Empty
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./wait-for-migration-to-finish.sh
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
 
   smoketests:
@@ -773,23 +773,23 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - migration
-                - master
-                - experimental1
-                - experimental2
-                - dawson
+      # - deploy:
+      #     requires:
+      #       - build-client-coverage
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - test
+      #           - migration
+      #           - master
+      #           - experimental1
+      #           - experimental2
+      #           - dawson
       - migrate:
-          requires:
-            - deploy
+          # requires:
+          # - deploy
           filters:
             branches:
               only:
