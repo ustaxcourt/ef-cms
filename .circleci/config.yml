@@ -608,7 +608,7 @@ jobs:
           name: Setup Migration Infrastructure
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "STREAM_ARN=${STREAM_ARN}" -e "SOURCE_TABLE=${SOURCE_TABLE}" -e "DESTINATION_TABLE=${DESTINATION_TABLE}" --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "SOURCE_TABLE=${SOURCE_TABLE}" -e "DESTINATION_TABLE=${DESTINATION_TABLE}" --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
           name: Run Migration
