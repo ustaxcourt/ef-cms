@@ -797,8 +797,8 @@ workflows:
                 - experimental1
                 - experimental2
       - smoketests:
-          requires:
-            - migrate
+          # requires:
+          #   - migrate
           filters:
             branches:
               only:
