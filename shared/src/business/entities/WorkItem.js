@@ -1,20 +1,11 @@
-const joi = require('joi');
-const {
-  CHAMBERS_SECTIONS,
-  IRS_SYSTEM_SECTION,
-  SECTIONS,
-} = require('./EntityConstants');
-const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CASE_STATUS_TYPES } = require('./EntityConstants');
-const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
+const { CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
+const { WORK_ITEM_VALIDATION_RULES } = require('./EntityValidationConstants');
 
 /**
  * constructor
@@ -60,56 +51,7 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
 
 WorkItem.validationName = 'WorkItem';
 
-WorkItem.VALIDATION_RULES = joi.object().keys({
-  assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
-  assigneeName: JoiValidationConstants.STRING.max(100).allow(null).optional(), // should be a Message entity at some point
-  associatedJudge: JoiValidationConstants.STRING.max(100).required(),
-  caseIsInProgress: joi.boolean().optional(),
-  caseStatus: JoiValidationConstants.STRING.valid(
-    ...Object.values(CASE_STATUS_TYPES),
-  ).optional(),
-  caseTitle: JoiValidationConstants.STRING.max(500).optional(),
-  completedAt: JoiValidationConstants.ISO_DATE.optional(),
-  completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
-  completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
-  completedMessage: JoiValidationConstants.STRING.max(100)
-    .optional()
-    .allow(null),
-  createdAt: JoiValidationConstants.ISO_DATE.optional(),
-  docketEntry: joi.object().required(),
-  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-    'Unique case identifier in XXXXX-YY format.',
-  ),
-  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
-    'Auto-generated from docket number and the suffix.',
-  ),
-  entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
-  hideFromPendingMessages: joi.boolean().optional(),
-  highPriority: joi.boolean().optional(),
-  inProgress: joi.boolean().optional(),
-  isInitializeCase: joi.boolean().optional(),
-  isRead: joi.boolean().optional(),
-  section: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-    ...Object.values(ROLES),
-    IRS_SYSTEM_SECTION,
-  ).required(),
-  sentBy: JoiValidationConstants.STRING.max(100)
-    .required()
-    .description('The name of the user that sent the WorkItem'),
-  sentBySection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-    ...Object.values(ROLES),
-  ).optional(),
-  sentByUserId: JoiValidationConstants.UUID.optional(),
-  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
-  updatedAt: JoiValidationConstants.ISO_DATE.required(),
-  workItemId: JoiValidationConstants.UUID.required(),
-});
-
-joiValidationDecorator(WorkItem, WorkItem.VALIDATION_RULES);
+joiValidationDecorator(WorkItem, WORK_ITEM_VALIDATION_RULES);
 
 /**
  * Assign to a user
