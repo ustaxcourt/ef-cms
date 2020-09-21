@@ -59,3 +59,14 @@ If applicable, add screenshots to help explain your problem.
 * High-severity defects affect key functionality of an application, and the app behaves in a way that is strongly different from the one stated in the requirements, for instance, an email service provider does not allow adding more than one email address to the recipient field.
 * Medium-severity defects are identified in case a minor function does not behave in a way stated in the requirements. An example of such a defect is a broken link in an application’s Terms and Requirements section.
 * Low-severity defects are primarily related to an application’s UI and may include such an example as a slightly different size or color of a button.
+
+**FOR ENGINEERING TEAM ONLY**
+Bug Resolution Steps:
+ - [ ] Determine why the bug wasn't caught by a test. 
+ - [ ] Determine if an automated test needs to fixed, expanded or created. If unsure, bring in others to discuss.
+ - [ ] Determine if a manual test needs to be fixed, expanded or created. If unsure, bring in others to discuss.
+ - [ ] If needed, automated test is created.
+ - [ ] If needed, manual test is created.
+ - [ ] Fix has been deployed to dev environment
+ - [ ] Fix has been deployed to the stage environment
+ - [ ] Bug has been tested in staging (UX or Engineering)
