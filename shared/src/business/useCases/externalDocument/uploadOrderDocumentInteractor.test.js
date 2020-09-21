@@ -27,12 +27,19 @@ describe('uploadOrderDocumentInteractor', () => {
     await uploadOrderDocumentInteractor({
       applicationContext,
       docketEntryIdToOverwrite: 123,
-      documentFile: '',
+      documentFile: 'document file',
     });
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
         .calls.length,
     ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: 'document file',
+      key: 123,
+    });
   });
 });
