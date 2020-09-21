@@ -12,8 +12,8 @@ describe('uploadOrderDocumentInteractor', () => {
     await expect(
       uploadOrderDocumentInteractor({
         applicationContext,
+        docketEntryIdToOverwrite: 123,
         documentFile: '',
-        documentIdToOverwrite: 123,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -26,8 +26,8 @@ describe('uploadOrderDocumentInteractor', () => {
 
     await uploadOrderDocumentInteractor({
       applicationContext,
+      docketEntryIdToOverwrite: 123,
       documentFile: '',
-      documentIdToOverwrite: 123,
     });
 
     expect(

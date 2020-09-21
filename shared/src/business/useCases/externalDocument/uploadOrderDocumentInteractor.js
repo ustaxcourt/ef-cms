@@ -6,8 +6,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadOrderDocumentInteractor = async ({
   applicationContext,
+  docketEntryIdToOverwrite,
   documentFile,
-  documentIdToOverwrite,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -20,7 +20,7 @@ exports.uploadOrderDocumentInteractor = async ({
     .uploadDocumentFromClient({
       applicationContext,
       document: documentFile,
-      key: documentIdToOverwrite,
+      key: docketEntryIdToOverwrite,
       onUploadProgress: () => {},
     });
 
