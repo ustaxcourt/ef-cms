@@ -46,7 +46,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Sid": "SQS",
       "Effect": "Allow",
       "Action": [
-        "sqs:GetQueueAttributes"
+        "sqs:GetQueueAttributes",
+        "sqs:ListQueueTabs"
       ],
       "Resource": "*"
     },
