@@ -13,7 +13,6 @@ export const submitCourtIssuedOrderAction = async ({
   applicationContext,
   get,
   props,
-  store,
 }) => {
   let caseDetail;
   const { docketNumber } = get(state.caseDetail);
@@ -48,7 +47,7 @@ export const submitCourtIssuedOrderAction = async ({
       .getUseCases()
       .updateCourtIssuedOrderInteractor({
         applicationContext,
-        docketEntryIdToEdit: docketEntryIdToEdit,
+        docketEntryIdToEdit,
         documentMetadata,
       });
   } else {
@@ -60,8 +59,6 @@ export const submitCourtIssuedOrderAction = async ({
         primaryDocumentFileId: docketEntryId,
       });
   }
-
-  store.set(state.draftDocumentViewerDocketEntryId, docketEntryId);
 
   return {
     caseDetail,
