@@ -65,7 +65,7 @@ let sent = 0;
         })
         .promise()
         .then(() => {
-          done += 10;
+          done += chunk.length;
           console.log(
             `${done} out of ${totalSegments} messages sent successfully.`,
           );
