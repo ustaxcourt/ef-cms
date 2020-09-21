@@ -47,7 +47,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Effect": "Allow",
       "Action": [
         "sqs:GetQueueAttributes",
-        "sqs:ListQueueTabs"
+        "sqs:ListQueueTags",
+        "sqs:CreateQueue"
       ],
       "Resource": "*"
     },
