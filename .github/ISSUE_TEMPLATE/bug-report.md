@@ -67,6 +67,7 @@ Bug Resolution Steps:
  - [ ] Determine if a manual test needs to be fixed, expanded or created. If unsure, bring in others to discuss.
  - [ ] If needed, automated test is created.
  - [ ] If needed, manual test is created.
+ - [ ] Reason for bug has been documented.
  - [ ] Fix has been deployed to dev environment
  - [ ] Fix has been deployed to the stage environment
  - [ ] Bug has been tested in staging (UX or Engineering)
