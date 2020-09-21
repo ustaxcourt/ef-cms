@@ -65,48 +65,14 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns the correct document when state.draftDocumentViewerDocketEntryId is set', async () => {
+  it('returns the correct document when props.draftDocketEntryId is set', async () => {
     const result = await runAction(
       getDefaultDraftViewerDocumentToDisplayAction,
       {
         modules: {
           presenter,
         },
-        state: {
-          caseDetail: {
-            draftDocuments: [
-              {
-                docketEntryId: '123',
-                documentType: 'Petition',
-              },
-              {
-                docketEntryId: '123456',
-                documentType: 'Order',
-              },
-              {
-                docketEntryId: '345',
-                documentType: 'Notice',
-                isDraft: true,
-              },
-            ],
-          },
-          draftDocumentViewerDocketEntryId: '123456',
-        },
-      },
-    );
-    expect(result.output).toMatchObject({
-      viewerDraftDocumentToDisplay: { docketEntryId: '123456' },
-    });
-  });
-
-  it('returns the correct document when state.draftDocumentViewerDocketEntryId is not set and props.docketEntryId is set', async () => {
-    const result = await runAction(
-      getDefaultDraftViewerDocumentToDisplayAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: { docketEntryId: '345' },
+        props: { draftDocketEntryId: '345' },
         state: {
           caseDetail: {
             docketEntries: [

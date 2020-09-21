@@ -11,6 +11,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
+import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -29,6 +30,7 @@ const onSuccess = [
   generateCourtIssuedDocumentTitleAction,
   setupUploadMetadataAction,
   submitCourtIssuedOrderAction,
+  setDefaultDraftDocumentIdAction,
   setCaseAction,
   getUploadCourtIssuedDocumentAlertSuccessAction,
   setAlertSuccessAction,

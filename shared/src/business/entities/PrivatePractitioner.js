@@ -25,6 +25,7 @@ function PrivatePractitioner() {
 PrivatePractitioner.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
   this.barNumber = rawUser.barNumber;
+  this.firmName = rawUser.firmName;
   this.representing = rawUser.representing || [];
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
@@ -45,6 +46,10 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
   entityName: JoiValidationConstants.STRING.valid(
     'PrivatePractitioner',
   ).required(),
+  firmName: JoiValidationConstants.STRING.max(100)
+    .optional()
+    .allow(null)
+    .description('The firm name for the practitioner.'),
   name: JoiValidationConstants.STRING.max(100).required(),
   representing: joi
     .array()

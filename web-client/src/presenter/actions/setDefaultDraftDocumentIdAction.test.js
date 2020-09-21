@@ -2,16 +2,16 @@ import { runAction } from 'cerebral/test';
 import { setDefaultDraftDocumentIdAction } from './setDefaultDraftDocumentIdAction';
 
 describe('setDefaultDraftDocumentIdAction', () => {
-  it('sets state.screenMetadata.draftDocumentId from props', async () => {
+  it('sets state.screenMetadata.draftDocketEntryId from props', async () => {
     const { state } = await runAction(setDefaultDraftDocumentIdAction, {
       props: {
-        draftDocumentId: '1234',
+        docketEntryId: '1234',
       },
       state: {
         screenMetadata: {},
       },
     });
 
-    expect(state.screenMetadata.draftDocumentId).toEqual('1234');
+    expect(state.screenMetadata.draftDocketEntryId).toEqual('1234');
   });
 });
