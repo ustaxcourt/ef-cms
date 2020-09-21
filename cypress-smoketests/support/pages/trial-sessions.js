@@ -85,24 +85,31 @@ exports.goToTrialSessionWorkingCopy = ({
   });
 };
 
-exports.changeCaseTrialStatus = docketNumber => {
-  cy.get(`#trialSessionWorkingCopy-${docketNumber}`).select('Set for Trial');
+exports.changeCaseTrialStatus = (docketNumber, status = 'Set for Trial') => {
+  cy.get(`#trialSessionWorkingCopy-${docketNumber}`).select(status);
+};
+
+exports.checkShowAllFilterOnWorkingCopy = trialSessionId => {
+  cy.goToRoute(`/trial-session-working-copy/${trialSessionId}`);
+  cy.get('label:contains("Show All")').click();
 };
 
 exports.filterWorkingCopyByStatus = ({
   docketNumberShouldExist,
   docketNumberShouldNotExist,
+  status,
 }) => {
-  cy.get('label:contains("Set for Trial")').click();
+  cy.get(`label:contains("${status}")`).click();
   cy.get(`#trialSessionWorkingCopy-${docketNumberShouldExist}`).should('exist');
   cy.get(`#trialSessionWorkingCopy-${docketNumberShouldNotExist}`).should(
     'not.exist',
   );
 };
 
-exports.addCaseNote = () => {
+exports.addCaseNote = (docketNumber, note) => {
   cy.get('.no-wrap button:contains("Add Note")').click(); //TODO #add-note-${docketNumber}
-  cy.get('#case-notes').type('A case note');
+  cy.get(`h5:contains("Docket ${docketNumber}")`).should('exist');
+  cy.get('#case-notes').type(note);
   cy.get('#confirm').click();
-  cy.get('span:contains("A case note")').should('exist');
+  cy.get(`span:contains("${note}")`).should('exist');
 };
