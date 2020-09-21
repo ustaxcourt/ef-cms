@@ -1012,7 +1012,7 @@ const execPromise = util.promisify(exec);
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
-    ? `app.${process.env.EFCMS_DOMAIN}`
+    ? `app-${process.env.EFCMS_DOMAIN}`
     : 'localhost:1234',
   currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
