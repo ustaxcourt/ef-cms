@@ -8,6 +8,7 @@ AWS.config.secretAccessKey = Cypress.env('AWS_SECRET_ACCESS_KEY');
 AWS.config.region = awsRegion;
 
 const ENV = Cypress.env('ENV');
+const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 const cognito = new AWS.CognitoIdentityServiceProvider({
   region: 'us-east-1',
@@ -68,7 +69,7 @@ exports.getRestApi = async () => {
     .promise();
 
   const services = apis
-    .filter(api => api.name.includes(`gateway_api_${ENV}`))
+    .filter(api => api.name.includes(`gateway_api_${ENV}_${DEPLOYING_COLOR}`))
     .reduce((obj, api) => {
       obj[
         api.name.replace(`_${ENV}`, '')
