@@ -1,7 +1,10 @@
 const joi = require('joi');
 const {
+  CASE_STATUS_TYPES,
   CHAMBERS_SECTIONS,
+  CHIEF_JUDGE,
   IRS_SYSTEM_SECTION,
+  ROLES,
   SECTIONS,
 } = require('./EntityConstants');
 const {
@@ -11,8 +14,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CASE_STATUS_TYPES } = require('./EntityConstants');
-const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
 
