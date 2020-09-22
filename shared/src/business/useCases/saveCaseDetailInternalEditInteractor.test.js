@@ -37,7 +37,18 @@ describe('updateCase', () => {
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
         workItem: {
           docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            documentType: 'Petition',
+            entityName: 'DocketEntry',
+            eventCode: 'P',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            sentBy: 'petitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
           docketNumber: '56789-18',
           isInitializeCase: true,
