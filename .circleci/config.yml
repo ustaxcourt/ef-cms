@@ -624,18 +624,6 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
-      - run:
-          name: Update version number in dynamo for deploying color
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
-            fi
-      - run:
-          name: Update version number in dynamo for current color
-          command: |
-            if [ "$MIGRATE_FLAG" == "false" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
-            fi
 
   smoketests:
     docker:
