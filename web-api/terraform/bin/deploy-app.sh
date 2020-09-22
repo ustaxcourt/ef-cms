@@ -31,6 +31,19 @@ popd
 # exit on any failure
 set -eo pipefail
 
+if [ ${MIGRATE_FLAG} == false ]; then
+  BLUE_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
+  GREEN_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
+else
+  if [ ${DEPLOYING_COLOR} == 'blue' ]; then
+    BLUE_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
+    GREEN_TABLE_NAME=$(./get-source-table.sh $CIRCLE_BRANCH)
+  else 
+    GREEN_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
+    BLUE_TABLE_NAME=$(./get-source-table.sh $CIRCLE_BRANCH)
+  fi
+fi
+
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_environment=$ENVIRONMENT
@@ -39,6 +52,8 @@ export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_honeybadger_key=$CIRCLE_HONEYBADGER_API_KEY
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
+export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
+export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan

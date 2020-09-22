@@ -25,7 +25,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "route53:ListResourceRecordSets",
         "route53:ListHostedZones",
         "route53:ChangeResourceRecordSets",
-        "route53:ListTagsForResource"
+        "route53:ListTagsForResource",
+        "route53:ListHostedZonesByName"
       ],
       "Resource": "*"
     },
@@ -126,7 +127,9 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cloudfront:UpdateDistribution",
         "cloudfront:CreateCloudFrontOriginAccessIdentity",
         "cloudfront:GetCloudFrontOriginAccessIdentity",
-        "cloudfront:DeleteCloudFrontOriginAccessIdentity"
+        "cloudfront:DeleteCloudFrontOriginAccessIdentity",
+        "cloudfront:ListDistributions",
+        "cloudfront:GetDistributionConfig"
       ],
       "Resource": "*"
     },

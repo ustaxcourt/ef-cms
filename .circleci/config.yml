@@ -491,11 +491,13 @@ jobs:
           command: |
             ENV=$(./get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export CIRCLE_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export IRS_SUPERUSER_EMAIL=$(./get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -513,7 +515,7 @@ jobs:
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" -e "MIGRATE_FLAG=${MIGRATE_FLAG} --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
@@ -597,7 +599,7 @@ jobs:
           command: |
             ENV=$(./get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=true" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./get-destination-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./get-source-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
@@ -620,6 +622,18 @@ jobs:
           name: Wait for SQS Queue to Empty
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+            fi
+      - run:
+          name: Update version number in dynamo for deploying color
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+            fi
+      - run:
+          name: Update version number in dynamo for current color
+          command: |
+            if [ "$MIGRATE_FLAG" == "false" ]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
 
