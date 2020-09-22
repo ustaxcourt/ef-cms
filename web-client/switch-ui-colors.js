@@ -21,12 +21,15 @@ const run = async () => {
     .listDistributions({})
     .promise();
 
+  console.log('Got here, 1');
+
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
       alias =>
         alias === `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
     ),
   );
+  console.log('Got here, 2');
 
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
@@ -34,18 +37,21 @@ const run = async () => {
         alias === `app-${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
     ),
   );
+  console.log('Got here, 3');
 
   const currentColorConfig = await cloudfront
     .getDistributionConfig({
       Id: currentColorDistribution.Id,
     })
     .promise();
+  console.log('Got here, 4');
 
   const deployingColorConfig = await cloudfront
     .getDistributionConfig({
       Id: deployingColorDistribution.Id,
     })
     .promise();
+  console.log('Got here, 5');
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
     `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
@@ -65,6 +71,7 @@ const run = async () => {
       IfMatch: currentColorConfig.ETag,
     })
     .promise();
+  console.log('Got here, 6');
 
   await cloudfront
     .updateDistribution({
@@ -73,10 +80,12 @@ const run = async () => {
       IfMatch: deployingColorConfig.ETag,
     })
     .promise();
+  console.log('Got here, 7');
 
   const zone = await route53
     .listHostedZonesByName({ DNSName: 'ustc-case-mgmt.flexion.us.' })
     .promise();
+  console.log('Got here, 8');
 
   const zoneId = zone.HostedZones[0].Id;
 
@@ -102,6 +111,7 @@ const run = async () => {
       HostedZoneId: zoneId,
     })
     .promise();
+  console.log('Got here, 9');
 };
 
 run();
