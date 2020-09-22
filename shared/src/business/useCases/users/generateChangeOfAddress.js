@@ -163,6 +163,8 @@ exports.generateChangeOfAddress = async ({
           applicationContext,
         });
 
+        caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
         const servedParties = aggregatePartiesForService(caseEntity);
 
         changeOfAddressDocketEntry.setAsServed(servedParties.all);
@@ -196,8 +198,6 @@ exports.generateChangeOfAddress = async ({
         );
 
         changeOfAddressDocketEntry.setWorkItem(workItem);
-
-        caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,

@@ -118,6 +118,8 @@ exports.updateSecondaryContactInteractor = async ({
       { applicationContext },
     );
 
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
     const servedParties = aggregatePartiesForService(caseEntity);
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
@@ -151,8 +153,6 @@ exports.updateSecondaryContactInteractor = async ({
     );
 
     changeOfAddressDocketEntry.setWorkItem(workItem);
-
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,

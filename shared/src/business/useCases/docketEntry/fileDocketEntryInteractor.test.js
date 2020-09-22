@@ -125,6 +125,10 @@ describe('fileDocketEntryInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryEntity,
+    ).toMatchObject({ index: 1 });
   });
 
   it('add documents and workItem to inbox if saving for later if a document is attached', async () => {

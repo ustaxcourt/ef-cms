@@ -18,8 +18,13 @@ exports.sendServedPartiesEmails = async ({
     documentType,
     eventCode,
     filedBy,
+    index: docketEntryNumber,
     servedAt,
   } = docketEntryEntity;
+
+  if (docketEntryNumber === undefined) {
+    throw new Error('Docket entry must have an index');
+  }
 
   const currentDate = applicationContext
     .getUtilities()
@@ -44,7 +49,7 @@ exports.sendServedPartiesEmails = async ({
             docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
           },
           currentDate,
-          docketEntryNumber: docketEntryEntity.index,
+          docketEntryNumber,
           documentDetail: {
             docketEntryId,
             documentTitle: documentTitle || documentType,

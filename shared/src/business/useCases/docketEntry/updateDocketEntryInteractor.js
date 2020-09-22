@@ -98,6 +98,8 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
+  caseEntity.updateDocketEntry(docketEntryEntity);
+
   if (editableFields.isFileAttached) {
     const { workItem } = docketEntryEntity;
 
@@ -240,8 +242,6 @@ exports.updateDocketEntryInteractor = async ({
         workItem: workItem.validate().toRawObject(),
       });
   }
-
-  caseEntity.updateDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
