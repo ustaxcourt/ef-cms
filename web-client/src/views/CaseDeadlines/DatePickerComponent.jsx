@@ -57,13 +57,19 @@ export const DatePickerComponent = ({
     }
   };
 
-  // inputRef evaluates to undefined when the date value does not match MM/DD/YYY or MM-DD-YYY,
-  // which is why we need to get the input element by ID
+  /**when using a modal, document.getElementById does not successfully find the
+   date input, causing us to use inputRef. However, inputRef does not return the date in the expected format
+   (MM/DD/YYY) but instead returns it as YYY/MM/DD **/
+
   useEffect(() => {
     const input = document.getElementById(`${name}-date`) || inputRef.current;
+
     input.addEventListener('change', e => {
       if (values) {
-        const [month, day, year] = splitDate(e.target.value);
+        let [month, day, year] = splitDate(e.target.value);
+        if (month.length > 2) {
+          [year, month, day] = splitDate(e.target.value);
+        }
         onChange({
           key: names.day,
           value: day,

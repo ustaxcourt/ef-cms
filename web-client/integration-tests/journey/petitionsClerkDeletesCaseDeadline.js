@@ -26,5 +26,7 @@ export const petitionsClerkDeletesCaseDeadline = test => {
     expect(test.getState('form.description')).toBeTruthy();
 
     await test.runSequence('deleteCaseDeadlineSequence');
+
+    delete test.caseDeadline;
   });
 };
