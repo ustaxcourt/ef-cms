@@ -13,7 +13,7 @@ check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
 check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 
-const cloudfront = new AWS.CloudFront();
+const cloudfront = new AWS.CloudFront({ maxRetries: 3 });
 const route53 = new AWS.Route53();
 
 const run = async () => {
@@ -21,15 +21,12 @@ const run = async () => {
     .listDistributions({})
     .promise();
 
-  console.log('Got here, 1');
-
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
       alias =>
         alias === `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
     ),
   );
-  console.log('Got here, 2');
 
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
@@ -37,21 +34,18 @@ const run = async () => {
         alias === `app-${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
     ),
   );
-  console.log('Got here, 3');
 
   const currentColorConfig = await cloudfront
     .getDistributionConfig({
       Id: currentColorDistribution.Id,
     })
     .promise();
-  console.log('Got here, 4');
 
   const deployingColorConfig = await cloudfront
     .getDistributionConfig({
       Id: deployingColorDistribution.Id,
     })
     .promise();
-  console.log('Got here, 5');
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
     `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
@@ -71,7 +65,6 @@ const run = async () => {
       IfMatch: currentColorConfig.ETag,
     })
     .promise();
-  console.log('Got here, 6');
   try {
     await cloudfront
       .updateDistribution({
@@ -81,7 +74,7 @@ const run = async () => {
       })
       .promise();
   } catch (e) {
-    console.log('error: ', e);
+    // Need to retry after one minute as throttling occurs after the previous update request.
     setTimeout(async () => {
       await cloudfront
         .updateDistribution({
@@ -92,12 +85,10 @@ const run = async () => {
         .promise();
     }, 60000);
   }
-  console.log('Got here, 7');
 
   const zone = await route53
     .listHostedZonesByName({ DNSName: 'ustc-case-mgmt.flexion.us.' })
     .promise();
-  console.log('Got here, 8');
 
   const zoneId = zone.HostedZones[0].Id;
 
@@ -123,7 +114,6 @@ const run = async () => {
       HostedZoneId: zoneId,
     })
     .promise();
-  console.log('Got here, 9');
 };
 
 run();
