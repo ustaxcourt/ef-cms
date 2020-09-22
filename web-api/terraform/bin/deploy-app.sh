@@ -32,15 +32,15 @@ popd
 set -eo pipefail
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
-  GREEN_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
+  BLUE_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
+  GREEN_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
-    GREEN_TABLE_NAME=$(./get-source-table.sh $CIRCLE_BRANCH)
+    BLUE_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
+    GREEN_TABLE_NAME=$(../../../get-source-table.sh $CIRCLE_BRANCH)
   else 
-    GREEN_TABLE_NAME=$(./get-destination-table.sh $CIRCLE_BRANCH)
-    BLUE_TABLE_NAME=$(./get-source-table.sh $CIRCLE_BRANCH)
+    GREEN_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
+    BLUE_TABLE_NAME=$(../../../get-source-table.sh $CIRCLE_BRANCH)
   fi
 fi
 
