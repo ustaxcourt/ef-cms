@@ -1,7 +1,9 @@
-import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSessionInteractor';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  batchDownloadTrialSessionInteractor,
+} = require('./batchDownloadTrialSessionInteractor');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -25,6 +27,20 @@ describe('batchDownloadTrialSessionInteractor', () => {
         filingDate: '2018-03-01T00:03:00.000Z',
         index: 4,
         isDraft: false,
+        isMinuteEntry: false,
+        isOnDocketRecord: true,
+        userId: 'abc-123',
+      },
+      {
+        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3858',
+        documentTitle: 'fifth record',
+        documentType: 'Stipulated Decision',
+        entityName: 'DocketEntry',
+        eventCode: 'SDEC',
+        filingDate: '2018-03-02T00:03:00.000Z',
+        index: 4,
+        isDraft: false,
+        isFileAttached: false,
         isMinuteEntry: false,
         isOnDocketRecord: true,
         userId: 'abc-123',
