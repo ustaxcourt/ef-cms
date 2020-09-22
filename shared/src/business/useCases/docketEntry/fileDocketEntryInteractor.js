@@ -128,6 +128,8 @@ exports.fileDocketEntryInteractor = async ({
           });
       }
 
+      caseEntity.addDocketEntry(docketEntryEntity); // adding docket entry sets its index
+
       if (metadata.isPaper) {
         if (metadata.isFileAttached && !isSavingForLater) {
           workItem.setAsCompleted({
@@ -155,7 +157,6 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       workItems.push(workItem);
-      caseEntity.addDocketEntry(docketEntryEntity);
     }
   }
 
