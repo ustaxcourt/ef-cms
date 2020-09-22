@@ -45,7 +45,9 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
-  this.highPriority = rawWorkItem.highPriority;
+  this.highPriority =
+    rawWorkItem.highPriority ||
+    rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isRead = rawWorkItem.isRead;
