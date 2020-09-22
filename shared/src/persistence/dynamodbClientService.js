@@ -40,10 +40,8 @@ const filterEmptyStrings = params => {
 };
 
 const getTableName = ({ applicationContext }) =>
-  `efcms-${applicationContext.environment.currentColor}-${
-    (applicationContext.environment || applicationContext.getEnvironment())
-      .stage
-  }`;
+  (applicationContext.environment || applicationContext.getEnvironment())
+    .dynamoDbTableName;
 
 const getDeployTableName = ({ applicationContext }) =>
   `efcms-deploy-${
