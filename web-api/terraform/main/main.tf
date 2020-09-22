@@ -32,4 +32,6 @@ module "ef-cms_apis" {
   honeybadger_key     = var.honeybadger_key
   irs_superuser_email = var.irs_superuser_email
   deploying_color     = var.deploying_color
+  blue_table_name     = var.blue_table_name
+  green_table_name    = var.green_table_name
 }

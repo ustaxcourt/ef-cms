@@ -129,8 +129,9 @@ module "api-west-green" {
   account_id             = data.aws_caller_identity.current.account_id
   zone_id                = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT = "dynamodb.us-west-1.amazonaws.com"
-    CURRENT_COLOR     = "green"
+    DYNAMODB_ENDPOINT   = "dynamodb.us-west-1.amazonaws.com"
+    CURRENT_COLOR       = "green"
+    DYNAMODB_TABLE_NAME = "efcms-${var.environment}"
   })
   region   = "us-west-1"
   validate = 0
@@ -158,8 +159,9 @@ module "api-west-blue" {
   account_id             = data.aws_caller_identity.current.account_id
   zone_id                = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT = "dynamodb.us-west-1.amazonaws.com"
-    CURRENT_COLOR     = "blue"
+    DYNAMODB_ENDPOINT   = "dynamodb.us-west-1.amazonaws.com"
+    CURRENT_COLOR       = "blue"
+    DYNAMODB_TABLE_NAME = "efcms-${var.environment}-1"
   })
   region   = "us-west-1"
   validate = 0

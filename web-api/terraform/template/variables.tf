@@ -33,3 +33,11 @@ variable "irs_superuser_email" {
 variable "deploying_color" {
   type = string
 }
+
+variable "blue_table_name" {
+  type = string
+}
+
+variable "green_table_name" {
+  type = string
+}
