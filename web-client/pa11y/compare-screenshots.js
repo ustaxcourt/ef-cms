@@ -4,14 +4,23 @@ const { PNG } = require('pngjs');
 
 const screenshotsPath = './pa11y-screenshots';
 
-const filesToTest = fs.readdirSync(`${screenshotsPath}/new`);
+const pathNew = `${screenshotsPath}/new`;
+const pathOld = `${screenshotsPath}/old`;
+if (!fs.existsSync(pathNew) || !fs.existsSync(pathOld)) {
+  console.log(
+    'Exiting: Screenshots must exist in both old/ and new/ in order to be compared.',
+  );
+  process.exit();
+}
+
+const filesToTest = fs.readdirSync(pathNew);
 
 console.log(`Comparing ${filesToTest.length} screenshots`);
 
 filesToTest.forEach(filename => {
   console.log(filename);
-  const newFilePath = `${screenshotsPath}/new/${filename}`;
-  const oldFilePath = `${screenshotsPath}/old/${filename}`;
+  const newFilePath = `${pathNew}/${filename}`;
+  const oldFilePath = `${pathOld}/${filename}`;
 
   const isNewFile =
     fs.existsSync(newFilePath) && fs.lstatSync(newFilePath).isFile();
