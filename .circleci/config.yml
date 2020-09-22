@@ -775,29 +775,29 @@ workflows:
       #       - e2e-pa11y-public
       #       - e2e-cypress
       #       - e2e-cypress-public
-      # - deploy:
-      #     # requires:
-      #     #   - build-client-coverage
-      #     filters:
-      #       branches:
-      #         only:
-      #           - irs
-      #           - staging
-      #           - test
-      #           - migration
-      #           - master
-      #           - experimental1
-      #           - experimental2
-      #           - dawson
-      # - migrate:
-      #     requires:
-      #       - deploy
-      #     filters:
-      #       branches:
-      #         only:
-      #           - staging
-      #           - experimental1
-      #           - experimental2
+      - deploy:
+          # requires:
+          #   - build-client-coverage
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - test
+                - migration
+                - master
+                - experimental1
+                - experimental2
+                - dawson
+      - migrate:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only:
+                - staging
+                - experimental1
+                - experimental2
       # - smoketests:
       #     requires:
       #       - migrate
@@ -808,8 +808,8 @@ workflows:
       #           - experimental1
       #           - experimental2
       - switch-colors:
-          # requires:
-          #   - migrate
+          requires:
+            - migrate
           filters:
             branches:
               only:
