@@ -72,14 +72,26 @@ const run = async () => {
     })
     .promise();
   console.log('Got here, 6');
-
-  await cloudfront
-    .updateDistribution({
-      DistributionConfig: deployingColorConfig.DistributionConfig,
-      Id: deployingColorDistribution.Id,
-      IfMatch: deployingColorConfig.ETag,
-    })
-    .promise();
+  try {
+    await cloudfront
+      .updateDistribution({
+        DistributionConfig: deployingColorConfig.DistributionConfig,
+        Id: deployingColorDistribution.Id,
+        IfMatch: deployingColorConfig.ETag,
+      })
+      .promise();
+  } catch (e) {
+    console.log('error: ', e);
+    setTimeout(async () => {
+      await cloudfront
+        .updateDistribution({
+          DistributionConfig: deployingColorConfig.DistributionConfig,
+          Id: deployingColorDistribution.Id,
+          IfMatch: deployingColorConfig.ETag,
+        })
+        .promise();
+    }, 60000);
+  }
   console.log('Got here, 7');
 
   const zone = await route53
