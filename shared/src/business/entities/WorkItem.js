@@ -2,7 +2,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHIEF_JUDGE } = require('./EntityConstants');
+const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
 const { WORK_ITEM_VALIDATION_RULES } = require('./EntityValidationConstants');
@@ -36,7 +36,9 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
-  this.highPriority = rawWorkItem.highPriority;
+  this.highPriority =
+    rawWorkItem.highPriority ||
+    rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isRead = rawWorkItem.isRead;
