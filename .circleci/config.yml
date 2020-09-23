@@ -650,18 +650,18 @@ workflows:
       - e2e-cypress
       - e2e-cypress-public
       - build-client-coverage:
-        requires:
-          - build-shared
-          - build-api
-          - build-client-unit
-          - build-client-integration
-          - e2e-pa11y
-          - e2e-pa11y-public
-          - e2e-cypress
-          - e2e-cypress-public
+          requires:
+            - build-shared
+            - build-api
+            - build-client-unit
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-cypress
+            - e2e-cypress-public
       - deploy:
-        requires:
-          - build-client-coverage
+          requires:
+            - build-client-coverage
       - smoketests:
           requires:
             - deploy
