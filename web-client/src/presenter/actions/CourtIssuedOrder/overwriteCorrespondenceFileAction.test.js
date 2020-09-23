@@ -28,9 +28,7 @@ describe('overwriteCorrespondenceFileAction', () => {
         presenter,
       },
       state: {
-        documentToEdit: {
-          correspondenceId: 'document-id-123',
-        },
+        docketEntryId: 'document-id-123',
         form: {
           primaryDocumentFile: {},
         },
@@ -41,6 +39,14 @@ describe('overwriteCorrespondenceFileAction', () => {
       applicationContextForClient.getUseCases()
         .uploadCorrespondenceDocumentInteractor,
     ).toBeCalled();
+    expect(
+      applicationContextForClient.getUseCases()
+        .uploadCorrespondenceDocumentInteractor,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        keyToOverwrite: 'document-id-123',
+      }),
+    );
     expect(successStub).toHaveBeenCalledWith({
       primaryDocumentFileId: 'document-id-123',
     });
@@ -56,9 +62,7 @@ describe('overwriteCorrespondenceFileAction', () => {
     runAction(overwriteCorrespondenceFileAction, {
       modules: { presenter },
       state: {
-        documentToEdit: {
-          correspondenceId: 'document-id-123',
-        },
+        docketEntryId: 'document-id-123',
         form: {
           primaryDocumentFile: {},
         },
