@@ -13,23 +13,19 @@ import { state } from 'cerebral';
 export const getDefaultDraftViewerDocumentToDisplayAction = ({
   applicationContext,
   get,
-  props,
 }) => {
-  const { draftDocketEntryId } = props;
-
-  let viewerDraftDocumentToDisplay = null;
+  const draftDocketEntryId = get(state.draftDocumentViewerDocketEntryId);
   const caseDetail = get(state.caseDetail);
-
   const { draftDocuments } = applicationContext
     .getUtilities()
     .formatCase(applicationContext, cloneDeep(caseDetail));
+
+  let viewerDraftDocumentToDisplay = draftDocuments[0];
 
   if (draftDocketEntryId) {
     viewerDraftDocumentToDisplay = draftDocuments.find(
       d => d.docketEntryId === draftDocketEntryId,
     );
-  } else {
-    viewerDraftDocumentToDisplay = draftDocuments[0];
   }
 
   return {
