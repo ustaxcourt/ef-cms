@@ -149,11 +149,11 @@ data "aws_s3_bucket_object" "cron_green_east_object" {
   key        = "cron_green.js.zip"
 }
 
-data "aws_elasticsearch_domain" "green_elasticsearch_domain" {
+data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   domain_name = var.green_elasticsearch_domain
 }
 
-data "aws_elasticsearch_domain" "blue_elasticsearch_domain" {
+data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
   domain_name = var.blue_elasticsearch_domain
 }
 
@@ -173,7 +173,7 @@ module "api-east-green" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_east_elasticsearch_domain.endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -207,7 +207,7 @@ module "api-east-blue" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_east_elasticsearch_domain.endpoint
   })
   region   = "us-east-1"
   validate = 1

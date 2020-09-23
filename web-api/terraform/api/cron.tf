@@ -5,7 +5,7 @@ resource "aws_lambda_function" "reprocess_cron_lambda" {
   s3_key           = "cron_${var.current_color}.js.zip"
   source_code_hash = var.cron_object_hash
   function_name    = "reprocess_cron_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "cron.reprocessFailedRecordsHandler"
   timeout          = "29"
   memory_size      = "3008"
@@ -46,7 +46,7 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
   s3_key           = "cron_${var.current_color}.js.zip"
   source_code_hash = var.cron_object_hash
   function_name    = "check_case_cron_${var.environment}_${var.current_color}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "cron.checkForReadyForTrialCasesHandler"
   timeout          = "29"
   memory_size      = "3008"
