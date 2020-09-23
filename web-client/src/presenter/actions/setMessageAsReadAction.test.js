@@ -12,17 +12,19 @@ describe('setMessageAsReadAction', () => {
     await runAction(setMessageAsReadAction, {
       modules: { presenter },
       props: {
-        messageToMarkRead: [
-          {
-            docketNumber: '123-45',
-            messageId: '123',
-          },
-        ],
+        messageToMarkRead: {
+          docketNumber: '123-45',
+          messageId: '123',
+        },
       },
     });
 
     expect(
       applicationContext.getUseCases().setMessageAsReadInteractor,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      docketNumber: '123-45',
+      messageId: '123',
+    });
   });
 });
