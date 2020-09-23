@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for passing the props.docketEntryId
  */
 export const setDefaultDraftDocumentIdAction = ({ props, store }) => {
-  store.set(state.screenMetadata.draftDocketEntryId, props.docketEntryId);
+  store.set(state.draftDocumentViewerDocketEntryId, props.docketEntryId);
 };

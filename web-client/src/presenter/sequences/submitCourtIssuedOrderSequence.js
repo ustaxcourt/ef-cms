@@ -11,6 +11,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
@@ -18,7 +19,9 @@ import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAc
 
 const onFileUploadedSuccess = [
   submitCourtIssuedOrderAction,
+  setDefaultDraftDocumentIdAction,
   setCaseAction,
+  setDefaultDraftDocumentIdAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
