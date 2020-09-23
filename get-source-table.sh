@@ -19,19 +19,19 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo 'efcms-exp2'
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo 'irs'
+  echo 'efcms-irs'
 elif [[ $BRANCH == 'test' ]] ; then
-  echo 'test'
+  echo 'efcms-test'
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'mig'
+  echo 'efcms-mig'
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'stg'
+  echo 'efcms-stg'
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'prod'
+  echo 'efcms-prod'
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo 'daw'
+  echo 'efcms-daw'
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo 'prod'
+  echo 'efcms-prod'
 else
   exit 1;
 fi
