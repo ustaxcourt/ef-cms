@@ -369,6 +369,17 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics&info=delete-other-statistics-modal',
   },
+  {
+    actions: [
+      'wait for element #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for element .sealed-address to be visible',
+    ],
+    notes:
+      'checks a11y of sealed address display for primary and secondary contact',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
+  },
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',

@@ -12,29 +12,13 @@ describe('setDocketEntryMetaFormForEditAction', () => {
 
   beforeAll(() => {
     caseDetail = {
-      docketNumber: '123-45',
-      docketRecord: [
-        {
-          index: 1,
-        },
-        {
-          documentId: '123',
-          index: 2,
-        },
-        {
-          documentId: '234',
-          index: 3,
-        },
-        {
-          documentId: '456',
-          index: 4,
-          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
-        },
-      ],
-      documents: [
+      docketEntries: [
+        { index: 1 },
         {
           documentId: '123',
           eventCode: 'O',
+          index: 2,
+          isOnDocketRecord: true,
           lodged: false,
         },
         {
@@ -43,6 +27,8 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           documentId: '234',
           eventCode: 'A',
           filingDate: '2020-01-01',
+          index: 3,
+          isOnDocketRecord: true,
           lodged: false,
           servedAt: '2020-01-01',
           servedParties: [{ name: 'Party Man' }],
@@ -53,9 +39,13 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           documentId: '456',
           eventCode: 'A',
           filingDate: '2020-01-01',
+          index: 4,
+          isOnDocketRecord: true,
           lodged: false,
+          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
         },
       ],
+      docketNumber: '123-45',
     };
   });
 

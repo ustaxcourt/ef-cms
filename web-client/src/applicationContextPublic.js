@@ -2,6 +2,7 @@ import {
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS_MAP,
@@ -17,9 +18,8 @@ import {
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
-  formatDocketRecord,
-  formatDocketRecordWithDocument,
-  sortDocketRecords,
+  formatDocketEntry,
+  sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
@@ -28,6 +28,7 @@ import {
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
@@ -58,6 +59,7 @@ const applicationContextPublic = {
       CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
       COUNTRY_TYPES: COUNTRY_TYPES,
+      DOCKET_NUMBER_SUFFIXES,
       DOCUMENT_PROCESSING_STATUS_OPTIONS,
       INITIAL_DOCUMENT_TYPES,
       OBJECTIONS_OPTIONS_MAP,
@@ -74,6 +76,7 @@ const applicationContextPublic = {
     getCaseForPublicDocketSearchInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     getDocumentDownloadUrlInteractor,
+    getHealthCheckInteractor,
     getPublicJudgesInteractor,
     getTodaysOpinionsInteractor,
     opinionPublicSearchInteractor,
@@ -87,10 +90,9 @@ const applicationContextPublic = {
       compareCasesByDocketNumber,
       createISODateString,
       formatDateString,
-      formatDocketRecord,
-      formatDocketRecordWithDocument,
+      formatDocketEntry,
       getJudgeLastName,
-      sortDocketRecords,
+      sortDocketEntries,
     };
   },
 };

@@ -1,8 +1,12 @@
 const {
+  caseContactAddressSealedFormatter,
+  caseSealedFormatter,
+  caseSearchFilter,
+} = require('./caseFilter');
+const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const { caseSealedFormatter, caseSearchFilter } = require('./caseFilter');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -21,19 +25,64 @@ describe('caseFilter', () => {
     });
   });
 
+  describe('caseContactAddressSealedFormatter', () => {
+    it('returns contact info with ONLY the whitelisted attributes present', () => {
+      const createContactInfo = () => ({
+        additionalName: 'Bob',
+        bananas: '8-foot bunch',
+        city: 'Los Angeles',
+        contactId: '42-universe-everything',
+        inCareOf: 'Friendship is Magic',
+        isAddressSealed: true,
+        name: 'Joe Dirt',
+        otherFilerType: 'Nail File',
+        secondaryName: 'Cheeseburgers',
+        title: 'Emperor',
+        transmission: 'manual',
+      });
+      const caseDetail = {};
+      caseDetail.contactPrimary = createContactInfo();
+      caseDetail.contactSecondary = createContactInfo();
+      caseDetail.otherFilers = [createContactInfo(), createContactInfo()];
+      caseDetail.otherPetitioners = [createContactInfo(), createContactInfo()];
+
+      const result = caseContactAddressSealedFormatter(caseDetail, {
+        role: ROLES.petitioner,
+      });
+      [
+        result.contactPrimary,
+        result.contactSecondary,
+        ...result.otherFilers,
+        ...result.otherPetitioners,
+      ].forEach(party => {
+        expect(Object.keys(party).sort()).toMatchObject([
+          'additionalName',
+          'contactId',
+          'inCareOf',
+          'isAddressSealed',
+          'name',
+          'otherFilerType',
+          'sealedAndUnavailable',
+          'secondaryName',
+          'title',
+        ]);
+      });
+    });
+  });
+
   describe('caseSearchFilter', () => {
     const caseSearchResults = [
       {
         baz: 'quux',
+        docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '101-20',
-        documents: [{ documentType: 'Petition' }],
         foo: 'baz',
         sealedDate: undefined,
       },
       {
         baz: 'quux',
+        docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '102-20',
-        documents: [{ documentType: 'Petition' }],
         foo: 'bar',
         irsPractitioners: [{ userId: 'authRespondent' }],
         privatePractitioners: [{ userId: 'authPractitioner' }],
@@ -41,10 +90,17 @@ describe('caseFilter', () => {
       },
       {
         baz: 'quux',
-        docketNumber: '102-20',
-        documents: [
+        contactPrimary: {
+          address1: '1 Eagle Way',
+          city: 'Hotel California',
+          isAddressSealed: true,
+          name: 'Joe Walsh',
+          state: 'CA',
+        },
+        docketEntries: [
           { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
         ],
+        docketNumber: '102-20',
         foo: 'bar',
         irsPractitioners: [{ userId: 'authRespondent' }],
         privatePractitioners: [{ userId: 'authPractitioner' }],
@@ -62,6 +118,20 @@ describe('caseFilter', () => {
       expect(result[0]).toMatchObject({
         docketNumber: '101-20',
         sealedDate: undefined,
+      });
+    });
+
+    it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
+      let result = caseSearchFilter(caseSearchResults, {
+        role: ROLES.petitionsClerk,
+        userId: 'petitionsClerk',
+      });
+
+      expect(result.length).toEqual(3);
+      expect(result[2].contactPrimary).toMatchObject({
+        isAddressSealed: true,
+        name: 'Joe Walsh',
+        sealedAndUnavailable: true,
       });
     });
 

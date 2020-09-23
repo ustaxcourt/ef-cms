@@ -10,9 +10,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
-const { omit } = require('lodash');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -81,12 +79,15 @@ exports.updateDocketEntryInteractor = async ({
     serviceDate: documentMetadata.serviceDate,
   };
 
-  const documentEntity = new Document(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
+      description: editableFields.documentTitle,
       documentId: primaryDocumentFileId,
+      editState: JSON.stringify(editableFields),
+      isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
@@ -97,26 +98,8 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
-    documentEntity.documentId,
-  );
-
-  const docketRecordEntry = new DocketRecord(
-    {
-      ...existingDocketRecordEntry,
-      description: editableFields.documentTitle,
-      documentId: documentEntity.documentId,
-      editState: JSON.stringify(editableFields),
-      eventCode: documentEntity.eventCode,
-      filingDate: documentEntity.receivedAt,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
-
   if (editableFields.isFileAttached) {
-    const { workItem } = documentEntity;
+    const { workItem } = docketEntryEntity;
 
     if (!isSavingForLater) {
       const workItemToDelete =
@@ -140,8 +123,8 @@ exports.updateDocketEntryInteractor = async ({
         docketNumber: caseToUpdate.docketNumber,
         docketNumberSuffix: caseToUpdate.docketNumberSuffix,
         document: {
-          ...documentEntity.toRawObject(),
-          createdAt: documentEntity.createdAt,
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
         },
         inProgress: isSavingForLater,
         section: DOCKET_SECTION,
@@ -162,20 +145,20 @@ exports.updateDocketEntryInteractor = async ({
         sentByUserId: user.userId,
       });
 
-      documentEntity.setWorkItem(workItem);
+      docketEntryEntity.setWorkItem(workItem);
 
       const servedParties = aggregatePartiesForService(caseEntity);
-      documentEntity.setAsServed(servedParties.all);
-      documentEntity.setAsProcessingStatusAsCompleted();
+      docketEntryEntity.setAsServed(servedParties.all);
+      docketEntryEntity.setAsProcessingStatusAsCompleted();
 
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
-        documentEntity,
+        documentEntity: docketEntryEntity,
         servedParties,
       });
     } else {
-      documentEntity.numberOfPages = await applicationContext
+      docketEntryEntity.numberOfPages = await applicationContext
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
@@ -190,8 +173,8 @@ exports.updateDocketEntryInteractor = async ({
         docketNumber: caseToUpdate.docketNumber,
         docketNumberSuffix: caseToUpdate.docketNumberSuffix,
         document: {
-          ...documentEntity.toRawObject(),
-          createdAt: documentEntity.createdAt,
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
         },
         inProgress: isSavingForLater,
         section: DOCKET_SECTION,
@@ -214,7 +197,7 @@ exports.updateDocketEntryInteractor = async ({
           workItem: workItem.validate().toRawObject(),
         });
     }
-    caseEntity.updateDocument(documentEntity);
+    caseEntity.updateDocketEntry(docketEntryEntity);
 
     await applicationContext
       .getPersistenceGateway()
@@ -223,7 +206,7 @@ exports.updateDocketEntryInteractor = async ({
         workItem: workItem.validate().toRawObject(),
       });
   } else if (!editableFields.isFileAttached && isSavingForLater) {
-    const { workItem } = documentEntity;
+    const { workItem } = docketEntryEntity;
 
     Object.assign(workItem, {
       assigneeId: null,
@@ -233,8 +216,8 @@ exports.updateDocketEntryInteractor = async ({
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
       document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
       inProgress: isSavingForLater,
       section: DOCKET_SECTION,
@@ -258,7 +241,7 @@ exports.updateDocketEntryInteractor = async ({
       });
   }
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

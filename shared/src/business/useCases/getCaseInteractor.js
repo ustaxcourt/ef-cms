@@ -1,17 +1,20 @@
 const {
+  caseContactAddressSealedFormatter,
+  caseSealedFormatter,
+} = require('../utilities/caseFilter');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case, isAssociatedUser } = require('../entities/cases/Case');
-const { caseSealedFormatter } = require('../utilities/caseFilter');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 
 const getDocumentContentsForDocuments = async ({
   applicationContext,
-  documents,
+  docketEntries,
 }) => {
-  for (const document of documents) {
+  for (const document of docketEntries) {
     if (document.documentContentsId) {
       try {
         const documentContentsFile = await applicationContext
@@ -40,7 +43,7 @@ const getDocumentContentsForDocuments = async ({
     }
   }
 
-  return documents;
+  return docketEntries;
 };
 
 /**
@@ -65,6 +68,8 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     throw error;
   }
 
+  let caseDetailRaw;
+
   if (
     !isAuthorized(
       applicationContext.getCurrentUser(),
@@ -74,8 +79,6 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  let caseDetailRaw;
 
   if (caseRecord.sealedDate) {
     let isAuthorizedUser =
@@ -95,9 +98,9 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
         .validate()
         .toRawObject();
 
-      caseDetailRaw.documents = await getDocumentContentsForDocuments({
+      caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
         applicationContext,
-        documents: caseDetailRaw.documents,
+        docketEntries: caseDetailRaw.docketEntries,
       });
     } else {
       caseRecord = caseSealedFormatter(caseRecord);
@@ -114,10 +117,16 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
       .validate()
       .toRawObject();
 
-    caseDetailRaw.documents = await getDocumentContentsForDocuments({
+    caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
       applicationContext,
-      documents: caseDetailRaw.documents,
+      docketEntries: caseDetailRaw.docketEntries,
     });
   }
+
+  caseDetailRaw = caseContactAddressSealedFormatter(
+    caseDetailRaw,
+    applicationContext.getCurrentUser(),
+  );
+
   return caseDetailRaw;
 };

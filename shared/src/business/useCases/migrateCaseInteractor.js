@@ -43,11 +43,6 @@ exports.migrateCaseInteractor = async ({
         applicationContext
           .getPersistenceGateway()
           .deleteCaseByDocketNumber({ applicationContext, docketNumber }),
-        ...caseToDelete.documents.map(({ documentId }) =>
-          applicationContext
-            .getPersistenceGateway()
-            .deleteDocumentFromS3({ applicationContext, key: documentId }),
-        ),
       ]);
     }
   }
@@ -107,6 +102,13 @@ exports.migrateCaseInteractor = async ({
 
     const trialSessionEntity = new TrialSession(trialSessionData, {
       applicationContext,
+    });
+
+    trialSessionEntity.addCaseToCalendar(caseToAdd);
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
     });
 
     caseToAdd.setAsCalendared(trialSessionEntity);

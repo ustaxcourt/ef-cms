@@ -14,7 +14,7 @@ export const completeWorkItemForDocumentSigningAction = async ({
   const messageId = get(state.currentViewMetadata.messageId);
   const caseDetail = get(state.caseDetail);
   const originalDocumentId = get(state.pdfForSigning.documentId);
-  const document = caseDetail.documents.find(
+  const document = caseDetail.docketEntries.find(
     caseDocument => caseDocument.documentId === originalDocumentId,
   );
 

@@ -244,7 +244,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          documents: [
+          docketEntries: [
             {
               documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
               documentType: 'Ownership Disclosure Statement',
@@ -264,7 +264,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          documents: [
+          docketEntries: [
             {
               documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
               documentType: 'Petition',
@@ -306,7 +306,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          documents: [
+          docketEntries: [
             {
               documentId: '123',
               documentTitle: 'Request for Place of Trial at Somewhere, USA',

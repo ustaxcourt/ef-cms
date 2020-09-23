@@ -13,7 +13,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const modalState = get(state.modal);
   let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
   const showJudgesNotes = permissions.JUDGES_NOTES;
@@ -53,63 +52,31 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.petitioner) {
     showEditContacts = true;
-  } else if (user.role === USER_ROLES.irsPractitioner) {
-    showEditContacts = false;
   } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
   } else if (user.role === USER_ROLES.docketClerk) {
     showEditPetitionerInformation = true;
   }
 
-  const practitionerMatchesFormatted =
-    modalState && modalState.practitionerMatches;
-  if (practitionerMatchesFormatted) {
-    practitionerMatchesFormatted.map(practitioner => {
-      if (practitioner.contact) {
-        practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
-      }
-      if (caseDetail.privatePractitioners) {
-        practitioner.isAlreadyInCase = caseDetail.privatePractitioners.find(
-          casePractitioner => casePractitioner.userId === practitioner.userId,
-        );
-      }
-    });
-  }
-  const respondentMatchesFormatted = modalState && modalState.respondentMatches;
-  if (respondentMatchesFormatted) {
-    respondentMatchesFormatted.map(respondent => {
-      if (respondent.contact) {
-        respondent.cityStateZip = `${respondent.contact.city}, ${respondent.contact.state} ${respondent.contact.postalCode}`;
-      }
-      if (caseDetail.irsPractitioners) {
-        respondent.isAlreadyInCase = caseDetail.irsPractitioners.find(
-          caseRespondent => caseRespondent.userId === respondent.userId,
-        );
-      }
-    });
-  }
-
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
   const petitionDocument = applicationContext
     .getUtilities()
-    .getPetitionDocumentFromDocuments(caseDetail.documents);
+    .getPetitionDocumentFromDocuments(caseDetail.docketEntries);
   const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+
+  const hasPrivatePractitioners =
+    !!caseDetail.privatePractitioners &&
+    !!caseDetail.privatePractitioners.length;
+  const hasIrsPractitioners =
+    !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
 
   return {
     caseDeadlines,
     documentDetailTab,
     hasConsolidatedCases,
-    practitionerMatchesFormatted,
-    practitionerSearchResultsCount:
-      modalState &&
-      modalState.practitionerMatches &&
-      modalState.practitionerMatches.length,
-    respondentMatchesFormatted,
-    respondentSearchResultsCount:
-      modalState &&
-      modalState.respondentMatches &&
-      modalState.respondentMatches.length,
+    hasIrsPractitioners,
+    hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
@@ -128,15 +95,9 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
     showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
-    showPractitionerSection:
-      !isExternalUser ||
-      (caseDetail.privatePractitioners &&
-        !!caseDetail.privatePractitioners.length),
+    showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRespondentSection:
-      !isExternalUser ||
-      (caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length),
     userCanViewCase:
       (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,

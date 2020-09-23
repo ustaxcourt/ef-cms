@@ -22,8 +22,10 @@ export const caseInformationHelper = get => {
   const otherPetitioners = [...(caseDetail.otherPetitioners || [])];
   const showOtherPetitioners = !!otherPetitioners.length;
   const formattedOtherPetitioners = showingAdditionalPetitioners
-    ? otherPetitioners || []
+    ? otherPetitioners
     : otherPetitioners.slice(0, 4);
+
+  const showSealAddressLink = permissions.SEAL_ADDRESS;
 
   return {
     formattedOtherPetitioners,
@@ -31,6 +33,7 @@ export const caseInformationHelper = get => {
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showOtherPetitioners,
+    showSealAddressLink,
     showSealCaseButton,
     toggleAdditionalPetitionersDisplay,
   };

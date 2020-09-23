@@ -1,9 +1,18 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketNumberFromModalSearchAction } from './setDocketNumberFromModalSearchAction';
 
 describe('setDocketNumberFromModalSearchAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('matches a docket number', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18',
@@ -14,6 +23,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with S suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18S',
@@ -24,6 +36,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with S suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18S',
@@ -34,6 +49,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with R suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18R',
@@ -44,6 +62,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with P suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18P',
@@ -54,6 +75,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with W suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18W',
@@ -64,6 +88,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with X suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18X',
@@ -74,6 +101,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with L suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18L',
@@ -84,6 +114,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('matches a docket number with SL suffix', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18SL',
@@ -94,6 +127,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('does not match a docket number in invalid format', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '101-18SX',
@@ -104,6 +140,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('does not match a non-docket number', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: 'XY101-18',
@@ -114,6 +153,9 @@ describe('setDocketNumberFromModalSearchAction', () => {
   });
   it('trims the search term', async () => {
     const { output } = await runAction(setDocketNumberFromModalSearchAction, {
+      modules: {
+        presenter,
+      },
       state: {
         modal: {
           searchTerm: '  101-18SL  ',

@@ -31,7 +31,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [] },
+        caseDetail: { docketEntries: [], privatePractitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -52,7 +52,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [] },
+        caseDetail: { docketEntries: [], privatePractitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -73,7 +73,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           privatePractitioners: [{ userId: '123' }],
         },
         currentPage: 'CaseDetail',
@@ -94,7 +94,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [] },
+        caseDetail: { docketEntries: [], privatePractitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -112,7 +112,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -131,7 +131,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -151,7 +151,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           privatePractitioners: [{ userId: '123' }],
         },
         currentPage: 'CaseDetail',
@@ -171,7 +171,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           privatePractitioners: [{ userId: '234' }],
         },
         currentPage: 'CaseDetail',
@@ -190,7 +190,10 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '789' }] },
+        caseDetail: {
+          docketEntries: [],
+          irsPractitioners: [{ userId: '789' }],
+        },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -210,7 +213,10 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '123' }] },
+        caseDetail: {
+          docketEntries: [],
+          irsPractitioners: [{ userId: '123' }],
+        },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -230,7 +236,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -251,7 +257,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDeadlines: ['something'],
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -273,7 +279,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDeadlines: [],
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -295,7 +301,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDeadlines: ['something'],
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -317,7 +323,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDeadlines: ['something'],
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
       },
@@ -336,7 +342,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDeadlines: [],
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetail',
         form: {},
       },
@@ -354,7 +360,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         form: {},
       },
     });
@@ -370,7 +376,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [],
+          docketEntries: [],
           privatePractitioners: [{ name: 'Test Practitioner' }],
         },
         form: {},
@@ -387,243 +393,11 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [] },
+        caseDetail: { docketEntries: [], privatePractitioners: [] },
         form: {},
       },
     });
     expect(result.showPractitionerSection).toEqual(false);
-  });
-
-  it('should show respondent section if user is an internal user', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-      },
-    });
-    expect(result.showRespondentSection).toEqual(true);
-  });
-
-  it('should show respondent section if user is an external user and there are irsPractitioners on the case', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          documents: [],
-          irsPractitioners: [{ name: 'Test Respondents' }],
-        },
-        form: {},
-      },
-    });
-    expect(result.showRespondentSection).toEqual(true);
-  });
-
-  it('should not show respondent section if user is an external user and there are no irsPractitioners on the case', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [] },
-        form: {},
-      },
-    });
-    expect(result.showRespondentSection).toEqual(false);
-  });
-
-  it('should format practitioner matches with cityStateZip string and isAlreadyInCase boolean', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [], privatePractitioners: [{ userId: '2' }] },
-        form: {},
-        modal: {
-          practitionerMatches: [
-            {
-              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
-              name: '1',
-              userId: '1',
-            },
-            {
-              contact: {
-                city: 'Somewhere Else',
-                postalCode: '54321',
-                state: 'TX',
-              },
-              name: '2',
-              userId: '2',
-            },
-          ],
-        },
-      },
-    });
-    expect(result.practitionerMatchesFormatted).toMatchObject([
-      {
-        cityStateZip: 'Somewhere, AL 12345',
-        name: '1',
-      },
-      {
-        cityStateZip: 'Somewhere Else, TX 54321',
-        name: '2',
-      },
-    ]);
-    expect(result.practitionerMatchesFormatted[0].isAlreadyInCase).toBeFalsy();
-    expect(result.practitionerMatchesFormatted[1].isAlreadyInCase).toBeTruthy();
-  });
-
-  it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-        modal: { practitionerMatches: [{ name: '1' }, { name: '2' }] },
-      },
-    });
-    expect(result.practitionerSearchResultsCount).toEqual(2);
-  });
-
-  it('should set practitionerSearchResultsCount to 0 if the state.modal.practitionerMatches is an empty array', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-        modal: { practitionerMatches: [] },
-      },
-    });
-    expect(result.practitionerSearchResultsCount).toEqual(0);
-  });
-
-  it('should not set practitionerSearchResultsCount if state.modal is an empty object', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-        modal: {},
-      },
-    });
-    expect(result.practitionerSearchResultsCount).toBeUndefined();
-  });
-
-  it('should format respondent matches with cityStateZip string and isAlreadyInCase boolean', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [], irsPractitioners: [{ userId: '1' }] },
-        form: {},
-        modal: {
-          respondentMatches: [
-            {
-              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
-              name: '1',
-              userId: '1',
-            },
-            {
-              contact: {
-                city: 'Somewhere Else',
-                postalCode: '54321',
-                state: 'TX',
-              },
-              name: '2',
-              userId: '2',
-            },
-          ],
-        },
-      },
-    });
-    expect(result.respondentMatchesFormatted).toMatchObject([
-      {
-        cityStateZip: 'Somewhere, AL 12345',
-        name: '1',
-      },
-      {
-        cityStateZip: 'Somewhere Else, TX 54321',
-        name: '2',
-      },
-    ]);
-    expect(result.respondentMatchesFormatted[0].isAlreadyInCase).toBeTruthy();
-    expect(result.respondentMatchesFormatted[1].isAlreadyInCase).toBeFalsy();
-  });
-
-  it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-        modal: { respondentMatches: [{ name: '1' }, { name: '2' }] },
-      },
-    });
-    expect(result.respondentSearchResultsCount).toEqual(2);
-  });
-
-  it('should set respondentSearchResultsCount to 0 if the state.modal.respondentMatches is an empty array', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-        modal: { respondentMatches: [] },
-      },
-    });
-    expect(result.respondentSearchResultsCount).toEqual(0);
-  });
-
-  it('should not set respondentSearchResultsCount if state.modal is an empty object', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { documents: [] },
-        form: {},
-        modal: {},
-      },
-    });
-    expect(result.respondentSearchResultsCount).toBeUndefined();
   });
 
   it('should show empty state for consolidated cases', () => {
@@ -636,7 +410,7 @@ describe('case detail computed', () => {
         ...getBaseState(user),
         caseDetail: {
           consolidatedCases: [],
-          documents: [],
+          docketEntries: [],
           noticeOfAttachments: false,
           orderDesignatingPlaceOfTrial: false,
           orderForAmendedPetition: false,
@@ -661,7 +435,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
         permissions: { EDIT_PETITION_DETAILS: true },
@@ -678,7 +452,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
         permissions: { EDIT_PETITION_DETAILS: false },
@@ -695,7 +469,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailExternal',
         form: {},
       },
@@ -711,7 +485,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailExternal',
         form: {},
       },
@@ -727,7 +501,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailExternal',
         form: {},
       },
@@ -743,7 +517,7 @@ describe('case detail computed', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { documents: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -760,7 +534,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [
+          docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
         },
@@ -780,12 +554,90 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          documents: [{ documentType: 'Petition' }],
+          docketEntries: [{ documentType: 'Petition' }],
         },
         currentPage: 'CaseDetailExternal',
         form: {},
       },
     });
     expect(result.showPetitionProcessingAlert).toEqual(true);
+  });
+
+  it('should return hasIrsPractitioners false if there are no irs practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [], irsPractitioners: [] },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasIrsPractitioners).toEqual(false);
+  });
+
+  it('should return hasIrsPractitioners true if there are irs practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [],
+          irsPractitioners: [{ userId: '789' }],
+        },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasIrsPractitioners).toEqual(true);
+  });
+
+  it('should return hasPrivatePractitioners false if there are no private practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [], privatePractitioners: [] },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasPrivatePractitioners).toEqual(false);
+  });
+
+  it('should return hasPrivatePractitioners true if there are private practitioners on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [],
+          privatePractitioners: [{ userId: '789' }],
+        },
+
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.hasPrivatePractitioners).toEqual(true);
   });
 });

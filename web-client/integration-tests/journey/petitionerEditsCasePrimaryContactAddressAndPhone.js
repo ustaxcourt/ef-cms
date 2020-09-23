@@ -38,9 +38,9 @@ export const petitionerEditsCasePrimaryContactAddressAndPhone = test => {
       },
     );
 
-    const noticeDocument = caseDetailFormatted.docketRecordWithDocument.find(
+    const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
       entry =>
-        entry.record.description ===
+        entry.description ===
         'Notice of Change of Address and Telephone Number for Mona Schultz',
     );
 

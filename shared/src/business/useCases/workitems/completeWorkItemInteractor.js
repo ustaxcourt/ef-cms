@@ -33,13 +33,14 @@ exports.completeWorkItemInteractor = async ({
       applicationContext,
       workItemId,
     });
-
-  const completedWorkItem = new WorkItem(originalWorkItem, {
+  const originalWorkItemEntity = new WorkItem(originalWorkItem, {
     applicationContext,
-  })
+  });
+
+  const completedWorkItem = originalWorkItemEntity
     .setAsCompleted({
       message: completedMessage,
-      user: applicationContext.getCurrentUser(),
+      user,
     })
     .validate()
     .toRawObject();
@@ -75,7 +76,7 @@ exports.completeWorkItemInteractor = async ({
     applicationContext,
   });
 
-  caseToUpdate.documents.forEach(document => {
+  caseToUpdate.docketEntries.forEach(document => {
     if (
       document.workItem &&
       document.workItem.workItemId === workItemEntity.workItemId

@@ -5,10 +5,10 @@ import { runAction } from 'cerebral/test';
 
 describe('completeDocketEntryQCAction', () => {
   const caseDetail = {
-    docketNumber: '123-45',
-    documents: [
+    docketEntries: [
       { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
     ],
+    docketNumber: '123-45',
   };
 
   beforeAll(() => {

@@ -38,54 +38,58 @@ export const PublicDocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {publicCaseDetailHelper.formattedDocketEntries.map(entry => {
-              return (
-                <tr key={entry.index}>
-                  <td className="center-column hide-on-mobile">
-                    {entry.index}
-                  </td>
-                  <td>
-                    <span
-                      className={classNames(
-                        entry.isStricken && 'stricken-docket-record',
-                        'no-wrap',
-                      )}
-                    >
-                      {entry.createdAtFormatted}
-                    </span>
-                  </td>
-                  <td className="center-column hide-on-mobile">
-                    {entry.eventCode}
-                  </td>
-                  <td
-                    aria-hidden="true"
-                    className="filing-type-icon hide-on-mobile"
-                  >
-                    {entry.isPaper && (
-                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                    )}
-                  </td>
-                  <td>
-                    <PublicFilingsAndProceedings entry={entry} />
-                  </td>
-                  <td className="hide-on-mobile">{entry.numberOfPages}</td>
-                  <td className="hide-on-mobile">{entry.filedBy}</td>
-                  <td className="hide-on-mobile">{entry.action}</td>
-                  <td>
-                    {entry.showNotServed && (
-                      <span className="text-secondary text-semibold">
-                        Not served
+            {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
+              entry => {
+                return (
+                  <tr key={entry.index}>
+                    <td className="center-column hide-on-mobile">
+                      {entry.index}
+                    </td>
+                    <td>
+                      <span
+                        className={classNames(
+                          entry.isStricken && 'stricken-docket-record',
+                          'no-wrap',
+                        )}
+                      >
+                        {entry.createdAtFormatted}
                       </span>
-                    )}
-                    {entry.showServed && <span>{entry.servedAtFormatted}</span>}
-                  </td>
-                  <td className="center-column hide-on-mobile">
-                    <span className="responsive-label">Parties</span>
-                    {entry.servedPartiesCode}
-                  </td>
-                </tr>
-              );
-            })}
+                    </td>
+                    <td className="center-column hide-on-mobile">
+                      {entry.eventCode}
+                    </td>
+                    <td
+                      aria-hidden="true"
+                      className="filing-type-icon hide-on-mobile"
+                    >
+                      {entry.isPaper && (
+                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                      )}
+                    </td>
+                    <td>
+                      <PublicFilingsAndProceedings entry={entry} />
+                    </td>
+                    <td className="hide-on-mobile">{entry.numberOfPages}</td>
+                    <td className="hide-on-mobile">{entry.filedBy}</td>
+                    <td className="hide-on-mobile">{entry.action}</td>
+                    <td>
+                      {entry.showNotServed && (
+                        <span className="text-secondary text-semibold">
+                          Not served
+                        </span>
+                      )}
+                      {entry.showServed && (
+                        <span>{entry.servedAtFormatted}</span>
+                      )}
+                    </td>
+                    <td className="center-column hide-on-mobile">
+                      <span className="responsive-label">Parties</span>
+                      {entry.servedPartiesCode}
+                    </td>
+                  </tr>
+                );
+              },
+            )}
           </tbody>
         </table>
       </>

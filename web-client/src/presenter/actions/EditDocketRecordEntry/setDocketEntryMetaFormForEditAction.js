@@ -16,7 +16,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   props,
   store,
 }) => {
-  const { docketRecord, documents } = get(state.caseDetail);
+  const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
   const { deconstructDate } = applicationContext.getUtilities();
 
@@ -37,32 +37,23 @@ export const setDocketEntryMetaFormForEditAction = ({
     return deconstructedDate;
   };
 
-  const docketRecordEntry = docketRecord.find(
+  const documentDetail = docketEntries.find(
     ({ index }) => index === docketRecordIndex,
   );
 
   store.set(state.docketRecordIndex, docketRecordIndex);
 
-  if (docketRecordEntry.documentId) {
-    const documentDetail =
-      documents.find(
-        document => docketRecordEntry.documentId === document.documentId,
-      ) || {};
-
+  if (documentDetail) {
     documentDetail.servedPartiesCode =
-      docketRecordEntry.servedPartiesCode ||
+      documentDetail.servedPartiesCode ||
       applicationContext
         .getUtilities()
         .getServedPartiesCode(documentDetail.servedParties);
 
     store.set(state.form, {
-      ...docketRecordEntry,
       ...documentDetail,
       lodged: !!documentDetail.lodged,
-      ...deconstructDateWrapper(
-        documentDetail.filingDate || docketRecordEntry.filingDate,
-        'filingDate',
-      ),
+      ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
       ...deconstructDateWrapper(
         documentDetail.certificateOfServiceDate,
         'certificateOfService',
@@ -76,8 +67,8 @@ export const setDocketEntryMetaFormForEditAction = ({
     };
   } else {
     store.set(state.form, {
-      ...docketRecordEntry,
-      ...deconstructDateWrapper(docketRecordEntry.filingDate, 'filingDate'),
+      ...documentDetail,
+      ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
     });
   }
 };

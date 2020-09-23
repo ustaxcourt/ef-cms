@@ -122,7 +122,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
     });
 
     test.documentId = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === docketEntryEventCode).documentId;
 
     expect(test.getState('alertSuccess').message).toEqual(

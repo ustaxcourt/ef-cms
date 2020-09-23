@@ -21,6 +21,7 @@ import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTria
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
+import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequence';
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
@@ -214,6 +215,7 @@ import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequ
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
+import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
@@ -245,6 +247,7 @@ import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessi
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
+import { sealAddressSequence } from './sequences/sealAddressSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
@@ -397,7 +400,7 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
-import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
+import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
 import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -455,6 +458,7 @@ export const presenter = {
     blockCaseFromTrialSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
+    canEditContactInformationSequence,
     cancelAddDraftDocumentSequence,
     cancelAddStatisticSequence,
     cancelAndNavigateToCorrespondenceSequence,
@@ -648,6 +652,7 @@ export const presenter = {
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openReplyToMessageModalSequence,
+    openSealAddressModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     openStrikeDocketEntryModalSequence,
@@ -679,6 +684,7 @@ export const presenter = {
     saveDocumentSigningSequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
+    sealAddressSequence,
     sealCaseSequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,
@@ -829,7 +835,7 @@ export const presenter = {
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validateEditIrsPractitionersSequence,
     validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,

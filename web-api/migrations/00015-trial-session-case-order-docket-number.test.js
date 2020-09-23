@@ -82,7 +82,7 @@ describe('replace caseId with docketNumber for each item in trialSession.caseOrd
         startDate: '3000-03-03',
         term: 'Spring',
         termYear: '3000',
-        trialLocation: 'Under the Sea',
+        trialLocation: 'Chicago, Illinois',
         trialSessionId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       },
     ];
@@ -106,7 +106,7 @@ describe('replace caseId with docketNumber for each item in trialSession.caseOrd
         startDate: '3000-03-03',
         term: 'Spring',
         termYear: '3000',
-        trialLocation: 'Under the Sea',
+        trialLocation: 'Chicago, Illinois',
         trialSessionId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       },
     ];

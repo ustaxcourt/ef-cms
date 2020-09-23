@@ -18,6 +18,7 @@ data "null_data_source" "locals" {
     CLAMAV_DEF_DIR                 = "/opt/var/lib/clamav"
     CIRCLE_HONEYBADGER_API_KEY     = var.honeybadger_key
     IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
+    COGNITO_SUFFIX                 = var.cognito_suffix
   }
 }
 

@@ -414,6 +414,7 @@ table.docket-record {
       text-align: right;
 
       svg {
+        margin-top: 4px;
         margin-right: 0;
       }
     }
@@ -433,7 +434,7 @@ table.docket-record {
 
     tr.qc-untouched {
       td {
-        font-weight: bold;
+        font-weight: $font-semibold;
       }
       .fa-star {
         color: color($theme-color-secondary-dark);
@@ -444,6 +445,10 @@ table.docket-record {
       td {
         background: $color-primary-alt-lightest;
       }
+    }
+
+    button.view-pdf-link {
+      padding: 0;
     }
   }
 

@@ -2508,6 +2508,50 @@
         }
       }
     },
+    "/public-api/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "returns the health of various services",
+        "description": "Returns the health of various services.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/health"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/documents/{documentId}/virus-scan": {
       "parameters": [
         {
@@ -5051,6 +5095,64 @@
         }
       }
     },
+    "/case-meta/{docketNumber}/seal-address/{contactId}": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "contactId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the specified case contact address as sealed",
+        "description": "updates the case contact address as sealed.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-parties/{docketNumber}/associate-private-practitioner": {
       "parameters": [
         {
@@ -6145,6 +6247,81 @@
     }
   },
   "definitions": {
+    "health": {
+      "type": "object",
+      "properties": {
+        "clamAV": {
+          "type": "boolean",
+          "description": "the status of clamav"
+        },
+        "cognito": {
+          "type": "boolean",
+          "description": "the status of cognito ui"
+        },
+        "dynamo": {
+          "type": "object",
+          "properties": {
+            "efcms": {
+              "type": "boolean",
+              "description": "the status of main dynamo table"
+            },
+            "efcmsDeploy": {
+              "type": "boolean",
+              "description": "the status of deploy dynamo table"
+            }
+          }
+        },
+        "dynamsoft": {
+          "type": "boolean",
+          "description": "the status of static hosted dynamsoft files"
+        },
+        "elasticsearch": {
+          "type": "boolean",
+          "description": "the status of elasticsearch"
+        },
+        "emailService": {
+          "type": "boolean",
+          "description": "the status of ses"
+        },
+        "s3": {
+          "type": "object",
+          "properties": {
+            "app": {
+              "type": "boolean",
+              "description": "the status of app bucket"
+            },
+            "appFailover": {
+              "type": "boolean",
+              "description": "the status of app failover bucket"
+            },
+            "eastDocuments": {
+              "type": "boolean",
+              "description": "the status of east documents bucket"
+            },
+            "eastTempDocuments": {
+              "type": "boolean",
+              "description": "the status of east temp documents bucket"
+            },
+            "public": {
+              "type": "boolean",
+              "description": "the status of public ui bucket"
+            },
+            "publicFailover": {
+              "type": "boolean",
+              "description": "the status of public failover ui bucket"
+            },
+            "westDocuments": {
+              "type": "boolean",
+              "description": "the status of west documents bucket"
+            },
+            "westTempDocuments": {
+              "type": "boolean",
+              "description": "the status of west temp documents"
+            }
+          }
+        }
+      }
+    },
     "policyUrl": {
       "type": "object",
       "properties": {
