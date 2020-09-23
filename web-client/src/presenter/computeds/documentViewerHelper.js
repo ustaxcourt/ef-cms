@@ -24,7 +24,8 @@ export const documentViewerHelper = (get, applicationContext) => {
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
-      entry => entry && entry.documentId === viewerDocumentToDisplay.documentId,
+      entry =>
+        entry && entry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
     );
   if (!formattedDocumentToDisplay) {
     return {};
@@ -40,7 +41,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showNotServed = getShowNotServedForDocument({
     UNSERVABLE_EVENT_CODES,
     caseDetail,
-    documentId: formattedDocumentToDisplay.documentId,
+    docketEntryId: formattedDocumentToDisplay.docketEntryId,
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
@@ -75,13 +76,13 @@ export const documentViewerHelper = (get, applicationContext) => {
   } else {
     const entry = formattedCaseDetail.formattedDocketEntries.find(
       docketEntry =>
-        docketEntry.documentId === viewerDocumentToDisplay.documentId,
+        docketEntry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
     );
     showStricken = entry.isStricken;
   }
 
   return {
-    description: formattedDocumentToDisplay.description,
+    description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
     servedLabel,
     showNotServed,

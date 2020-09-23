@@ -9,8 +9,8 @@ import React, { useEffect, useRef } from 'react';
 export const SignOrder = connect(
   {
     currentPageNumber: state.pdfForSigning.pageNumber,
+    docketEntryId: state.docketEntryId,
     docketNumber: state.caseDetail.docketNumber,
-    documentId: state.documentId,
     navigateToCaseDetailWithDraftDocumentSequence:
       sequences.navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning: state.pdfForSigning,
@@ -24,7 +24,7 @@ export const SignOrder = connect(
   },
   function SignOrder({
     currentPageNumber,
-    documentId,
+    docketEntryId,
     navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning,
     pdfObj,
@@ -158,7 +158,7 @@ export const SignOrder = connect(
                 onClick={() => {
                   navigateToCaseDetailWithDraftDocumentSequence({
                     primaryTab: 'draftDocuments',
-                    viewerDraftDocumentToDisplay: { documentId },
+                    viewerDraftDocumentToDisplay: { docketEntryId },
                   });
                 }}
               >

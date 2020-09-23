@@ -5,17 +5,17 @@ const { get } = require('./requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case containing the document
- * @param {string} providers.documentId the document id
+ * @param {string} providers.docketNumber the docket number of the case containing the docket entry
+ * @param {string} providers.key the key of the document to get
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getPublicDownloadPolicyUrl = ({
   applicationContext,
   docketNumber,
-  documentId,
+  key,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/public-api/${docketNumber}/${documentId}/public-download-policy-url`,
+    endpoint: `/public-api/${docketNumber}/${key}/public-download-policy-url`,
   });
 };

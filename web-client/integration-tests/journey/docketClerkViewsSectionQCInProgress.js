@@ -15,12 +15,13 @@ export const docketClerkViewsSectionQCInProgress = (test, shouldExist) => {
     const inProgressQueue = test.getState('workQueue');
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
-        workItem.document.documentId === test.docketRecordEntry.documentId,
+        workItem.docketEntry.docketEntryId ===
+        test.docketRecordEntry.docketEntryId,
     );
 
     if (shouldExist) {
       expect(inProgressWorkItem).toBeTruthy();
-      expect(inProgressWorkItem.document.otherFilingParty).toEqual(
+      expect(inProgressWorkItem.docketEntry.otherFilingParty).toEqual(
         'Brianna Noble',
       );
     } else {

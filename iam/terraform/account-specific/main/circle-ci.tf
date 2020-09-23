@@ -5,7 +5,7 @@ resource "aws_iam_user" "circle_ci" {
 }
 
 resource "aws_iam_user_policy_attachment" "circle_ci_policy_attachment" {
-  user = "${aws_iam_user.circle_ci.name}"
+  user       = "${aws_iam_user.circle_ci.name}"
   policy_arn = "${aws_iam_policy.circle_ci_policy.arn}"
 }
 
@@ -25,7 +25,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "route53:ListResourceRecordSets",
         "route53:ListHostedZones",
         "route53:ChangeResourceRecordSets",
-        "route53:ListTagsForResource"
+        "route53:ListTagsForResource",
+        "route53:ListHostedZonesByName"
       ],
       "Resource": "*"
     },
@@ -37,7 +38,21 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "dynamodb:ListTagsOfResource",
         "dynamodb:TagResource",
         "dynamodb:DescribeTimeToLive",
-        "dynamodb:UpdateContinuousBackups"
+        "dynamodb:UpdateContinuousBackups",
+        "dynamodb:ListStreams"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SQS",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:GetQueueAttributes",
+        "sqs:ListQueueTags",
+        "sqs:CreateQueue",
+        "sqs:SetQueueAttributes",
+        "sqs:SendMessageBatch",
+        "sqs:SendMessage"
       ],
       "Resource": "*"
     },
@@ -112,7 +127,9 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cloudfront:UpdateDistribution",
         "cloudfront:CreateCloudFrontOriginAccessIdentity",
         "cloudfront:GetCloudFrontOriginAccessIdentity",
-        "cloudfront:DeleteCloudFrontOriginAccessIdentity"
+        "cloudfront:DeleteCloudFrontOriginAccessIdentity",
+        "cloudfront:ListDistributions",
+        "cloudfront:GetDistributionConfig"
       ],
       "Resource": "*"
     },

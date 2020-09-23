@@ -21,7 +21,7 @@ describe('updateCaseCorrespondence', () => {
     const mockGuid = applicationContext.getUniqueId();
     const mockCorrespondence = new Correspondence({
       archived: false,
-      documentId: mockGuid,
+      correspondenceId: mockGuid,
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
       userId: mockGuid,
@@ -38,7 +38,7 @@ describe('updateCaseCorrespondence', () => {
     ).toMatchObject({
       Item: {
         archived: false,
-        documentId: mockGuid,
+        correspondenceId: mockGuid,
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
         pk: 'case|101-20',

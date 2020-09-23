@@ -289,6 +289,13 @@ table.work-queue {
     }
   }
 
+  th.message-unread-column,
+  td.message-unread-column {
+    width: 20px;
+    padding: 15px 0;
+    text-align: right;
+  }
+
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
 

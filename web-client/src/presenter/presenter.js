@@ -177,6 +177,7 @@ import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialM
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
+import { openCaseInNewTabSequence } from './sequences/openCaseInNewTabSequence';
 import { openCaseInventoryReportModalSequence } from './sequences/openCaseInventoryReportModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
@@ -614,6 +615,7 @@ export const presenter = {
     openCancelDraftDocumentModalSequence,
     openCaseDifferenceModalSequence,
     openCaseDocumentDownloadUrlSequence,
+    openCaseInNewTabSequence,
     openCaseInventoryReportModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,

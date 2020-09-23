@@ -19,11 +19,11 @@ describe('fetchPendingItems', () => {
       caseCaption: 'Test Petitioner, Petitioner',
       docketEntries: [
         {
-          documentId: 'def',
+          docketEntryId: 'def',
           pending: true,
         },
         {
-          documentId: 'lmnop',
+          docketEntryId: 'lmnop',
           pending: false,
         },
       ],
@@ -32,11 +32,11 @@ describe('fetchPendingItems', () => {
       caseCaption: 'Another Test Petitioner, Petitioner',
       docketEntries: [
         {
-          documentId: 'abc',
+          docketEntryId: 'abc',
           pending: true,
         },
         {
-          documentId: 'xyz',
+          docketEntryId: 'xyz',
           pending: false,
         },
       ],
@@ -61,8 +61,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { documentId: 'def', pending: true },
-      { documentId: 'abc', pending: true },
+      { docketEntryId: 'def', pending: true },
+      { docketEntryId: 'abc', pending: true },
     ]);
   });
 
@@ -95,8 +95,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { documentId: 'def', pending: true },
-      { documentId: 'abc', pending: true },
+      { docketEntryId: 'def', pending: true },
+      { docketEntryId: 'abc', pending: true },
     ]);
   });
 
@@ -132,8 +132,8 @@ describe('fetchPendingItems', () => {
         associatedJudge: CHIEF_JUDGE,
         caseCaption: 'Test Petitioner, Petitioner',
         createdAt: '2018-11-21T20:49:28.192Z',
+        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         docketNumberSuffix: null,
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Proposed Stipulated Decision',
         documentType: 'Proposed Stipulated Decision',
         eventCode: 'PSDE',

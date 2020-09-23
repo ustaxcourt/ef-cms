@@ -7,23 +7,19 @@ const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 exports.sendServedPartiesEmails = async ({
   applicationContext,
   caseEntity,
-  documentEntity,
+  docketEntryEntity,
   servedParties,
 }) => {
   const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
 
   const {
-    documentId,
+    docketEntryId,
     documentTitle,
     documentType,
     eventCode,
     filedBy,
     servedAt,
-  } = documentEntity;
-
-  const docketEntry = caseEntity.docketEntries.find(
-    entry => entry.documentId === documentId,
-  );
+  } = docketEntryEntity;
 
   const currentDate = applicationContext
     .getUtilities()
@@ -48,9 +44,9 @@ exports.sendServedPartiesEmails = async ({
             docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
           },
           currentDate,
-          docketEntryNumber: docketEntry && docketEntry.index,
+          docketEntryNumber: docketEntryEntity.index,
           documentDetail: {
-            documentId,
+            docketEntryId,
             documentTitle: documentTitle || documentType,
             eventCode,
             filedBy,
@@ -59,7 +55,7 @@ exports.sendServedPartiesEmails = async ({
               .formatDateString(servedAt, 'DATE_TIME_TZ'),
           },
           name: party.name,
-          taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,
+          taxCourtLoginUrl: `https://app-${process.env.EFCMS_DOMAIN}`,
         },
       }),
     },

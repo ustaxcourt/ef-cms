@@ -17,18 +17,18 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
-    test.documentId = documentId;
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    test.docketEntryId = docketEntryId;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: draftOrderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: draftOrderDocument.documentId,
     });
 
     // default
@@ -208,7 +208,7 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
     );
 
     const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
-      entry => entry.documentId === documentId && entry.isOnDocketRecord,
+      entry => entry.docketEntryId === docketEntryId && entry.isOnDocketRecord,
     );
 
     expect(newDocketEntry).toBeTruthy();

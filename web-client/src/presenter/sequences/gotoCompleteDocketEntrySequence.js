@@ -8,7 +8,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPdfPreviewUrlForCompleteDocketEntryAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForCompleteDocketEntryAction';
 import { setupCompleteDocketEntryAction } from '../actions/setupCompleteDocketEntryAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -25,7 +25,7 @@ export const gotoEditDocketEntry = [
   setDocketEntryFormForDocketEditAction,
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   setupCompleteDocketEntryAction,
   setPdfPreviewUrlForCompleteDocketEntryAction,
   setCurrentPageAction('AddDocketEntry'),

@@ -142,10 +142,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
       numberOfPages: 0,
       ...entry,
       createdAtFormatted: entry.createdAtFormatted,
-      description:
-        entry.description || entry.documentTitle || entry.documentType,
-      descriptionDisplay:
-        entry.description || entry.documentTitle || entry.documentType,
     };
 
     let showDocumentLinks = false;
@@ -214,7 +210,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     if (entry.filingsAndProceedings) {
       formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.filingsAndProceedings}`;
     }
-    if (entry && entry.additionalInfo2) {
+    if (entry.additionalInfo2) {
       formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.additionalInfo2}`;
     }
 
@@ -230,6 +226,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.formattedDocketEntriesOnDocketRecord = result.formattedDocketEntries.filter(
     d => d.isOnDocketRecord,
+  );
+
+  result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
+    d => d.pending,
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(

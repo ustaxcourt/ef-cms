@@ -1,9 +1,4 @@
-import {
-  DOCKET_SECTION,
-  PETITIONS_SECTION,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
-import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
 
 const isDateToday = (date, applicationContext) => {
@@ -93,11 +88,11 @@ export const formatWorkItem = ({
   );
 
   result.receivedAt = isDateToday(
-    result.document.receivedAt,
+    result.docketEntry.receivedAt,
     applicationContext,
   )
-    ? result.document.createdAt
-    : result.document.receivedAt;
+    ? result.docketEntry.createdAt
+    : result.docketEntry.receivedAt;
   result.received = formatDateIfToday(result.receivedAt, applicationContext);
 
   result.sentDateFormatted = formatDateIfToday(
@@ -106,20 +101,22 @@ export const formatWorkItem = ({
   );
 
   result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    result.document.documentType,
+    result.docketEntry.documentType,
   );
-  result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
+  result.isOrder = !!orderDocumentTypes.includes(
+    result.docketEntry.documentType,
+  );
 
-  let descriptionDisplay = result.document.documentType;
+  let descriptionDisplay = result.docketEntry.documentType;
 
-  if (result.document.documentTitle) {
-    descriptionDisplay = result.document.documentTitle;
-    if (result.document.additionalInfo) {
-      descriptionDisplay += ` ${result.document.additionalInfo}`;
+  if (result.docketEntry.documentTitle) {
+    descriptionDisplay = result.docketEntry.documentTitle;
+    if (result.docketEntry.additionalInfo) {
+      descriptionDisplay += ` ${result.docketEntry.additionalInfo}`;
     }
   }
 
-  result.document.descriptionDisplay = descriptionDisplay;
+  result.docketEntry.descriptionDisplay = descriptionDisplay;
 
   return result;
 };
@@ -153,36 +150,36 @@ export const getWorkItemDocumentLink = ({
 }) => {
   const result = cloneDeep(workItem);
 
-  const formattedDocument = applicationContext
+  const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, result.document);
+    .formatDocketEntry(applicationContext, result.docketEntry);
 
   const isInProgress = workItem.inProgress;
 
   const qcWorkItemsUntouched =
     !isInProgress &&
-    formattedDocument &&
+    formattedDocketEntry &&
     !result.isRead &&
     !result.completedAt &&
     !result.isCourtIssuedDocument;
 
   const showDocumentEditLink =
-    formattedDocument &&
+    formattedDocketEntry &&
     permissions.UPDATE_CASE &&
-    (!formattedDocument.isInProgress ||
-      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress) ||
+    (!formattedDocketEntry.isInProgress ||
+      (permissions.DOCKET_ENTRY && formattedDocketEntry.isInProgress) ||
       (permissions.QC_PETITION &&
-        formattedDocument.isPetition &&
-        formattedDocument.isInProgress));
+        formattedDocketEntry.isPetition &&
+        formattedDocketEntry.isInProgress));
 
-  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
-  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
+  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
+  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
   let editLink = documentDetailLink;
   if (showDocumentEditLink) {
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
-        formattedDocument,
+        formattedDocument: formattedDocketEntry,
         isInProgress,
         qcWorkItemsUntouched,
         result,
@@ -192,7 +189,10 @@ export const getWorkItemDocumentLink = ({
       } else {
         editLink = documentViewLink;
       }
-    } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
+    } else if (
+      formattedDocketEntry.isPetition &&
+      !formattedDocketEntry.servedAt
+    ) {
       if (result.caseIsInProgress) {
         editLink += '/review';
       } else {
@@ -212,88 +212,18 @@ export const filterWorkItems = ({
   user,
   workQueueToDisplay,
 }) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
-
   const { box, queue } = workQueueToDisplay;
-  let docQCUserSection = user.section;
 
-  if (user.section !== PETITIONS_SECTION) {
-    docQCUserSection = DOCKET_SECTION;
-  }
+  let additionalFilters = applicationContext
+    .getUtilities()
+    .filterQcItemsByAssociatedJudge({
+      applicationContext,
+      judgeUser,
+    });
 
-  let additionalFilters = filterQcItemsByAssociatedJudge({
-    applicationContext,
-    judgeUser,
-  });
-
-  const filters = {
-    my: {
-      inProgress: item => {
-        return (
-          // DocketClerks
-          (item.assigneeId === user.userId &&
-            user.role === USER_ROLES.docketClerk &&
-            !item.completedAt &&
-            item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)) ||
-          // PetitionsClerks
-          (item.assigneeId === user.userId &&
-            user.role === USER_ROLES.petitionsClerk &&
-            item.caseStatus === STATUS_TYPES.new &&
-            item.caseIsInProgress === true)
-        );
-      },
-      inbox: item => {
-        return (
-          item.assigneeId === user.userId &&
-          !item.completedAt &&
-          item.section === user.section &&
-          item.document.isFileAttached !== false &&
-          !item.inProgress &&
-          item.caseIsInProgress !== true
-        );
-      },
-      outbox: item => {
-        return (
-          (user.role === USER_ROLES.petitionsClerk ? !!item.section : true) &&
-          item.completedByUserId &&
-          item.completedByUserId === user.userId &&
-          !!item.completedAt
-        );
-      },
-    },
-    section: {
-      inProgress: item => {
-        return (
-          // DocketClerks
-          (!item.completedAt &&
-            user.role === USER_ROLES.docketClerk &&
-            item.section === user.section &&
-            (item.document.isFileAttached === false || item.inProgress)) ||
-          // PetitionsClerks
-          (user.role === USER_ROLES.petitionsClerk &&
-            item.caseStatus === STATUS_TYPES.new &&
-            item.caseIsInProgress === true)
-        );
-      },
-      inbox: item => {
-        return (
-          !item.completedAt &&
-          item.section === docQCUserSection &&
-          item.document.isFileAttached !== false &&
-          !item.inProgress &&
-          additionalFilters(item) &&
-          item.caseIsInProgress !== true
-        );
-      },
-      outbox: item => {
-        return (
-          !!item.completedAt &&
-          (user.role === USER_ROLES.petitionsClerk ? !!item.section : true)
-        );
-      },
-    },
-  };
+  const filters = applicationContext
+    .getUtilities()
+    .getWorkQueueFilters({ additionalFilters, user });
 
   const composedFilter = filters[queue][box];
   return composedFilter;
