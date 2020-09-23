@@ -2,6 +2,28 @@
 
 ENVIRONMENT=$1
 
+[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+[ -z "${CIRCLE_BRANCH}" ] && echo "You must have CIRCLE_BRANCH set in your environment" && exit 1
+[ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
+[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
+[ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
+[ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
+
+
+echo "Running terraform with the following environment configs:"
+echo "  - ENVIRONMENT=${ENVIRONMENT}"
+echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
+echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
+echo "  - ZONE_NAME=${ZONE_NAME}"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
+echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
+echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
+echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
@@ -65,4 +87,4 @@ export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
-terraform apply -auto-approve
+terraform apply --auto-approve
