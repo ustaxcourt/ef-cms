@@ -124,6 +124,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
+        isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
@@ -181,6 +182,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
+        isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,

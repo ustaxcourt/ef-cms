@@ -292,6 +292,7 @@ exports.completeDocketEntryQCInteractor = async ({
           NOTICE_OF_DOCKET_CHANGE.documentTitle,
           docketChangeInfo.docketEntryIndex,
         ),
+        isFileAttached: true,
         isOnDocketRecord: true,
         userId: user.userId,
       },
