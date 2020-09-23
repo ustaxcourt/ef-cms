@@ -70,7 +70,7 @@ const batchDownloadTrialSessionInteractor = async ({
 
   sessionCases.forEach(caseToBatch => {
     const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
-      d => d.isOnDocketRecord,
+      d => d.isOnDocketRecord && d.isFileAttached,
     );
 
     const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
