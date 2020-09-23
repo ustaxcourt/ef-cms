@@ -30,6 +30,9 @@ const {
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
+  DOCKET_ENTRY_VALIDATION_RULES,
+} = require('../EntityValidationConstants');
+const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
@@ -322,7 +325,7 @@ Case.VALIDATION_RULES = {
     .description('List of Correspondence Entities that were archived.'),
   archivedDocketEntries: joi
     .array()
-    .items(DocketEntry.VALIDATION_RULES)
+    .items(DOCKET_ENTRY_VALIDATION_RULES)
     .optional()
     .description(
       'List of DocketEntry Entities that were archived instead of added to the docket record.',
@@ -405,7 +408,7 @@ Case.VALIDATION_RULES = {
     .description('Damages for the case.'),
   docketEntries: joi
     .array()
-    .items(DocketEntry.VALIDATION_RULES)
+    .items(DOCKET_ENTRY_VALIDATION_RULES)
     .required()
     .description('List of DocketEntry Entities for the case.'),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
