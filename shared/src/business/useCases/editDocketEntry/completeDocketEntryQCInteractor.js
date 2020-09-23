@@ -292,11 +292,19 @@ exports.completeDocketEntryQCInteractor = async ({
           NOTICE_OF_DOCKET_CHANGE.documentTitle,
           docketChangeInfo.docketEntryIndex,
         ),
+        isFileAttached: true,
         isOnDocketRecord: true,
         userId: user.userId,
       },
       { applicationContext },
     );
+
+    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+      });
 
     noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
