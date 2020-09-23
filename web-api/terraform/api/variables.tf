@@ -58,6 +58,10 @@ variable "puppeteer_layer_object" {
   type = any
 }
 
+variable "cron_object" {
+  type = any
+}
+
 variable "public_object_hash" {
   type = string
 }
@@ -72,4 +76,12 @@ variable "websockets_object_hash" {
 
 variable "puppeteer_object_hash" {
   type = string
+}
+
+variable "cron_object_hash" {
+  type = string
+}
+
+variable "create_cron" {
+  type = number
 }

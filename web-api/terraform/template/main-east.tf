@@ -72,6 +72,22 @@ resource "null_resource" "puppeteer_layer_east_object" {
   }
 }
 
+data "archive_file" "zip_cron" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/cron.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/cron.js"
+}
+
+resource "null_resource" "cron_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_cron.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/cron_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
 
 data "aws_s3_bucket_object" "api_public_blue_east_object" {
   depends_on = [null_resource.api_public_east_object]
@@ -121,11 +137,32 @@ data "aws_s3_bucket_object" "puppeteer_green_east_object" {
   key        = "green_puppeteer_lambda_layer.zip"
 }
 
+data "aws_s3_bucket_object" "cron_blue_east_object" {
+  depends_on = [null_resource.cron_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "cron_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "cron_green_east_object" {
+  depends_on = [null_resource.cron_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "cron_green.js.zip"
+}
+
+data "aws_elasticsearch_domain" "green_elasticsearch_domain" {
+  domain_name = var.green_elasticsearch_domain
+}
+
+data "aws_elasticsearch_domain" "blue_elasticsearch_domain" {
+  domain_name = var.blue_elasticsearch_domain
+}
+
 module "api-east-green" {
   api_object             = null_resource.api_east_object
   api_public_object      = null_resource.api_public_east_object
   websockets_object      = null_resource.websockets_east_object
   puppeteer_layer_object = null_resource.puppeteer_layer_east_object
+  cron_object            = null_resource.cron_east_object
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -133,9 +170,10 @@ module "api-east-green" {
   account_id             = data.aws_caller_identity.current.account_id
   zone_id                = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT   = "dynamodb.us-east-1.amazonaws.com"
-    CURRENT_COLOR       = "green"
-    DYNAMODB_TABLE_NAME = var.green_table_name
+    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
+    CURRENT_COLOR          = "green"
+    DYNAMODB_TABLE_NAME    = var.green_table_name
+    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_elasticsearch_domain.endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -149,6 +187,8 @@ module "api-east-green" {
   api_object_hash        = data.aws_s3_bucket_object.api_green_east_object.etag
   websockets_object_hash = data.aws_s3_bucket_object.websockets_green_east_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_green_east_object.etag
+  cron_object_hash       = data.aws_s3_bucket_object.cron_green_east_object.etag
+  create_cron            = 1
 }
 
 module "api-east-blue" {
@@ -156,6 +196,7 @@ module "api-east-blue" {
   api_public_object      = null_resource.api_public_east_object
   websockets_object      = null_resource.websockets_east_object
   puppeteer_layer_object = null_resource.puppeteer_layer_east_object
+  cron_object            = null_resource.cron_east_object
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -163,9 +204,10 @@ module "api-east-blue" {
   account_id             = data.aws_caller_identity.current.account_id
   zone_id                = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT   = "dynamodb.us-east-1.amazonaws.com"
-    CURRENT_COLOR       = "blue"
-    DYNAMODB_TABLE_NAME = var.blue_table_name
+    DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
+    CURRENT_COLOR          = "blue"
+    DYNAMODB_TABLE_NAME    = var.blue_table_name
+    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_elasticsearch_domain.endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -179,4 +221,6 @@ module "api-east-blue" {
   api_object_hash        = data.aws_s3_bucket_object.api_blue_east_object.etag
   websockets_object_hash = data.aws_s3_bucket_object.websockets_blue_east_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_blue_east_object.etag
+  cron_object_hash       = data.aws_s3_bucket_object.cron_blue_east_object.etag
+  create_cron            = 1
 }
