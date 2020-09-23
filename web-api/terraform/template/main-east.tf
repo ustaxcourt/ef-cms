@@ -89,6 +89,23 @@ resource "null_resource" "cron_east_object" {
   }
 }
 
+data "archive_file" "zip_streams" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/streams.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/streams.js"
+}
+
+resource "null_resource" "streams_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_streams.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/streams_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 data "aws_s3_bucket_object" "api_public_blue_east_object" {
   depends_on = [null_resource.api_public_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -149,6 +166,18 @@ data "aws_s3_bucket_object" "cron_green_east_object" {
   key        = "cron_green.js.zip"
 }
 
+data "aws_s3_bucket_object" "streams_blue_east_object" {
+  depends_on = [null_resource.streams_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "streams_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "streams_green_east_object" {
+  depends_on = [null_resource.streams_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "streams_green.js.zip"
+}
+
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   domain_name = var.green_elasticsearch_domain
 }
@@ -157,12 +186,21 @@ data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
   domain_name = var.blue_elasticsearch_domain
 }
 
+data "aws_dynamodb_table" "green_dynamo_table" {
+  name = var.green_table_name
+}
+
+data "aws_dynamodb_table" "blue_dynamo_table" {
+  name = var.blue_table_name
+}
+
 module "api-east-green" {
   api_object             = null_resource.api_east_object
   api_public_object      = null_resource.api_public_east_object
   websockets_object      = null_resource.websockets_east_object
   puppeteer_layer_object = null_resource.puppeteer_layer_east_object
   cron_object            = null_resource.cron_east_object
+  streams_object         = null_resource.streams_east_object
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -188,7 +226,10 @@ module "api-east-green" {
   websockets_object_hash = data.aws_s3_bucket_object.websockets_green_east_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_green_east_object.etag
   cron_object_hash       = data.aws_s3_bucket_object.cron_green_east_object.etag
+  streams_object_hash    = data.aws_s3_bucket_object.streams_green_east_object.etag
   create_cron            = 1
+  create_streams         = 1
+  stream_arn             = data.aws_dynamodb_table.green_dynamo_table.stream_arn
 }
 
 module "api-east-blue" {
@@ -197,6 +238,7 @@ module "api-east-blue" {
   websockets_object      = null_resource.websockets_east_object
   puppeteer_layer_object = null_resource.puppeteer_layer_east_object
   cron_object            = null_resource.cron_east_object
+  streams_object         = null_resource.streams_east_object
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -222,5 +264,8 @@ module "api-east-blue" {
   websockets_object_hash = data.aws_s3_bucket_object.websockets_blue_east_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_blue_east_object.etag
   cron_object_hash       = data.aws_s3_bucket_object.cron_blue_east_object.etag
+  streams_object_hash    = data.aws_s3_bucket_object.streams_green_east_object.etag
   create_cron            = 1
+  create_streams         = 1
+  stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
 }
