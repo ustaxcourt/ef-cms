@@ -127,23 +127,11 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
   provider   = aws.us-west-1
 }
 
-data "aws_s3_bucket_object" "cron_blue_west_object" {
-  depends_on = [null_resource.cron_west_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
-  key        = "cron_blue.js.zip"
-}
-
-data "aws_s3_bucket_object" "cron_green_west_object" {
-  depends_on = [null_resource.cron_west_object]
-  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
-  key        = "cron_green.js.zip"
-}
-
-data "aws_elasticsearch_domain" "green_elasticsearch_domain" {
+data "aws_elasticsearch_domain" "green_west_elasticsearch_domain" {
   domain_name = var.green_elasticsearch_domain
 }
 
-data "aws_elasticsearch_domain" "blue_elasticsearch_domain" {
+data "aws_elasticsearch_domain" "blue_west_elasticsearch_domain" {
   domain_name = var.blue_elasticsearch_domain
 }
 
@@ -152,7 +140,7 @@ module "api-west-green" {
   api_public_object      = null_resource.api_public_west_object
   websockets_object      = null_resource.websockets_west_object
   puppeteer_layer_object = null_resource.puppeteer_layer_west_object
-  cron_object            = null_resource.cron_west_object
+  cron_object            = ""
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -163,7 +151,7 @@ module "api-west-green" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_west_elasticsearch_domain.endpoint
   })
   region   = "us-west-1"
   validate = 0
@@ -177,7 +165,7 @@ module "api-west-green" {
   api_object_hash        = data.aws_s3_bucket_object.api_green_west_object.etag
   websockets_object_hash = data.aws_s3_bucket_object.websockets_green_west_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
-  cron_object_hash       = data.aws_s3_bucket_object.cron_green_west_object.etag
+  cron_object_hash       = ""
   create_cron            = 0
 }
 
@@ -186,7 +174,7 @@ module "api-west-blue" {
   api_public_object      = null_resource.api_public_west_object
   websockets_object      = null_resource.websockets_west_object
   puppeteer_layer_object = null_resource.puppeteer_layer_west_object
-  cron_object            = null_resource.cron_west_object
+  cron_object            = ""
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -197,7 +185,7 @@ module "api-west-blue" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_west_elasticsearch_domain.endpoint
   })
   region   = "us-west-1"
   validate = 0
@@ -211,6 +199,6 @@ module "api-west-blue" {
   api_object_hash        = data.aws_s3_bucket_object.api_blue_west_object.etag
   websockets_object_hash = data.aws_s3_bucket_object.websockets_blue_west_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
-  cron_object_hash       = data.aws_s3_bucket_object.cron_blue_west_object.etag
+  cron_object_hash       = ""
   create_cron            = 0
 }
