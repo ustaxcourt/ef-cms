@@ -17,15 +17,16 @@
 ENV=$1
 BUCKET_NAME="${ENV}.${ZONE_NAME}.efcms.${ENV}.us-east-1.lambdas"
 
-aws s3 cp s3://${BUCKET_NAME}/api_blue.js.zip s3://${BUCKET_NAME}/api_green.js.zip
-aws s3 cp s3://${BUCKET_NAME}/api_public_blue.js.zip s3://${BUCKET_NAME}/api_public_green.js.zip
-aws s3 cp s3://${BUCKET_NAME}/websockets_blue.js.zip s3://${BUCKET_NAME}/websockets_green.js.zip
-aws s3 cp s3://${BUCKET_NAME}/blue_puppeteer_lambda_layer.zip s3://${BUCKET_NAME}/green_puppeteer_lambda_layer.zip
-aws s3 cp s3://${BUCKET_NAME}/cron_blue.zip s3://${BUCKET_NAME}/cron_green.zip
+# aws s3 cp s3://${BUCKET_NAME}/api_blue.js.zip s3://${BUCKET_NAME}/api_green.js.zip
+# aws s3 cp s3://${BUCKET_NAME}/api_public_blue.js.zip s3://${BUCKET_NAME}/api_public_green.js.zip
+# aws s3 cp s3://${BUCKET_NAME}/websockets_blue.js.zip s3://${BUCKET_NAME}/websockets_green.js.zip
+# aws s3 cp s3://${BUCKET_NAME}/blue_puppeteer_lambda_layer.zip s3://${BUCKET_NAME}/green_puppeteer_lambda_layer.zip
+# aws s3 cp s3://${BUCKET_NAME}/cron_blue.zip s3://${BUCKET_NAME}/cron_green.zip
+aws s3 cp s3://${BUCKET_NAME}/streams_blue.zip s3://${BUCKET_NAME}/streams_green.zip
 
-BUCKET_NAME="${ENV}.${ZONE_NAME}.efcms.${ENV}.us-west-1.lambdas"
+# BUCKET_NAME="${ENV}.${ZONE_NAME}.efcms.${ENV}.us-west-1.lambdas"
 
-aws s3 cp s3://${BUCKET_NAME}/api_blue.js.zip s3://${BUCKET_NAME}/api_green.js.zip
-aws s3 cp s3://${BUCKET_NAME}/api_public_blue.js.zip s3://${BUCKET_NAME}/api_public_green.js.zip
-aws s3 cp s3://${BUCKET_NAME}/websockets_blue.js.zip s3://${BUCKET_NAME}/websockets_green.js.zip
-aws s3 cp s3://${BUCKET_NAME}/blue_puppeteer_lambda_layer.zip s3://${BUCKET_NAME}/green_puppeteer_lambda_layer.zip
+# aws s3 cp s3://${BUCKET_NAME}/api_blue.js.zip s3://${BUCKET_NAME}/api_green.js.zip
+# aws s3 cp s3://${BUCKET_NAME}/api_public_blue.js.zip s3://${BUCKET_NAME}/api_public_green.js.zip
+# aws s3 cp s3://${BUCKET_NAME}/websockets_blue.js.zip s3://${BUCKET_NAME}/websockets_green.js.zip
+# aws s3 cp s3://${BUCKET_NAME}/blue_puppeteer_lambda_layer.zip s3://${BUCKET_NAME}/green_puppeteer_lambda_layer.zip
