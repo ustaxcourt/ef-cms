@@ -172,6 +172,13 @@ exports.updatePetitionerInformationInteractor = async ({
       pdfData: changeOfAddressPdf,
     });
 
+    changeOfAddressDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentBytes: changeOfAddressPdfWithCover,
+      });
+
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({

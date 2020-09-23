@@ -151,14 +151,21 @@ exports.updatePrimaryContactInteractor = async ({
 
     changeOfAddressDocketEntry.setWorkItem(workItem);
 
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
-
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
+
+    changeOfAddressDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentBytes: changeOfAddressPdfWithCover,
+      });
+
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,

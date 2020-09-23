@@ -133,6 +133,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
+    noticeOfTrialDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeOfTrialDocketEntry.docketEntryId,
+      });
+
     caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
     caseEntity.setNoticeOfTrialDate();
 
@@ -189,6 +196,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       },
       { applicationContext },
     );
+
+    standingPretrialDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: standingPretrialDocketEntry.docketEntryId,
+      });
 
     caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
