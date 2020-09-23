@@ -292,6 +292,13 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
+    const mockNumberOfPages = 999;
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockImplementation(() => {
+        return mockNumberOfPages;
+      });
+
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
@@ -302,6 +309,19 @@ describe('completeDocketEntryQCInteractor', () => {
         eventCode: 'MISP',
         partyPrimary: true,
       },
+    });
+
+    const noticeOfDocketChange = result.caseDetail.docketEntries.find(
+      document => document.eventCode === 'NODC',
+    );
+
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalled();
+
+    expect(noticeOfDocketChange).toMatchObject({
+      isFileAttached: true,
+      numberOfPages: 999,
     });
 
     expect(
