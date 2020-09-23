@@ -10,7 +10,7 @@ exports.sendServedPartiesEmails = async ({
   docketEntryEntity,
   servedParties,
 }) => {
-  const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
+  const { caseCaption, docketNumberWithSuffix } = caseEntity;
 
   const {
     docketEntryId,
@@ -21,10 +21,6 @@ exports.sendServedPartiesEmails = async ({
     index: docketEntryNumber,
     servedAt,
   } = docketEntryEntity;
-
-  if (docketEntryNumber === undefined) {
-    throw new Error('Docket entry must have an index');
-  }
 
   const currentDate = applicationContext
     .getUtilities()
@@ -46,7 +42,7 @@ exports.sendServedPartiesEmails = async ({
         data: {
           caseDetail: {
             caseTitle: Case.getCaseTitle(caseCaption),
-            docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
+            docketNumber: docketNumberWithSuffix,
           },
           currentDate,
           docketEntryNumber,
@@ -70,9 +66,7 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        docketNumber: `${caseEntity.docketNumber}${
-          caseEntity.docketNumberSuffix || ''
-        }`,
+        docketNumber: docketNumberWithSuffix,
         emailContent: '',
       },
       destinations,
