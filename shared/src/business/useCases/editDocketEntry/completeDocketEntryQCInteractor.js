@@ -299,6 +299,13 @@ exports.completeDocketEntryQCInteractor = async ({
       { applicationContext },
     );
 
+    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+      });
+
     noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
     caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
