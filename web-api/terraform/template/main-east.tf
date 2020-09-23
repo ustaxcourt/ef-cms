@@ -264,7 +264,7 @@ module "api-east-blue" {
   websockets_object_hash = data.aws_s3_bucket_object.websockets_blue_east_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_blue_east_object.etag
   cron_object_hash       = data.aws_s3_bucket_object.cron_blue_east_object.etag
-  streams_object_hash    = data.aws_s3_bucket_object.streams_green_east_object.etag
+  streams_object_hash    = data.aws_s3_bucket_object.streams_blue_east_object.etag
   create_cron            = 1
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
