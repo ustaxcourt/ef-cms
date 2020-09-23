@@ -4,6 +4,9 @@ export const petitionsClerkSavesSignatureForDraftDocument = (test, title) => {
       gotoAfterSigning: 'DocumentDetail',
     });
 
+    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
+      test.docketEntryId,
+    );
     expect(test.getState('alertSuccess.message')).toEqual(title);
   });
 };

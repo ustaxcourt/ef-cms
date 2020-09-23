@@ -24,6 +24,9 @@ const isWorkItemOrWorkQueueRecord = item => item.sk.startsWith('work-item|');
 const isCorrespondenceRecord = item =>
   item.pk.startsWith('case|') && item.sk.startsWith('correspondence|');
 
+const getDocketNumberFromRecord = item =>
+  item.pk.includes('case|') && item.pk.split('|')[1];
+
 const forAllRecords = async (documentClient, tableName, cb) => {
   let hasMoreResults = true;
   let lastKey = null;
@@ -69,6 +72,7 @@ const upGenerator = mutateFunction => async (
 
 module.exports = {
   forAllRecords,
+  getDocketNumberFromRecord,
   isCaseDeadlineRecord,
   isCaseMessageRecord,
   isCaseRecord,

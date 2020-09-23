@@ -234,4 +234,44 @@ describe('completeDocumentSigningAction', () => {
       redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockDocketEntryId}`,
     });
   });
+
+  it('returns the updated documents docketEntryId as props', async () => {
+    const { output } = await runAction(completeDocumentSigningAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItem: {
+                messages: [
+                  {
+                    messageId: '123',
+                  },
+                ],
+              },
+            },
+          ],
+          docketNumber,
+        },
+        currentViewMetadata: {
+          messageId: '123',
+        },
+        pdfForSigning: {
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          pageNumber: 3,
+          pdfjsLib: {},
+          signatureData: {
+            scale: 1,
+            x: 300,
+            y: 400,
+          },
+        },
+      },
+    });
+
+    expect(output.docketEntryId).toBeDefined();
+  });
 });
