@@ -644,30 +644,17 @@ workflows:
       - build-shared
       - build-api
       - build-client-unit
-      - build-client-integration
       - e2e-pa11y
       - e2e-pa11y-public
       - e2e-cypress
       - e2e-cypress-public
-      - build-client-coverage:
-          requires:
-            - build-shared
-            - build-api
-            - build-client-unit
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
+      - deploy
       - smoketests:
           requires:
             - deploy
     triggers:
       - schedule:
-          cron: '0 13-22 * * 1-5'
+          cron: '0 * * * 1-5'
           filters:
             branches:
               only:
