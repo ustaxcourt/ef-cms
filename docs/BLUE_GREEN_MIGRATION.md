@@ -1,5 +1,7 @@
 #  Blue-Green Deploy and Migration Steps
-1) If this is the first time running a blue/green deployment on the environment, attempt to run a deploy on circle. The deploy will fail on the deploy web-api terraform step. In order to resolve the error, run `setup-s3-deploy-files.sh`.
+1) If this is the first time running a blue/green deployment on the environment:
+  a. Delete the environment's lambda S3 bucket
+  b. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api terraform step. In order to resolve the error, run `setup-s3-deploy-files.sh`.
 2) If migration is necessary:
 	a. Run the following command to set the environment's migrate flag to true:
 	```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"true"}}'```
