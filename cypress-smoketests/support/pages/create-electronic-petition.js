@@ -39,7 +39,7 @@ exports.goToWizardStep5 = () => {
   cy.url().should('contain', '/file-a-petition/step-5');
 };
 
-exports.submitPetition = (testData = {}) => {
+exports.submitPetition = testData => {
   cy.get('button#submit-case').scrollIntoView().click();
 
   cy.server();
