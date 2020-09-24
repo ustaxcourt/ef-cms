@@ -1,3 +1,4 @@
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   assignWorkItems,
@@ -135,12 +136,15 @@ describe('Create a work item', () => {
 
     await test.runSequence('completeDocketEntryQCSequence');
 
-    const noticeDocument = test
+    const noticeDocketEntry = test
       .getState('caseDetail.docketEntries')
       .find(doc => doc.documentType === 'Notice of Docket Change');
 
-    expect(noticeDocument).toBeTruthy();
-    expect(noticeDocument.servedAt).toBeDefined();
+    expect(noticeDocketEntry).toBeTruthy();
+    expect(noticeDocketEntry.servedAt).toBeDefined();
+    expect(noticeDocketEntry.processingStatus).toEqual(
+      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    );
     expect(test.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',
     );
