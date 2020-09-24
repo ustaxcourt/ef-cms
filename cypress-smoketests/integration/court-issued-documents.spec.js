@@ -53,19 +53,28 @@ describe('Petitioner', () => {
     login(token);
   });
 
-  it('should be able to create a case', () => {
-    goToStartCreatePetition();
-    goToWizardStep1();
-    completeWizardStep1();
-    goToWizardStep2();
-    completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
-    goToWizardStep3();
-    completeWizardStep3(filingTypes.INDIVIDUAL, 'Petitioner');
-    goToWizardStep4();
-    completeWizardStep4();
-    goToWizardStep5();
-    submitPetition(testData);
-    goToDashboard();
+  describe('should be able to create a case', () => {
+    it('should complete wizard step 1', () => {
+      goToStartCreatePetition();
+      goToWizardStep1();
+      completeWizardStep1();
+    });
+
+    // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
+    it('should go to wizard step 2', () => {
+      goToWizardStep2();
+    });
+
+    it('should complete the form and submit the petition', () => {
+      completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
+      goToWizardStep3();
+      completeWizardStep3(filingTypes.INDIVIDUAL, 'Petitioner');
+      goToWizardStep4();
+      completeWizardStep4();
+      goToWizardStep5();
+      submitPetition(testData);
+      goToDashboard();
+    });
   });
 });
 
