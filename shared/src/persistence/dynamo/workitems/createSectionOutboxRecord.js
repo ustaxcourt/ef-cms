@@ -17,7 +17,7 @@ exports.createSectionOutboxRecord = async ({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
       pk: `section-outbox|${section}`,
-      sk: workItem.createdAt,
+      sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
       ...workItem,
     },
     applicationContext,
