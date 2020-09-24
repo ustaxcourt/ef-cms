@@ -42,6 +42,7 @@ describe('verify old served work items do not show up in the outbox', () => {
       section: PETITIONS_SECTION,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
+    applicationContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = new Date();
     const CREATED_7_DAYS_AGO = new Date();
