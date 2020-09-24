@@ -7,7 +7,6 @@ const {
 
 describe('createElasticsearchReindexRecord', () => {
   it('persists the reindex record', async () => {
-    applicationContext.environment.stage = 'dev';
     await createElasticsearchReindexRecord({
       applicationContext,
       recordPk: '123',
@@ -22,7 +21,6 @@ describe('createElasticsearchReindexRecord', () => {
         recordSk: 'abc',
         sk: '123-abc',
       },
-      TableName: 'efcms-dev',
     });
   });
 });

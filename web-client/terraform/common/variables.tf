@@ -7,15 +7,16 @@ variable "dns_domain" {
 }
 
 variable "cloudfront_max_ttl" {
-  type = string
+  type    = string
   default = "31536000"
 }
 
 variable "cloudfront_default_ttl" {
-  type = string
+  type    = string
   default = "86400"
 }
 
 variable "zone_name" {
   type = string
 }
+

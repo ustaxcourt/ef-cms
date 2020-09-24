@@ -9,7 +9,6 @@ describe('deleteCaseByDocketNumber', () => {
     { pk: 'case|101-20', sk: 'docket-entry|1234-1451-234-1234-1234' },
   ];
   beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: () => Promise.resolve({ Items: records }),
     });
@@ -31,13 +30,13 @@ describe('deleteCaseByDocketNumber', () => {
       [
         {
           Key: records[0],
-          TableName: 'efcms-dev',
+          TableName: 'efcms-local',
         },
       ],
       [
         {
           Key: records[1],
-          TableName: 'efcms-dev',
+          TableName: 'efcms-local',
         },
       ],
     ]);
