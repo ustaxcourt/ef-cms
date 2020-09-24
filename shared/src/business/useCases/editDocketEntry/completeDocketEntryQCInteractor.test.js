@@ -6,6 +6,7 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -322,6 +323,7 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(noticeOfDocketChange).toMatchObject({
       isFileAttached: true,
       numberOfPages: 999,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
 
     expect(

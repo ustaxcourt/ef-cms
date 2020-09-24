@@ -56,10 +56,10 @@ exports.handler = (event, context, cb) => {
   console.log('Auth function invoked');
 
   let requestToken = null;
-  if (event.authorizationToken) {
-    requestToken = event.authorizationToken.substring(7);
-  } else if (event.queryStringParameters.token) {
+  if (event.queryStringParameters && event.queryStringParameters.token) {
     requestToken = event.queryStringParameters.token;
+  } else if (event.authorizationToken) {
+    requestToken = event.authorizationToken.substring(7);
   }
 
   if (requestToken) {

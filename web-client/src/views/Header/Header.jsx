@@ -159,7 +159,6 @@ const NavigationItems = (
 
 export const Header = connect(
   {
-    fetchUserNotificationsSequence: sequences.fetchUserNotificationsSequence,
     headerHelper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
@@ -172,7 +171,6 @@ export const Header = connect(
     user: state.user,
   },
   function Header({
-    fetchUserNotificationsSequence,
     headerHelper,
     isAccountMenuOpen,
     isReportsMenuOpen,
@@ -187,7 +185,6 @@ export const Header = connect(
     const headerRef = useRef(null);
 
     useEffect(() => {
-      fetchUserNotificationsSequence();
       document.addEventListener('mousedown', reset, false);
       document.addEventListener('keydown', keydown, false);
       return () => {
