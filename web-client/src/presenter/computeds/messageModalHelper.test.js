@@ -21,7 +21,7 @@ describe('messageModalHelper', () => {
       ...MOCK_CASE,
       correspondence: [
         {
-          documentId: '986',
+          correspondenceId: '986',
           documentTitle: 'Test Correspondence',
         },
       ],
@@ -80,7 +80,7 @@ describe('messageModalHelper', () => {
     });
 
     expect(result.correspondence).toMatchObject([
-      { documentId: '986', documentTitle: 'Test Correspondence' },
+      { correspondenceId: '986', documentTitle: 'Test Correspondence' },
     ]);
   });
 
@@ -104,7 +104,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
-          correspondence: [{ documentId: '123' }],
+          correspondence: [{ correspondenceId: '123' }],
           docketEntries: [],
         },
         modal: {
@@ -209,7 +209,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
-          correspondence: [{ documentId: '234' }],
+          correspondence: [{ correspondenceId: '234' }],
           docketEntries: [
             {
               documentId: '123',

@@ -13,20 +13,20 @@ describe('saveDocumentFromLambda', () => {
       putObject: putObjectStub,
     });
     applicationContext.getDocumentsBucketName.mockReturnValue('aBucket');
-    const expectedDocumentId = 'abc';
+    const expectedDocketEntryId = 'abc';
     const expectedArray = new Uint8Array(['a']);
 
     await saveDocumentFromLambda({
       applicationContext,
       document: new Uint8Array(['a']),
-      documentId: expectedDocumentId,
+      key: expectedDocketEntryId,
     });
 
     expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: 'aBucket',
       ContentType: 'application/pdf',
-      Key: expectedDocumentId,
+      Key: expectedDocketEntryId,
     });
   });
 
@@ -37,13 +37,13 @@ describe('saveDocumentFromLambda', () => {
     applicationContext.getTempDocumentsBucketName.mockReturnValue(
       'aTempBucket',
     );
-    const expectedDocumentId = 'abc';
+    const expectedDocketEntryId = 'abc';
     const expectedArray = new Uint8Array(['a']);
 
     await saveDocumentFromLambda({
       applicationContext,
       document: new Uint8Array(['a']),
-      documentId: expectedDocumentId,
+      key: expectedDocketEntryId,
       useTempBucket: true,
     });
 
@@ -51,7 +51,7 @@ describe('saveDocumentFromLambda', () => {
       Body: Buffer.from(expectedArray),
       Bucket: 'aTempBucket',
       ContentType: 'application/pdf',
-      Key: expectedDocumentId,
+      Key: expectedDocketEntryId,
     });
   });
 
@@ -60,21 +60,21 @@ describe('saveDocumentFromLambda', () => {
       putObject: putObjectStub,
     });
     applicationContext.getDocumentsBucketName.mockReturnValue('aBucket');
-    const expectedDocumentId = 'abc';
+    const expectedDocketEntryId = 'abc';
     const expectedArray = new Uint8Array(['a']);
 
     await saveDocumentFromLambda({
       applicationContext,
       contentType: 'text/plain',
       document: new Uint8Array(['a']),
-      documentId: expectedDocumentId,
+      key: expectedDocketEntryId,
     });
 
     expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: 'aBucket',
       ContentType: 'text/plain',
-      Key: expectedDocumentId,
+      Key: expectedDocketEntryId,
     });
   });
 });

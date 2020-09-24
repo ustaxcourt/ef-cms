@@ -26,8 +26,8 @@ describe('getPDFForPreviewAction', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('returns results from loadPDFForPreviewInteractor if provided a docketNumber and documentId', async () => {
-    const props = { file: { docketNumber: '123-20', documentId: '456' } };
+  it('returns results from loadPDFForPreviewInteractor if provided a docketNumber and docketEntryId', async () => {
+    const props = { file: { docketEntryId: '456', docketNumber: '123-20' } };
     await runAction(getPDFForPreviewAction, {
       modules: {
         presenter,
@@ -39,8 +39,8 @@ describe('getPDFForPreviewAction', () => {
       applicationContext.getUseCases().loadPDFForPreviewInteractor,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      docketEntryId: '456',
       docketNumber: '123-20',
-      documentId: '456',
     });
   });
 });

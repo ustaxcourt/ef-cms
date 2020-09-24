@@ -4,8 +4,8 @@ const getDocumentEditUrl = ({ caseDetail, document }) => {
   const isMiscellaneous = document.documentType === MISCELLANEOUS_DOCUMENT_TYPE;
 
   const editUrl = isMiscellaneous
-    ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
-    : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
+    ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.docketEntryId}`
+    : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.docketEntryId}`;
 
   return editUrl;
 };

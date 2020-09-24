@@ -55,11 +55,11 @@ export const createCaseAction = async ({
     return path.error();
   }
 
-  const addCoversheet = document => {
+  const addCoversheet = docketEntry => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
-      documentId: document.documentId,
     });
   };
   await Promise.all(

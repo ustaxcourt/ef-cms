@@ -22,8 +22,8 @@ describe('fetchPendingItemsInteractor', () => {
   it('calls fetch function and returns records', async () => {
     searchSpy = jest.fn(async () => {
       return [
-        { docketNumber: '101-20', documentId: 'def', pending: true },
-        { docketNumber: '201-20', documentId: 'abc', pending: true },
+        { docketEntryId: 'def', docketNumber: '101-20', pending: true },
+        { docketEntryId: 'abc', docketNumber: '201-20', pending: true },
       ];
     });
 
@@ -34,8 +34,8 @@ describe('fetchPendingItemsInteractor', () => {
 
     expect(searchSpy).toHaveBeenCalled();
     expect(results).toEqual([
-      { docketNumber: '101-20', documentId: 'def', pending: true },
-      { docketNumber: '201-20', documentId: 'abc', pending: true },
+      { docketEntryId: 'def', docketNumber: '101-20', pending: true },
+      { docketEntryId: 'abc', docketNumber: '201-20', pending: true },
     ]);
   });
 

@@ -6,16 +6,16 @@ const { post } = require('../requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.documentId the document id
+ * @param {string} providers.docketEntryId the docket entry id
  * @returns {Promise<*>} the promise of the api call
  */
 exports.addCoversheetInteractor = ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   return post({
     applicationContext,
-    endpoint: `/case-documents/${docketNumber}/${documentId}/coversheet`,
+    endpoint: `/case-documents/${docketNumber}/${docketEntryId}/coversheet`,
   });
 };

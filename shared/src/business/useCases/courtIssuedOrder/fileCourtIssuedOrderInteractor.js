@@ -46,8 +46,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
-    if (documentMetadata.draftState) {
-      documentMetadata.draftState.freeText = documentMetadata.documentTitle;
+    if (documentMetadata.draftOrderState) {
+      documentMetadata.draftOrderState.freeText =
+        documentMetadata.documentTitle;
     }
   }
 
@@ -86,22 +87,22 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState
-        ? documentMetadata.draftState.richText
+      richText: documentMetadata.draftOrderState
+        ? documentMetadata.draftOrderState.richText
         : undefined,
     };
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
-      documentId: documentContentsId,
+      key: documentContentsId,
       useTempBucket: false,
     });
 
-    if (documentMetadata.draftState) {
-      delete documentMetadata.draftState.documentContents;
-      delete documentMetadata.draftState.richText;
-      delete documentMetadata.draftState.editorDelta;
+    if (documentMetadata.draftOrderState) {
+      delete documentMetadata.draftOrderState.documentContents;
+      delete documentMetadata.draftOrderState.richText;
+      delete documentMetadata.draftOrderState.editorDelta;
     }
 
     delete documentMetadata.documentContents;
@@ -111,7 +112,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   const docketEntryEntity = new DocketEntry(
     {
       ...documentMetadata,
-      documentId: primaryDocumentFileId,
+      docketEntryId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
       isDraft: true,
@@ -144,7 +145,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       applicationContext,
     }).validate();
     messageEntity.addAttachment({
-      documentId: docketEntryEntity.documentId,
+      documentId: docketEntryEntity.docketEntryId,
       documentTitle: docketEntryEntity.documentTitle,
     });
 

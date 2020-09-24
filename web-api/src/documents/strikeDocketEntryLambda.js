@@ -11,15 +11,15 @@ exports.strikeDocketEntryLambda = event =>
     event,
     async ({ applicationContext }) => {
       const {
-        pathParameters: { docketNumber, documentId },
+        pathParameters: { docketEntryId, docketNumber },
       } = event;
 
       return await applicationContext
         .getUseCases()
         .strikeDocketEntryInteractor({
           applicationContext,
+          docketEntryId,
           docketNumber,
-          documentId,
         });
     },
     {

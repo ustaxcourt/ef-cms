@@ -52,7 +52,7 @@ describe('updateDocketEntryMetaAction', () => {
           docketNumber: '123-45',
         },
         docketRecordEntry: {
-          description: 'Test Description',
+          documentTitle: 'Test Description',
         },
       },
     });

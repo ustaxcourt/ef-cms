@@ -14,7 +14,8 @@ export const unassociatedUserSearchesForServedOrderInSealedCase = (
     expect(test.getState('searchResults')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentId: test.draftOrders[options.draftOrderIndex].documentId,
+          docketEntryId:
+            test.draftOrders[options.draftOrderIndex].docketEntryId,
         }),
       ]),
     );

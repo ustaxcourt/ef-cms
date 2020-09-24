@@ -46,8 +46,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -55,8 +55,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -64,8 +64,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -73,8 +73,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
@@ -84,8 +84,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
@@ -95,8 +95,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
         {
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           docketNumber: '45678-18',
-          documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
           eventCode: TRANSCRIPT_EVENT_CODE,
@@ -120,8 +120,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Memorandum in Support',
         },
       }),
@@ -139,12 +139,12 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           documentType: 'Order',
         },
       }),
-    ).rejects.toThrow('Document not found');
+    ).rejects.toThrow('Docket entry not found');
   });
 
   it('should call countPagesInDocument, updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
@@ -158,8 +158,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
@@ -189,8 +189,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         documentTitle: 'Order to Show Cause',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
@@ -233,8 +233,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         documentTitle: 'Order to Show Cause',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
@@ -271,8 +271,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext,
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         docketNumber: caseRecord.docketNumber,
-        documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
@@ -300,8 +300,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext,
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         docketNumber: caseRecord.docketNumber,
-        documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,

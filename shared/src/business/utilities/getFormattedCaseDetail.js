@@ -31,73 +31,6 @@ const getServedPartiesCode = servedParties => {
   return servedPartiesCode;
 };
 
-const formatDocument = (applicationContext, document) => {
-  const result = cloneDeep(document);
-
-  result.createdAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYY');
-
-  result.servedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.servedAt, 'MMDDYY');
-
-  result.signedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.signedAt, 'MMDDYY');
-
-  result.signedAtFormattedTZ = applicationContext
-    .getUtilities()
-    .formatDateString(result.signedAt, 'DATE_TIME_TZ');
-
-  if (result.certificateOfServiceDate) {
-    result.certificateOfServiceDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
-  }
-  if (result.lodged) {
-    result.eventCode = 'MISCL';
-  }
-  result.showLegacySealed = !!result.isLegacySealed;
-  result.showServedAt = !!result.servedAt;
-  result.isStatusServed = !!result.servedAt;
-  result.isPetition =
-    result.documentType === 'Petition' || result.eventCode === 'P';
-
-  result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    result.documentType,
-  );
-
-  const qcWorkItem = result.workItem;
-
-  result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
-
-  result.isUnservable =
-    UNSERVABLE_EVENT_CODES.includes(document.eventCode) ||
-    document.isLegacyServed;
-
-  result.isInProgress =
-    (!result.isCourtIssuedDocument &&
-      result.isFileAttached === false &&
-      !result.isMinuteEntry &&
-      !result.isUnservable) ||
-    (result.isFileAttached === true &&
-      !result.servedAt &&
-      !result.isUnservable);
-
-  result.isNotServedDocument = !result.servedAt && !result.isLegacyServed;
-
-  result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
-
-  result.qcWorkItemsUntouched =
-    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
-
-  // Served parties code - R = Respondent, P = Petitioner, B = Both
-  result.servedPartiesCode = getServedPartiesCode(result.servedParties);
-
-  return result;
-};
-
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = document => {
   const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
@@ -136,18 +69,85 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
 const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
-  const formattedDocument = formatDocument(applicationContext, formattedEntry);
+  formattedEntry.servedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(formattedEntry.servedAt, 'MMDDYY');
+
+  formattedEntry.signedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(formattedEntry.signedAt, 'MMDDYY');
+
+  formattedEntry.signedAtFormattedTZ = applicationContext
+    .getUtilities()
+    .formatDateString(formattedEntry.signedAt, 'DATE_TIME_TZ');
+
+  if (formattedEntry.certificateOfServiceDate) {
+    formattedEntry.certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.certificateOfServiceDate, 'MMDDYY');
+  }
+  if (formattedEntry.lodged) {
+    formattedEntry.eventCode = 'MISCL';
+  }
+  formattedEntry.showLegacySealed = !!formattedEntry.isLegacySealed;
+  formattedEntry.showServedAt = !!formattedEntry.servedAt;
+  formattedEntry.isStatusServed = !!formattedEntry.servedAt;
+  formattedEntry.isPetition =
+    formattedEntry.documentType === 'Petition' ||
+    formattedEntry.eventCode === 'P';
+
+  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
+    formattedEntry.documentType,
+  );
+
+  const qcWorkItem = formattedEntry.workItem;
+
+  formattedEntry.qcWorkItemsCompleted = !!(
+    qcWorkItem && qcWorkItem.completedAt
+  );
+
+  formattedEntry.isUnservable =
+    UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
+    formattedEntry.isLegacyServed;
+
+  formattedEntry.isInProgress =
+    (!formattedEntry.isCourtIssuedDocument &&
+      formattedEntry.isFileAttached === false &&
+      !formattedEntry.isMinuteEntry &&
+      !formattedEntry.isUnservable) ||
+    (formattedEntry.isFileAttached === true &&
+      !formattedEntry.servedAt &&
+      !formattedEntry.isUnservable);
+
+  formattedEntry.isNotServedDocument =
+    !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
+
+  formattedEntry.isTranscript =
+    formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
+
+  formattedEntry.qcWorkItemsUntouched =
+    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+
+  // Served parties code - R = Respondent, P = Petitioner, B = Both
+  formattedEntry.servedPartiesCode = getServedPartiesCode(
+    formattedEntry.servedParties,
+  );
 
   if (
-    formattedDocument.isCourtIssuedDocument &&
-    !formattedDocument.servedAt &&
-    !formattedDocument.isUnservable
+    formattedEntry.isCourtIssuedDocument &&
+    !formattedEntry.servedAt &&
+    !formattedEntry.isUnservable &&
+    formattedEntry.isOnDocketRecord
   ) {
     formattedEntry.createdAtFormatted = undefined;
-  } else {
+  } else if (formattedEntry.isOnDocketRecord) {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.filingDate, 'MMDDYY');
+  } else {
+    formattedEntry.createdAtFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.createdAt, 'MMDDYY');
   }
 
   formattedEntry.isAvailableToUser = documentMeetsAgeRequirements(
@@ -155,39 +155,43 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   );
 
   formattedEntry.filingsAndProceedings = getFilingsAndProceedings(
-    formattedDocument,
+    formattedEntry,
   );
 
-  if (formattedDocument.additionalInfo) {
-    formattedEntry.description += ` ${formattedDocument.additionalInfo}`;
+  if (!formattedEntry.descriptionDisplay) {
+    formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
+  }
+
+  if (formattedEntry.additionalInfo) {
+    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
   }
 
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
   }
 
-  return { ...formattedDocument, ...formattedEntry };
+  return { ...formattedEntry };
 };
 
-const getFilingsAndProceedings = formattedDocument => {
+const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
     `${
-      formattedDocument.certificateOfService
-        ? `(C/S ${formattedDocument.certificateOfServiceDateFormatted})`
+      formattedDocketEntry.certificateOfService
+        ? `(C/S ${formattedDocketEntry.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
-    `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
+    `${formattedDocketEntry.exhibits ? '(Exhibit(s))' : ''}`,
+    `${formattedDocketEntry.attachments ? '(Attachment(s))' : ''}`,
     `${
-      formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.YES
+      formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
-        : formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.NO
+        : formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.NO
         ? '(No Objection)'
         : ''
     }`,
-    `${formattedDocument.lodged ? '(Lodged)' : ''}`,
+    `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
@@ -211,20 +215,20 @@ const formatCase = (applicationContext, caseDetail) => {
 
   if (result.docketEntries) {
     result.draftDocuments = result.docketEntries
-      .filter(document => document.isDraft && !document.archived)
-      .map(document => ({
-        ...formatDocument(applicationContext, document),
+      .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
+      .map(docketEntry => ({
+        ...formatDocketEntry(applicationContext, docketEntry),
         editUrl:
-          document.documentType === 'Miscellaneous'
-            ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
-            : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-        signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
+          docketEntry.documentType === 'Miscellaneous'
+            ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
+            : `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}`,
+        signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
         signedAtFormatted: applicationContext
           .getUtilities()
-          .formatDateString(document.signedAt, 'MMDDYY'),
+          .formatDateString(docketEntry.signedAt, 'MMDDYY'),
         signedAtFormattedTZ: applicationContext
           .getUtilities()
-          .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
+          .formatDateString(docketEntry.signedAt, 'DATE_TIME_TZ'),
       }));
 
     result.formattedDocketEntries = result.docketEntries.map(d =>
@@ -255,10 +259,10 @@ const formatCase = (applicationContext, caseDetail) => {
     counsel.formattedName = formattedName;
 
     if (counsel.representing) {
-      counsel.representingNames = [];
+      counsel.representingFormatted = [];
 
       if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingNames.push({
+        counsel.representingFormatted.push({
           name: caseDetail.contactPrimary.name,
           secondaryName: caseDetail.contactPrimary.secondaryName,
           title: caseDetail.contactPrimary.title,
@@ -269,7 +273,7 @@ const formatCase = (applicationContext, caseDetail) => {
         caseDetail.contactSecondary &&
         counsel.representing.includes(caseDetail.contactSecondary.contactId)
       ) {
-        counsel.representingNames.push({
+        counsel.representingFormatted.push({
           name: caseDetail.contactSecondary.name,
           secondaryName: caseDetail.contactSecondary.secondaryName,
           title: caseDetail.contactSecondary.title,
@@ -278,7 +282,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
       caseDetail.otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
-          counsel.representingNames.push({
+          counsel.representingFormatted.push({
             name: otherPetitioner.name,
             secondaryName: otherPetitioner.secondaryName,
             title: otherPetitioner.title,
@@ -288,7 +292,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
       caseDetail.otherFilers.forEach(otherFiler => {
         if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingNames.push({
+          counsel.representingFormatted.push({
             name: otherFiler.name,
             secondaryName: otherFiler.secondaryName,
             title: otherFiler.title,
@@ -421,9 +425,9 @@ const byIndexSortFunction = (a, b) => {
   if (!a.index && !b.index) {
     return 0;
   } else if (!a.index) {
-    return -1;
-  } else if (!b.index) {
     return 1;
+  } else if (!b.index) {
+    return -1;
   }
   return a.index - b.index;
 };
@@ -497,7 +501,6 @@ module.exports = {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,

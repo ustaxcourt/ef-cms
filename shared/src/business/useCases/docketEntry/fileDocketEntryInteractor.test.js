@@ -37,8 +37,8 @@ describe('fileDocketEntryInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -46,8 +46,8 @@ describe('fileDocketEntryInteractor', () => {
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -55,8 +55,8 @@ describe('fileDocketEntryInteractor', () => {
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',

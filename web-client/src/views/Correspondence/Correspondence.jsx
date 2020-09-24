@@ -27,7 +27,7 @@ export const Correspondence = connect(
   }) {
     useEffect(() => {
       loadDefaultViewerCorrespondenceSequence({
-        documentId: correspondenceDocumentId,
+        docketEntryId: correspondenceDocumentId,
       });
       return;
     }, []);
@@ -50,30 +50,32 @@ export const Correspondence = connect(
                     </tr>
                   </thead>
                   <tbody>
-                    {formattedCaseDetail.correspondence.map((document, idx) => {
-                      return (
-                        <tr
-                          className={classNames(
-                            'row-button',
-                            viewerCorrespondenceToDisplay &&
-                              viewerCorrespondenceToDisplay.documentId ===
-                                document.documentId &&
-                              'active',
-                          )}
-                          key={idx}
-                          onClick={() => {
-                            setViewerCorrespondenceToDisplaySequence({
-                              viewerCorrespondenceToDisplay: document,
-                            });
-                          }}
-                        >
-                          <td className="small">
-                            {document.formattedFilingDate}
-                          </td>
-                          <td>{document.documentTitle}</td>
-                        </tr>
-                      );
-                    })}
+                    {formattedCaseDetail.correspondence.map(
+                      (correspondence, idx) => {
+                        return (
+                          <tr
+                            className={classNames(
+                              'row-button',
+                              viewerCorrespondenceToDisplay &&
+                                viewerCorrespondenceToDisplay.correspondenceId ===
+                                  correspondence.correspondenceId &&
+                                'active',
+                            )}
+                            key={idx}
+                            onClick={() => {
+                              setViewerCorrespondenceToDisplaySequence({
+                                viewerCorrespondenceToDisplay: correspondence,
+                              });
+                            }}
+                          >
+                            <td className="small">
+                              {correspondence.formattedFilingDate}
+                            </td>
+                            <td>{correspondence.documentTitle}</td>
+                          </tr>
+                        );
+                      },
+                    )}
                   </tbody>
                 </table>
               </div>

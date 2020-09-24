@@ -149,6 +149,10 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
+    docketEntry: 
+      type: "object"
+      flags: 
+        presence: "required"
     docketNumber: 
       type: "string"
       flags: 
@@ -173,10 +177,6 @@
           name: "min"
           args: 
             limit: 1
-    document: 
-      type: "object"
-      flags: 
-        presence: "required"
     entityName: 
       type: "string"
       flags: 

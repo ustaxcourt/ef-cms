@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
- * @returns {object} object containing documentId and pdfUrl
+ * @returns {object} object containing docketEntryId and pdfUrl
  */
 export const getDocumentUrlForPreviewAction = async ({
   applicationContext,
@@ -22,8 +22,8 @@ export const getDocumentUrlForPreviewAction = async ({
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
     docketNumber,
-    documentId: documentInS3.documentId,
+    key: documentInS3.docketEntryId,
   });
 
-  return { documentId: documentInS3.documentId, pdfUrl: url };
+  return { docketEntryId: documentInS3.docketEntryId, pdfUrl: url };
 };

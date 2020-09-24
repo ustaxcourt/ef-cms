@@ -34,6 +34,9 @@ const back = () => {
 const router = {
   initialize: (app, registerRoute) => {
     window.document.title = 'U.S. Tax Court';
+    // expose route function on window for use with cypress
+    // eslint-disable-next-line no-underscore-dangle
+    window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     const ifHasAccess = (cb, permissionToCheck) => {
@@ -161,11 +164,11 @@ const router = {
     registerRoute(
       '/case-detail/*/draft-documents?..',
       ifHasAccess(docketNumber => {
-        const { documentId } = route.query();
+        const { docketEntryId } = route.query();
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           docketNumber,
-          draftDocumentId: documentId,
+          draftDocketEntryId: docketEntryId,
           primaryTab: 'drafts',
         });
       }),
@@ -174,13 +177,13 @@ const router = {
     registerRoute(
       '/case-detail/*/document-view?..',
       ifHasAccess(docketNumber => {
-        const { documentId } = route.query();
+        const { docketEntryId } = route.query();
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
+          docketEntryId,
           docketNumber,
           docketRecordTab: 'documentView',
-          documentId,
         });
       }),
     );
@@ -207,11 +210,11 @@ const router = {
 
     registerRoute(
       '/case-detail/*/petition-qc/document-view/*',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
         return app.getSequence('gotoPetitionQcSequence')({
           docketNumber,
-          redirectUrl: `/case-detail/${docketNumber}/document-view?documentId=${documentId}`,
+          redirectUrl: `/case-detail/${docketNumber}/document-view?docketEntryId=${docketEntryId}`,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
@@ -241,39 +244,39 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/review',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
         );
         return app.getSequence('gotoReviewSavedPetitionSequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
     registerRoute(
       '/case-detail/*/documents/*/complete',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
         );
         return app.getSequence('gotoCompleteDocketEntrySequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/documents/*/edit',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
         );
         return app.getSequence('gotoEditDocketEntrySequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
         });
       }),
     );
@@ -293,13 +296,13 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
         return app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
         });
       }),
     );
@@ -459,26 +462,26 @@ const router = {
     );
     registerRoute(
       '/case-detail/*/edit-upload-court-issued/*',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
         );
         return app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/edit-upload-court-issued/*/*',
-      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+      ifHasAccess((docketNumber, docketEntryId, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
         );
         return app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
           redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
@@ -500,12 +503,12 @@ const router = {
     registerRoute(
       '/case-detail/*/correspondence?..',
       ifHasAccess(docketNumber => {
-        const { documentId } = route.query();
+        const { correspondenceId } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
         );
         return app.getSequence('gotoCaseDetailSequence')({
-          correspondenceDocumentId: documentId,
+          correspondenceDocumentId: correspondenceId,
           docketNumber,
           primaryTab: 'correspondence',
         });
@@ -526,27 +529,27 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, correspondenceId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
         );
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+          correspondenceId,
           docketNumber,
-          documentId,
-          redirectUrl: `/case-detail/${docketNumber}/correspondence?documentId=${documentId}`,
+          redirectUrl: `/case-detail/${docketNumber}/correspondence?correspondenceId=${correspondenceId}`,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*/*',
-      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+      ifHasAccess((docketNumber, correspondenceId, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
         );
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+          correspondenceId,
           docketNumber,
-          documentId,
           redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
@@ -554,51 +557,51 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-order/*/sign',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoSignOrderSequence');
         return sequence({
+          docketEntryId,
           docketNumber,
-          documentId,
-          redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`,
+          redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/edit-order/*/sign/*',
-      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+      ifHasAccess((docketNumber, docketEntryId, parentMessageId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoSignOrderSequence');
         return sequence({
+          docketEntryId,
           docketNumber,
-          documentId,
           parentMessageId,
-          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/edit-order/*',
-      ifHasAccess((docketNumber, documentIdToEdit) => {
+      ifHasAccess((docketNumber, docketEntryIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoEditOrderSequence');
         return sequence({
+          docketEntryIdToEdit,
           docketNumber,
-          documentIdToEdit,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/edit-order/*/*',
-      ifHasAccess((docketNumber, documentIdToEdit, parentMessageId) => {
+      ifHasAccess((docketNumber, docketEntryIdToEdit, parentMessageId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoEditOrderSequence');
         return sequence({
+          docketEntryIdToEdit,
           docketNumber,
-          documentIdToEdit,
           parentMessageId,
           redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
@@ -617,20 +620,20 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
         );
         return app.getSequence('gotoAddCourtIssuedDocketEntrySequence')({
+          docketEntryId,
           docketNumber,
-          documentId,
         });
       }),
     );
 
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
-      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+      ifHasAccess((docketNumber, docketEntryId, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
         );
@@ -638,8 +641,8 @@ const router = {
           'gotoAddCourtIssuedDocketEntrySequence',
         );
         return sequence({
+          docketEntryId,
           docketNumber,
-          documentId,
           redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),

@@ -14,7 +14,7 @@ describe('countPagesInDocument', () => {
   it('returns page count of a PDF document', async () => {
     const pageCount = await countPagesInDocument({
       applicationContext,
-      documentId: 'document-id-123',
+      docketEntryId: 'document-id-123',
     });
 
     expect(pageCount).toEqual(1);

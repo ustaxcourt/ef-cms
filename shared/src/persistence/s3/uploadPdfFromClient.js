@@ -10,12 +10,12 @@
  */
 exports.uploadPdfFromClient = async ({
   applicationContext,
-  documentId,
   file,
+  key,
   onUploadProgress,
   policy,
 }) => {
-  const docId = documentId;
+  const docId = key;
   const formData = new FormData();
   formData.append('key', docId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
