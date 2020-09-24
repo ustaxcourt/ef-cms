@@ -129,7 +129,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cloudfront:GetCloudFrontOriginAccessIdentity",
         "cloudfront:DeleteCloudFrontOriginAccessIdentity",
         "cloudfront:ListDistributions",
-        "cloudfront:GetDistributionConfig"
+        "cloudfront:GetDistributionConfig",
+        "cloudfront:DeleteDistribution"
       ],
       "Resource": "*"
     },

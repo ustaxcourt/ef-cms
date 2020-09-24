@@ -53,19 +53,22 @@ If applicable, add screenshots to help explain your problem.
 
 **Severity Definition:**
 * Critical Defect
-        * Blocks entire system's or module’s functionality
-        * No workarounds available
-        * Testing cannot proceed further without bug being fixed. 
+Blocks entire system's or module’s functionality
+No workarounds available
+Testing cannot proceed further without bug being fixed.
+
 * High-severity Defect
-       * Affects key functionality of an application
-       * There's a workaround, but not obvious or easy
-       * App behaves in a way that is strongly different from the one stated in the requirements
+Affects key functionality of an application
+There's a workaround, but not obvious or easy
+App behaves in a way that is strongly different from the one stated in the requirements
+
 * Medium-severity Defect
-       * A minor function does not behave in a way stated in the requirements.
-       * Workaround is available and easy
+A minor function does not behave in a way stated in the requirements.
+Workaround is available and easy
+
 * Low-severity Defect
-       * Mostly related to an application’s UI
-       * Doesn't need a workaround, because it doesn't impact functionality
+Mostly related to an application’s UI
+Doesn't need a workaround, because it doesn't impact functionality
 
 **FOR ENGINEERING TEAM ONLY**
 Bug Resolution Steps:
