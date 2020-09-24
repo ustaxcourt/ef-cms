@@ -1,10 +1,10 @@
 export const docketClerkSignsOrder = (test, draftOrderIndex) => {
   return it('Docket clerk signs order', async () => {
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     await test.runSequence('gotoSignOrderSequence', {
+      docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: documentId,
     });
 
     await test.runSequence('setPDFSignatureDataSequence', {

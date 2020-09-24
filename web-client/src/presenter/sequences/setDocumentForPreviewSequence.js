@@ -2,11 +2,11 @@ import { getDocumentSelectedForPreviewAction } from '../actions/getDocumentSelec
 import { getDocumentUrlForPreviewAction } from '../actions/getDocumentUrlForPreviewAction';
 import { selectDocumentForPreviewAction } from '../actions/selectDocumentForPreviewAction';
 import { set } from 'cerebral/factories';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { state } from 'cerebral';
 import { takePathForDocumentPreviewAction } from '../actions/takePathForDocumentPreviewAction';
-import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
+import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
 export const setDocumentForPreviewSequence = [
   getDocumentSelectedForPreviewAction,
@@ -15,17 +15,17 @@ export const setDocumentForPreviewSequence = [
     documentInS3: [
       getDocumentUrlForPreviewAction,
       setPdfPreviewUrlAction,
-      setDocumentIdAction,
+      setDocketEntryIdAction,
       set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
     no: [
-      unsetDocumentIdAction,
+      unsetDocketEntryIdAction,
       set(state.currentViewMetadata.documentUploadMode, 'scan'),
     ],
     pdfInMemory: [
       selectDocumentForPreviewAction,
       setPdfPreviewUrlAction,
-      unsetDocumentIdAction,
+      unsetDocketEntryIdAction,
       set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
   },

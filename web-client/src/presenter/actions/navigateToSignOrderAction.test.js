@@ -22,8 +22,8 @@ describe('navigateToSignOrderAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: DOCUMENT_ID,
         docketNumber: DOCKET_NUMBER,
-        documentId: DOCUMENT_ID,
       },
       state: { form: {} },
     });
@@ -39,8 +39,8 @@ describe('navigateToSignOrderAction', () => {
         presenter,
       },
       props: {
+        docketEntryId: DOCUMENT_ID,
         docketNumber: DOCKET_NUMBER,
-        documentId: DOCUMENT_ID,
       },
       state: {
         parentMessageId: PARENT_MESSAGE_ID,

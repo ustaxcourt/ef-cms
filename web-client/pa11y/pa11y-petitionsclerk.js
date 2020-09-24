@@ -272,7 +272,7 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-correspondence',
   },
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-20/document-view?documentId=ac62f25a-49f9-46a5-aed7-d6b955a2dc34&info=document-view-review-and-serve-petition-button',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-20/document-view?docketEntryId=ac62f25a-49f9-46a5-aed7-d6b955a2dc34&info=document-view-review-and-serve-petition-button',
   {
     actions: [
       'wait for #tab-case-information to be visible',

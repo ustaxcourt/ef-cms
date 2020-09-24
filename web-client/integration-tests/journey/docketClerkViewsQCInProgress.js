@@ -16,7 +16,8 @@ export const docketClerkViewsQCInProgress = (test, shouldExist) => {
     console.log(''); // adding this causes the tests to pass....
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
-        workItem.document.documentId === test.docketRecordEntry.documentId,
+        workItem.docketEntry.docketEntryId ===
+        test.docketRecordEntry.docketEntryId,
     );
     if (shouldExist) {
       expect(inProgressWorkItem).toBeTruthy();

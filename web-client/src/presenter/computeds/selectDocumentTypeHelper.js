@@ -124,7 +124,7 @@ export const getOptionsForCategory = (
 export const getPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,
-  documentIdWhitelist,
+  docketEntryIdWhitelist,
 ) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   return caseDetail.docketEntries
@@ -134,8 +134,8 @@ export const getPreviouslyFiledDocuments = (
     )
     .filter(
       document =>
-        !documentIdWhitelist ||
-        documentIdWhitelist.includes(document.documentId),
+        !docketEntryIdWhitelist ||
+        docketEntryIdWhitelist.includes(document.docketEntryId),
     );
 };
 

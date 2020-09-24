@@ -18,7 +18,7 @@ exports.goToSelectDocumentType = () => {
 exports.goToFileYourDocument = () => {
   cy.get('button#submit-document').click();
 };
-exports.goToReviewDocument = this.goToFileYourDocument;
+exports.goToReviewDocument = exports.goToFileYourDocument;
 
 exports.selectDocumentType = documentType => {
   cy.get('#document-type').children().first().click();

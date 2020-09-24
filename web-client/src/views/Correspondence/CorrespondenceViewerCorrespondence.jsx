@@ -53,7 +53,7 @@ export const CorrespondenceViewerCorrespondence = connect(
                 <Button
                   link
                   className="edit-correspondence-button"
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${viewerCorrespondenceToDisplay.documentId}`}
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${viewerCorrespondenceToDisplay.correspondenceId}`}
                   icon="edit"
                   iconColor="white"
                 >
@@ -68,7 +68,8 @@ export const CorrespondenceViewerCorrespondence = connect(
                   iconColor="white"
                   onClick={() => {
                     openConfirmDeleteCorrespondenceModalSequence({
-                      documentId: viewerCorrespondenceToDisplay.documentId,
+                      correspondenceId:
+                        viewerCorrespondenceToDisplay.correspondenceId,
                       documentTitle:
                         viewerCorrespondenceToDisplay.documentTitle,
                     });
@@ -84,8 +85,9 @@ export const CorrespondenceViewerCorrespondence = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
+                    docketEntryId:
+                      viewerCorrespondenceToDisplay.correspondenceId,
                     docketNumber: caseDetail.docketNumber,
-                    documentId: viewerCorrespondenceToDisplay.documentId,
                   })
                 }
               >

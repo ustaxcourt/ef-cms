@@ -47,7 +47,7 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketEntry }) => {
   const isCourtIssued = getIsCourtIssued(docketEntry);
   const isUnservable = getIsUnservable(docketEntry);
 
-  if (!isInitialFilingType && !isMinuteEntry && !docketEntry.documentId) {
+  if (!isInitialFilingType && !isMinuteEntry && !docketEntry.docketEntryId) {
     return false;
   }
 

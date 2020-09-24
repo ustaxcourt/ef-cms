@@ -90,13 +90,13 @@ describe('assignWorkItemsInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19S',
         isInitializeCase: true,
         section: PETITIONS_SECTION,
         sentBy: 'Test Petitionsclerk',
@@ -117,7 +117,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       workItem: {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        document: {
+        docketEntry: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
         },

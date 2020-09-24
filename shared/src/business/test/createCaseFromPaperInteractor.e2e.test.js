@@ -88,12 +88,12 @@ describe('createCaseFromPaperInteractor integration test', () => {
             assigneeName: 'Alex Petitionsclerk',
             caseStatus: CASE_STATUS_TYPES.new,
             createdAt: RECEIVED_DATE,
-            docketNumber: '101-19',
-            document: {
-              documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
+            docketEntry: {
+              docketEntryId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
               documentType: 'Petition',
               filedBy: 'Petr. Bob Jones',
             },
+            docketNumber: '101-19',
             isInitializeCase: true,
             section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
@@ -133,13 +133,13 @@ describe('createCaseFromPaperInteractor integration test', () => {
       {
         assigneeName: 'Alex Petitionsclerk',
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19',
-        document: {
+        docketEntry: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
           eventCode: 'P',
         },
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19',
         isInitializeCase: true,
         section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',
@@ -155,13 +155,13 @@ describe('createCaseFromPaperInteractor integration test', () => {
       {
         assigneeName: 'Alex Petitionsclerk',
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19',
-        document: {
+        docketEntry: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
           eventCode: 'P',
         },
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19',
         isInitializeCase: true,
         section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',

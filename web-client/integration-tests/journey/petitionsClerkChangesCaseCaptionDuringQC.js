@@ -47,14 +47,14 @@ export const petitionsClerkChangesCaseCaptionDuringQC = test => {
       docketNumber: test.docketNumber,
     });
 
-    const documents = test.getState('caseDetail.docketEntries');
+    const docketEntries = test.getState('caseDetail.docketEntries');
 
-    const caseAmended = documents.find(entry =>
-      entry.description.startsWith('Caption of case is amended'),
+    const caseAmended = docketEntries.find(entry =>
+      entry.documentTitle.startsWith('Caption of case is amended'),
     );
 
-    const docketNumberAmended = documents.find(entry =>
-      entry.description.startsWith('Docket Number is amended'),
+    const docketNumberAmended = docketEntries.find(entry =>
+      entry.documentTitle.startsWith('Docket Number is amended'),
     );
 
     //case type was changed in an earlier test
