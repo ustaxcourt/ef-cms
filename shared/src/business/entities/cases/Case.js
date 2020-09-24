@@ -1124,8 +1124,6 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
-
   if (updatedDocketEntry.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,

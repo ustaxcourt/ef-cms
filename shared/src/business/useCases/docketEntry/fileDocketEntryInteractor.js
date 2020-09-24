@@ -70,6 +70,8 @@ exports.fileDocketEntryInteractor = async ({
       const docketRecordEditState =
         metadata.isFileAttached === false ? documentMetadata : {};
 
+      const readyForService = metadata.isFileAttached && !isSavingForLater;
+      const saveFileForLater = metadata.isFileAttached && isSavingForLater;
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
@@ -116,10 +118,10 @@ exports.fileDocketEntryInteractor = async ({
 
       docketEntryEntity.setWorkItem(workItem);
 
-      if (metadata.isFileAttached && !isSavingForLater) {
+      if (readyForService) {
         const servedParties = aggregatePartiesForService(caseEntity);
         docketEntryEntity.setAsServed(servedParties.all);
-      } else if (metadata.isFileAttached && isSavingForLater) {
+      } else if (saveFileForLater) {
         docketEntryEntity.numberOfPages = await applicationContext
           .getUseCaseHelpers()
           .countPagesInDocument({
@@ -128,10 +130,10 @@ exports.fileDocketEntryInteractor = async ({
           });
       }
 
-      caseEntity.addDocketEntry(docketEntryEntity); // adding docket entry sets its index
+      caseEntity.addDocketEntry(docketEntryEntity);
 
       if (metadata.isPaper) {
-        if (metadata.isFileAttached && !isSavingForLater) {
+        if (readyForService) {
           workItem.setAsCompleted({
             message: 'completed',
             user,
