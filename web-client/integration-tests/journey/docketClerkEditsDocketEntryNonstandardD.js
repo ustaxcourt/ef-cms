@@ -20,23 +20,23 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       },
     );
 
-    const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
     const petitionDocument = getPetitionDocumentForCase(
       test.getState('caseDetail'),
     );
-    expect(documentId).toBeDefined();
-    expect(petitionDocument.documentId).toBeDefined();
+    expect(docketEntryId).toBeDefined();
+    expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId,
       docketNumber: test.docketNumber,
-      documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('documentId')).toEqual(documentId);
+    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
@@ -67,7 +67,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
-      value: petitionDocument.documentId,
+      value: petitionDocument.docketEntryId,
     });
 
     await test.runSequence('fileDocketEntrySequence', {
@@ -90,12 +90,12 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
+      descriptionDisplay:
         'Certificate of Service Petition 05-05-2015 some additional info',
     });
 
     const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
-      document => document.documentId === documentId,
+      document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Certificate of Service Petition 05-05-2015',

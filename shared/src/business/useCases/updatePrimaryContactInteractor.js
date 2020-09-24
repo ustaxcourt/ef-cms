@@ -93,15 +93,14 @@ exports.updatePrimaryContactInteractor = async ({
         },
       });
 
-    const newDocumentId = applicationContext.getUniqueId();
+    const newDocketEntryId = applicationContext.getUniqueId();
 
     const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
-        description: documentType.title,
+        docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
-        documentId: newDocumentId,
         documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,
@@ -124,7 +123,7 @@ exports.updatePrimaryContactInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       servedParties,
     });
 
@@ -136,12 +135,12 @@ exports.updatePrimaryContactInteractor = async ({
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        document: {
+        docketEntry: {
           ...changeOfAddressDocketEntry.toRawObject(),
           createdAt: changeOfAddressDocketEntry.createdAt,
         },
+        docketNumber: caseEntity.docketNumber,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
@@ -156,14 +155,14 @@ exports.updatePrimaryContactInteractor = async ({
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
-      documentEntity: changeOfAddressDocketEntry,
+      docketEntryEntity: changeOfAddressDocketEntry,
       pdfData: changeOfAddressPdf,
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
-      documentId: newDocumentId,
+      key: newDocketEntryId,
     });
 
     await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({

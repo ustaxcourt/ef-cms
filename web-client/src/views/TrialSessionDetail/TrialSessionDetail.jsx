@@ -45,6 +45,7 @@ export const TrialSessionDetail = connect(
                 <Button
                   className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
                   icon="calendar-check"
+                  id="set-calendar-button"
                   onClick={() => openSetCalendarModalSequence()}
                 >
                   Set Calendar

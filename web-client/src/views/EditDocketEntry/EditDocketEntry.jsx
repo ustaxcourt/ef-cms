@@ -40,22 +40,23 @@ export const EditDocketEntry = connect(
             </Hint>
           )}
           <h2 className="heading-1">
-            {editDocketEntryHelper.formattedDocument.documentTitle ||
-              editDocketEntryHelper.formattedDocument.documentType}
+            {editDocketEntryHelper.formattedDocketEntry.documentTitle ||
+              editDocketEntryHelper.formattedDocketEntry.documentType}
           </h2>
           <div className="filed-by">
             <div className="padding-bottom-1">
-              Filed {editDocketEntryHelper.formattedDocument.createdAtFormatted}
-              {editDocketEntryHelper.formattedDocument.filedBy &&
-                ` by ${editDocketEntryHelper.formattedDocument.filedBy}`}
+              Filed{' '}
+              {editDocketEntryHelper.formattedDocketEntry.createdAtFormatted}
+              {editDocketEntryHelper.formattedDocketEntry.filedBy &&
+                ` by ${editDocketEntryHelper.formattedDocketEntry.filedBy}`}
             </div>
-            {editDocketEntryHelper.formattedDocument.showServedAt && (
+            {editDocketEntryHelper.formattedDocketEntry.showServedAt && (
               <div>
                 Served{' '}
-                {editDocketEntryHelper.formattedDocument.servedAtFormatted}
+                {editDocketEntryHelper.formattedDocketEntry.servedAtFormatted}
               </div>
             )}
-            {editDocketEntryHelper.formattedDocument.showLegacySealed && (
+            {editDocketEntryHelper.formattedDocketEntry.showLegacySealed && (
               <div>Sealed in Blackstone</div>
             )}
           </div>

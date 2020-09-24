@@ -55,7 +55,7 @@ describe('getCasesByUser', () => {
     expect(result).toEqual([
       {
         archivedCorrespondences: [],
-        archivedDocuments: [],
+        archivedDocketEntries: [],
         correspondence: [],
         docketEntries: [],
         docketNumber: '123-20',

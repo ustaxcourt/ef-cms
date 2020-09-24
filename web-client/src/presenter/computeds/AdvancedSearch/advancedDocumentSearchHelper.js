@@ -1,4 +1,3 @@
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   OPINION_EVENT_CODES,
   ORDER_EVENT_CODES,
@@ -56,14 +55,10 @@ export const formatDocumentSearchResultRecord = (
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
-  // TODO 636 - this should be on the app context
-  result.formattedDocumentType = DocketEntry.getFormattedType(
-    result.documentType,
-  );
 
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {
-    result.documentTitle = result.formattedDocumentType;
+    result.documentTitle = result.documentType;
   }
 
   if (OPINION_EVENT_CODES.includes(result.eventCode)) {

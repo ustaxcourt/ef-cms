@@ -12,7 +12,10 @@ const mutateRecord = async item => {
         item.qcByUserId = item.qcByUser.userId;
       }
 
-      const updatedDocument = new DocketEntry(item, { applicationContext })
+      const updatedDocument = new DocketEntry(
+        { ...item, docketEntryId: item.docketEntryId || item.documentId },
+        { applicationContext },
+      )
         .validate()
         .toRawObject();
 

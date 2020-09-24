@@ -30,14 +30,16 @@ describe('updateCase', () => {
     createdAt: new Date().toISOString(),
     docketEntries: [
       {
-        documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Petition',
         eventCode: 'P',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
         workItem: {
+          docketEntry: {
+            docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
           docketNumber: '56789-18',
-          document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
           isInitializeCase: true,
           section: PETITIONS_SECTION,
           sentBy: 'petitioner',
@@ -45,14 +47,14 @@ describe('updateCase', () => {
         },
       },
       {
-        documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
       {
-        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Motion for Continuance',
         eventCode: 'M006',
         filedBy: 'Test Petitioner',
@@ -249,7 +251,7 @@ describe('updateCase', () => {
   it('should remove a new initial filing document from the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
     const mockRQT = {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',

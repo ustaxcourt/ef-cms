@@ -11,10 +11,7 @@ const { User } = require('../entities/User');
  * @param {object} providers.applicationContext the application context
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getUploadPolicyInteractor = async ({
-  applicationContext,
-  documentId,
-}) => {
+exports.getUploadPolicyInteractor = async ({ applicationContext, key }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
@@ -27,7 +24,7 @@ exports.getUploadPolicyInteractor = async ({
       .getPersistenceGateway()
       .isFileExists({
         applicationContext,
-        documentId,
+        key,
       });
 
     if (isFileExists) {
@@ -37,6 +34,6 @@ exports.getUploadPolicyInteractor = async ({
 
   return applicationContext.getPersistenceGateway().getUploadPolicy({
     applicationContext,
-    documentId,
+    key,
   });
 };

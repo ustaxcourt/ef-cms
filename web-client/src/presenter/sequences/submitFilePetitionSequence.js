@@ -9,7 +9,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
@@ -24,7 +23,7 @@ export const submitFilePetitionSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: showProgressSequenceDecorator([
+    success: [
       stopShowValidationAction,
       openFileUploadStatusModalAction,
       setCaseTypeAction,
@@ -37,6 +36,6 @@ export const submitFilePetitionSequence = [
           navigateToFilePetitionSuccessAction,
         ],
       },
-    ]),
+    ],
   },
 ];

@@ -7,7 +7,7 @@ const {
 const { MOCK_DOCUMENTS } = require('./mockDocuments');
 
 exports.MOCK_CASE = {
-  archivedDocuments: [],
+  archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   contactPrimary: {

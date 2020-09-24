@@ -94,7 +94,7 @@ const RecordDescription = ({ entry }) => {
 
   return (
     <>
-      <strong>{entry.description}</strong>
+      <strong>{entry.descriptionDisplay}</strong>
       {additionalDescription}
     </>
   );

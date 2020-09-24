@@ -12,7 +12,7 @@ export const DocumentViewer = connect(
       sequences.loadDefaultDocketViewerDocumentToDisplaySequence,
     setViewerDocumentToDisplaySequence:
       sequences.setViewerDocumentToDisplaySequence,
-    viewDocumentId: state.viewerDocumentToDisplay.documentId,
+    viewDocumentId: state.viewerDocumentToDisplay.docketEntryId,
   },
   function DocumentViewer({
     formattedCaseDetail,
@@ -44,9 +44,9 @@ export const DocumentViewer = connect(
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewDocumentId === entry.documentId && 'active',
+                          viewDocumentId === entry.docketEntryId && 'active',
                         )}
-                        isActive={viewDocumentId === entry.documentId}
+                        isActive={viewDocumentId === entry.docketEntryId}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
@@ -72,7 +72,7 @@ export const DocumentViewer = connect(
                                 entry.isStricken && 'stricken-docket-record',
                               )}
                             >
-                              {entry.description}
+                              {entry.descriptionDisplay}
                             </span>
                             {entry.isStricken && ' (STRICKEN)'}
                           </div>

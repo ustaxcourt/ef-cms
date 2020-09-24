@@ -1,14 +1,14 @@
 export const petitionsClerk1ServesDocumentFromMessageDetail = test => {
   return it('petitions clerk 1 serves document from message detail', async () => {
     await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      documentId: test.documentId,
+      docketEntryId: test.docketEntryId,
       redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
     expect(test.getState('redirectUrl')).toBe(
       `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     );
-    expect(test.getState('documentId')).toBe(test.documentId);
+    expect(test.getState('docketEntryId')).toBe(test.docketEntryId);
 
     expect(test.getState('modal.showModal')).toBe(
       'ConfirmInitiatePaperDocumentServiceModal',

@@ -14,7 +14,7 @@ export const DraftDocumentViewer = connect(
     setViewerDraftDocumentToDisplaySequence:
       sequences.setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay:
-      state.viewerDraftDocumentToDisplay.documentId,
+      state.viewerDraftDocumentToDisplay.docketEntryId,
   },
   function DraftDocumentViewer({
     draftDocumentId,
@@ -25,7 +25,7 @@ export const DraftDocumentViewer = connect(
   }) {
     useEffect(() => {
       loadDefaultDraftViewerDocumentToDisplaySequence({
-        documentId: draftDocumentId,
+        docketEntryId: draftDocumentId,
       });
       return;
     }, []);
@@ -46,11 +46,11 @@ export const DraftDocumentViewer = connect(
                       className={classNames(
                         'usa-button--unstyled attachment-viewer-button',
                         viewerDraftDocumentIdToDisplay ===
-                          draftDocument.documentId && 'active',
+                          draftDocument.docketEntryId && 'active',
                       )}
                       isActive={
                         viewerDraftDocumentIdToDisplay ===
-                        draftDocument.documentId
+                        draftDocument.docketEntryId
                       }
                       key={index}
                       onClick={() => {

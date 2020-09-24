@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  */
 export const removePdfFromCaseAction = async ({ get }) => {
   const form = get(state.form);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
 
-  if (documentId) {
+  if (docketEntryId) {
     (form.docketEntries || []).some((document, idx) => {
-      if (document.documentId === documentId) {
+      if (document.docketEntryId === docketEntryId) {
         form.docketEntries.splice(idx, 1);
         return true;
       }

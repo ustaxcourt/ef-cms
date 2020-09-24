@@ -75,8 +75,9 @@ export const DraftDocumentViewerDocument = connect(
                   id="edit-order-button"
                   onClick={() =>
                     openConfirmEditModalSequence({
+                      docketEntryIdToEdit:
+                        viewerDraftDocumentToDisplay.docketEntryId,
                       docketNumber: caseDetail.docketNumber,
-                      documentIdToEdit: viewerDraftDocumentToDisplay.documentId,
                     })
                   }
                 >
@@ -89,8 +90,8 @@ export const DraftDocumentViewerDocument = connect(
                 icon="trash"
                 onClick={() =>
                   archiveDraftDocumentModalSequence({
+                    docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                    documentId: viewerDraftDocumentToDisplay.documentId,
                     documentTitle: viewerDraftDocumentToDisplay.documentTitle,
                     redirectToCaseDetail: true,
                   })
@@ -102,7 +103,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showApplySignatureButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplay.documentId}/sign/`}
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplay.docketEntryId}/sign/`}
                   icon="pencil-alt"
                 >
                   Apply Signature
@@ -115,7 +116,8 @@ export const DraftDocumentViewerDocument = connect(
                   icon="pencil-alt"
                   onClick={() =>
                     openConfirmRemoveSignatureModalSequence({
-                      documentIdToEdit: viewerDraftDocumentToDisplay.documentId,
+                      docketEntryIdToEdit:
+                        viewerDraftDocumentToDisplay.docketEntryId,
                     })
                   }
                 >
@@ -126,7 +128,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showAddDocketEntryButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplay.documentId}/add-court-issued-docket-entry`}
+                  href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplay.docketEntryId}/add-court-issued-docket-entry`}
                   icon="plus-circle"
                   id="add-court-issued-docket-entry-button"
                 >
@@ -140,8 +142,8 @@ export const DraftDocumentViewerDocument = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
+                    docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                    documentId: viewerDraftDocumentToDisplay.documentId,
                   })
                 }
               >

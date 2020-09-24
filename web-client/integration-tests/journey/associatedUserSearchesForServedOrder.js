@@ -12,7 +12,8 @@ export const associatedUserSearchesForServedOrder = (test, options) => {
     expect(test.getState('searchResults')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentId: test.draftOrders[options.draftOrderIndex].documentId,
+          docketEntryId:
+            test.draftOrders[options.draftOrderIndex].docketEntryId,
         }),
       ]),
     );
