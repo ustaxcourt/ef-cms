@@ -195,7 +195,8 @@ resource "aws_api_gateway_method_response" "async_method_response_post" {
 resource "aws_api_gateway_integration_response" "async_response_post" {
   depends_on = [
     aws_api_gateway_integration.api_async_integration_post,
-    aws_api_gateway_method.api_async_method_post
+    aws_api_gateway_method.api_async_method_post,
+    aws_api_gateway_resource.api_async_resource
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_async_resource.id
@@ -223,7 +224,8 @@ resource "aws_api_gateway_method_response" "async_method_response_put" {
 resource "aws_api_gateway_integration_response" "async_response_put" {
   depends_on = [
     aws_api_gateway_integration.api_async_integration_post,
-    aws_api_gateway_method.api_async_method_put
+    aws_api_gateway_method.api_async_method_put,
+    aws_api_gateway_resource.api_async_resource
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_async_resource.id
@@ -251,7 +253,8 @@ resource "aws_api_gateway_method_response" "async_method_response_get" {
 resource "aws_api_gateway_integration_response" "async_response_get" {
   depends_on = [
     aws_api_gateway_integration.api_async_integration_post,
-    aws_api_gateway_method.api_async_method_get
+    aws_api_gateway_method.api_async_method_get,
+    aws_api_gateway_resource.api_async_resource
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_async_resource.id
