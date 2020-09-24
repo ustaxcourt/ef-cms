@@ -190,6 +190,10 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
+  lifecycle {
+    ignore_changes = [aliases]
+  }
+
   aliases = [
     "${var.current_color}-${var.dns_domain}"
   ]

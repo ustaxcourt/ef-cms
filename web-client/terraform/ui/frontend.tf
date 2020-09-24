@@ -290,6 +290,10 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [ aliases ]
+  }
+
   aliases = ["app-${var.current_color}-${var.dns_domain}"]
 
   restrictions {
