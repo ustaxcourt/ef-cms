@@ -1,12 +1,13 @@
 resource "aws_lambda_function" "api_async_lambda" {
-  function_name    = "api_async_${var.environment}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api.handler"
-  s3_bucket        = aws_s3_bucket.api_lambdas_bucket.id
-  s3_key           = aws_s3_bucket_object.api_object.key
-  source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout          = "900"
-  memory_size      = "3008"
+  depends_on    = [var.api_object]
+  function_name = "api_async_${var.environment}_${var.current_color}"
+  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler       = "api.handler"
+  s3_bucket     = var.lambda_bucket_id
+  s3_key        = "api_${var.current_color}.js.zip"
+  source_code_hash = var.api_object_hash
+  timeout     = "900"
+  memory_size = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
