@@ -9,7 +9,6 @@ const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { isEmpty } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -119,11 +118,10 @@ exports.updateSecondaryContactInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
-
     const servedParties = aggregatePartiesForService(caseEntity);
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
@@ -169,7 +167,7 @@ exports.updateSecondaryContactInteractor = async ({
         documentBytes: changeOfAddressPdfWithCover,
       });
 
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+    caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
@@ -185,12 +183,7 @@ exports.updateSecondaryContactInteractor = async ({
 
   const validatedCaseEntity = caseEntity.validate().toRawObject();
 
-  const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
-    newData: editableFields,
-    oldData: caseToUpdate.contactSecondary,
-  });
-
-  if (!isEmpty(contactDiff)) {
+  if (changeOfAddressDocumentTypeToGenerate) {
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: validatedCaseEntity,

@@ -98,8 +98,6 @@ exports.updateDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  caseEntity.updateDocketEntry(docketEntryEntity);
-
   if (editableFields.isFileAttached) {
     const { workItem } = docketEntryEntity;
 
@@ -152,6 +150,8 @@ exports.updateDocketEntryInteractor = async ({
       const servedParties = aggregatePartiesForService(caseEntity);
       docketEntryEntity.setAsServed(servedParties.all);
       docketEntryEntity.setAsProcessingStatusAsCompleted();
+
+      caseEntity.updateDocketEntry(docketEntryEntity);
 
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
