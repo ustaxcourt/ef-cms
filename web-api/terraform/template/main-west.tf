@@ -141,6 +141,7 @@ module "api-west-green" {
   websockets_object      = null_resource.websockets_west_object
   puppeteer_layer_object = null_resource.puppeteer_layer_west_object
   cron_object            = ""
+  streams_object         = ""
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -166,7 +167,10 @@ module "api-west-green" {
   websockets_object_hash = data.aws_s3_bucket_object.websockets_green_west_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
   cron_object_hash       = ""
+  streams_object_hash    = ""
   create_cron            = 0
+  create_streams         = 0
+  stream_arn             = ""
 }
 
 module "api-west-blue" {
@@ -175,6 +179,7 @@ module "api-west-blue" {
   websockets_object      = null_resource.websockets_west_object
   puppeteer_layer_object = null_resource.puppeteer_layer_west_object
   cron_object            = ""
+  streams_object         = ""
   source                 = "../api/"
   environment            = var.environment
   dns_domain             = var.dns_domain
@@ -200,5 +205,8 @@ module "api-west-blue" {
   websockets_object_hash = data.aws_s3_bucket_object.websockets_blue_west_object.etag
   puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
   cron_object_hash       = ""
+  streams_object_hash    = ""
   create_cron            = 0
+  create_streams         = 0
+  stream_arn             = ""
 }

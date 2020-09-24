@@ -62,6 +62,10 @@ variable "cron_object" {
   type = any
 }
 
+variable "streams_object" {
+  type = any
+}
+
 variable "public_object_hash" {
   type = string
 }
@@ -82,6 +86,18 @@ variable "cron_object_hash" {
   type = string
 }
 
+variable "streams_object_hash" {
+  type = string
+}
+
 variable "create_cron" {
   type = number
+}
+
+variable "create_streams" {
+  type = number
+}
+
+variable "stream_arn" {
+  type = string
 }

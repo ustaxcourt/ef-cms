@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the migration source table for the environment
+# Returns the source elasticsearch domain for the environment
 
 # Usage
-#   ./get-source-table.sh dev
+#   ./get-source-elasticsearch.sh dev
 
 # Arguments
 #   - $1 - the environment to check
@@ -19,19 +19,19 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo 'efcms-search-exp2'
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo 'irs'
+  echo 'efcms-search-irs'
 elif [[ $BRANCH == 'test' ]] ; then
-  echo 'test'
+  echo 'efcms-search-test'
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'mig'
+  echo 'efcms-search-mig'
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'stg'
+  echo 'efcms-search-stg'
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'prod'
+  echo 'efcms-search-prod'
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo 'daw'
+  echo 'efcms-search-daw'
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo 'prod'
+  echo 'efcms-search-prod'
 else
   exit 1;
 fi
