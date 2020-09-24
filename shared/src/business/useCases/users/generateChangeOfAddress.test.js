@@ -264,6 +264,7 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toBeCalledTimes(1);
+    expect(changeOfAddressDocketEntry.isFileAttached).toEqual(true);
     expect(changeOfAddressDocketEntry.numberOfPages).toBe(mockNumberOfPages);
   });
 
