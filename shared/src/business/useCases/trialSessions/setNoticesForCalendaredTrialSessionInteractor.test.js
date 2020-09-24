@@ -208,6 +208,11 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should create a docket entry for each case', async () => {
+    const mockNumberOfPages = 999;
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
+
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -219,13 +224,21 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       );
     };
 
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalled();
+
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
       index: expect.anything(),
+      isFileAttached: true,
       isOnDocketRecord: true,
+      numberOfPages: 999,
     });
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toMatchObject({
       index: expect.anything(),
+      isFileAttached: true,
       isOnDocketRecord: true,
+      numberOfPages: 999,
     });
   });
 
