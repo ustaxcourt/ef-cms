@@ -38,6 +38,9 @@ export const AddressDisplay = connect(
           )}
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
+          <br />
+          {contact.firmName && contact.firmName}
+          <br />
           {contact.secondaryName && (
             <span>
               <br />

@@ -63,6 +63,10 @@ export const fakeFile = (() => {
   return getFakeFile();
 })();
 
+export const fakeFile1 = (() => {
+  return getFakeFile(false, true);
+})();
+
 export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',

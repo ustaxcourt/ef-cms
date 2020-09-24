@@ -167,8 +167,8 @@ const router = {
         const { docketEntryId } = route.query();
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
+          docketEntryId,
           docketNumber,
-          draftDocketEntryId: docketEntryId,
           primaryTab: 'drafts',
         });
       }),
