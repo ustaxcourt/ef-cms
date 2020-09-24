@@ -243,6 +243,8 @@ exports.updateDocketEntryInteractor = async ({
       });
   }
 
+  caseEntity.updateDocketEntry(docketEntryEntity);
+
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
