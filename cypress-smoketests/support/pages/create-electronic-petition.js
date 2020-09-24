@@ -50,9 +50,9 @@ exports.submitPetition = testData => {
     const { docketNumber } = xhr.responseBody;
     if (testData) {
       testData.createdDocketNumber = docketNumber;
-    }
-    if (testData.docketNumbers) {
-      testData.docketNumbers.push(docketNumber);
+      if (testData.docketNumbers) {
+        testData.docketNumbers.push(docketNumber);
+      }
     }
   });
   cy.url().should('include', 'file-a-petition/success');
