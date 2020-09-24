@@ -7,11 +7,14 @@ export const CaseDetailSubnavTabs = connect(
   {
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
     clearAlertSequence: sequences.clearAlertSequence,
+    clearDraftDocumentViewerDocketEntryIdSequence:
+      sequences.clearDraftDocumentViewerDocketEntryIdSequence,
     setCaseDetailPrimaryTabSequence: sequences.setCaseDetailPrimaryTabSequence,
   },
   function CaseDetailSubnavTabs({
     caseDetailSubnavHelper,
     clearAlertSequence,
+    clearDraftDocumentViewerDocketEntryIdSequence,
     setCaseDetailPrimaryTabSequence,
   }) {
     return (
@@ -23,6 +26,7 @@ export const CaseDetailSubnavTabs = connect(
             onSelect={() => {
               clearAlertSequence();
               setCaseDetailPrimaryTabSequence();
+              clearDraftDocumentViewerDocketEntryIdSequence();
             }}
           >
             <Tab
