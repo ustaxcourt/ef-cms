@@ -28,7 +28,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: '123-20',
-        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized to access private document');
   });
@@ -52,7 +52,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
-          documentId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
+          docketEntryId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           eventCode: 'O',
@@ -66,7 +66,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor({
         applicationContext,
         docketNumber: '123-20',
-        documentId: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
+        key: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
       }),
     ).rejects.toThrow('Unauthorized to access documents in a sealed case');
   });
@@ -90,7 +90,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
-          documentId: '83813a24-7687-418e-a186-c416b4bb0ad4',
+          docketEntryId: '83813a24-7687-418e-a186-c416b4bb0ad4',
           documentTitle: 'Memorandum Opinion',
           documentType: 'Memorandum Opinion',
           eventCode: 'MOP',
@@ -103,7 +103,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     const result = await getPublicDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: '123-20',
-      documentId: '83813a24-7687-418e-a186-c416b4bb0ad4',
+      key: '83813a24-7687-418e-a186-c416b4bb0ad4',
     });
     expect(result).toEqual(
       'http://example.com/document/83813a24-7687-418e-a186-c416b4bb0ad4',
@@ -126,7 +126,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     MOCK_CASE.docketEntries.push(
       new DocketEntry(
         {
-          documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
+          docketEntryId: '8008b288-8b6b-48e3-8239-599266b13b8b',
           documentTitle: 'Order to do something',
           documentType: 'Order',
           eventCode: 'O',
@@ -139,7 +139,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     const result = await getPublicDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: '123-20',
-      documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
+      key: '8008b288-8b6b-48e3-8239-599266b13b8b',
     });
     expect(result).toEqual(
       'http://example.com/document/8008b288-8b6b-48e3-8239-599266b13b8b',

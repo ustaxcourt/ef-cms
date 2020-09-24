@@ -21,15 +21,15 @@ export const docketClerkEditsAnUploadedCourtIssuedDocument = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoEditUploadCourtIssuedDocumentSequence', {
-      documentId: draftOrderDocument.documentId,
+      docketEntryId: draftOrderDocument.docketEntryId,
     });
 
     await test.runSequence('validateUploadCourtIssuedDocumentSequence');
@@ -72,6 +72,6 @@ export const docketClerkEditsAnUploadedCourtIssuedDocument = (
     );
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
-    test.documentId = newDraftOrder.documentId;
+    test.docketEntryId = newDraftOrder.docketEntryId;
   });
 };

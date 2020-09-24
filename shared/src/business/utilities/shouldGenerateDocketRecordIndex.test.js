@@ -4,7 +4,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
   it('returns false for any entry that already has an index', () => {
     const caseDetail = { docketEntries: [] };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       index: 1,
     };
 
@@ -36,14 +36,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
     const caseDetail = {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: false,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Answer',
       eventCode: 'A',
     };
@@ -59,13 +59,13 @@ describe('shouldGenerateDocketRecordIndex', () => {
     const caseDetail = {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: false,
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Answer',
       eventCode: 'O',
     };
@@ -81,14 +81,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
     const caseDetail = {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Petition',
       eventCode: 'P',
     };
@@ -105,18 +105,18 @@ describe('shouldGenerateDocketRecordIndex', () => {
       docketEntries: [
         {
           createdAt: '2019-03-01T21:40:46.415Z',
-          documentId: '012',
+          docketEntryId: '012',
           eventCode: 'P',
           isPaper: true,
         },
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: true,
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:56.415Z', // 10 seconds
@@ -134,20 +134,20 @@ describe('shouldGenerateDocketRecordIndex', () => {
       docketEntries: [
         {
           createdAt: '2019-03-01T21:40:46.415Z',
-          documentId: '012',
+          docketEntryId: '012',
           eventCode: 'P',
           isPaper: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: true,
           servedAt: '2019-03-02T21:40:46.415Z',
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:57.415Z',
@@ -164,7 +164,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
       docketEntries: [
         {
           createdAt: '2019-03-01T21:40:46.415Z',
-          documentId: '012',
+          docketEntryId: '012',
           eventCode: 'P',
           isPaper: true,
           servedAt: '2019-03-01T21:40:46.415Z',
@@ -172,7 +172,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Ownership Disclosure Statement',
       eventCode: 'DISC',
       filingDate: '2019-03-01T21:40:57.415Z',
@@ -190,13 +190,13 @@ describe('shouldGenerateDocketRecordIndex', () => {
     const caseDetail = {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: true,
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Hearing before',
       eventCode: 'HEAR',
     };
@@ -213,13 +213,13 @@ describe('shouldGenerateDocketRecordIndex', () => {
     const caseDetail = {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: true,
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Filing Fee Paid',
       eventCode: 'FEE',
     };
@@ -235,7 +235,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
   it('returns true for minute entries', () => {
     const caseDetail = { docketEntries: [] };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Filing Fee Paid',
       eventCode: 'FEE',
     };
@@ -253,7 +253,7 @@ describe('shouldGenerateDocketRecordIndex', () => {
       docketEntries: [],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Answer',
       eventCode: 'A',
       isPaper: true,
@@ -272,14 +272,14 @@ describe('shouldGenerateDocketRecordIndex', () => {
     const caseDetail = {
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           isPaper: true,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
       ],
     };
     const docketEntry = {
-      documentId: '123',
+      docketEntryId: '123',
       documentType: 'Answer',
       eventCode: 'A',
     };

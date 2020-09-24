@@ -7,7 +7,8 @@ export const docketClerkViewsStipulatedDecision = test => {
         test,
       );
       const stipDecision = documentQCSectionInbox.find(
-        item => item.document.documentType === 'Proposed Stipulated Decision',
+        item =>
+          item.docketEntry.documentType === 'Proposed Stipulated Decision',
       );
       test.stipDecision = stipDecision;
       expect(stipDecision).not.toBeNull();

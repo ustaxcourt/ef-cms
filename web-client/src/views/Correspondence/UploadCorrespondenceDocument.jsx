@@ -37,7 +37,7 @@ export const UploadCorrespondenceDocument = connect(
   }) {
     return (
       <>
-        <CaseDetailHeader hideActionButtons />
+        <CaseDetailHeader />
 
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />

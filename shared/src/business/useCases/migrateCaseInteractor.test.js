@@ -164,7 +164,7 @@ describe('migrateCaseInteractor', () => {
           caseMetadata: {
             ...MOCK_CASE,
             docketEntries: [
-              { ...MOCK_CASE.docketEntries[0], documentId: 'invalid' },
+              { ...MOCK_CASE.docketEntries[0], docketEntryId: 'invalid' },
             ],
             docketNumber: 'ABC',
           },
@@ -178,7 +178,7 @@ describe('migrateCaseInteractor', () => {
         "'docketNumber' with value 'ABC' fails to match the required pattern",
       );
       expect(error.message).toContain(
-        "'docketEntries[0].documentId' must be a valid GUID",
+        "'docketEntries[0].docketEntryId' must be a valid GUID",
       );
     });
   });

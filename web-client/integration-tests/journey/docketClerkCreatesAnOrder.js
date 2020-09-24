@@ -64,6 +64,6 @@ export const docketClerkCreatesAnOrder = (test, data) => {
 
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
-    test.documentId = newDraftOrder.documentId;
+    test.docketEntryId = newDraftOrder.docketEntryId;
   });
 };

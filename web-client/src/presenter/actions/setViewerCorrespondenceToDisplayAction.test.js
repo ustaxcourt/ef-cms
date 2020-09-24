@@ -19,7 +19,7 @@ describe('setViewerCorrespondenceToDisplayAction', () => {
         presenter,
       },
       props: {
-        viewerCorrespondenceToDisplay: { documentId: '1234' },
+        viewerCorrespondenceToDisplay: { correspondenceId: '1234' },
       },
       state: {
         caseDetail: {
@@ -29,7 +29,7 @@ describe('setViewerCorrespondenceToDisplayAction', () => {
       },
     });
     expect(result.state.viewerCorrespondenceToDisplay).toEqual({
-      documentId: '1234',
+      correspondenceId: '1234',
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });

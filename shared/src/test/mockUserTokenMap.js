@@ -15,6 +15,7 @@ mockUsers.forEach(userRecord => {
     'userId',
     'barNumber',
     'contact',
+    'section',
   ]);
 
   newUser['custom:role'] = newUser.role;

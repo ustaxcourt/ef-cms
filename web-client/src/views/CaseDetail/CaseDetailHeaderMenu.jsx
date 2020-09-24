@@ -1,13 +1,13 @@
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
-import { Button } from '../../ustc-ui/Button/Button';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
 import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
 import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PrioritizeCaseModal } from './PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
 import { UnblockFromTrialModal } from './UnblockFromTrialModal';
@@ -23,8 +23,10 @@ export const CaseDetailHeaderMenu = connect(
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     isCaseDetailMenuOpen: state.menuHelper.isCaseDetailMenuOpen,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
+    openCaseInNewTabSequence: sequences.openCaseInNewTabSequence,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
     openCreateMessageModalSequence: sequences.openCreateMessageModalSequence,
@@ -39,7 +41,9 @@ export const CaseDetailHeaderMenu = connect(
     caseDetail,
     caseDetailHeaderHelper,
     isCaseDetailMenuOpen,
+    navigateToPathSequence,
     openAddEditCaseNoteModalSequence,
+    openCaseInNewTabSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
@@ -104,118 +108,156 @@ export const CaseDetailHeaderMenu = connect(
 
             {isCaseDetailMenuOpen && (
               <ul className="usa-nav__submenu position-right-0">
-                <li className="usa-nav__submenu-item">
-                  <Button
-                    href={`/case-detail/${caseDetail.docketNumber}`}
+                <li
+                  className="usa-nav__submenu-item row-button"
+                  id="menu-button-new-tab"
+                  onClick={() => {
+                    resetCaseMenuSequence();
+                    openCaseInNewTabSequence();
+                  }}
+                >
+                  <Icon
+                    aria-label="create message"
+                    className="margin-right-1"
                     icon="arrow-right"
-                    id="menu-button-new-tab"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    New Tab
-                  </Button>
+                    size="1x"
+                  />
+                  New Tab
                   <hr></hr>
                 </li>
 
-                <li className="usa-nav__submenu-item">
-                  <Button
+                <li
+                  className="usa-nav__submenu-item row-button"
+                  id="menu-button-add-new-message"
+                  onClick={() => {
+                    resetCaseMenuSequence();
+                    openCreateMessageModalSequence();
+                  }}
+                >
+                  <Icon
+                    aria-label="create message"
+                    className="margin-right-1"
                     icon="envelope"
-                    id="menu-button-add-new-message"
-                    onClick={() => {
-                      resetCaseMenuSequence();
-                      openCreateMessageModalSequence();
-                    }}
-                  >
-                    Message
-                  </Button>
+                    size="1x"
+                  />
+                  Message
                   <hr></hr>
                 </li>
-                <li className="usa-nav__submenu-item">
-                  <Button
+                <li
+                  className="usa-nav__submenu-item row-button"
+                  id="menu-button-add-deadline"
+                  onClick={() => {
+                    resetCaseMenuSequence();
+                    openCreateCaseDeadlineModalSequence();
+                  }}
+                >
+                  <Icon
+                    aria-label="create deadline"
+                    className="margin-right-1"
                     icon="calendar-alt"
-                    id="menu-button-add-deadline"
-                    onClick={() => {
-                      resetCaseMenuSequence();
-                      openCreateCaseDeadlineModalSequence();
-                    }}
-                  >
-                    Deadline
-                  </Button>
+                    size="1x"
+                  />
+                  Deadline
                   <hr></hr>
                 </li>
 
                 {caseDetailHeaderHelper.showCreateOrderButton && (
-                  <li className="usa-nav__submenu-item">
-                    <Button
+                  <li
+                    className="usa-nav__submenu-item row-button"
+                    id="menu-button-create-order"
+                    onClick={() => {
+                      resetCaseMenuSequence();
+                      openCreateOrderChooseTypeModalSequence();
+                    }}
+                  >
+                    <Icon
+                      aria-label="create order or notice"
+                      className="margin-right-1"
                       icon="clipboard-list"
-                      id="menu-button-create-order"
-                      onClick={() => {
-                        resetCaseMenuSequence();
-                        openCreateOrderChooseTypeModalSequence();
-                      }}
-                    >
-                      Order or Notice
-                    </Button>
+                      size="1x"
+                    />
+                    Order or Notice
                     <hr></hr>
                   </li>
                 )}
                 {caseDetailHeaderHelper.showAddDocketEntryButton && (
-                  <li className="usa-nav__submenu-item">
-                    <Button
-                      link
-                      href={`/case-detail/${caseDetail.docketNumber}/add-paper-filing`}
+                  <li
+                    className="usa-nav__submenu-item row-button"
+                    id="menu-button-add-docket-entry"
+                    onClick={() => {
+                      navigateToPathSequence({
+                        path: `/case-detail/${caseDetail.docketNumber}/add-paper-filing`,
+                      });
+                    }}
+                  >
+                    <Icon
+                      aria-label="create paper filing"
+                      className="margin-right-1"
                       icon="plus-circle"
-                      id="menu-button-add-docket-entry"
-                    >
-                      Paper Filing
-                    </Button>
+                      size="1x"
+                    />
+                    Paper Filing
                     <hr></hr>
                   </li>
                 )}
 
                 {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
-                  <li className="usa-nav__submenu-item">
-                    <Button
-                      link
-                      className="fa-icon-blue"
-                      href={`/case-detail/${caseDetail.docketNumber}/upload-court-issued`}
+                  <li
+                    className="usa-nav__submenu-item row-button"
+                    id="menu-button-upload-pdf"
+                    onClick={() => {
+                      navigateToPathSequence({
+                        path: `/case-detail/${caseDetail.docketNumber}/upload-court-issued`,
+                      });
+                    }}
+                  >
+                    <Icon
+                      aria-label="create pdf upload"
+                      className="margin-right-1 fa-icon-blue"
                       icon="file-pdf"
-                      iconColor="blue"
-                      id="menu-button-upload-pdf"
-                    >
-                      PDF Upload
-                    </Button>
+                      size="1x"
+                    />
+                    PDF Upload
                     <hr></hr>
                   </li>
                 )}
 
                 {caseDetailHeaderHelper.showAddCorrespondenceButton && (
-                  <li className="usa-nav__submenu-item">
-                    <Button
-                      link
-                      className="fa-icon-blue"
-                      href={`/case-detail/${caseDetail.docketNumber}/upload-correspondence`}
+                  <li
+                    className="usa-nav__submenu-item row-button"
+                    id="menu-button-upload-pdf"
+                    onClick={() => {
+                      navigateToPathSequence({
+                        path: `/case-detail/${caseDetail.docketNumber}/upload-correspondence`,
+                      });
+                    }}
+                  >
+                    <Icon
+                      aria-label="create pdf upload"
+                      className="margin-right-1 fa-icon-blue"
                       icon="mail-bulk"
-                      iconColor="blue"
-                      id="menu-button-upload-pdf"
-                    >
-                      Correspondence
-                    </Button>
+                      size="1x"
+                    />
+                    Correspondence
                     <hr></hr>
                   </li>
                 )}
 
-                <li className="usa-nav__submenu-item">
-                  <Button
+                <li
+                  className="usa-nav__submenu-item row-button"
+                  id="menu-add-case-note-button"
+                  onClick={() => {
+                    resetCaseMenuSequence();
+                    openAddEditCaseNoteModalSequence();
+                  }}
+                >
+                  <Icon
+                    aria-label="create order or notice"
+                    className="margin-right-1"
                     icon="sticky-note"
-                    id="menu-add-case-note-button"
-                    onClick={() => {
-                      resetCaseMenuSequence();
-                      openAddEditCaseNoteModalSequence();
-                    }}
-                  >
-                    Case Note
-                  </Button>
+                    size="1x"
+                  />
+                  Case Note
                 </li>
               </ul>
             )}

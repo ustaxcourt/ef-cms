@@ -6,17 +6,18 @@ const { Case } = require('../../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * strikes a given docket record on a case
+ * strikes a given docket entry on a case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.documentMeta document details to go on the record
- * @returns {object} the updated case after the documents are added
+ * @param {string} providers.docketEntryId the docket entry id to strike
+ * @param {string} providers.docketNumber the docket number of the case
+ * @returns {object} the updated case after the docket entry is stricken
  */
 exports.strikeDocketEntryInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -38,7 +39,9 @@ exports.strikeDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketEntryEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
 
   if (!docketEntryEntity) {
     throw new NotFoundError('Docket entry not found');
@@ -52,11 +55,11 @@ exports.strikeDocketEntryInteractor = async ({
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateDocument({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
+    docketEntryId,
     docketNumber,
     document: docketEntryEntity.validate().toRawObject(),
-    documentId,
   });
 
   return caseEntity.toRawObject();

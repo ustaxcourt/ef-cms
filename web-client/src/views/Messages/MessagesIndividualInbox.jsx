@@ -1,7 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   { formattedMessages: state.formattedMessages.messages },
@@ -15,6 +17,7 @@ export const MessagesIndividualInbox = connect(
                 Docket No.
               </th>
               <th className="small">Received</th>
+              <th className="message-unread-column"></th>
               <th>Message</th>
               <th>Case Title</th>
               <th>Case Status</th>
@@ -23,6 +26,8 @@ export const MessagesIndividualInbox = connect(
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
+            const unreadClass = message.isRead ? '' : 'text-bold';
+
             return (
               <tbody key={idx}>
                 <tr key={idx}>
@@ -35,11 +40,21 @@ export const MessagesIndividualInbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
+                  <td className="message-unread-column">
+                    {!message.isRead && (
+                      <Icon
+                        aria-label="create message"
+                        className="fa-icon-blue"
+                        icon="envelope"
+                        size="1x"
+                      />
+                    )}
+                  </td>
                   <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
-                        className="padding-0"
+                        className={classNames('padding-0', unreadClass)}
                         href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}

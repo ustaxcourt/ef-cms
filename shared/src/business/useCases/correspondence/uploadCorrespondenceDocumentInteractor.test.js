@@ -8,7 +8,7 @@ const { ROLES } = require('../../entities/EntityConstants');
 
 describe('uploadCorrespondenceDocumentInteractor', () => {
   let mockUser;
-  const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
+  const mockKey = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockDocumentFile = 'bananas';
   const mockUserFixture = {
     name: 'Docket Clerk',
@@ -35,7 +35,7 @@ describe('uploadCorrespondenceDocumentInteractor', () => {
     await uploadCorrespondenceDocumentInteractor({
       applicationContext,
       documentFile: mockDocumentFile,
-      documentIdToOverwrite: mockDocumentId,
+      keyToOverwrite: mockKey,
     });
 
     expect(
@@ -44,7 +44,7 @@ describe('uploadCorrespondenceDocumentInteractor', () => {
     ).toMatchObject({
       applicationContext,
       document: mockDocumentFile,
-      documentId: mockDocumentId,
+      key: mockKey,
     });
   });
 });

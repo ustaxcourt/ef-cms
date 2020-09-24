@@ -7,7 +7,7 @@ import {
 
 import {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } from '../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
@@ -100,7 +100,6 @@ import {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
@@ -180,6 +179,7 @@ import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/ser
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
@@ -388,6 +388,7 @@ const allUseCases = {
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
   setItemInteractor,
+  setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
@@ -557,16 +558,16 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocketEntry,
-      formatDocument,
       formatDollars,
       formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,
+      getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
-      getPetitionDocumentFromDocuments,
+      getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,

@@ -19,7 +19,7 @@ export const setCourtIssuedDocumentInitialDataAction = ({
 }) => {
   const caseDetail = get(state.caseDetail);
   const document = (caseDetail.docketEntries || []).find(
-    item => item.documentId === props.documentId,
+    item => item.docketEntryId === props.docketEntryId,
   );
 
   if (document) {

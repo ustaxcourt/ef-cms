@@ -14,6 +14,8 @@ function MockEntity1(raw) {
   Object.assign(this, raw);
 }
 
+MockEntity1.prototype.init = function init() {};
+
 MockEntity1.validationName = 'MockEntity1';
 
 MockEntity1.errorToMessageMap = {
@@ -34,6 +36,8 @@ joiValidationDecorator(
 const MockEntity2 = function (raw) {
   Object.assign(this, raw);
 };
+
+MockEntity2.prototype.init = function init() {};
 
 const MockEntity2Schema = joi.object().keys({
   arry1: joi
@@ -69,6 +73,8 @@ const MockEntity3 = function (raw) {
   this.mockEntity2 = new MockEntity2(raw.mockEntity2);
 };
 
+MockEntity3.prototype.init = function init() {};
+
 const MockEntity3Schema = joi.object().keys({
   anotherItem: JoiValidationConstants.STRING.required(),
 });
@@ -80,6 +86,8 @@ const MockCase = function (raw) {
   this.somethingId = raw.somethingId;
   this.title = raw.title;
 };
+
+MockCase.prototype.init = function init() {};
 
 const MockCaseSchema = joi.object().keys({
   docketNumber: JoiValidationConstants.STRING.required(),

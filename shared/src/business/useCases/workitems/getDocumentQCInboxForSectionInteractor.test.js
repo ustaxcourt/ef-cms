@@ -13,11 +13,11 @@ const {
 describe('getDocumentQCInboxForSectionInteractor', () => {
   let mockWorkItem = {
     createdAt: '',
-    docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    document: {
+    docketEntry: {
       sentBy: 'petitioner',
     },
+    docketNumber: '101-18',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     messages: [],
     section: DOCKET_SECTION,
     sentBy: 'docketclerk',

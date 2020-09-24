@@ -8,8 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setCorrespondenceToDeleteAction = async ({ props, store }) => {
-  const { documentId, documentTitle } = props;
+  const { correspondenceId, documentTitle } = props;
 
   store.set(state.modal.correspondenceToDelete.documentTitle, documentTitle);
-  store.set(state.modal.correspondenceToDelete.documentId, documentId);
+  store.set(
+    state.modal.correspondenceToDelete.correspondenceId,
+    correspondenceId,
+  );
 };

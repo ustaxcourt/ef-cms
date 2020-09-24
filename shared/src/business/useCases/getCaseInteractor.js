@@ -21,7 +21,7 @@ const getDocumentContentsForDocuments = async ({
           .getPersistenceGateway()
           .getDocument({
             applicationContext,
-            documentId: document.documentContentsId,
+            key: document.documentContentsId,
             protocol: 'S3',
             useTempBucket: false,
           });
@@ -30,8 +30,8 @@ const getDocumentContentsForDocuments = async ({
           documentContentsFile.toString(),
         );
         document.documentContents = documentContentsData.documentContents;
-        document.draftState = {
-          ...document.draftState,
+        document.draftOrderState = {
+          ...document.draftOrderState,
           documentContents: documentContentsData.documentContents,
           richText: documentContentsData.richText,
         };

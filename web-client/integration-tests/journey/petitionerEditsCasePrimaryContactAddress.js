@@ -40,7 +40,8 @@ export const petitionerEditsCasePrimaryContactAddress = test => {
 
     const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
       entry =>
-        entry.description === 'Notice of Change of Address for Mona Schultz',
+        entry.descriptionDisplay ===
+        'Notice of Change of Address for Mona Schultz',
     );
     expect(noticeDocument).toBeTruthy();
   });
