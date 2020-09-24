@@ -15,6 +15,7 @@ const {
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
+  validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   SecondaryDocumentInformationFactory,
@@ -105,7 +106,11 @@ function ExternalDocumentInformationFactory() {}
  * @returns {Function} the created entity
  */
 ExternalDocumentInformationFactory.get = documentMetadata => {
-  let entityConstructor = function (rawProps) {
+  /**
+   *
+   */
+  function entityConstructor() {}
+  entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
@@ -299,7 +304,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
-  return new entityConstructor(documentMetadata);
+  return new (validEntityDecorator(entityConstructor))(documentMetadata);
 };
 
 module.exports = {

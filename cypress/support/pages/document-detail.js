@@ -1,5 +1,5 @@
-exports.navigateTo = (username, docketNumber, documentId) => {
-  cy.login(username, `/case-detail/${docketNumber}/documents/${documentId}`);
+exports.navigateTo = (username, docketNumber, docketEntryId) => {
+  cy.login(username, `/case-detail/${docketNumber}/documents/${docketEntryId}`);
 };
 
 exports.getMessagesTab = () => {

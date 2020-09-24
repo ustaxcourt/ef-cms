@@ -14,17 +14,17 @@ export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
-      entry => entry.documentId === documentId,
+      entry => entry.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');

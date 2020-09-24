@@ -85,13 +85,13 @@ const createCase = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: petitionFile,
-        documentId: petitionFileId,
+        key: petitionFileId,
       });
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: stinFile,
-        documentId: stinFileId,
+        key: stinFileId,
       });
     } catch (e) {
       console.log('e', e);
@@ -129,25 +129,25 @@ const createCase = async ({
       stinFileId,
     });
 
-  const addCoversheet = document => {
+  const addCoversheet = docketEntry => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
-      documentId: document.documentId,
     });
   };
 
-  for (const document of caseDetail.docketEntries) {
+  for (const docketEntry of caseDetail.docketEntries) {
     if (shouldUpload) {
-      await addCoversheet(document);
+      await addCoversheet(docketEntry);
     }
 
     await applicationContext
       .getPersistenceGateway()
-      .updateDocumentProcessingStatus({
+      .updateDocketEntryProcessingStatus({
         applicationContext,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: caseDetail.docketNumber,
-        documentId: document.documentId,
       });
   }
 

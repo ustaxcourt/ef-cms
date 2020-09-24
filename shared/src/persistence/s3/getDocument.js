@@ -1,16 +1,12 @@
 const { getPdfFromUrl } = require('./getPdfFromUrl');
 
-const getDownloadPolicy = async ({
-  applicationContext,
-  docketNumber,
-  documentId,
-}) => {
+const getDownloadPolicy = async ({ applicationContext, docketNumber, key }) => {
   const {
     data: { url },
   } = await applicationContext
     .getHttpClient()
     .get(
-      `${applicationContext.getBaseUrl()}/case-documents/${docketNumber}/${documentId}/download-policy-url`,
+      `${applicationContext.getBaseUrl()}/case-documents/${docketNumber}/${key}/download-policy-url`,
       {
         headers: {
           Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
@@ -23,7 +19,7 @@ const getDownloadPolicy = async ({
 exports.getDocument = async ({
   applicationContext,
   docketNumber,
-  documentId,
+  key,
   protocol,
   useTempBucket,
 }) => {
@@ -34,14 +30,14 @@ exports.getDocument = async ({
         Bucket: useTempBucket
           ? applicationContext.getTempDocumentsBucketName()
           : applicationContext.getDocumentsBucketName(),
-        Key: documentId,
+        Key: key,
       }).promise()
     ).Body;
   } else {
     const url = await getDownloadPolicy({
       applicationContext,
       docketNumber,
-      documentId,
+      key,
     });
 
     return await getPdfFromUrl({ applicationContext, url });

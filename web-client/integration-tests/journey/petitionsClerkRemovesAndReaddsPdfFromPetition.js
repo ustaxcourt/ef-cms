@@ -14,15 +14,15 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
     );
     await test.runSequence('setDocumentForPreviewSequence');
 
-    const documentIdToDelete = test.getState('documentId');
-    expect(documentIdToDelete).toBeDefined();
+    const docketEntryIdToDelete = test.getState('docketEntryId');
+    expect(docketEntryIdToDelete).toBeDefined();
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
     await test.runSequence('deleteUploadedPdfSequence');
 
     const deletedDocument = test
       .getState('form.docketEntries')
-      .find(doc => doc.documentId === documentIdToDelete);
+      .find(doc => doc.docketEntryId === docketEntryIdToDelete);
     expect(deletedDocument).toBeUndefined();
     expect(test.getState('pdfPreviewUrl')).toBeUndefined();
 
@@ -50,13 +50,13 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
     await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
-    const newApwFileDocumentId = test
+    const newApwFileDocketEntryId = test
       .getState('caseDetail.docketEntries')
       .find(
         doc =>
           doc.eventCode ===
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
       );
-    expect(newApwFileDocumentId).not.toBe(documentIdToDelete);
+    expect(newApwFileDocketEntryId).not.toBe(docketEntryIdToDelete);
   });
 };

@@ -60,10 +60,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       .formatDateString(irsNoticeDate, 'MMDDYY');
   }
 
-  const documentsByType = (docketEntries || []).reduce((acc, document) => {
-    acc[document.documentType] = document;
-    return acc;
-  }, {});
+  const documentsByType = (docketEntries || [])
+    .filter(d => !d.isMinuteEntry)
+    .reduce((acc, docketEntry) => {
+      acc[docketEntry.documentType] = docketEntry;
+      return acc;
+    }, {});
 
   // orders needed summary
   const hasOrders = [

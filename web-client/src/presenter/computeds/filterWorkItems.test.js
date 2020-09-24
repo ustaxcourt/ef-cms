@@ -67,19 +67,19 @@ const adc = {
   userId: 'd3',
 };
 
-const generateWorkItem = (data, document) => {
+const generateWorkItem = (data, docketEntry) => {
   const baseWorkItem = {
     assigneeId: null,
     assigneeName: null,
     caseStatus: CASE_STATUS_TYPES.new,
     createdAt: '2018-12-27T18:05:54.166Z',
-    docketNumber: '100-01',
-    document: {
+    docketEntry: {
       createdAt: '2018-12-27T18:05:54.164Z',
-      documentId: '456',
+      docketEntryId: '456',
       documentType: 'Answer',
-      ...document,
+      ...docketEntry,
     },
+    docketNumber: '100-01',
     section: DOCKET_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',

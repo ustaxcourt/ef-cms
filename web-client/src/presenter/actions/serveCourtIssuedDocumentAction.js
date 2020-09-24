@@ -13,15 +13,15 @@ export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
 }) => {
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const result = await applicationContext
     .getUseCases()
     .serveCourtIssuedDocumentInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber,
-      documentId,
     });
 
   return {

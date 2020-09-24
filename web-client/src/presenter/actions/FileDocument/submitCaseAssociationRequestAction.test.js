@@ -66,7 +66,7 @@ describe('submitCaseAssociationRequestAction', () => {
     ).toEqual(1);
   });
 
-  it('should return the documentId of the uploaded document as documentsFiled.primaryDocumentId', async () => {
+  it('should return the docketEntryId of the uploaded document as documentsFiled.primaryDocumentId', async () => {
     const { output } = await runAction(submitCaseAssociationRequestAction, {
       modules: {
         presenter,

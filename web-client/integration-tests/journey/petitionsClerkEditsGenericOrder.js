@@ -15,8 +15,8 @@ export const petitionsClerkEditsGenericOrder = test => {
     const draftOrder = formatted.draftDocuments[0];
 
     await test.runSequence('gotoEditOrderSequence', {
+      docketEntryIdToEdit: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
-      documentIdToEdit: draftOrder.documentId,
     });
 
     await test.runSequence('submitCourtIssuedOrderSequence');

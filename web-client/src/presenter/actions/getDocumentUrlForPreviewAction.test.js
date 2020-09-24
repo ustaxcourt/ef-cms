@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('getDocumentUrlForPreviewAction', () => {
   const mockUrl = 'www.example.com';
   const mockDocketNumber = '123-45';
-  const mockDocumentId = applicationContext.getUniqueId();
+  const mockDocketEntryId = applicationContext.getUniqueId();
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -24,7 +24,7 @@ describe('getDocumentUrlForPreviewAction', () => {
         presenter,
       },
       props: {
-        documentInS3: { documentId: mockDocumentId },
+        documentInS3: { docketEntryId: mockDocketEntryId },
       },
       state: {
         form: {
@@ -38,7 +38,7 @@ describe('getDocumentUrlForPreviewAction', () => {
         .calls[0][0],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
-      documentId: mockDocumentId,
+      key: mockDocketEntryId,
     });
   });
 
@@ -48,7 +48,7 @@ describe('getDocumentUrlForPreviewAction', () => {
         presenter,
       },
       props: {
-        documentInS3: { documentId: mockDocumentId },
+        documentInS3: { docketEntryId: mockDocketEntryId },
       },
       state: {
         form: {
@@ -57,7 +57,7 @@ describe('getDocumentUrlForPreviewAction', () => {
       },
     });
 
-    expect(output.documentId).toBe(mockDocumentId);
+    expect(output.docketEntryId).toBe(mockDocketEntryId);
     expect(output.pdfUrl).toBe(mockUrl);
   });
 });

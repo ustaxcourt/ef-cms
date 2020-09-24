@@ -50,6 +50,14 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
   });
 });
 
+Cypress.Commands.add('goToRoute', (...args) => {
+  cy.get('.progress-indicator').should('not.exist');
+  return cy.window().then(w => {
+    // eslint-disable-next-line no-underscore-dangle
+    w.__cy_route(...args);
+  });
+});
+
 /**
  * @param b64Data
  * @param contentType

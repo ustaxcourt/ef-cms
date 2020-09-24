@@ -7,7 +7,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.uploadDocumentInteractor = async ({
   applicationContext,
   documentFile,
-  documentId,
+  key,
   onUploadProgress,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -27,7 +27,7 @@ exports.uploadDocumentInteractor = async ({
     .uploadDocumentFromClient({
       applicationContext,
       document: documentFile,
-      documentId,
+      key,
       onUploadProgress,
     });
 };

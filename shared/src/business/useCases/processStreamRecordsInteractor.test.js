@@ -110,12 +110,12 @@ describe('processStreamRecordsInteractor', () => {
           dynamodb: {
             Keys: { pk: { S: '6' } },
             NewImage: {
-              documentId: { S: '6' },
+              docketEntryId: { S: '6' },
               pk: { S: '6' },
               sk: { S: '6' },
               workItem: {
                 blah: true,
-                docketEntries: [{ documentId: '6' }],
+                docketEntries: [{ docketEntryId: '6' }],
               },
             },
           },
@@ -365,7 +365,7 @@ describe('processStreamRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
-        docketEntries: [{ documentId: '1' }],
+        docketEntries: [{ docketEntryId: '1' }],
         docketNumber,
         entityName: 'Case',
         pk: `case|${docketNumber}`,
@@ -432,7 +432,7 @@ describe('processStreamRecordsInteractor', () => {
       },
       { index: { _id: 'case|1_case|1', _index: 'efcms-case' } },
       {
-        docketEntries: { L: [{ M: { documentId: { S: '1' } } }] },
+        docketEntries: { L: [{ M: { docketEntryId: { S: '1' } } }] },
         docketNumber: { S: '1' },
         entityName: { S: 'Case' },
         pk: { S: 'case|1' },
@@ -442,8 +442,8 @@ describe('processStreamRecordsInteractor', () => {
       { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketEntries: undefined,
+        docketEntryId: { S: '1' },
         docketNumber: { S: '1' },
-        documentId: { S: '1' },
         entityName: { S: 'DocketEntry' },
         irsPractitioners: undefined,
         pk: { S: 'case|1' },
@@ -454,7 +454,7 @@ describe('processStreamRecordsInteractor', () => {
         index: { _id: 'case|4_case|4', _index: 'efcms-case' },
       },
       {
-        docketEntries: { L: [{ M: { documentId: { S: '1' } } }] },
+        docketEntries: { L: [{ M: { docketEntryId: { S: '1' } } }] },
         docketNumber: { S: '4' },
         entityName: { S: 'Case' },
         pk: { S: 'case|4' },
@@ -463,8 +463,8 @@ describe('processStreamRecordsInteractor', () => {
       { index: { _id: 'case|4_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketEntries: undefined,
+        docketEntryId: { S: '1' },
         docketNumber: { S: '4' },
-        documentId: { S: '1' },
         entityName: { S: 'DocketEntry' },
         irsPractitioners: undefined,
         pk: { S: 'case|4' },
@@ -478,7 +478,7 @@ describe('processStreamRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
-        docketEntries: [{ documentContentsId: '5', documentId: '1' }],
+        docketEntries: [{ docketEntryId: '1', documentContentsId: '5' }],
         docketNumber,
         entityName: 'Case',
         pk: `case|${docketNumber}`,
@@ -529,7 +529,9 @@ describe('processStreamRecordsInteractor', () => {
       {
         docketEntries: {
           L: [
-            { M: { documentContentsId: { S: '5' }, documentId: { S: '1' } } },
+            {
+              M: { docketEntryId: { S: '1' }, documentContentsId: { S: '5' } },
+            },
           ],
         },
         docketNumber: { S: '1' },
@@ -541,12 +543,12 @@ describe('processStreamRecordsInteractor', () => {
       { index: { _id: 'case|1_docket-entry|1', _index: 'efcms-docket-entry' } },
       {
         docketEntries: undefined,
+        docketEntryId: { S: '1' },
         docketNumber: { S: '1' },
         documentContents: {
           S: 'I am some document contents',
         },
         documentContentsId: { S: '5' },
-        documentId: { S: '1' },
         entityName: { S: 'DocketEntry' },
         irsPractitioners: undefined,
         pk: { S: 'case|1' },

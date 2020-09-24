@@ -3,10 +3,10 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../../business/entities/EntityConstants');
 
-exports.updateDocumentProcessingStatus = async ({
+exports.updateDocketEntryProcessingStatus = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   await client.update({
     ExpressionAttributeNames: {
@@ -17,7 +17,7 @@ exports.updateDocumentProcessingStatus = async ({
     },
     Key: {
       pk: `case|${docketNumber}`,
-      sk: `docket-entry|${documentId}`,
+      sk: `docket-entry|${docketEntryId}`,
     },
     UpdateExpression: 'SET #processingStatus = :status',
     applicationContext,

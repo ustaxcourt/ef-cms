@@ -65,7 +65,7 @@ exports.setTrialSessionCalendarInteractor = async ({
 
   let eligibleCasesLimit = trialSessionEntity.maxCases;
 
-  if (manuallyAddedQcCompleteCases && manuallyAddedQcCompleteCases.length > 0) {
+  if (manuallyAddedQcCompleteCases.length > 0) {
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
   }
 

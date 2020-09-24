@@ -24,12 +24,12 @@ describe('serveCourtIssuedDocumentAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'document-id',
+              docketEntryId: 'document-id',
             },
           ],
           docketNumber: '101-20',
         },
-        documentId: 'document-id',
+        docketEntryId: 'document-id',
       },
     });
 
@@ -51,12 +51,12 @@ describe('serveCourtIssuedDocumentAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'document-id',
+              docketEntryId: 'document-id',
             },
           ],
           docketNumber: '101-20',
         },
-        documentId: 'document-id',
+        docketEntryId: 'document-id',
       },
     });
 

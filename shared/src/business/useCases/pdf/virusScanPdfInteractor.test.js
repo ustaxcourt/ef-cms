@@ -28,7 +28,7 @@ describe('virusScanPdfInteractor', () => {
         },
         runVirusScan: async () => true,
       },
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
     const result = await virusScanPdfInteractor(cleanParams);
     expect(result).toBe('clean');
@@ -55,7 +55,7 @@ describe('virusScanPdfInteractor', () => {
           throw new Error('');
         },
       },
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     let error;
@@ -90,7 +90,7 @@ describe('virusScanPdfInteractor', () => {
           throw err;
         },
       },
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     let error;

@@ -13,7 +13,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
-    documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+    docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
     filedBy: 'Test Petitioner',
@@ -50,7 +50,7 @@ describe('addNewInitialFilingToCase', () => {
     });
 
     const rqtFile = mockOriginalCase.docketEntries.find(
-      d => d.documentId === mockRQT.documentId,
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(rqtFile).toBeDefined();
   });
@@ -74,7 +74,7 @@ describe('addNewInitialFilingToCase', () => {
     });
 
     const filedDocument = mockOriginalCase.docketEntries.find(
-      d => d.documentId === mockRQT.documentId,
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(filedDocument.isFileAttached).toBeTruthy();
     expect(filedDocument.isPaper).toBeTruthy();
@@ -118,7 +118,7 @@ describe('addNewInitialFilingToCase', () => {
     });
 
     const filedDocument = mockOriginalCase.docketEntries.find(
-      d => d.documentId === mockRQT.documentId,
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(filedDocument.partyPrimary).toBeTruthy();
     expect(filedDocument.partySecondary).toBeTruthy();
@@ -142,7 +142,7 @@ describe('addNewInitialFilingToCase', () => {
     });
 
     const rqtFile = mockOriginalCase.docketEntries.find(
-      d => d.documentId === mockRQT.documentId,
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(rqtFile).toBeUndefined();
   });
@@ -155,7 +155,7 @@ describe('addNewInitialFilingToCase', () => {
 
     const mockNewRQT = {
       ...mockRQT,
-      documentId: applicationContext.getUniqueId(),
+      docketEntryId: applicationContext.getUniqueId(),
     };
     mockCaseToUpdate = {
       ...MOCK_CASE,
@@ -170,11 +170,11 @@ describe('addNewInitialFilingToCase', () => {
     });
 
     const oldRqtFile = mockOriginalCase.docketEntries.find(
-      d => d.documentId === mockRQT.documentId,
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(oldRqtFile).toBeUndefined();
     const newRqtFile = mockOriginalCase.docketEntries.find(
-      d => d.documentId === mockNewRQT.documentId,
+      d => d.docketEntryId === mockNewRQT.docketEntryId,
     );
     expect(newRqtFile).toBeDefined();
   });

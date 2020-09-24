@@ -11,7 +11,9 @@ describe('validateStartCaseWizardAction', () => {
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
+
     presenter.providers.applicationContext = applicationContext;
+
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -48,5 +50,38 @@ describe('validateStartCaseWizardAction', () => {
     });
 
     expect(errorStub.mock.calls.length).toEqual(1);
+  });
+
+  it('should call the error path, providing an error display order, when errors are found', async () => {
+    applicationContext
+      .getUseCases()
+      .validateStartCaseWizardInteractor.mockReturnValue({
+        contactSecondary: {
+          inCareOf: 'Enter name for in care of',
+        },
+      });
+
+    await runAction(validateStartCaseWizardAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: MOCK_CASE,
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errorDisplayOrder).toEqual([
+      'petitionFile',
+      'hasIrsNotice',
+      'name',
+      'inCareOf',
+      'address1',
+      'city',
+      'state',
+      'postalCode',
+      'phone',
+      'procedureType',
+      'preferredTrialLocation',
+    ]);
   });
 });

@@ -8,20 +8,18 @@ import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAc
 const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
 describe('saveCaseDetailInternalEditAction', () => {
-  const mockUploadedDocumentId = applicationContext.getUniqueId();
+  const mockUploadedKey = applicationContext.getUniqueId();
 
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor.mockImplementation(
-        ({ documentId }) => {
-          if (documentId) {
-            return documentId;
-          } else {
-            return mockUploadedDocumentId; //generated document id from upload
-          }
-        },
-      );
+      .uploadDocumentAndMakeSafeInteractor.mockImplementation(({ key }) => {
+        if (key) {
+          return key;
+        } else {
+          return mockUploadedKey; //generated document id from upload
+        }
+      });
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -51,7 +49,7 @@ describe('saveCaseDetailInternalEditAction', () => {
           ...caseDetail,
           docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
             },
           ],
@@ -61,7 +59,7 @@ describe('saveCaseDetailInternalEditAction', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].documentId,
+        .calls[0][0].key,
     ).toEqual('123');
   });
 
@@ -100,11 +98,11 @@ describe('saveCaseDetailInternalEditAction', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].documentId,
+        .calls[0][0].key,
     ).toBeUndefined();
 
     expect(uploadedDocument).toEqual({
-      documentId: mockUploadedDocumentId,
+      docketEntryId: mockUploadedKey,
       documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
     });
   });
@@ -159,7 +157,7 @@ describe('saveCaseDetailInternalEditAction', () => {
 
   it('should upload initial filing documents if they exist on the case', async () => {
     const mockRqtFile = {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',
@@ -192,7 +190,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toMatchObject(
       expect.arrayContaining([
         {
-          documentId: mockUploadedDocumentId,
+          docketEntryId: mockUploadedKey,
           documentType: 'Request for Place of Trial',
         },
       ]),

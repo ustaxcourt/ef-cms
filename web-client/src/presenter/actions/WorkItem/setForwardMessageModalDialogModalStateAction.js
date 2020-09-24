@@ -22,6 +22,7 @@ export const setForwardMessageModalDialogModalStateAction = ({
   const formattedAttachments = applicationContext
     .getUtilities()
     .formatAttachments({
+      applicationContext,
       attachments: mostRecentMessage.attachments,
       caseDetail,
     });
