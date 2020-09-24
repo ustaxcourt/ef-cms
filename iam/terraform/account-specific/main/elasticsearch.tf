@@ -8,7 +8,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 
   cluster_config {
     instance_type = "t2.small.elasticsearch"
-    instance_count = var.es_logs_instance_count == "" ? "1" : var.es_logs_instance_count
+    instance_count = var.es_logs_instance_count
   }
 
   cognito_options {

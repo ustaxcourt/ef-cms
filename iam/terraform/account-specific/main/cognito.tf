@@ -1,7 +1,12 @@
 resource "aws_cognito_user_pool" "log_viewers" {
   name = "log_viewers"
   password_policy {
-    minimum_length = 8
+    minimum_length                   = 8
+    require_lowercase                = true
+    require_uppercase                = true
+    require_numbers                  = true
+    require_symbols                  = true
+    temporary_password_validity_days = 7
   }
 }
 
