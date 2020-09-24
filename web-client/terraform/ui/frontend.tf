@@ -307,19 +307,3 @@ resource "aws_cloudfront_distribution" "distribution" {
     ssl_support_method  = "sni-only"
   }
 }
-
-data "aws_route53_zone" "zone" {
-  name = "${var.zone_name}."
-}
-
-resource "aws_route53_record" "www" {
-  zone_id = data.aws_route53_zone.zone.zone_id
-  name    = "app-${var.current_color}-${var.dns_domain}"
-  type    = "A"
-
-  alias {
-    name                   = aws_cloudfront_distribution.distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
-    evaluate_target_health = false
-  }
-}
