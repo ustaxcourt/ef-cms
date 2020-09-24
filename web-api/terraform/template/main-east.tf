@@ -63,7 +63,7 @@ resource "null_resource" "api_public_east_object" {
 resource "null_resource" "puppeteer_layer_east_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
   provisioner "local-exec" {
-    #command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
+    command = "aws s3 cp ../../runtimes/puppeteer/puppeteer_lambda_layer.zip s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/${var.deploying_color}_puppeteer_lambda_layer.zip"
     command = "echo 'hello'"
   }
 
