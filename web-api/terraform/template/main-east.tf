@@ -179,19 +179,23 @@ data "aws_s3_bucket_object" "streams_green_east_object" {
 }
 
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
+  depends_on  = [aws_elasticsearch_domain.efcms-search, module.elasticsearch_1]
   domain_name = var.green_elasticsearch_domain
 }
 
 data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
+  depends_on  = [aws_elasticsearch_domain.efcms-search, module.elasticsearch_1]
   domain_name = var.blue_elasticsearch_domain
 }
 
 data "aws_dynamodb_table" "green_dynamo_table" {
-  name = var.green_table_name
+  depends_on = [aws_dynamodb_table.efcms-east, module.dynamo_table_1]
+  name       = var.green_table_name
 }
 
 data "aws_dynamodb_table" "blue_dynamo_table" {
-  name = var.blue_table_name
+  depends_on = [aws_dynamodb_table.efcms-east, module.dynamo_table_1]
+  name       = var.blue_table_name
 }
 
 module "api-east-green" {
