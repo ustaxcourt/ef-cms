@@ -17,7 +17,7 @@ if  [[ $BRANCH == 'develop' ]] ; then
 elif [[ $BRANCH == 'experimental1' ]] ; then
   echo 'efcms-search-exp1'
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo 'efcms-search-exp2'
+  echo 'efcms-search-dev'
 elif [[ $BRANCH == 'irs' ]] ; then
   echo 'efcms-search-irs'
 elif [[ $BRANCH == 'test' ]] ; then

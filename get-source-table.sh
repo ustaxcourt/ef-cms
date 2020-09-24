@@ -17,7 +17,7 @@ if  [[ $BRANCH == 'develop' ]] ; then
 elif [[ $BRANCH == 'experimental1' ]] ; then
   echo 'efcms-exp1'
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo 'efcms-exp2'
+  echo 'efcms-dev'
 elif [[ $BRANCH == 'irs' ]] ; then
   echo 'efcms-irs'
 elif [[ $BRANCH == 'test' ]] ; then
