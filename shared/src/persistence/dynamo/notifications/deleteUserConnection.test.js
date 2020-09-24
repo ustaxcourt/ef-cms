@@ -4,10 +4,6 @@ const {
 const { deleteUserConnection } = require('./deleteUserConnection');
 
 describe('deleteUserConnection', () => {
-  beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
-  });
-
   it('attempts to to delete the user connection', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
@@ -24,7 +20,7 @@ describe('deleteUserConnection', () => {
       applicationContext.getDocumentClient().batchWrite,
     ).toHaveBeenCalledWith({
       RequestItems: {
-        'efcms-dev': [
+        'efcms-local': [
           {
             DeleteRequest: {
               Key: {
