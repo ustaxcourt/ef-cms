@@ -11,10 +11,6 @@ const mockCaseDeadline = {
 };
 
 describe('updateCaseDeadline', () => {
-  beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
-  });
-
   it('attempts to persist the trial session', async () => {
     await updateCaseDeadline({
       applicationContext,
@@ -28,7 +24,6 @@ describe('updateCaseDeadline', () => {
         pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
       },
-      TableName: 'efcms-dev',
     });
   });
 });
