@@ -14,17 +14,17 @@ export const docketClerkAddsDocketEntryFromOrderWithDate = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: draftOrderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: draftOrderDocument.documentId,
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {

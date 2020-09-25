@@ -13,18 +13,18 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(draftOrderDocument).toBeTruthy();
     expect(draftOrderDocument.numberOfPages).toEqual(1);
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: draftOrderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: draftOrderDocument.documentId,
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -67,7 +67,7 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
     const numberOfPagesIncludingCoversheet =
       draftOrderDocument.numberOfPages + 1;
     const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(updatedDocument.numberOfPages).toEqual(

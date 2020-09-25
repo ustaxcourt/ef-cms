@@ -19,11 +19,11 @@ describe('setViewerDocumentToDisplayAction', () => {
         presenter,
       },
       props: {
-        viewerDocumentToDisplay: { documentId: '1234' },
+        viewerDocumentToDisplay: { docketEntryId: '1234' },
       },
       state: {
         caseDetail: {
-          docketEntries: [{ documentId: '1234' }],
+          docketEntries: [{ docketEntryId: '1234' }],
           docketNumber: '123-45',
         },
         viewerDocumentToDisplay: null,
@@ -31,7 +31,7 @@ describe('setViewerDocumentToDisplayAction', () => {
     });
 
     expect(result.state.viewerDocumentToDisplay).toEqual({
-      documentId: '1234',
+      docketEntryId: '1234',
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });
@@ -46,7 +46,7 @@ describe('setViewerDocumentToDisplayAction', () => {
       },
       state: {
         caseDetail: {
-          docketEntries: [{ documentId: '1234' }],
+          docketEntries: [{ docketEntryId: '1234' }],
           docketNumber: '123-45',
         },
         viewerDocumentToDisplay: null,

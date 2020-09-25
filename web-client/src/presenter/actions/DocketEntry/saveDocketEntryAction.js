@@ -22,14 +22,14 @@ export const saveDocketEntryAction = async ({
   const isUpdating = get(state.isEditingDocketEntry);
   const generateCoversheet = isFileAttached && !isSavingForLater;
 
-  let documentId;
+  let docketEntryId;
 
   if (isUpdating) {
-    documentId = get(state.documentId);
+    docketEntryId = get(state.docketEntryId);
   } else if (isFileAttached) {
-    documentId = primaryDocumentFileId;
+    docketEntryId = primaryDocumentFileId;
   } else {
-    documentId = applicationContext.getUniqueId();
+    docketEntryId = applicationContext.getUniqueId();
   }
 
   let caseDetail;
@@ -53,12 +53,12 @@ export const saveDocketEntryAction = async ({
   if (isFileAttachedNow) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
-      documentId,
+      key: docketEntryId,
     });
 
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
-      documentId,
+      key: docketEntryId,
     });
   }
 
@@ -69,7 +69,7 @@ export const saveDocketEntryAction = async ({
         applicationContext,
         documentMetadata,
         isSavingForLater,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
   } else {
     caseDetail = await applicationContext
@@ -78,22 +78,22 @@ export const saveDocketEntryAction = async ({
         applicationContext,
         documentMetadata,
         isSavingForLater,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
   }
 
   if (generateCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber: caseDetail.docketNumber,
-      documentId,
     });
   }
 
   return {
     caseDetail,
+    docketEntryId,
     docketNumber,
-    documentId,
     overridePaperServiceAddress: true,
   };
 };

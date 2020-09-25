@@ -13,14 +13,14 @@ export const setDocketEntryMetaTypeAction = ({
   get,
   store,
 }) => {
-  const { documentId, eventCode } = get(state.form);
+  const { docketEntryId, eventCode } = get(state.form);
 
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
   const COURT_ISSUED_EVENT_CODES_MAP = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedEvent => courtIssuedEvent.eventCode,
   );
 
-  const hasDocument = !!documentId;
+  const hasDocument = !!docketEntryId;
 
   const isCourtIssuedDocument =
     hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
@@ -35,6 +35,6 @@ export const setDocketEntryMetaTypeAction = ({
     editType = 'Document';
   }
 
-  store.set(state.documentId, documentId);
+  store.set(state.docketEntryId, docketEntryId);
   store.set(state.screenMetadata.editType, editType);
 };

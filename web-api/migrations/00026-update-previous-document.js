@@ -8,7 +8,10 @@ const applicationContext = createApplicationContext({});
 const mutateRecord = async item => {
   if (isDocumentRecord(item)) {
     if (item.previousDocument) {
-      const updatedDocument = new DocketEntry(item, { applicationContext })
+      const updatedDocument = new DocketEntry(
+        { ...item, docketEntryId: item.docketEntryId || item.documentId },
+        { applicationContext },
+      )
         .validate()
         .toRawObject();
 

@@ -34,10 +34,10 @@ export const createNewMessageOnCase = test => {
     });
 
     const messageDocument = getHelper().documents[0];
-    test.testMessageDocumentId = messageDocument.documentId;
+    test.testMessageDocumentId = messageDocument.docketEntryId;
 
     await test.runSequence('updateMessageModalAttachmentsSequence', {
-      documentId: messageDocument.documentId,
+      documentId: test.testMessageDocumentId,
     });
 
     expect(test.getState('modal.form.subject')).toEqual(

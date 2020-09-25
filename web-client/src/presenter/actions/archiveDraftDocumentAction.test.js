@@ -16,7 +16,7 @@ describe('archiveDraftDocumentAction', () => {
       props: {},
       state: {
         archiveDraftDocument: {
-          documentId: 'def-gfed213-441-abce-312f',
+          docketEntryId: 'def-gfed213-441-abce-312f',
           documentTitle: 'document-title-123',
         },
         caseDetail: {
@@ -41,7 +41,7 @@ describe('archiveDraftDocumentAction', () => {
       props: {},
       state: {
         archiveDraftDocument: {
-          documentId: 'def-gfed213-441-abce-312f',
+          docketEntryId: 'def-gfed213-441-abce-312f',
           documentTitle: 'document-title-123',
           redirectToCaseDetail: true,
         },

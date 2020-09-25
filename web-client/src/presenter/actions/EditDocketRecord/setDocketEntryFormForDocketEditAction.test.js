@@ -9,8 +9,8 @@ describe('setDocketEntryFormForDocketEditAction', () => {
   it("sets the given document's edit state on form.state", async () => {
     const editState = {
       date: '2020-01-01T05:00:00.000Z',
+      docketEntryId: '123-abc-123-abc',
       docketNumber: '123-45',
-      documentId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
       testKey: 'testValue',
@@ -19,18 +19,18 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     const result = await runAction(setDocketEntryFormForDocketEditAction, {
       modules: { presenter },
       props: {
-        documentId: '123-abc-123-abc',
+        docketEntryId: '123-abc-123-abc',
       },
       state: {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '123-abc-123-abc',
+              docketEntryId: '123-abc-123-abc',
               editState: JSON.stringify(editState),
               eventCode: 'OPP',
               lodged: true,
             },
-            { documentId: '321-cba-321-cba' },
+            { docketEntryId: '321-cba-321-cba' },
           ],
           docketNumber: '123-45',
         },
@@ -41,8 +41,8 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     const expectedResult = {
       date: '2020-01-01T05:00:00.000Z',
       day: '1',
+      docketEntryId: '123-abc-123-abc',
       docketNumber: '123-45',
-      documentId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
       month: '1',
@@ -56,7 +56,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
   it("does not set the given document's edit state on form.state if the docketRecord editState does not contain a docketNumber", async () => {
     const editState = {
-      documentId: '123-abc-123-abc',
+      docketEntryId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
       testKey: 'testValue',
@@ -65,18 +65,18 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     const result = await runAction(setDocketEntryFormForDocketEditAction, {
       modules: { presenter },
       props: {
-        documentId: '123-abc-123-abc',
+        docketEntryId: '123-abc-123-abc',
       },
       state: {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '123-abc-123-abc',
+              docketEntryId: '123-abc-123-abc',
               editState: JSON.stringify(editState),
               eventCode: 'OPP',
               lodged: true,
             },
-            { documentId: '321-cba-321-cba' },
+            { docketEntryId: '321-cba-321-cba' },
           ],
           docketNumber: '123-45',
         },
@@ -85,7 +85,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     });
 
     const expectedResult = {
-      documentId: '123-abc-123-abc',
+      docketEntryId: '123-abc-123-abc',
       editState: JSON.stringify(editState),
       eventCode: 'OPP',
       lodged: true,
@@ -95,20 +95,20 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     expect(result.output.docketEntry).toEqual(expectedResult);
   });
 
-  it('sets an empty object on form.state if no document matches the given documentId', async () => {
+  it('sets an empty object on form.state if no document matches the given docketEntryId', async () => {
     const result = await runAction(setDocketEntryFormForDocketEditAction, {
       modules: { presenter },
       props: {
-        documentId: '111-aaa-111-aaa',
+        docketEntryId: '111-aaa-111-aaa',
       },
       state: {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '123-abc-123-abc',
+              docketEntryId: '123-abc-123-abc',
             },
             {
-              documentId: '321-cba-321-cba',
+              docketEntryId: '321-cba-321-cba',
             },
           ],
           docketNumber: '123-45',

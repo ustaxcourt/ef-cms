@@ -6,10 +6,10 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../../business/entities/EntityConstants');
 const {
-  updateDocumentProcessingStatus,
-} = require('./updateDocumentProcessingStatus');
+  updateDocketEntryProcessingStatus,
+} = require('./updateDocketEntryProcessingStatus');
 
-describe('updateDocumentProcessingStatus', () => {
+describe('updateDocketEntryProcessingStatus', () => {
   beforeAll(() => {
     applicationContext.filterCaseMetadata.mockImplementation(
       ({ cases }) => cases,
@@ -24,10 +24,10 @@ describe('updateDocumentProcessingStatus', () => {
   });
 
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
-    await updateDocumentProcessingStatus({
+    await updateDocketEntryProcessingStatus({
       applicationContext,
+      docketEntryId: 3,
       docketNumber: '123-20',
-      documentId: 3,
     });
     expect(client.update.mock.calls[0][0]).toMatchObject({
       Key: { pk: 'case|123-20', sk: 'docket-entry|3' },

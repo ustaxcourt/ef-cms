@@ -28,7 +28,7 @@ exports.addDocketEntryForPaymentStatus = ({
     caseEntity.addDocketEntry(
       new DocketEntry(
         {
-          description: 'Filing Fee Paid',
+          documentTitle: 'Filing Fee Paid',
           documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
           eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
           filingDate: caseEntity.petitionPaymentDate,
@@ -45,7 +45,7 @@ exports.addDocketEntryForPaymentStatus = ({
     caseEntity.addDocketEntry(
       new DocketEntry(
         {
-          description: 'Filing Fee Waived',
+          documentTitle: 'Filing Fee Waived',
           documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
           eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
           filingDate: caseEntity.petitionPaymentWaivedDate,
@@ -70,10 +70,10 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   if (stinDocument) {
     await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
       applicationContext,
-      key: stinDocument.documentId,
+      key: stinDocument.docketEntryId,
     });
 
-    return stinDocument.documentId;
+    return stinDocument.docketEntryId;
   }
 };
 
@@ -155,13 +155,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            documentEntity: initialDocketEntry,
+            docketEntryEntity: initialDocketEntry,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: initialDocketEntry,
+          docketEntryEntity: initialDocketEntry,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
@@ -183,12 +183,12 @@ exports.serveCaseToIrsInteractor = async ({
     .validate();
 
   //This functionality will probably change soon
-  //  deletedStinDocumentId = await exports.deleteStinIfAvailable({
+  //  deletedStinDocketEntryId = await exports.deleteStinIfAvailable({
   //   applicationContext,
   //   caseEntity,
   // });
   // caseEntity.docketEntries = caseEntity.docketEntries.filter(
-  //   item => item.documentId !== deletedStinDocumentId,
+  //   item => item.docketEntryId !== deletedStinDocketEntryId,
   // );
 
   const petitionDocument = caseEntity.docketEntries.find(
@@ -197,7 +197,7 @@ exports.serveCaseToIrsInteractor = async ({
   );
   const initializeCaseWorkItem = petitionDocument.workItem;
 
-  initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
   initializeCaseWorkItem.docketNumberWithSuffix =
     caseEntity.docketNumberWithSuffix;
@@ -228,8 +228,8 @@ exports.serveCaseToIrsInteractor = async ({
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: doc.docketEntryId,
         docketNumber: caseEntity.docketNumber,
-        documentId: doc.documentId,
         replaceCoversheet: !caseEntity.isPaper,
         useInitialData: !caseEntity.isPaper,
       });
@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: doc.documentId,
+          docketEntryId: doc.docketEntryId,
         });
     }
   }
@@ -298,7 +298,7 @@ exports.serveCaseToIrsInteractor = async ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: caseConfirmationPdfName,
+      key: caseConfirmationPdfName,
       useTempBucket: false,
     }));
   }

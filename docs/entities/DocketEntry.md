@@ -110,11 +110,22 @@
         description: "An optional date used when generating a fully concatenated document title."
       allow: 
         - null
-    description: 
+    docketEntryId: 
       type: "string"
       flags: 
-        presence: "optional"
-        description: "Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value."
+        presence: "required"
+        description: "System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     docketNumber: 
       type: "string"
       flags: 
@@ -148,22 +159,6 @@
       flags: 
         presence: "optional"
         description: "The S3 ID containing the text contents of the document."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
-    documentId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "ID of the associated PDF document in the S3 bucket."
       rules: 
         - 
           name: "min"
@@ -556,7 +551,7 @@
         - "U.S.C.A"
         - "Unsworn Declaration under Penalty of Perjury in Support"
         - "Writ of Habeas Corpus Ad Testificandum"
-    draftState: 
+    draftOrderState: 
       type: "object"
       flags: 
         presence: "optional"
@@ -1418,11 +1413,11 @@
     isMinuteEntry: 
       type: "boolean"
       flags: 
-        presence: "optional"
+        presence: "required"
     isOnDocketRecord: 
       type: "boolean"
       flags: 
-        presence: "optional"
+        presence: "required"
     isPaper: 
       type: "boolean"
       flags: 
@@ -1628,7 +1623,7 @@
       flags: 
         presence: "optional"
       keys: 
-        documentId: 
+        docketEntryId: 
           type: "string"
           flags: 
             presence: "optional"
@@ -3494,6 +3489,10 @@
               - "YYYY-MM-DDTHH:mm:ss.SSSZ"
               - "YYYY-MM-DD"
             presence: "optional"
+        docketEntry: 
+          type: "object"
+          flags: 
+            presence: "required"
         docketNumber: 
           type: "string"
           flags: 
@@ -3518,10 +3517,6 @@
               name: "min"
               args: 
                 limit: 1
-        document: 
-          type: "object"
-          flags: 
-            presence: "required"
         entityName: 
           type: "string"
           flags: 
