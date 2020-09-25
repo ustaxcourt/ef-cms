@@ -233,6 +233,9 @@ const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
 const {
+  removePdfFromDocketEntryLambda,
+} = require('./documents/removePdfFromDocketEntryLambda');
+const {
   removeSignatureFromDocumentLambda,
 } = require('./documents/removeSignatureFromDocumentLambda');
 const {
@@ -455,6 +458,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:docketEntryId/remove-pdf',
+    lambdaWrapper(removePdfFromDocketEntryLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/sign',
