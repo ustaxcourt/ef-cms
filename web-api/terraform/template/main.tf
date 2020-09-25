@@ -1,33 +1,38 @@
-module "api-east" {
-  source         = "../api/"
-  environment    = var.environment
-  dns_domain     = var.dns_domain
-  authorizer_uri = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  account_id     = data.aws_caller_identity.current.account_id
-  zone_id        = data.aws_route53_zone.zone.id
-  lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT = "dynamodb.us-east-1.amazonaws.com"
-  })
-  region   = "us-east-1"
-  validate = 1
+provider "aws" {
+  region = var.aws_region
+}
+
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us-east-1"
+}
+
+provider "aws" {
+  region = "us-west-1"
+  alias  = "us-west-1"
+}
+
+module "dynamo_table_1" {
+  source = "./dynamo-table"
+
+  environment = var.environment
+  table_name  = "efcms-${var.environment}-1"
+
   providers = {
-    aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
   }
 }
 
-module "api-west" {
-  source         = "../api/"
-  environment    = var.environment
-  dns_domain     = var.dns_domain
-  authorizer_uri = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  account_id     = data.aws_caller_identity.current.account_id
-  zone_id        = data.aws_route53_zone.zone.id
-  lambda_environment = merge(data.null_data_source.locals.outputs, {
-    DYNAMODB_ENDPOINT = "dynamodb.us-west-1.amazonaws.com"
-  })
-  region   = "us-west-1"
-  validate = 0
+module "elasticsearch_1" {
+  source = "./elasticsearch"
+
+  environment       = var.environment
+  domain_name       = "efcms-search-${var.environment}-1"
+  es_instance_count = var.es_instance_count
+  es_instance_type  = "t2.small.elasticsearch"
+
   providers = {
-    aws = aws.us-west-1
+    aws.us-east-1 = aws.us-east-1
   }
 }
