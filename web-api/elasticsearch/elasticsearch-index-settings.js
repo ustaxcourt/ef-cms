@@ -21,10 +21,9 @@
   const ELASTICSEARCH_API_VERSION = '7.4';
 
   const environment = {
+    elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,
     region: 'us-east-1',
   };
-
-  environment.elasticsearchEndpoint = process.argv[2];
 
   const searchClientCache = new elasticsearch.Client({
     amazonES: {

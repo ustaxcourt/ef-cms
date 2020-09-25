@@ -41,6 +41,8 @@ const otherUser = {
 
 describe('createPractitionerUser', () => {
   beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: async () =>
         Promise.resolve({
@@ -78,6 +80,7 @@ describe('createPractitionerUser', () => {
         pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
+      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -87,6 +90,7 @@ describe('createPractitionerUser', () => {
         sk: `user|${userId}`,
         ...privatePractitionerUser,
       },
+      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -95,6 +99,7 @@ describe('createPractitionerUser', () => {
         pk: 'privatePractitioner|Test Private Practitioner',
         sk: `user|${userId}`,
       },
+      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[3][0],
@@ -103,6 +108,7 @@ describe('createPractitionerUser', () => {
         pk: 'privatePractitioner|PT1234',
         sk: `user|${userId}`,
       },
+      TableName: 'efcms-dev',
     });
   });
 
@@ -120,6 +126,7 @@ describe('createPractitionerUser', () => {
         pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
+      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -129,6 +136,7 @@ describe('createPractitionerUser', () => {
         sk: `user|${userId}`,
         ...privatePractitionerUserWithoutBarNumber,
       },
+      TableName: 'efcms-dev',
     });
 
     await createPractitionerUser({
@@ -218,6 +226,7 @@ describe('createPractitionerUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
+        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -227,6 +236,7 @@ describe('createPractitionerUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUser,
         },
+        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -235,6 +245,7 @@ describe('createPractitionerUser', () => {
           pk: 'privatePractitioner|Test Private Practitioner',
           sk: `user|${userId}`,
         },
+        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[3][0],
@@ -243,6 +254,7 @@ describe('createPractitionerUser', () => {
           pk: 'privatePractitioner|PT1234',
           sk: `user|${userId}`,
         },
+        TableName: 'efcms-dev',
       });
     });
 
@@ -263,6 +275,7 @@ describe('createPractitionerUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
+        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -272,6 +285,7 @@ describe('createPractitionerUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUserWithoutBarNumber,
         },
+        TableName: 'efcms-dev',
       });
     });
   });

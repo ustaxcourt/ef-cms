@@ -6,6 +6,10 @@ const { deleteTrialSession } = require('./deleteTrialSession');
 const mockTrialSessionId = '123';
 
 describe('deleteTrialSession', () => {
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
+
   it('attempts to remove the trial session', async () => {
     await deleteTrialSession({
       applicationContext,
@@ -19,6 +23,7 @@ describe('deleteTrialSession', () => {
         pk: `trial-session|${mockTrialSessionId}`,
         sk: `trial-session|${mockTrialSessionId}`,
       },
+      TableName: 'efcms-dev',
     });
   });
 });

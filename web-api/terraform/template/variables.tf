@@ -1,7 +1,3 @@
-variable "aws_region" {
-  default = "us-east-1"
-}
-
 variable "environment" {
   type = string
 }
@@ -31,25 +27,5 @@ variable "honeybadger_key" {
 }
 
 variable "irs_superuser_email" {
-  type = string
-}
-
-variable "deploying_color" {
-  type = string
-}
-
-variable "blue_table_name" {
-  type = string
-}
-
-variable "green_table_name" {
-  type = string
-}
-
-variable "blue_elasticsearch_domain" {
-  type = string
-}
-
-variable "green_elasticsearch_domain" {
   type = string
 }

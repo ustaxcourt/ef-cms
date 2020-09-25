@@ -13,6 +13,10 @@ const mockTrialSessionWorkingCopy = {
 };
 
 describe('createTrialSessionWorkingCopy', () => {
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
+
   it('attempts to persist the trial session', async () => {
     await createTrialSessionWorkingCopy({
       applicationContext,
@@ -28,6 +32,7 @@ describe('createTrialSessionWorkingCopy', () => {
         trialSessionId: '456',
         userId,
       },
+      TableName: 'efcms-dev',
     });
   });
 });

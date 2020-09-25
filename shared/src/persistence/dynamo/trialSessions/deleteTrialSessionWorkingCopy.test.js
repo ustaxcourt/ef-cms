@@ -9,6 +9,10 @@ const mockTrialSessionId = '456';
 const mockUserId = '338';
 
 describe('deleteTrialSessionWorkingCopy', () => {
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
+
   it('attempts to remove the trial session', async () => {
     await deleteTrialSessionWorkingCopy({
       applicationContext,
@@ -23,6 +27,7 @@ describe('deleteTrialSessionWorkingCopy', () => {
         pk: `trial-session-working-copy|${mockTrialSessionId}`,
         sk: `user|${mockUserId}`,
       },
+      TableName: 'efcms-dev',
     });
   });
 });

@@ -4,7 +4,6 @@ const axios = require('axios');
 
 const ENV = process.argv[2];
 const REGION = process.argv[3];
-const DEPLOYING_COLOR = process.argv[4];
 
 if (!ENV || !REGION) {
   console.error(
@@ -67,10 +66,10 @@ const getUserToken = async (username, password) => {
     .promise();
 
   const services = apis
-    .filter(api => api.name.includes(`gateway_api_${ENV}_${DEPLOYING_COLOR}`))
+    .filter(api => api.name.includes(`gateway_api_${ENV}`))
     .reduce((obj, api) => {
       obj[
-        api.name.replace(`_${ENV}_${DEPLOYING_COLOR}`, '')
+        api.name.replace(`_${ENV}`, '')
       ] = `https://${api.id}.execute-api.${REGION}.amazonaws.com/${ENV}`;
       return obj;
     }, {});

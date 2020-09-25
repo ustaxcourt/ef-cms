@@ -1,11 +1,15 @@
+data "archive_file" "zip_api_public" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/api-public.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/api-public.js"
+}
+
 resource "aws_lambda_function" "api_public_lambda" {
-  depends_on       = [var.api_public_object]
-  function_name    = "api_public_${var.environment}_${var.current_color}"
+  filename         = data.archive_file.zip_api_public.output_path
+  function_name    = "api_public_${var.environment}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "api-public.handler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "api_public_${var.current_color}.js.zip"
-  source_code_hash = var.public_object_hash
+  source_code_hash = data.archive_file.zip_api_public.output_base64sha256
   timeout          = "10"
   memory_size      = "3008"
 
@@ -21,7 +25,7 @@ resource "aws_lambda_function" "api_public_lambda" {
 }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api_public" {
-  name = "gateway_api_public_${var.environment}_${var.current_color}"
+  name = "gateway_api_public_${var.environment}"
 
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -74,11 +78,11 @@ resource "aws_api_gateway_deployment" "api_public_deployment" {
 }
 
 resource "aws_acm_certificate" "api_gateway_cert_public" {
-  domain_name       = "public-api-${var.current_color}.${var.dns_domain}"
+  domain_name       = "public-api.${var.dns_domain}"
   validation_method = "DNS"
 
   tags = {
-    Name          = "public-api-${var.current_color}.${var.dns_domain}"
+    Name          = "public-api.${var.dns_domain}"
     ProductDomain = "EFCMS Public API"
     Environment   = var.environment
     Description   = "Certificate for public-api.${var.dns_domain}"
@@ -104,9 +108,8 @@ resource "aws_route53_record" "api_public_route53_record" {
 }
 
 resource "aws_api_gateway_domain_name" "api_public_custom" {
-  depends_on               = [aws_acm_certificate.api_gateway_cert_public]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_public.arn
-  domain_name              = "public-api-${var.current_color}.${var.dns_domain}"
+  domain_name              = "public-api.${var.dns_domain}"
 
   security_policy = "TLS_1_2"
   endpoint_configuration {
@@ -119,7 +122,7 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
   name           = aws_api_gateway_domain_name.api_public_custom.domain_name
   type           = "A"
   zone_id        = var.zone_id
-  set_identifier = "api_public_${var.region}_${var.current_color}"
+  set_identifier = "api_public_${var.region}"
 
   alias {
     name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name

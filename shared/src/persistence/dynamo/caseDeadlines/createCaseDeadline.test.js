@@ -11,6 +11,10 @@ describe('createCaseDeadline', () => {
     docketNumber: '123-20',
   };
 
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
+
   it('attempts to persist the case deadline', async () => {
     await createCaseDeadline({
       applicationContext,
@@ -25,6 +29,7 @@ describe('createCaseDeadline', () => {
         pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
         sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
       },
+      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -33,6 +38,7 @@ describe('createCaseDeadline', () => {
         pk: 'case|123-20',
         sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
       },
+      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -41,6 +47,7 @@ describe('createCaseDeadline', () => {
         pk: 'case-deadline-catalog',
         sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
       },
+      TableName: 'efcms-dev',
     });
   });
 });
