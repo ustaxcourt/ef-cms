@@ -19,6 +19,11 @@ module "environment" {
   dns_domain             = var.dns_domain
   cloudfront_default_ttl = var.cloudfront_default_ttl
   cloudfront_max_ttl     = var.cloudfront_max_ttl
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
 }
 
 provider "aws" {
