@@ -723,12 +723,12 @@ workflows:
       - migrate:
           requires:
             - deploy
-      # - smoketests:
-      #     requires:
-      #       - migrate
-      - switch-colors:
+      - smoketests:
           requires:
             - migrate
+      - switch-colors:
+          requires:
+            - smoketests
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -799,7 +799,7 @@ workflows:
                 - experimental2
       - switch-colors:
           requires:
-            - migrate
+            - smoketests
           filters:
             branches:
               only:
