@@ -194,7 +194,7 @@ describe('fileDocketEntryInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).not.toBeCalled();
+    ).toBeCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
