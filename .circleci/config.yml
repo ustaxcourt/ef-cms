@@ -799,7 +799,7 @@ workflows:
                 - experimental2
       - switch-colors:
           requires:
-            - migrate
+            - smoketests
           filters:
             branches:
               only:
