@@ -9,6 +9,7 @@ const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
+const { isEmpty } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -183,7 +184,15 @@ exports.updateSecondaryContactInteractor = async ({
 
   const validatedCaseEntity = caseEntity.validate().toRawObject();
 
-  if (changeOfAddressDocumentTypeToGenerate) {
+  const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
+    newData: editableFields,
+    oldData: caseToUpdate.contactSecondary,
+  });
+
+  const shouldUpdateCase =
+    !isEmpty(contactDiff) || changeOfAddressDocumentTypeToGenerate;
+
+  if (shouldUpdateCase) {
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: validatedCaseEntity,

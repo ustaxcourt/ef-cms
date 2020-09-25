@@ -140,7 +140,7 @@ exports.fileDocketEntryInteractor = async ({
           });
 
           const servedParties = aggregatePartiesForService(caseEntity);
-          docketEntryEntity.setAsServed(servedParties);
+          docketEntryEntity.setAsServed(servedParties.all);
           caseEntity.updateDocketEntry(docketEntryEntity);
 
           await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
