@@ -1,477 +1,477 @@
 version: 2.1
 jobs:
-  build-api:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Lint
-          command: npm run lint
-      - run:
-          name: Shellcheck
-          command: |
-            ./run-shellcheck.sh
-      - run:
-          name: Web API - Test
-          command: npm run test:api:ci
-      - run:
-          name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
-      - run:
-          name: Web API - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${API_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-api" \
-            -Dproject.settings="web-api/sonar-project.properties" \
-            -Dsonar.login="${API_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+  # build-api:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #   resource_class: small
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Lint
+  #         command: npm run lint
+  #     - run:
+  #         name: Shellcheck
+  #         command: |
+  #           ./run-shellcheck.sh
+  #     - run:
+  #         name: Web API - Test
+  #         command: npm run test:api:ci
+  #     - run:
+  #         name: Normalize Coverage for SonarQube
+  #         command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
+  #     - run:
+  #         name: Web API - SonarQube
+  #         command: |
+  #           export SONAR_SCANNER_OPTS="-Xmx2048m"
+  #           /home/app/sonar_home/bin/sonar-scanner \
+  #           -Dsonar.projectKey="${API_SONAR_KEY}" \
+  #           -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+  #           -Dsonar.organization="${SONAR_ORG}" \
+  #           -Dsonar.projectBaseDir="web-api" \
+  #           -Dproject.settings="web-api/sonar-project.properties" \
+  #           -Dsonar.login="${API_SONAR_TOKEN}" \
+  #           -Dsonar.host.url="https://sonarcloud.io"
 
-  build-shared:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Shared - Test
-          command: npm run test:shared:ci
-      - run:
-          name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
-      - run:
-          name: Shared - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="shared" \
-            -Dproject.settings="shared/sonar-project.properties" \
-            -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+  # build-shared:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #   resource_class: small
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Shared - Test
+  #         command: npm run test:shared:ci
+  #     - run:
+  #         name: Normalize Coverage for SonarQube
+  #         command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
+  #     - run:
+  #         name: Shared - SonarQube
+  #         command: |
+  #           export SONAR_SCANNER_OPTS="-Xmx2048m"
+  #           /home/app/sonar_home/bin/sonar-scanner \
+  #           -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
+  #           -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+  #           -Dsonar.organization="${SONAR_ORG}" \
+  #           -Dsonar.projectBaseDir="shared" \
+  #           -Dproject.settings="shared/sonar-project.properties" \
+  #           -Dsonar.login="${SHARED_SONAR_TOKEN}" \
+  #           -Dsonar.host.url="https://sonarcloud.io"
 
-  build-client-unit:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Web Client - Unit Test
-          command: npm run build:assets && CI=false npm run test:client:unit:ci
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/web-client/coverage-unit
+  # build-client-unit:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #   resource_class: small
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Web Client - Unit Test
+  #         command: npm run build:assets && CI=false npm run test:client:unit:ci
+  #     - persist_to_workspace:
+  #         root: ~/
+  #         paths:
+  #           - project/web-client/coverage-unit
 
-  build-client-integration:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-        environment:
-          discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium+
-    parallelism: 5
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Create web-client Artifacts Directory
-          command: mkdir /tmp/web-client/
-      - run:
-          name: Web Client - Integration Test
-          command: |
-            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
-            ./wait-until.sh http://localhost:4000/api/swagger
-            TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
-            CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
-      - store_artifacts:
-          path: /tmp/web-client
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/web-client
-            - project/web-client/coverage-integration-*
+  # build-client-integration:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #     - image: amazon/dynamodb-local
+  #       command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+  #       environment:
+  #         discovery.type: single-node
+  #         JAVA_OPTS: '-Xms512m -Xmx512m'
+  #     - image: elastic/elasticsearch:7.8.1
+  #       environment:
+  #         discovery.type: single-node
+  #         ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+  #   resource_class: medium+
+  #   parallelism: 5
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Create web-client Artifacts Directory
+  #         command: mkdir /tmp/web-client/
+  #     - run:
+  #         name: Web Client - Integration Test
+  #         command: |
+  #           TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
+  #           ./wait-until.sh http://localhost:4000/api/swagger
+  #           TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
+  #           CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
+  #     - store_artifacts:
+  #         path: /tmp/web-client
+  #     - persist_to_workspace:
+  #         root: ~/
+  #         paths:
+  #           - project/web-client
+  #           - project/web-client/coverage-integration-*
 
-  build-client-coverage:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Combine Coverage
-          command: |
-            npx istanbul-combine -d combined-coverage -p both -r lcov \
-            ./web-client/coverage-integration-0/coverage-final.json \
-            ./web-client/coverage-integration-1/coverage-final.json \
-            ./web-client/coverage-integration-2/coverage-final.json \
-            ./web-client/coverage-integration-3/coverage-final.json \
-            ./web-client/coverage-integration-4/coverage-final.json \
-            ./web-client/coverage-unit/coverage-final.json
-      - run:
-          name: Check Coverage
-          command: |
-            npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
-            --statements 95 --functions 95 --branches 95 --lines 95
-      - run:
-          name: Web Client - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${UI_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-client" \
-            -Dproject.settings="web-client/sonar-project.properties" \
-            -Dsonar.login="${UI_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+  # build-client-coverage:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #   resource_class: small
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/
+  #     - run:
+  #         name: Combine Coverage
+  #         command: |
+  #           npx istanbul-combine -d combined-coverage -p both -r lcov \
+  #           ./web-client/coverage-integration-0/coverage-final.json \
+  #           ./web-client/coverage-integration-1/coverage-final.json \
+  #           ./web-client/coverage-integration-2/coverage-final.json \
+  #           ./web-client/coverage-integration-3/coverage-final.json \
+  #           ./web-client/coverage-integration-4/coverage-final.json \
+  #           ./web-client/coverage-unit/coverage-final.json
+  #     - run:
+  #         name: Check Coverage
+  #         command: |
+  #           npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
+  #           --statements 95 --functions 95 --branches 95 --lines 95
+  #     - run:
+  #         name: Web Client - SonarQube
+  #         command: |
+  #           export SONAR_SCANNER_OPTS="-Xmx2048m"
+  #           /home/app/sonar_home/bin/sonar-scanner \
+  #           -Dsonar.projectKey="${UI_SONAR_KEY}" \
+  #           -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+  #           -Dsonar.organization="${SONAR_ORG}" \
+  #           -Dsonar.projectBaseDir="web-client" \
+  #           -Dproject.settings="web-client/sonar-project.properties" \
+  #           -Dsonar.login="${UI_SONAR_TOKEN}" \
+  #           -Dsonar.host.url="https://sonarcloud.io"
 
-  e2e-pa11y:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-        environment:
-          discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Create Pa11y Artifacts Directory
-          command: mkdir /tmp/pa11y
-      - run:
-          name: Pa11y
-          environment:
-            SKIP_CACHE_INVALIDATION: true
-            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-            S3_ENDPOINT: http://localhost:9000
-            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-            AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER
-          command: |
-            npm run build:all
-            npx run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
-            sleep 10
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-      - store_artifacts:
-          path: /root/project/web-client/pa11y/pa11y-screenshots
-      - store_artifacts:
-          path: /tmp/pa11y
+  # e2e-pa11y:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #     - image: amazon/dynamodb-local
+  #       command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+  #       environment:
+  #         discovery.type: single-node
+  #         JAVA_OPTS: '-Xms512m -Xmx512m'
+  #     - image: elastic/elasticsearch:7.8.1
+  #       environment:
+  #         discovery.type: single-node
+  #         ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+  #   resource_class: large
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Create Pa11y Artifacts Directory
+  #         command: mkdir /tmp/pa11y
+  #     - run:
+  #         name: Pa11y
+  #         environment:
+  #           SKIP_CACHE_INVALIDATION: true
+  #           TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+  #           DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+  #           S3_ENDPOINT: http://localhost:9000
+  #           MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+  #           AWS_ACCESS_KEY_ID: S3RVER
+  #           AWS_SECRET_ACCESS_KEY: S3RVER
+  #         command: |
+  #           npm run build:all
+  #           npx run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
+  #           ./wait-until-services.sh
+  #           ./wait-until.sh http://localhost:4000/api/swagger
+  #           sleep 10
+  #           npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+  #           npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+  #           npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+  #     - store_artifacts:
+  #         path: /root/project/web-client/pa11y/pa11y-screenshots
+  #     - store_artifacts:
+  #         path: /tmp/pa11y
 
-  e2e-pa11y-public:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-        environment:
-          discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Create Pa11y Artifacts Directory
-          command: mkdir /tmp/pa11y
-      - run:
-          name: Pa11y
-          environment:
-            SKIP_CACHE_INVALIDATION: true
-            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-            S3_ENDPOINT: http://localhost:9000
-            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-            AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER
-          command: |
-            npm run build:all
-            npx run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:5000/ 404
-            sleep 10
-            npm run test:pa11y:public --node-flags --max-old-space-size=1024
-      - store_artifacts:
-          path: /root/project/web-client/pa11y/pa11y-screenshots
-      - store_artifacts:
-          path: /tmp/pa11y
+  # e2e-pa11y-public:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #     - image: amazon/dynamodb-local
+  #       command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+  #       environment:
+  #         discovery.type: single-node
+  #         JAVA_OPTS: '-Xms512m -Xmx512m'
+  #     - image: elastic/elasticsearch:7.8.1
+  #       environment:
+  #         discovery.type: single-node
+  #         ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+  #   resource_class: large
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Create Pa11y Artifacts Directory
+  #         command: mkdir /tmp/pa11y
+  #     - run:
+  #         name: Pa11y
+  #         environment:
+  #           SKIP_CACHE_INVALIDATION: true
+  #           TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+  #           DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+  #           S3_ENDPOINT: http://localhost:9000
+  #           MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+  #           AWS_ACCESS_KEY_ID: S3RVER
+  #           AWS_SECRET_ACCESS_KEY: S3RVER
+  #         command: |
+  #           npm run build:all
+  #           npx run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+  #           ./wait-until-services.sh
+  #           ./wait-until.sh http://localhost:5000/ 404
+  #           sleep 10
+  #           npm run test:pa11y:public --node-flags --max-old-space-size=1024
+  #     - store_artifacts:
+  #         path: /root/project/web-client/pa11y/pa11y-screenshots
+  #     - store_artifacts:
+  #         path: /tmp/pa11y
 
-  e2e-cypress:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-        environment:
-          discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Cypress
-          environment:
-            SKIP_CACHE_INVALIDATION: true
-            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-            S3_ENDPOINT: http://localhost:9000
-            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-            AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER
-          command: |
-            npm run build:all &&
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
-            npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
-            sleep 5
-            npm run cypress
-      - store_artifacts:
-          path: /root/project/cypress/videos/
-      - store_artifacts:
-          path: /tmp/cypress
+  # e2e-cypress:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #     - image: amazon/dynamodb-local
+  #       command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+  #       environment:
+  #         discovery.type: single-node
+  #         JAVA_OPTS: '-Xms512m -Xmx512m'
+  #     - image: elastic/elasticsearch:7.8.1
+  #       environment:
+  #         discovery.type: single-node
+  #         ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+  #   resource_class: large
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Create Cypress Artifacts Directory
+  #         command: mkdir /tmp/cypress
+  #     - run:
+  #         name: Cypress
+  #         environment:
+  #           SKIP_CACHE_INVALIDATION: true
+  #           TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+  #           DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+  #           S3_ENDPOINT: http://localhost:9000
+  #           MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+  #           AWS_ACCESS_KEY_ID: S3RVER
+  #           AWS_SECRET_ACCESS_KEY: S3RVER
+  #         command: |
+  #           npm run build:all &&
+  #           CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+  #           if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+  #             ./node_modules/.bin/cypress install
+  #           fi
+  #           npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+  #           ./wait-until-services.sh
+  #           ./wait-until.sh http://localhost:4000/api/swagger
+  #           sleep 5
+  #           npm run cypress
+  #     - store_artifacts:
+  #         path: /root/project/cypress/videos/
+  #     - store_artifacts:
+  #         path: /tmp/cypress
 
-  e2e-cypress-public:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-        environment:
-          discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
-        environment:
-          discovery.type: single-node
-          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium+
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Cypress
-          environment:
-            SKIP_CACHE_INVALIDATION: true
-            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-            S3_ENDPOINT: http://localhost:9000
-            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-            AWS_ACCESS_KEY_ID: S3RVER
-            AWS_SECRET_ACCESS_KEY: S3RVER
-          command: |
-            npm run build:all &&
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
-            npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
-            sleep 5
-            npm run cypress:public
-      - store_artifacts:
-          path: /root/project/cypress/videos/
-      - store_artifacts:
-          path: /tmp/cypress
+  # e2e-cypress-public:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #     - image: amazon/dynamodb-local
+  #       command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+  #       environment:
+  #         discovery.type: single-node
+  #         JAVA_OPTS: '-Xms512m -Xmx512m'
+  #     - image: elastic/elasticsearch:7.8.1
+  #       environment:
+  #         discovery.type: single-node
+  #         ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+  #   resource_class: medium+
+  #   steps:
+  #     - restore_cache:
+  #         name: Source - Restoring Cache
+  #         keys:
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #           - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+  #           - source-{{ .Environment.CACHE_VERSION }}-
+  #     - checkout
+  #     - save_cache:
+  #         name: Source - Saving Cache
+  #         key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+  #         paths:
+  #           - '.git'
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Create Cypress Artifacts Directory
+  #         command: mkdir /tmp/cypress
+  #     - run:
+  #         name: Cypress
+  #         environment:
+  #           SKIP_CACHE_INVALIDATION: true
+  #           TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+  #           DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+  #           S3_ENDPOINT: http://localhost:9000
+  #           MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+  #           AWS_ACCESS_KEY_ID: S3RVER
+  #           AWS_SECRET_ACCESS_KEY: S3RVER
+  #         command: |
+  #           npm run build:all &&
+  #           CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+  #           if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+  #             ./node_modules/.bin/cypress install
+  #           fi
+  #           npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+  #           ./wait-until-services.sh
+  #           ./wait-until.sh http://localhost:4000/api/swagger
+  #           sleep 5
+  #           npm run cypress:public
+  #     - store_artifacts:
+  #         path: /root/project/cypress/videos/
+  #     - store_artifacts:
+  #         path: /tmp/cypress
 
   deploy:
     machine:
@@ -617,38 +617,38 @@ jobs:
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
 
-  smoketests:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
-    steps:
-      - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild node-sass
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Setup Env
-          command: |
-            ENV=$(./get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: 'Cypress Smoke Tests'
-          command: npm run cypress:smoketests
-      - run:
-          name: 'Pa11y Smoke Tests'
-          command: npm run test:pa11y:smoketests
+  # # smoketests:
+  #   docker:
+  #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+  #       aws_auth:
+  #         aws_access_key_id: $AWS_ACCESS_KEY_ID
+  #         aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+  #   resource_class: large
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: NPM - Install
+  #         command: |
+  #           npm set progress=false
+  #           npm ci
+  #           npm rebuild node-sass
+  #     - run:
+  #         name: Create Cypress Artifacts Directory
+  #         command: mkdir /tmp/cypress
+  #     - run:
+  #         name: Setup Env
+  #         command: |
+  #           ENV=$(./get-env.sh $CIRCLE_BRANCH)
+  #           echo "export ENV=$ENV" >> $BASH_ENV
+  #           echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+  #           echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+  #           echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+  #     - run:
+  #         name: 'Cypress Smoke Tests'
+  #         command: npm run cypress:smoketests
+  #     - run:
+  #         name: 'Pa11y Smoke Tests'
+  #         command: npm run test:pa11y:smoketests
 
   switch-colors:
     docker:
@@ -719,7 +719,7 @@ workflows:
             - e2e-cypress-public
       - deploy:
           requires:
-            - build-client-coverage
+            # - build-client-coverage
       - migrate:
           requires:
             - deploy
@@ -728,7 +728,7 @@ workflows:
             - migrate
       - switch-colors:
           requires:
-            - smoketests
+            # - smoketests
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -767,7 +767,7 @@ workflows:
             - e2e-cypress-public
       - deploy:
           requires:
-            - build-client-coverage
+            # - build-client-coverage
           filters:
             branches:
               only:
@@ -799,7 +799,7 @@ workflows:
                 - experimental2
       - switch-colors:
           requires:
-            - smoketests
+            # - smoketests
           filters:
             branches:
               only:
