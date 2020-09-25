@@ -14,3 +14,16 @@
 	- https://app-<DEPLOYED_COLOR>-dev.ustc-case-mgmt.flexion.us
 6) Destroy the migration infrastructure to turn off the live streams
 	`DESTINATION_TABLE=b SOURCE_TABLE=a STREAM_ARN=abc npm run destroy:migration -- <DEPLOYED_ENV>`
+
+
+## Troubleshooting:
+
+If the following error occurs when running the environment-specific terraform deploy, delete the role in the AWS IAM console.
+
+```
+Error: Error creating IAM Role migration_role_<ENV>: EntityAlreadyExists: Role with name 		migration_role_<ENV> already exists.
+	status code: 409, request id: ***********
+
+  on migration.tf line 1, in resource "aws_iam_role" "migration_role":
+   1: resource "aws_iam_role" "migration_role" {
+```
