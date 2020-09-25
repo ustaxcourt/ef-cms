@@ -37,3 +37,7 @@ Delete the role in the AWS IAM console and rerun `npm run deploy:environment-spe
 
 #### Failing smoke tests
 When this is run for the first time on a new environment, the smoke tests may fail for up to an hour after the initial deploy due to the header security lambda redeploying to all edge locations. To resolve, wait an hour and rerun the smoke tests.
+
+
+#### 403 on websockets endpoint
+If the websockets endpoint returns a 403 Unauthorized error (can be seen during trial session smoke tests), redeploy the websocket APIs for the environment in the AWS console under API Gateway (both east and west).
