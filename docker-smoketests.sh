@@ -12,4 +12,4 @@ docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
            -e EFCMS_DOMAIN=$EFCMS_DOMAIN \
            -e ENV=$ENV \
            --rm efcms /bin/sh \
-           -c 'npm run cypress:smoketests && npm run test:pa11y:smoketests --prefix=web-client/pa11y/'
+           -c 'npm run cypress:smoketests && npm run test:pa11y:smoketests'
