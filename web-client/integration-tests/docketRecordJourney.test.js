@@ -287,7 +287,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: test.docketNumber,
       eventCode: 'HEAR',
       test,
-      trialLocation: 'Brimingham, AL',
+      trialLocation: 'Birmingham, AL',
     });
 
     const {
