@@ -727,8 +727,8 @@ workflows:
       #     requires:
       #       - migrate
       - switch-colors:
-          # requires:
-          # - smoketests
+          requires:
+            - migrate
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
