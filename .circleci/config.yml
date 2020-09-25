@@ -766,8 +766,8 @@ workflows:
       #       - e2e-cypress
       #       - e2e-cypress-public
       - deploy:
-          requires:
-            # - build-client-coverage
+          # requires:
+          # - build-client-coverage
           filters:
             branches:
               only:
@@ -798,8 +798,8 @@ workflows:
       #           - experimental1
       #           - experimental2
       - switch-colors:
-          requires:
-            # - smoketests
+            requires:
+              - migrate
           filters:
             branches:
               only:
