@@ -5,7 +5,6 @@ module.exports = {
   collectCoverageFrom: [
     'bulkImportPractitionerUsers.js',
     'switch-environment-color.js',
-    'migrations/*.js',
     'src/**/*.js',
     '!src/applicationContext.js',
     '!src/**/*Handlers.js',
