@@ -37,7 +37,7 @@ exports.fileDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber } = documentMetadata;
+  const { docketNumber, isFileAttached } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -67,6 +67,7 @@ exports.fileDocketEntryInteractor = async ({
     const [docketEntryId, metadata, relationship] = document;
 
     if (docketEntryId && metadata) {
+      let servedParties;
       const docketRecordEditState =
         metadata.isFileAttached === false ? documentMetadata : {};
 
@@ -129,32 +130,35 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       if (readyForService) {
-        const servedParties = aggregatePartiesForService(caseEntity);
+        servedParties = aggregatePartiesForService(caseEntity);
         docketEntryEntity.setAsServed(servedParties.all);
         if (metadata.isPaper) {
           workItem.setAsCompleted({
             message: 'completed',
             user,
           });
-
-          caseEntity.updateDocketEntry(docketEntryEntity);
-
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            servedParties,
-          });
         }
       }
-      docketEntryEntity.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
-          docketEntryId,
-        });
+
+      if (isFileAttached) {
+        docketEntryEntity.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            docketEntryId,
+          });
+      }
 
       caseEntity.addDocketEntry(docketEntryEntity);
+
+      if (readyForService) {
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity,
+          docketEntryEntity,
+          servedParties,
+        });
+      }
 
       workItems.push(workItem);
     }
