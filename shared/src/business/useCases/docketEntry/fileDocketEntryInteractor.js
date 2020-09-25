@@ -71,7 +71,6 @@ exports.fileDocketEntryInteractor = async ({
         metadata.isFileAttached === false ? documentMetadata : {};
 
       const readyForService = metadata.isFileAttached && !isSavingForLater;
-      const saveFileForLater = metadata.isFileAttached && isSavingForLater;
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
@@ -118,39 +117,7 @@ exports.fileDocketEntryInteractor = async ({
 
       docketEntryEntity.setWorkItem(workItem);
 
-      if (readyForService) {
-        const servedParties = aggregatePartiesForService(caseEntity);
-        docketEntryEntity.setAsServed(servedParties.all);
-      } else if (saveFileForLater) {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            docketEntryId,
-          });
-      }
-
-      caseEntity.addDocketEntry(docketEntryEntity);
-
       if (metadata.isPaper) {
-        if (readyForService) {
-          workItem.setAsCompleted({
-            message: 'completed',
-            user,
-          });
-
-          const servedParties = aggregatePartiesForService(caseEntity);
-          docketEntryEntity.setAsServed(servedParties.all);
-          caseEntity.updateDocketEntry(docketEntryEntity);
-
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            servedParties,
-          });
-        }
-
         workItem.assignToUser({
           assigneeId: user.userId,
           assigneeName: user.name,
@@ -160,6 +127,34 @@ exports.fileDocketEntryInteractor = async ({
           sentByUserId: user.userId,
         });
       }
+
+      if (readyForService) {
+        const servedParties = aggregatePartiesForService(caseEntity);
+        docketEntryEntity.setAsServed(servedParties.all);
+        if (metadata.isPaper) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
+          });
+
+          caseEntity.updateDocketEntry(docketEntryEntity);
+
+          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+            applicationContext,
+            caseEntity,
+            docketEntryEntity,
+            servedParties,
+          });
+        }
+      }
+      docketEntryEntity.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          docketEntryId,
+        });
+
+      caseEntity.addDocketEntry(docketEntryEntity);
 
       workItems.push(workItem);
     }

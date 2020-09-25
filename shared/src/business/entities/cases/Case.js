@@ -1124,18 +1124,20 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (updatedDocketEntry.isOnDocketRecord) {
-    const updateIndex = shouldGenerateDocketRecordIndex({
-      caseDetail: this,
-      docketEntry: foundDocketEntry,
-    });
+  if (foundDocketEntry) {
+    Object.assign(foundDocketEntry, updatedDocketEntry);
 
-    if (updateIndex) {
-      updatedDocketEntry.index = this.generateNextDocketRecordIndex();
+    if (foundDocketEntry.isOnDocketRecord) {
+      const updateIndex = shouldGenerateDocketRecordIndex({
+        caseDetail: this,
+        docketEntry: foundDocketEntry,
+      });
+
+      if (updateIndex) {
+        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+      }
     }
   }
-
-  if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
 
   return this;
 };
