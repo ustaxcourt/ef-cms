@@ -77,7 +77,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
           .formatDateString(servedAt, 'DATE_TIME_TZ'),
       },
       practitioners: privatePractitioners,
-      taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,
+      taxCourtLoginUrl: `https://app-${process.env.EFCMS_DOMAIN}`,
     },
   });
 

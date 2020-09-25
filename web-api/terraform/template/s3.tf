@@ -1,13 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-  alias  = "us-east-1"
-}
-
-provider "aws" {
-  region = "us-west-1"
-  alias  = "us-west-1"
-}
-
 data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "documents_us_east_1" {

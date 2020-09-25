@@ -4,10 +4,6 @@ const {
 const { deleteCaseDeadline } = require('./deleteCaseDeadline');
 
 describe('deleteCaseDeadline', () => {
-  beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
-  });
-
   it('deletes the case deadline', async () => {
     await deleteCaseDeadline({
       applicationContext,
@@ -22,7 +18,6 @@ describe('deleteCaseDeadline', () => {
         pk: 'case-deadline|123',
         sk: 'case-deadline|123',
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().delete.mock.calls[1][0],
@@ -31,7 +26,6 @@ describe('deleteCaseDeadline', () => {
         pk: 'case|456-20',
         sk: 'case-deadline|123',
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().delete.mock.calls[2][0],
@@ -40,7 +34,6 @@ describe('deleteCaseDeadline', () => {
         pk: 'case-deadline-catalog',
         sk: 'case-deadline|123',
       },
-      TableName: 'efcms-dev',
     });
   });
 });
