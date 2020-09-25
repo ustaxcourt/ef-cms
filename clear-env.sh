@@ -20,6 +20,10 @@
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 
 ENV=$1
+DYNAMODB_TABLE_NAME=$2
+ELASTICSEARCH_ENDPOINT=$3
+
+export ELASTICSEARCH_ENDPOINT
 
 $(which terraform) > /dev/null
 if [[ "$?" == "1" ]]; then
@@ -27,11 +31,11 @@ if [[ "$?" == "1" ]]; then
   exit 1
 fi
 
-./web-api/clear-elasticsearch-index.sh $ENV
+./web-api/clear-elasticsearch-index.sh $ENV $ELASTICSEARCH_ENDPOINT
 ./web-api/setup-elasticsearch-index.sh $ENV
 
 pushd web-api
-node clear-dynamodb-table.js $ENV
+node clear-dynamodb-table.js $DYNAMODB_TABLE_NAME
 ./setup-cognito-users.sh $ENV
 ./setup-court-users.sh $ENV
 popd
