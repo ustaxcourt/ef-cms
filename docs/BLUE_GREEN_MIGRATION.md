@@ -33,3 +33,7 @@ Error: Error creating IAM Role migration_role_<ENV>: EntityAlreadyExists: Role w
    1: resource "aws_iam_role" "migration_role" {
    ```
 Delete the role in the AWS IAM console and rerun `npm run deploy:environment-specific <ENV>`.
+
+
+#### Failing smoke tests
+When this is run for the first time on a new environment, the smoke tests may fail for up to an hour after the initial deploy due to the header security lambda redeploying to all edge locations. To resolve, wait an hour and rerun the smoke tests.
