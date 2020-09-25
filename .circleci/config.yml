@@ -798,8 +798,8 @@ workflows:
       #           - experimental1
       #           - experimental2
       - switch-colors:
-            requires:
-              - migrate
+          requires:
+            - migrate
           filters:
             branches:
               only:
