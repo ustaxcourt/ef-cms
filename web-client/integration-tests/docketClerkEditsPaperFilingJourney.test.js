@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
 
 const test = setupTest();
 
@@ -103,6 +103,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
     );
 
     await test.runSequence('removeScannedPdfSequence');
+    await wait(200);
 
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'scan',
