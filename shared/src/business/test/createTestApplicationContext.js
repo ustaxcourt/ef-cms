@@ -419,7 +419,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
       appEndpoint: 'localhost:1234',
-      dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },

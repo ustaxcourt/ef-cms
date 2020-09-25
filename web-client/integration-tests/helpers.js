@@ -54,7 +54,6 @@ Object.assign(applicationContext, {
     });
   },
   getEnvironment: () => ({
-    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerInterface,

@@ -1,18 +1,10 @@
 #!/bin/bash -e
-
 ENV=$1
-DEPLOYING_COLOR=$2
-
-[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${ENV}" ] && echo 'You must pass ENV as argument $1' && exit 1
-[ -z "${DEPLOYING_COLOR}" ] && echo 'You must pass DEPLOYING_COLOR as argument $2' && exit 1
-
-
 REGION="us-east-1"
-API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
-WS_URL="wss://ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
-COGNITO_REDIRECT_URL="https%3A//app-${EFCMS_DOMAIN}/log-in"
-COGNITO_REDIRECT_URI="https://app-${EFCMS_DOMAIN}/log-in"
+API_URL="https://api.${EFCMS_DOMAIN}"
+WS_URL="wss://ws.${EFCMS_DOMAIN}"
+COGNITO_REDIRECT_URL="https%3A//app.${EFCMS_DOMAIN}/log-in"
+COGNITO_REDIRECT_URI="https://app.${EFCMS_DOMAIN}/log-in"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"

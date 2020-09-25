@@ -1,11 +1,10 @@
 resource "aws_lambda_function" "api_async_lambda" {
-  depends_on       = [var.api_object]
-  function_name    = "api_async_${var.environment}_${var.current_color}"
+  function_name    = "api_async_${var.environment}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "api.handler"
-  s3_bucket        = var.lambda_bucket_id
-  s3_key           = "api_${var.current_color}.js.zip"
-  source_code_hash = var.api_object_hash
+  s3_bucket        = aws_s3_bucket.api_lambdas_bucket.id
+  s3_key           = aws_s3_bucket_object.api_object.key
+  source_code_hash = data.archive_file.zip_api.output_base64sha256
   timeout          = "900"
   memory_size      = "3008"
 
@@ -194,9 +193,7 @@ resource "aws_api_gateway_method_response" "async_method_response_post" {
 
 resource "aws_api_gateway_integration_response" "async_response_post" {
   depends_on = [
-    aws_api_gateway_integration.api_async_integration_post,
-    aws_api_gateway_method.api_async_method_post,
-    aws_api_gateway_resource.api_async_resource
+    aws_api_gateway_integration.api_async_integration_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_async_resource.id
@@ -223,9 +220,7 @@ resource "aws_api_gateway_method_response" "async_method_response_put" {
 
 resource "aws_api_gateway_integration_response" "async_response_put" {
   depends_on = [
-    aws_api_gateway_integration.api_async_integration_put,
-    aws_api_gateway_method.api_async_method_put,
-    aws_api_gateway_resource.api_async_resource
+    aws_api_gateway_integration.api_async_integration_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_async_resource.id
@@ -252,9 +247,7 @@ resource "aws_api_gateway_method_response" "async_method_response_get" {
 
 resource "aws_api_gateway_integration_response" "async_response_get" {
   depends_on = [
-    aws_api_gateway_integration.api_async_integration_get,
-    aws_api_gateway_method.api_async_method_get,
-    aws_api_gateway_resource.api_async_resource
+    aws_api_gateway_integration.api_async_integration_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_async_resource.id

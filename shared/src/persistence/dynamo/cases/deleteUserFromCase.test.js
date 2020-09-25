@@ -4,6 +4,10 @@ const {
 const { deleteUserFromCase } = require('./deleteUserFromCase');
 
 describe('deleteUserFromCase', () => {
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
+
   it('attempts to delete the user from the case', async () => {
     await deleteUserFromCase({
       applicationContext,
@@ -18,6 +22,7 @@ describe('deleteUserFromCase', () => {
         pk: 'user|123',
         sk: 'case|101-20',
       },
+      TableName: 'efcms-dev',
     });
   });
 });

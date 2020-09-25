@@ -1,8 +1,24 @@
+resource "aws_s3_bucket" "layer_bucket" {
+  bucket   = "${var.dns_domain}.efcms.${var.environment}.${var.region}.layers"
+  acl      = "private"
+  region   = var.region
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_object" "puppeteer_layer_object" {
+  bucket = aws_s3_bucket.layer_bucket.id
+  key    = "${var.environment}_puppeteer_lambda_layer.zip"
+  source = "../../runtimes/puppeteer/puppeteer_lambda_layer.zip"
+  etag   = "${filemd5("../../runtimes/puppeteer/puppeteer_lambda_layer.zip")}"
+}
+
 resource "aws_lambda_layer_version" "puppeteer_layer" {
-  depends_on = [var.puppeteer_layer_object]
-  s3_bucket  = var.lambda_bucket_id
-  s3_key     = "${var.current_color}_puppeteer_lambda_layer.zip"
-  layer_name = "puppeteer-${var.environment}-${var.current_color}"
-  source_code_hash = var.puppeteer_object_hash
+  s3_bucket  = aws_s3_bucket.layer_bucket.id
+  s3_key     = aws_s3_bucket_object.puppeteer_layer_object.key
+  layer_name = "puppeteer-${var.environment}"
+
   compatible_runtimes = ["nodejs12.x"]
 }

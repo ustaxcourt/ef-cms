@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="permissions-account.tfstate"
+KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 

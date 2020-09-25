@@ -1,12 +1,11 @@
 describe('Health check', () => {
   it("should retrieve the status of the application's critical services", () => {
     const domain = Cypress.env('EFCMS_DOMAIN');
-    const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
     cy.request({
       followRedirect: true,
       method: 'GET',
-      url: `https://public-api-${DEPLOYING_COLOR}.${domain}/public-api/health`,
+      url: `https://public-api.${domain}/public-api/health`,
     }).should(response => {
       expect(response.body).to.have.property('clamAV');
       expect(response.body).to.have.property('cognito');

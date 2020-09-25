@@ -8,6 +8,10 @@ const mockTrialSession = {
 };
 
 describe('createTrialSession', () => {
+  beforeAll(() => {
+    applicationContext.environment.stage = 'dev';
+  });
+
   it('attempts to persist the trial session', async () => {
     await createTrialSession({
       applicationContext,
@@ -22,6 +26,7 @@ describe('createTrialSession', () => {
         sk: 'trial-session|123',
         trialSessionId: '123',
       },
+      TableName: 'efcms-dev',
     });
   });
 });

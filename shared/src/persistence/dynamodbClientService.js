@@ -40,10 +40,11 @@ const filterEmptyStrings = params => {
 };
 
 const getTableName = ({ applicationContext }) =>
-  (applicationContext.environment &&
-    applicationContext.environment.dynamoDbTableName) ||
-  (applicationContext.getEnvironment() &&
-    applicationContext.getEnvironment().dynamoDbTableName);
+  `efcms-${
+    (applicationContext.environment || applicationContext.getEnvironment())
+      .stage
+  }`;
+
 const getDeployTableName = ({ applicationContext }) =>
   `efcms-deploy-${
     (applicationContext.environment || applicationContext.getEnvironment())
