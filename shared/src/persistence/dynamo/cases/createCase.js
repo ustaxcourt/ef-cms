@@ -28,7 +28,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
       client.put({
         Item: {
           pk: `case|${caseToCreate.docketNumber}`,
-          sk: `docket-entry|${document.documentId}`,
+          sk: `docket-entry|${document.docketEntryId}`,
           ...document,
         },
         applicationContext,

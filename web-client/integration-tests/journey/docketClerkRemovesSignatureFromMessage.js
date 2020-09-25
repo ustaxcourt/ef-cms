@@ -25,7 +25,7 @@ export const docketClerkRemovesSignatureFromMessage = test => {
     expect(orderDocument.documentTitle).toEqual('Order');
 
     await test.runSequence('openConfirmRemoveSignatureModalSequence', {
-      documentIdToEdit: orderDocument.documentId,
+      docketEntryIdToEdit: orderDocument.documentId,
     });
 
     await test.runSequence('removeSignatureSequence');
@@ -36,7 +36,7 @@ export const docketClerkRemovesSignatureFromMessage = test => {
       state: test.getState(),
     });
     const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
-      d => d.documentId === orderDocument.documentId,
+      d => d.docketEntryId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toEqual(null);
   });

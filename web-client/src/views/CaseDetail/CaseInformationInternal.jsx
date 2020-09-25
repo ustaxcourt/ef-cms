@@ -147,7 +147,11 @@ const TrialInformation = ({
         <div className="grid-row">
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
-            <p>{caseDetail.formattedTrialCity}</p>
+            <p>
+              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+                {caseDetail.formattedTrialCity}
+              </a>
+            </p>
           </div>
           <div className="grid-col-4">
             <p className="label">Trial date</p>
@@ -194,6 +198,7 @@ const TrialInformation = ({
                 link
                 className="red-warning margin-top-0 padding-0 push-right"
                 icon="trash"
+                id="remove-block"
                 onClick={() => {
                   openUnblockFromTrialModalSequence();
                 }}
@@ -294,7 +299,11 @@ const TrialInformation = ({
         <div className="grid-row">
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
-            <p>{caseDetail.formattedTrialCity}</p>
+            <p>
+              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+                {caseDetail.formattedTrialCity}
+              </a>
+            </p>
           </div>
           <div className="grid-col-4">
             <p className="label">Trial date</p>

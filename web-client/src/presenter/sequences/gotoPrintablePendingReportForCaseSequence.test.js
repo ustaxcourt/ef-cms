@@ -19,7 +19,7 @@ describe('gotoPrintablePendingReportForCaseSequence', () => {
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           documentType: 'Proposed Stipulated Decision',
         },
       ],

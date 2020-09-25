@@ -28,8 +28,8 @@ export const setSuccessFromDocumentTitleAction = ({
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
   const { docketEntries } = get(state.caseDetail);
-  const documentId = get(state.documentId);
-  const order = docketEntries.find(d => d.documentId === documentId);
+  const docketEntryId = get(state.docketEntryId);
+  const order = docketEntries.find(d => d.docketEntryId === docketEntryId);
 
   let successMessage = `${order.documentTitle || order.documentType} updated.`;
 

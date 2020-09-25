@@ -13,12 +13,12 @@ describe('editDocketEntryHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Generic Document',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -30,13 +30,13 @@ describe('editDocketEntryHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
               workItem: { isRead: true },
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -48,12 +48,12 @@ describe('editDocketEntryHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -65,13 +65,13 @@ describe('editDocketEntryHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
               workItem: { isRead: false },
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(true);

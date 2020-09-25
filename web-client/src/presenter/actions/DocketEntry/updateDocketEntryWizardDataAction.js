@@ -53,12 +53,14 @@ export const updateDocketEntryWizardDataAction = ({
         store.unset(state.form.previousDocument);
       } else {
         //if there is only one previously selected doc, default that selection on the form
-        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
-        if (filedDocumentIds.length === 1) {
+        const filedDocketEntryIds = get(
+          state.screenMetadata.filedDocketEntryIds,
+        );
+        if (filedDocketEntryIds.length === 1) {
           const caseDetail = get(state.caseDetail);
 
           const previousDocument = find(caseDetail.docketEntries, doc =>
-            includes(filedDocumentIds, doc.documentId),
+            includes(filedDocketEntryIds, doc.docketEntryId),
           );
           if (previousDocument) {
             store.set(state.form.previousDocument, previousDocument);
@@ -107,14 +109,16 @@ export const updateDocketEntryWizardDataAction = ({
 
         //restore previous doc data from screenMetadata onto form
         const caseDetail = get(state.caseDetail);
-        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
+        const filedDocketEntryIds = get(
+          state.screenMetadata.filedDocketEntryIds,
+        );
 
         const previousDocument =
           props.value &&
           find(
             caseDetail.docketEntries,
             doc =>
-              includes(filedDocumentIds, doc.documentId) &&
+              includes(filedDocketEntryIds, doc.docketEntryId) &&
               (doc.documentTitle || doc.documentType) === props.value,
           );
         if (previousDocument.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY) {

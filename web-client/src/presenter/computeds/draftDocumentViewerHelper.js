@@ -38,7 +38,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     formattedCaseDetail.draftDocuments &&
     formattedCaseDetail.draftDocuments.find(
       draftDocument =>
-        draftDocument.documentId === viewerDraftDocumentToDisplay.documentId,
+        draftDocument.docketEntryId ===
+        viewerDraftDocumentToDisplay.docketEntryId,
     );
   if (!formattedDocumentToDisplay) {
     return {

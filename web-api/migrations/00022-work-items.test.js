@@ -19,8 +19,8 @@ describe('work items array to object', () => {
 
   const mockWorkItem = {
     associatedJudge: 'Judge Ashford',
+    docketEntry: {},
     docketNumber: MOCK_CASE.docketNumber,
-    document: {},
     section: DOCKET_SECTION,
     sentBy: 'Test Docketclerk',
     sentBySection: DOCKET_SECTION,

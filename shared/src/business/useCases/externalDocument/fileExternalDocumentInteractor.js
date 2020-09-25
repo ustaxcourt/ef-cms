@@ -79,7 +79,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        supportingDocuments[i].documentId,
+        supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
@@ -90,7 +90,7 @@ exports.fileExternalDocumentInteractor = async ({
     secondaryDocument.lodged = true;
 
     documentsToAdd.push([
-      secondaryDocument.documentId,
+      secondaryDocument.docketEntryId,
       secondaryDocument,
       DOCUMENT_RELATIONSHIPS.SECONDARY,
     ]);
@@ -99,7 +99,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        secondarySupportingDocuments[i].documentId,
+        secondarySupportingDocuments[i].docketEntryId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
@@ -108,13 +108,13 @@ exports.fileExternalDocumentInteractor = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  for (let [documentId, metadata, relationship] of documentsToAdd) {
-    if (documentId && metadata) {
+  for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
+    if (docketEntryId && metadata) {
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
-          documentId,
+          docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
           partyPrimary:
@@ -143,12 +143,12 @@ exports.fileExternalDocumentInteractor = async ({
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-          document: {
+          docketEntry: {
             ...docketEntryEntity.toRawObject(),
             createdAt: docketEntryEntity.createdAt,
           },
+          docketNumber: caseToUpdate.docketNumber,
+          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           highPriority: highPriorityWorkItem,
           section: DOCKET_SECTION,
           sentBy: user.name,
@@ -171,7 +171,7 @@ exports.fileExternalDocumentInteractor = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: docketEntryEntity,
+          docketEntryEntity,
           servedParties,
         });
       }

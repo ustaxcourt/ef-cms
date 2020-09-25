@@ -78,7 +78,7 @@ describe('Create a work item', () => {
       workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(decisionWorkItem).toMatchObject({
-      document: {
+      docketEntry: {
         documentTitle: 'Agreed Computation for Entry of Decision',
         userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -105,7 +105,7 @@ describe('Create a work item', () => {
       caseDetail.docketNumber,
     );
     expect(decisionWorkItem).toMatchObject({
-      document: {
+      docketEntry: {
         documentTitle: 'Agreed Computation for Entry of Decision',
         userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -123,8 +123,8 @@ describe('Create a work item', () => {
 
   it('docket clerk QCs a document, updates the document title, and generates a Notice of Docket Change', async () => {
     await test.runSequence('gotoEditDocketEntrySequence', {
+      docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
-      documentId: decisionWorkItem.document.documentId,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -202,7 +202,7 @@ describe('Create a work item', () => {
     const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
       item => item.docketNumber === caseDetail.docketNumber,
     );
-    const qcDocumentTitleMyOutbox = myOutbox[0].document.documentTitle;
+    const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
 
     expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
 

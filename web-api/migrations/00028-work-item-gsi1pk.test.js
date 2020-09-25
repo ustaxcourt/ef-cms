@@ -10,8 +10,8 @@ describe('update work items missing a gsi1pk', () => {
 
   const workItemToUpdate = {
     associatedJudge: 'Chief Judge',
+    docketEntry: {},
     docketNumber: '132-20',
-    document: {},
     pk: 'work-item|7fc94df2-9a6a-4aef-b9bb-52d409c4bea3',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
@@ -23,8 +23,8 @@ describe('update work items missing a gsi1pk', () => {
   const workItems = [
     {
       associatedJudge: 'Chief Judge',
+      docketEntry: {},
       docketNumber: '132-20',
-      document: {},
       gsi1pk: 'work-item|1fc94df2-9a6a-4aef-b9bb-52d409c4bea3',
       pk: 'work-item|1fc94df2-9a6a-4aef-b9bb-52d409c4bea3',
       section: 'petitions',

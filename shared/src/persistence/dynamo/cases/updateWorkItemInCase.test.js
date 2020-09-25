@@ -20,7 +20,7 @@ describe('updateWorkItemInCase', () => {
       caseToUpdate: {
         docketEntries: [
           {
-            documentId: '321',
+            docketEntryId: '321',
             workItem: { workItemId: '456' },
           },
         ],

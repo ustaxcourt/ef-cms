@@ -45,7 +45,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
       },
     });
 
-  const documentId = applicationContext.getUniqueId();
+  const docketEntryId = applicationContext.getUniqueId();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -55,11 +55,11 @@ exports.generateNoticeOfDocketChangePdf = async ({
       Body: noticePdf,
       Bucket: documentsBucket,
       ContentType: 'application/pdf',
-      Key: documentId,
+      Key: docketEntryId,
     };
 
     s3Client.upload(params, resolve);
   });
 
-  return documentId;
+  return docketEntryId;
 };

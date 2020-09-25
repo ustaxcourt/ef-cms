@@ -18,7 +18,7 @@ export const unauthedUserSearchesForSealedCaseOrderByKeyword = (
     expect(test.getState('searchResults')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentId: testClient.draftOrders[1].documentId,
+          docketEntryId: testClient.draftOrders[1].docketEntryId,
         }),
       ]),
     );

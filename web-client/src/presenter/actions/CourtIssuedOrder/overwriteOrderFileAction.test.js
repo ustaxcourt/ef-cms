@@ -25,7 +25,7 @@ describe('overwriteOrderFileAction', () => {
       },
       state: {
         documentToEdit: {
-          documentId: 'document-id-123',
+          docketEntryId: 'document-id-123',
         },
         form: {
           primaryDocumentFile: {},
@@ -49,7 +49,7 @@ describe('overwriteOrderFileAction', () => {
       modules: { presenter },
       state: {
         documentToEdit: {
-          documentId: 'document-id-123',
+          docketEntryId: 'document-id-123',
         },
         form: {
           primaryDocumentFile: {},

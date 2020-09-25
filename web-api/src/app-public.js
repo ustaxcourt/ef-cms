@@ -60,7 +60,7 @@ app.post(
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
 );
 app.get(
-  '/public-api/:docketNumber/:documentId/public-document-download-url',
+  '/public-api/:docketNumber/:key/public-document-download-url',
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));

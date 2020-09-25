@@ -50,7 +50,7 @@ export const petitionerFilesAmendedMotion = (test, fakeFile) => {
     );
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'previousDocument',
-      value: previousDocument.documentId,
+      value: previousDocument.docketEntryId,
     });
 
     await test.runSequence('completeDocumentSelectSequence');

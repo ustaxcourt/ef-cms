@@ -49,8 +49,8 @@ export const chambersUserAddsOrderToCase = test => {
       caseDetail: test.getState('caseDetail'),
     });
 
-    test.documentId = first(draftDocuments)
-      ? first(draftDocuments).documentId
+    test.docketEntryId = first(draftDocuments)
+      ? first(draftDocuments).docketEntryId
       : undefined;
   });
 };

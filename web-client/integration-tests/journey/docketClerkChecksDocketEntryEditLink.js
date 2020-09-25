@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkChecksDocketEntryEditLink = (test, data = {}) => {
-  return it('Docket Clerk ', async () => {
+  return it('Docket Clerk checks docket entry edit link', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -15,12 +15,13 @@ export const docketClerkChecksDocketEntryEditLink = (test, data = {}) => {
       },
     );
 
-    const lastIndex = caseDetailFormatted.formattedDocketEntries.length - 1;
+    const lastIndex =
+      caseDetailFormatted.formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
     data.value = !!data.value;
 
     expect(
-      caseDetailFormatted.formattedDocketEntries[data.index]
+      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[data.index]
         .showEditDocketRecordEntry,
     ).toEqual(data.value);
   });

@@ -104,12 +104,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         trialSessionId: trialSessionEntity.trialSessionId,
       });
 
-    const newNoticeOfTrialIssuedDocumentId = applicationContext.getUniqueId();
+    const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: noticeOfTrialIssuedFile,
-      documentId: newNoticeOfTrialIssuedDocumentId,
+      key: newNoticeOfTrialIssuedDocketEntryId,
     });
 
     const trialSessionStartDate = applicationContext
@@ -120,8 +120,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocketEntry = new DocketEntry(
       {
-        description: noticeOfTrialDocumentTitle,
-        documentId: newNoticeOfTrialIssuedDocumentId,
+        docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
@@ -167,18 +166,18 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
     }
 
-    const newStandingPretrialDocumentId = applicationContext.getUniqueId();
+    const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: standingPretrialFile,
-      documentId: newStandingPretrialDocumentId,
+      key: newStandingPretrialDocketEntryId,
     });
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
         description: standingPretrialDocumentTitle,
-        documentId: newStandingPretrialDocumentId,
+        docketEntryId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
@@ -239,14 +238,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeDocketEntryEntity,
+      docketEntryEntity: noticeDocketEntryEntity,
       servedParties,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: standingPretrialDocketEntryEntity,
+      docketEntryEntity: standingPretrialDocketEntryEntity,
       servedParties,
     });
 
@@ -303,15 +302,15 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   }
 
   let hasPaper = newPdfDoc.getPages().length;
-  let documentId = null;
+  let docketEntryId = null;
   let pdfUrl = null;
   if (hasPaper) {
     const paperServicePdfData = await newPdfDoc.save();
-    documentId = applicationContext.getUniqueId();
+    docketEntryId = applicationContext.getUniqueId();
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
-      documentId,
+      key: docketEntryId,
       useTempBucket: true,
     });
     hasPaper = true;
@@ -319,7 +318,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     pdfUrl = (
       await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
         applicationContext,
-        documentId,
+        key: docketEntryId,
         useTempBucket: true,
       })
     ).url;
@@ -329,7 +328,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      documentId,
+      docketEntryId,
       hasPaper,
       pdfUrl,
     },

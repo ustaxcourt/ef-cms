@@ -5,8 +5,8 @@ const { STATUS_TYPES } = applicationContext.getConstants();
 export const docketClerkCreatesDocketEntryForSignedStipulatedDecision = test => {
   return it('docketclerk creates a docket entry for the signed stipulated decision', async () => {
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: test.stipDecisionDocketEntryId,
       docketNumber: test.docketNumber,
-      documentId: test.stipDecisionDocumentId,
     });
 
     expect(test.getState('form.documentType')).toEqual('Stipulated Decision');
