@@ -207,7 +207,9 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "iam:ListInstanceProfilesForRole",
         "iam:AddRoleToInstanceProfile",
         "iam:CreateServiceLinkedRole",
-        "iam:ListAttachedRolePolicies"
+        "iam:ListAttachedRolePolicies",
+        "iam:DeleteRolePolicy",
+        "iam:DeleteRole"
       ],
       "Resource": [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global*",

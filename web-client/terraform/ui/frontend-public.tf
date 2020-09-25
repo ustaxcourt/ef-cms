@@ -190,6 +190,10 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
+  lifecycle {
+    ignore_changes = [aliases]
+  }
+
   aliases = [
     "${var.current_color}-${var.dns_domain}"
   ]
@@ -208,5 +212,21 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   viewer_certificate {
     acm_certificate_arn = var.certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
+  }
+}
+
+data "aws_route53_zone" "public_zone" {
+  name = "${var.zone_name}."
+}
+
+resource "aws_route53_record" "public_www" {
+  zone_id = data.aws_route53_zone.public_zone.zone_id
+  name    = "${var.current_color}-${var.dns_domain}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.public_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.public_distribution.hosted_zone_id
+    evaluate_target_health = false
   }
 }
