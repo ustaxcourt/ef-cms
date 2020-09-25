@@ -3,6 +3,7 @@ const {
   addDocketEntryForOrderAndServePaper,
   addDocketEntryForUploadedPdfAndServe,
   addDocketEntryForUploadedPdfAndServePaper,
+  clickSaveUploadedPdfButton,
   createOrder,
   editAndSignOrder,
   goToCaseDetail,
@@ -127,15 +128,31 @@ describe('Docket Clerk', () => {
     addDocketEntryForOrderAndServePaper();
   });
 
-  it('should be able to upload a court-issued order pdf on the electronically-filed case and serve it', () => {
+  it('should be able to upload a court-issued order pdf on the electronically-filed case', () => {
     goToCaseDetail(testData.createdDocketNumber);
     uploadCourtIssuedDocPdf();
+  });
+
+  // in its own step for retry purposes - sometimes the click fails
+  it('should click the save uploaded PDF button', () => {
+    clickSaveUploadedPdfButton();
+  });
+
+  it('should add a docket entry for the uploaded PDF and serve', () => {
     addDocketEntryForUploadedPdfAndServe();
   });
 
-  it('should be able to upload a court-issued order pdf on the paper-filed case and serve it', () => {
+  it('should be able to upload a court-issued order pdf on the paper-filed case', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
     uploadCourtIssuedDocPdf();
+  });
+
+  // in its own step for retry purposes - sometimes the click fails
+  it('should click the save uploaded PDF button', () => {
+    clickSaveUploadedPdfButton();
+  });
+
+  it('should add a docket entry for the uploaded PDF and serve for paper', () => {
     addDocketEntryForUploadedPdfAndServePaper();
   });
 });
