@@ -364,12 +364,13 @@ describe('addCoversheetInteractor', () => {
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
+        filingDateUpdated: false,
       });
 
       expect(result.dateReceived).toEqual('04/19/19 10:45 am');
     });
 
-    it('shows does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
+    it('does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -386,9 +387,10 @@ describe('addCoversheetInteractor', () => {
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
-          filingDate: '2019-04-19T14:45:15.595Z',
+          filingDate: '2019-04-19T14:45:15x.595Z',
           isPaper: false,
         },
+        filingDateUpdated: false,
       });
 
       expect(result.dateReceived).toEqual('');
@@ -772,6 +774,58 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toBeUndefined();
       expect(result.electronicallyFiled).toBeUndefined();
       expect(result.dateServed).toBeUndefined();
+    });
+
+    it('sets the dateRecieved to dateFiledFormatted when the filingDate has been updated', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+        },
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          createdAt: '2019-02-19T14:45:15.595Z',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
+          filingDate: '2019-05-19T14:45:15.595Z',
+          isPaper: false,
+        },
+        filingDateUpdated: true,
+      });
+
+      expect(result.dateReceived).toBe('05/19/19');
+    });
+
+    it('ets the dateRecieved to createdAt date when the filingDate has not been updated', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+        },
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          createdAt: '2019-02-15T14:45:15.595Z',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
+          filingDate: '2019-05-19T14:45:15.595Z',
+          isPaper: true,
+        },
+        filingDateUpdated: false,
+      });
+
+      expect(result.dateReceived).toBe('02/15/19');
     });
   });
 });

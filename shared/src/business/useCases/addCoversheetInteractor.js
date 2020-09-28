@@ -41,10 +41,11 @@ exports.generateCoverSheetData = ({
           .formatDateString(docketEntryEntity.createdAt, 'MMDDYY')) ||
       '';
   } else {
-    (docketEntryEntity.filingDate &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(docketEntryEntity.filingDate, 'MMDDYY')) ||
+    dateReceivedFormatted =
+      (docketEntryEntity.createdAt &&
+        applicationContext
+          .getUtilities()
+          .formatDateString(docketEntryEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
       '';
   }
 
@@ -185,6 +186,7 @@ exports.addCoversheetInteractor = async ({
   applicationContext,
   docketEntryId,
   docketNumber,
+  filingDateUpdated = false,
   replaceCoversheet = false,
   useInitialData = false,
 }) => {
@@ -220,6 +222,7 @@ exports.addCoversheetInteractor = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity,
+    filingDateUpdated,
     pdfData,
     replaceCoversheet,
     useInitialData,
