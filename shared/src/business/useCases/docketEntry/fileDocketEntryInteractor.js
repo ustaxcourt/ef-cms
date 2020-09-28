@@ -37,7 +37,7 @@ exports.fileDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber } = documentMetadata;
+  const { docketNumber, isFileAttached } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -67,9 +67,11 @@ exports.fileDocketEntryInteractor = async ({
     const [docketEntryId, metadata, relationship] = document;
 
     if (docketEntryId && metadata) {
+      let servedParties;
       const docketRecordEditState =
         metadata.isFileAttached === false ? documentMetadata : {};
 
+      const readyForService = metadata.isFileAttached && !isSavingForLater;
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
@@ -116,34 +118,7 @@ exports.fileDocketEntryInteractor = async ({
 
       docketEntryEntity.setWorkItem(workItem);
 
-      if (metadata.isFileAttached && !isSavingForLater) {
-        const servedParties = aggregatePartiesForService(caseEntity);
-        docketEntryEntity.setAsServed(servedParties.all);
-      } else if (metadata.isFileAttached && isSavingForLater) {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            docketEntryId,
-          });
-      }
-
       if (metadata.isPaper) {
-        if (metadata.isFileAttached && !isSavingForLater) {
-          workItem.setAsCompleted({
-            message: 'completed',
-            user,
-          });
-
-          const servedParties = aggregatePartiesForService(caseEntity);
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity,
-            servedParties,
-          });
-        }
-
         workItem.assignToUser({
           assigneeId: user.userId,
           assigneeName: user.name,
@@ -154,8 +129,38 @@ exports.fileDocketEntryInteractor = async ({
         });
       }
 
-      workItems.push(workItem);
+      if (readyForService) {
+        servedParties = aggregatePartiesForService(caseEntity);
+        docketEntryEntity.setAsServed(servedParties.all);
+        if (metadata.isPaper) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
+          });
+        }
+      }
+
+      if (isFileAttached) {
+        docketEntryEntity.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            docketEntryId,
+          });
+      }
+
       caseEntity.addDocketEntry(docketEntryEntity);
+
+      if (readyForService) {
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity,
+          docketEntryEntity,
+          servedParties,
+        });
+      }
+
+      workItems.push(workItem);
     }
   }
 

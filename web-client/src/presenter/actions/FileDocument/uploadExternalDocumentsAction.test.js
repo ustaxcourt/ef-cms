@@ -131,6 +131,7 @@ describe('uploadExternalDocumentsAction', () => {
           hasSecondarySupportingDocuments: true,
           hasSupportingDocuments: true,
           primaryDocumentFile: { data: 'something' },
+          secondaryDocument: {},
           secondaryDocumentFile: { data: 'something2' },
           secondarySupportingDocuments: [
             {
