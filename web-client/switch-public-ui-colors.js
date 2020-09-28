@@ -74,7 +74,7 @@ const run = async () => {
     .promise();
 
   const zone = await route53
-    .listHostedZonesByName({ DNSName: '${ZONE_NAME}.' })
+    .listHostedZonesByName({ DNSName: `${ZONE_NAME}.` })
     .promise();
 
   const zoneId = zone.HostedZones[0].Id;
