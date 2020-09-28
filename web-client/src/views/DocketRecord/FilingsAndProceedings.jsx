@@ -36,6 +36,7 @@ export const FilingsAndProceedings = connect(
               link
               aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(
+                'text-left',
                 entry.isStricken && 'stricken-docket-record',
               )}
               onClick={() =>
