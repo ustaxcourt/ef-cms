@@ -18,6 +18,7 @@ exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  filingDateUpdated,
   useInitialData,
 }) => {
   const isLodged = docketEntryEntity.lodged;
@@ -40,11 +41,10 @@ exports.generateCoverSheetData = ({
           .formatDateString(docketEntryEntity.createdAt, 'MMDDYY')) ||
       '';
   } else {
-    dateReceivedFormatted =
-      (docketEntryEntity.createdAt &&
-        applicationContext
-          .getUtilities()
-          .formatDateString(docketEntryEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
+    (docketEntryEntity.filingDate &&
+      applicationContext
+        .getUtilities()
+        .formatDateString(docketEntryEntity.filingDate, 'MMDDYY')) ||
       '';
   }
 
@@ -86,7 +86,9 @@ exports.generateCoverSheetData = ({
     certificateOfService,
     dateFiledLodged: dateFiledFormatted,
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
-    dateReceived: dateReceivedFormatted,
+    dateReceived: filingDateUpdated
+      ? dateFiledFormatted
+      : dateReceivedFormatted,
     dateServed: dateServedFormatted,
     docketNumberWithSuffix,
     documentTitle,
@@ -122,6 +124,7 @@ exports.addCoverToPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  filingDateUpdated = false,
   pdfData,
   replaceCoversheet = false,
   useInitialData = false,
@@ -130,6 +133,7 @@ exports.addCoverToPdf = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity,
+    filingDateUpdated,
     useInitialData,
   });
 
