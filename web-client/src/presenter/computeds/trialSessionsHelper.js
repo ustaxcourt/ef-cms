@@ -8,9 +8,7 @@ export const trialSessionsHelper = get => {
   const isAllTab = tab === 'all';
 
   let additionalColumnsShown = 0;
-  if (isOpenTab) {
-    additionalColumnsShown = 2;
-  } else if (isAllTab) {
+  if (isOpenTab || isAllTab) {
     additionalColumnsShown = 1;
   }
 
