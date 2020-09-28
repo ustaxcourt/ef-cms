@@ -10,8 +10,8 @@
 3) If a new dynamo table and elasticsearch domain is necessary, duplicate the modules found in `web-api/terraform/template/main.tf`. Be sure to update the version number at the end of the module names, `table_name`, and `domain_name`. Do not delete the old modules.
 4) Run a deploy in circle.
 5) Verify the new application works at: 
-	- https://<DEPLOYED_COLOR>-dev.ustc-case-mgmt.flexion.us
-	- https://app-<DEPLOYED_COLOR>-dev.ustc-case-mgmt.flexion.us
+	- https://<DEPLOYED_COLOR>-<ENV>.<ZONE_NAME>
+	- https://app-<DEPLOYED_COLOR>-<ENV>.<ZONE_NAME>
 6) Destroy the migration infrastructure to turn off the live streams
 	`DESTINATION_TABLE=b SOURCE_TABLE=a STREAM_ARN=abc npm run destroy:migration -- <DEPLOYED_ENV>`
 
@@ -37,3 +37,7 @@ Delete the role in the AWS IAM console and rerun `npm run deploy:environment-spe
 
 #### Failing smoke tests
 When this is run for the first time on a new environment, the smoke tests may fail for up to an hour after the initial deploy due to the header security lambda redeploying to all edge locations. To resolve, wait an hour and rerun the smoke tests.
+
+
+#### 403 on websockets endpoint
+If the websockets endpoint returns a 403 Unauthorized error (can be seen during trial session smoke tests), redeploy the websocket APIs for the environment in the AWS console under API Gateway (both east and west).
