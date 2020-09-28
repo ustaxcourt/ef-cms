@@ -25,13 +25,15 @@ const { getUserToken, login } = require('../support/pages/login');
 
 let token = null;
 
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
 // This test is a work in progress. We need to chat about an approach for using
 // test data that's consistent on all environments: https://trello.com/c/ZYDJzXay/567-filings-and-qc
 describe.skip('Petitions clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -67,7 +69,7 @@ describe.skip('Petitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -92,7 +94,7 @@ describe.skip('Private practitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
