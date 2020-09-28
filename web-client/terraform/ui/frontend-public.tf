@@ -7,7 +7,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "frontend_public" {
-  bucket = "${var.current_color}-${var.dns_domain}"
+  bucket = "${var.current_color}.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.public_policy_bucket.json
 
@@ -22,7 +22,7 @@ resource "aws_s3_bucket" "frontend_public" {
 }
 
 resource "aws_s3_bucket" "failover_public" {
-  bucket = "failover-${var.current_color}-${var.dns_domain}"
+  bucket = "failover-${var.current_color}.${var.dns_domain}"
 
   policy = data.aws_iam_policy_document.public_policy_bucket_failover.json
 
@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "public_policy_bucket" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::${var.current_color}-${var.dns_domain}/*"
+      "arn:aws:s3:::${var.current_color}.${var.dns_domain}/*"
     ]
   }
 }
@@ -71,31 +71,31 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
     actions = ["s3:GetObject"]
 
     resources = [
-      "arn:aws:s3:::failover-${var.current_color}-${var.dns_domain}/*"
+      "arn:aws:s3:::failover-${var.current_color}.${var.dns_domain}/*"
     ]
   }
 }
 
 resource "aws_cloudfront_distribution" "public_distribution" {
   origin_group {
-    origin_id = "group-${var.current_color}-${var.dns_domain}"
+    origin_id = "group-${var.current_color}.${var.dns_domain}"
 
     failover_criteria {
       status_codes = [403, 404, 500, 502, 503, 504]
     }
 
     member {
-      origin_id = "primary-${var.current_color}-${var.dns_domain}"
+      origin_id = "primary-${var.current_color}.${var.dns_domain}"
     }
 
     member {
-      origin_id = "failover-${var.current_color}-${var.dns_domain}"
+      origin_id = "failover-${var.current_color}.${var.dns_domain}"
     }
   }
 
   origin {
     domain_name = aws_s3_bucket.frontend_public.website_endpoint
-    origin_id   = "primary-${var.current_color}-${var.dns_domain}"
+    origin_id   = "primary-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
       http_port              = "80"
@@ -113,7 +113,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
   origin {
     domain_name = aws_s3_bucket.failover_public.website_endpoint
-    origin_id   = "failover-${var.current_color}-${var.dns_domain}"
+    origin_id   = "failover-${var.current_color}.${var.dns_domain}"
 
     custom_origin_config {
       http_port              = "80"
@@ -143,7 +143,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "group-${var.current_color}-${var.dns_domain}"
+    target_origin_id       = "group-${var.current_color}.${var.dns_domain}"
     min_ttl                = 0
     default_ttl            = var.cloudfront_default_ttl
     max_ttl                = var.cloudfront_max_ttl
@@ -167,7 +167,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     path_pattern     = "/index.html"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "group-${var.current_color}-${var.dns_domain}"
+    target_origin_id = "group-${var.current_color}.${var.dns_domain}"
 
     lambda_function_association {
       event_type   = "origin-response"
@@ -195,7 +195,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   }
 
   aliases = [
-    "${var.current_color}-${var.dns_domain}"
+    "${var.current_color}.${var.dns_domain}"
   ]
 
   restrictions {
@@ -206,11 +206,11 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
 
   depends_on = [
-    var.certificate
+    var.public_certificate
   ]
 
   viewer_certificate {
-    acm_certificate_arn = var.certificate.acm_certificate_arn
+    acm_certificate_arn = var.public_certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
@@ -221,7 +221,7 @@ data "aws_route53_zone" "public_zone" {
 
 resource "aws_route53_record" "public_www" {
   zone_id = data.aws_route53_zone.public_zone.zone_id
-  name    = "${var.current_color}-${var.dns_domain}"
+  name    = "${var.current_color}.${var.dns_domain}"
   type    = "A"
 
   alias {
