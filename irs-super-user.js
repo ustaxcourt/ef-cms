@@ -14,8 +14,6 @@ const cognito = new CognitoIdentityServiceProvider({
 const ClientId = '5aatnhmbjcq2lhdcqc9r4mvaok';
 const email = 'service.agent.test@irs.gov';
 
-const { DEFAULT_ACCOUNT_PASS } = process.env;
-
 const askQuestion = query => {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -37,7 +35,7 @@ const registerUser = async () => {
     .initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
-        PASSWORD: DEFAULT_ACCOUNT_PASS,
+        PASSWORD: 'WelcomeToFlavortown!',
         USERNAME: email,
       },
       ClientId,
@@ -50,7 +48,7 @@ const registerUser = async () => {
       .respondToAuthChallenge({
         ChallengeName: 'NEW_PASSWORD_REQUIRED',
         ChallengeResponses: {
-          NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
+          NEW_PASSWORD: 'WelcomeToFlavortown!',
           USERNAME: email,
         },
         ClientId,
@@ -64,7 +62,7 @@ const registerUser = async () => {
     .initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
-        PASSWORD: DEFAULT_ACCOUNT_PASS,
+        PASSWORD: 'WelcomeToFlavortown!',
         USERNAME: email,
       },
       ClientId,
@@ -99,7 +97,7 @@ const login = async () => {
     .initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
-        PASSWORD: DEFAULT_ACCOUNT_PASS,
+        PASSWORD: 'WelcomeToFlavortown!',
         USERNAME: email,
       },
       ClientId,
