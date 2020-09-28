@@ -802,7 +802,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toBe('05/19/19');
     });
 
-    it('ets the dateRecieved to createdAt date when the filingDate has not been updated', () => {
+    it('sets the dateRecieved to createdAt date when the filingDate has not been updated', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
