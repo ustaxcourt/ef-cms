@@ -248,6 +248,14 @@ const INITIAL_DOCUMENT_TYPES = {
   stin: STIN_DOCKET_ENTRY_TYPE,
 };
 
+const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
+  applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
+  ownershipDisclosure: 'ownershipDisclosureFile',
+  petition: 'petitionFile',
+  requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
+  stin: 'stinFile',
+};
+
 const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
@@ -1017,6 +1025,7 @@ module.exports = deepFreeze({
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_FILE_MAP,
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
