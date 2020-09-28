@@ -15,23 +15,23 @@ BRANCH=$1
 if  [[ $BRANCH == 'develop' ]] ; then
   echo 'efcms-dev-2'
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo 'efcms-exp1-1'
+  echo 'efcms-exp1-2'
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo 'efcms-exp2-1'
+  echo 'efcms-exp2-2'
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo 'efcms-irs-1'
+  echo 'efcms-irs-2'
 elif [[ $BRANCH == 'test' ]] ; then
-  echo 'efcms-test-1'
+  echo 'efcms-test-2'
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'efcms-mig-1'
+  echo 'efcms-mig-2'
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'efcms-stg-1'
+  echo 'efcms-stg-2'
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'efcms-prod-1'
+  echo 'efcms-prod-2'
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo 'efcms-daw-1'
+  echo 'efcms-daw-2'
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo 'efcms-prod-1'
+  echo 'efcms-prod-2'
 else
   exit 1;
 fi
