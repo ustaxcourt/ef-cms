@@ -387,7 +387,7 @@ describe('addCoversheetInteractor', () => {
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
-          filingDate: '2019-04-19T14:45:15x.595Z',
+          filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
         filingDateUpdated: false,
