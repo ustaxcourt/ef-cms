@@ -46,9 +46,7 @@ exports.generateTrialCalendarPdfInteractor = async ({
     .map(openCase => {
       return {
         caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
-        docketNumber: `${openCase.docketNumber}${
-          openCase.docketNumberSuffix || ''
-        }`,
+        docketNumber: openCase.docketNumberWithSuffix,
         petitionerCounsel: (openCase.privatePractitioners || []).map(
           getPractitionerName,
         ),

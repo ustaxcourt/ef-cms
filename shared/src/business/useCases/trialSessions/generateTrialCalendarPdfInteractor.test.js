@@ -14,9 +14,13 @@ describe('generateTrialCalendarPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([
-        MOCK_CASE,
-        { ...MOCK_CASE, docketNumber: '102-19' },
-        { ...MOCK_CASE, docketNumber: '123-20', removedFromTrial: true },
+        { ...MOCK_CASE, docketNumberWithSuffix: '101-18' },
+        { ...MOCK_CASE, docketNumberWithSuffix: '102-19' },
+        {
+          ...MOCK_CASE,
+          docketNumberWithSuffix: '123-20',
+          removedFromTrial: true,
+        },
       ]);
 
     applicationContext
