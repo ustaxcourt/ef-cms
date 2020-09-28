@@ -13,7 +13,7 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then
-  echo 'efcms-dev-1'
+  echo 'efcms-dev-2'
 elif [[ $BRANCH == 'experimental1' ]] ; then
   echo 'efcms-exp1-1'
 elif [[ $BRANCH == 'experimental2' ]] ; then
