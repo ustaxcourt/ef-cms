@@ -22,7 +22,7 @@ resource "aws_cognito_user_pool" "pool" {
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "Update Your Email with the U.S. Tax Court"
-      email_message = "Welcome to the U.S. Tax Court case management system. You are now able to log in to view and manage your cases.<br /><br /><b>Your username: </b>{username}<br /></br /><b>Temporary password: </b>{####}<br /><br /><br />For added security, please log in to the <a href='https://app-${var.dns_domain}/'>U.S. Tax Court site</a> to change your password."
+      email_message = "Welcome to the U.S. Tax Court case management system. You are now able to log in to view and manage your cases.<br /><br /><b>Your username: </b>{username}<br /></br /><b>Temporary password: </b>{####}<br /><br /><br />For added security, please log in to the <a href='https://app.${var.dns_domain}/'>U.S. Tax Court site</a> to change your password."
     }
   }
 
@@ -82,7 +82,7 @@ resource "aws_cognito_user_pool_client" "client" {
 
   callback_urls = [
     "http://localhost:1234/log-in",
-    "https://app-${var.dns_domain}/log-in",
+    "https://app.${var.dns_domain}/log-in",
   ]
 
   allowed_oauth_flows          = ["code", "implicit"]
@@ -187,7 +187,7 @@ resource "aws_cognito_user_pool_client" "irs_client" {
 
   callback_urls = [
     "http://localhost:1234/log-in",
-    "https://app-${var.dns_domain}/log-in",
+    "https://app.${var.dns_domain}/log-in",
   ]
 
   allowed_oauth_flows          = ["code", "implicit"]
