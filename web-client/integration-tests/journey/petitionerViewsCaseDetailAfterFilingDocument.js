@@ -68,6 +68,13 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
         }),
       ]),
     );
+
+    const statement = caseDetailFormatted.formattedDocketEntries.find(
+      entry => entry.documentType === 'Statement',
+    );
+
+    expect(statement.showLinkToDocument).toBeTruthy();
+
     expect(
       caseDetailFormatted.formattedDocketEntriesOnDocketRecord[1].eventCode,
     ).toEqual('RQT');
