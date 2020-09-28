@@ -21,6 +21,4 @@
 ENV=$1
 ELASTICSEARCH_ENDPOINT=$2
 
-export ELASTICSEARCH_ENDPOINT
-
 node ./web-api/delete-elasticsearch-index.js

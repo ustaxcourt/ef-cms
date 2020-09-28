@@ -32,7 +32,7 @@ export const uploadExternalDocumentsAction = async ({
 
   if (form.secondaryDocumentFile) {
     documentFiles.secondary = form.secondaryDocumentFile;
-    documentFiles.isFileAttached = true;
+    documentMetadata.secondaryDocument.isFileAttached = true;
   }
 
   if (form.hasSupportingDocuments) {
