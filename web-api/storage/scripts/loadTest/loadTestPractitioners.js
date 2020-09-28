@@ -31,7 +31,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   const token = await getUserToken({
     cognito,
     env: process.env.ENV,
-    password: 'Testing1234$',
+    password: process.env.DEFAULT_ACCOUNT_PASS,
     username: 'practitioner1@example.com',
   });
 
