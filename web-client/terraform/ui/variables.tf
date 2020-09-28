@@ -32,6 +32,10 @@ variable "strip_basepath_arn" {
   type = string
 }
 
-variable "certificate" {
+variable "public_certificate" {
+  type = any
+}
+
+variable "private_certificate" {
   type = any
 }

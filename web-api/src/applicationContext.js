@@ -743,6 +743,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removePdfFromDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
+const {
   removeSignatureFromDocumentInteractor,
 } = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
 const {
@@ -1012,7 +1015,7 @@ const execPromise = util.promisify(exec);
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
-    ? `app-${process.env.EFCMS_DOMAIN}`
+    ? `app.${process.env.EFCMS_DOMAIN}`
     : 'localhost:1234',
   currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -1594,6 +1597,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         reprocessFailedRecordsInteractor,
