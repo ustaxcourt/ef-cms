@@ -61,12 +61,13 @@ const testData = {
 };
 const firstDocketNumber = createDocketNumber();
 const secondDocketNumber = createDocketNumber();
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Petitions Clerk', () => {
   before(async () => {
     const result = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
   });
@@ -81,7 +82,7 @@ describe('Petitions Clerk', () => {
       migrateRestApi = await getRestApi();
       const results = await getUserToken(
         'migrator@example.com',
-        'Testing1234$',
+        DEFAULT_ACCOUNT_PASS,
       );
       migrateUserToken = results.AuthenticationResult.IdToken;
     });
