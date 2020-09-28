@@ -212,7 +212,7 @@ describe('trialSessionsHelper', () => {
     expect(result.additionalColumnsShown).toEqual(0);
   });
 
-  it('should show 2 additional table columns for `open` sessions', () => {
+  it('should show 1 additional table column for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         currentViewMetadata: {
@@ -223,7 +223,7 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.additionalColumnsShown).toEqual(2);
+    expect(result.additionalColumnsShown).toEqual(1);
   });
 
   it('should show 1 additional table column for `all` sessions', () => {
