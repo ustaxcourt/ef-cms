@@ -15,7 +15,6 @@ export const trialSessionsHelper = get => {
   return {
     additionalColumnsShown,
     showNoticeIssued: isOpenTab,
-    showNumberOfCases: isOpenTab,
     showSessionStatus: isAllTab,
     showUnassignedJudgeFilter: isNewTab,
   };

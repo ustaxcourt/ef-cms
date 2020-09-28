@@ -72,62 +72,6 @@ describe('trialSessionsHelper', () => {
     expect(result.showNoticeIssued).toEqual(false);
   });
 
-  it('should show the Number of Cases column for `open` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(true);
-  });
-
-  it('should NOT show the Number of Cases column for `new` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'new',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(false);
-  });
-
-  it('should NOT show the Number of Cases column for `closed` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'closed',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(false);
-  });
-
-  it('should NOT show the Number of Cases column for `all` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'all',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(false);
-  });
-
   it('should show the Session Status column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
