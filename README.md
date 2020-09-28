@@ -375,9 +375,7 @@ cohensChambers1@example.com – cohensChambers5@example.com
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
 
-The password for all accounts is:
-
-`Testing1234$`
+The password for all accounts is set as an environment variable: `USTC_TEST_ACCOUNT_PASS`.
 
 ## Editor configuration
 
