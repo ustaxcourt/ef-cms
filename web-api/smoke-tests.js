@@ -5,10 +5,11 @@ const axios = require('axios');
 const ENV = process.argv[2];
 const REGION = process.argv[3];
 const DEPLOYING_COLOR = process.argv[4];
+const DEFAULT_ACCOUNT_PASS = process.argv[5];
 
-if (!ENV || !REGION) {
+if (!ENV || !REGION || !DEFAULT_ACCOUNT_PASS) {
   console.error(
-    "Missing required arguments: please invoke this script like so 'node smoke-tests ${ENV} ${REGION}'",
+    "Missing required arguments: please invoke this script like so 'node smoke-tests ${ENV} ${REGION} ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}'",
   );
   process.exit(1);
 }
@@ -77,7 +78,7 @@ const getUserToken = async (username, password) => {
 
   const token = await getUserToken(
     'petitionsclerk1@example.com',
-    'Testing1234$',
+    DEFAULT_ACCOUNT_PASS,
   );
 
   const response = await axios.get(`${services['gateway_api']}/users`, {

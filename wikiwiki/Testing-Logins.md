@@ -1,7 +1,7 @@
 [Return to Directory](./README.md)
 
-
-PW Testing1234$
+#### Account Passwords
+The password is set to the environment variable found in the [setup documentation](../docs/environments/setup.md).
 
 ### Petitioner
 petitioner1@example.com – petitioner5@example.com
@@ -51,16 +51,16 @@ trialclerk1@example.com – trialclerk5@example.com
 
 ## Private Practitioner
 email: flexionustc+privatePractitioner@gmail.com
-pass: Testing1234$
+pass: [noted above](./Testing-Logins.md#account-passwords)
 
 ## Petitioner
 email: flexionustc+petitioner@gmail.com
-pass: Testing1234$
+pass: [noted above](./Testing-Logins.md#account-passwords)
 
 ## IRS Practitioner
 email: flexionustc+irsPractitioner@gmail.com
-pass: Testing1234$
+pass: [noted above](./Testing-Logins.md#Account-Passwords)
 
 ## IRS Super User
 email:  service.agent.test@irs.gov
-pass: Testing1234$
+pass: [noted above](./Testing-Logins.md#account-passwords)
