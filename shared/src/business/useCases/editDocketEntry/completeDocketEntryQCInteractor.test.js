@@ -448,4 +448,27 @@ describe('completeDocketEntryQCInteractor', () => {
       otherFilingParty: 'Bert Brooks',
     });
   });
+
+  it('updates the automaticBlocked status of a case', async () => {
+    expect(caseRecord.automaticBlocked).toBeFalsy();
+
+    const { caseDetail } = await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Edited Document',
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        freeText: 'Some text about this document',
+        hasOtherFilingParty: true,
+        isPaper: true,
+        otherFilingParty: 'Bert Brooks',
+        partyPrimary: true,
+        pending: true,
+      },
+    });
+
+    expect(caseDetail.automaticBlocked).toBeTruthy();
+  });
 });
