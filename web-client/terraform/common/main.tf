@@ -10,23 +10,24 @@ provider "aws" {
 module "ui-public-certificate" {
   source = "../../../iam/terraform/shared/certificates"
 
-  domain_name      = var.zone_name
-  hosted_zone_name = "${var.zone_name}."
-  certificate_name = var.zone_name
-  environment      = var.environment
-  description      = "Certificate for public facing ${var.zone_name}"
-  product_domain   = "EFCMS"
+  domain_name               = var.dns_domain
+  hosted_zone_name          = "${var.zone_name}."
+  subject_alternative_names = ["*.${var.dns_domain}"]
+  certificate_name          = var.dns_domain
+  environment               = var.environment
+  description               = "Certificate for public facing ${var.dns_domain}"
+  product_domain            = "EFCMS"
 }
 
 module "ui-certificate" {
   source = "../../../iam/terraform/shared/certificates"
 
-  domain_name      = "*.${var.dns_domain}"
-  hosted_zone_name = "${var.zone_name}."
-  certificate_name = "wildcard.${var.dns_domain}"
-  environment      = var.environment
-  description      = "Certificate for wildcard.${var.dns_domain}"
-  product_domain   = "EFCMS"
+  domain_name               = "*.${var.dns_domain}"
+  hosted_zone_name          = "${var.zone_name}."
+  certificate_name          = "wildcard.${var.dns_domain}"
+  environment               = var.environment
+  description               = "Certificate for wildcard.${var.dns_domain}"
+  product_domain            = "EFCMS"
 }
 
 module "ui-green" {
