@@ -5,7 +5,7 @@ output "acm_certificate_arn" {
 
 output "acm_certificate_dns_validation_record" {
   description = "record which is used to validate acm certificate"
-  value       = aws_route53_record.this.*.name[0]
+  value       = aws_route53_record.this.name
 }
 
 output "dns_validation" {
