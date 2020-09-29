@@ -178,6 +178,7 @@
     "destroy:dev": "node env-destroy-utils/destroyEnvironment.js dev",
     "destroy:exp1": "node env-destroy-utils/destroyEnvironment.js exp1",
     "destroy:exp2": "node env-destroy-utils/destroyEnvironment.js exp2",
+    "destroy:exp3": "node env-destroy-utils/destroyEnvironment.js exp3",
     "destroy:prod": "node env-destroy-utils/destroyEnvironment.js prod",
     "destroy:stg": "node env-destroy-utils/destroyEnvironment.js stg",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
