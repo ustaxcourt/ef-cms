@@ -811,6 +811,10 @@ const JUDGES_CHAMBERS = {
     label: 'Leyden’s Chambers',
     section: 'leydensChambers',
   },
+  LEGACY_JUDGES_CHAMBERS_SECTION: {
+    label: 'Legacy Judges Chambers',
+    section: 'legacyJudgesChambers',
+  },
   MARVELS_CHAMBERS_SECTION: {
     label: 'Marvel’s Chambers',
     section: 'marvelsChambers',

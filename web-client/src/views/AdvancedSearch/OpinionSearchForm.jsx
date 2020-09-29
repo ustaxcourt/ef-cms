@@ -9,7 +9,7 @@ import React from 'react';
 export const OpinionSearchForm = connect(
   {
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    judges: state.judges,
+    judges: state.allJudges,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
