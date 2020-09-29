@@ -18,6 +18,7 @@ exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  filingDateUpdated,
   useInitialData,
 }) => {
   const isLodged = docketEntryEntity.lodged;
@@ -86,7 +87,9 @@ exports.generateCoverSheetData = ({
     certificateOfService,
     dateFiledLodged: dateFiledFormatted,
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
-    dateReceived: dateReceivedFormatted,
+    dateReceived: filingDateUpdated
+      ? dateFiledFormatted
+      : dateReceivedFormatted,
     dateServed: dateServedFormatted,
     docketNumberWithSuffix,
     documentTitle,
@@ -122,6 +125,7 @@ exports.addCoverToPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
+  filingDateUpdated = false,
   pdfData,
   replaceCoversheet = false,
   useInitialData = false,
@@ -130,6 +134,7 @@ exports.addCoverToPdf = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity,
+    filingDateUpdated,
     useInitialData,
   });
 
@@ -181,6 +186,7 @@ exports.addCoversheetInteractor = async ({
   applicationContext,
   docketEntryId,
   docketNumber,
+  filingDateUpdated = false,
   replaceCoversheet = false,
   useInitialData = false,
 }) => {
@@ -216,6 +222,7 @@ exports.addCoversheetInteractor = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity,
+    filingDateUpdated,
     pdfData,
     replaceCoversheet,
     useInitialData,
