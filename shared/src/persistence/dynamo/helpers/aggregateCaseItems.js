@@ -26,9 +26,10 @@ exports.aggregateCaseItems = caseAndCaseItems => {
 
   let associatedJudge;
   if (theCase && theCase.judgeUserId) {
-    associatedJudge = caseAndCaseItems.find(
+    const associatedJudgeId = caseAndCaseItems.find(
       item => item.sk === `user|${theCase.judgeUserId}`,
-    ).name;
+    );
+    associatedJudge = associatedJudgeId ? associatedJudgeId.name : undefined;
   }
 
   const sortedDocuments = sortBy(documents, 'createdAt');
