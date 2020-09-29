@@ -13,25 +13,25 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then
-  echo 'efcms-search-dev-1'
+  echo 'efcms-search-dev-2'
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo 'efcms-search-exp1-1'
+  echo 'efcms-search-exp1-2'
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo 'efcms-search-exp2-1'
+  echo 'efcms-search-exp2-2'
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo 'efcms-search-irs-1'
+  echo 'efcms-search-irs-2'
 elif [[ $BRANCH == 'test' ]] ; then
-  echo 'efcms-search-test-1'
+  echo 'efcms-search-test-2'
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo 'efcms-search-mig-1'
+  echo 'efcms-search-mig-2'
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'efcms-search-stg-1'
+  echo 'efcms-search-stg-2'
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'efcms-search-prod-1'
+  echo 'efcms-search-prod-2'
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo 'efcms-search-daw-1'
+  echo 'efcms-search-daw-2'
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo 'efcms-search-prod-1'
+  echo 'efcms-search-prod-2'
 else
   exit 1;
 fi

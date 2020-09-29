@@ -18,6 +18,7 @@
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
+[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
 
 ENV=$1
 REGION="us-east-1"
@@ -42,7 +43,7 @@ generate_post_data() {
   cat <<EOF
 {
   "email": "$email",
-  "password": "Testing1234$",
+  "password": "${DEFAULT_ACCOUNT_PASS}",
   "role": "$role",
   "section": "$section",
   "name": "$name",
@@ -73,7 +74,7 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"')
+    --auth-parameters USERNAME="${email}"',PASSWORD="${DEFAULT_ACCOUNT_PASS}"')
 
   session=$(echo "${response}" | jq -r ".Session")
 
@@ -83,7 +84,7 @@ createAccount() {
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
+      --challenge-responses 'NEW_PASSWORD="${DEFAULT_ACCOUNT_PASS}",'USERNAME="${email}" \
       --session="${session}")
   fi
 }
