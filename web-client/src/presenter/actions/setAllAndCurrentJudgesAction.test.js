@@ -9,7 +9,7 @@ describe('setAllAndCurrentJudgesAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
-  it('populates state.allJudges with all users.props whose role is "judge" or "legacyJudge"', async () => {
+  it('populates state.legacyAndCurrentJudges with all users.props whose role is "judge" or "legacyJudge"', async () => {
     const result = await runAction(setAllAndCurrentJudgesAction, {
       modules: { presenter },
       props: {
@@ -20,10 +20,10 @@ describe('setAllAndCurrentJudgesAction', () => {
       },
     });
 
-    expect(result.state.allJudges.length).toBe(2);
+    expect(result.state.legacyAndCurrentJudges.length).toBe(2);
   });
 
-  it('populates state.currentJudges with all users.props whose role is "judge"', async () => {
+  it('populates state.judges with all users.props whose role is "judge"', async () => {
     const result = await runAction(setAllAndCurrentJudgesAction, {
       modules: { presenter },
       props: {
@@ -34,8 +34,8 @@ describe('setAllAndCurrentJudgesAction', () => {
       },
     });
 
-    expect(result.state.currentJudges.length).toBe(1);
-    expect(result.state.currentJudges[0]).toEqual({
+    expect(result.state.judges.length).toBe(1);
+    expect(result.state.judges[0]).toEqual({
       name: 'I am not a legacy judge',
       role: USER_ROLES.judge,
     });
