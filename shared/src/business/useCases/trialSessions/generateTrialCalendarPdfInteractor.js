@@ -28,7 +28,7 @@ exports.generateTrialCalendarPdfInteractor = async ({
       trialSession,
     });
 
-  const openCases = await applicationContext
+  const calendaredCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
@@ -41,20 +41,20 @@ exports.generateTrialCalendarPdfInteractor = async ({
     return `${name}${barNumberFormatted}`;
   };
 
-  const formattedOpenCases = openCases.map(openCase => {
-    return {
-      caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
-      docketNumber: `${openCase.docketNumber}${
-        openCase.docketNumberSuffix || ''
-      }`,
-      petitionerCounsel: (openCase.privatePractitioners || []).map(
-        getPractitionerName,
-      ),
-      respondentCounsel: (openCase.irsPractitioners || []).map(
-        getPractitionerName,
-      ),
-    };
-  });
+  const formattedOpenCases = calendaredCases
+    .filter(calendaredCase => calendaredCase.removedFromTrial !== true)
+    .map(openCase => {
+      return {
+        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
+        docketNumber: openCase.docketNumberWithSuffix,
+        petitionerCounsel: (openCase.privatePractitioners || []).map(
+          getPractitionerName,
+        ),
+        respondentCounsel: (openCase.irsPractitioners || []).map(
+          getPractitionerName,
+        ),
+      };
+    });
 
   const {
     formattedCourtReporter,
