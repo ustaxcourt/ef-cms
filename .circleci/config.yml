@@ -554,7 +554,7 @@ jobs:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1"
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}"
             else
               echo "skipping…"
             fi
@@ -562,7 +562,7 @@ jobs:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-west-1 ${DEPLOYING_COLOR}"
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" -e "CURRENT_COLOR=${CURRENT_COLOR}" -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-west-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}"
             else
               echo "skipping…"
             fi

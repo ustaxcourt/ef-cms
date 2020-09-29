@@ -13,8 +13,12 @@
 
 # Arguments
 #   - $1 - the environment to clear
+#   - $2 - the dynamo table name to clear
+#   - $3 - the elasticsearch endpoint to clear
 
 [ -z "$1" ] && echo "The branch name to check must be provided as the \$1 argument." && exit 1
+[ -z "$2" ] && echo "The dynamo table name to clear must be provided as the \$2 argument." && exit 1
+[ -z "$3" ] && echo "The elasticsearch endpoint to clear must be provided as the \$3 argument." && exit 1
 [ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1

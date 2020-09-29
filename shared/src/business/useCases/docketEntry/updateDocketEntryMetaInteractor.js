@@ -112,7 +112,7 @@ exports.updateDocketEntryMetaInteractor = async ({
         applicationContext,
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
-        replaceCoversheet: true,
+        filingDateUpdated,
       });
     }
   }
