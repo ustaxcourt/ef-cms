@@ -1,4 +1,3 @@
-import { application } from 'express';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getFilterCurrentJudgeUsersAction } from './getFilterCurrentJudgeUsersAction';
 import { presenter } from '../presenter-mock';
