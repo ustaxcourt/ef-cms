@@ -47,7 +47,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     ...theCase,
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocketEntries: sortedArchivedDocketEntries,
-    associatedJudge: theCase.associatedJudge
+    associatedJudge: theCase?.associatedJudge
       ? theCase.associatedJudge
       : associatedJudge,
     correspondence: sortedCorrespondences,
