@@ -24,6 +24,16 @@
     "entityName": "User"
   },
   {
+    "role": "legacyJudge",
+    "name": "Legacy Judge Fieri",
+    "section": "fieriChambers",
+    "userId": "dadbad42-18d0-43ec-bafb-654e83405416",
+    "email": "judgeFieri@example.com",
+    "judgeFullName": "Guy S. B. Fieri",
+    "judgeTitle": "Legacy Judge",
+    "entityName": "User"
+  },
+  {
     "role": "judge",
     "name": "Judge Armen",
     "section": "armensChambers",

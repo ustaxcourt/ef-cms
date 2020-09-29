@@ -18,6 +18,8 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
   echo 'efcms-search-exp1-1'
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo 'efcms-search-exp2-1'
+elif [[ $BRANCH == 'experimental3' ]] ; then
+  echo 'efcms-search-exp3-1'
 elif [[ $BRANCH == 'irs' ]] ; then
   echo 'efcms-search-irs-1'
 elif [[ $BRANCH == 'test' ]] ; then
