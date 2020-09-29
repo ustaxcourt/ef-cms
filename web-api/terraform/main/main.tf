@@ -36,4 +36,5 @@ module "ef-cms_apis" {
   green_table_name           = var.green_table_name
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   green_elasticsearch_domain = var.green_elasticsearch_domain
+  destination_table          = var.destination_table
 }
