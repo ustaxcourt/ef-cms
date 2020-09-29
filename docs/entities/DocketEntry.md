@@ -1518,6 +1518,22 @@
             type: "any"
             flags: 
               presence: "optional"
+    judgeUserId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Unique ID for the associated judge."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     lodged: 
       type: "boolean"
       flags: 
