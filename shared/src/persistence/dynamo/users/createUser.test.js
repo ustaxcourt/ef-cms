@@ -200,6 +200,48 @@ describe('createUser', () => {
       });
     });
 
+    it('attempts to persist a legacy judge user with a section mapping record for the chambers and the judge', async () => {
+      const judgeUser = {
+        name: 'Legacy Judge Ginsburg',
+        role: ROLES.legacyJudge,
+        section: 'legacyJudgeChambers',
+      };
+
+      await createUserRecords({
+        applicationContext,
+        user: judgeUser,
+        userId,
+      });
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        3,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'section|legacyJudgeChambers',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'section|judge',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
+        Item: {
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
+          ...judgeUser,
+        },
+      });
+    });
+
     it('does not persist mapping records for practitioner without barNumber', async () => {
       await createUserRecords({
         applicationContext,
