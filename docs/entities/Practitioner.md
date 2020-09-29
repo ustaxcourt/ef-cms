@@ -474,6 +474,7 @@
         - "irsPractitioner"
         - "irsSuperuser"
         - "judge"
+        - "legacyJudge"
         - "petitioner"
         - "petitionsclerk"
         - "privatePractitioner"
