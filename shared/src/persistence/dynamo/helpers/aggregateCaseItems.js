@@ -25,7 +25,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   );
 
   let associatedJudge;
-  if (theCase.judgeUserId) {
+  if (theCase && theCase.judgeUserId) {
     associatedJudge = caseAndCaseItems.filter(
       item => item.sk === `user|${theCase.judgeUserId}`,
     );
