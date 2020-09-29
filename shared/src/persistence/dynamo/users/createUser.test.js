@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  JUDGES_CHAMBERS,
   PETITIONS_SECTION,
   ROLES,
 } = require('../../../business/entities/EntityConstants');
@@ -204,7 +205,7 @@ describe('createUser', () => {
       const judgeUser = {
         name: 'Legacy Judge Ginsburg',
         role: ROLES.legacyJudge,
-        section: 'legacyJudgeChambers',
+        section: JUDGES_CHAMBERS.LEGACY_JUDGES_CHAMBERS_SECTION.section,
       };
 
       await createUserRecords({
@@ -219,7 +220,7 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
-          pk: 'section|legacyJudgeChambers',
+          pk: `section|${JUDGES_CHAMBERS.LEGACY_JUDGES_CHAMBERS_SECTION.section}`,
           sk: `user|${userId}`,
         },
       });
