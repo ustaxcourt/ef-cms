@@ -24,6 +24,13 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     item => item.sk.startsWith('correspondence|') && item.archived,
   );
 
+  let associatedJudge;
+  if (theCase.judgeUserId) {
+    associatedJudge = caseAndCaseItems.filter(
+      item => item.sk === `user|${theCase.judgeUserId}`,
+    );
+  }
+
   const sortedDocuments = sortBy(documents, 'createdAt');
   const sortedArchivedDocketEntries = sortBy(
     archivedDocketEntries,
@@ -39,6 +46,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     ...theCase,
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocketEntries: sortedArchivedDocketEntries,
+    associatedJudge,
     correspondence: sortedCorrespondences,
     docketEntries: sortedDocuments,
     irsPractitioners,
