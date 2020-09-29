@@ -39,6 +39,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       CLAMAV_DEF_DIR                 = "/opt/var/lib/clamav"
       CIRCLE_HONEYBADGER_API_KEY     = var.honeybadger_key
       IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
+      DYNAMODB_TABLE_NAME            = var.destination_table
     }
   }
 }
