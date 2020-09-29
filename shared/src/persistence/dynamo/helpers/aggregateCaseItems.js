@@ -1,5 +1,16 @@
 const { sortBy } = require('lodash');
 
+const getAssociatedJudge = (theCase, caseAndCaseItems) => {
+  if (theCase && theCase.judgeUserId) {
+    const associatedJudgeId = caseAndCaseItems.find(
+      item => item.sk === `user|${theCase.judgeUserId}`,
+    );
+    return associatedJudgeId ? associatedJudgeId.name : undefined;
+  } else if (theCase && theCase.associatedJudge) {
+    return theCase.associatedJudge;
+  }
+};
+
 exports.aggregateCaseItems = caseAndCaseItems => {
   const theCase = caseAndCaseItems
     .filter(item => item.sk.startsWith('case|'))
@@ -24,14 +35,6 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     item => item.sk.startsWith('correspondence|') && item.archived,
   );
 
-  let associatedJudge;
-  if (theCase && theCase.judgeUserId) {
-    const associatedJudgeId = caseAndCaseItems.find(
-      item => item.sk === `user|${theCase.judgeUserId}`,
-    );
-    associatedJudge = associatedJudgeId ? associatedJudgeId.name : undefined;
-  }
-
   const sortedDocuments = sortBy(documents, 'createdAt');
   const sortedArchivedDocketEntries = sortBy(
     archivedDocketEntries,
@@ -47,9 +50,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     ...theCase,
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocketEntries: sortedArchivedDocketEntries,
-    associatedJudge: theCase?.associatedJudge
-      ? theCase.associatedJudge
-      : associatedJudge,
+    associatedJudge: getAssociatedJudge(theCase, caseAndCaseItems),
     correspondence: sortedCorrespondences,
     docketEntries: sortedDocuments,
     irsPractitioners,
