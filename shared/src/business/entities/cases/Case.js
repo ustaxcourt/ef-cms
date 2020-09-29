@@ -207,6 +207,7 @@ Case.prototype.init = function init(
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
+  this.judgeUserId = rawCase.judgeUserId;
   this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
@@ -467,6 +468,9 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
+  judgeUserId: JoiValidationConstants.UUID.optional().description(
+    'Unique ID for the associated judge.',
+  ),
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
