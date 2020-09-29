@@ -3807,5 +3807,25 @@ describe('Case entity', () => {
         contactSecondary: undefined,
       });
     });
+
+    describe('judgeUserId', () => {
+      it('sets the judgeUserId property when a value is passed in', () => {
+        const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+        const myCase = new Case(
+          { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
+          { applicationContext },
+        );
+        expect(myCase).toMatchObject({
+          judgeUserId: mockJudgeUserId,
+        });
+        expect(myCase.isValid()).toBeTruthy();
+      });
+
+      it('does not fail validation without a judgeUserId', () => {
+        const myCase = new Case(MOCK_CASE, { applicationContext });
+        expect(myCase.judgeUserId).toBeUndefined();
+        expect(myCase.isValid()).toBeTruthy();
+      });
+    });
   });
 });
