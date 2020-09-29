@@ -9,13 +9,13 @@ const {
  * @param {object} providers.applicationContext the application context
  * @returns {Promise} the promise of the call to the storage client
  */
-exports.getUploadPolicy = ({ applicationContext, documentId }) =>
+exports.getUploadPolicy = ({ applicationContext, key }) =>
   new Promise((resolve, reject) => {
     applicationContext.getStorageClient().createPresignedPost(
       {
         Bucket: applicationContext.getDocumentsBucketName(),
         Conditions: [
-          ['starts-with', '$key', documentId],
+          ['starts-with', '$key', key],
           ['starts-with', '$Content-Type', ''],
           ['content-length-range', 0, MAX_FILE_SIZE_BYTES],
         ],

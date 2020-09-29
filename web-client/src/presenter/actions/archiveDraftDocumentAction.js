@@ -14,15 +14,17 @@ export const archiveDraftDocumentAction = async ({
   get,
   store,
 }) => {
-  const { documentId, redirectToCaseDetail } = get(state.archiveDraftDocument);
+  const { docketEntryId, redirectToCaseDetail } = get(
+    state.archiveDraftDocument,
+  );
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const updatedCase = await applicationContext
     .getUseCases()
     .archiveDraftDocumentInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber,
-      documentId,
     });
 
   store.set(state.alertSuccess, {

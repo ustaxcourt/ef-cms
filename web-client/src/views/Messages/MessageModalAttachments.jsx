@@ -8,8 +8,20 @@ import React from 'react';
 const getDocumentOption = document => {
   const title = document.documentTitle || document.documentType;
   return (
-    <option key={document.documentId} value={`${document.documentId}`}>
+    <option key={document.docketEntryId} value={`${document.docketEntryId}`}>
       {document.createdAtFormatted} - {title}
+    </option>
+  );
+};
+
+const getCorrespondenceOption = document => {
+  const title = document.documentTitle || document.documentType;
+  return (
+    <option
+      key={document.correspondenceId}
+      value={`${document.correspondenceId}`}
+    >
+      {title}
     </option>
   );
 };
@@ -91,7 +103,9 @@ export const MessageModalAttachments = connect(
 
               {messageModalHelper.hasCorrespondence && (
                 <optgroup label="Correspondence">
-                  {messageModalHelper.correspondence.map(getDocumentOption)}
+                  {messageModalHelper.correspondence.map(
+                    getCorrespondenceOption,
+                  )}
                 </optgroup>
               )}
             </select>

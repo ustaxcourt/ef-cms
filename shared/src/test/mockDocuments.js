@@ -3,9 +3,8 @@ import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
 exports.MOCK_DOCUMENTS = [
   {
     createdAt: '2018-11-21T20:49:28.192Z',
-    description: 'Petition',
+    docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     docketNumber: '101-18',
-    documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Petition',
     documentType: 'Petition',
     eventCode: 'P',
@@ -19,8 +18,8 @@ exports.MOCK_DOCUMENTS = [
   },
   {
     createdAt: '2018-11-21T20:49:28.192Z',
+    docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     docketNumber: '101-18',
-    documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Statement of Taxpayer Identification',
     documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
     eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -30,8 +29,8 @@ exports.MOCK_DOCUMENTS = [
   },
   {
     createdAt: '2018-11-21T20:49:28.192Z',
+    docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     docketNumber: '101-18',
-    documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Answer',
     documentType: 'Answer',
     eventCode: 'A',
@@ -42,8 +41,8 @@ exports.MOCK_DOCUMENTS = [
   },
   {
     createdAt: '2018-11-21T20:49:28.192Z',
+    docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     docketNumber: '101-18',
-    documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
     eventCode: 'PSDE',

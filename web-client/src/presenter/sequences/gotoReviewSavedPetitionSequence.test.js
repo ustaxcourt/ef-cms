@@ -10,7 +10,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
   ({ PARTY_TYPES } = applicationContext.getConstants());
 
   const MOCK_CASE = {
-    docketEntries: [{ documentId: '123', documentType: 'Petition' }],
+    docketEntries: [{ docketEntryId: '123', documentType: 'Petition' }],
     docketNumber: '105-15',
     partyType: PARTY_TYPES.petitioner,
   };

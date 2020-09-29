@@ -4,26 +4,26 @@ import { removePdfFromCaseAction } from './removePdfFromCaseAction';
 import { runAction } from 'cerebral/test';
 
 describe('removePdfFromCaseAction', () => {
-  const mockDocumentId = 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const mockDocketEntryId = 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should delete the pdf associated with state.documentId when state.documentId is defined', async () => {
+  it('should delete the pdf associated with state.docketEntryId when state.docketEntryId is defined', async () => {
     const { output } = await runAction(removePdfFromCaseAction, {
       modules: {
         presenter,
       },
       state: {
-        documentId: mockDocumentId,
+        docketEntryId: mockDocketEntryId,
         form: {
           docketEntries: [
             {
-              documentId: mockDocumentId,
+              docketEntryId: mockDocketEntryId,
             },
             {
-              documentId: '123',
+              docketEntryId: '123',
             },
           ],
           docketNumber: '101-19',
@@ -33,7 +33,7 @@ describe('removePdfFromCaseAction', () => {
 
     expect(output.caseDetail.docketEntries).toEqual([
       {
-        documentId: '123',
+        docketEntryId: '123',
       },
     ]);
   });
@@ -52,10 +52,10 @@ describe('removePdfFromCaseAction', () => {
           applicationForWaiverOfFilingFeeFileSize: 2,
           docketEntries: [
             {
-              documentId: mockDocumentId,
+              docketEntryId: mockDocketEntryId,
             },
             {
-              documentId: '123',
+              docketEntryId: '123',
             },
           ],
           docketNumber: '101-19',
@@ -72,14 +72,14 @@ describe('removePdfFromCaseAction', () => {
         presenter,
       },
       state: {
-        documentId: mockDocumentId,
+        docketEntryId: mockDocketEntryId,
         form: {
           docketEntries: [
             {
-              documentId: mockDocumentId,
+              docketEntryId: mockDocketEntryId,
             },
             {
-              documentId: '123',
+              docketEntryId: '123',
             },
           ],
           docketNumber: '101-19',
@@ -90,7 +90,7 @@ describe('removePdfFromCaseAction', () => {
     expect(output.caseDetail).toEqual({
       docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
         },
       ],
       docketNumber: '101-19',
@@ -103,14 +103,14 @@ describe('removePdfFromCaseAction', () => {
         presenter,
       },
       state: {
-        documentId: mockDocumentId,
+        docketEntryId: mockDocketEntryId,
         form: {
           docketEntries: [
             {
-              documentId: mockDocumentId,
+              docketEntryId: mockDocketEntryId,
             },
             {
-              documentId: '123',
+              docketEntryId: '123',
             },
           ],
           docketNumber: '101-19',

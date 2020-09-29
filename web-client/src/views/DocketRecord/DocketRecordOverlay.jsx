@@ -102,15 +102,15 @@ export const DocketRecordOverlay = connect(
                 Document Details
               </Button>
               <hr className="margin-top-1 margin-bottom-2" />
-              <h3 tabIndex="-1">{entry.description}</h3>
+              <h3 tabIndex="-1">{entry.descriptionDisplay}</h3>
               <Button
                 link
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"
                 onClick={() => {
                   openCaseDocumentDownloadUrlSequence({
+                    docketEntryId: entry.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                    documentId: entry.documentId,
                   });
                 }}
               >

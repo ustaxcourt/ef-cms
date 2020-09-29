@@ -27,7 +27,7 @@ describe('strikeDocketEntryAction', () => {
           docketNumber: '123-45',
         },
         form: {
-          documentId: 'document-id-123',
+          docketEntryId: 'document-id-123',
         },
       },
     });
@@ -52,7 +52,7 @@ describe('strikeDocketEntryAction', () => {
           docketNumber: '123-45',
         },
         form: {
-          documentId: 'document-id-123',
+          docketEntryId: 'document-id-123',
         },
       },
     });

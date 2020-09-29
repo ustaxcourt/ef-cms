@@ -21,7 +21,7 @@ describe('removeSignatureAction', () => {
       },
       props: {
         caseDetail: { docketNumber: '123-45' },
-        documentIdToEdit: '476cadf8-63c3-472b-a477-c8f9ea8b7d1f',
+        docketEntryIdToEdit: '476cadf8-63c3-472b-a477-c8f9ea8b7d1f',
       },
     });
 
@@ -31,7 +31,7 @@ describe('removeSignatureAction', () => {
     expect(result.output).toMatchObject({
       caseDetail: { docketNumber: '123-19' },
       viewerDraftDocumentToDisplay: {
-        documentId: '476cadf8-63c3-472b-a477-c8f9ea8b7d1f',
+        docketEntryId: '476cadf8-63c3-472b-a477-c8f9ea8b7d1f',
       },
     });
   });

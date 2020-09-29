@@ -13,13 +13,13 @@ describe('skipSigningOrderAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order',
             },
           ],
           docketNumber: '123-19',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.output.path).toEqual('/case-detail/123-19/draft-documents');
@@ -35,13 +35,13 @@ describe('skipSigningOrderAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order',
             },
           ],
           docketNumber: '123-19',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.output.alertSuccess.message).toEqual('Order updated.');
@@ -57,13 +57,13 @@ describe('skipSigningOrderAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Order',
             },
           ],
           docketNumber: '123-19',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.output.alertSuccess.message).toEqual('Order updated.');
@@ -79,13 +79,13 @@ describe('skipSigningOrderAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order',
             },
           ],
           docketNumber: '123-19',
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
         isCreatingOrder: true,
       },
     });

@@ -23,7 +23,7 @@ describe('isEditingOrderAction', () => {
       },
       state: {
         documentToEdit: {
-          documentId: 'document-id-123',
+          docketEntryId: 'document-id-123',
         },
       },
     });
