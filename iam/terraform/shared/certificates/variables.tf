@@ -27,3 +27,8 @@ variable "hosted_zone_name" {
   description = "Need for DNS validation, hosted zone name where record validation will be stored."
   type        = string
 }
+
+variable "subject_alternative_names" {
+  type    = list(string)
+  default = []
+}
