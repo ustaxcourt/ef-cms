@@ -19,6 +19,8 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
+elif [[ $BRANCH == 'experimental3' ]] ; then
+  echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_IRS}"
 elif [[ $BRANCH == 'master' ]] ; then
