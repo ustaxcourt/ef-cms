@@ -2,7 +2,7 @@
 
 ENVIRONMENT=$1
 
-BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="ui-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
@@ -17,9 +17,14 @@ if [ -z "$EFCMS_DOMAIN" ]; then
   exit 1
 fi
 
+if [ -z "$ZONE_NAME" ]; then
+  echo "Please export the ZONE_NAME variable in your shell"
+  exit 1
+fi
+
 rm -rf .terraform
 
-DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
+DYNAMSOFT_URL="https://dynamsoft-lib.${EFCMS_DOMAIN}"
 
 if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
 then
