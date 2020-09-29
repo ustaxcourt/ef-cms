@@ -452,6 +452,7 @@ const ROLES = {
   irsPractitioner: 'irsPractitioner',
   irsSuperuser: 'irsSuperuser',
   judge: 'judge',
+  legacyJudge: 'legacyJudge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
   privatePractitioner: 'privatePractitioner',
