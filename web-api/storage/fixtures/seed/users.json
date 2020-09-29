@@ -24,26 +24,6 @@
     "entityName": "User"
   },
   {
-    "role": "judge",
-    "name": "Judge Armen",
-    "section": "armensChambers",
-    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeArmen@example.com",
-    "judgeFullName": "Robert N. Armen, Jr.",
-    "judgeTitle": "Special Trial Judge",
-    "entityName": "User"
-  },
-  {
-    "role": "judge",
-    "name": "Judge Armen",
-    "section": "armensChambers",
-    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeArmen@example.com",
-    "judgeFullName": "Robert N. Armen, Jr.",
-    "judgeTitle": "Special Trial Judge",
-    "entityName": "User"
-  },
-  {
     "role": "legacyJudge",
     "name": "Legacy Judge Fieri",
     "section": "fieriChambers",
@@ -51,6 +31,26 @@
     "email": "judgeFieri@example.com",
     "judgeFullName": "Guy S. B. Fieri",
     "judgeTitle": "Legacy Judge",
+    "entityName": "User"
+  },
+  {
+    "role": "judge",
+    "name": "Judge Armen",
+    "section": "armensChambers",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "email": "judgeArmen@example.com",
+    "judgeFullName": "Robert N. Armen, Jr.",
+    "judgeTitle": "Special Trial Judge",
+    "entityName": "User"
+  },
+  {
+    "role": "judge",
+    "name": "Judge Ashford",
+    "section": "ashfordsChambers",
+    "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "email": "judgeAshford@example.com",
+    "judgeFullName": "Tamara W. Ashford",
+    "judgeTitle": "Judge",
     "entityName": "User"
   },
   {
