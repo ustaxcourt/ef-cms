@@ -128,7 +128,7 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD="${DEFAULT_ACCOUNT_PASS}"')
+    --auth-parameters "USERNAME=${email},PASSWORD=${DEFAULT_ACCOUNT_PASS}")
 
   session=$(echo "${response}" | jq -r ".Session")
 
@@ -138,7 +138,7 @@ createAccount() {
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses 'NEW_PASSWORD="${DEFAULT_ACCOUNT_PASS}",'USERNAME="${email}" \
+      --challenge-responses NEW_PASSWORD=${DEFAULT_ACCOUNT_PASS},USERNAME=${email} \
       --session="${session}")
   fi
 }
