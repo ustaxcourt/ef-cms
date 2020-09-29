@@ -176,6 +176,8 @@ exports.completeDocketEntryQCInteractor = async ({
 
   caseEntity.updateDocketEntry(updatedDocketEntry);
 
+  caseEntity.updateAutomaticBlocked({});
+
   const workItemToUpdate = updatedDocketEntry.workItem;
 
   if (workItemToUpdate) {
