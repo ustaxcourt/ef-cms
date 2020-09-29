@@ -89,9 +89,6 @@ export const TrialSessionsTable = connect(
               <th>Location</th>
               <th>Type</th>
               <th>Judge</th>
-              {trialSessionsHelper.showNumberOfCases && (
-                <th aria-label="Number of cases">No. of cases</th>
-              )}
               {trialSessionsHelper.showNoticeIssued && <th>Notice issued</th>}
               {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
             </tr>
@@ -134,9 +131,6 @@ export const TrialSessionsTable = connect(
                     </td>
                     <td>{item.sessionType}</td>
                     <td>{item.judge && item.judge.name}</td>
-                    {trialSessionsHelper.showNumberOfCases && (
-                      <td>{item.maxCases}</td>
-                    )}
                     {trialSessionsHelper.showNoticeIssued && (
                       <td>{item.formattedNoticeIssuedDate}</td>
                     )}

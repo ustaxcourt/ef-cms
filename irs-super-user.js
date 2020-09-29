@@ -35,7 +35,7 @@ const registerUser = async () => {
     .initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
-        PASSWORD: 'Testing1234$',
+        PASSWORD: 'WelcomeToFlavortown!',
         USERNAME: email,
       },
       ClientId,
@@ -48,7 +48,7 @@ const registerUser = async () => {
       .respondToAuthChallenge({
         ChallengeName: 'NEW_PASSWORD_REQUIRED',
         ChallengeResponses: {
-          NEW_PASSWORD: 'Testing1234$',
+          NEW_PASSWORD: 'WelcomeToFlavortown!',
           USERNAME: email,
         },
         ClientId,
@@ -62,7 +62,7 @@ const registerUser = async () => {
     .initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
-        PASSWORD: 'Testing1234$',
+        PASSWORD: 'WelcomeToFlavortown!',
         USERNAME: email,
       },
       ClientId,
@@ -97,7 +97,7 @@ const login = async () => {
     .initiateAuth({
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
-        PASSWORD: 'Testing1234$',
+        PASSWORD: 'WelcomeToFlavortown!',
         USERNAME: email,
       },
       ClientId,
