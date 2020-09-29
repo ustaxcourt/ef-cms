@@ -9,7 +9,7 @@ import React from 'react';
 export const OrderSearch = connect(
   {
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    judges: state.allJudges,
+    judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,

@@ -250,6 +250,8 @@ export const baseState = {
   },
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  judges: [],
+  legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {

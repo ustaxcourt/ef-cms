@@ -5,6 +5,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { initCourtIssuedOrderFormPropsFromEventCodeAction } from '../actions/EditDocketRecordEntry/initCourtIssuedOrderFormPropsFromEventCodeAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -32,7 +33,8 @@ export const gotoEditDocketEntryMeta = [
     courtIssued: [
       initCourtIssuedOrderFormPropsFromEventCodeAction,
       getUsersInSectionAction({ section: 'judge' }),
-      setUsersByKeyAction('judgeUsers'),
+      getFilterCurrentJudgeUsersAction,
+      setUsersByKeyAction('judges'),
       generateCourtIssuedDocumentTitleAction,
     ],
     document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
