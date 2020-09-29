@@ -33,10 +33,10 @@ exports.uploadExternalDocumentsInteractor = async ({
    * uploads a document and then immediately processes it to scan for viruses and validate the document
    *
    * @param {string} documentLabel the string identifying which documentFile and progressFunction
-   * @returns {Promise<string>} the documentId returned from a successful upload
+   * @returns {Promise<string>} the key returned from a successful upload
    */
   const uploadDocumentAndMakeSafeInteractor = async documentLabel => {
-    const documentId = await applicationContext
+    const key = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
         applicationContext,
@@ -46,21 +46,21 @@ exports.uploadExternalDocumentsInteractor = async ({
 
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
-      documentId,
+      key,
     });
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
-      documentId,
+      key,
     });
 
-    return documentId;
+    return key;
   };
   documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
     'primary',
   );
 
   if (documentFiles.secondary) {
-    documentMetadata.secondaryDocument.documentId = await uploadDocumentAndMakeSafeInteractor(
+    documentMetadata.secondaryDocument.docketEntryId = await uploadDocumentAndMakeSafeInteractor(
       'secondary',
     );
   }
@@ -69,7 +69,7 @@ exports.uploadExternalDocumentsInteractor = async ({
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
       documentMetadata.supportingDocuments[
         i
-      ].documentId = await uploadDocumentAndMakeSafeInteractor(
+      ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `primarySupporting${i}`,
       );
     }
@@ -83,7 +83,7 @@ exports.uploadExternalDocumentsInteractor = async ({
     ) {
       documentMetadata.secondarySupportingDocuments[
         i
-      ].documentId = await uploadDocumentAndMakeSafeInteractor(
+      ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `secondarySupporting${i}`,
       );
     }

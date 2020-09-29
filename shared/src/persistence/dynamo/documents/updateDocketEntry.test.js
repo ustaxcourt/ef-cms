@@ -1,25 +1,25 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { updateDocument } = require('./updateDocument');
+const { updateDocketEntry } = require('./updateDocketEntry');
 
-const mockDocumentId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+const mockDocketEntryId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 const mockDocketNumber = '101-20';
 
 const mockDocument = {
-  documentId: mockDocumentId,
+  docketEntryId: mockDocketEntryId,
   documentTitle: 'Title of le Document',
   filedBy: 'The one and only, Guy Fieri',
   status: 'complete',
 };
 
-describe('updateDocument', () => {
+describe('updateDocketEntry', () => {
   it('makes put request with the given document data for the matching document id', async () => {
-    await updateDocument({
+    await updateDocketEntry({
       applicationContext,
+      docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
       document: mockDocument,
-      documentId: mockDocumentId,
     });
 
     expect(
@@ -27,7 +27,7 @@ describe('updateDocument', () => {
     ).toMatchObject({
       Item: {
         pk: `case|${mockDocketNumber}`,
-        sk: `docket-entry|${mockDocumentId}`,
+        sk: `docket-entry|${mockDocketEntryId}`,
         ...mockDocument,
       },
     });

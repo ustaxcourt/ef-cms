@@ -6,15 +6,15 @@ const tmp = require('tmp');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.documentId the id of the document to virus scan
+ * @param {string} providers.key the key of the document to virus scan
  * @returns {object} errors (null if no errors)
  */
-exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
+exports.virusScanPdfInteractor = async ({ applicationContext, key }) => {
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
+      Key: key,
     })
     .promise();
 
@@ -26,7 +26,7 @@ exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
     await applicationContext.runVirusScan({ filePath: inputPdf.name });
     applicationContext.getStorageClient().putObjectTagging({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
+      Key: key,
       Tagging: {
         TagSet: [
           {
@@ -42,7 +42,7 @@ exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
     if (e.code === 1) {
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
+        Key: key,
         Tagging: {
           TagSet: [
             {
@@ -56,7 +56,7 @@ exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
     } else {
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
+        Key: key,
         Tagging: {
           TagSet: [
             {

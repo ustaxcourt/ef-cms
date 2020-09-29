@@ -4,19 +4,19 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getDocumentEditUrlAsPathAction', () => {
-  const documentIdToEdit = '123';
+  const docketEntryIdToEdit = '123';
   const documentToMatch = {
-    documentId: documentIdToEdit,
+    docketEntryId: docketEntryIdToEdit,
     documentType: 'Order',
   };
 
-  documentToMatch.draftState = { ...documentToMatch };
+  documentToMatch.draftOrderState = { ...documentToMatch };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('does not return editUrl if props.documentIdToEdit is not set', async () => {
+  it('does not return editUrl if props.docketEntryIdToEdit is not set', async () => {
     const result = await runAction(getDocumentEditUrlAsPathAction, {
       modules: {
         presenter,
@@ -25,7 +25,7 @@ describe('getDocumentEditUrlAsPathAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
           ],
@@ -48,13 +48,13 @@ describe('getDocumentEditUrlAsPathAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
           ],
           docketNumber: '123-45',
         },
-        documentIdToEdit: '321',
+        docketEntryIdToEdit: '321',
       },
       state: {
         parentMessageId: '09a41e75-cdbb-42a0-a602-e59d50a3ba6e',
@@ -74,13 +74,13 @@ describe('getDocumentEditUrlAsPathAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
           ],
           docketNumber: '123-19',
         },
-        documentIdToEdit: '321',
+        docketEntryIdToEdit: '321',
       },
       state: {},
     });

@@ -41,9 +41,9 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.completedByUserId = rawWorkItem.completedByUserId;
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
+  this.docketEntry = omit(rawWorkItem.docketEntry, 'workItem');
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
-  this.document = omit(rawWorkItem.document, 'workItem');
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
@@ -76,13 +76,13 @@ WorkItem.VALIDATION_RULES = joi.object().keys({
     .optional()
     .allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
+  docketEntry: joi.object().required(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
   docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
     'Auto-generated from docket number and the suffix.',
   ),
-  document: joi.object().required(),
   entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
   hideFromPendingMessages: joi.boolean().optional(),
   highPriority: joi.boolean().optional(),

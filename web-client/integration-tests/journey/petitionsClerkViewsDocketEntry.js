@@ -11,10 +11,10 @@ export const petitionsClerkViewsDocketEntry = (test, draftOrderIndex) => {
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const docketRecordEntry = caseDetailFormatted.formattedDocketEntries.find(
-      entry => entry.documentId === documentId,
+      entry => entry.docketEntryId === docketEntryId,
     );
 
     expect(docketRecordEntry).toBeTruthy();

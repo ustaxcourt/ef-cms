@@ -12,7 +12,7 @@ exports.saveSignedDocumentLambda = event =>
     async ({ applicationContext }) => {
       const {
         body,
-        pathParameters: { docketNumber, documentId: originalDocumentId },
+        pathParameters: { docketEntryId: originalDocketEntryId, docketNumber },
       } = event;
 
       return await applicationContext
@@ -20,7 +20,7 @@ exports.saveSignedDocumentLambda = event =>
         .saveSignedDocumentInteractor({
           applicationContext,
           docketNumber,
-          originalDocumentId,
+          originalDocketEntryId,
           ...JSON.parse(body),
         });
     },

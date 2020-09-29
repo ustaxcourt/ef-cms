@@ -47,8 +47,8 @@ exports.updateDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId: primaryDocumentFileId,
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: primaryDocumentFileId,
   });
 
   const editableFields = {
@@ -81,11 +81,11 @@ exports.updateDocketEntryInteractor = async ({
 
   const docketEntryEntity = new DocketEntry(
     {
-      ...currentDocument,
+      ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      description: editableFields.documentTitle,
-      documentId: primaryDocumentFileId,
+      docketEntryId: primaryDocumentFileId,
+      documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -103,8 +103,8 @@ exports.updateDocketEntryInteractor = async ({
 
     if (!isSavingForLater) {
       const workItemToDelete =
-        currentDocument.workItem &&
-        !currentDocument.workItem.document.isFileAttached;
+        currentDocketEntry.workItem &&
+        !currentDocketEntry.workItem.docketEntry.isFileAttached;
 
       if (workItemToDelete) {
         await applicationContext
@@ -120,12 +120,12 @@ exports.updateDocketEntryInteractor = async ({
         assigneeName: null,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
+        docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
         inProgress: isSavingForLater,
         section: DOCKET_SECTION,
         sentBy: user.userId,
@@ -154,7 +154,7 @@ exports.updateDocketEntryInteractor = async ({
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
-        documentEntity: docketEntryEntity,
+        docketEntryEntity,
         servedParties,
       });
     } else {
@@ -162,7 +162,7 @@ exports.updateDocketEntryInteractor = async ({
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: primaryDocumentFileId,
+          docketEntryId: primaryDocumentFileId,
         });
 
       Object.assign(workItem, {
@@ -170,12 +170,12 @@ exports.updateDocketEntryInteractor = async ({
         assigneeName: null,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
+        docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
         inProgress: isSavingForLater,
         section: DOCKET_SECTION,
         sentBy: user.userId,
@@ -213,12 +213,12 @@ exports.updateDocketEntryInteractor = async ({
       assigneeName: null,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
+      docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
       inProgress: isSavingForLater,
       section: DOCKET_SECTION,
       sentBy: user.userId,

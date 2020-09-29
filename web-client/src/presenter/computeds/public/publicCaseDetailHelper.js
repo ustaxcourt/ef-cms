@@ -43,7 +43,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         createdAtFormatted: record.createdAtFormatted,
         description: record.description,
         descriptionDisplay: record.documentTitle || record.description,
-        documentId: record.documentId,
+        docketEntryId: record.docketEntryId,
         eventCode: record.eventCode,
         filedBy: record.filedBy,
         filingsAndProceedingsWithAdditionalInfo,

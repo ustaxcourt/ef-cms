@@ -15,7 +15,7 @@ export const getDefaultViewerCorrespondenceToDisplayAction = ({
   get,
   props,
 }) => {
-  const { documentId } = props;
+  const { correspondenceId } = props;
   let viewerCorrespondenceToDisplay = null;
 
   const caseDetail = get(state.caseDetail);
@@ -24,9 +24,9 @@ export const getDefaultViewerCorrespondenceToDisplayAction = ({
     .getUtilities()
     .formatCase(applicationContext, cloneDeep(caseDetail));
 
-  if (documentId) {
+  if (correspondenceId) {
     viewerCorrespondenceToDisplay = correspondence.find(
-      d => d.documentId === documentId,
+      d => d.correspondenceId === correspondenceId,
     );
   } else {
     viewerCorrespondenceToDisplay = correspondence[0];

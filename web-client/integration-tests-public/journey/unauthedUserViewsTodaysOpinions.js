@@ -16,8 +16,8 @@ export const unauthedUserViewsTodaysOpinions = (test, testClient) => {
     );
 
     await test.runSequence('openCaseDocumentDownloadUrlSequence', {
+      docketEntryId: testClient.docketEntryId,
       docketNumber: testClient.docketNumber,
-      documentId: testClient.documentId,
       isPublic: true,
     });
 

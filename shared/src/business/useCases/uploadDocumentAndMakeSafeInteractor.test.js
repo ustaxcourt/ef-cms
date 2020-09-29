@@ -10,15 +10,15 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .uploadDocumentFromClient.mockResolvedValue(mockDocument.documentId);
+      .uploadDocumentFromClient.mockResolvedValue(mockDocument.docketEntryId);
   });
-  it('returns the newly created document ID', async () => {
-    const expectDocumentId = await uploadDocumentAndMakeSafeInteractor({
+  it('returns the newly created docket entry ID', async () => {
+    const expectDocketEntryId = await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
       onUploadProgress: () => {},
     });
-    expect(expectDocumentId).toEqual(mockDocument.documentId);
+    expect(expectDocketEntryId).toEqual(mockDocument.docketEntryId);
   });
 
   it('calls upload on the provided document', async () => {
@@ -34,17 +34,17 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     ).toEqual(mockDocument);
   });
 
-  it('calls upload with the given documentId if set', async () => {
+  it('calls upload with the given key if set', async () => {
     await uploadDocumentAndMakeSafeInteractor({
       applicationContext,
       document: mockDocument,
-      documentId: '123',
+      key: '123',
       onUploadProgress: () => {},
     });
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
-        .calls[0][0].documentId,
+        .calls[0][0].key,
     ).toEqual('123');
   });
 
@@ -56,8 +56,8 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
     expect(
       applicationContext.getUseCases().virusScanPdfInteractor.mock.calls[0][0]
-        .documentId,
-    ).toEqual(mockDocument.documentId);
+        .key,
+    ).toEqual(mockDocument.key);
   });
 
   it('validates the provided document', async () => {
@@ -68,7 +68,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
     expect(
       applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][0]
-        .documentId,
-    ).toEqual(mockDocument.documentId);
+        .key,
+    ).toEqual(mockDocument.key);
   });
 });

@@ -12,7 +12,7 @@ export const petitionsClerkAssignsWorkItemToOther = test => {
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
       item =>
-        item.document.documentType === 'Petition' &&
+        item.docketEntry.documentType === 'Petition' &&
         item.docketNumber === test.docketNumber,
     ).workItemId;
 

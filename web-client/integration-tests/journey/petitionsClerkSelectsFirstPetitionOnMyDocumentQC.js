@@ -4,8 +4,8 @@ export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC = test => {
       .getState('workQueue')
       .find(workItem => workItem.docketNumber === test.docketNumber);
 
-    const { documentId } = workItem.document;
+    const { docketEntryId } = workItem.docketEntry;
 
-    test.documentId = documentId;
+    test.docketEntryId = docketEntryId;
   });
 };

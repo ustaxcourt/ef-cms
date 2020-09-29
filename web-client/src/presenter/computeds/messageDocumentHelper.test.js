@@ -38,13 +38,20 @@ const petitionerUser = {
 };
 
 describe('messageDocumentHelper', () => {
-  const baseDocument = {
-    documentId: '123',
+  const baseDocketEntry = {
+    docketEntryId: '123',
     entityName: 'Document',
     isDraft: true,
   };
 
+  const baseCorrespondence = {
+    correspondenceId: '456',
+    documentTitle: 'The Correspondence',
+  };
+
   const baseCaseDetail = {
+    archivedCorrespondences: [],
+    archivedDocketEntries: [],
     correspondence: [],
     docketEntries: [],
   };
@@ -57,7 +64,7 @@ describe('messageDocumentHelper', () => {
         ...getBaseState(docketClerkUser),
         caseDetail: {
           ...baseCaseDetail,
-          docketEntries: [baseDocument],
+          docketEntries: [baseDocketEntry],
         },
       },
     });
@@ -73,7 +80,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -92,7 +99,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -111,7 +118,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(clerkOfCourtUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -130,7 +137,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocument, isDraft: false }],
+            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -149,7 +156,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocument, isDraft: false }],
+            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -168,7 +175,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(clerkOfCourtUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocument, isDraft: false }],
+            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -187,7 +194,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(judgeUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -208,7 +215,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
               },
             ],
@@ -232,7 +239,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -254,7 +261,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 eventCode: 'SDEC',
                 isDraft: true,
                 signedAt: '2020-06-25T20:49:28.192Z',
@@ -281,7 +288,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -304,7 +311,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(petitionerUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -326,7 +333,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
@@ -349,7 +356,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocument, isDraft: false }],
+            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -371,7 +378,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 isDraft: false,
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
@@ -397,7 +404,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentTitle: 'Notice',
                 documentType: 'Notice',
                 eventCode: 'NOT',
@@ -425,7 +432,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentTitle: 'Notice',
                 documentType: 'Notice',
                 eventCode: 'NTD',
@@ -453,7 +460,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
               },
             ],
@@ -479,7 +486,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 signedAt: '123',
               },
             ],
@@ -503,7 +510,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 eventCode: 'SDEC',
                 signedAt: '123',
               },
@@ -526,7 +533,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -547,7 +554,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
                 isDraft: true,
               },
@@ -570,7 +577,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(petitionerUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -589,7 +596,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocument, isDraft: false }],
+            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -610,7 +617,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 eventCode: 'NOT',
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
@@ -639,7 +646,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             correspondence: [
               {
-                documentId: '567',
+                correspondenceId: '567',
                 documentTitle: 'Test Correspondence',
               },
             ],
@@ -661,7 +668,7 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [baseDocument],
+            docketEntries: [baseDocketEntry],
           },
           viewerDocumentToDisplay: {
             documentId: '123',
@@ -682,7 +689,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 eventCode: 'MISC', // Does not require a signature
               },
             ],
@@ -704,7 +711,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 eventCode: 'O', // Requires a signature
                 isDraft: false,
               },
@@ -733,7 +740,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 eventCode: 'O',
                 isDraft: false,
               },
@@ -756,7 +763,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Order',
                 eventCode: 'O', //court issued document type
                 isDraft: false,
@@ -780,7 +787,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Order',
                 eventCode: 'O',
                 isDraft: false,
@@ -804,7 +811,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Answer',
                 eventCode: 'A',
                 isDraft: false,
@@ -828,7 +835,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Answer',
                 eventCode: 'A', // paper filed document
                 isDraft: false,
@@ -852,13 +859,13 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Answer',
                 eventCode: 'A', // paper filed document type
                 isDraft: false,
               },
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentId: '456',
                 documentType: 'Order',
                 eventCode: 'O', //court issued document type
@@ -887,7 +894,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Petition',
                 eventCode: 'P',
                 isDraft: false,
@@ -912,7 +919,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Petition',
                 eventCode: 'P',
                 isDraft: false,
@@ -936,7 +943,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Petition',
                 eventCode: 'P',
                 isDraft: false,
@@ -962,7 +969,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Miscellaneous',
                 eventCode: 'MISC',
                 isDraft: true,
@@ -986,7 +993,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Miscellaneous',
                 eventCode: 'MISC',
               },
@@ -1011,7 +1018,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
               },
@@ -1034,12 +1041,12 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
               },
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 archived: true,
                 documentId: '234',
                 documentType: 'Stipulated Decision',
@@ -1064,12 +1071,12 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
               },
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentId: '234',
                 documentType: 'Stipulated Decision',
                 eventCode: 'SDEC',
@@ -1095,7 +1102,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
               },
@@ -1118,7 +1125,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Answer',
                 eventCode: 'A',
               },
@@ -1135,23 +1142,24 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('archived', () => {
-    it('should be true when the document is an archived document', () => {
+    it('should be true when the document is an archived docket entry', () => {
       const { archived } = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            archivedDocuments: [
+            archivedDocketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 archived: true,
+                docketEntryId: '789',
                 documentType: 'Answer',
                 eventCode: 'A',
               },
             ],
           },
           viewerDocumentToDisplay: {
-            documentId: '123',
+            documentId: '789',
           },
         },
       });
@@ -1167,15 +1175,16 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             archivedCorrespondences: [
               {
-                ...baseDocument,
+                ...baseCorrespondence,
                 archived: true,
+                correspondenceId: '098',
                 documentTitle: 'My Correspondence',
                 filedBy: 'Docket Clerk',
               },
             ],
           },
           viewerDocumentToDisplay: {
-            documentId: '123',
+            documentId: '098',
           },
         },
       });
@@ -1191,14 +1200,14 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             archivedCorrespondences: [
               {
-                ...baseDocument,
+                ...baseCorrespondence,
                 documentTitle: 'My Correspondence',
                 filedBy: 'Docket Clerk',
               },
             ],
           },
           viewerDocumentToDisplay: {
-            documentId: '123',
+            documentId: '456',
           },
         },
       });
@@ -1214,7 +1223,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [
               {
-                ...baseDocument,
+                ...baseDocketEntry,
                 documentType: 'Answer',
                 entityName: 'Document',
                 eventCode: 'A',

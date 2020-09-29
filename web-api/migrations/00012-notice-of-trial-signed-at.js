@@ -13,7 +13,11 @@ const mutateRecord = async item => {
     if (documentRequiresSignedAt && !item.signedAt) {
       // Use createdAt for signedAt, since these are likely auto-generated documents (signed and created at the same time)
       const documentToUpdate = new DocketEntry(
-        { ...item, signedAt: item.createdAt },
+        {
+          ...item,
+          docketEntryId: item.docketEntryId || item.documentId,
+          signedAt: item.createdAt,
+        },
         { applicationContext },
       )
         .validate()

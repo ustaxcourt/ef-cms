@@ -65,8 +65,8 @@ export const DocumentSearchResults = connect(
                           link
                           onClick={() => {
                             openCaseDocumentDownloadUrlSequence({
+                              docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
-                              documentId: result.documentId,
                               isPublic: advancedDocumentSearchHelper.isPublic,
                             });
                           }}

@@ -17,17 +17,17 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
     const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     // Type F
@@ -77,7 +77,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     );
 
     const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(updatedOrderDocument).toMatchObject({
@@ -89,8 +89,8 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     });
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     expect(test.getState('form')).toMatchObject({

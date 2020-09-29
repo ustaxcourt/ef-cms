@@ -5,13 +5,13 @@ const { put } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.documentIdToEdit the id of the correspondence document
+ * @param {string} providers.correspondenceId the id of the correspondence document
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the promise of the api call
  */
 exports.updateCorrespondenceDocumentInteractor = ({
   applicationContext,
-  documentId,
+  correspondenceId,
   documentMetadata,
 }) => {
   const { docketNumber } = documentMetadata;
@@ -21,6 +21,6 @@ exports.updateCorrespondenceDocumentInteractor = ({
     body: {
       documentMetadata,
     },
-    endpoint: `/case-documents/${docketNumber}/correspondence/${documentId}`,
+    endpoint: `/case-documents/${docketNumber}/correspondence/${correspondenceId}`,
   });
 };

@@ -6,17 +6,17 @@ const { post } = require('./requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {object} providers.documentId the id of the document
+ * @param {object} providers.docketEntryId the id of the docket entry
  * @returns {Promise<*>} the promise of the api call
  */
 exports.serveCourtIssuedDocumentInteractor = ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   return post({
     applicationContext,
     body: {},
-    endpoint: `/case-documents/${docketNumber}/${documentId}/serve-court-issued`,
+    endpoint: `/case-documents/${docketNumber}/${docketEntryId}/serve-court-issued`,
   });
 };

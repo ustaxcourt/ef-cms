@@ -15,13 +15,13 @@ const { User } = require('../entities/User');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document
- * @param {string} providers.documentId the id of the document
+ * @param {string} providers.key the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
 exports.getDownloadPolicyUrlInteractor = async ({
   applicationContext,
   docketNumber,
-  documentId,
+  key,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -42,19 +42,21 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
     const caseEntity = new Case(caseData, { applicationContext });
 
-    if (documentId.includes('.pdf')) {
-      if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== documentId) {
+    if (key.includes('.pdf')) {
+      if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key) {
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
-      const selectedDocument = caseData.docketEntries.find(
-        document => document.documentId === documentId,
+      const selectedDocketEntry = caseData.docketEntries.find(
+        document => document.docketEntryId === key,
       );
 
-      const documentEntity = caseEntity.getDocumentById({ documentId });
+      const docketEntryEntity = caseEntity.getDocketEntryById({
+        docketEntryId: key,
+      });
 
       const documentIsAvailable = documentMeetsAgeRequirements(
-        selectedDocument,
+        selectedDocketEntry,
       );
 
       if (!documentIsAvailable) {
@@ -63,8 +65,8 @@ exports.getDownloadPolicyUrlInteractor = async ({
         );
       }
 
-      if (documentEntity.isCourtIssued()) {
-        if (!documentEntity.servedAt) {
+      if (docketEntryEntity.isCourtIssued()) {
+        if (!docketEntryEntity.servedAt) {
           throw new UnauthorizedError(
             'Unauthorized to view document at this time',
           );
@@ -106,6 +108,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
   return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId,
+    key,
   });
 };
