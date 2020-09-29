@@ -5,3 +5,7 @@ output "elasticsearch_endpoint" {
 output "elasticsearch_endpoint_1" {
   value = module.elasticsearch_1.endpoint
 }
+
+output "elasticsearch_endpoint_2" {
+  value = module.elasticsearch_2.endpoint
+}
