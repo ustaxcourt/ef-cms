@@ -77,6 +77,10 @@ describe('formatted work queue computed', () => {
       };
     };
 
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(() => true);
+
     formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
       ...applicationContext,
     });
@@ -259,6 +263,12 @@ describe('formatted work queue computed', () => {
       userId: JUDGE_USER_ID_1,
     };
 
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(
+        item => item.associatedJudge && item.associatedJudge === judgeUser.name,
+      );
+
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(judgeUser),
@@ -301,6 +311,12 @@ describe('formatted work queue computed', () => {
       role: USER_ROLES.adc,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
+
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(
+        item => !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE,
+      );
 
     const result = runCompute(formattedWorkQueue, {
       state: {

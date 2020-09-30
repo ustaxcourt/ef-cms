@@ -152,7 +152,29 @@ describe('updatePractitionerUser', () => {
 });
 
 describe('updatePractitionerUser - with a cognito response', () => {
-  it('should not log an error', async () => {
+  beforeEach(() => {
+    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
+      promise: () => null,
+    });
+  });
+
+  it("should not log an error when updating a practitioner's Cognito attributes", async () => {
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => ({
+        Username: 'inactivePractitionerUsername',
+      }),
+    });
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+
     const updatedUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
@@ -166,5 +188,11 @@ describe('updatePractitionerUser - with a cognito response', () => {
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes.mock
+        .calls[0][0],
+    ).toMatchObject({
+      Username: 'inactivePractitionerUsername',
+    });
   });
 });

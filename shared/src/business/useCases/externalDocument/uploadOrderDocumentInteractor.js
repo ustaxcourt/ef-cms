@@ -4,10 +4,18 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+/**
+ *
+ * @param {object} object the argument object
+ * @param {object} object.applicationContext application context
+ * @param {string} object.docketEntryIdToOverwrite docket entry id to overwrite
+ * @param {object} object.documentFile file object to upload to S3
+ * @returns {string} uploaded docket entry id
+ */
 exports.uploadOrderDocumentInteractor = async ({
   applicationContext,
+  docketEntryIdToOverwrite,
   documentFile,
-  documentIdToOverwrite,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -20,7 +28,7 @@ exports.uploadOrderDocumentInteractor = async ({
     .uploadDocumentFromClient({
       applicationContext,
       document: documentFile,
-      key: documentIdToOverwrite,
+      key: docketEntryIdToOverwrite,
       onUploadProgress: () => {},
     });
 

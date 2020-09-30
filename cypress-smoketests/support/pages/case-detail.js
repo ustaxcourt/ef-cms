@@ -109,6 +109,7 @@ exports.manuallyAddCaseToNewTrialSession = trialSessionId => {
     .should('have.value', trialSessionId);
   cy.get('#modal-root .modal-button-confirm').click();
   cy.get('.usa-alert--success').should('contain', 'Case scheduled for trial.');
+  cy.get('h3:contains("Trial - Scheduled")').should('exist');
 };
 
 exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {

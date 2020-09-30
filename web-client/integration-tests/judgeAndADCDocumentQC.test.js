@@ -3,7 +3,7 @@ import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTria
 import {
   fakeFile,
   getFormattedDocumentQCSectionInbox,
-  getInboxCount,
+  getSectionInboxCount,
   loginAs,
   setupTest,
   uploadPetition,
@@ -30,13 +30,13 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   loginAs(test, 'judgeCohen@example.com');
   it("Get judge's document qc section inbox before", async () => {
     await getFormattedDocumentQCSectionInbox(test);
-    judgeDocketSectionQCInboxCountBefore = getInboxCount(test);
+    judgeDocketSectionQCInboxCountBefore = getSectionInboxCount(test);
   });
 
   loginAs(test, 'adc@example.com');
   it("Get adc's document qc section inbox before", async () => {
     await getFormattedDocumentQCSectionInbox(test);
-    adcDocketSectionQCInboxCountBefore = getInboxCount(test);
+    adcDocketSectionQCInboxCountBefore = getSectionInboxCount(test);
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -62,7 +62,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   loginAs(test, 'judgeCohen@example.com');
   it("Get judge's document qc section inbox after", async () => {
     await getFormattedDocumentQCSectionInbox(test);
-    const judgeDocketSectionQCInboxCountAfter = getInboxCount(test);
+    const judgeDocketSectionQCInboxCountAfter = getSectionInboxCount(test);
     expect(judgeDocketSectionQCInboxCountAfter).toBe(
       judgeDocketSectionQCInboxCountBefore + 8,
     );
@@ -71,7 +71,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   loginAs(test, 'adc@example.com');
   it("Get adc's document qc section inbox after", async () => {
     await getFormattedDocumentQCSectionInbox(test);
-    const adcDocketSectionQCInboxCountAfter = getInboxCount(test);
+    const adcDocketSectionQCInboxCountAfter = getSectionInboxCount(test);
     expect(adcDocketSectionQCInboxCountAfter).toBe(
       adcDocketSectionQCInboxCountBefore + 4,
     );
