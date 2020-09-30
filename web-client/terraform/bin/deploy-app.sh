@@ -43,4 +43,4 @@ export TF_PLUGIN_CACHE_DIR=./terraform-cache
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
-terraform apply
+terraform apply --auto-approve
