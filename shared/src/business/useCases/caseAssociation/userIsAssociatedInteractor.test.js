@@ -20,7 +20,7 @@ describe('userIsAssociated', () => {
     expect(result).toEqual(true);
   });
 
-  it('returns true if the user.userId matches the corresponding role', () => {
+  it('returns true if the user.userId matches the corresponding privatePractitioner role', () => {
     const caseDetail = {
       privatePractitioners: [
         {
@@ -38,6 +38,30 @@ describe('userIsAssociated', () => {
     expect(result).toEqual(true);
 
     user.role = ROLES.privatePractitioner;
+    caseDetail.irsPractitioners = [{ userId: 'abc-123' }];
+
+    const result2 = userIsAssociated({ applicationContext, caseDetail, user });
+    expect(result2).toEqual(true);
+  });
+
+  it('returns true if the user.userId matches the corresponding irsPractitioner role', () => {
+    const caseDetail = {
+      irsPractitioners: [
+        {
+          userId: 'abc-123',
+        },
+      ],
+      userId: 'def-321',
+    };
+    const user = {
+      role: ROLES.irsPractitioner,
+      userId: 'abc-123',
+    };
+
+    const result = userIsAssociated({ applicationContext, caseDetail, user });
+    expect(result).toEqual(true);
+
+    user.role = ROLES.irsPractitioner;
     caseDetail.irsPractitioners = [{ userId: 'abc-123' }];
 
     const result2 = userIsAssociated({ applicationContext, caseDetail, user });

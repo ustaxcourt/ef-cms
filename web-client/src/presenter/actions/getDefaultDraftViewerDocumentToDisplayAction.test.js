@@ -65,14 +65,13 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns the correct document if props.docketEntryId is set', async () => {
+  it('returns the correct document when state.draftDocumentViewerDocketEntryId is set', async () => {
     const result = await runAction(
       getDefaultDraftViewerDocumentToDisplayAction,
       {
         modules: {
           presenter,
         },
-        props: { docketEntryId: '345' },
         state: {
           caseDetail: {
             docketEntries: [
@@ -91,6 +90,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
               },
             ],
           },
+          draftDocumentViewerDocketEntryId: '345',
         },
       },
     );

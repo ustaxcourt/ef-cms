@@ -53,6 +53,12 @@ const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
+  filterQcItemsByAssociatedJudge,
+} = require('../utilities/filterQcItemsByAssociatedJudge');
+const {
+  filterWorkItemsForUser,
+} = require('../../../src/business/utilities/filterWorkItemsForUser');
+const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
@@ -74,6 +80,10 @@ const {
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
+const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -204,6 +214,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    filterQcItemsByAssociatedJudge: jest
+      .fn()
+      .mockImplementation(filterQcItemsByAssociatedJudge),
+    filterWorkItemsForUser: jest
+      .fn()
+      .mockImplementation(filterWorkItemsForUser),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
@@ -222,6 +238,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getDocQcSectionForUser: jest
+      .fn()
+      .mockImplementation(getDocQcSectionForUser),
     getDocumentTypeForAddressChange: jest
       .fn()
       .mockImplementation(getDocumentTypeForAddressChange),
@@ -233,6 +252,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
@@ -336,7 +356,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
-    getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
+    getDocumentQCInboxForSection: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDocumentQCInboxForUser: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForUserPersistence),

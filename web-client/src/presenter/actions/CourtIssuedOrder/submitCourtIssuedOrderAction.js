@@ -47,7 +47,7 @@ export const submitCourtIssuedOrderAction = async ({
       .getUseCases()
       .updateCourtIssuedOrderInteractor({
         applicationContext,
-        docketEntryIdToEdit: docketEntryIdToEdit,
+        docketEntryIdToEdit,
         documentMetadata,
       });
   } else {
