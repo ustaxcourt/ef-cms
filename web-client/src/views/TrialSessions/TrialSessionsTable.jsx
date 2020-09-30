@@ -11,13 +11,11 @@ export const TrialSessionsTable = connect(
       state.formattedTrialSessions.filteredTrialSessions[props.filter],
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
     trialSessionsHelper: state.trialSessionsHelper,
-    users: state.users,
   },
   function TrialSessionsTable({
     formattedTrialSessions,
     trialSessionsHelper,
     trialSessionTypes,
-    users,
   }) {
     return (
       <React.Fragment>
@@ -61,13 +59,17 @@ export const TrialSessionsTable = connect(
                   name="judge"
                 >
                   <option value="">-Judge-</option>
-                  {users.map((judge, idx) => (
+                  {trialSessionsHelper.trialSessionJudges.map((judge, idx) => (
                     <option key={idx} value={judge.userId}>
                       {judge.name}
                     </option>
                   ))}
+
                   {trialSessionsHelper.showUnassignedJudgeFilter && (
-                    <option key={users.length} value="unassigned">
+                    <option
+                      key={trialSessionsHelper.trialSessionJudges.length}
+                      value="unassigned"
+                    >
                       Unassigned
                     </option>
                   )}
