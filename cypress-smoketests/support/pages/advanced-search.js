@@ -58,11 +58,7 @@ exports.createOpinion = () => {
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
   cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
-  cy.get(
-    '#main-content > section > div > div.grid-row.grid-gap.margin-top-4 > div > button:nth-child(1)',
-  )
-    .scrollIntoView()
-    .click();
+  cy.get('#save-uploaded-pdf-button').scrollIntoView().click();
 };
 
 exports.signOpinion = () => {
