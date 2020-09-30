@@ -31,7 +31,7 @@ elif [[ $BRANCH == 'master' ]] ; then
 elif [[ $BRANCH == 'dawson' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo "2"
+  echo "3"
 else
   exit 1;
 fi
