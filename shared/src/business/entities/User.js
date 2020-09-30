@@ -1,6 +1,6 @@
 const joi = require('joi');
 const {
-  CHAMBERS_SECTIONS,
+  CHAMBERS_SECTIONS_WITH_LEGACY,
   COUNTRY_TYPES,
   ROLES,
   SECTIONS,
@@ -118,7 +118,7 @@ const userValidation = {
     ),
   section: JoiValidationConstants.STRING.valid(
     ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
+    ...CHAMBERS_SECTIONS_WITH_LEGACY,
     ...Object.values(ROLES),
   ).optional(),
   token: JoiValidationConstants.STRING.optional(),
