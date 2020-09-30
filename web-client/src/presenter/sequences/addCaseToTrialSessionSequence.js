@@ -8,6 +8,7 @@ import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialS
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
+import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -18,6 +19,7 @@ import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateA
 const showSuccessAlert = [
   clearModalStateAction,
   setAlertSuccessAction,
+  setTrialSessionJudgeAction,
   getCaseAction,
   setCaseAction,
 ];
