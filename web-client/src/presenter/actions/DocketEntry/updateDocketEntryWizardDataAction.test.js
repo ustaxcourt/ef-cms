@@ -358,4 +358,22 @@ describe('updateDocketEntryWizardDataAction', () => {
 
     expect(result.state.form.additionalInfo2).toEqual('abc');
   });
+
+  it('should not override documentTitle', async () => {
+    const mockDocumentTitle = 'Entry of Disappearance';
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      modules: { presenter },
+      props: {
+        key: 'initEventCode',
+        value: 'EA',
+      },
+      state: {
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+      },
+    });
+
+    expect(result.state.form.documentTitle).toEqual(mockDocumentTitle);
+  });
 });

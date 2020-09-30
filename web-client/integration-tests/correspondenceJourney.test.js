@@ -4,7 +4,7 @@ import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorres
 import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
 import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
 import { docketClerkStartsNewMessageWithCorrespondence } from './journey/docketClerkStartsNewMessageWithCorrespondence';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 let caseDetail;
@@ -27,6 +27,6 @@ describe('Adds correspondence to a case', () => {
   docketClerkAddsCorrespondence(test, correspondenceTitle);
   docketClerkNavigatesToEditCorrespondence(test, correspondenceTitle);
   docketClerkStartsNewMessageWithCorrespondence(test);
-  docketClerkEditsCorrespondence(test);
+  docketClerkEditsCorrespondence(test, fakeFile);
   docketClerkDeletesCorrespondence(test);
 });

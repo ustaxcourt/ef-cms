@@ -63,6 +63,10 @@ export const fakeFile = (() => {
   return getFakeFile();
 })();
 
+export const fakeFile1 = (() => {
+  return getFakeFile(false, true);
+})();
+
 export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -194,10 +198,28 @@ export const createCourtIssuedDocketEntry = async ({
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getInboxCount = test => {
+export const getIndividualInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
-  }).inboxCount;
+  }).individualInboxCount;
+};
+
+export const getSectionInboxCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInboxCount;
+};
+
+export const getSectionInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInProgressCount;
+};
+
+export const getIndividualInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).individualInProgressCount;
 };
 
 export const findWorkItemByDocketNumber = (queue, docketNumber) => {

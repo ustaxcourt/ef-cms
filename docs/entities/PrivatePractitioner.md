@@ -304,6 +304,22 @@
             limit: 1
       allow: 
         - "PrivatePractitioner"
+    firmName: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The firm name for the practitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      allow: 
+        - null
     name: 
       type: "string"
       flags: 

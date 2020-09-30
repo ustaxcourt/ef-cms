@@ -341,6 +341,21 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     documentTitle: 'Substitution of Counsel',
     eventCode: 'SOC',
   },
+  {
+    documentType: 'Notice of Intervention',
+    documentTitle: 'Notice of Intervention',
+    eventCode: 'NOI',
+  },
+  {
+    documentType: 'Notice of Election to Participate',
+    documentTitle: 'Notice of Election to Participate',
+    eventCode: 'NOEP',
+  },
+  {
+    documentType: 'Notice of Election to Intervene',
+    documentTitle: 'Notice of Election to Intervene',
+    eventCode: 'NOEI',
+  },
 ];
 const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(
   d => d.documentType,

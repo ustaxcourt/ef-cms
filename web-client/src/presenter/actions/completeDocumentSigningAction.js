@@ -77,6 +77,7 @@ export const completeDocumentSigningAction = async ({
   }
 
   return {
+    docketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',

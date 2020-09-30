@@ -230,8 +230,8 @@ export const baseState = {
   },
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
-
   docketRecordIndex: 0,
+  draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     isUploading: false,
@@ -246,6 +246,8 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  individualInProgressCount: 0,
+  individualInboxCount: 0,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {

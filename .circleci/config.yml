@@ -26,7 +26,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Lint
           command: npm run lint
@@ -79,7 +78,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Shared - Test
           command: npm run test:shared:ci
@@ -125,7 +123,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit:ci
@@ -170,7 +167,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -262,7 +258,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -282,9 +277,9 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 10
-            npm run test:pa11y:1 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -325,7 +320,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -345,7 +339,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
-            npm run test:pa11y:public --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -386,7 +380,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -451,7 +444,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -603,7 +595,6 @@ jobs:
             npm set progress=false
             npm ci
             npm rebuild node-sass
-            npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -618,7 +609,7 @@ jobs:
           command: npm run cypress:smoketests
       - run:
           name: 'Pa11y Smoke Tests'
-          command: npm run test:pa11y:smoketests --prefix=web-client/pa11y/
+          command: npm run test:pa11y:smoketests
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
