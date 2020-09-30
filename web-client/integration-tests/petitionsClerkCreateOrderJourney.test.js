@@ -5,6 +5,7 @@ import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAddsGenericOrderToCase } from './journey/petitionsClerkAddsGenericOrderToCase';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
+import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 import { petitionsClerkEditsDraftOrder } from './journey/petitionsClerkEditsDraftOrder';
 import { petitionsClerkEditsGenericOrder } from './journey/petitionsClerkEditsGenericOrder';
 import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
@@ -39,6 +40,7 @@ describe('Petitions Clerk Create Order Journey', () => {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
   });
+  petitionsClerkCreatesMessageToChambers(test);
   petitionsDeletesOrderFromCase(test);
   petitionsClerkViewsDraftDocuments(test, 0);
 

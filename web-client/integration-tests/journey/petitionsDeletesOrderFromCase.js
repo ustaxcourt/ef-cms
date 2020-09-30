@@ -21,7 +21,19 @@ export const petitionsDeletesOrderFromCase = test => {
       redirectToCaseDetail: true,
     });
 
-    await test.runSequence('archiveDraftDocumentSequence');
+    console.log(
+      'LOL',
+      JSON.stringify(test.getState('caseDetail.messages', null, 1)),
+    );
+
+    const daniel = await test.runSequence('archiveDraftDocumentSequence');
+
+    console.log('???', daniel.state);
+
+    console.log(
+      'LOL',
+      JSON.stringify(test.getState('caseDetail.messages', null, 1)),
+    );
 
     formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
@@ -30,6 +42,7 @@ export const petitionsDeletesOrderFromCase = test => {
     expect(test.getState('alertSuccess.message')).toEqual('Document deleted.');
     expect(test.getState('viewerDraftDocumentToDisplay')).toBeUndefined();
     expect(test.getState('draftDocumentViewerDocketEntryId')).toBeUndefined();
+    expect(test.getState('caseDetail.messages').length).toBe(1);
 
     expect(
       formatted.draftDocuments.find(
