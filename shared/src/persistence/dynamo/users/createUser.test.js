@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  JUDGES_CHAMBERS,
   PETITIONS_SECTION,
   ROLES,
 } = require('../../../business/entities/EntityConstants');
@@ -178,6 +179,48 @@ describe('createUser', () => {
       ).toMatchObject({
         Item: {
           pk: 'section|adamsChambers',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'section|judge',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
+        Item: {
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
+          ...judgeUser,
+        },
+      });
+    });
+
+    it('attempts to persist a legacy judge user with a section mapping record for the chambers and the judge', async () => {
+      const judgeUser = {
+        name: 'Legacy Judge Ginsburg',
+        role: ROLES.legacyJudge,
+        section: JUDGES_CHAMBERS.LEGACY_JUDGES_CHAMBERS_SECTION.section,
+      };
+
+      await createUserRecords({
+        applicationContext,
+        user: judgeUser,
+        userId,
+      });
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        3,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          pk: `section|${JUDGES_CHAMBERS.LEGACY_JUDGES_CHAMBERS_SECTION.section}`,
           sk: `user|${userId}`,
         },
       });
