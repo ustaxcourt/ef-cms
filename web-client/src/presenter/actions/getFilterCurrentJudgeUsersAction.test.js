@@ -22,10 +22,16 @@ describe('getFilterCurrentJudgeUsersAction', () => {
       },
     });
 
-    expect(result.output.users.length).toBe(1);
-    expect(result.output.users[0]).toEqual({
-      name: 'I am not a legacy judge',
-      role: USER_ROLES.judge,
+    expect(result.output).toMatchObject({
+      users: expect.arrayContaining([
+        expect.objectContaining({ role: USER_ROLES.judge }),
+      ]),
+    });
+
+    expect(result.output).not.toMatchObject({
+      users: expect.arrayContaining([
+        expect.objectContaining({ role: USER_ROLES.legacyJudge }),
+      ]),
     });
   });
 });
