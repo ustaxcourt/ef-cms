@@ -1,3 +1,4 @@
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   assignWorkItems,
@@ -6,8 +7,9 @@ import {
   getFormattedDocumentQCMyInbox,
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
-  getInboxCount,
+  getIndividualInboxCount,
   getNotifications,
+  getSectionInboxCount,
   loginAs,
   setupTest,
   uploadExternalDecisionDocument,
@@ -32,10 +34,10 @@ describe('Create a work item', () => {
 
   it('login as the docketclerk and cache the initial inbox counts', async () => {
     await getFormattedDocumentQCMyInbox(test);
-    qcMyInboxCountBefore = getInboxCount(test);
+    qcMyInboxCountBefore = getIndividualInboxCount(test);
 
     await getFormattedDocumentQCSectionInbox(test);
-    qcSectionInboxCountBefore = getInboxCount(test);
+    qcSectionInboxCountBefore = getSectionInboxCount(test);
 
     notificationsBefore = getNotifications(test);
   });
@@ -84,7 +86,7 @@ describe('Create a work item', () => {
       },
     });
 
-    const qcSectionInboxCountAfter = getInboxCount(test);
+    const qcSectionInboxCountAfter = getSectionInboxCount(test);
     expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 3);
   });
 
@@ -110,7 +112,7 @@ describe('Create a work item', () => {
         userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
-    const qcMyInboxCountAfter = getInboxCount(test);
+    const qcMyInboxCountAfter = getIndividualInboxCount(test);
     expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 3);
   });
 
@@ -134,12 +136,15 @@ describe('Create a work item', () => {
 
     await test.runSequence('completeDocketEntryQCSequence');
 
-    const noticeDocument = test
+    const noticeDocketEntry = test
       .getState('caseDetail.docketEntries')
       .find(doc => doc.documentType === 'Notice of Docket Change');
 
-    expect(noticeDocument).toBeTruthy();
-    expect(noticeDocument.servedAt).toBeDefined();
+    expect(noticeDocketEntry).toBeTruthy();
+    expect(noticeDocketEntry.servedAt).toBeDefined();
+    expect(noticeDocketEntry.processingStatus).toEqual(
+      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    );
     expect(test.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',
     );

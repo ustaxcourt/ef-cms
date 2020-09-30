@@ -7,6 +7,8 @@ export const headerHelper = (get, applicationContext) => {
   const currentPage = get(state.currentPage) || '';
   const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
+  const notifications = get(state.notifications);
+  const { unreadMessageCount } = notifications;
 
   const isOtherUser = role => {
     const externalRoles = [USER_ROLES.petitionsClerk, USER_ROLES.docketClerk];
@@ -63,6 +65,7 @@ export const headerHelper = (get, applicationContext) => {
       userRole !== USER_ROLES.irsSuperuser,
     showSearchNavItem: user && userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
+    unreadMessageCount,
     userName: user && user.name,
   };
 };

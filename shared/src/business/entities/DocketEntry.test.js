@@ -1612,6 +1612,30 @@ describe('DocketEntry entity', () => {
       expect(docketEntry.isAutoServed()).toBeTruthy();
     });
 
+    it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentTitle: 'Notice of Election to Participate',
+          documentType: 'Notice of Election to Participate',
+        },
+        { applicationContext },
+      );
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Notice of Election to Intervene';
+      docketEntry.documentType = 'Notice of Election to Intervene';
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Notice of Election to Participate';
+      docketEntry.documentType = 'Notice of Election to Participate';
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Notice of Intervention';
+      docketEntry.documentType = 'Notice of Intervention';
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+    });
+
     it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
       const docketEntry = new DocketEntry(
         {

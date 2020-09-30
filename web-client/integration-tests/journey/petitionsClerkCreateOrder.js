@@ -45,5 +45,8 @@ export const petitionsClerkCreateOrder = test => {
     test.docketEntryId = first(draftDocuments)
       ? first(draftDocuments).docketEntryId
       : undefined;
+    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
+      test.docketEntryId,
+    );
   });
 };

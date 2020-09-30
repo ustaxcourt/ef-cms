@@ -13,11 +13,11 @@ export const petitionsClerkGetsSectionDocumentQCInboxCount = (
       state: test.getState(),
     });
     if (test.petitionsClerkSectionDocumentQCInboxCount !== undefined) {
-      expect(helper.inboxCount).toEqual(
+      expect(helper.sectionInboxCount).toEqual(
         test.petitionsClerkSectionDocumentQCInboxCount + adjustExpectedCountBy,
       );
     } else {
-      expect(helper.inboxCount).toBeGreaterThan(0);
+      expect(helper.sectionInboxCount).toBeGreaterThan(0);
     }
   });
 };

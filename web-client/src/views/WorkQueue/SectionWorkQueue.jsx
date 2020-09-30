@@ -36,7 +36,7 @@ export const SectionWorkQueue = connect(
         <Tab
           id="section-inbox-tab"
           tabName="inbox"
-          title={`Inbox (${workQueueHelper.inboxCount})`}
+          title={`Inbox (${workQueueHelper.sectionInboxCount})`}
         >
           <div id="section-inbox-tab-content">
             <SectionWorkQueueInbox />
@@ -46,7 +46,7 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-in-progress-tab"
             tabName="inProgress"
-            title={`In Progress (${workQueueHelper.inProgressCount})`}
+            title={`In Progress (${workQueueHelper.sectionInProgressCount})`}
           >
             <div id="section-in-progress-tab-content">
               <SectionWorkQueueInProgress />

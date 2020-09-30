@@ -251,6 +251,7 @@ const PetitionerInformation = connect(
                   <address aria-labelledby="practitioner-label">
                     {practitioner.name && (
                       <AddressDisplay
+                        showEmail
                         contact={{
                           ...practitioner,
                           ...practitioner.contact,

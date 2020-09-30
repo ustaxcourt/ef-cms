@@ -12,6 +12,6 @@ export const unauthedUserSearchesForSealedCasesByDocketNumber = test => {
     await test.runSequence('submitPublicCaseDocketNumberSearchSequence');
 
     expect(test.getState('searchResults')).toEqual([]);
-    expect(test.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
+    expect(test.currentRouteUrl).toBe(`/case-detail/${test.docketNumber}`);
   });
 };
