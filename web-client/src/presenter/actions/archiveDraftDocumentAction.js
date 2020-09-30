@@ -27,6 +27,9 @@ export const archiveDraftDocumentAction = async ({
       docketNumber,
     });
 
+  store.unset(state.viewerDraftDocumentToDisplay);
+  store.unset(state.draftDocumentViewerDocketEntryId);
+
   store.set(state.alertSuccess, {
     message: 'Document deleted.',
   });

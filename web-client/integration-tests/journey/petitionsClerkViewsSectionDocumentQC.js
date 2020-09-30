@@ -18,7 +18,7 @@ export const petitionsClerkViewsSectionDocumentQC = (test, storeCount) => {
       const helper = await runCompute(workQueueHelper, {
         state: test.getState(),
       });
-      test.petitionsClerkSectionDocumentQCInboxCount = helper.inboxCount;
+      test.petitionsClerkSectionDocumentQCInboxCount = helper.sectionInboxCount;
     }
   });
 };

@@ -24,7 +24,7 @@ describe('sendServedPartiesEmails', () => {
       },
       docketEntryEntity: {
         docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
-        documentTitle: 'The Document',
+        documentType: 'The Document',
         servedAt: '2019-03-01T21:40:46.415Z',
       },
       servedParties: {
