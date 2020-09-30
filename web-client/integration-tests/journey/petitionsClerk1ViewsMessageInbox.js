@@ -15,5 +15,8 @@ export const petitionsClerk1ViewsMessageInbox = test => {
 
     test.testMessageDocumentId = foundMessage.attachments[0].documentId;
     test.parentMessageId = foundMessage.parentMessageId;
+
+    expect(test.getState('messagesSectionCount')).toBeGreaterThan(0);
+    expect(test.getState('messagesInboxCount')).toBeGreaterThan(0);
   });
 };

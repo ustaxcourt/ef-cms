@@ -237,7 +237,39 @@ describe('workQueueHelper', () => {
     expect(result.showInProgressTab).toEqual(true);
   });
 
-  it('returns the inboxCount for the work queue based on the value of state.sectionInboxCount', () => {
+  it('returns the individualInboxCount for the work queue based on the value of state.individualInboxCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        individualInboxCount: 3,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.individualInboxCount).toBe(3);
+  });
+
+  it('returns the individualInProgressCount for the work queue based on the value of state.individualInProgressCount', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        individualInProgressCount: 10,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+    expect(result.individualInProgressCount).toBe(10);
+  });
+
+  it('returns the sectionInboxCount for the work queue based on the value of state.sectionInboxCount', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
@@ -250,10 +282,10 @@ describe('workQueueHelper', () => {
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
-    expect(result.inboxCount).toBe(3);
+    expect(result.sectionInboxCount).toBe(3);
   });
 
-  it('returns the inProgressCount for the work queue based on the value of state.sectionInProgressCount', () => {
+  it('returns the sectionInProgressCount for the work queue based on the value of state.sectionInProgressCount', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
@@ -266,6 +298,6 @@ describe('workQueueHelper', () => {
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
-    expect(result.inProgressCount).toBe(10);
+    expect(result.sectionInProgressCount).toBe(10);
   });
 });

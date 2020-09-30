@@ -160,9 +160,11 @@ export const WorkingCopySessionList = connect(
                         link
                         className="margin-top-1"
                         icon="plus-circle"
+                        id={`add-note-${item.docketNumber}`}
                         onClick={() => {
                           openAddEditUserCaseNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
+                            docketNumberWithSuffix: item.docketNumberWithSuffix,
                           });
                         }}
                       >

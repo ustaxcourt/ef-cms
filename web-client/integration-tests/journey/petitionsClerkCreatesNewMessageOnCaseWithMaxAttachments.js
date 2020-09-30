@@ -10,6 +10,9 @@ const { PETITIONS_SECTION } = applicationContext.getConstants();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
+  expect(test.getState('messagesSectionCount')).toBe(0);
+  expect(test.getState('messagesInboxCount')).toBe(0);
+
   const getHelper = () => {
     return runCompute(messageModalHelper, {
       state: test.getState(),

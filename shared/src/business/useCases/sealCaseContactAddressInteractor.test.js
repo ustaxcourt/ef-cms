@@ -39,6 +39,30 @@ describe('sealCaseContactAddressInteractor', () => {
     ).rejects.toThrow('Cannot seal contact');
   });
 
+  it('should throw an exception of `Cannot seal contact` even when otherFilers or otherPetitioners are undefined or null', async () => {
+    const caseWithoutOthers = {
+      ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      otherFilers: null,
+      otherPetitioners: null,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(caseWithoutOthers);
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
+    await expect(
+      sealCaseContactAddressInteractor({
+        applicationContext,
+        contactId: '23-skidoo',
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow('Cannot seal contact');
+  });
+
   it('should call updateCase with `isSealedAddress` on contactPrimary and return the updated case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
