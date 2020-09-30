@@ -1915,4 +1915,43 @@ describe('DocketEntry entity', () => {
       });
     });
   });
+
+  describe('judgeUserId', () => {
+    it('sets the judgeUserId property when a value is passed in', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          judgeUserId: mockJudgeUserId,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+
+      expect(docketEntry).toMatchObject({
+        judgeUserId: mockJudgeUserId,
+      });
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('does not fail validation without a judgeUserId', () => {
+      const docketEntry = new DocketEntry(
+        {
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+      expect(docketEntry.judgeUserId).toBeUndefined();
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+  });
 });
