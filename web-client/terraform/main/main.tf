@@ -122,3 +122,14 @@ resource "aws_acm_certificate_validation" "dns_validation_west" {
   validation_record_fqdns = [aws_route53_record.record_certs.fqdn]
   provider                = aws.us-west-1
 }
+
+resource "aws_route53_record" "statuspage" {
+  count   = var.statuspage_dns_record != "" ? 1 : 0
+  name    = "status.${var.dns_domain}"
+  type    = "CNAME"
+  zone_id = data.aws_route53_zone.zone.zone_id
+  ttl     = 60
+  records = [
+    var.statuspage_dns_record
+  ]
+}
