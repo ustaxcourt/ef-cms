@@ -124,7 +124,7 @@ resource "aws_acm_certificate_validation" "dns_validation_west" {
 }
 
 resource "aws_route53_record" "statuspage" {
-  count   = "${var.statuspage_dns_record != "" ? 1 : 0}"
+  count   = var.statuspage_dns_record != "" ? 1 : 0
   name    = "status.${var.dns_domain}"
   type    = "CNAME"
   zone_id = data.aws_route53_zone.zone.zone_id
