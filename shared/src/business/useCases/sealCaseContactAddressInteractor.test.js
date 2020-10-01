@@ -39,7 +39,7 @@ describe('sealCaseContactAddressInteractor', () => {
     ).rejects.toThrow('Cannot seal contact');
   });
 
-  it('should default otherFilers and otherPetitioners to an empty array if they do not exist on the case', async () => {
+  it('should throw an exception of `Cannot seal contact` even when otherFilers or otherPetitioners are undefined or null', async () => {
     const caseWithoutOthers = {
       ...MOCK_CASE_WITH_SECONDARY_OTHERS,
       otherFilers: null,
