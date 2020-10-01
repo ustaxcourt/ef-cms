@@ -2,7 +2,7 @@
 name: Bug Report
 about: 'Template for USTC bugs. '
 title: 'BUG: '
-labels: bug
+labels: ''
 assignees: ''
 
 ---
