@@ -1,60 +1,53 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  createPractitionerUserInteractor,
-} = require('./createPractitionerUserInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+const { createJudgeUserInteractor } = require('./createJudgeUserInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const mockUser = {
-  admissionsDate: '2019-03-01T21:40:46.415Z',
-  admissionsStatus: 'Active',
-  barNumber: 'AT5678',
-  birthYear: 2019,
-  employer: 'Private',
-  firmName: 'GW Law Offices',
-  firstName: 'bob',
-  lastName: 'sagot',
-  name: 'Test Attorney',
-  originalBarState: US_STATES.OK,
-  practitionerType: 'Attorney',
-  role: ROLES.privatePractitioner,
-  userId: '07044afe-641b-4d75-a84f-0698870b7650',
+  email: 'judgeFieri@example.com',
+  entityName: 'User',
+  judgeFullName: 'Guy S. B. Fieri',
+  judgeTitle: 'Legacy Judge Fieri',
+  name: 'Fieri',
+  role: ROLES.legacyJudge,
+  section: 'legacyJudgesChambers',
+  userId: 'fa244bfb-2636-4d02-9f84-6a131eb16502',
 };
 
-describe('create practitioner user', () => {
+describe('createJudgeUserInteractor', () => {
   let testUser;
 
   beforeEach(() => {
     testUser = {
-      role: ROLES.admissionsClerk,
-      userId: 'admissionsclerk',
+      role: ROLES.admin,
+      userId: 'f0c1d194-92e5-45b7-a381-7625a6a7bc0c',
     };
 
     applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
       .getPersistenceGateway()
-      .createPractitionerUser.mockResolvedValue(mockUser);
+      .createUser.mockResolvedValue(mockUser);
   });
 
-  it('creates the practitioner user', async () => {
-    const user = await createPractitionerUserInteractor({
+  it('creates the judge user', async () => {
+    const user = await createJudgeUserInteractor({
       applicationContext,
       user: mockUser,
     });
     expect(user).not.toBeUndefined();
   });
 
-  it('throws unauthorized for a non-internal user', async () => {
+  it('throws unauthorized for a non-admin user', async () => {
     testUser = {
       role: ROLES.petitioner,
       userId: '6a2a8f95-0223-442e-8e55-5f094c6bca15',
     };
 
     await expect(
-      createPractitionerUserInteractor({
+      createJudgeUserInteractor({
         applicationContext,
         user: mockUser,
       }),
