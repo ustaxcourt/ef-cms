@@ -13,6 +13,6 @@ export const openUpdateCaseModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   defaultUpdateCaseModalValuesAction,
   getUsersInSectionAction({ section: 'judge' }),
-  setUsersByKeyAction('modal.judgeUsers'),
+  setUsersByKeyAction('modal.judges'),
   setShowModalFactoryAction('UpdateCaseModalDialog'),
 ]);

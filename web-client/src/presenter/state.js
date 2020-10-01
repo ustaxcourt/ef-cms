@@ -188,6 +188,7 @@ const helpers = {
 
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
     // used by the delete draft document modal
@@ -201,6 +202,7 @@ export const baseState = {
   cognitoLoginUrl: null,
   completeForm: {},
   // TODO: replace with state.form
+  currentJudges: [],
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -248,6 +250,8 @@ export const baseState = {
   },
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  judges: [],
+  legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {

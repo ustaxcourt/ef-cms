@@ -7,10 +7,11 @@ const check = (value, message) => {
   }
 };
 
-const { CURRENT_COLOR, DEPLOYING_COLOR, ENV } = process.env;
+const { CURRENT_COLOR, DEPLOYING_COLOR, ENV, ZONE_NAME } = process.env;
 
 check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
 check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
+check(ZONE_NAME, 'You must have ZONE_NAME set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 
 const cloudfront = new AWS.CloudFront({ maxRetries: 3 });
@@ -23,15 +24,13 @@ const run = async () => {
 
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias =>
-        alias === `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+      alias => alias === `app-${CURRENT_COLOR}.${ENV}.${ZONE_NAME}`,
     ),
   );
 
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias =>
-        alias === `app-${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+      alias => alias === `app-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}`,
     ),
   );
 
@@ -48,14 +47,14 @@ const run = async () => {
     .promise();
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
-    `app-${CURRENT_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
+    `app-${CURRENT_COLOR}.${ENV}.${ZONE_NAME}`,
   ];
   currentColorConfig.DistributionConfig.Aliases.Quantity = 1;
 
   deployingColorConfig.DistributionConfig.Aliases.Quantity = 2;
   deployingColorConfig.DistributionConfig.Aliases.Items = [
-    `app-${DEPLOYING_COLOR}-${ENV}.ustc-case-mgmt.flexion.us`,
-    `app-${ENV}.ustc-case-mgmt.flexion.us`,
+    `app-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}`,
+    `app.${ENV}.${ZONE_NAME}`,
   ];
 
   await cloudfront
@@ -87,7 +86,7 @@ const run = async () => {
   }
 
   const zone = await route53
-    .listHostedZonesByName({ DNSName: 'ustc-case-mgmt.flexion.us.' })
+    .listHostedZonesByName({ DNSName: `${ZONE_NAME}.` })
     .promise();
 
   const zoneId = zone.HostedZones[0].Id;
@@ -104,12 +103,12 @@ const run = async () => {
                 EvaluateTargetHealth: false,
                 HostedZoneId: 'Z2FDTNDATAQYW2', // this magic number is the zone for all cloud front distributions on AWS
               },
-              Name: `app-${ENV}.ustc-case-mgmt.flexion.us`,
+              Name: `app.${ENV}.${ZONE_NAME}`,
               Type: 'A',
             },
           },
         ],
-        Comment: `The UI for app-${ENV}.ustc-case-mgmt.flexion.us`,
+        Comment: `The UI for app.${ENV}.${ZONE_NAME}`,
       },
       HostedZoneId: zoneId,
     })

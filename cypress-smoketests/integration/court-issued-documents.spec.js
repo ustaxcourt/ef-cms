@@ -41,11 +41,13 @@ const { goToMyDocumentQC } = require('../support/pages/document-qc');
 let token = null;
 const testData = {};
 
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
 describe('Petitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -83,7 +85,7 @@ describe('Petitions clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -106,7 +108,7 @@ describe('Docket Clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
