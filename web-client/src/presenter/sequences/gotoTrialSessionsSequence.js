@@ -8,12 +8,12 @@ import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
-import { setUsersAction } from '../actions/setUsersAction';
 
 const gotoTrialSessions = [
   setCurrentPageAction('Interstitial'),
@@ -28,7 +28,10 @@ const gotoTrialSessions = [
       setNotificationsAction,
     ],
     [getTrialSessionsAction, setTrialSessionsAction],
-    [getUsersInSectionAction({ section: 'judge' }), setUsersAction],
+    [
+      getUsersInSectionAction({ section: 'judge' }),
+      setAllAndCurrentJudgesAction,
+    ],
   ]),
   setTrialSessionsFiltersAction,
   setCurrentPageAction('TrialSessions'),
