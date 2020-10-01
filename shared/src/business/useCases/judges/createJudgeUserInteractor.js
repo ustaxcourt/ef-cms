@@ -26,7 +26,7 @@ exports.createJudgeUserInteractor = async ({ applicationContext }) => {
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
-    .createJudgeUser({
+    .createUser({
       applicationContext,
       user: judge,
     });
