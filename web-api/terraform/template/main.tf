@@ -36,6 +36,18 @@ module "dynamo_table_2" {
   }
 }
 
+module "dynamo_table_3" {
+  source = "./dynamo-table"
+
+  environment = var.environment
+  table_name  = "efcms-${var.environment}-3"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
 module "elasticsearch_1" {
   source = "./elasticsearch"
 
@@ -54,6 +66,19 @@ module "elasticsearch_2" {
 
   environment       = var.environment
   domain_name       = "efcms-search-${var.environment}-2"
+  es_instance_count = var.es_instance_count
+  es_instance_type  = "t2.small.elasticsearch"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
+
+module "elasticsearch_3" {
+  source = "./elasticsearch"
+
+  environment       = var.environment
+  domain_name       = "efcms-search-${var.environment}-3"
   es_instance_count = var.es_instance_count
   es_instance_type  = "t2.small.elasticsearch"
 
