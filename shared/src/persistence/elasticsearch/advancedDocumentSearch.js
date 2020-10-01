@@ -68,13 +68,13 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (judge) {
+    const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
-
     queryParams.push({
       bool: {
-        must: {
+        should: {
           match: {
-            [judgeField]: judge,
+            [judgeField]: judgeName,
           },
         },
       },
@@ -148,6 +148,5 @@ exports.advancedDocumentSearch = async ({
     applicationContext,
     searchParameters: documentQuery,
   });
-
   return results;
 };
