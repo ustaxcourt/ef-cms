@@ -19,7 +19,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
-        opinionType: 'Summary Opinion',
+        opinionType: 'Memorandum Opinion',
         startDate: '2001-01-01',
       },
     });
