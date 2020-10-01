@@ -11,10 +11,6 @@ var https = require('https');
 var zlib = require('zlib');
 var crypto = require('crypto');
 
-const ENV = process.env;
-
-var endpoint = ENV.es_endpoint;
-
 // Set this to true if you want to debug why data isn't making it to
 // your Elasticsearch cluster. This will enable logging of failed items
 // to CloudWatch Logs.
@@ -147,7 +143,7 @@ function isNumeric(n) {
 }
 
 function post(body, callback) {
-    var requestParams = buildRequest(endpoint, body);
+    var requestParams = buildRequest(process.env.es_endpoint, body);
 
     var request = https.request(requestParams, function(response) {
         var responseBody = '';
