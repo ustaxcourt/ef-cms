@@ -172,10 +172,10 @@ export const getWorkItemDocumentLink = ({
         formattedDocketEntry.isPetition &&
         formattedDocketEntry.isInProgress));
 
-  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
+  const baseDocumentLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
-  let editLink = documentDetailLink;
+  let editLink = documentViewLink;
   if (showDocumentEditLink) {
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
@@ -185,7 +185,7 @@ export const getWorkItemDocumentLink = ({
         result,
       });
       if (editLinkExtension) {
-        editLink += editLinkExtension;
+        editLink = `${baseDocumentLink}${editLinkExtension}`;
       } else {
         editLink = documentViewLink;
       }
@@ -194,12 +194,10 @@ export const getWorkItemDocumentLink = ({
       !formattedDocketEntry.servedAt
     ) {
       if (result.caseIsInProgress) {
-        editLink += '/review';
+        editLink = `${baseDocumentLink}/review`;
       } else {
         editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
       }
-    } else {
-      editLink = documentViewLink;
     }
   }
 
