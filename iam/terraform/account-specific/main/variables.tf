@@ -10,3 +10,9 @@ variable "es_logs_instance_count" {
   type = string
   default = "1"
 }
+
+variable "environments" {
+  description = "deployment environments"
+  type = list(string)
+  default = ["dev", "stg", "mig", "irs", "test"]
+}

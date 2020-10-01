@@ -20,6 +20,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 
   domain_endpoint_options {
     enforce_https = true
+    tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
   }
 
   ebs_options{
