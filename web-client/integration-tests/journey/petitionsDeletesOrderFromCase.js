@@ -21,19 +21,7 @@ export const petitionsDeletesOrderFromCase = test => {
       redirectToCaseDetail: true,
     });
 
-    console.log(
-      'LOL',
-      JSON.stringify(test.getState('caseDetail.messages', null, 1)),
-    );
-
-    const daniel = await test.runSequence('archiveDraftDocumentSequence');
-
-    console.log('???', daniel.state);
-
-    console.log(
-      'LOL',
-      JSON.stringify(test.getState('caseDetail.messages', null, 1)),
-    );
+    await test.runSequence('archiveDraftDocumentSequence');
 
     formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
