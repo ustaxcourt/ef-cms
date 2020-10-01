@@ -41,7 +41,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
-          opinionType: 'Summary Opinion',
+          opinionType: 'Memorandum Opinion',
           startDate: '1995-08-03',
         },
       });
