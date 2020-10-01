@@ -37,7 +37,20 @@ describe('createJudgeUserInteractor', () => {
       applicationContext,
       user: mockUser,
     });
+
     expect(user).not.toBeUndefined();
+  });
+
+  it('makes a call to create the judge user in persistence', async () => {
+    await createJudgeUserInteractor({
+      applicationContext,
+      user: mockUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject(mockUser);
   });
 
   it('throws unauthorized for a non-admin user', async () => {
