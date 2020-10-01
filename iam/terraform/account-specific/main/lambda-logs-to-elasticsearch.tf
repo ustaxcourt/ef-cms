@@ -28,6 +28,22 @@ resource "aws_cloudwatch_log_subscription_filter" "api_filter" {
   count = length(var.environments)
   destination_arn = aws_lambda_function.logs_to_es.arn
   filter_pattern = ""
-  name = "api_${count.index}_lambda_filter"
+  name = "api_${element(var.environments, count.index)}_lambda_filter"
   log_group_name  = "/aws/lambda/api_${element(var.environments, count.index)}"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "streams_filter" {
+  count = length(var.environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern = ""
+  name = "streams_${element(var.environments, count.index)}_lambda_filter"
+  log_group_name = "/aws/lambda/streams_${element(var.environments, count.index)}"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
+  count = length(var.environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern = ""
+  name = "cognito_authorizer_${element(var.environments, count.index)}_lambda_filter"
+  log_group_name = "/aws/lambda/cognito_authorizer_lambda_${element(var.environments, count.index)}"
 }
