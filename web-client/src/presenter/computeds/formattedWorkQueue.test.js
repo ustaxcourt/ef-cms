@@ -771,6 +771,39 @@ describe('formatted work queue computed', () => {
       );
     });
 
+    it('should return default document view link when the document has been processed, is unservable, and the user is docketClerk', () => {
+      const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-02-28T21:14:39.488Z',
+          docketEntry: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Hearing Exhibits for A document from the west',
+            documentType: 'Hearing Exhibits',
+            eventCode: UNSERVABLE_EVENT_CODES[0],
+            isFileAttached: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+            scenario: 'Standard',
+          },
+          isInitializeCase: false,
+          section: DOCKET_SECTION,
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      });
+      expect(result).toEqual(documentViewLink);
+    });
+
     it('should return default edit link if document is in progress and user is petitionsClerk', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
