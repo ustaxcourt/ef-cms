@@ -18,9 +18,12 @@ describe('AddressLabelCoverSheet', () => {
         city="Some City"
         countryName="USA"
         docketNumberWithSuffix="123-45S"
+        inCareOf="Care"
         name="Test Person"
         postalCode="89890"
+        secondaryName="Secondary"
         state="ZZ"
+        title="The Title"
       />,
     );
 
@@ -30,5 +33,8 @@ describe('AddressLabelCoverSheet', () => {
     expect(wrapper.text()).toContain('Test Person');
     expect(wrapper.text()).toContain('89890');
     expect(wrapper.text()).toContain('ZZ');
+    expect(wrapper.text()).toContain('Secondary');
+    expect(wrapper.text()).toContain('The Title');
+    expect(wrapper.text()).toContain('Care');
   });
 });

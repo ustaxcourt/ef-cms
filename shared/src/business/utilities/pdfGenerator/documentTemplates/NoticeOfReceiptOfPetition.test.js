@@ -12,9 +12,12 @@ describe('NoticeOfReceiptOfPetition', () => {
     address1: '123 Some St.',
     city: 'Somecity',
     countryName: '',
+    inCareOf: 'Who',
     name: 'Test Petitioner',
     postalCode: '80008',
+    secondaryName: 'What',
     state: 'ZZ',
+    title: 'When',
   };
 
   it('renders a document header with case information', () => {
@@ -74,5 +77,8 @@ describe('NoticeOfReceiptOfPetition', () => {
     expect(textContent).toContain(address.city);
     expect(textContent).toContain(address.state);
     expect(textContent).toContain(address.postalCode);
+    expect(textContent).toContain(address.inCareOf);
+    expect(textContent).toContain(address.secondaryName);
+    expect(textContent).toContain(address.title);
   });
 });

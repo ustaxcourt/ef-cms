@@ -592,8 +592,8 @@ jobs:
             ENV=$(./get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./get-source-table.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |

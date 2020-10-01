@@ -341,6 +341,7 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
+const { createJudgeUserLambda } = require('./judges/createJudgeUserLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
@@ -774,6 +775,13 @@ app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
   );
   app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
   app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
+}
+
+/**
+ * judges
+ */
+{
+  app.post('/judges', lambdaWrapper(createJudgeUserLambda));
 }
 
 /**

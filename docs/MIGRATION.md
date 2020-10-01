@@ -44,6 +44,7 @@ Valid Case object example:
   "irsNoticeDate":null,
   "isPaper":false,
   "isSealed":false,
+  "judgeUserId": "91d16b55-50af-49ce-8682-ef1fa65acc6a",
   "leadDocketNumber":"101-20",
   "partyType":"Petitioner",
   "petitionPaymentDate":null,

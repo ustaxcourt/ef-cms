@@ -417,6 +417,7 @@
         - "jonesChambers"
         - "kerrigansChambers"
         - "laubersChambers"
+        - "legacyJudgesChambers"
         - "leydensChambers"
         - "marvelsChambers"
         - "morrisonsChambers"
