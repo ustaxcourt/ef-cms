@@ -263,7 +263,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
   });
 
-  it("should replace the document's coversheet with a new one when the filingDate field is changed", async () => {
+  it('should add a new coversheet when filingDate field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       docketEntryMeta: {
@@ -280,7 +280,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
     ).toMatchObject({
       docketNumber: '101-20',
-      replaceCoversheet: true,
+      filingDateUpdated: true,
     });
   });
 

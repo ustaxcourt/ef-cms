@@ -248,6 +248,14 @@ const INITIAL_DOCUMENT_TYPES = {
   stin: STIN_DOCKET_ENTRY_TYPE,
 };
 
+const INITIAL_DOCUMENT_TYPES_FILE_MAP = {
+  applicationForWaiverOfFilingFee: 'applicationForWaiverOfFilingFeeFile',
+  ownershipDisclosure: 'ownershipDisclosureFile',
+  petition: 'petitionFile',
+  requestForPlaceOfTrial: 'requestForPlaceOfTrialFile',
+  stin: 'stinFile',
+};
+
 const INITIAL_DOCUMENT_TYPES_MAP = {
   applicationForWaiverOfFilingFeeFile:
     INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
@@ -444,6 +452,7 @@ const ROLES = {
   irsPractitioner: 'irsPractitioner',
   irsSuperuser: 'irsSuperuser',
   judge: 'judge',
+  legacyJudge: 'legacyJudge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
   privatePractitioner: 'privatePractitioner',
@@ -802,6 +811,10 @@ const JUDGES_CHAMBERS = {
     label: 'Leyden’s Chambers',
     section: 'leydensChambers',
   },
+  LEGACY_JUDGES_CHAMBERS_SECTION: {
+    label: 'Legacy Judges Chambers',
+    section: 'legacyJudgesChambers',
+  },
   MARVELS_CHAMBERS_SECTION: {
     label: 'Marvel’s Chambers',
     section: 'marvelsChambers',
@@ -1017,6 +1030,7 @@ module.exports = deepFreeze({
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_FILE_MAP,
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,

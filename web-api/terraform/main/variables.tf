@@ -56,3 +56,7 @@ variable "blue_elasticsearch_domain" {
 variable "green_elasticsearch_domain" {
   type = string
 }
+
+variable "destination_table" {
+  type = string
+}

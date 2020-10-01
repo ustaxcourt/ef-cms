@@ -17,7 +17,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
       applicationContext,
     });
 
-    if (user.role === ROLES.judge) {
+    if (user.role === ROLES.judge || user.role === ROLES.legacyJudge) {
       await client.put({
         Item: {
           pk: 'section|judge',

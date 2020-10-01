@@ -43,11 +43,13 @@ const testData = {
   trialSessionIds: [],
 };
 
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
 describe('Petitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -109,7 +111,7 @@ describe('Petitions Clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -151,7 +153,10 @@ describe('Petitions Clerk', () => {
 
 describe('Judge', () => {
   before(async () => {
-    const result = await getUserToken('jcohen@example.com', 'Testing1234$');
+    const result = await getUserToken(
+      'jcohen@example.com',
+      DEFAULT_ACCOUNT_PASS,
+    );
     token = result.AuthenticationResult.IdToken;
   });
 
@@ -187,7 +192,7 @@ describe('Judge Chambers', () => {
   before(async () => {
     const result = await getUserToken(
       'cohensChambers1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
   });

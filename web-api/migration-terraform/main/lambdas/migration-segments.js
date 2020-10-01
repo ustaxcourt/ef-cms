@@ -1,4 +1,7 @@
 const AWS = require('aws-sdk');
+const {
+  migrateItems: migration0001,
+} = require('./migrations/0001-eligible-for-trial-case-id');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -19,6 +22,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const reprocessItems = async items => {
   const moreUnprocessedItems = [];
 
+  items = migration0001(items);
+
   for (let item of items) {
     const results = await documentClient
       .batchWrite({
@@ -36,10 +41,12 @@ const reprocessItems = async items => {
   }
 };
 
-const processItems = async items => {
-  // TODO: your migration code would go here
+const processItems = async ({ documentClient, items }) => {
+  // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
+    c = migration0001(c);
+
     const results = await documentClient
       .batchWrite({
         RequestItems: {
@@ -60,6 +67,8 @@ const processItems = async items => {
   }
 };
 
+exports.processItems = processItems;
+
 const scanTableSegment = async (segment, totalSegments) => {
   let hasMoreResults = true;
   let lastKey = null;
@@ -78,7 +87,7 @@ const scanTableSegment = async (segment, totalSegments) => {
         console.log('got some results', results.Items.length);
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        await processItems(results.Items);
+        await processItems({ documentClient, items: results.Items });
       });
   }
 };

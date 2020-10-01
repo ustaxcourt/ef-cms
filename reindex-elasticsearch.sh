@@ -15,6 +15,8 @@
 #   - $1 - the environment to clear
 
 [ -z "$1" ] && echo "The environment to reindex must be provided as the \$1 argument." && exit 1
+[ -z "$2" ] && echo "The dynamo table name to clear must be provided as the \$2 argument." && exit 1
+[ -z "$3" ] && echo "The elasticsearch endpoint to clear must be provided as the \$3 argument." && exit 1
 [ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
@@ -22,6 +24,10 @@
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 
 ENV=$1
+DYNAMODB_TABLE_NAME=$2
+ELASTICSEARCH_ENDPOINT=$3
+
+export ELASTICSEARCH_ENDPOINT
 
 $(which terraform) > /dev/null
 if [[ "$?" == "1" ]]; then
@@ -29,9 +35,9 @@ if [[ "$?" == "1" ]]; then
   exit 1
 fi
 
-./web-api/clear-elasticsearch-index.sh $ENV
+./web-api/clear-elasticsearch-index.sh $ENV $ELASTICSEARCH_ENDPOINT
 ./web-api/setup-elasticsearch-index.sh $ENV
 
 pushd web-api
-node reindex-dynamodb-records.js $ENV
+node reindex-dynamodb-records.js $DYNAMODB_TABLE_NAME
 popd
