@@ -10,7 +10,7 @@ exports.sendServedPartiesEmails = async ({
   docketEntryEntity,
   servedParties,
 }) => {
-  const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
+  const { caseCaption, docketNumberWithSuffix } = caseEntity;
 
   const {
     docketEntryId,
@@ -18,6 +18,7 @@ exports.sendServedPartiesEmails = async ({
     documentType,
     eventCode,
     filedBy,
+    index: docketEntryNumber,
     servedAt,
   } = docketEntryEntity;
 
@@ -41,10 +42,10 @@ exports.sendServedPartiesEmails = async ({
         data: {
           caseDetail: {
             caseTitle: Case.getCaseTitle(caseCaption),
-            docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
+            docketNumber: docketNumberWithSuffix,
           },
           currentDate,
-          docketEntryNumber: docketEntryEntity.index,
+          docketEntryNumber,
           documentDetail: {
             docketEntryId,
             documentTitle: documentTitle || documentType,
@@ -55,7 +56,7 @@ exports.sendServedPartiesEmails = async ({
               .formatDateString(servedAt, 'DATE_TIME_TZ'),
           },
           name: party.name,
-          taxCourtLoginUrl: `https://app-${process.env.EFCMS_DOMAIN}`,
+          taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,
         },
       }),
     },
@@ -65,9 +66,7 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        docketNumber: `${caseEntity.docketNumber}${
-          caseEntity.docketNumberSuffix || ''
-        }`,
+        docketNumber: docketNumberWithSuffix,
         emailContent: '',
       },
       destinations,

@@ -122,6 +122,7 @@ exports.updateSecondaryContactInteractor = async ({
     const servedParties = aggregatePartiesForService(caseEntity);
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
@@ -167,7 +168,7 @@ exports.updateSecondaryContactInteractor = async ({
         documentBytes: changeOfAddressPdfWithCover,
       });
 
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+    caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
@@ -188,7 +189,10 @@ exports.updateSecondaryContactInteractor = async ({
     oldData: caseToUpdate.contactSecondary,
   });
 
-  if (!isEmpty(contactDiff)) {
+  const shouldUpdateCase =
+    !isEmpty(contactDiff) || changeOfAddressDocumentTypeToGenerate;
+
+  if (shouldUpdateCase) {
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: validatedCaseEntity,

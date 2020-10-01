@@ -96,7 +96,7 @@ const getS3BucketStatus = async ({ applicationContext }) => {
   const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionWest}`;
   const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionEast}`;
   const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionWest}`;
-  const appS3Bucket = `app-${efcmsDomain}`;
+  const appS3Bucket = `app.${efcmsDomain}`;
   const publicS3Bucket = `${efcmsDomain}`;
   const publicFailoverS3Bucket = `failover.${efcmsDomain}`;
   const appFailoverS3Bucket = `app-failover.${efcmsDomain}`;
@@ -138,7 +138,7 @@ const getCognitoStatus = async ({ applicationContext }) => {
       });
 
     await axios.get(
-      `https://auth-${process.env.STAGE}-${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=https%3A//app-${process.env.EFCMS_DOMAIN}/log-in`,
+      `https://auth-${process.env.STAGE}-${process.env.COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${clientId}&redirect_uri=https%3A//app.${process.env.EFCMS_DOMAIN}/log-in`,
       {
         cancelToken: source.token,
         timeout: 1000,
