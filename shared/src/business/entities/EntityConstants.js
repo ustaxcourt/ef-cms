@@ -811,10 +811,6 @@ const JUDGES_CHAMBERS = {
     label: 'Leyden’s Chambers',
     section: 'leydensChambers',
   },
-  LEGACY_JUDGES_CHAMBERS_SECTION: {
-    label: 'Legacy Judges Chambers',
-    section: 'legacyJudgesChambers',
-  },
   MARVELS_CHAMBERS_SECTION: {
     label: 'Marvel’s Chambers',
     section: 'marvelsChambers',
@@ -865,7 +861,16 @@ const JUDGES_CHAMBERS = {
   },
 };
 
+const JUDGES_CHAMBERS_WITH_LEGACY = {
+  ...JUDGES_CHAMBERS,
+  LEGACY_JUDGES_CHAMBERS_SECTION: {
+    label: 'Legacy Judges Chambers',
+    section: 'legacyJudgesChambers',
+  },
+};
+
 const chambersSections = [];
+
 const chambersSectionsLabels = [];
 
 Object.keys(JUDGES_CHAMBERS).forEach(k => {
@@ -875,7 +880,13 @@ Object.keys(JUDGES_CHAMBERS).forEach(k => {
   chambersSectionsLabels[chambers.section] = chambers.label;
 });
 
+const chambersSectionsWithLegacy = [
+  ...chambersSections,
+  'legacyJudgesChambers',
+];
+
 const CHAMBERS_SECTIONS = sortBy(chambersSections);
+const CHAMBERS_SECTIONS_WITH_LEGACY = sortBy(chambersSectionsWithLegacy);
 const CHAMBERS_SECTIONS_LABELS = chambersSectionsLabels;
 
 const SECTIONS = sortBy([
@@ -927,7 +938,9 @@ const ADMISSIONS_STATUS_OPTIONS = [
 const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
 const CASE_SEARCH_MIN_YEAR = 1986;
-const CASE_SEARCH_PAGE_SIZE = 5;
+const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
+const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
+const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
 
 // TODO: event codes need to be reorganized
 const ALL_EVENT_CODES = flatten([
@@ -998,12 +1011,16 @@ module.exports = deepFreeze({
   CASE_CAPTION_POSTFIX,
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
   CASE_SEARCH_MIN_YEAR,
+  CASE_INVENTORY_PAGE_SIZE,
   CASE_SEARCH_PAGE_SIZE,
+  CASE_LIST_PAGE_SIZE,
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
+  JUDGES_CHAMBERS_WITH_LEGACY,
+  CHAMBERS_SECTIONS_WITH_LEGACY,
   CHAMBERS_SECTIONS_LABELS,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
