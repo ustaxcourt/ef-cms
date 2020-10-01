@@ -811,10 +811,6 @@ const JUDGES_CHAMBERS = {
     label: 'Leyden’s Chambers',
     section: 'leydensChambers',
   },
-  LEGACY_JUDGES_CHAMBERS_SECTION: {
-    label: 'Legacy Judges Chambers',
-    section: 'legacyJudgesChambers',
-  },
   MARVELS_CHAMBERS_SECTION: {
     label: 'Marvel’s Chambers',
     section: 'marvelsChambers',
@@ -865,7 +861,16 @@ const JUDGES_CHAMBERS = {
   },
 };
 
+const JUDGES_CHAMBERS_WITH_LEGACY = {
+  ...JUDGES_CHAMBERS,
+  LEGACY_JUDGES_CHAMBERS_SECTION: {
+    label: 'Legacy Judges Chambers',
+    section: 'legacyJudgesChambers',
+  },
+};
+
 const chambersSections = [];
+
 const chambersSectionsLabels = [];
 
 Object.keys(JUDGES_CHAMBERS).forEach(k => {
@@ -875,7 +880,13 @@ Object.keys(JUDGES_CHAMBERS).forEach(k => {
   chambersSectionsLabels[chambers.section] = chambers.label;
 });
 
+const chambersSectionsWithLegacy = [
+  ...chambersSections,
+  'legacyJudgesChambers',
+];
+
 const CHAMBERS_SECTIONS = sortBy(chambersSections);
+const CHAMBERS_SECTIONS_WITH_LEGACY = sortBy(chambersSectionsWithLegacy);
 const CHAMBERS_SECTIONS_LABELS = chambersSectionsLabels;
 
 const SECTIONS = sortBy([
@@ -1004,6 +1015,8 @@ module.exports = deepFreeze({
   CASE_TYPES_MAP,
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
+  JUDGES_CHAMBERS_WITH_LEGACY,
+  CHAMBERS_SECTIONS_WITH_LEGACY,
   CHAMBERS_SECTIONS_LABELS,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,

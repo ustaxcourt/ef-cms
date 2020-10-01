@@ -239,4 +239,150 @@ describe('trialSessionsHelper', () => {
 
     expect(result.showUnassignedJudgeFilter).toBeFalsy();
   });
+
+  describe('trialSessionJudges', () => {
+    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is Open', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge part 2',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).not.toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+
+    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is New', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'new',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge part 2',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).not.toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+
+    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is Closed', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'closed',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+
+    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is All', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'all',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+  });
 });
