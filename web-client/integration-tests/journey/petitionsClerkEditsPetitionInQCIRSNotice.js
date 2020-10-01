@@ -146,7 +146,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     errors = test.getState('validationErrors.statistics');
 
     expect(errors[0].enterAllValues).toContain(
-      'Enter period, deficiency amount, and total penalties',
+      'Enter year, deficiency amount, and total penalties',
     );
 
     // Switch back to year input
@@ -250,8 +250,22 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
       'Enter year, deficiency amount, and total penalties',
     );
 
-    // Fill out all statistics values and submit
-    for (let i = 0; i < 12; i++) {
+    // Add 11 more statistics (reaching the maximum number of 12) back to form - they were removed
+    // before by empty statistic filtering
+    for (let i = 1; i < 12; i++) {
+      await test.runSequence('addStatisticToFormSequence');
+    }
+    statistics = test.getState('form.statistics');
+
+    expect(statistics.length).toEqual(12);
+
+    statisticsUiHelper = runCompute(statisticsFormHelper, {
+      state: test.getState(),
+    });
+
+    // Fill out all statistics values except the last one and submit
+    // -- the last one should be removed from the form because it was not filled in
+    for (let i = 0; i < 11; i++) {
       await test.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.year`,
         value: 2019,
@@ -355,13 +369,6 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
         formattedIrsTotalPenalties: '$110.00',
         irsDeficiencyAmount: 1010,
         irsTotalPenalties: 110,
-        year: 2019,
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,011.00',
-        formattedIrsTotalPenalties: '$111.00',
-        irsDeficiencyAmount: 1011,
-        irsTotalPenalties: 111,
         year: 2019,
       }),
     ]);
