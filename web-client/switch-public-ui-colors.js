@@ -24,13 +24,13 @@ const run = async () => {
 
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias => alias === `${CURRENT_COLOR}-${ENV}.${ZONE_NAME}`,
+      alias => alias === `${CURRENT_COLOR}.${ENV}.${ZONE_NAME}`,
     ),
   );
 
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias => alias === `${DEPLOYING_COLOR}-${ENV}.${ZONE_NAME}`,
+      alias => alias === `${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}`,
     ),
   );
 
@@ -47,13 +47,13 @@ const run = async () => {
     .promise();
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
-    `${CURRENT_COLOR}-${ENV}.${ZONE_NAME}`,
+    `${CURRENT_COLOR}.${ENV}.${ZONE_NAME}`,
   ];
   currentColorConfig.DistributionConfig.Aliases.Quantity = 1;
 
   deployingColorConfig.DistributionConfig.Aliases.Quantity = 2;
   deployingColorConfig.DistributionConfig.Aliases.Items = [
-    `${DEPLOYING_COLOR}-${ENV}.${ZONE_NAME}`,
+    `${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}`,
     `${ENV}.${ZONE_NAME}`,
   ];
 
