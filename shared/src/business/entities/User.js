@@ -53,7 +53,7 @@ const userDecorator = (obj, rawObj) => {
       state: rawObj.contact.state,
     };
   }
-  if (obj.role === ROLES.judge) {
+  if (obj.role === ROLES.judge || obj.role === ROLES.legacyJudge) {
     obj.judgeFullName = rawObj.judgeFullName;
     obj.judgeTitle = rawObj.judgeTitle;
   }
@@ -97,7 +97,7 @@ const baseUserValidation = {
     then: joi.optional(),
   }),
   judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
-    is: ROLES.judge,
+    is: ROLES.judge || ROLES.judgeTitle,
     otherwise: joi.optional().allow(null),
     then: joi.optional(),
   }),
