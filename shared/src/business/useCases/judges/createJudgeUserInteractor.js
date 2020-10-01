@@ -13,16 +13,14 @@ const { User } = require('../../entities/User');
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createJudgeUserInteractor = async ({ applicationContext }) => {
+exports.createJudgeUserInteractor = async ({ applicationContext, user }) => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_JUDGE_USER)) {
     throw new UnauthorizedError('Unauthorized for creating judge user');
   }
 
-  const judge = new User(createdUser, { applicationContext })
-    .validate()
-    .toRawObject();
+  const judge = new User(user, { applicationContext }).validate().toRawObject();
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
