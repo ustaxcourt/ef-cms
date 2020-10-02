@@ -148,7 +148,7 @@ const batchDownloadTrialSessionInteractor = async ({
     extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
   };
 
-  for (let sessionCase of sessionCases) {
+  for (const sessionCase of sessionCases) {
     await generateDocumentAndDocketRecordForCase(sessionCase);
   }
 
