@@ -1,6 +1,6 @@
 data "archive_file" "zip_triggers" {
   type        = "zip"
-  source_file = "${path.module}/lambdas/cognito-triggers.js"
+  source_file = "${path.module}/lambdas/dist/cognito-triggers.js"
   output_path = "${path.module}/lambdas/cognito-triggers.js.zip"
 }
 

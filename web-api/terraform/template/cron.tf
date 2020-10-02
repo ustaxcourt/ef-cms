@@ -25,7 +25,7 @@ data "null_data_source" "locals" {
 data "archive_file" "zip_cron" {
   type        = "zip"
   output_path = "${path.module}/lambdas/cron.js.zip"
-  source_file = "${path.module}/lambdas/cron.js"
+  source_file = "${path.module}/lambdas/dist/cron.js"
 }
 
 resource "aws_lambda_function" "reprocess_cron_lambda" {
