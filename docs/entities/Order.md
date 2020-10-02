@@ -2,31 +2,31 @@
  ```
 ---
   type: "object"
-  keys: 
-    documentTitle: 
+  keys:
+    documentTitle:
       type: "string"
-      flags: 
+      flags:
         presence: "required"
-      rules: 
-        - 
+      rules:
+        -
           name: "min"
-          args: 
+          args:
             limit: 1
-        - 
+        -
           name: "max"
-          args: 
+          args:
             limit: 100
-    documentType: 
+    documentType:
       type: "string"
-      flags: 
+      flags:
         only: true
         presence: "required"
-      rules: 
-        - 
+      rules:
+        -
           name: "min"
-          args: 
+          args:
             limit: 1
-      allow: 
+      allow:
         - "Administrative Record"
         - "Affidavit in Support"
         - "Agreed Computation for Entry of Decision"
@@ -164,7 +164,7 @@
         - "Motion to Dismiss for Lack of Jurisdiction"
         - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
         - "Motion to Dismiss for Lack of Prosecution"
-        - "Motion to Dismiss on Grounds of Mootness"
+        - "Motion to Dismiss on Ground of Mootness"
         - "Motion to Disqualify Counsel"
         - "Motion to Enforce Subpoena"
         - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -301,7 +301,7 @@
         - "Ratification of Petition"
         - "Record on Appeal"
         - "Redacted"
-        - "Redacted Petition Filed"
+        - "Redacted Petition"
         - "Reference List of Redacted Information"
         - "Reply"
         - "Report"
@@ -366,17 +366,17 @@
         - "U.S.C.A"
         - "Unsworn Declaration under Penalty of Perjury in Support"
         - "Writ of Habeas Corpus Ad Testificandum"
-    eventCode: 
+    eventCode:
       type: "string"
-      flags: 
+      flags:
         only: true
         presence: "optional"
-      rules: 
-        - 
+      rules:
+        -
           name: "min"
-          args: 
+          args:
             limit: 1
-      allow: 
+      allow:
         - "A"
         - "AAAP"
         - "AAPN"
@@ -715,18 +715,18 @@
         - "USCA"
         - "USDL"
         - "WRIT"
-    orderBody: 
+    orderBody:
       type: "string"
-      flags: 
+      flags:
         presence: "required"
-      rules: 
-        - 
+      rules:
+        -
           name: "min"
-          args: 
+          args:
             limit: 1
-        - 
+        -
           name: "max"
-          args: 
+          args:
             limit: 500
 
  ```
