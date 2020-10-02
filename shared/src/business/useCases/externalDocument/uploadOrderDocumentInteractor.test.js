@@ -12,8 +12,8 @@ describe('uploadOrderDocumentInteractor', () => {
     await expect(
       uploadOrderDocumentInteractor({
         applicationContext,
+        docketEntryIdToOverwrite: 123,
         documentFile: '',
-        documentIdToOverwrite: 123,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -26,13 +26,20 @@ describe('uploadOrderDocumentInteractor', () => {
 
     await uploadOrderDocumentInteractor({
       applicationContext,
-      documentFile: '',
-      documentIdToOverwrite: 123,
+      docketEntryIdToOverwrite: 123,
+      documentFile: 'document file',
     });
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
         .calls.length,
     ).toBe(1);
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: 'document file',
+      key: 123,
+    });
   });
 });

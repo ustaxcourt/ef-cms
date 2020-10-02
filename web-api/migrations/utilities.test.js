@@ -3,6 +3,7 @@ const {
 } = require('../../shared/src/business/entities/EntityConstants');
 const {
   forAllRecords,
+  getDocketNumberFromRecord,
   isCaseMessageRecord,
   isCaseRecord,
   isDocketEntryRecord,
@@ -282,6 +283,28 @@ describe('utilities', () => {
 
       expect(scanStub).toHaveBeenCalled();
       expect(putStub).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getDocketNumberFromRecord', () => {
+    it('returns the docketNumber from a case-related item', () => {
+      const item = {
+        documentTitle: 'Document Title',
+        pk: 'case|3234-20',
+        sk: 'docket-entry|123',
+      };
+
+      expect(getDocketNumberFromRecord(item)).toEqual('3234-20');
+    });
+
+    it('returns false if the item is not a case-related item', () => {
+      const item = {
+        documentTitle: 'Document Title',
+        pk: 'user|234',
+        sk: 'user|123',
+      };
+
+      expect(getDocketNumberFromRecord(item)).toEqual(false);
     });
   });
 });

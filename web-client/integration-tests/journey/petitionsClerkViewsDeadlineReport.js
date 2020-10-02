@@ -6,10 +6,16 @@ export const petitionsClerkViewsDeadlineReport = test => {
     expect(test.getState('judges').length).toBeGreaterThan(0);
 
     await test.runSequence('selectDateRangeFromCalendarSequence', {
-      endDate: new Date('01/01/2020'),
-      startDate: new Date('01/01/2014'),
+      endDate: new Date('01/01/2025'),
+      startDate: new Date('01/01/2025'),
     });
 
     expect(test.getState('allCaseDeadlines').length).toBeGreaterThan(0);
+
+    if (test.caseDeadline) {
+      expect(test.getState('allCaseDeadlines')[0].deadlineDate).toBe(
+        test.caseDeadline,
+      );
+    }
   });
 };

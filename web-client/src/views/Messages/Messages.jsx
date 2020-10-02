@@ -28,9 +28,7 @@ export const Messages = connect(
             <span
               aria-label="unread messages count"
               className="unread margin-right-2"
-            >
-              {messagesHelper.inboxCount}
-            </span>
+            ></span>
             {messagesHelper.showIndividualMessages && (
               <Button
                 link

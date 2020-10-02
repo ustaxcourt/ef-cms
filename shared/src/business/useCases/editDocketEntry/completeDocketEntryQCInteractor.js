@@ -10,6 +10,10 @@ const {
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
+  DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../../entities/EntityConstants');
+const {
   formatDocketEntry,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -22,7 +26,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
@@ -292,11 +295,20 @@ exports.completeDocketEntryQCInteractor = async ({
           NOTICE_OF_DOCKET_CHANGE.documentTitle,
           docketChangeInfo.docketEntryIndex,
         ),
+        isFileAttached: true,
         isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
     );
+
+    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+      });
 
     noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 

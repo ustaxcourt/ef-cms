@@ -128,13 +128,14 @@ describe('fileCourtIssuedOrderInteractor', () => {
     ).toEqual(4);
   });
 
-  it('should add order document to case and set freeText to the document title if it is a generic order (eventCode O)', async () => {
+  it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
         documentType: 'Order',
+        draftOrderState: {},
         eventCode: 'O',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
@@ -153,7 +154,45 @@ describe('fileCourtIssuedOrderInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries[3],
-    ).toMatchObject({ freeText: 'Order to do anything' });
+    ).toMatchObject({
+      draftOrderState: { freeText: 'Order to do anything' },
+      freeText: 'Order to do anything',
+    });
+  });
+
+  it('should delete draftOrderState properties if they exists on the documentMetadata, after saving the document', async () => {
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: {},
+        documentTitle: 'Order to do anything',
+        documentType: 'Order',
+        draftOrderState: {
+          documentContents: 'something',
+          editorDelta: 'something',
+          richText: 'something',
+        },
+        eventCode: 'O',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3].draftOrderState.documentContents,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3].draftOrderState.editorDelta,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3].draftOrderState.richText,
+    ).toBeUndefined();
   });
 
   it('should add a generic notice document to case, set freeText to the document title, and set the document to signed', async () => {

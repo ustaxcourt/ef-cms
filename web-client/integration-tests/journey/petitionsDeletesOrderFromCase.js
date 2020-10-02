@@ -28,6 +28,8 @@ export const petitionsDeletesOrderFromCase = test => {
     });
 
     expect(test.getState('alertSuccess.message')).toEqual('Document deleted.');
+    expect(test.getState('viewerDraftDocumentToDisplay')).toBeUndefined();
+    expect(test.getState('draftDocumentViewerDocketEntryId')).toBeUndefined();
 
     expect(
       formatted.draftDocuments.find(
