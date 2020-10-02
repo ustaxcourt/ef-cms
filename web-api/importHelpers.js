@@ -1,8 +1,20 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
+const localUsers = require('./storage/fixtures/seed/users.json');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
 
 const getToken = async () => {
+  if (process.env.ENV === 'local') {
+    const adminUser = localUsers.find(user => user.role === 'admin');
+    const user = {
+      ...adminUser,
+      sub: adminUser.userId,
+    };
+
+    return jwt.sign(user, 'secret');
+  }
+
   const cognito = new AWS.CognitoIdentityServiceProvider({
     region: process.env.REGION,
   });

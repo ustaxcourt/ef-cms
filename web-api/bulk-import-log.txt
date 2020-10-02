@@ -276,3 +276,573 @@ Error: connect ECONNREFUSED 127.0.0.1:80
   isAxiosError: true,
   toJSON: [Function]
 }
+ERROR Fieri
+Error: connect ECONNREFUSED 127.0.0.1:4000
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1054:14) {
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 4000,
+  config: {
+    url: 'http://localhost:4000/judges',
+    method: 'post',
+    data: '{"user":{"name":"Fieri","judgeTitle":"Legacy ' +
+      'Judge","judgeFullName":"Fiere","email":"judgeFieri@example.com","role":"legacyJudge","userId":"dadbad42-18d0-43ec-bafb-654e83405416","section":"legacyJudgesChambers"}}',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: 'Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTc5MH0.-dHiRe3l8Kb7ZWv3bhC2U4nsjiN24NWSIRxC8U9NmDc',
+      'User-Agent': 'axios/0.19.2',
+      'Content-Length': 212
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    adapter: [Function: httpAdapter],
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    validateStatus: [Function: validateStatus]
+  },
+  request: Writable {
+    _writableState: WritableState {
+      objectMode: false,
+      highWaterMark: 16384,
+      finalCalled: false,
+      needDrain: false,
+      ending: false,
+      ended: false,
+      finished: false,
+      destroyed: false,
+      decodeStrings: true,
+      defaultEncoding: 'utf8',
+      length: 0,
+      writing: false,
+      corked: 0,
+      sync: true,
+      bufferProcessing: false,
+      onwrite: [Function: bound onwrite],
+      writecb: null,
+      writelen: 0,
+      bufferedRequest: null,
+      lastBufferedRequest: null,
+      pendingcb: 0,
+      prefinished: false,
+      errorEmitted: false,
+      emitClose: true,
+      autoDestroy: false,
+      bufferedRequestCount: 0,
+      corkedRequestsFree: [Object]
+    },
+    writable: true,
+    _events: [Object: null prototype] {
+      response: [Function: handleResponse],
+      error: [Function: handleRequestError]
+    },
+    _eventsCount: 2,
+    _maxListeners: undefined,
+    _options: {
+      protocol: 'http:',
+      maxRedirects: 21,
+      maxBodyLength: 10485760,
+      path: '/judges',
+      method: 'POST',
+      headers: [Object],
+      agent: undefined,
+      agents: [Object],
+      auth: undefined,
+      hostname: 'localhost',
+      port: '4000',
+      nativeProtocols: [Object],
+      pathname: '/judges'
+    },
+    _redirectCount: 0,
+    _redirects: [],
+    _requestBodyLength: 212,
+    _requestBodyBuffers: [ [Object] ],
+    _onNativeResponse: [Function],
+    _currentRequest: ClientRequest {
+      _events: [Object],
+      _eventsCount: 6,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      _last: true,
+      chunkedEncoding: false,
+      shouldKeepAlive: false,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      _contentLength: null,
+      _hasBody: true,
+      _trailer: '',
+      finished: false,
+      _headerSent: true,
+      socket: [Socket],
+      connection: [Socket],
+      _header: 'POST /judges HTTP/1.1\r' +
+        '\nAccept: application/json, text/plain, */*\r' +
+        '\nContent-Type: application/json;charset=utf-8\r' +
+        '\nAuthorization: Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTc5MH0.-dHiRe3l8Kb7ZWv3bhC2U4nsjiN24NWSIRxC8U9NmDc\r' +
+        '\nUser-Agent: axios/0.19.2\r' +
+        '\nContent-Length: 212\r' +
+        '\nHost: localhost:4000\r' +
+        '\nConnection: close\r' +
+        '\n\r' +
+        '\n',
+      _onPendingData: [Function: noopPendingOutput],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      path: '/judges',
+      _ended: false,
+      res: null,
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      _redirectable: [Circular],
+      [Symbol(isCorked)]: false,
+      [Symbol(outHeadersKey)]: [Object]
+    },
+    _currentUrl: 'http://localhost:4000/judges'
+  },
+  response: undefined,
+  isAxiosError: true,
+  toJSON: [Function]
+}
+ERROR Dredd
+Error: connect ECONNREFUSED 127.0.0.1:4000
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1054:14) {
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 4000,
+  config: {
+    url: 'http://localhost:4000/judges',
+    method: 'post',
+    data: '{"user":{"name":"Dredd","judgeTitle":"Judge","judgeFullName":"Joseph ' +
+      'S. ' +
+      'Dredd","email":"judgeDredd@example.com","role":"judge","userId":"dabbad00-18d0-43ec-bafb-654e83405416","section":"dreddsChambers"}}',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: 'Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTc5MH0.-dHiRe3l8Kb7ZWv3bhC2U4nsjiN24NWSIRxC8U9NmDc',
+      'User-Agent': 'axios/0.19.2',
+      'Content-Length': 203
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    adapter: [Function: httpAdapter],
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    validateStatus: [Function: validateStatus]
+  },
+  request: Writable {
+    _writableState: WritableState {
+      objectMode: false,
+      highWaterMark: 16384,
+      finalCalled: false,
+      needDrain: false,
+      ending: false,
+      ended: false,
+      finished: false,
+      destroyed: false,
+      decodeStrings: true,
+      defaultEncoding: 'utf8',
+      length: 0,
+      writing: false,
+      corked: 0,
+      sync: true,
+      bufferProcessing: false,
+      onwrite: [Function: bound onwrite],
+      writecb: null,
+      writelen: 0,
+      bufferedRequest: null,
+      lastBufferedRequest: null,
+      pendingcb: 0,
+      prefinished: false,
+      errorEmitted: false,
+      emitClose: true,
+      autoDestroy: false,
+      bufferedRequestCount: 0,
+      corkedRequestsFree: [Object]
+    },
+    writable: true,
+    _events: [Object: null prototype] {
+      response: [Function: handleResponse],
+      error: [Function: handleRequestError]
+    },
+    _eventsCount: 2,
+    _maxListeners: undefined,
+    _options: {
+      protocol: 'http:',
+      maxRedirects: 21,
+      maxBodyLength: 10485760,
+      path: '/judges',
+      method: 'POST',
+      headers: [Object],
+      agent: undefined,
+      agents: [Object],
+      auth: undefined,
+      hostname: 'localhost',
+      port: '4000',
+      nativeProtocols: [Object],
+      pathname: '/judges'
+    },
+    _redirectCount: 0,
+    _redirects: [],
+    _requestBodyLength: 203,
+    _requestBodyBuffers: [ [Object] ],
+    _onNativeResponse: [Function],
+    _currentRequest: ClientRequest {
+      _events: [Object],
+      _eventsCount: 6,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      _last: true,
+      chunkedEncoding: false,
+      shouldKeepAlive: false,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      _contentLength: null,
+      _hasBody: true,
+      _trailer: '',
+      finished: false,
+      _headerSent: true,
+      socket: [Socket],
+      connection: [Socket],
+      _header: 'POST /judges HTTP/1.1\r' +
+        '\nAccept: application/json, text/plain, */*\r' +
+        '\nContent-Type: application/json;charset=utf-8\r' +
+        '\nAuthorization: Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTc5MH0.-dHiRe3l8Kb7ZWv3bhC2U4nsjiN24NWSIRxC8U9NmDc\r' +
+        '\nUser-Agent: axios/0.19.2\r' +
+        '\nContent-Length: 203\r' +
+        '\nHost: localhost:4000\r' +
+        '\nConnection: close\r' +
+        '\n\r' +
+        '\n',
+      _onPendingData: [Function: noopPendingOutput],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      path: '/judges',
+      _ended: false,
+      res: null,
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      _redirectable: [Circular],
+      [Symbol(isCorked)]: false,
+      [Symbol(outHeadersKey)]: [Object]
+    },
+    _currentUrl: 'http://localhost:4000/judges'
+  },
+  response: undefined,
+  isAxiosError: true,
+  toJSON: [Function]
+}
+ERROR Fieri
+Error: connect ECONNREFUSED 127.0.0.1:4000
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1054:14) {
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 4000,
+  config: {
+    url: 'http://localhost:4000/judges',
+    method: 'post',
+    data: '{"user":{"name":"Fieri","judgeTitle":"Legacy ' +
+      'Judge","judgeFullName":"Fiere","email":"judgeFieri@example.com","role":"legacyJudge","userId":"dadbad42-18d0-43ec-bafb-654e83405416","section":"legacyJudgesChambers"}}',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: 'Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTgwNX0.sIUIJGW_AuAqsz0WAN2oNa0kd7LTOn5PMq7E2ZqwmbI',
+      'User-Agent': 'axios/0.19.2',
+      'Content-Length': 212
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    adapter: [Function: httpAdapter],
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    validateStatus: [Function: validateStatus]
+  },
+  request: Writable {
+    _writableState: WritableState {
+      objectMode: false,
+      highWaterMark: 16384,
+      finalCalled: false,
+      needDrain: false,
+      ending: false,
+      ended: false,
+      finished: false,
+      destroyed: false,
+      decodeStrings: true,
+      defaultEncoding: 'utf8',
+      length: 0,
+      writing: false,
+      corked: 0,
+      sync: true,
+      bufferProcessing: false,
+      onwrite: [Function: bound onwrite],
+      writecb: null,
+      writelen: 0,
+      bufferedRequest: null,
+      lastBufferedRequest: null,
+      pendingcb: 0,
+      prefinished: false,
+      errorEmitted: false,
+      emitClose: true,
+      autoDestroy: false,
+      bufferedRequestCount: 0,
+      corkedRequestsFree: [Object]
+    },
+    writable: true,
+    _events: [Object: null prototype] {
+      response: [Function: handleResponse],
+      error: [Function: handleRequestError]
+    },
+    _eventsCount: 2,
+    _maxListeners: undefined,
+    _options: {
+      protocol: 'http:',
+      maxRedirects: 21,
+      maxBodyLength: 10485760,
+      path: '/judges',
+      method: 'POST',
+      headers: [Object],
+      agent: undefined,
+      agents: [Object],
+      auth: undefined,
+      hostname: 'localhost',
+      port: '4000',
+      nativeProtocols: [Object],
+      pathname: '/judges'
+    },
+    _redirectCount: 0,
+    _redirects: [],
+    _requestBodyLength: 212,
+    _requestBodyBuffers: [ [Object] ],
+    _onNativeResponse: [Function],
+    _currentRequest: ClientRequest {
+      _events: [Object],
+      _eventsCount: 6,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      _last: true,
+      chunkedEncoding: false,
+      shouldKeepAlive: false,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      _contentLength: null,
+      _hasBody: true,
+      _trailer: '',
+      finished: false,
+      _headerSent: true,
+      socket: [Socket],
+      connection: [Socket],
+      _header: 'POST /judges HTTP/1.1\r' +
+        '\nAccept: application/json, text/plain, */*\r' +
+        '\nContent-Type: application/json;charset=utf-8\r' +
+        '\nAuthorization: Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTgwNX0.sIUIJGW_AuAqsz0WAN2oNa0kd7LTOn5PMq7E2ZqwmbI\r' +
+        '\nUser-Agent: axios/0.19.2\r' +
+        '\nContent-Length: 212\r' +
+        '\nHost: localhost:4000\r' +
+        '\nConnection: close\r' +
+        '\n\r' +
+        '\n',
+      _onPendingData: [Function: noopPendingOutput],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      path: '/judges',
+      _ended: false,
+      res: null,
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      _redirectable: [Circular],
+      [Symbol(isCorked)]: false,
+      [Symbol(outHeadersKey)]: [Object]
+    },
+    _currentUrl: 'http://localhost:4000/judges'
+  },
+  response: undefined,
+  isAxiosError: true,
+  toJSON: [Function]
+}
+ERROR Dredd
+Error: connect ECONNREFUSED 127.0.0.1:4000
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1054:14) {
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 4000,
+  config: {
+    url: 'http://localhost:4000/judges',
+    method: 'post',
+    data: '{"user":{"name":"Dredd","judgeTitle":"Judge","judgeFullName":"Joseph ' +
+      'S. ' +
+      'Dredd","email":"judgeDredd@example.com","role":"judge","userId":"dabbad00-18d0-43ec-bafb-654e83405416","section":"dreddsChambers"}}',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: 'Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTgwNX0.sIUIJGW_AuAqsz0WAN2oNa0kd7LTOn5PMq7E2ZqwmbI',
+      'User-Agent': 'axios/0.19.2',
+      'Content-Length': 203
+    },
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    adapter: [Function: httpAdapter],
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    validateStatus: [Function: validateStatus]
+  },
+  request: Writable {
+    _writableState: WritableState {
+      objectMode: false,
+      highWaterMark: 16384,
+      finalCalled: false,
+      needDrain: false,
+      ending: false,
+      ended: false,
+      finished: false,
+      destroyed: false,
+      decodeStrings: true,
+      defaultEncoding: 'utf8',
+      length: 0,
+      writing: false,
+      corked: 0,
+      sync: true,
+      bufferProcessing: false,
+      onwrite: [Function: bound onwrite],
+      writecb: null,
+      writelen: 0,
+      bufferedRequest: null,
+      lastBufferedRequest: null,
+      pendingcb: 0,
+      prefinished: false,
+      errorEmitted: false,
+      emitClose: true,
+      autoDestroy: false,
+      bufferedRequestCount: 0,
+      corkedRequestsFree: [Object]
+    },
+    writable: true,
+    _events: [Object: null prototype] {
+      response: [Function: handleResponse],
+      error: [Function: handleRequestError]
+    },
+    _eventsCount: 2,
+    _maxListeners: undefined,
+    _options: {
+      protocol: 'http:',
+      maxRedirects: 21,
+      maxBodyLength: 10485760,
+      path: '/judges',
+      method: 'POST',
+      headers: [Object],
+      agent: undefined,
+      agents: [Object],
+      auth: undefined,
+      hostname: 'localhost',
+      port: '4000',
+      nativeProtocols: [Object],
+      pathname: '/judges'
+    },
+    _redirectCount: 0,
+    _redirects: [],
+    _requestBodyLength: 203,
+    _requestBodyBuffers: [ [Object] ],
+    _onNativeResponse: [Function],
+    _currentRequest: ClientRequest {
+      _events: [Object],
+      _eventsCount: 6,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      _last: true,
+      chunkedEncoding: false,
+      shouldKeepAlive: false,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      _contentLength: null,
+      _hasBody: true,
+      _trailer: '',
+      finished: false,
+      _headerSent: true,
+      socket: [Socket],
+      connection: [Socket],
+      _header: 'POST /judges HTTP/1.1\r' +
+        '\nAccept: application/json, text/plain, */*\r' +
+        '\nContent-Type: application/json;charset=utf-8\r' +
+        '\nAuthorization: Bearer ' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiVGVzdCBBZG1pbiIsInNlY3Rpb24iOiJhZG1pbiIsInVzZXJJZCI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJlbnRpdHlOYW1lIjoiVXNlciIsInN1YiI6Ijg2YzNmODdiLTM1MGItNDc3ZC05MmMzLTQzYmQwOTVjYjAwNiIsImlhdCI6MTYwMTY0OTgwNX0.sIUIJGW_AuAqsz0WAN2oNa0kd7LTOn5PMq7E2ZqwmbI\r' +
+        '\nUser-Agent: axios/0.19.2\r' +
+        '\nContent-Length: 203\r' +
+        '\nHost: localhost:4000\r' +
+        '\nConnection: close\r' +
+        '\n\r' +
+        '\n',
+      _onPendingData: [Function: noopPendingOutput],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      path: '/judges',
+      _ended: false,
+      res: null,
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      _redirectable: [Circular],
+      [Symbol(isCorked)]: false,
+      [Symbol(outHeadersKey)]: [Object]
+    },
+    _currentUrl: 'http://localhost:4000/judges'
+  },
+  response: undefined,
+  isAxiosError: true,
+  toJSON: [Function]
+}
