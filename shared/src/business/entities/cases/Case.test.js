@@ -322,6 +322,119 @@ describe('Case entity', () => {
       );
       expect(Object.keys(myCase)).toContain('associatedJudge');
     });
+
+    it('returns STIN docket entry if filtered is false and the user is docketclerk', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: false,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).toBeDefined();
+    });
+
+    it('returns STIN docket entry if filtered is true and the user is IRS superuser', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'],
+      ); //irsSuperuser user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).toBeDefined();
+    });
+
+    it('returns STIN docket entry if filtered is true and the user is petitionsclerk and the petition is not served', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitionsclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).toBeDefined();
+    });
+
+    it('does not return STIN docket entry if filtered is true and the user is docketclerk and the petition is not served', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).not.toBeDefined();
+    });
+
+    it('does not return STIN docket entry if filtered is true and the user is petitionsclerk and the petition is served', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitionsclerk user
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketNumber: '101-18',
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              eventCode: 'P',
+              filedBy: 'Test Petitioner',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              processingStatus: 'complete',
+              servedAt: '2018-11-21T20:49:28.192Z',
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+            MOCK_CASE.docketEntries.find(
+              d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+            ),
+          ],
+        },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).not.toBeDefined();
+    });
   });
 
   describe('Other Petitioners', () => {

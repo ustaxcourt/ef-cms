@@ -260,6 +260,17 @@ Case.prototype.init = function init(
       this.docketEntries.some(
         docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
       );
+
+    if (
+      filtered &&
+      applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
+      (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
+        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+    ) {
+      this.docketEntries = this.docketEntries.filter(
+        d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+    }
   } else {
     this.docketEntries = [];
   }
