@@ -804,7 +804,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual(documentViewLink);
     });
 
-    it('should return default edit link if document is in progress and user is petitionsClerk', () => {
+    it('should return default document view link if document is in progress and user is petitionsClerk', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -833,7 +833,7 @@ describe('formatted work queue computed', () => {
           queue: 'section',
         },
       });
-      expect(result).toEqual(baseWorkItemEditLink);
+      expect(result).toEqual(documentViewLink);
     });
 
     it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {
