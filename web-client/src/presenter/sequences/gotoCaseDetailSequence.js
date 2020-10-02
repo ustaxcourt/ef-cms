@@ -71,6 +71,7 @@ export const gotoCaseDetailSequence = [
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
         USER_ROLES.docketClerk,
+        USER_ROLES.floater,
         USER_ROLES.petitionsClerk,
         USER_ROLES.trialClerk,
       ],
