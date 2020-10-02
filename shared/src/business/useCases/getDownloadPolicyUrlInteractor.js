@@ -46,6 +46,8 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
   const caseEntity = new Case(caseData, { applicationContext });
 
+  const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
+
   if (!isInternalUser && !isIrsSuperuser) {
     if (key.includes('.pdf')) {
       if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key) {
@@ -99,11 +101,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
       }
     }
   } else if (isIrsSuperuser) {
-    const isPetitionServed = caseEntity.docketEntries.find(
-      doc => doc.documentType === 'Petition',
-    ).servedAt;
-
-    if (!isPetitionServed) {
+    if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
       throw new UnauthorizedError(
         'Unauthorized to view case documents at this time',
       );
@@ -119,11 +117,11 @@ exports.getDownloadPolicyUrlInteractor = async ({
         INITIAL_DOCUMENT_TYPES.stin.documentType;
 
     if (isPetitionsClerk) {
-      const isPetitionServed = caseEntity.docketEntries.find(
-        doc => doc.documentType === 'Petition',
-      ).servedAt;
-
-      if (selectedIsStin && isPetitionServed) {
+      if (
+        selectedIsStin &&
+        petitionDocketEntry &&
+        petitionDocketEntry.servedAt
+      ) {
         throw new UnauthorizedError(
           'Unauthorized to view case documents at this time',
         );
