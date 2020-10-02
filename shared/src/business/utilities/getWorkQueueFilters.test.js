@@ -218,6 +218,16 @@ describe('getWorkQueueFilters', () => {
             workItemId: '2',
           },
           {
+            // my in progress
+            assigneeId: '123',
+            caseIsInProgress: false,
+            caseStatus: CASE_STATUS_TYPES.generalDocket,
+            docketEntry: {},
+            inProgress: true,
+            section: PETITIONS_SECTION,
+            workItemId: '9',
+          },
+          {
             // my inbox
             assigneeId: '123',
             caseIsInProgress: false,
@@ -305,6 +315,7 @@ describe('getWorkQueueFilters', () => {
         expect(myInProgress).toMatchObject([
           expect.objectContaining({ workItemId: '1' }),
           expect.objectContaining({ workItemId: '2' }),
+          expect.objectContaining({ workItemId: '9' }),
         ]);
         expect(myInbox).toMatchObject([
           expect.objectContaining({ workItemId: '3' }),
@@ -315,6 +326,7 @@ describe('getWorkQueueFilters', () => {
         expect(sectionInProgress).toMatchObject([
           expect.objectContaining({ workItemId: '1' }),
           expect.objectContaining({ workItemId: '2' }),
+          expect.objectContaining({ workItemId: '9' }),
           expect.objectContaining({ workItemId: '5' }),
           expect.objectContaining({ workItemId: '6' }),
         ]);
