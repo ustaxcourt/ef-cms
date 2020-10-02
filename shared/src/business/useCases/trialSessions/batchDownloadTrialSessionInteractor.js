@@ -148,7 +148,9 @@ const batchDownloadTrialSessionInteractor = async ({
     extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
   };
 
-  await Promise.all(sessionCases.map(generateDocumentAndDocketRecordForCase));
+  for (let sessionCase of sessionCases) {
+    await generateDocumentAndDocketRecordForCase(sessionCase);
+  }
 
   const onEntry = entryData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({
