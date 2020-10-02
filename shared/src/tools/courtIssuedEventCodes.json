@@ -16,6 +16,14 @@
     "requiresSignature": true
   },
   {
+    "eventCode": "SPOS",
+    "documentType": "Standing Pretrial Order",
+    "documentTitle": "Standing Pretrial Order",
+    "scenario": "Type A",
+    "isOrder": true,
+    "requiresSignature": true
+  },
+  {
     "eventCode": "OAL",
     "documentType": "Order that the letter \"L\" is added to Docket number",
     "documentTitle": "Order that the letter \"L\" is added to Docket number [Anything]",
