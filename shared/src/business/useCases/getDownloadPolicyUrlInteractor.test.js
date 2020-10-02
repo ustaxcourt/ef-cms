@@ -294,4 +294,22 @@ describe('getDownloadPolicyUrlInteractor', () => {
       }),
     ).rejects.toThrow('Unauthorized to view case documents at this time');
   });
+
+  it('should throw an error when the user is a petitioner and is attempting to view the stin document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time');
+  });
 });
