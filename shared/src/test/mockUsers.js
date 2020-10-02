@@ -6,6 +6,12 @@ const {
 } = require('../business/entities/EntityConstants');
 
 exports.MOCK_USERS = {
+  '2eee98ac-613f-46bc-afd5-2574d1b15664': {
+    name: 'IRS Superuser',
+    role: ROLES.irsSuperuser,
+    section: 'irsSuperuser',
+    userId: '2eee98ac-613f-46bc-afd5-2574d1b15664',
+  },
   '330d4b65-620a-489d-8414-6623653ebc4f': {
     barNumber: 'BN1234',
     name: 'Private Practitioner',
