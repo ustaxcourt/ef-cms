@@ -312,4 +312,28 @@ describe('getDownloadPolicyUrlInteractor', () => {
       }),
     ).rejects.toThrow('Unauthorized to view document at this time');
   });
+
+  it('should return the url when the user is a docketClerk and is attempting to view a correspondence document', async () => {
+    const mockCorrespondenceId = applicationContext.getUniqueId();
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
+    mockCase.correspondence = [
+      {
+        correspondenceId: mockCorrespondenceId,
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      docketNumber: mockCase.docketNumber,
+      key: mockCorrespondenceId,
+    });
+
+    expect(url).toEqual('localhost');
+  });
 });
