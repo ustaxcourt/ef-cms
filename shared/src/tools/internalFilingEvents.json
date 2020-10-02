@@ -380,7 +380,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Certificate of Service of [Document Name] [Date]",
+      "documentTitle": "Certificate of Service [Document Name] [Date]",
       "documentType": "Certificate of Service",
       "category": "Miscellaneous",
       "eventCode": "CS",
