@@ -28,9 +28,11 @@ export const NoticeOfReceiptOfPetition = ({
         served it on respondent on {servedDate}.
       </div>
 
-      <div className="margin-top-5 margin-bottom-20">
-        (X) Request for Place of Trial at {preferredTrialCity}.
-      </div>
+      {preferredTrialCity && (
+        <div className="margin-top-5 margin-bottom-20">
+          (X) Request for Place of Trial at {preferredTrialCity}.
+        </div>
+      )}
 
       <div className="info-box margin-bottom-0">
         <div className="info-box-header">
