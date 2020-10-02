@@ -38,7 +38,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     // verify that the user was given a link to their receipt
     expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
 
-    expect(caseDetail.docketEntries.length).toEqual(7);
+    expect(caseDetail.docketEntries.length).toEqual(6);
 
     //verify that the documents were added and served
     expect(caseDetail.docketEntries).toEqual(

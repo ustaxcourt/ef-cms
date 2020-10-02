@@ -85,6 +85,6 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-    documentCount: 6,
+    documentCount: 5,
   });
 });
