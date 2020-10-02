@@ -194,8 +194,6 @@ export const getWorkItemDocumentLink = ({
       });
       if (editLinkExtension) {
         editLink = `${baseDocumentLink}${editLinkExtension}`;
-      } else {
-        editLink = documentViewLink;
       }
     } else if (
       formattedDocketEntry.isPetition &&
