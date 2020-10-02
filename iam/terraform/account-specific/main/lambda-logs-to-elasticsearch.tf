@@ -18,7 +18,6 @@ resource "aws_lambda_function" "logs_to_es" {
   }
 }
 
-
 resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
   name              = "/aws/lambda/${aws_lambda_function.logs_to_es.function_name}"
   retention_in_days = 14
