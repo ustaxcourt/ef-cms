@@ -13,11 +13,14 @@ const CSV_HEADERS = [
   'section',
 ];
 
+if (!process.env.ENV) {
+  process.env.ENV = process.argv[1];
+}
+
 const init = async csvFile => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
   let output = [];
 
-  const services = await getServices();
   const token = await getToken();
   const data = readCsvFile(csvFile);
   const stream = parse(data, csvOptions);
@@ -27,8 +30,17 @@ const init = async csvFile => {
     stream.on('end', async () => {
       for (let row of output) {
         try {
+          let endpoint;
+
+          if (process.env.ENV === 'local') {
+            endpoint = 'http://localhost:4000/judges';
+          } else {
+            const services = await getServices();
+            endpoint = `${services['gateway_api']}/judges`;
+          }
+
           const result = await axios.post(
-            `${services['gateway_api']}/judges`,
+            endpoint,
             { user: row },
             {
               headers: {
