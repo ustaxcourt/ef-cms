@@ -9,10 +9,11 @@ const getToken = async () => {
     const adminUser = localUsers.find(user => user.role === 'admin');
     const user = {
       ...adminUser,
+      'custom:role': adminUser.role,
       sub: adminUser.userId,
     };
 
-    return jwt.sign(user, 'secret');
+    return Promise.resolve(jwt.sign(user, 'secret'));
   }
 
   const cognito = new AWS.CognitoIdentityServiceProvider({
