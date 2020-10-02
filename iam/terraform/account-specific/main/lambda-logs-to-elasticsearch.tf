@@ -18,6 +18,7 @@ resource "aws_lambda_function" "logs_to_es" {
   }
 }
 
+
 resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
   name              = "/aws/lambda/${aws_lambda_function.logs_to_es.function_name}"
   retention_in_days = 14
@@ -52,4 +53,50 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   filter_pattern = ""
   name = "cognito_authorizer_${element(var.environments, count.index)}_lambda_filter"
   log_group_name = "/aws/lambda/cognito_authorizer_lambda_${element(var.environments, count.index)}"
+}
+
+resource "aws_iam_role" "lambda_logs_role" {
+  name = "lambda_role__account"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "lambda_policy" {
+  name = "lambda_policy__account" 
+  role = aws_iam_role.lambda_logs_role.id
+
+  policy = <<EOF
+
+resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs" {
+  policy_name = "allow_logstream_lambda_to_write_logs"
+
+  policy_document = <<CONFIG
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:PutLogEvents",
+        "logs:PutLogEventsBatch",
+        "logs:CreateLogStream"
+      ],
+      "Resource": "arn:aws:logs:*"
+    }
+  ]
+}
+EOF
 }
