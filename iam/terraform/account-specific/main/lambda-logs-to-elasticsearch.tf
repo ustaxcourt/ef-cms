@@ -73,16 +73,11 @@ resource "aws_iam_role" "lambda_logs_role" {
 EOF
 }
 
-resource "aws_iam_role_policy" "lambda_policy" {
+resource "aws_iam_role_policy" "lambda_logs_policy" {
   name = "lambda_policy__account" 
   role = aws_iam_role.lambda_logs_role.id
 
   policy = <<EOF
-
-resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs" {
-  policy_name = "allow_logstream_lambda_to_write_logs"
-
-  policy_document = <<CONFIG
 {
   "Version": "2012-10-17",
   "Statement": [
