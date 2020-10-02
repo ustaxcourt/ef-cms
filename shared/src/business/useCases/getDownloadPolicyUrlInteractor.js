@@ -2,11 +2,14 @@ const {
   documentMeetsAgeRequirements,
 } = require('../utilities/getFormattedCaseDetail');
 const {
+  INITIAL_DOCUMENT_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -31,33 +34,39 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
   const isInternalUser = User.isInternalUser(user && user.role);
   const isIrsSuperuser = user && user.role && user.role === ROLES.irsSuperuser;
+  const isPetitionsClerk =
+    user && user.role && user.role === ROLES.petitionsClerk;
+
+  const caseData = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseData, { applicationContext });
 
   if (!isInternalUser && !isIrsSuperuser) {
-    const caseData = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
-    const caseEntity = new Case(caseData, { applicationContext });
-
     if (key.includes('.pdf')) {
       if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key) {
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
-      const selectedDocketEntry = caseData.docketEntries.find(
-        document => document.docketEntryId === key,
-      );
-
       const docketEntryEntity = caseEntity.getDocketEntryById({
         docketEntryId: key,
       });
 
+      const selectedDocketEntry = caseData.docketEntries.find(
+        document => document.docketEntryId === key,
+      );
+
       const documentIsAvailable = documentMeetsAgeRequirements(
         selectedDocketEntry,
       );
+
+      const selectedIsStin =
+        selectedDocketEntry.documentType ===
+        INITIAL_DOCUMENT_TYPES.stin.documentType;
 
       if (!documentIsAvailable) {
         throw new UnauthorizedError(
@@ -71,6 +80,10 @@ exports.getDownloadPolicyUrlInteractor = async ({
             'Unauthorized to view document at this time',
           );
         }
+      } else if (selectedIsStin) {
+        throw new UnauthorizedError(
+          'Unauthorized to view document at this time',
+        );
       } else {
         const userAssociatedWithCase = await applicationContext
           .getPersistenceGateway()
@@ -86,15 +99,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
       }
     }
   } else if (isIrsSuperuser) {
-    const caseData = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
-    const caseEntity = new Case(caseData, { applicationContext });
-
     const isPetitionServed = caseEntity.docketEntries.find(
       doc => doc.documentType === 'Petition',
     ).servedAt;
@@ -103,6 +107,33 @@ exports.getDownloadPolicyUrlInteractor = async ({
       throw new UnauthorizedError(
         'Unauthorized to view case documents at this time',
       );
+    }
+  } else if (isInternalUser) {
+    const selectedDocketEntry = caseData.docketEntries.find(
+      document => document.docketEntryId === key,
+    );
+
+    const selectedIsStin =
+      selectedDocketEntry &&
+      selectedDocketEntry.documentType ===
+        INITIAL_DOCUMENT_TYPES.stin.documentType;
+
+    if (isPetitionsClerk) {
+      const isPetitionServed = caseEntity.docketEntries.find(
+        doc => doc.documentType === 'Petition',
+      ).servedAt;
+
+      if (selectedIsStin && isPetitionServed) {
+        throw new UnauthorizedError(
+          'Unauthorized to view case documents at this time',
+        );
+      }
+    } else {
+      if (selectedIsStin) {
+        throw new UnauthorizedError(
+          'Unauthorized to view case documents at this time',
+        );
+      }
     }
   }
 
