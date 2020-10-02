@@ -1,10 +1,13 @@
 import { state } from 'cerebral';
 
 export const trialSessionsHelper = get => {
-  const tab = get(state.currentViewMetadata.trialSessions.tab);
+  const status = get(state.screenMetadata.trialSessionFilters.status);
+  const tab =
+    get(state.currentViewMetadata.trialSessions.tab) ||
+    (status && status.toLowerCase());
 
   const isNewTab = tab === 'new';
-  const isOpenTab = tab === 'open';
+  const isOpenTab = tab === 'open' || tab === undefined;
   const isAllTab = tab === 'all';
 
   let additionalColumnsShown = 0;
