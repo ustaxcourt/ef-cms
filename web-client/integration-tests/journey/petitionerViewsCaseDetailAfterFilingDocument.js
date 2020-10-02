@@ -45,9 +45,6 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       expect.arrayContaining([
         expect.objectContaining({ eventCode: 'P' }),
         expect.objectContaining({
-          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-        }),
-        expect.objectContaining({
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         }),
         expect.objectContaining({
