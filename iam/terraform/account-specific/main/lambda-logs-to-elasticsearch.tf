@@ -53,3 +53,44 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   name = "cognito_authorizer_${element(var.environments, count.index)}_lambda_filter"
   log_group_name = "/aws/lambda/cognito_authorizer_lambda_${element(var.environments, count.index)}"
 }
+
+resource "aws_iam_role" "lambda_logs_role" {
+  name = "lambda_role__account"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "lambda_logs_policy" {
+  name = "lambda_policy__account" 
+  role = aws_iam_role.lambda_logs_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:PutLogEvents",
+        "logs:PutLogEventsBatch",
+        "logs:CreateLogStream"
+      ],
+      "Resource": "arn:aws:logs:*"
+    }
+  ]
+}
+EOF
+}
