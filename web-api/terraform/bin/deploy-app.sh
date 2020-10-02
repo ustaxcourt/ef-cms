@@ -54,21 +54,21 @@ popd
 set -eo pipefail
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
-  GREEN_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $CIRCLE_BRANCH)
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $CIRCLE_BRANCH)
+  BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
+  GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
+  BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
+  GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
-    GREEN_TABLE_NAME=$(../../../get-source-table.sh $CIRCLE_BRANCH)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $CIRCLE_BRANCH)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $CIRCLE_BRANCH)
+    BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
+    GREEN_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
   else
-    GREEN_TABLE_NAME=$(../../../get-destination-table.sh $CIRCLE_BRANCH)
-    BLUE_TABLE_NAME=$(../../../get-source-table.sh $CIRCLE_BRANCH)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $CIRCLE_BRANCH)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $CIRCLE_BRANCH)
+    GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
+    BLUE_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
   fi
 fi
 

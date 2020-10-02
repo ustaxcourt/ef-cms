@@ -8,9 +8,12 @@ export const AddressLabelCoverSheet = ({
   city,
   countryName,
   docketNumberWithSuffix,
+  inCareOf,
   name,
   postalCode,
+  secondaryName,
   state,
+  title,
 }) => {
   return (
     <div id="address-label-cover-sheet">
@@ -21,9 +24,12 @@ export const AddressLabelCoverSheet = ({
         address3={address3}
         city={city}
         countryName={countryName}
+        inCareOf={inCareOf}
         name={name}
         postalCode={postalCode}
+        secondaryName={secondaryName}
         state={state}
+        title={title}
       />
     </div>
   );

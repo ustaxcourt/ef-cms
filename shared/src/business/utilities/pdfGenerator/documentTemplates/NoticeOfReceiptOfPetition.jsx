@@ -86,9 +86,12 @@ export const NoticeOfReceiptOfPetition = ({
           address3={address.address3}
           city={address.city}
           countryName={address.countryName}
+          inCareOf={address.inCareOf}
           name={address.name}
           postalCode={address.postalCode}
+          secondaryName={address.secondaryName}
           state={address.state}
+          title={address.title}
         />
       </div>
     </>
