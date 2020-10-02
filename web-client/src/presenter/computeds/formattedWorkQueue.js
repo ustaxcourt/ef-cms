@@ -122,13 +122,20 @@ export const formatWorkItem = ({
 };
 
 const getDocketEntryEditLink = ({
+  applicationContext,
   formattedDocument,
   isInProgress,
   qcWorkItemsUntouched,
   result,
 }) => {
+  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+
   let editLink;
-  if (formattedDocument.isCourtIssuedDocument && !formattedDocument.servedAt) {
+  if (
+    formattedDocument.isCourtIssuedDocument &&
+    !formattedDocument.servedAt &&
+    !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
+  ) {
     editLink = '/edit-court-issued';
   } else if (isInProgress) {
     editLink = '/complete';
@@ -179,6 +186,7 @@ export const getWorkItemDocumentLink = ({
   if (showDocumentEditLink) {
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
+        applicationContext,
         formattedDocument: formattedDocketEntry,
         isInProgress,
         qcWorkItemsUntouched,
