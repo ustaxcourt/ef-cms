@@ -14,16 +14,21 @@ export const archiveDraftDocumentAction = async ({
   get,
   store,
 }) => {
-  const { documentId, redirectToCaseDetail } = get(state.archiveDraftDocument);
+  const { docketEntryId, redirectToCaseDetail } = get(
+    state.archiveDraftDocument,
+  );
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const updatedCase = await applicationContext
     .getUseCases()
     .archiveDraftDocumentInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber,
-      documentId,
     });
+
+  store.unset(state.viewerDraftDocumentToDisplay);
+  store.unset(state.draftDocumentViewerDocketEntryId);
 
   store.set(state.alertSuccess, {
     message: 'Document deleted.',

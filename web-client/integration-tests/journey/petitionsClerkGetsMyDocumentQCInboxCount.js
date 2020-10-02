@@ -13,11 +13,11 @@ export const petitionsClerkGetsMyDocumentQCInboxCount = (
       state: test.getState(),
     });
     if (test.petitionsClerkMyDocumentQCInboxCount) {
-      expect(helper.inboxCount).toEqual(
+      expect(helper.individualInboxCount).toEqual(
         test.petitionsClerkMyDocumentQCInboxCount + adjustExpectedCountBy,
       );
     } else {
-      expect(helper.inboxCount).toBeGreaterThan(0);
+      expect(helper.individualInboxCount).toBeGreaterThan(0);
     }
   });
 };

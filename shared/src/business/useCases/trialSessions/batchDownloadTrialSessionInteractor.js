@@ -69,20 +69,20 @@ const batchDownloadTrialSessionInteractor = async ({
     });
 
   sessionCases.forEach(caseToBatch => {
-    const documentMap = caseToBatch.docketEntries.reduce((acc, document) => {
-      acc[document.documentId] = document;
+    const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
+      d => d.isOnDocketRecord && d.isFileAttached,
+    );
+
+    const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
+      acc[document.docketEntryId] = document;
       return acc;
     }, {});
 
-    caseToBatch.docketEntries.forEach(aDocketRecord => {
-      if (!aDocketRecord.isOnDocketRecord) {
-        return; // TODO 636
-      }
-
+    docketEntriesOnDocketRecord.forEach(aDocketRecord => {
       let myDoc;
       if (
-        aDocketRecord.documentId &&
-        (myDoc = documentMap[aDocketRecord.documentId])
+        aDocketRecord.docketEntryId &&
+        (myDoc = documentMap[aDocketRecord.docketEntryId])
       ) {
         const docDate = formatDateString(
           aDocketRecord.filingDate,
@@ -90,10 +90,10 @@ const batchDownloadTrialSessionInteractor = async ({
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
         const fileName = sanitize(
-          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+          `${docDate}_${docNum}_${aDocketRecord.documentTitle}.pdf`,
         );
         const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
-        s3Ids.push(myDoc.documentId);
+        s3Ids.push(myDoc.docketEntryId);
         fileNames.push(pdfTitle);
       }
     });
@@ -136,7 +136,7 @@ const batchDownloadTrialSessionInteractor = async ({
       .getDocument({
         applicationContext,
         docketNumber: sessionCase.docketNumber,
-        documentId: result.fileId,
+        key: result.fileId,
         protocol: 'S3',
         useTempBucket: true,
       });
@@ -205,7 +205,7 @@ const batchDownloadTrialSessionInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId: zipName,
+    key: zipName,
     useTempBucket: true,
   });
 

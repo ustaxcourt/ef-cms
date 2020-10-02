@@ -2,7 +2,7 @@ exports.saveDocumentFromLambda = ({
   applicationContext,
   contentType: ContentType = 'application/pdf',
   document: body,
-  documentId: key,
+  key,
   useTempBucket,
 }) => {
   let Bucket = applicationContext.getDocumentsBucketName();

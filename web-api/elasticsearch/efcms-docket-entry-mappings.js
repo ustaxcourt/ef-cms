@@ -9,6 +9,9 @@ module.exports = {
     'contactSecondary.M.name.S': {
       type: 'text',
     },
+    'docketEntryId.S': {
+      type: 'text',
+    },
     'docketNumber.S': {
       type: 'text',
     },
@@ -20,9 +23,6 @@ module.exports = {
     },
     'documentContents.S': {
       analyzer: 'ustc_analyzer',
-      type: 'text',
-    },
-    'documentId.S': {
       type: 'text',
     },
     'documentTitle.S': {

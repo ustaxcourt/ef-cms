@@ -20,6 +20,12 @@ const isEligibleForTrialRecord = item =>
   item.pk === 'eligible-for-trial-case-catalog';
 const isWorkItemRecord = item =>
   item.pk.startsWith('work-item|') && item.sk.startsWith('work-item|');
+const isWorkItemOrWorkQueueRecord = item => item.sk.startsWith('work-item|');
+const isCorrespondenceRecord = item =>
+  item.pk.startsWith('case|') && item.sk.startsWith('correspondence|');
+
+const getDocketNumberFromRecord = item =>
+  item.pk.includes('case|') && item.pk.split('|')[1];
 
 const forAllRecords = async (documentClient, tableName, cb) => {
   let hasMoreResults = true;
@@ -66,9 +72,11 @@ const upGenerator = mutateFunction => async (
 
 module.exports = {
   forAllRecords,
+  getDocketNumberFromRecord,
   isCaseDeadlineRecord,
   isCaseMessageRecord,
   isCaseRecord,
+  isCorrespondenceRecord,
   isDocketEntryRecord,
   isDocumentRecord,
   isEligibleForTrialRecord,
@@ -76,6 +84,7 @@ module.exports = {
   isTrialSessionRecord,
   isUserCaseMappingRecord,
   isUserCaseNoteRecord,
+  isWorkItemOrWorkQueueRecord,
   isWorkItemRecord,
   upGenerator,
 };

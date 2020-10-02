@@ -7,26 +7,22 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
-    draftDocumentId: state.screenMetadata.draftDocumentId,
     formattedCaseDetail: state.formattedCaseDetail,
     loadDefaultDraftViewerDocumentToDisplaySequence:
       sequences.loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence:
       sequences.setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay:
-      state.viewerDraftDocumentToDisplay.documentId,
+      state.viewerDraftDocumentToDisplay.docketEntryId,
   },
   function DraftDocumentViewer({
-    draftDocumentId,
     formattedCaseDetail,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay,
   }) {
     useEffect(() => {
-      loadDefaultDraftViewerDocumentToDisplaySequence({
-        documentId: draftDocumentId,
-      });
+      loadDefaultDraftViewerDocumentToDisplaySequence();
       return;
     }, []);
 
@@ -46,11 +42,11 @@ export const DraftDocumentViewer = connect(
                       className={classNames(
                         'usa-button--unstyled attachment-viewer-button',
                         viewerDraftDocumentIdToDisplay ===
-                          draftDocument.documentId && 'active',
+                          draftDocument.docketEntryId && 'active',
                       )}
                       isActive={
                         viewerDraftDocumentIdToDisplay ===
-                        draftDocument.documentId
+                        draftDocument.docketEntryId
                       }
                       key={index}
                       onClick={() => {

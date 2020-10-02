@@ -28,7 +28,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketNumber, documentId } = documentMeta;
+  const { docketEntryId, docketNumber } = documentMeta;
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -39,11 +39,11 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId,
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId,
   });
 
-  if (!currentDocument) {
+  if (!currentDocketEntry) {
     throw new NotFoundError('Document not found');
   }
 
@@ -72,9 +72,9 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   const docketEntryEntity = new DocketEntry(
     {
-      ...currentDocument,
+      ...currentDocketEntry,
       ...editableFields,
-      description: editableFields.documentTitle,
+      documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
       secondaryDate,
@@ -88,7 +88,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
   const { workItem } = docketEntryEntity;
 
   Object.assign(workItem, {
-    document: {
+    docketEntry: {
       ...docketEntryEntity.toRawObject(),
       createdAt: docketEntryEntity.createdAt,
     },

@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -227,6 +228,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
+  loginAs(test, 'testFloater@example.com');
+  it('allows access to the floater user to view the case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+  });
+
   loginAs(test, 'docketclerk@example.com');
   it('updates the fee payment status on case detail and verifies minute entry on the docket record', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -282,8 +290,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const uploadedDocument = test.draftOrders[0];
 
     await createCourtIssuedDocketEntry({
+      docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: uploadedDocument.documentId,
       eventCode: 'HEAR',
       test,
       trialLocation: 'Brimingham, AL',
@@ -294,7 +302,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     } = await getFormattedCaseDetailForTest(test);
 
     const docketEntry = formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.documentId === uploadedDocument.documentId,
+      entry => entry.docketEntryId === uploadedDocument.docketEntryId,
     );
     expect(docketEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
@@ -411,7 +419,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     const entry = formattedDocketEntriesOnDocketRecord[6];
 
-    test.documentId = entry.documentId;
+    test.docketEntryId = entry.docketEntryId;
 
     expect(entry.index).toBeUndefined();
     expect(entry).toMatchObject({
@@ -427,7 +435,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
 
     await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      documentId: test.documentId,
+      docketEntryId: test.docketEntryId,
     });
 
     await test.runSequence('servePaperFiledDocumentSequence');
@@ -437,7 +445,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     } = await getFormattedCaseDetailForTest(test);
 
     const servedEntry = formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.documentId === test.documentId,
+      entry => entry.docketEntryId === test.docketEntryId,
     );
 
     expect(servedEntry).toMatchObject({
@@ -484,6 +492,33 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(test);
+
+  loginAs(test, 'docketclerk@example.com');
+  const today = applicationContext.getUtilities().formatNow('MMDDYYYY');
+  const [todayMonth, todayDay, todayYear] = today.split('/');
+
+  docketClerkAddsDocketEntryWithoutFile(test, {
+    dateReceivedDay: todayDay,
+    dateReceivedMonth: todayMonth,
+    dateReceivedYear: todayYear,
+  });
+  it('verifies the docket record after filing a paper document without a file', async () => {
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
+
+    expect(formattedDocketEntriesOnDocketRecord.length).toEqual(4);
+    const entry = formattedDocketEntriesOnDocketRecord[3];
+
+    expect(entry.index).toBeUndefined();
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'ADMR',
+      isInProgress: true,
+      showNotServed: true,
+      showServed: false,
+    });
+  });
 
   loginAs(test, 'petitioner@example.com');
   petitionerFilesADocumentForCase(test, fakeFile);

@@ -47,8 +47,12 @@ exports.submitPetition = testData => {
   cy.wait('@postCase');
   cy.get('@postCase').should(xhr => {
     expect(xhr.responseBody).to.have.property('docketNumber');
+    const { docketNumber } = xhr.responseBody;
     if (testData) {
-      testData.createdDocketNumber = xhr.responseBody.docketNumber;
+      testData.createdDocketNumber = docketNumber;
+      if (testData.docketNumbers) {
+        testData.docketNumbers.push(docketNumber);
+      }
     }
   });
   cy.url().should('include', 'file-a-petition/success');
@@ -73,7 +77,7 @@ exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
 exports.completeWizardStep3 = (filingType, petitionerName) => {
   cy.get(`label#filing-type-${filingType}`).scrollIntoView().click();
 
-  if (filingType === this.filingTypes.PETITIONER_AND_SPOUSE) {
+  if (filingType === exports.filingTypes.PETITIONER_AND_SPOUSE) {
     cy.get('label#is-spouse-deceased-0').click();
     cy.get('input#use-same-address-above')
       .scrollIntoView()

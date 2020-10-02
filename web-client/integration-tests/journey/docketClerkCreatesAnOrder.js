@@ -62,8 +62,12 @@ export const docketClerkCreatesAnOrder = (test, data) => {
       prev.createdAt > current.createdAt ? prev : current,
     );
 
+    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
+      newDraftOrder.docketEntryId,
+    );
+
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
-    test.documentId = newDraftOrder.documentId;
+    test.docketEntryId = newDraftOrder.docketEntryId;
   });
 };

@@ -8,6 +8,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
+import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -39,6 +40,7 @@ export const uploadCourtIssuedDocumentSequence = [
           generateCourtIssuedDocumentTitleAction,
           setupUploadMetadataAction,
           submitCourtIssuedOrderAction,
+          setDefaultDraftDocumentIdAction,
           setCaseAction,
           getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,

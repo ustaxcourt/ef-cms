@@ -55,14 +55,14 @@ export const IndividualWorkQueueInProgress = connect(
                           e.stopPropagation();
                         }}
                       >
-                        {item.document.documentTitle ||
-                          item.document.documentType}
+                        {item.docketEntry.documentTitle ||
+                          item.docketEntry.documentType}
                       </a>
                     </div>
                   </td>
                   {!workQueueHelper.hideFiledByColumn && (
                     <td className="message-queue-row">
-                      {item.document.filedBy}
+                      {item.docketEntry.filedBy}
                     </td>
                   )}
                   {workQueueHelper.showCaseStatusColumn && (

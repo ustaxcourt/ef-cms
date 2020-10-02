@@ -12,10 +12,10 @@ export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
 }) => {
-  const originalDocumentId = get(state.pdfForSigning.documentId);
+  const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
-  let documentId;
+  let docketEntryId;
 
   if (get(state.pdfForSigning.signatureData.x)) {
     const {
@@ -57,26 +57,27 @@ export const completeDocumentSigningAction = async ({
       });
 
     ({
-      signedDocumentId: documentId,
+      signedDocketEntryId: docketEntryId,
     } = await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
       docketNumber,
       nameForSigning,
-      originalDocumentId,
+      originalDocketEntryId,
       parentMessageId,
-      signedDocumentId: signedDocumentFromUploadId,
+      signedDocketEntryId: signedDocumentFromUploadId,
     }));
   }
 
   let redirectUrl;
 
   if (parentMessageId) {
-    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`;
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`;
   } else {
-    redirectUrl = `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`;
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
   }
 
   return {
+    docketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',

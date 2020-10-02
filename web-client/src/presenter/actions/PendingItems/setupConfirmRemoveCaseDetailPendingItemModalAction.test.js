@@ -10,17 +10,17 @@ describe('setupConfirmRemoveCaseDetailPendingItemModalAction', () => {
           caseDetail: {
             docketEntries: [
               {
-                documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+                docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
                 documentTitle: 'something great',
               },
             ],
           },
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
         state: {},
       },
     );
-    expect(result.state.modal.documentId).toEqual(
+    expect(result.state.modal.docketEntryId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     );
     expect(result.state.modal.documentTitle).toEqual('something great');
@@ -34,17 +34,17 @@ describe('setupConfirmRemoveCaseDetailPendingItemModalAction', () => {
           caseDetail: {
             docketEntries: [
               {
-                documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+                docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
                 documentType: 'no way',
               },
             ],
           },
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
         state: {},
       },
     );
-    expect(result.state.modal.documentId).toEqual(
+    expect(result.state.modal.docketEntryId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     );
     expect(result.state.modal.documentTitle).toEqual('no way');

@@ -23,7 +23,11 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
 
   if (viewerDocumentToDisplay) {
     const { attachments } = mostRecentMessage;
-    const formattedAttachments = formatAttachments({ attachments, caseDetail });
+    const formattedAttachments = formatAttachments({
+      applicationContext,
+      attachments,
+      caseDetail,
+    });
     const formattedAttachment = formattedAttachments.find(
       attachment =>
         attachment.documentId === viewerDocumentToDisplay.documentId,
@@ -37,8 +41,8 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
         .getDocumentDownloadUrlInteractor({
           applicationContext,
           docketNumber,
-          documentId: viewerDocumentToDisplay.documentId,
           isPublic: false,
+          key: viewerDocumentToDisplay.documentId,
         });
 
       store.set(state.iframeSrc, url);

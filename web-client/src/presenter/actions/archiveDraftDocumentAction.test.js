@@ -16,7 +16,7 @@ describe('archiveDraftDocumentAction', () => {
       props: {},
       state: {
         archiveDraftDocument: {
-          documentId: 'def-gfed213-441-abce-312f',
+          docketEntryId: 'def-gfed213-441-abce-312f',
           documentTitle: 'document-title-123',
         },
         caseDetail: {
@@ -41,7 +41,7 @@ describe('archiveDraftDocumentAction', () => {
       props: {},
       state: {
         archiveDraftDocument: {
-          documentId: 'def-gfed213-441-abce-312f',
+          docketEntryId: 'def-gfed213-441-abce-312f',
           documentTitle: 'document-title-123',
           redirectToCaseDetail: true,
         },
@@ -59,5 +59,29 @@ describe('archiveDraftDocumentAction', () => {
     });
     expect(result.state.saveAlertsForNavigation).toEqual(true);
     expect(result.output.docketNumber).toEqual('101-20');
+  });
+
+  it('should unset state.viewerDraftDocumentToDisplay and state.draftDocumentViewerDocketEntryId so the viewer does not display an archived document', async () => {
+    const { state } = await runAction(archiveDraftDocumentAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        archiveDraftDocument: {
+          docketEntryId: 'def-gfed213-441-abce-312f',
+          documentTitle: 'document-title-123',
+          redirectToCaseDetail: true,
+        },
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        draftDocumentViewerDocketEntryId: '99999999',
+        viewerDraftDocumentToDisplay: { docketEntryId: '999999' },
+      },
+    });
+
+    expect(state.draftDocumentViewerDocketEntryId).toBeUndefined();
+    expect(state.viewerDraftDocumentToDisplay).toBeUndefined();
   });
 });

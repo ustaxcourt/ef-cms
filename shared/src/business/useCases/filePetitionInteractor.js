@@ -25,13 +25,13 @@ exports.filePetitionInteractor = async ({
    *
    * @param {object} document the documentFile
    * @param {Function} onUploadProgress the progressFunction
-   * @returns {Promise<string>} the documentId returned from a successful upload
+   * @returns {Promise<string>} the key returned from a successful upload
    */
   const uploadDocumentAndMakeSafeInteractor = async (
     document,
     onUploadProgress,
   ) => {
-    const documentId = await applicationContext
+    const key = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
         applicationContext,
@@ -41,14 +41,14 @@ exports.filePetitionInteractor = async ({
 
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
-      documentId,
+      key,
     });
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
-      documentId,
+      key,
     });
 
-    return documentId;
+    return key;
   };
 
   const petitionFileUpload = uploadDocumentAndMakeSafeInteractor(

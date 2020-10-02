@@ -1,7 +1,7 @@
 export const petitionsClerkRemovesSignatureFromDraftDocument = test => {
   return it('Petitions clerk removes saved signature from draft document', async () => {
     await test.runSequence('openConfirmRemoveSignatureModalSequence', {
-      documentIdToEdit: test.documentId,
+      docketEntryIdToEdit: test.docketEntryId,
     });
 
     await test.runSequence('removeSignatureSequence');

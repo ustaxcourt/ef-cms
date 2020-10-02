@@ -1,4 +1,4 @@
-import { caseExistsAndIsNotSealedAction } from '../../actions/caseExistsAndIsNotSealedAction';
+import { caseExistsAction } from '../../actions/caseExistsAction';
 import { clearSearchResultsAction } from '../../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../../actions/clearSearchTermAction';
 import { navigateToCaseDetailAction } from '../../actions/navigateToCaseDetailAction';
@@ -25,7 +25,7 @@ export const submitPublicCaseDocketNumberSearchSequence = [
     success: showProgressSequenceDecorator([
       stopShowValidationAction,
       setDocketNumberFromAdvancedSearchAction,
-      caseExistsAndIsNotSealedAction,
+      caseExistsAction,
       {
         error: [set(state.searchResults, [])],
         success: [navigateToCaseDetailAction],

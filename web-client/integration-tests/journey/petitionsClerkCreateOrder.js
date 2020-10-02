@@ -33,7 +33,7 @@ export const petitionsClerkCreateOrder = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(4); // TODO 636 documents now includes RQT (request for place of trial as minute entry)
+    expect(test.getState('caseDetail.docketEntries').length).toEqual(4);
 
     const {
       draftDocuments,
@@ -42,8 +42,11 @@ export const petitionsClerkCreateOrder = test => {
       caseDetail: test.getState('caseDetail'),
     });
 
-    test.documentId = first(draftDocuments)
-      ? first(draftDocuments).documentId
+    test.docketEntryId = first(draftDocuments)
+      ? first(draftDocuments).docketEntryId
       : undefined;
+    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
+      test.docketEntryId,
+    );
   });
 };

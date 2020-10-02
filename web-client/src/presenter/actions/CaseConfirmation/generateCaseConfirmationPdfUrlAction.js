@@ -20,7 +20,7 @@ export const generateCaseConfirmationPdfUrlAction = async ({
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
     docketNumber,
-    documentId: `case-${docketNumber}-confirmation.pdf`,
+    key: `case-${docketNumber}-confirmation.pdf`,
   });
 
   store.set(state.pdfPreviewUrl, url);

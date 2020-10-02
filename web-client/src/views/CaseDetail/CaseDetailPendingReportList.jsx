@@ -10,14 +10,11 @@ export const CaseDetailPendingReportList = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmRemoveCaseDetailPendingItemModalSequence:
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
-    pendingItemsDocketEntries:
-      state.formattedCaseDetail.pendingItemsDocketEntries,
     showModal: state.modal.showModal,
   },
   function CaseDetailPendingReportList({
     formattedCaseDetail,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
-    pendingItemsDocketEntries,
     showModal,
   }) {
     return (
@@ -53,41 +50,42 @@ export const CaseDetailPendingReportList = connect(
               <th></th>
             </tr>
           </thead>
-          {pendingItemsDocketEntries.map((entry, arrayIndex) => (
-            <tbody key={arrayIndex}>
-              <tr className="pending-item-row">
-                <td>{entry.index}</td>
-                <td>
-                  <span className="no-wrap">{entry.createdAtFormatted}</span>
-                </td>
-                <td>
-                  <FilingsAndProceedings
-                    arrayIndex={arrayIndex}
-                    entry={entry}
-                  />
-                </td>
-                <td>{entry.filedBy}</td>
-                <td>
-                  <Button
-                    link
-                    className="padding-0 no-wrap"
-                    icon="trash"
-                    onClick={() =>
-                      openConfirmRemoveCaseDetailPendingItemModalSequence({
-                        documentId: entry.documentId,
-                      })
-                    }
-                  >
-                    Remove
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          ))}
+          {formattedCaseDetail.formattedPendingDocketEntriesOnDocketRecord.map(
+            (entry, arrayIndex) => (
+              <tbody key={arrayIndex}>
+                <tr className="pending-item-row">
+                  <td>{entry.index}</td>
+                  <td>
+                    <span className="no-wrap">{entry.createdAtFormatted}</span>
+                  </td>
+                  <td>
+                    <FilingsAndProceedings
+                      arrayIndex={entry.index}
+                      entry={entry}
+                    />
+                  </td>
+                  <td>{entry.filedBy}</td>
+                  <td>
+                    <Button
+                      link
+                      className="padding-0 no-wrap"
+                      icon="trash"
+                      onClick={() =>
+                        openConfirmRemoveCaseDetailPendingItemModalSequence({
+                          docketEntryId: entry.docketEntryId,
+                        })
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            ),
+          )}
         </table>
-        {pendingItemsDocketEntries.length === 0 && (
-          <p>There is nothing pending.</p>
-        )}
+        {formattedCaseDetail.formattedPendingDocketEntriesOnDocketRecord
+          .length === 0 && <p>There is nothing pending.</p>}
         {showModal === 'ConfirmRemoveCaseDetailPendingItemModal' && (
           <ConfirmRemoveCaseDetailPendingItemModal />
         )}

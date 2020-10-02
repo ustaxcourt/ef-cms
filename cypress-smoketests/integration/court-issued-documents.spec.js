@@ -1,9 +1,13 @@
 const {
-  addDocketEntryForOrderAndServe,
+  addDocketEntryForOrderAndSaveForLater,
   addDocketEntryForOrderAndServePaper,
+  addDocketEntryForUploadedPdfAndServe,
+  addDocketEntryForUploadedPdfAndServePaper,
   createOrder,
   editAndSignOrder,
   goToCaseDetail,
+  serveCourtIssuedDocketEntry,
+  uploadCourtIssuedDocPdf,
 } = require('../support/pages/case-detail');
 const {
   closeScannerSetupDialog,
@@ -88,9 +92,7 @@ describe('Petitions clerk', () => {
   });
 });
 
-//failing because of new tab functionality. skipped until we have the smoke tests discussion
-// eslint-disable-next-line jest/no-disabled-tests
-describe.skip('Docket Clerk', () => {
+describe('Docket Clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
@@ -104,16 +106,27 @@ describe.skip('Docket Clerk', () => {
   });
 
   it('should be able to create an order on the electronically-filed case and serve it', () => {
-    goToCaseDetail(testData.createdDocketNumber);
-    createOrder();
+    createOrder(testData.createdDocketNumber);
     editAndSignOrder();
-    addDocketEntryForOrderAndServe();
+    addDocketEntryForOrderAndSaveForLater();
+    serveCourtIssuedDocketEntry();
   });
 
   it('should be able to create an order on the paper-filed case and serve it', () => {
-    goToCaseDetail(testData.createdPaperDocketNumber);
-    createOrder();
+    createOrder(testData.createdPaperDocketNumber);
     editAndSignOrder();
     addDocketEntryForOrderAndServePaper();
+  });
+
+  it('should be able to upload a court-issued order pdf on the electronically-filed case and serve it', () => {
+    goToCaseDetail(testData.createdDocketNumber);
+    uploadCourtIssuedDocPdf();
+    addDocketEntryForUploadedPdfAndServe();
+  });
+
+  it('should be able to upload a court-issued order pdf on the paper-filed case and serve it', () => {
+    goToCaseDetail(testData.createdPaperDocketNumber);
+    uploadCourtIssuedDocPdf();
+    addDocketEntryForUploadedPdfAndServePaper();
   });
 });

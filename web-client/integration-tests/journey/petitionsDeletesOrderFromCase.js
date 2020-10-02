@@ -15,8 +15,8 @@ export const petitionsDeletesOrderFromCase = test => {
     const draftOrder = formatted.draftDocuments[0];
 
     await test.runSequence('archiveDraftDocumentModalSequence', {
+      docketEntryId: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
-      documentId: draftOrder.documentId,
       documentTitle: draftOrder.documentTitle,
       redirectToCaseDetail: true,
     });
@@ -28,10 +28,12 @@ export const petitionsDeletesOrderFromCase = test => {
     });
 
     expect(test.getState('alertSuccess.message')).toEqual('Document deleted.');
+    expect(test.getState('viewerDraftDocumentToDisplay')).toBeUndefined();
+    expect(test.getState('draftDocumentViewerDocketEntryId')).toBeUndefined();
 
     expect(
       formatted.draftDocuments.find(
-        doc => doc.documentId === draftOrder.documentId,
+        doc => doc.docketEntryId === draftOrder.docketEntryId,
       ),
     ).toBeFalsy();
   });

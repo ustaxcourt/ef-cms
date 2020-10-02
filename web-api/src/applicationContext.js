@@ -213,8 +213,8 @@ const {
   deleteDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
 const {
-  deleteDocument,
-} = require('../../shared/src/persistence/dynamo/documents/deleteDocument');
+  deleteDocketEntry,
+} = require('../../shared/src/persistence/dynamo/documents/deleteDocketEntry');
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
@@ -290,6 +290,12 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
+const {
+  filterQcItemsByAssociatedJudge,
+} = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
+const {
+  filterWorkItemsForUser,
+} = require('../../shared/src/business/utilities/filterWorkItemsForUser');
 const {
   formatAndSortConsolidatedCases,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
@@ -429,6 +435,10 @@ const {
 const {
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
+const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -805,6 +815,12 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  setMessageAsRead,
+} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
+const {
+  setMessageAsReadInteractor,
+} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -880,17 +896,17 @@ const {
   updateDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateDeficiencyStatisticInteractor');
 const {
+  updateDocketEntry,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntry');
+const {
   updateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocument,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocument');
-const {
-  updateDocumentProcessingStatus,
-} = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+  updateDocketEntryProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
@@ -1143,13 +1159,14 @@ const gatewayMethods = {
     saveWorkItemForDocketEntryInProgress,
     saveWorkItemForNonPaper,
     saveWorkItemForPaper,
+    setMessageAsRead,
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
     updateCase,
     updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
-    updateDocument,
-    updateDocumentProcessingStatus,
+    updateDocketEntry,
+    updateDocketEntryProcessingStatus,
     updateHighPriorityCaseTrialSortMappingRecords,
     updateMessage,
     updatePractitionerUser,
@@ -1167,7 +1184,7 @@ const gatewayMethods = {
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
-  deleteDocument,
+  deleteDocketEntry,
   deleteDocumentFromS3,
   deleteElasticsearchReindexRecord,
   deleteRecord,
@@ -1587,6 +1604,7 @@ module.exports = appContextUser => {
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
+        setMessageAsReadInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
@@ -1630,14 +1648,18 @@ module.exports = appContextUser => {
         compareISODateStrings,
         compareStrings,
         createISODateString,
+        filterQcItemsByAssociatedJudge,
+        filterWorkItemsForUser,
         formatCaseForTrialSession,
         formatDateString,
         formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
+        getDocQcSectionForUser,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getWorkQueueFilters,
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,

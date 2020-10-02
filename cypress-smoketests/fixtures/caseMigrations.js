@@ -9,7 +9,7 @@ const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 exports.BASE_CASE = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
-  caseCaption: 'A Migrated Case',
+  caseCaption: `${faker.name.findName()}, Petitioner`,
   preferredTrialCity: 'Washington, District of Columbia',
 };
 

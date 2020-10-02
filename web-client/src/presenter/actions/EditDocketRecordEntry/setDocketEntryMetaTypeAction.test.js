@@ -12,14 +12,14 @@ describe('setDocketEntryMetaTypeAction', () => {
       modules: { presenter },
       state: {
         form: {
-          documentId: '123',
+          docketEntryId: '123',
           eventCode: COURT_ISSUED_EVENT_CODES[0].eventCode,
         },
       },
     });
 
     expect(result.state.screenMetadata.editType).toEqual('CourtIssued');
-    expect(result.state.documentId).toEqual('123');
+    expect(result.state.docketEntryId).toEqual('123');
   });
 
   it('Should return Document in the case of a non court issued document', async () => {
@@ -27,13 +27,13 @@ describe('setDocketEntryMetaTypeAction', () => {
       modules: { presenter },
       state: {
         form: {
-          documentId: '123',
+          docketEntryId: '123',
         },
       },
     });
 
     expect(result.state.screenMetadata.editType).toEqual('Document');
-    expect(result.state.documentId).toEqual('123');
+    expect(result.state.docketEntryId).toEqual('123');
   });
 
   it('Should return NoDocument when there is no document', async () => {
@@ -45,6 +45,6 @@ describe('setDocketEntryMetaTypeAction', () => {
     });
 
     expect(result.state.screenMetadata.editType).toEqual('NoDocument');
-    expect(result.state.documentId).toBeUndefined();
+    expect(result.state.docketEntryId).toBeUndefined();
   });
 });

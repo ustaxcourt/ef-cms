@@ -16,13 +16,13 @@ export const submitCourtIssuedOrderAction = async ({
 }) => {
   let caseDetail;
   const { docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId: documentId } = props;
+  const { primaryDocumentFileId: docketEntryId } = props;
   const formData = get(state.form);
-  const { documentIdToEdit } = formData;
+  const { docketEntryIdToEdit } = formData;
 
   let documentMetadata = omit(formData, [
     'primaryDocumentFile',
-    'documentIdToEdit',
+    'docketEntryIdToEdit',
   ]);
 
   documentMetadata = {
@@ -30,24 +30,24 @@ export const submitCourtIssuedOrderAction = async ({
     docketNumber,
   };
 
-  documentMetadata.draftState = { ...documentMetadata };
+  documentMetadata.draftOrderState = { ...documentMetadata };
 
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
-    documentId,
+    key: docketEntryId,
   });
 
   await applicationContext.getUseCases().validatePdfInteractor({
     applicationContext,
-    documentId,
+    key: docketEntryId,
   });
 
-  if (documentIdToEdit) {
+  if (docketEntryIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()
       .updateCourtIssuedOrderInteractor({
         applicationContext,
-        documentIdToEdit,
+        docketEntryIdToEdit,
         documentMetadata,
       });
   } else {
@@ -56,14 +56,14 @@ export const submitCourtIssuedOrderAction = async ({
       .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
   }
 
   return {
     caseDetail,
+    docketEntryId,
     docketNumber,
-    documentId,
     eventCode: documentMetadata.eventCode,
   };
 };

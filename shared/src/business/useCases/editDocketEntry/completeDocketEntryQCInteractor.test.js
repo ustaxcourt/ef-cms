@@ -6,6 +6,7 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -20,14 +21,14 @@ describe('completeDocketEntryQCInteractor', () => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
-      docketNumber: '45678-18',
-      document: {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntry: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
+      docketNumber: '45678-18',
       section: DOCKET_SECTION,
       sentBy: 'Test User',
       sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -53,8 +54,7 @@ describe('completeDocketEntryQCInteractor', () => {
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
-          description: 'Answer Docket Record Entry',
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -65,7 +65,7 @@ describe('completeDocketEntryQCInteractor', () => {
           workItem,
         },
         {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -73,7 +73,7 @@ describe('completeDocketEntryQCInteractor', () => {
           workItem,
         },
         {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -148,8 +148,8 @@ describe('completeDocketEntryQCInteractor', () => {
       completeDocketEntryQCInteractor({
         applicationContext,
         entryMetadata: {
+          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -186,8 +186,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -216,8 +216,8 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         additionalInfo: '123',
         additionalInfo2: 'abc',
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -242,8 +242,8 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -267,8 +267,8 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info 2',
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Answer',
         documentType: 'Answer',
         eventCode: 'A',
@@ -293,16 +293,37 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
+    const mockNumberOfPages = 999;
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockImplementation(() => {
+        return mockNumberOfPages;
+      });
+
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         partyPrimary: true,
       },
+    });
+
+    const noticeOfDocketChange = result.caseDetail.docketEntries.find(
+      document => document.eventCode === 'NODC',
+    );
+
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalled();
+
+    expect(noticeOfDocketChange).toMatchObject({
+      isFileAttached: true,
+      numberOfPages: 999,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
 
     expect(
@@ -335,8 +356,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'MISP',
@@ -374,8 +395,8 @@ describe('completeDocketEntryQCInteractor', () => {
     const result = await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
@@ -402,8 +423,8 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'My Edited Document',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
