@@ -46,10 +46,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
   const caseEntity = new Case(caseData, { applicationContext });
 
-  const selectedDocketEntry = caseData.docketEntries.find(
-    document => document.docketEntryId === key,
-  );
-
   if (!isInternalUser && !isIrsSuperuser) {
     if (key.includes('.pdf')) {
       if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key) {
@@ -59,6 +55,10 @@ exports.getDownloadPolicyUrlInteractor = async ({
       const docketEntryEntity = caseEntity.getDocketEntryById({
         docketEntryId: key,
       });
+
+      const selectedDocketEntry = caseData.docketEntries.find(
+        document => document.docketEntryId === key,
+      );
 
       const documentIsAvailable = documentMeetsAgeRequirements(
         selectedDocketEntry,
@@ -109,9 +109,14 @@ exports.getDownloadPolicyUrlInteractor = async ({
       );
     }
   } else if (isInternalUser) {
+    const selectedDocketEntry = caseData.docketEntries.find(
+      document => document.docketEntryId === key,
+    );
+
     const selectedIsStin =
+      selectedDocketEntry &&
       selectedDocketEntry.documentType ===
-      INITIAL_DOCUMENT_TYPES.stin.documentType;
+        INITIAL_DOCUMENT_TYPES.stin.documentType;
 
     if (isPetitionsClerk) {
       const isPetitionServed = caseEntity.docketEntries.find(
