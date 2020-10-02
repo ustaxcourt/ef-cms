@@ -29,8 +29,9 @@ const getWorkQueueFilters = ({ additionalFilters = item => item, user }) => {
           // PetitionsClerks
           (item.assigneeId === user.userId &&
             user.role === ROLES.petitionsClerk &&
-            item.caseStatus === CASE_STATUS_TYPES.new &&
-            item.caseIsInProgress === true) // caseIsInProgress only looked at for petitionsclerks
+            ((item.caseStatus === CASE_STATUS_TYPES.new &&
+              item.caseIsInProgress === true) || // caseIsInProgress only looked at for petitionsclerks
+              item.inProgress === true))
         );
       },
       inbox: item => {
@@ -62,8 +63,9 @@ const getWorkQueueFilters = ({ additionalFilters = item => item, user }) => {
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (user.role === ROLES.petitionsClerk &&
-            item.caseStatus === CASE_STATUS_TYPES.new &&
-            item.caseIsInProgress === true)
+            ((item.caseStatus === CASE_STATUS_TYPES.new &&
+              item.caseIsInProgress === true) ||
+              item.inProgress === true))
         );
       },
       inbox: item => {

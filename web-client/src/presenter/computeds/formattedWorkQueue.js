@@ -122,13 +122,20 @@ export const formatWorkItem = ({
 };
 
 const getDocketEntryEditLink = ({
+  applicationContext,
   formattedDocument,
   isInProgress,
   qcWorkItemsUntouched,
   result,
 }) => {
+  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+
   let editLink;
-  if (formattedDocument.isCourtIssuedDocument && !formattedDocument.servedAt) {
+  if (
+    formattedDocument.isCourtIssuedDocument &&
+    !formattedDocument.servedAt &&
+    !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
+  ) {
     editLink = '/edit-court-issued';
   } else if (isInProgress) {
     editLink = '/complete';
@@ -172,20 +179,21 @@ export const getWorkItemDocumentLink = ({
         formattedDocketEntry.isPetition &&
         formattedDocketEntry.isInProgress));
 
-  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
+  const baseDocumentLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
-  let editLink = documentDetailLink;
+  let editLink = documentViewLink;
   if (showDocumentEditLink) {
     if (permissions.DOCKET_ENTRY) {
       const editLinkExtension = getDocketEntryEditLink({
+        applicationContext,
         formattedDocument: formattedDocketEntry,
         isInProgress,
         qcWorkItemsUntouched,
         result,
       });
       if (editLinkExtension) {
-        editLink += editLinkExtension;
+        editLink = `${baseDocumentLink}${editLinkExtension}`;
       } else {
         editLink = documentViewLink;
       }
@@ -194,12 +202,10 @@ export const getWorkItemDocumentLink = ({
       !formattedDocketEntry.servedAt
     ) {
       if (result.caseIsInProgress) {
-        editLink += '/review';
+        editLink = `${baseDocumentLink}/review`;
       } else {
         editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
       }
-    } else {
-      editLink = documentViewLink;
     }
   }
 
