@@ -37,7 +37,11 @@ const getServices = async () => {
     .promise();
 
   return apis
-    .filter(api => api.name.includes(`gateway_api_${process.env.ENV}`))
+    .filter(api =>
+      api.name.includes(
+        `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
+      ),
+    )
     .reduce((obj, api) => {
       obj[
         api.name.replace(`_${process.env.ENV}`, '')
