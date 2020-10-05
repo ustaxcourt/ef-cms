@@ -12,6 +12,11 @@ export const docketClerkUpdatesCaseCaption = test => {
 
     await test.runSequence('openUpdateCaseModalSequence');
 
+    const judges = test.getState('modal.judges');
+
+    const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
+    expect(legacyJudge).toBeFalsy();
+
     expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
 
     expect(test.getState('modal.caseCaption')).toEqual(
