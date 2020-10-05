@@ -38,6 +38,18 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     applicationContext,
   });
 
+  if (user.email) {
+    const formattedEmail = user.email.toLowerCase().trim();
+    await client.put({
+      Item: {
+        pk: `user-email|${formattedEmail}`,
+        sk: `user|${userId}`,
+        userId,
+      },
+      applicationContext,
+    });
+  }
+
   if (
     (user.role === ROLES.privatePractitioner ||
       user.role === ROLES.irsPractitioner) &&
