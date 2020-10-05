@@ -72,7 +72,7 @@ function transform(payload) {
         ].join('.');
 
         var source = {};
-        source['data'] = extractData(logEvent.message, logEvent.extractedFields);
+        source['logdata'] = extractData(logEvent.message, logEvent.extractedFields);
         source['@id'] = logEvent.id;
         source['@timestamp'] = new Date(1 * logEvent.timestamp).toISOString();
         source['@message'] = logEvent.message;
