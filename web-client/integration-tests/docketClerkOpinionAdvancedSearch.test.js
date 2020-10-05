@@ -15,6 +15,12 @@ describe('docket clerk opinion advanced search', () => {
 
     await test.runSequence('gotoAdvancedSearchSequence');
 
+    const judges = test.getState('legacyAndCurrentJudges');
+    expect(judges.length).toBeGreaterThan(0);
+
+    const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
+    expect(legacyJudge).toBeTruthy();
+
     await test.runSequence('submitOpinionAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({

@@ -556,6 +556,7 @@ describe('draftDocumentViewerHelper', () => {
               docketEntryId: 'abc',
               documentTitle: 'Notice',
               documentType: 'NOT',
+              eventCode: 'NOT',
               isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
@@ -563,7 +564,6 @@ describe('draftDocumentViewerHelper', () => {
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
-          eventCode: 'NOT',
         },
       },
     });
@@ -635,13 +635,38 @@ describe('draftDocumentViewerHelper', () => {
               docketEntryId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              eventCode: 'O', // Requires a signature
               isDraft: true,
             },
           ],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
-          eventCode: 'O', // Requires a signature
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showDocumentNotSignedAlert).toEqual(true);
+  });
+
+  it('should return showDocumentNotSignedAlert true if document is not signed but the event code requires a signature and viewerDraftDocumentToDisplay only contains a docketEntryId', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              eventCode: 'O', // Requires a signature
+              isDraft: true,
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: 'abc',
         },
       },
     });
