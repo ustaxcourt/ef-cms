@@ -119,7 +119,7 @@ describe('User entity', () => {
     expect(user.role).toBe(ROLES.petitioner);
   });
 
-  it('should create a user with hasEAccess defaulted to false if not provided', () => {
+  it('should create a user with hasEAccess defaulted to undefined if not provided', () => {
     const user = new User({
       name: 'Saul Goodman',
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',

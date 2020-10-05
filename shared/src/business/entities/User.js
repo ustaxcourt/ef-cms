@@ -34,7 +34,7 @@ User.prototype.init = function init(rawUser) {
 };
 
 const userDecorator = (obj, rawObj) => {
-  obj.hasEAccess = rawObj.hasEAccess || false;
+  obj.hasEAccess = rawObj.hasEAccess || undefined;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.role = rawObj.role || ROLES.petitioner;
