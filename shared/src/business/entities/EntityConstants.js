@@ -759,6 +759,10 @@ const JUDGES_CHAMBERS = {
     label: 'Copeland’s Chambers',
     section: 'copelandsChambers',
   },
+  DREDDS_CHAMBERS_SECTION: {
+    label: 'Dredds’s Chambers',
+    section: 'dreddsChambers',
+  },
   FOLEYS_CHAMBERS_SECTION: {
     label: 'Foley’s Chambers',
     section: 'foleysChambers',
