@@ -37,10 +37,10 @@ resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
     {
       "Effect": "Allow",
       "Action": [
-        "es:ESHttpPost"
+        "es:*"
       ],
       "Resource": [
-        "${aws_elasticsearch_domain.efcms-logs.arn}"
+        "${aws_elasticsearch_domain.efcms-logs.arn}/*"
       ]
     }
   ]
