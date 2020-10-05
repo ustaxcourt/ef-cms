@@ -435,6 +435,7 @@
         - "cohensChambers"
         - "colvinsChambers"
         - "copelandsChambers"
+        - "dreddsChambers"
         - "foleysChambers"
         - "galesChambers"
         - "gerbersChambers"
