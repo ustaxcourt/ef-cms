@@ -1345,7 +1345,8 @@ Valid Case object example:
     "phone":"+1 (809) 471-2617",
     "postalCode":"19959",
     "serviceIndicator":"Electronic",
-    "state":"IN"
+    "state":"IN",
+    "hasEAccess":true
   }
 }
 ```

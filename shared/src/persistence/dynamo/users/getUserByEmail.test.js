@@ -8,7 +8,7 @@ const { getUserById } = require('./getUserById');
 
 describe('getUserByEmail', () => {
   beforeAll(() => {
-    client.get = jest.fn();
+    client.query = jest.fn();
   });
 
   it('should return undefined when a user is not found with the provided email', async () => {
@@ -30,9 +30,9 @@ describe('getUserByEmail', () => {
       email: mockEmail,
     });
 
-    expect(client.get.mock.calls[0][0].Key.pk).toEqual(
-      'user-email|found@example.com',
-    );
+    expect(
+      client.query.mock.calls[0][0].ExpressionAttributeValues[':pk'],
+    ).toEqual('user-email|found@example.com');
   });
 
   it('should return a user object when one is found with the email provided', async () => {
@@ -41,9 +41,11 @@ describe('getUserByEmail', () => {
       email: mockEmail,
       userId: 'petitioner1',
     };
-    client.get = jest.fn().mockReturnValue({
-      userId: mockFoundUser.userId,
-    });
+    client.query = jest.fn().mockReturnValue([
+      {
+        userId: mockFoundUser.userId,
+      },
+    ]);
     getUserById.mockReturnValue(mockFoundUser);
 
     const result = await getUserByEmail({
