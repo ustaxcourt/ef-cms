@@ -11,6 +11,8 @@ resource "aws_lambda_function" "logs_to_es" {
   role = aws_iam_role.lambda_elasticsearch_execution_role.arn
   runtime = "nodejs10.x"
 
+  source_code_hash = "${filebase64sha256(data.archive_file.zip_logs_to_es_lambda.output_path)}-${aws_iam_role.lambda_elasticsearch_execution_role.name}"
+
   environment {
     variables = {
       es_endpoint = aws_elasticsearch_domain.efcms-logs.endpoint
@@ -54,43 +56,3 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   log_group_name = "/aws/lambda/cognito_authorizer_lambda_${element(var.environments, count.index)}"
 }
 
-resource "aws_iam_role" "lambda_logs_role" {
-  name = "lambda_role__account"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy" "lambda_logs_policy" {
-  name = "lambda_policy__account" 
-  role = aws_iam_role.lambda_logs_role.id
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:PutLogEvents",
-        "logs:PutLogEventsBatch",
-        "logs:CreateLogStream"
-      ],
-      "Resource": "arn:aws:logs:*"
-    }
-  ]
-}
-EOF
-}
