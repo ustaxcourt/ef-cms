@@ -313,7 +313,7 @@ describe('Case migration journey', () => {
       docketNumber: legacyServedDocumentCase.docketNumber,
     });
     const caseDocuments = test.getState('caseDetail.docketEntries');
-    expect(caseDocuments.length).toBe(5);
+    expect(caseDocuments.length).toBe(4);
 
     const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);
     expect(legacyServedDocument.servedAt).toBeUndefined();
