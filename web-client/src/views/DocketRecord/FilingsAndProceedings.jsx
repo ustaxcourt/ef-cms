@@ -100,7 +100,7 @@ export const FilingsAndProceedings = connect(
             onClick={() =>
               changeTabAndSetViewerDocumentToDisplaySequence({
                 docketRecordTab: 'documentView',
-                viewerDocumentToDisplay: { docketEntryId: entry.docketEntryId },
+                viewerDocumentToDisplay: entry,
               })
             }
           >
