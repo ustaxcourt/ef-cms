@@ -1,4 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
+1;
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -8,6 +10,8 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 const test = setupTest();
 
@@ -27,6 +31,21 @@ describe('case inventory report journey', () => {
   loginAs(test, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {
     await test.runSequence('openCaseInventoryReportModalSequence');
+
+    const caseInventoryReportHelper = withAppContextDecorator(
+      caseInventoryReportHelperComputed,
+    );
+
+    const helper = runCompute(caseInventoryReportHelper, {
+      state: test.getState(),
+    });
+
+    const legacyJudge = helper.judges.find(
+      judge => judge.role === 'legacyJudge',
+    );
+
+    expect(legacyJudge).toBeFalsy();
+
     //New
     await test.runSequence('updateScreenMetadataSequence', {
       key: 'status',
