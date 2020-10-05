@@ -216,6 +216,21 @@ const legacyServedDocumentCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
+const caseWithEAccess = {
+  ...MOCK_CASE,
+  associatedJudge: CHIEF_JUDGE,
+  caseCaption: 'The Sixth Migrated Case',
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+    email: 'petitioner@example.com',
+    hasEAccess: true,
+  },
+  docketNumber: '192-15',
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+};
+
 const legacyDeadline = {
   caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
   createdAt: '2020-01-01T01:02:15.185-04:00',
@@ -254,6 +269,10 @@ describe('Case migration journey', () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       legacyServedDocumentCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      caseWithEAccess,
     );
     await axiosInstance.post(
       'http://localhost:4000/migrate/case-deadline',
@@ -451,5 +470,19 @@ describe('Case migration journey', () => {
       docketNumber: otherFilersCase.docketNumber,
     });
     expect(test.getState('caseDeadlines').length).toBe(1);
+  });
+
+  loginAs(test, 'petitioner@example.com');
+
+  it('user with e-access should see migrated e-access case on their dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
+
+    const openCases = test.getState('openCases');
+
+    expect(
+      openCases.find(c => c.docketNumber === caseWithEAccess.docketNumber),
+    ).toBeDefined();
   });
 });
