@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 /*
-/* This Lambda is taken from the magically-generated lambda that is created 
+/* This Lambda is taken from the magically-generated lambda that is created
 /* in AWS Console when setting up a log subscription to our Elasticsearch Kibana domain.
 /* We need to host this lambda in order to manage it via Terraform.
 */
@@ -71,7 +71,8 @@ function transform(payload) {
             ('0' + timestamp.getUTCDate()).slice(-2)          // day
         ].join('.');
 
-        var source = buildSource(logEvent.message, logEvent.extractedFields);
+        var source = {};
+        source['logdata'] = extractData(logEvent.message, logEvent.extractedFields);
         source['@id'] = logEvent.id;
         source['@timestamp'] = new Date(1 * logEvent.timestamp).toISOString();
         source['@message'] = logEvent.message;
@@ -81,7 +82,7 @@ function transform(payload) {
 
         var action = { "index": {} };
         action.index._index = indexName;
-        action.index._type = 'efcms-logs';
+        action.index._type = 'ef-cms-info';
         action.index._id = logEvent.id;
 
         bulkRequestBody += [
@@ -92,28 +93,28 @@ function transform(payload) {
     return bulkRequestBody;
 }
 
-function buildSource(message, extractedFields) {
+function extractData(message, extractedFields) {
     if (extractedFields) {
-        var source = {};
+        var data = {};
 
         for (var key in extractedFields) {
             if (extractedFields.hasOwnProperty(key) && extractedFields[key]) {
                 var value = extractedFields[key];
 
                 if (isNumeric(value)) {
-                    source[key] = 1 * value;
+                    data[key] = 1 * value;
                     continue;
                 }
 
                 jsonSubString = extractJson(value);
                 if (jsonSubString !== null) {
-                    source['$' + key] = JSON.parse(jsonSubString);
+                    data['$' + key] = JSON.parse(jsonSubString);
                 }
 
-                source[key] = value;
+                data[key] = value;
             }
         }
-        return source;
+        return data;
     }
 
     jsonSubString = extractJson(message);

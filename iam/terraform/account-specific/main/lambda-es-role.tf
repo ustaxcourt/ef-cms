@@ -33,6 +33,15 @@ resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
       "Resource": [
         "arn:aws:logs:*:*:*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "es:*"
+      ],
+      "Resource": [
+        "${aws_elasticsearch_domain.efcms-logs.arn}/*"
+      ]
     }
   ]
 }
