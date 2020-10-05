@@ -9,6 +9,49 @@ const { UnauthorizedError } = require('../../errors/errors');
 const { UserCase } = require('../entities/UserCase');
 
 /**
+ * Creates a new user account for a case if one does not already exist
+ * or associates an existing user account with the case
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseEntity the case entity to associate the user with
+ * @param {object} providers.user the user to associate with the case
+ * @returns {object} the updated case entity
+ */
+const createUserAccount = async ({ applicationContext, caseEntity, user }) => {
+  const foundUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserByEmail({
+      applicationContext,
+      email: caseEntity.contactPrimary.email,
+    });
+
+  if (foundUser) {
+    caseEntity.contactPrimary.contactId = foundUser.userId;
+  } else {
+    const newUser = await applicationContext
+      .getPersistenceGateway()
+      .createUser({
+        applicationContext,
+        user,
+      });
+
+    caseEntity.contactPrimary.contactId = newUser.userId;
+  }
+
+  const userCaseEntity = new UserCase(caseEntity).validate().toRawObject();
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber: caseEntity.docketNumber,
+    userCase: userCaseEntity,
+    userId: caseEntity.contactPrimary.contactId,
+  });
+  return caseEntity;
+};
+
+exports.createUserAccount = createUserAccount;
+
+/**
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -48,7 +91,7 @@ exports.migrateCaseInteractor = async ({
     }
   }
 
-  const caseToAdd = new Case(
+  let caseToAdd = new Case(
     {
       ...caseMetadata,
       userId: user.userId,
@@ -121,32 +164,10 @@ exports.migrateCaseInteractor = async ({
     !!caseToAdd.contactPrimary.hasEAccess &&
     caseToAdd.status !== CASE_STATUS_TYPES.closed;
   if (shouldCreateUserAccount) {
-    const foundUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserByEmail({
-        applicationContext,
-        email: caseToAdd.contactPrimary.email,
-      });
-
-    if (foundUser) {
-      caseToAdd.contactPrimary.contactId = foundUser.userId;
-    } else {
-      const newUser = await applicationContext
-        .getPersistenceGateway()
-        .createUser({
-          applicationContext,
-          user: foundUser,
-        });
-
-      caseToAdd.contactPrimary.contactId = newUser.userId;
-    }
-
-    const userCaseEntity = new UserCase(caseToAdd).validate().toRawObject();
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
+    caseToAdd = await createUserAccount({
       applicationContext,
-      docketNumber: caseToAdd.docketNumber,
-      userCase: userCaseEntity,
-      userId: caseToAdd.contactPrimary.contactId,
+      caseEntity: caseToAdd,
+      user: caseToAdd.contactPrimary,
     });
   }
 
