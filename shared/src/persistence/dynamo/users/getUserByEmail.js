@@ -10,15 +10,19 @@ const { getUserById } = require('./getUserById');
 exports.getUserByEmail = async ({ applicationContext, email }) => {
   const formattedEmail = email.toLowerCase().trim();
 
-  const user = await client.get({
-    Key: {
-      pk: `user-email|${formattedEmail}`,
+  const results = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
     },
+    ExpressionAttributeValues: {
+      ':pk': `user-email|${formattedEmail}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
 
-  if (user) {
-    const { userId } = user;
+  if (results && results.length) {
+    const { userId } = results[0];
     return await getUserById({ applicationContext, userId });
   }
 };
