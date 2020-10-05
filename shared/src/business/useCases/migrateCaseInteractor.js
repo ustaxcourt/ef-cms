@@ -15,19 +15,25 @@ const { UserCase } = require('../entities/UserCase');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseEntity the case entity to associate the user with
+ * @param {string} providers.contactType contactPrimary or contactSecondary
  * @param {object} providers.user the user to associate with the case
  * @returns {object} the updated case entity
  */
-const createUserAccount = async ({ applicationContext, caseEntity, user }) => {
+const createUserAccount = async ({
+  applicationContext,
+  caseEntity,
+  contactType,
+  user,
+}) => {
   const foundUser = await applicationContext
     .getPersistenceGateway()
     .getUserByEmail({
       applicationContext,
-      email: caseEntity.contactPrimary.email,
+      email: caseEntity[contactType].email,
     });
 
   if (foundUser) {
-    caseEntity.contactPrimary.contactId = foundUser.userId;
+    caseEntity[contactType].contactId = foundUser.userId;
   } else {
     const newUser = await applicationContext
       .getPersistenceGateway()
@@ -36,7 +42,7 @@ const createUserAccount = async ({ applicationContext, caseEntity, user }) => {
         user,
       });
 
-    caseEntity.contactPrimary.contactId = newUser.userId;
+    caseEntity[contactType].contactId = newUser.userId;
   }
 
   const userCaseEntity = new UserCase(caseEntity).validate().toRawObject();
@@ -44,7 +50,7 @@ const createUserAccount = async ({ applicationContext, caseEntity, user }) => {
     applicationContext,
     docketNumber: caseEntity.docketNumber,
     userCase: userCaseEntity,
-    userId: caseEntity.contactPrimary.contactId,
+    userId: caseEntity[contactType].contactId,
   });
   return caseEntity;
 };
@@ -160,15 +166,22 @@ exports.migrateCaseInteractor = async ({
 
   caseToAdd.validateForMigration();
 
-  const shouldCreateUserAccount =
-    !!caseToAdd.contactPrimary.hasEAccess &&
-    caseToAdd.status !== CASE_STATUS_TYPES.closed;
-  if (shouldCreateUserAccount) {
-    caseToAdd = await createUserAccount({
-      applicationContext,
-      caseEntity: caseToAdd,
-      user: caseToAdd.contactPrimary,
-    });
+  const contactTypes = ['contactPrimary', 'contactSecondary'];
+
+  for (const contactType of contactTypes) {
+    if (caseToAdd[contactType]) {
+      const shouldCreateUserAccount =
+        !!caseToAdd[contactType].hasEAccess &&
+        caseToAdd.status !== CASE_STATUS_TYPES.closed;
+      if (shouldCreateUserAccount) {
+        caseToAdd = await createUserAccount({
+          applicationContext,
+          caseEntity: caseToAdd,
+          contactType,
+          user: caseToAdd[contactType],
+        });
+      }
+    }
   }
 
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();

@@ -2,31 +2,31 @@
  ```
 ---
   type: "object"
-  keys:
-    documentTitle:
+  keys: 
+    documentTitle: 
       type: "string"
-      flags:
+      flags: 
         presence: "required"
-      rules:
-        -
+      rules: 
+        - 
           name: "min"
-          args:
+          args: 
             limit: 1
-        -
+        - 
           name: "max"
-          args:
+          args: 
             limit: 100
-    documentType:
+    documentType: 
       type: "string"
-      flags:
+      flags: 
         only: true
         presence: "required"
-      rules:
-        -
+      rules: 
+        - 
           name: "min"
-          args:
+          args: 
             limit: 1
-      allow:
+      allow: 
         - "Administrative Record"
         - "Affidavit in Support"
         - "Agreed Computation for Entry of Decision"
@@ -85,6 +85,7 @@
         - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
         - "Motion for Continuance"
         - "Motion for Default and Dismissal"
+        - "Motion for Document Subpoena Hearing"
         - "Motion for Entry of Decision"
         - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
         - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -222,6 +223,7 @@
         - "Notice of Change of Counsel for Non-Party"
         - "Notice of Change of Telephone Number"
         - "Notice of Clarification of Tax Matters Partner"
+        - "Notice of Completion"
         - "Notice of Concession"
         - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
         - "Notice of Death of Counsel"
@@ -297,6 +299,7 @@
         - "Prehearing Memorandum"
         - "Pretrial Memorandum"
         - "Proposed Stipulated Decision"
+        - "Proposed Trial Exhibits"
         - "Ratification"
         - "Ratification of Petition"
         - "Record on Appeal"
@@ -366,17 +369,17 @@
         - "U.S.C.A"
         - "Unsworn Declaration under Penalty of Perjury in Support"
         - "Writ of Habeas Corpus Ad Testificandum"
-    eventCode:
+    eventCode: 
       type: "string"
-      flags:
+      flags: 
         only: true
         presence: "required"
-      rules:
-        -
+      rules: 
+        - 
           name: "min"
-          args:
+          args: 
             limit: 1
-      allow:
+      allow: 
         - "A"
         - "AAAP"
         - "AAPN"
@@ -555,6 +558,7 @@
         - "M134"
         - "M135"
         - "M136"
+        - "M137"
         - "M218"
         - "MEMO"
         - "MINC"
@@ -581,6 +585,7 @@
         - "NNOB"
         - "NOA"
         - "NOB"
+        - "NOC"
         - "NODC"
         - "NOEI"
         - "NOEP"
@@ -645,6 +650,7 @@
         - "PHM"
         - "PMT"
         - "PSDE"
+        - "PTE"
         - "PTFR"
         - "PTRL"
         - "RAT"
@@ -690,6 +696,7 @@
         - "SPD"
         - "SPML"
         - "SPMT"
+        - "SPOS"
         - "SPTN"
         - "SPTO"
         - "SRMB"
