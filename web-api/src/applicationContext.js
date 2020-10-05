@@ -614,6 +614,9 @@ const {
   getUploadPolicyInteractor,
 } = require('../../shared/src/business/useCases/getUploadPolicyInteractor');
 const {
+  getUserByEmail,
+} = require('../../shared/src/persistence/dynamo/users/getUserByEmail');
+const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
@@ -1247,6 +1250,7 @@ const gatewayMethods = {
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
+  getUserByEmail,
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
