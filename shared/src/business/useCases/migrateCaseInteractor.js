@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 const { UserCase } = require('../entities/UserCase');
@@ -114,6 +115,41 @@ exports.migrateCaseInteractor = async ({
     caseToAdd.setAsCalendared(trialSessionEntity);
   }
 
+  caseToAdd.validateForMigration();
+
+  const shouldCreateUserAccount =
+    !!caseToAdd.contactPrimary.hasEAccess &&
+    caseToAdd.status !== CASE_STATUS_TYPES.closed;
+  if (shouldCreateUserAccount) {
+    const foundUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserByEmail({
+        applicationContext,
+        email: caseToAdd.contactPrimary.email,
+      });
+
+    if (foundUser) {
+      caseToAdd.contactPrimary.contactId = foundUser.userId;
+    } else {
+      const newUser = await applicationContext
+        .getPersistenceGateway()
+        .createUser({
+          applicationContext,
+          user: foundUser,
+        });
+
+      caseToAdd.contactPrimary.contactId = newUser.userId;
+    }
+
+    const userCaseEntity = new UserCase(caseToAdd).validate().toRawObject();
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity,
+      userId: caseToAdd.contactPrimary.contactId,
+    });
+  }
+
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
   await applicationContext.getPersistenceGateway().createCase({
@@ -125,7 +161,7 @@ exports.migrateCaseInteractor = async ({
     await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
-      docketNumber: caseToAdd.docketNumber,
+      docketNumber: caseValidatedRaw.docketNumber,
     });
   }
 

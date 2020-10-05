@@ -1,4 +1,5 @@
 const {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -503,5 +504,23 @@ describe('migrateCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should associate the case with an existing user when one is found by searching for contactPrimary.email', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        contactPrimary: {
+          ...caseMetadata,
+          hasEAccess: true,
+        },
+        status: CASE_STATUS_TYPES.new,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 });
