@@ -11,6 +11,8 @@ resource "aws_lambda_function" "logs_to_es" {
   role = aws_iam_role.lambda_elasticsearch_execution_role.arn
   runtime = "nodejs10.x"
 
+  source_code_hash = "${filebase64sha256(data.archive_file.zip_logs_to_es_lambda.output_path)}-${aws_iam_role.lambda_elasticsearch_execution_role.name}"
+
   environment {
     variables = {
       es_endpoint = aws_elasticsearch_domain.efcms-logs.endpoint
@@ -53,3 +55,4 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   name = "cognito_authorizer_${element(var.environments, count.index)}_lambda_filter"
   log_group_name = "/aws/lambda/cognito_authorizer_lambda_${element(var.environments, count.index)}"
 }
+
