@@ -15,8 +15,10 @@ describe('formattedCaseDetail', () => {
   let globalUser;
   const {
     DOCUMENT_RELATIONSHIPS,
+    JUDGES_CHAMBERS,
     OBJECTIONS_OPTIONS_MAP,
     STATUS_TYPES,
+    TRIAL_CLERKS_SECTION,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -59,19 +61,29 @@ describe('formattedCaseDetail', () => {
 
   const petitionsClerkUser = {
     role: USER_ROLES.petitionsClerk,
-    userId: '123',
+    userId: '111',
   };
   const docketClerkUser = {
     role: USER_ROLES.docketClerk,
-    userId: '234',
+    userId: '222',
   };
   const petitionerUser = {
     role: USER_ROLES.petitioner,
-    userId: '456',
+    userId: '333',
   };
   const judgeUser = {
     role: USER_ROLES.judge,
-    userId: '789',
+    userId: '444',
+  };
+  const chambersUser = {
+    role: USER_ROLES.chambers,
+    section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+    userId: '555',
+  };
+  const trialClerkUser = {
+    role: USER_ROLES.trialClerk,
+    section: TRIAL_CLERKS_SECTION,
+    userId: '777',
   };
 
   const simpleDocketEntries = [
@@ -2314,7 +2326,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('trial session', () => {
+  describe('userIsAssignedToSession', () => {
     const caseDetail = {
       archivedCorrespondences: [],
       archivedDocketEntries: [],
@@ -2584,7 +2596,7 @@ describe('formattedCaseDetail', () => {
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
 
-    it("should set userIsAssignedToSession to true when the case's trial session judge is the currently logged in user", () => {
+    it("should be true when the case's trial session judge is the currently logged in user", () => {
       const mockTrialSessionId = applicationContext.getUniqueId();
 
       const result = runCompute(formattedCaseDetail, {
@@ -2608,7 +2620,7 @@ describe('formattedCaseDetail', () => {
       expect(result.userIsAssignedToSession).toBeTruthy();
     });
 
-    it("should set userIsAssignedToSession to false when the case's trial session judge is not the currently logged in user", () => {
+    it("should be false when the case's trial session judge is not the currently logged in user", () => {
       const mockTrialSessionId = applicationContext.getUniqueId();
 
       const result = runCompute(formattedCaseDetail, {
@@ -2623,6 +2635,108 @@ describe('formattedCaseDetail', () => {
               judge: {
                 userId: judgeUser.userId,
               },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeFalsy();
+    });
+
+    it('should be true when the current user is a chambers user for the judge assigned to the trial session the case is scheduled for', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          judgeUser: {
+            section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+            userId: judgeUser.userId,
+          },
+          ...getBaseState(chambersUser),
+          trialSessions: [
+            {
+              judge: {
+                userId: judgeUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeTruthy();
+    });
+
+    it('should be false when the current user is a chambers user for a different judge than the one assigned to the case', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          judgeUser: {
+            section: JUDGES_CHAMBERS.BUCHS_CHAMBERS_SECTION.section,
+            userId: judgeUser.userId,
+          },
+          ...getBaseState(chambersUser),
+          trialSessions: [
+            {
+              judge: {
+                userId: judgeUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeFalsy();
+    });
+
+    it('should be true when the current user is the trial clerk assigned to the trial session the case is scheduled for', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          ...getBaseState(trialClerkUser),
+          trialSessions: [
+            {
+              trialClerk: {
+                userId: trialClerkUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeTruthy();
+    });
+
+    it('should be false when the current user is a trial clerk and is not assigned to the trial session the case is scheduled for', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          ...getBaseState(trialClerkUser),
+          trialSessions: [
+            {
+              trialClerk: {},
               trialSessionId: mockTrialSessionId,
             },
           ],
