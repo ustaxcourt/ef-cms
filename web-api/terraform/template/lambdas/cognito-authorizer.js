@@ -1,6 +1,6 @@
+const axios = require('axios');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
-const request = require('request');
 
 const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
@@ -69,17 +69,17 @@ exports.handler = (event, context, cb) => {
     if (keyCache[iss]) {
       verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
     } else {
-      request(
-        { json: true, url: `${iss}/.well-known/jwks.json` },
-        (error, response, body) => {
-          if (error || response.statusCode !== 200) {
-            console.log('Request error:', error);
-            cb('Unauthorized');
-          }
-          keyCache[iss] = body;
+      axios
+        .get(`${iss}/.well-known/jwks.json`)
+        .then(response => {
+          keyCache[iss] = response;
           verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
-        },
-      );
+        })
+        .catch(error => {
+          console.log('Request error:', error);
+          // eslint-disable-next-line promise/no-callback-in-promise
+          cb('Unauthorized');
+        });
     }
   } else {
     console.log('No authorizationToken found in the header.');
