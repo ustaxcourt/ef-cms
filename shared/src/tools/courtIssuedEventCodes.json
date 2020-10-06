@@ -10,7 +10,7 @@
   {
     "eventCode": "OAJ",
     "documentType": "Order that case is assigned",
-    "documentTitle": "Order [Judge name] [Anything]",
+    "documentTitle": "Order that case is assigned to [Judge name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
     "requiresSignature": true
