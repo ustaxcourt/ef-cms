@@ -400,11 +400,6 @@
             limit: 1
       allow: 
         - "User"
-    hasEAccess: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Whether the user had access to an open case in the legacy system."
     isUpdatingInformation: 
       type: "boolean"
       flags: 
