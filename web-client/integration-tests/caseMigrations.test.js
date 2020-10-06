@@ -484,5 +484,13 @@ describe('Case migration journey', () => {
     expect(
       openCases.find(c => c.docketNumber === caseWithEAccess.docketNumber),
     ).toBeDefined();
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: caseWithEAccess.docketNumber,
+    });
+
+    expect(test.getState('caseDetail.docketNumber')).toEqual(
+      caseWithEAccess.docketNumber,
+    );
   });
 });
