@@ -1,3 +1,65 @@
 name,judgeTitle,judgeFullName,email,role,userId,section
-Fieri,Legacy Judge,Fiere,judgeFieri@example.com,legacyJudge,dadbad42-18d0-43ec-bafb-654e83405416,legacyJudgesChambers
-Dredd,Judge,Joseph S. Dredd,judgeDredd@example.com,judge,dabbad00-18d0-43ec-bafb-654e83405416,dreddsChambers
+Aarons,Judge,Aarons,legacy.judge@example.com,legacyJudge,96823fa4-e611-457a-a7d1-2bf47cd5f3ca,legacyJudgesChambers
+Armen,Special Trial Judge,Armen,legacy.judge@example.com,legacyJudge,fcef15a8-f694-4eed-ac1a-62882fe3c081,legacyJudgesChambers
+Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,bd7de790-19fa-4dcb-9a94-edd2f23cdbeb,ashfordsChambers
+Beghe,Judge,Beghe,legacy.judge@example.com,legacyJudge,085e273c-cb49-499a-8c29-2746cebc943a,legacyJudgesChambers
+Buch,Judge,Ronald L. Buch,judge.buch@example.com,judge,0e21364d-b0b1-455d-ab67-9c0abf2cfb4e,buchsChambers
+Buckley,Special Trial Judge,Buckley,legacy.judge@example.com,legacyJudge,1a9ebb4f-5965-4dab-82b7-35f7bb3f4505,legacyJudgesChambers
+Cantrel,Judge,Cantrel,legacy.judge@example.com,legacyJudge,a2ae3575-aa52-4e11-8399-fad5d3bf38d1,legacyJudgesChambers
+Carluzzo,Chief Special Trial Judge,Lewis R. Caluzzo,stjudge.carluzzo@example.com,judge,4b0d7155-a600-4158-84ad-b946d9bf8378,carluzzosChambers
+Chabot,Judge,Chabot,legacy.judge@example.com,legacyJudge,e4cf11a3-4da1-4283-8b5a-02cd8f23ae67,legacyJudgesChambers
+Chiechi,Judge,Chiechi,legacy.judge@example.com,legacyJudge,c9f1b7c4-fdbc-4c9e-a518-76220846b582,legacyJudgesChambers
+Clapp,Judge,Clapp,legacy.judge@example.com,legacyJudge,41c911fb-6ff4-4464-9e02-48dc2962daa2,legacyJudgesChambers
+Cohen,Judge,Mary Ann Cohen,judge.cohen@example.com,judge,bf07c5dc-942b-46ec-92a6-35a925ad3150,cohensChambers
+Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,5e9e2cc9-6f83-44ee-89cf-1c85dcb2a077,colvinsChambers
+Copeland,Judge,Elizabeth A. Copeland,judge.copeland@example.com,judge,9ef200eb-6905-491d-9f91-0f62670f489f,copelandsChambers
+Couvillion,Special Trial Judge,Couvillion,legacy.judge@example.com,legacyJudge,bd5b7fc3-d9d3-481e-914c-b2726b40b453,legacyJudgesChambers
+Dawson,Judge,Dawson,legacy.judge@example.com,legacyJudge,618a33a1-274f-482d-b8d7-84f273dfca69,legacyJudgesChambers
+Dean,Special Trial Judge,Dean,legacy.judge@example.com,legacyJudge,938b1d84-3563-4749-83e6-a3ed56e99380,legacyJudgesChambers
+Dinan,Special Trial Judge,Dinan,legacy.judge@example.com,legacyJudge,6eb00f4e-f664-45d2-be39-e051e56d6749,legacyJudgesChambers
+Drennen,Judge,Drennen,legacy.judge@example.com,legacyJudge,540f2e16-e1b2-458f-b162-ba14e936ff70,legacyJudgesChambers
+Fay,Judge,Fay,legacy.judge@example.com,legacyJudge,cea5dcd5-5033-41ff-a6c5-d80b274ec9aa,legacyJudgesChambers
+Featherston,Judge,Featherston,legacy.judge@example.com,legacyJudge,85bfc355-a414-42a7-8c88-42b7f75a2141,legacyJudgesChambers
+Foley,Chief Judge,Maurice B. Foley,judge.foley@example.com,judge,b9bfef74-df05-4e85-b112-8ad2c9538888,foleysChambers
+Gale,Judge,Joseph H. Gale,judge.gale@example.com,judge,100b935e-e6bd-47dc-850d-1ee04e8f8b57,galesChambers
+Galloway,Special Trial Judge,Galloway,legacy.judge@example.com,legacyJudge,d6f7cf49-aa7f-48a1-9390-1938a576735b,legacyJudgesChambers
+Gerber,Judge,Gerber,legacy.judge@example.com,legacyJudge,87c0efa3-5fb1-4f00-a671-f3cda3244738,legacyJudgesChambers
+Goeke,Judge,Joseph Robert Goeke,judge.goeke@example.com,judge,1b53994d-fe6d-4794-93f3-2ea8ddf0ac04,goekesChambers
+Goffe,Judge,Goffe,legacy.judge@example.com,legacyJudge,9755bb00-eb0b-4ab1-818e-5419031b40a3,legacyJudgesChambers
+Goldberg,Special Trial Judge,Goldberg,legacy.judge@example.com,legacyJudge,b65eda0c-bced-4d49-8b96-01f8bdb5460d,legacyJudgesChambers
+Greaves,Judge,Travis A. Greaves,judge.greaves@example.com,judge,b40214d6-7ea3-44d7-b060-aca20e8bc349,greavesChambers
+Gussis,Special Trial Judge,Gussis,legacy.judge@example.com,legacyJudge,fe334610-599d-4852-aa9f-8e4e7381f3cf,legacyJudgesChambers
+Gustafson,Judge,David Gustafson,judge.gustafson@example.com,judge,80d64e76-c0b9-4f6f-a4a5-8ab86ae757e5,gustafsonsChambers
+Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,judge,0c5b516a-2a67-4cf6-a94e-39a71fbc2b44,guysChambers
+Haines,Judge,Haines,legacy.judge@example.com,legacyJudge,479cd650-cafe-4396-b126-38b412d566aa,legacyJudgesChambers
+Halpern,Judge,James S. Halpern,judge.halpern@example.com,judge,e01996f1-efea-4ba5-8305-c8cd7a741de9,halpernsChambers
+Hamblen,Judge,Hamblen,legacy.judge@example.com,legacyJudge,87cdddd0-30a6-4153-80d6-32691c687de7,legacyJudgesChambers
+Holmes,Judge,Mark V. Holmes,judge.holmes@example.com,judge,24052329-2e9b-4586-b49b-6cba54b9edda,holmesChambers
+Jacobs,Judge,Jacobs,legacy.judge@example.com,legacyJudge,1d8f2ab6-9fca-4e59-af52-9d796200edc6,legacyJudgesChambers
+Jones,Judge,Courtney D. Jones,judge.jones@example.com,judge,b22abfaf-350b-49e1-aff4-12cf6e665eba,jonesChambers
+Kerrigan,Judge,Kathleen Kerrigan,judge.kerrigan@example.com,judge,1238eed8-b236-4378-acd6-a1b13f5c0fa3,kerrigansChambers
+Korner,Judge,Korner,legacy.judge@example.com,legacyJudge,4235a490-dcc2-4d82-89d0-5928a32215ef,legacyJudgesChambers
+Kroupa,Judge,Kroupa,legacy.judge@example.com,legacyJudge,864c3b58-b0b0-4695-833a-2b9e4024efec,legacyJudgesChambers
+Laro,Judge,Laro,legacy.judge@example.com,legacyJudge,97393d6d-a2be-4b19-b56c-c32a9a0bdb39,legacyJudgesChambers
+Lauber,Judge,Albert G. Lauber,judge.lauber@example.com,judge,f54b1390-49ff-4047-ad87-a1233cf7f4e3,laubersChambers
+Leyden,Special Trial Judge,Diana Leyden,stjudge.leyden@example.com,judge,a5953f26-0a06-4702-9b78-2e51fc36c647,leydensChambers
+Marshall,Judge,Alina I. Marshall,judge.marshall@example.com,judge,96153214-e04b-4a0d-ba40-a5f299defd8f,marshallsChambers
+Marvel,Judge,L. Paige Marvel,judge.marvel@example.com,judge,ca009c8d-f95c-4fa9-b9b5-bf8a97506a9b,marvelsChambers
+Morrison,Judge,Richard T. Morrison,judge.morrison@example.com,judge,3d06d04a-0324-4dad-a99f-f1d7270ae4fd,morrisonsChambers
+Nameroff,Judge,Nameroff,legacy.judge@example.com,legacyJudge,6d314af6-e3e7-4047-bd74-7133a0609692,legacyJudgesChambers
+Nega,Judge,Joseph W. Nega,judge.nega@example.com,judge,104ff148-a0ae-47a9-bb63-28a54c1d83de,negasChambers
+Nims,Judge,Nims,legacy.judge@example.com,legacyJudge,4fdc5974-b923-465a-b2d5-3a7f2eef7126,legacyJudgesChambers
+Pajak,Special Trial Judge,Pajak,legacy.judge@example.com,legacyJudge,9b7d9534-2ad4-46b8-afd7-4349e4465a97,legacyJudgesChambers
+Panuthos,Special Trial Judge,Peter J. Panuthos,stjudge.panuthos@example.com,judge,4adf1c5b-b890-4235-b3de-73dc7c0ac705,panuthosChambers
+Paris,Judge,Elizabeth Crewson Paris,judge.paris@example.com,judge,87106c62-0eb2-4981-acf8-5623afb41f67,parisChambers
+Parker,Judge,Parker,legacy.judge@example.com,legacyJudge,916d22c2-6645-4b30-bab8-06d9a2765191,legacyJudgesChambers
+Parr,Judge,Parr,legacy.judge@example.com,legacyJudge,5d9c183c-d0b1-45b7-8498-18ea21ba0609,legacyJudgesChambers
+Pate,Judge,Pate,legacy.judge@example.com,legacyJudge,c63eba7c-f68f-4ecd-9a13-9fecb37a8971,legacyJudgesChambers
+Peterson,Special Trial Judge,Peterson,legacy.judge@example.com,legacyJudge,9fd7cced-17cb-4969-b831-975d1742343c,legacyJudgesChambers
+Powell,Special Trial Judge,Powell,legacy.judge@example.com,legacyJudge,7524ae71-0694-4ebe-9145-e38cd3211328,legacyJudgesChambers
+Pugh,Judge,Cary Douglas Pugh,judge.pugh@example.com,judge,89ee1cc4-de01-435f-917e-99d53719b3c1,pughsChambers
+Raum,Judge,Raum,legacy.judge@example.com,legacyJudge,f8ff5921-fe8e-4460-9cdf-7ea413f7a591,legacyJudgesChambers
+Ruwe,Judge,Robert P. Ruwe,judge.ruwe@example.com,judge,93a635bd-85cc-4356-9ac7-52cde2fe2aa2,ruwesChambers
+Scott,Judge,Scott,legacy.judge@example.com,legacyJudge,5f7e5c9f-afdd-4dc2-aacd-448fe81a0f17,legacyJudgesChambers
+Shields,Judge,Shields,legacy.judge@example.com,legacyJudge,0ff97819-7a38-4add-98a4-7269d1ff60dc,legacyJudgesChambers
+Simpson,Judge,Simpson,legacy.judge@example.com,legacyJudge,046420a9-83db-405e-84dc-162673ac2eec,legacyJudgesChambers
