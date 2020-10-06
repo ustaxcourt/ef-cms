@@ -34,7 +34,6 @@ User.prototype.init = function init(rawUser) {
 };
 
 const userDecorator = (obj, rawObj) => {
-  obj.hasEAccess = rawObj.hasEAccess || undefined;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.role = rawObj.role || ROLES.petitioner;
@@ -111,12 +110,6 @@ const userValidation = {
   contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
   email: JoiValidationConstants.EMAIL.optional(),
   entityName: JoiValidationConstants.STRING.valid('User').required(),
-  hasEAccess: joi
-    .boolean()
-    .optional()
-    .description(
-      'Whether the user had access to an open case in the legacy system.',
-    ),
   isUpdatingInformation: joi
     .boolean()
     .optional()
