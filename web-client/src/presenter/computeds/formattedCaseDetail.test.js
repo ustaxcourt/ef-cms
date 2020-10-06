@@ -18,6 +18,7 @@ describe('formattedCaseDetail', () => {
     JUDGES_CHAMBERS,
     OBJECTIONS_OPTIONS_MAP,
     STATUS_TYPES,
+    TRIAL_CLERKS_SECTION,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -80,8 +81,8 @@ describe('formattedCaseDetail', () => {
     userId: '555',
   };
   const trialClerkUser = {
-    role: USER_ROLES.chambers,
-    section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+    role: USER_ROLES.trialClerk,
+    section: TRIAL_CLERKS_SECTION,
     userId: '777',
   };
 
