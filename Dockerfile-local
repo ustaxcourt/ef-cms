@@ -7,6 +7,7 @@ RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update
 RUN apt-get install -y -t stretch-backports openjdk-11-jdk=11.0.6+10-1~bpo9+1 -V
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 RUN apt-get install -yq \
   gconf-service=3.2.6-5 \
@@ -61,8 +62,6 @@ RUN apt-get install -yq \
   shellcheck=0.5.0-3 \
   clamav=0.102.4+dfsg-0+deb10u1 -V
 
-RUN apt list --installed
-
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.54.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
 RUN ./aws/install
@@ -71,6 +70,7 @@ RUN rm awscliv2.zip
 RUN freshclam
 
 RUN pip install --upgrade pip
+
 RUN wget -q -O terraform_0.12.28_linux_amd64.zip https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip && \
   unzip -o terraform_0.12.28_linux_amd64.zip terraform && \
   cp terraform /usr/local/bin/ && \
@@ -82,14 +82,9 @@ RUN wget -q -O terraform_0.12.28_linux_amd64.zip https://releases.hashicorp.com/
   CI=true npm install cypress && \
   sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' sonar_home/bin/sonar-scanner
 
-ENV SONAR_RUNNER_HOME=/home/app/sonar_home
-ENV PATH ${SONAR_RUNNER_HOME}/bin:$PATH
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
-RUN npm set progress=false && \
-  npm ci
+RUN npm set progress=false && npm ci
 
 COPY . /home/app
 
