@@ -23,7 +23,7 @@ const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
 
   const judge = get(state.judgeUser);
 
-  const isJudgeUserAssigned = !!(session?.judge?.userId === currentUser.userId);
+  const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
   const isChambersUserAssigned =
     judge &&
     session?.judge?.userId === judge?.userId &&
