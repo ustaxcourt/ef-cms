@@ -36,7 +36,9 @@ const init = async csvFile => {
             endpoint = 'http://localhost:4000/judges';
           } else {
             const services = await getServices();
-            endpoint = `${services['gateway_api']}/judges`;
+            endpoint = `${
+              services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
+            }/judges`;
           }
 
           const result = await axios.post(
