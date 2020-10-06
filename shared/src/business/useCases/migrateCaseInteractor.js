@@ -180,6 +180,8 @@ exports.migrateCaseInteractor = async ({
           contactType,
           user: caseToAdd[contactType],
         });
+      } else {
+        caseToAdd[contactType].hasEAccess = false;
       }
     }
   }
