@@ -25,6 +25,7 @@ const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
 
   const isJudgeUserAssigned = !!(session?.judge?.userId === currentUser.userId);
   const isChambersUserAssigned =
+    judge &&
     session?.judge?.userId === judge?.userId &&
     judge?.section === currentUser.section;
   const isTrialClerkUserAssigned =
