@@ -72,7 +72,7 @@ exports.handler = (event, context, cb) => {
       axios
         .get(`${iss}/.well-known/jwks.json`)
         .then(response => {
-          keyCache[iss] = response;
+          keyCache[iss] = response.data;
           verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
         })
         .catch(error => {
