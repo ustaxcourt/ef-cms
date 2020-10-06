@@ -1311,6 +1311,10 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
+  const isPrimaryContact = caseRaw.contactPrimary.contactId === user.userId;
+  const isSecondaryContact =
+    caseRaw.contactSecondary &&
+    caseRaw.contactSecondary.contactId === user.userId;
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
@@ -1324,6 +1328,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   return (
     isIrsPractitioner ||
     isPrivatePractitioner ||
+    isPrimaryContact ||
+    isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
 };

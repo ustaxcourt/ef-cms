@@ -64,14 +64,17 @@ describe('caseAdvancedSearchInteractor', () => {
   it('filters out sealed cases for non associated, non authorized users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsPractitioner,
+      userId: 'b45a0633-acda-499e-8fab-8785baeafed7',
     });
 
     applicationContext
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
+          contactPrimary: {},
           docketNumber: '101-20',
           sealedDate: 'yup',
+          userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
         },
       ]);
 
@@ -93,6 +96,7 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
+          contactPrimary: {},
           docketNumber: '101-20',
           irsPractitioners: [
             {
@@ -110,6 +114,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     expect(results).toEqual([
       {
+        contactPrimary: {},
         docketNumber: '101-20',
         irsPractitioners: [
           {
@@ -130,6 +135,7 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
+          contactPrimary: {},
           docketNumber: '101-20',
           sealedDate: 'yup',
         },
@@ -142,6 +148,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     expect(results).toEqual([
       {
+        contactPrimary: {},
         docketNumber: '101-20',
         sealedDate: 'yup',
       },

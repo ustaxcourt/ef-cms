@@ -74,6 +74,7 @@ describe('caseFilter', () => {
     const caseSearchResults = [
       {
         baz: 'quux',
+        contactPrimary: {},
         docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '101-20',
         foo: 'baz',
@@ -81,6 +82,7 @@ describe('caseFilter', () => {
       },
       {
         baz: 'quux',
+        contactPrimary: {},
         docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '102-20',
         foo: 'bar',
