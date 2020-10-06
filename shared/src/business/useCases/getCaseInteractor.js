@@ -75,7 +75,11 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
       applicationContext.getCurrentUser(),
       ROLE_PERMISSIONS.GET_CASE,
       caseRecord.userId,
-    )
+    ) &&
+    !isAssociatedUser({
+      caseRaw: caseRecord,
+      user: applicationContext.getCurrentUser(),
+    })
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
