@@ -22,7 +22,7 @@ resource "aws_cognito_user_pool" "pool" {
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "An account has been set up for you with the U.S. Tax Court"
-      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><b>Temporary password:</b> {####}<br /><br /><b>This temporary password is valid for 7 days.</b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>"
+      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> {####}<br /><br /><b>This temporary password is valid for 7 days.</b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>"
     }
   }
 
