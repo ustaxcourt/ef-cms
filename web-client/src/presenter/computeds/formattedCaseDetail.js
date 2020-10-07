@@ -14,12 +14,26 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-const getUserIsAssignedToSession = ({ currentUserId, session }) => {
-  const isJudgeUserAssigned = !!(session?.judge?.userId === currentUserId);
-  const isTrialClerkUserAssigned =
-    session?.trialClerk?.userId === currentUserId;
+const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
+  const sessions = get(state.trialSessions);
+  let session;
+  if (sessions) {
+    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
+  }
 
-  return isJudgeUserAssigned || isTrialClerkUserAssigned;
+  const judge = get(state.judgeUser);
+
+  const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
+  const isChambersUserAssigned =
+    judge &&
+    session?.judge?.userId === judge?.userId &&
+    judge?.section === currentUser.section;
+  const isTrialClerkUserAssigned =
+    session?.trialClerk?.userId === currentUser.userId;
+
+  return (
+    isJudgeUserAssigned || isTrialClerkUserAssigned || isChambersUserAssigned
+  );
 };
 
 export const getShowDocumentViewerLink = ({
@@ -252,15 +266,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.consolidatedCases = result.consolidatedCases || [];
 
-  const sessions = get(state.trialSessions);
-  let session;
-  if (sessions) {
-    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
-  }
-
   result.userIsAssignedToSession = getUserIsAssignedToSession({
-    currentUserId: user.userId,
-    session,
+    currentUser: user,
+    get,
+    result,
   });
 
   result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;

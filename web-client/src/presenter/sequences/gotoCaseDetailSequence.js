@@ -7,6 +7,7 @@ import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
+import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -22,6 +23,7 @@ import { setDefaultCorrespondenceDocumentIdAction } from '../actions/setDefaultC
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
+import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -35,6 +37,8 @@ const gotoCaseDetailInternal = [
   getTrialSessionsAction,
   setTrialSessionsAction,
   setTrialSessionJudgeAction,
+  getJudgeForCurrentUserAction,
+  setJudgeUserAction,
   setDefaultCorrespondenceDocumentIdAction,
   setDocketEntryIdAction,
   showModalFromQueryAction,
@@ -77,8 +81,10 @@ export const gotoCaseDetailSequence = [
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
         USER_ROLES.docketClerk,
+        USER_ROLES.floater,
         USER_ROLES.petitionsClerk,
         USER_ROLES.trialClerk,
+        USER_ROLES.chambers,
       ],
       [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
