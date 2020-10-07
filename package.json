@@ -16,7 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@hapi/joi-date": "^2.0.1",
-    "archiver": "3.1.1",
+    "archiver": "^5.0.2",
     "autoprefixer": "^9.8.6",
     "aws-sdk": "^2.768.0",
     "aws-serverless-express": "^3.3.8",
