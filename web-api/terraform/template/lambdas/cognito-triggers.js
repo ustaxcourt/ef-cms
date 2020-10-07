@@ -1,8 +1,5 @@
 const AWS = require('aws-sdk');
 const {
-  applicationContextForClient,
-} = require('../../../../shared/src/business/test/createTestApplicationContext');
-const {
   createPetitionerAccountInteractor,
 } = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
