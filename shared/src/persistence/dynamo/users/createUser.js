@@ -87,11 +87,18 @@ exports.createUser = async ({ applicationContext, password, user }) => {
       : process.env.USER_POOL_ID;
 
   try {
+    let passwordOptions;
+    if (password) {
+      passwordOptions = {
+        MessageAction: 'SUPPRESS',
+        TemporaryPassword: password,
+      };
+    }
+
     const response = await applicationContext
       .getCognito()
       .adminCreateUser({
-        MessageAction: 'SUPPRESS',
-        TemporaryPassword: password,
+        ...passwordOptions,
         UserAttributes: [
           {
             Name: 'email_verified',
@@ -116,6 +123,7 @@ exports.createUser = async ({ applicationContext, password, user }) => {
       .promise();
     userId = response.User.Username;
   } catch (err) {
+    applicationContext.logger.error(err);
     // the user already exists
     const response = await applicationContext
       .getCognito()
