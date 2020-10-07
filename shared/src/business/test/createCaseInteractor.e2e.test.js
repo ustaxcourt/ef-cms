@@ -17,9 +17,11 @@ const { User } = require('../entities/User');
 
 describe('createCase integration test', () => {
   const CREATED_DATE = '2019-03-01T22:54:06.000Z';
+  const CREATED_YEAR = '2019';
 
   beforeAll(() => {
     window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
+    window.Date.prototype.getFullYear = jest.fn().mockReturnValue(CREATED_YEAR);
   });
 
   it('should create the expected case into the database', async () => {

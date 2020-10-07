@@ -3477,6 +3477,8 @@ describe('Case entity', () => {
 
   describe('isAssociatedUser', () => {
     let caseEntity;
+    const CONTACT_PRIMARY_ID = '3855b2dd-4094-4526-acc0-b48d7eed1f28';
+    const CONTACT_SECONDARY_ID = '90035070-d10f-49cc-b08c-bb9d09993f5b';
     beforeEach(() => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
@@ -3484,9 +3486,18 @@ describe('Case entity', () => {
       caseEntity = new Case(
         {
           ...MOCK_CASE,
+          contactPrimary: {
+            ...MOCK_CASE.contactPrimary,
+            contactId: CONTACT_PRIMARY_ID,
+          },
+          contactSecondary: {
+            ...MOCK_CASE.contactPrimary,
+            contactId: CONTACT_SECONDARY_ID,
+          },
           irsPractitioners: [
             { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
           ],
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners: [
             { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
           ],
@@ -3567,6 +3578,24 @@ describe('Case entity', () => {
       });
 
       expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns true if the user is the primary contact on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: CONTACT_PRIMARY_ID },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns true if the user is the secondary contact on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: CONTACT_SECONDARY_ID },
+      });
+
+      expect(isAssociated).toBeTruthy();
     });
   });
 

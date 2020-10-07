@@ -75,6 +75,7 @@ const aggregateCommonQueryParams = ({
           'contactPrimary.M.name.S',
           'contactPrimary.M.secondaryName.S',
           'contactSecondary.M.name.S',
+          'caseCaption.S',
         ],
         query: `*${petitionerName}*`,
       },
