@@ -13,7 +13,7 @@ const {
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { cloneDeep, isEmpty } = require('lodash');
+const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { ROLES } = require('../entities/EntityConstants');
 
 const getServedPartiesCode = servedParties => {
@@ -214,7 +214,7 @@ const formatCase = (applicationContext, caseDetail) => {
   const result = cloneDeep(caseDetail);
 
   if (result.docketEntries) {
-    result.draftDocuments = result.docketEntries
+    result.draftDocumentsUnsorted = result.docketEntries
       .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
       .map(docketEntry => ({
         ...formatDocketEntry(applicationContext, docketEntry),
@@ -230,6 +230,8 @@ const formatCase = (applicationContext, caseDetail) => {
           .getUtilities()
           .formatDateString(docketEntry.signedAt, 'DATE_TIME_TZ'),
       }));
+
+    result.draftDocuments = sortBy(result.draftDocumentsUnsorted, 'receivedAt');
 
     result.formattedDocketEntries = result.docketEntries.map(d =>
       formatDocketEntry(applicationContext, d),
