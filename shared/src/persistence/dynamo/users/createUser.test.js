@@ -68,6 +68,48 @@ describe('createUser', () => {
     ).not.toBeCalled();
   });
 
+  it('should call adminCreateUser without password options if a password is not passed in', async () => {
+    const petitionsclerkUser = {
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({ applicationContext, user: petitionsclerkUser });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
+        .MessageAction,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
+        .TemporaryPassword,
+    ).toBeUndefined();
+  });
+
+  it('should call adminCreateUser with password options if a password is passed in', async () => {
+    const petitionsclerkUser = {
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({
+      applicationContext,
+      password: '1234',
+      user: petitionsclerkUser,
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
+        .MessageAction,
+    ).toEqual('SUPPRESS');
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
+        .TemporaryPassword,
+    ).toEqual('1234');
+  });
+
   it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
       promise: async () => {
