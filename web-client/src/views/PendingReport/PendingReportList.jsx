@@ -19,8 +19,8 @@ export const PendingReportList = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaDescribedBy="pending-report-tab filterHeading"
-                  ariaLabel="judge"
+                  aria-describedby="case-deadlines-tab filterHeading"
+                  aria-label="judge"
                   bind="screenMetadata.pendingItemsFilters.judge"
                   className="select-left"
                   id="judgeFilter"
