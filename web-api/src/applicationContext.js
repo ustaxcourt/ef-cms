@@ -1293,6 +1293,9 @@ module.exports = appContextUser => {
               },
             }),
           }),
+          adminDisableUser: () => ({
+            promise: () => {},
+          }),
           adminGetUser: ({ Username }) => ({
             promise: () => ({
               Username,
