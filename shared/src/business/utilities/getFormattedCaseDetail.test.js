@@ -813,6 +813,47 @@ describe('getFormattedCaseDetail', () => {
       },
     ]);
   });
+
+  it('should sort draft documents by their receievedAt', () => {
+    const result = getFormattedCaseDetail({
+      applicationContext,
+      caseDetail: {
+        ...mockCaseDetailBase,
+        docketEntries: [
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            docketEntryId: 'd-1-2-3',
+            documentType: 'Order',
+            isDraft: true,
+            receivedAt: '2019-08-03T06:26:44.000Z',
+          },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            docketEntryId: 'd-2-3-4',
+            documentType: 'Stipulated Decision',
+            isDraft: true,
+            receivedAt: '2019-08-03T06:10:44.000Z',
+          },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            docketEntryId: 'd-3-4-5',
+            documentType: 'Miscellaneous',
+            isDraft: true,
+            receivedAt: '2018-07-03T06:26:44.000Z',
+          },
+        ],
+      },
+    });
+
+    expect(result.draftDocuments).toMatchObject([
+      { receivedAt: '2018-07-03T06:26:44.000Z' },
+      { receivedAt: '2019-08-03T06:10:44.000Z' },
+      { receivedAt: '2019-08-03T06:26:44.000Z' },
+    ]);
+  });
 });
 
 describe('documentMeetsAgeRequirements', () => {

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "dynamsoft" {
-  bucket = "${var.dns_domain}-software"
+  bucket = "${var.zone_name}-software"
   acl = "private"
 }
 
