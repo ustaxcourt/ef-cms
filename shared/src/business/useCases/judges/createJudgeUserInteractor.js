@@ -22,7 +22,7 @@ exports.createJudgeUserInteractor = async ({ applicationContext, user }) => {
   }
 
   const judge = new User(
-    { ...user, userId: applicationContext.getUniqueId() },
+    { ...user, userId: user.userId || applicationContext.getUniqueId() },
     { applicationContext },
   )
     .validate()
