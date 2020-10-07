@@ -113,7 +113,7 @@ const commonValidationRequirements = {
     .boolean()
     .optional()
     .description(
-      'Flag that indicates if the contact has "eAccess" login credentials to the legacy system.',
+      'Flag that indicates if the contact has credentials to both the legacy and new system.',
     ),
 };
 

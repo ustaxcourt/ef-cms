@@ -189,7 +189,7 @@
       type: "boolean"
       flags: 
         presence: "optional"
-        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
     email: 
       type: "string"
       rules: 

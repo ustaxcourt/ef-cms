@@ -149,7 +149,13 @@ const TrialInformation = ({
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
             <p>
-              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+              <a
+                href={
+                  caseDetail.userIsAssignedToSession
+                    ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                    : `/trial-session-detail/${caseDetail.trialSessionId}`
+                }
+              >
                 {caseDetail.formattedTrialCity}
               </a>
             </p>
@@ -301,7 +307,13 @@ const TrialInformation = ({
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
             <p>
-              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+              <a
+                href={
+                  caseDetail.userIsAssignedToSession
+                    ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                    : `/trial-session-detail/${caseDetail.trialSessionId}`
+                }
+              >
                 {caseDetail.formattedTrialCity}
               </a>
             </p>

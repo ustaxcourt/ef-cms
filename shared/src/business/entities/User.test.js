@@ -115,6 +115,7 @@ describe('User entity', () => {
       role: undefined,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
+
     expect(user.role).toBe(ROLES.petitioner);
   });
 

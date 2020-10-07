@@ -6729,6 +6729,11 @@
     "status": "New"
   },
   {
+    "pk": "user-email|petitioner@example.com",
+    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
     "createdAt": "2019-03-01T21:40:46.415Z",
     "entityName": "UserCase",
     "gsi1pk": "user-case|102-19",

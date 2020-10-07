@@ -863,6 +863,14 @@ const JUDGES_CHAMBERS = {
     label: 'Wells’ Chambers',
     section: 'wellsChambers',
   },
+  GREAVES_CHAMBERS_SECTION: {
+    label: 'Greaves’ Chambers',
+    section: 'greavesChambers',
+  },
+  MARSHALLS_CHAMBERS_SECTION: {
+    label: 'Marshall’s Chambers',
+    section: 'marshallsChambers',
+  },
 };
 
 const JUDGES_CHAMBERS_WITH_LEGACY = {
