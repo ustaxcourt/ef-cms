@@ -9,7 +9,6 @@ const CSV_HEADERS = [
   'judgeFullName',
   'email',
   'role',
-  'userId',
   'section',
 ];
 
