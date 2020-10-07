@@ -427,28 +427,5 @@ describe('createUser', () => {
         },
       });
     });
-
-    // it('should persist a mapping record for a user and their formatted email when an email is provided in the user object', async () => {
-    //   const petitionerUser = {
-    //     email: 'TEST@example.com ',
-    //     name: 'Test Petitioner',
-    //     role: ROLES.petitioner,
-    //   };
-
-    //   await createUserRecords({
-    //     applicationContext,
-    //     user: petitionerUser,
-    //     userId,
-    //   });
-
-    //   expect(
-    //     applicationContext.getDocumentClient().put.mock.calls[1][0],
-    //   ).toMatchObject({
-    //     Item: {
-    //       pk: `user-email|${petitionerUser.email.toLowerCase().trim()}`,
-    //       sk: `user|${userId}`,
-    //     },
-    //   });
-    // });
   });
 });
