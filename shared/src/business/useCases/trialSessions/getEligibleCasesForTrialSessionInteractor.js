@@ -62,9 +62,13 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
           calendaredCases.length,
         skPrefix: trialSessionEntity.generateSortKeyPrefix(),
       })
-  ).map(rawCase =>
-    new Case(rawCase, { applicationContext }).validate().toRawObject(),
-  );
+  ).map(rawCase => {
+    return new Case(rawCase, { applicationContext }).validate().toRawObject();
+  });
 
-  return calendaredCases.concat(eligibleCases);
+  let eligibleCasesFiltered = calendaredCases
+    .concat(eligibleCases)
+    .filter(cases => !cases.automaticBlocked);
+
+  return eligibleCasesFiltered;
 };

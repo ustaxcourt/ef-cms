@@ -95,4 +95,52 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     expect(error).toBeUndefined();
     expect(result).toMatchObject([MOCK_ASSOCIATED_CASE, MOCK_CASE]);
   });
+
+  it('should filter and not return cases that do have automaticBlocked true', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2020-06-02',
+          automaticBlockedReason: 'Pending Item',
+          docketNumber: '999-99',
+        },
+        {
+          ...MOCK_CASE,
+          automaticBlocked: false,
+          docketNumber: '998-99',
+        },
+      ]);
+
+    const eligibleCases = await getEligibleCasesForTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(eligibleCases.length).toBe(1);
+  });
+
+  it('should filter and return all cases that do not have automaticBlocked true', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          docketNumber: '999-99',
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '998-99',
+        },
+      ]);
+
+    const eligibleCases = await getEligibleCasesForTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(eligibleCases.length).toBe(2);
+  });
 });
