@@ -95,7 +95,7 @@ exports.createUser = async ({ applicationContext, password, user }) => {
         UserAttributes: [
           {
             Name: 'email_verified',
-            Value: 'true',
+            Value: 'True',
           },
           {
             Name: 'email',
