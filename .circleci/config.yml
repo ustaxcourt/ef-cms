@@ -581,7 +581,6 @@ jobs:
           name: 'Deploy - Public Web Client - S3'
           command: |
             docker run \
-             -e "ENV=${ENV}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
@@ -589,6 +588,8 @@ jobs:
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "ENV=${ENV}" \
+             -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
              --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
       - run:
           name: 'Deploy - Web API - Global Tables'
