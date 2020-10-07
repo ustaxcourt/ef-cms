@@ -64,7 +64,6 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
 
   let eligibleCasesFiltered = calendaredCases
     .concat(eligibleCases)
-    .filter(cases => !cases.automaticBlocked)
     .map(rawCase => {
       return new Case(rawCase, { applicationContext }).validate().toRawObject();
     });
