@@ -1,5 +1,8 @@
 const AWS = require('aws-sdk');
 const {
+  applicationContextForClient,
+} = require('../../../../shared/src/business/test/createTestApplicationContext');
+const {
   createPetitionerAccountInteractor,
 } = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
@@ -26,6 +29,8 @@ const applicationContext = {
     createPetitionerAccountInteractor,
   }),
 };
+
+exports.applicationContext = applicationContext;
 
 exports.handler = async event => {
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
