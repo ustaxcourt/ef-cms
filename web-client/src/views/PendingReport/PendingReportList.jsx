@@ -25,7 +25,6 @@ export const PendingReportList = connect(
                   className="select-left"
                   id="judgeFilter"
                   name="judge"
-                  placeHolder="xyz"
                 >
                   <option value="">-Judge-</option>
                   {formattedPendingItems.judges.map((judge, idx) => (
