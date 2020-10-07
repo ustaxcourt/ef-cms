@@ -9,7 +9,6 @@ const CSV_HEADERS = [
   'judgeFullName',
   'email',
   'role',
-  'userId',
   'section',
 ];
 
@@ -17,7 +16,7 @@ if (!process.env.ENV) {
   process.env.ENV = process.argv[1];
 }
 
-const init = async csvFile => {
+const init = async (csvFile, outputMap) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
   let output = [];
 
@@ -52,6 +51,10 @@ const init = async csvFile => {
           );
           if (result.status === 200) {
             console.log(`SUCCESS ${row.name}`);
+
+            const lowerCaseName = row.name.toLowerCase();
+            const { userId } = result.data;
+            outputMap[lowerCaseName] = userId;
           } else {
             console.log(`ERROR ${row.name}`);
             console.log(result);
@@ -70,7 +73,9 @@ const init = async csvFile => {
 (async () => {
   const file = process.argv[2];
   if (file && !process.env.test) {
-    await init(file);
+    const outputMap = {};
+    await init(file, outputMap);
+    console.log('Judges Map: ', outputMap);
   }
 })();
 

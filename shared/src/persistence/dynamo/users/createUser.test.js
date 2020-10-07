@@ -59,9 +59,33 @@ describe('createUser', () => {
       section: PETITIONS_SECTION,
     };
 
-    await createUser({ applicationContext, user: petitionsclerkUser });
+    await createUser({
+      applicationContext,
+      user: petitionsclerkUser,
+    });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+
+  it('should create a user and cognito record, but disable the cognito user', async () => {
+    const petitionsclerkUser = {
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({
+      applicationContext,
+      disableCognitoUser: true,
+      user: petitionsclerkUser,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminDisableUser).toBeCalled();
     expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
