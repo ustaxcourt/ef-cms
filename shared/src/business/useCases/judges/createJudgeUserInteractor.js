@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -26,6 +27,7 @@ exports.createJudgeUserInteractor = async ({ applicationContext, user }) => {
     .getPersistenceGateway()
     .createUser({
       applicationContext,
+      disableCognitoUser: user.role === ROLES.legacyJudge,
       user: judge,
     });
 
