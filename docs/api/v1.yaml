@@ -143,24 +143,24 @@ components:
     Contact:
       type: object
       properties:
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
         address1:
           type: string
-          example: 111 South West St.
         address2:
           type: string
-          example: null
         address3:
           type: string
-          example: null
         city:
           type: string
-          example: Orlando
         state:
           type: string
-          example: AL
         postalCode:
           type: string
-          example: "12345"
     DocketEntry:
       type: object
       properties:
@@ -168,6 +168,18 @@ components:
           type: string
           format: guidv4
           example: 2621672d-cf3f-4ddd-ba50-92513b2fba76
+        isFileAttached:
+          type: boolean
+          example: true
+        index:
+          type: integer
+          example: 1
+        eventCode:
+          type: string
+          example: P
+        eventCodeDescription:
+          type: string
+          example: Petition
         filedBy:
           type: string
           example: Petrs. Private practitioner & Annalise
