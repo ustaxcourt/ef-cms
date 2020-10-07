@@ -102,3 +102,15 @@ An error occurred (NotAuthorizedException) when calling the AdminConfirmSignUp o
 curl: (3) URL using bad/illegal format or missing URL```
 
 This happened when duplicate API gateways (i.e., `gateway_api_$ENV`) were created due to a Terraform state sync problem.
+
+### LogsToElasticSearch_info lambda erroring out without trying to post to Elasticsearch
+
+We were observing errors in the `LogsToElasticSearch_info` Lambda monitoring tab; however, we weren't seeing any errors getting logged. Created a test function in the console in order to call the Lambda and observed this error:
+
+> Calling the invoke API action failed with this message: Lambda was unable to decrypt the environment variables because KMS access was denied. Please check the function’s KMS key settings. KMS Exception: AccessDeniedExceptionKMS Message: The ciphertext refers to a customer master key that does not exist, does not exist in this region, or you are not allowed to access.
+
+Found these references of this being an open and unsolved issue, with the only solution that has worked being to delete the app (in this case deleting the Lambda Function) and redeploying.
+
+* https://github.com/aws/chalice/issues/1103
+* https://github.com/terraform-providers/terraform-provider-aws/issues/6352
+* https://github.com/serverless/examples/issues/279

@@ -41,3 +41,8 @@ variable "is_dynamsoft_enabled" {
 variable "zone_name" {
   type = string
 }
+
+variable "statuspage_dns_record" {
+  type = string
+  default = ""
+}
