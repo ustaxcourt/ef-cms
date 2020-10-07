@@ -682,6 +682,7 @@ Valid Case object example:
       "signedAt":"2020-07-17T19:28:17.635Z",
       "signedByUserId":"e1d0b1c2-e531-4e07-ab82-851ee9acde64",
       "signedJudgeName":"Maurice B. Foley",
+      "judgeUserId":"31d0b1c2-e531-4e07-ab82-851ee9acde62",
       "userId":"e1d0b1c2-e531-4e07-ab82-851ee9acde64",
       "workItem":{
         "entityName":"WorkItem",
