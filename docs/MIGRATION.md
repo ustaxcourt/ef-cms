@@ -15,6 +15,7 @@ Valid Case object example:
 {
   "entityName":"Case",
   "associatedJudge":"Chief Judge",
+  "judgeUserId":"d8123f6c-6d8f-4c7a-80d9-6c1f9d033692",
   "automaticBlocked":true,
   "automaticBlockedDate":"2020-09-01T13:22:16.435Z",
   "automaticBlockedReason":"Pending Item and Due Date",
