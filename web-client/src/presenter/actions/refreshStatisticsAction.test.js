@@ -31,7 +31,7 @@ describe('refreshStatisticsAction', () => {
     expect(result.state.form.statistics.length).toEqual(0);
   });
 
-  it('should append a new entry to the statistics array if case type is deficiency and hasVerifiedIrsNotice is true ', async () => {
+  it('should append a new entry to the statistics array if case type is deficiency and hasVerifiedIrsNotice is true', async () => {
     const result = await runAction(refreshStatisticsAction, {
       modules: {
         presenter,
@@ -59,7 +59,7 @@ describe('refreshStatisticsAction', () => {
     ]);
   });
 
-  it('should not append a new entry to the statistics array is >= 12 entries ', async () => {
+  it('should not append a new entry to the statistics array is >= 12 entries', async () => {
     const statistics = new Array(12).fill({
       yearOrPeriod: 'Year',
     });

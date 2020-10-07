@@ -8,29 +8,26 @@ const {
 } = require('../../../business/entities/EntityConstants');
 const { createUser, createUserRecords } = require('./createUser');
 
-const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-const petitionsClerkUser = {
-  name: 'Test Petitionsclerk',
-  role: ROLES.petitionsClerk,
-  section: PETITIONS_SECTION,
-};
-
-const privatePractitionerUser = {
-  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithoutBarNumber = {
-  barNumber: '',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
 describe('createUser', () => {
+  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+  const petitionsClerkUser = {
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    section: PETITIONS_SECTION,
+  };
+  const privatePractitionerUser = {
+    barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithoutBarNumber = {
+    barNumber: '',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: async () =>
@@ -366,6 +363,29 @@ describe('createUser', () => {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
           ...privatePractitionerUserWithoutSection,
+        },
+      });
+    });
+
+    it('should persist a mapping record for a user and their formatted email when an email is provided in the user object', async () => {
+      const petitionerUser = {
+        email: 'TEST@example.com ',
+        name: 'Test Petitioner',
+        role: ROLES.petitioner,
+      };
+
+      await createUserRecords({
+        applicationContext,
+        user: petitionerUser,
+        userId,
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          pk: `user-email|${petitionerUser.email.toLowerCase().trim()}`,
+          sk: `user|${userId}`,
         },
       });
     });
