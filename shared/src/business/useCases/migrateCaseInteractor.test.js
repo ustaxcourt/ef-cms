@@ -545,7 +545,7 @@ describe('migrateCaseInteractor', () => {
         email: petitionerUser.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser,
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser,
       ).not.toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
@@ -565,7 +565,7 @@ describe('migrateCaseInteractor', () => {
         .getUserByEmail.mockReturnValue(undefined);
       applicationContext
         .getPersistenceGateway()
-        .createUser.mockReturnValue(petitionerUser);
+        .createMigratedPetitionerUser.mockReturnValue(petitionerUser);
 
       await migrateCaseInteractor({
         applicationContext,
@@ -586,7 +586,8 @@ describe('migrateCaseInteractor', () => {
         email: petitionerUser.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser.mock.calls[0][0],
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser
+          .mock.calls[0][0],
       ).toMatchObject({
         user: {
           contact: {
@@ -703,7 +704,7 @@ describe('migrateCaseInteractor', () => {
         email: petitioner2User.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser,
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser,
       ).not.toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
@@ -723,7 +724,7 @@ describe('migrateCaseInteractor', () => {
         .getUserByEmail.mockReturnValue(undefined);
       applicationContext
         .getPersistenceGateway()
-        .createUser.mockReturnValue(petitioner2User);
+        .createMigratedPetitionerUser.mockReturnValue(petitioner2User);
 
       await migrateCaseInteractor({
         applicationContext,
@@ -744,7 +745,8 @@ describe('migrateCaseInteractor', () => {
         email: petitioner2User.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser.mock.calls[0][0],
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser
+          .mock.calls[0][0],
       ).toMatchObject({
         user: {
           contact: {
