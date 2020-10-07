@@ -68,6 +68,43 @@ describe('createUser', () => {
     ).not.toBeCalled();
   });
 
+  it('should call adminCreateUser with the correct UserAttributes', async () => {
+    const petitionsclerkUser = {
+      email: 'test@example.com',
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({ applicationContext, user: petitionsclerkUser });
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith({
+      MessageAction: 'SUPPRESS',
+      TemporaryPassword: undefined,
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: 'test@example.com',
+        },
+        {
+          Name: 'custom:role',
+          Value: 'petitionsclerk',
+        },
+        {
+          Name: 'name',
+          Value: 'Test Petitionsclerk',
+        },
+      ],
+      UserPoolId: undefined,
+      Username: 'test@example.com',
+    });
+  });
+
   it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
       promise: async () => {

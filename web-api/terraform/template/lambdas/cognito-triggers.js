@@ -28,14 +28,16 @@ const applicationContext = {
 };
 
 exports.handler = async event => {
-  const { email, name, sub: userId } = event.request.userAttributes;
+  if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
+    const { email, name, sub: userId } = event.request.userAttributes;
 
-  await applicationContext.getUseCases().createPetitionerAccountInteractor({
-    applicationContext,
-    email,
-    name,
-    userId,
-  });
+    await applicationContext.getUseCases().createPetitionerAccountInteractor({
+      applicationContext,
+      email,
+      name,
+      userId,
+    });
+  }
 
   return event;
 };
