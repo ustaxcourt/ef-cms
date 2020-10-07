@@ -42,15 +42,43 @@ describe('createJudgeUserInteractor', () => {
   });
 
   it('makes a call to create the judge user in persistence', async () => {
+    const currentJudge = {
+      ...mockUser,
+      role: ROLES.judge,
+    };
     await createJudgeUserInteractor({
       applicationContext,
-      user: mockUser,
+      user: currentJudge,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject(mockUser);
+      applicationContext.getPersistenceGateway().createUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        disableCognitoUser: false,
+        user: currentJudge,
+      }),
+    );
+  });
+
+  it('makes a call to create a legacy judge user in persistence', async () => {
+    const legacyJudgeUser = {
+      ...mockUser,
+      role: ROLES.legacyJudge,
+    };
+    await createJudgeUserInteractor({
+      applicationContext,
+      user: legacyJudgeUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        disableCognitoUser: true,
+        user: legacyJudgeUser,
+      }),
+    );
   });
 
   it('throws unauthorized for a non-admin user', async () => {

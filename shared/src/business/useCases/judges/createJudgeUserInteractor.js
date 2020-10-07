@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -20,12 +21,18 @@ exports.createJudgeUserInteractor = async ({ applicationContext, user }) => {
     throw new UnauthorizedError('Unauthorized for creating judge user');
   }
 
-  const judge = new User(user, { applicationContext }).validate().toRawObject();
+  const judge = new User(
+    { ...user, userId: user.userId || applicationContext.getUniqueId() },
+    { applicationContext },
+  )
+    .validate()
+    .toRawObject();
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
     .createUser({
       applicationContext,
+      disableCognitoUser: user.role === ROLES.legacyJudge,
       user: judge,
     });
 
