@@ -21,7 +21,12 @@ exports.createJudgeUserInteractor = async ({ applicationContext, user }) => {
     throw new UnauthorizedError('Unauthorized for creating judge user');
   }
 
-  const judge = new User(user, { applicationContext }).validate().toRawObject();
+  const judge = new User(
+    { ...user, userId: applicationContext.getUniqueId() },
+    { applicationContext },
+  )
+    .validate()
+    .toRawObject();
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
