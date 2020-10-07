@@ -79,7 +79,12 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   };
 };
 
-exports.createUser = async ({ applicationContext, password, user }) => {
+exports.createUser = async ({
+  applicationContext,
+  disableCognitoUser = false,
+  password,
+  user,
+}) => {
   let userId;
   let userPoolId =
     user.role === ROLES.irsSuperuser
@@ -91,7 +96,7 @@ exports.createUser = async ({ applicationContext, password, user }) => {
       .getCognito()
       .adminCreateUser({
         MessageAction: 'SUPPRESS',
-        TemporaryPassword: password,
+        TemporaryPassword: password || process.env.DEFAULT_ACCOUNT_PASS,
         UserAttributes: [
           {
             Name: 'email_verified',
@@ -140,6 +145,13 @@ exports.createUser = async ({ applicationContext, password, user }) => {
       .promise();
 
     userId = response.Username;
+  }
+
+  if (disableCognitoUser) {
+    await applicationContext.getCognito().adminDisableUser({
+      UserPoolId: userPoolId,
+      Username: userId,
+    });
   }
 
   return await exports.createUserRecords({
