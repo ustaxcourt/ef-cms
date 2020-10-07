@@ -59,7 +59,10 @@ describe('createUser', () => {
       section: PETITIONS_SECTION,
     };
 
-    await createUser({ applicationContext, user: petitionsclerkUser });
+    await createUser({
+      applicationContext,
+      user: petitionsclerkUser,
+    });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
     expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
