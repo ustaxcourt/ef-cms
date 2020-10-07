@@ -165,6 +165,9 @@ const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
 const {
+  createMigratedPetitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser');
+const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
@@ -1151,6 +1154,7 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createElasticsearchReindexRecord,
     createMessage,
+    createMigratedPetitionerUser,
     createPractitionerUser,
     createSectionInboxRecord,
     createTrialSession,
