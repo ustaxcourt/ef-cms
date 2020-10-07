@@ -10,7 +10,8 @@ const { ROLES } = require('../../../business/entities/EntityConstants');
 const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
 const privatePractitionerUser = {
-  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
+  barNumber: 'pt1234',
+  email: 'test@example.com',
   name: 'Test Private Practitioner',
   role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
@@ -198,6 +199,38 @@ describe('createPractitionerUser', () => {
     ).rejects.toThrow(
       'Practitioner users must have either private or IRS practitioner role',
     );
+  });
+
+  it('should call adminCreateUser with the correct UserAttributes', async () => {
+    await createPractitionerUser({
+      applicationContext,
+      user: privatePractitionerUser,
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith({
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: 'test@example.com',
+        },
+        {
+          Name: 'custom:role',
+          Value: 'privatePractitioner',
+        },
+        {
+          Name: 'name',
+          Value: 'Test Private Practitioner',
+        },
+      ],
+      UserPoolId: undefined,
+      Username: 'test@example.com',
+    });
   });
 
   describe('createUserRecords', () => {
