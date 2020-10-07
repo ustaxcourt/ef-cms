@@ -8,6 +8,7 @@ const {
   PAYMENT_STATUS,
   ROLES,
   SERVED_PARTIES_CODES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const {
@@ -55,8 +56,8 @@ describe('formatCase', () => {
     expect(result).toMatchObject({});
   });
 
-  it('should format documents if the case documents array is set', () => {
-    const documents = [
+  it('should format docketEntries if the case docketEntries array is set', () => {
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: 'd-1-2-3',
@@ -86,8 +87,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
     expect(result.formattedDocketEntries[0].isPetition).toBeTruthy();
     expect(result.formattedDocketEntries[0].qcWorkItemsCompleted).toBeTruthy();
@@ -624,18 +624,45 @@ describe('formatDocketEntry', () => {
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const result = formatDocketEntry(
-      applicationContext,
-
-      {
-        docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-        documentType: 'Motion for Leave to File Administrative Record',
-        eventCode: 'M115',
-        lodged: true,
-      },
-    );
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Motion for Leave to File Administrative Record',
+      eventCode: 'M115',
+      lodged: true,
+    });
 
     expect(result.eventCode).toEqual('MISCL');
+  });
+
+  it('should return isTranscript true for transcript documents', () => {
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Transcript',
+      eventCode: TRANSCRIPT_EVENT_CODE,
+    });
+
+    expect(result.isTranscript).toEqual(true);
+  });
+
+  it('should return isStipDecision true for stipulated decision documents', () => {
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Stipulated Decision',
+      eventCode: STIPULATED_DECISION_EVENT_CODE,
+    });
+
+    expect(result.isStipDecision).toEqual(true);
+  });
+
+  it('should return isTranscript and isStipDecision false for non-transcript documents', () => {
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Answer',
+      eventCode: 'A',
+    });
+
+    expect(result.isTranscript).toEqual(false);
+    expect(result.isStipDecision).toEqual(false);
   });
 
   it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {

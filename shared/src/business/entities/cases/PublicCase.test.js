@@ -1,5 +1,6 @@
 const {
   DOCKET_NUMBER_SUFFIXES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
@@ -180,6 +181,19 @@ describe('PublicCase', () => {
       const isPrivate = isPrivateDocument(
         {
           documentType: 'Stipulated Decision',
+          eventCode: STIPULATED_DECISION_EVENT_CODE,
+        },
+        [],
+      );
+      expect(isPrivate).toEqual(true);
+    });
+
+    it('should return true for a stipulated decision document that is on the docket record', () => {
+      const isPrivate = isPrivateDocument(
+        {
+          documentType: 'Stipulated Decision',
+          eventCode: STIPULATED_DECISION_EVENT_CODE,
+          isOnDocketRecord: true,
         },
         [],
       );
