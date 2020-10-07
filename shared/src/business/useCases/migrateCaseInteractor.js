@@ -6,6 +6,7 @@ const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -22,8 +23,8 @@ const { UserCase } = require('../entities/UserCase');
 const createUserAccount = async ({
   applicationContext,
   caseEntity,
+  contactData,
   contactType,
-  user,
 }) => {
   const foundUser = await applicationContext
     .getPersistenceGateway()
@@ -35,14 +36,22 @@ const createUserAccount = async ({
   if (foundUser) {
     caseEntity[contactType].contactId = foundUser.userId;
   } else {
+    const userToAdd = new User({
+      ...contactData,
+      contact: {
+        ...contactData,
+      },
+      userId: contactData.contactId, // this will be overwritten in createUser to the userId that cognito generates
+    });
+
     const newUser = await applicationContext
       .getPersistenceGateway()
-      .createUser({
+      .createMigratedPetitionerUser({
         applicationContext,
-        user,
+        user: userToAdd.validate().toRawObject(),
       });
 
-    caseEntity[contactType].contactId = newUser.userId;
+    caseEntity[contactType].contactId = newUser.userId; // update contactId to match the userId cognito generates
   }
 
   const userCaseEntity = new UserCase(caseEntity).validate().toRawObject();
@@ -177,8 +186,8 @@ exports.migrateCaseInteractor = async ({
         caseToAdd = await createUserAccount({
           applicationContext,
           caseEntity: caseToAdd,
+          contactData: caseToAdd[contactType],
           contactType,
-          user: caseToAdd[contactType],
         });
       } else {
         caseToAdd[contactType].hasEAccess = false;

@@ -545,7 +545,7 @@ describe('migrateCaseInteractor', () => {
         email: petitionerUser.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser,
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser,
       ).not.toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
@@ -565,7 +565,7 @@ describe('migrateCaseInteractor', () => {
         .getUserByEmail.mockReturnValue(undefined);
       applicationContext
         .getPersistenceGateway()
-        .createUser.mockReturnValue(petitionerUser);
+        .createMigratedPetitionerUser.mockReturnValue(petitionerUser);
 
       await migrateCaseInteractor({
         applicationContext,
@@ -586,9 +586,25 @@ describe('migrateCaseInteractor', () => {
         email: petitionerUser.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser.mock.calls[0][0],
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser
+          .mock.calls[0][0],
       ).toMatchObject({
-        user: caseMetadata.contactPrimary,
+        user: {
+          contact: {
+            address1: caseMetadata.contactPrimary.address1,
+            address2: caseMetadata.contactPrimary.address2,
+            address3: caseMetadata.contactPrimary.address3,
+            city: caseMetadata.contactPrimary.city,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            phone: caseMetadata.contactPrimary.phone,
+            postalCode: caseMetadata.contactPrimary.postalCode,
+            state: caseMetadata.contactPrimary.state,
+          },
+          email: caseMetadata.contactPrimary.email,
+          name: caseMetadata.contactPrimary.name,
+          role: ROLES.petitioner,
+          userId: expect.anything(),
+        },
       });
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
@@ -688,7 +704,7 @@ describe('migrateCaseInteractor', () => {
         email: petitioner2User.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser,
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser,
       ).not.toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
@@ -708,7 +724,7 @@ describe('migrateCaseInteractor', () => {
         .getUserByEmail.mockReturnValue(undefined);
       applicationContext
         .getPersistenceGateway()
-        .createUser.mockReturnValue(petitioner2User);
+        .createMigratedPetitionerUser.mockReturnValue(petitioner2User);
 
       await migrateCaseInteractor({
         applicationContext,
@@ -729,9 +745,25 @@ describe('migrateCaseInteractor', () => {
         email: petitioner2User.email,
       });
       expect(
-        applicationContext.getPersistenceGateway().createUser.mock.calls[0][0],
+        applicationContext.getPersistenceGateway().createMigratedPetitionerUser
+          .mock.calls[0][0],
       ).toMatchObject({
-        user: caseMetadataWithSecondary.contactSecondary,
+        user: {
+          contact: {
+            address1: caseMetadataWithSecondary.contactSecondary.address1,
+            address2: caseMetadataWithSecondary.contactSecondary.address2,
+            address3: caseMetadataWithSecondary.contactSecondary.address3,
+            city: caseMetadataWithSecondary.contactSecondary.city,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            phone: caseMetadataWithSecondary.contactSecondary.phone,
+            postalCode: caseMetadataWithSecondary.contactSecondary.postalCode,
+            state: caseMetadataWithSecondary.contactSecondary.state,
+          },
+          email: caseMetadataWithSecondary.contactSecondary.email,
+          name: caseMetadataWithSecondary.contactSecondary.name,
+          role: ROLES.petitioner,
+          userId: expect.anything(),
+        },
       });
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
