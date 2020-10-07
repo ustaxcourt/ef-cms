@@ -27,7 +27,7 @@ export const TrialSessionsTable = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaLabel="session"
+                  aria-label="session"
                   bind="screenMetadata.trialSessionFilters.sessionType"
                   id="sessionFilter"
                   name="sessionType"
@@ -42,7 +42,7 @@ export const TrialSessionsTable = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaLabel="location"
+                  aria-label="location"
                   bind="screenMetadata.trialSessionFilters.trialLocation"
                   id="locationFilter"
                   name="trialLocation"
@@ -53,7 +53,7 @@ export const TrialSessionsTable = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaLabel="judge"
+                  aria-label="judge"
                   bind="screenMetadata.trialSessionFilters.judge.userId"
                   id="judgeFilter"
                   name="judge"
