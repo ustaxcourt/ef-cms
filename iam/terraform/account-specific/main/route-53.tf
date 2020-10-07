@@ -1,3 +1,3 @@
 resource "aws_route53_zone" "primary" {
-  name = "${var.dns_domain}"
+  name = "${var.zone_name}"
 }
