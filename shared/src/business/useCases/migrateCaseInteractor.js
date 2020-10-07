@@ -46,7 +46,7 @@ const createUserAccount = async ({
 
     const newUser = await applicationContext
       .getPersistenceGateway()
-      .createUser({
+      .createMigratedPetitionerUser({
         applicationContext,
         user: userToAdd.validate().toRawObject(),
       });
