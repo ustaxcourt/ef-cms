@@ -40,7 +40,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
