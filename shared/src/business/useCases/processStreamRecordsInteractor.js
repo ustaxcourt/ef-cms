@@ -106,7 +106,10 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  applicationContext.logger.info('Time', createISODateString());
+  applicationContext.logger.info(
+    'processStreamRecordsInteractor time:',
+    createISODateString(),
+  );
 
   const removeRecords = getRemoveRecords({ records: recordsToProcess });
 
@@ -128,13 +131,19 @@ exports.processStreamRecordsInteractor = async ({
               recordId: failedRecord['_id'],
             });
           } catch (e) {
-            applicationContext.logger.info('Error', e);
+            applicationContext.logger.info(
+              `processStreamRecordsInteractor deleteRecord error for record ${failedRecord['_id']}:`,
+              e,
+            );
             await applicationContext.notifyHoneybadger(e);
           }
         }
       }
     } catch (e) {
-      applicationContext.logger.info('Error', e);
+      applicationContext.logger.info(
+        'processStreamRecordsInteractor bulkDeleteRecords error:',
+        e,
+      );
       await applicationContext.notifyHoneybadger(e);
     }
   }
