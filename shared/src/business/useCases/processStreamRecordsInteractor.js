@@ -106,8 +106,10 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
+  const processJobId = applicationContext.getUniqueId();
+
   applicationContext.logger.info(
-    'processStreamRecordsInteractor time:',
+    `processStreamRecordsInteractor job ${processJobId} started at time:`,
     createISODateString(),
   );
 
@@ -122,26 +124,30 @@ exports.processStreamRecordsInteractor = async ({
         records: removeRecords,
       });
 
-      if (failedRecords.length) {
-        for (const failedRecord of failedRecords) {
-          try {
-            await applicationContext.getPersistenceGateway().deleteRecord({
-              applicationContext,
-              indexName: failedRecord['_index'],
-              recordId: failedRecord['_id'],
-            });
-          } catch (e) {
-            applicationContext.logger.info(
-              `processStreamRecordsInteractor deleteRecord error for record ${failedRecord['_id']}:`,
-              e,
-            );
-            await applicationContext.notifyHoneybadger(e);
-          }
-        }
-      }
+      const catchDeleteRecordError = failedRecord => async e => {
+        applicationContext.logger.info(
+          `processStreamRecordsInteractor job ${processJobId} deleteRecord error for record ${failedRecord['_id']}:`,
+          e,
+        );
+        await applicationContext.notifyHoneybadger(e);
+      };
+
+      const processRecordDeletion = failedRecord => {
+        return applicationContext
+          .getPersistenceGateway()
+          .deleteRecord({
+            applicationContext,
+            indexName: failedRecord['_index'],
+            recordId: failedRecord['_id'],
+          })
+          .catch(catchDeleteRecordError(failedRecord));
+      };
+
+      const deletionRequests = failedRecords.map(processRecordDeletion);
+      await Promise.allSettled(deletionRequests);
     } catch (e) {
       applicationContext.logger.info(
-        'processStreamRecordsInteractor bulkDeleteRecords error:',
+        `processStreamRecordsInteractor job ${processJobId} bulkDeleteRecords error:`,
         e,
       );
       await applicationContext.notifyHoneybadger(e);
@@ -163,9 +169,26 @@ exports.processStreamRecordsInteractor = async ({
       });
 
       if (failedRecords.length) {
-        for (const failedRecord of failedRecords) {
-          try {
-            await applicationContext.getPersistenceGateway().indexRecord({
+        const catchAndReIndex = failedRecord => async e => {
+          await applicationContext
+            .getPersistenceGateway()
+            .createElasticsearchReindexRecord({
+              applicationContext,
+              recordPk: failedRecord.pk.S,
+              recordSk: failedRecord.sk.S,
+            });
+
+          applicationContext.logger.info(
+            `processStreamRecordsInteractor job ${processJobId} indexRecord error:`,
+            e,
+          );
+          await applicationContext.notifyHoneybadger(e);
+        };
+
+        const indexRecord = failedRecord => {
+          applicationContext
+            .getPersistenceGateway()
+            .indexRecord({
               applicationContext,
               fullRecord: { ...failedRecord },
               isAlreadyMarshalled: true,
@@ -173,20 +196,11 @@ exports.processStreamRecordsInteractor = async ({
                 recordPk: failedRecord.pk.S,
                 recordSk: failedRecord.sk.S,
               },
-            });
-          } catch (e) {
-            await applicationContext
-              .getPersistenceGateway()
-              .createElasticsearchReindexRecord({
-                applicationContext,
-                recordPk: failedRecord.pk.S,
-                recordSk: failedRecord.sk.S,
-              });
+            })
+            .catch(catchAndReIndex(failedRecord));
+        };
 
-            applicationContext.logger.info('Error', e);
-            await applicationContext.notifyHoneybadger(e);
-          }
-        }
+        await Promise.allSettled(failedRecords.map(indexRecord));
       }
     } catch {
       //if the bulk index fails, try each single index individually and
@@ -225,5 +239,8 @@ exports.processStreamRecordsInteractor = async ({
     }
   }
 
-  applicationContext.logger.info('Time', createISODateString());
+  applicationContext.logger.info(
+    `processStreamRecordsInteractor job ${processJobId} completed at time:`,
+    createISODateString(),
+  );
 };
