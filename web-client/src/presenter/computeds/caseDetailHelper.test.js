@@ -657,8 +657,6 @@ describe('case detail computed', () => {
             privatePractitioners: [{ userId: '789' }],
           },
           currentPage: 'CaseDetailInternal',
-          form: {},
-          permissions: { EDIT_PETITION_DETAILS: false },
         },
       });
 
@@ -679,8 +677,6 @@ describe('case detail computed', () => {
             privatePractitioners: [{ userId: '789' }],
           },
           currentPage: 'CaseDetailInternal',
-          form: {},
-          permissions: { EDIT_PETITION_DETAILS: false },
         },
       });
 
@@ -701,8 +697,6 @@ describe('case detail computed', () => {
             privatePractitioners: [{ userId: '789' }],
           },
           currentPage: 'CaseDetailInternal',
-          form: {},
-          permissions: { EDIT_PETITION_DETAILS: false },
         },
       });
 
