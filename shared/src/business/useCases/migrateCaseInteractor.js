@@ -129,6 +129,7 @@ exports.migrateCaseInteractor = async ({
 
     if (practitioner) {
       casePractitioner.contact = practitioner.contact;
+      casePractitioner.email = practitioner.email;
       casePractitioner.name = practitioner.name;
       casePractitioner.userId = practitioner.userId;
 
