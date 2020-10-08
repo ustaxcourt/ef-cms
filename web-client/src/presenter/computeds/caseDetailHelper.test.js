@@ -683,7 +683,7 @@ describe('case detail computed', () => {
       expect(result.showEditPetitionerInformation).toEqual(true);
     });
 
-    it("should NOT allow the user to edit the petitioner information if they're a clerkOfCourt", () => {
+    it("should NOT allow the user to edit the petitioner information if they're not a docketClerk or a clerkOfCourt", () => {
       const user = {
         role: ROLES.petitionsClerk,
         userId: '789',
