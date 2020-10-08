@@ -625,6 +625,7 @@ describe('case detail computed', () => {
       role: ROLES.docketClerk,
       userId: '789',
     };
+
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(user),
@@ -639,5 +640,73 @@ describe('case detail computed', () => {
       },
     });
     expect(result.hasPrivatePractitioners).toEqual(true);
+  });
+
+  describe('showEditPetitionerInformation', () => {
+    it("should allow the user to edit the petitioner information if they're a docketClerk", () => {
+      const user = {
+        role: ROLES.docketClerk,
+        userId: '789',
+      };
+
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            privatePractitioners: [{ userId: '789' }],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+          permissions: { EDIT_PETITION_DETAILS: false },
+        },
+      });
+
+      expect(result.showEditPetitionerInformation).toEqual(true);
+    });
+
+    it("should allow the user to edit the petitioner information if they're a clerkOfCourt", () => {
+      const user = {
+        role: ROLES.clerkOfCourt,
+        userId: '789',
+      };
+
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            privatePractitioners: [{ userId: '789' }],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+          permissions: { EDIT_PETITION_DETAILS: false },
+        },
+      });
+
+      expect(result.showEditPetitionerInformation).toEqual(true);
+    });
+
+    it("should NOT allow the user to edit the petitioner information if they're a clerkOfCourt", () => {
+      const user = {
+        role: ROLES.petitionsClerk,
+        userId: '789',
+      };
+
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            privatePractitioners: [{ userId: '789' }],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+          permissions: { EDIT_PETITION_DETAILS: false },
+        },
+      });
+
+      expect(result.showEditPetitionerInformation).toEqual(false);
+    });
   });
 });
