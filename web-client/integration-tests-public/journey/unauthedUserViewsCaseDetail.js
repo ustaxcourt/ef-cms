@@ -22,14 +22,14 @@ export const unauthedUserViewsCaseDetail = test => {
       state: test.getState(),
     });
 
-    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(4);
+    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(5);
     expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         descriptionDisplay: 'Petition',
         hasDocument: true,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
-        showServed: false,
+        showServed: true,
       },
       {
         descriptionDisplay: 'Request for Place of Trial at Seattle, Washington',
@@ -52,9 +52,17 @@ export const unauthedUserViewsCaseDetail = test => {
         showLinkToDocument: false,
         showServed: true,
       },
+      {
+        descriptionDisplay:
+          'Stipulated Decision Entered, Judge Ashford Anything',
+        hasDocument: true,
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showServed: true,
+      },
     ]);
 
-    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(4);
+    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(5);
     expect(helper.formattedCaseDetail.docketEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -68,6 +76,7 @@ export const unauthedUserViewsCaseDetail = test => {
           documentType: 'Order of Dismissal',
         }),
         expect.objectContaining({ documentType: 'Transcript' }),
+        expect.objectContaining({ documentType: 'Stipulated Decision' }),
       ]),
     );
   });
