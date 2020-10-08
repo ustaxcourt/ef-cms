@@ -351,7 +351,7 @@ describe('processStreamRecordsInteractor', () => {
     });
   });
 
-  it.only('calls getCaseByDocketNumber to index an entire case item even if only a document record changes', async () => {
+  it('calls getCaseByDocketNumber to index an entire case item even if only a document record changes', async () => {
     applicationContext.getSearchClient().bulk.mockResolvedValue({
       body: {
         errors: [{ badError: true }],

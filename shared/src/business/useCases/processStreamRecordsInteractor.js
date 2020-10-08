@@ -24,8 +24,7 @@ const filterRecords = async ({ applicationContext, records }) => {
     record.dynamodb.Keys.pk.S.includes('case|'),
   );
 
-  const getCaseForModification = async caseRecord => {
-    const casesForModification = [];
+  for (let caseRecord of caseRecords) {
     const docketNumber = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
 
     const fullCase = await applicationContext
@@ -36,7 +35,7 @@ const filterRecords = async ({ applicationContext, records }) => {
       });
 
     if (fullCase.docketNumber) {
-      casesForModification.push({
+      filteredRecords.push({
         dynamodb: {
           Keys: {
             pk: {
@@ -53,8 +52,7 @@ const filterRecords = async ({ applicationContext, records }) => {
 
       //also reindex all of the docketEntries on the case
       const { docketEntries } = fullCase;
-
-      const getDocumentCaseInfoRecord = async document => {
+      for (const document of docketEntries) {
         if (document.documentContentsId) {
           const buffer = await applicationContext
             .getPersistenceGateway()
@@ -77,7 +75,7 @@ const filterRecords = async ({ applicationContext, records }) => {
           sk: { S: `docket-entry|${document.docketEntryId}` },
         };
 
-        const documentCaseInfoRecord = {
+        filteredRecords.push({
           dynamodb: {
             Keys: {
               pk: {
@@ -90,34 +88,10 @@ const filterRecords = async ({ applicationContext, records }) => {
             NewImage: documentWithCaseInfo,
           },
           eventName: 'MODIFY',
-        };
-
-        return documentCaseInfoRecord;
-      };
-
-      const docketEntriesWithCaseInfo = await Promise.all(
-        docketEntries.map(getDocumentCaseInfoRecord),
-      );
-      console.log(
-        '**********************************docketEntriesWithCaseInfo',
-        docketEntriesWithCaseInfo,
-      );
-
-      casesForModification.push(...docketEntriesWithCaseInfo);
+        });
+      }
     }
-    return casesForModification;
-  };
-
-  const casesForModification = await Promise.all(
-    caseRecords.map(getCaseForModification),
-  );
-
-  console.log(
-    '---cases for modificatoion',
-    JSON.stringify(casesForModification),
-  );
-
-  filteredRecords.push(...casesForModification);
+  }
 
   return filteredRecords;
 };
@@ -229,17 +203,12 @@ exports.processStreamRecordsInteractor = async ({
         await Promise.allSettled(failedRecords.map(indexRecord));
       }
     } catch {
-      // if (Array.isArray(recordsToProcess[0])) {
-      //   console.log('has an array ', recordsToProcess[0]);
-      // }
       //if the bulk index fails, try each single index individually and
       //add the failing ones to the reindex list
       const recordsToReprocess = await filterRecords({
         applicationContext,
         records: recordsToProcess,
       });
-
-      console.log(JSON.stringify(recordsToReprocess, null, 2));
 
       const reIndexRecord = record => async e => {
         await applicationContext
@@ -258,10 +227,6 @@ exports.processStreamRecordsInteractor = async ({
       };
 
       const reprocessRecord = record => {
-        console.log(record.length);
-        if (!record.dynamodb) {
-          console.log(JSON.stringify(record));
-        }
         const newImage = record.dynamodb.NewImage;
 
         applicationContext
