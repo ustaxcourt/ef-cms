@@ -9,6 +9,7 @@ const {
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
@@ -124,6 +125,9 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
+
+  formattedEntry.isStipDecision =
+    formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
   formattedEntry.qcWorkItemsUntouched =
     qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
