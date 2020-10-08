@@ -400,20 +400,11 @@ const {
   getCasesByLeadDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
 const {
-  getCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
-const {
-  getCasesByUserInteractor,
-} = require('../../shared/src/business/useCases/getCasesByUserInteractor');
-const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getClosedCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
 const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
@@ -536,9 +527,6 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getOpenCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
-const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
@@ -637,9 +625,6 @@ const {
 const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
-const {
-  getUserCases,
-} = require('../../shared/src/persistence/dynamo/cases/getUserCases');
 const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
@@ -1221,9 +1206,7 @@ const gatewayMethods = {
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
-  getCasesByUser,
   getClientId,
-  getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1242,7 +1225,6 @@ const gatewayMethods = {
   getInternalUsers,
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
-  getOpenCasesByUser,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1258,7 +1240,6 @@ const gatewayMethods = {
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
-  getUserCases,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersBySearchKey,
@@ -1561,7 +1542,6 @@ module.exports = appContextUser => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getCasesByUserInteractor,
         getClosedCasesInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
