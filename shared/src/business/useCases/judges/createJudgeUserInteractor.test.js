@@ -56,7 +56,7 @@ describe('createJudgeUserInteractor', () => {
     ).toHaveBeenCalledWith(
       expect.objectContaining({
         disableCognitoUser: false,
-        user: currentJudge,
+        user: { ...currentJudge, userId: expect.anything() },
       }),
     );
   });
@@ -76,7 +76,7 @@ describe('createJudgeUserInteractor', () => {
     ).toHaveBeenCalledWith(
       expect.objectContaining({
         disableCognitoUser: true,
-        user: legacyJudgeUser,
+        user: { ...legacyJudgeUser, userId: expect.anything() },
       }),
     );
   });
@@ -90,7 +90,7 @@ describe('createJudgeUserInteractor', () => {
     await expect(
       createJudgeUserInteractor({
         applicationContext,
-        user: mockUser,
+        user: { ...mockUser, userId: expect.anything() },
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
