@@ -9,6 +9,7 @@ const {
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
@@ -124,6 +125,9 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
+
+  formattedEntry.isStipDecision =
+    formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
   formattedEntry.qcWorkItemsUntouched =
     qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
@@ -434,7 +438,7 @@ const byIndexSortFunction = (a, b) => {
   return a.index - b.index;
 };
 
-const getDocketRecordSortFunc = sortBy => {
+const getDocketRecordSortFunc = sortByString => {
   const byDate = (a, b) => {
     const compared = calendarDatesCompared(a.filingDate, b.filingDate);
     if (compared === 0) {
@@ -443,7 +447,7 @@ const getDocketRecordSortFunc = sortBy => {
     return compared;
   };
 
-  switch (sortBy) {
+  switch (sortByString) {
     case 'byIndex': // fall-through
     case 'byIndexDesc':
       return byIndexSortFunction;
@@ -465,9 +469,9 @@ const sortUndefined = (a, b) => {
   }
 };
 
-const sortDocketEntries = (docketEntries = [], sortBy = '') => {
-  const sortFunc = getDocketRecordSortFunc(sortBy);
-  const isReversed = sortBy.includes('Desc');
+const sortDocketEntries = (docketEntries = [], sortByString = '') => {
+  const sortFunc = getDocketRecordSortFunc(sortByString);
+  const isReversed = sortByString.includes('Desc');
   const result = docketEntries.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable

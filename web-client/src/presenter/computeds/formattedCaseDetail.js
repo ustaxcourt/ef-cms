@@ -42,6 +42,7 @@ export const getShowDocumentViewerLink = ({
   isExternalUser,
   isInitialDocument,
   isServed,
+  isStipDecision,
   isStricken,
   isUnservable,
   userHasAccessToCase,
@@ -53,7 +54,7 @@ export const getShowDocumentViewerLink = ({
     if (isStricken) return false;
     if (userHasNoAccessToDocument) return false;
 
-    if (isCourtIssuedDocument) {
+    if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
     } else {
@@ -217,6 +218,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       isExternalUser,
       isInitialDocument,
       isServed: !!entry.servedAt,
+      isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
       userHasAccessToCase,

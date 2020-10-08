@@ -7,7 +7,7 @@ export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
-      petitionerName: 'Daenerys Stormborn',
+      petitionerName: 'Aliens, Dude',
       ...overrides,
     };
 

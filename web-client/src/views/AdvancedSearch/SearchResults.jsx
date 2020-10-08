@@ -12,7 +12,7 @@ export const SearchResults = connect(
   },
   function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
     return (
-      <>
+      <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">
@@ -95,7 +95,7 @@ export const SearchResults = connect(
             <p>Check your search terms and try again.</p>
           </div>
         )}
-      </>
+      </div>
     );
   },
 );

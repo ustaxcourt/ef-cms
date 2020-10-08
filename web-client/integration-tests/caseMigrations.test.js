@@ -315,12 +315,18 @@ describe('Case migration journey', () => {
     expect(test.getState('caseDetail.privatePractitioners.0.barNumber')).toBe(
       'PT1234',
     );
+    expect(test.getState('caseDetail.privatePractitioners.0.email')).toBe(
+      'privatePractitioner@example.com',
+    );
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing.0'),
     ).toBe('dd0ac156-aa2d-46e7-8b5a-902f1d16f199');
     // override contact data with what's already in the database
     expect(test.getState('caseDetail.irsPractitioners.0.contact.city')).toBe(
       'Chicago',
+    );
+    expect(test.getState('caseDetail.irsPractitioners.0.email')).toBe(
+      'irsPractitioner@example.com',
     );
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),

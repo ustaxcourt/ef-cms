@@ -1,10 +1,14 @@
 const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
+const {
+  ROLES,
+  STIPULATED_DECISION_EVENT_CODE,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES, TRANSCRIPT_EVENT_CODE } = require('../entities/EntityConstants');
 
 describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;
@@ -121,6 +125,172 @@ describe('getDownloadPolicyUrlInteractor', () => {
               d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
             )[0],
             documentType: 'Order that case is assigned',
+            servedAt: new Date().toISOString(),
+          },
+        ],
+      });
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      docketNumber: mockCase.docketNumber,
+      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+
+    expect(url).toEqual('localhost');
+  });
+
+  it('throws an error for a privatePractitioner who is not associated with the case and viewing an unserved court issued document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: 'privatePractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Order that case is assigned',
+            servedAt: undefined,
+          },
+        ],
+      });
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time');
+  });
+
+  it('throws an error for a petitioner who is associated with the case and viewing an unserved court issued document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Order that case is assigned',
+            servedAt: undefined,
+          },
+        ],
+      });
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time');
+  });
+
+  it('throws an error for a privatePractitioner who is NOT associated with the case and viewing a served Stipulated Decision', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: 'privatePractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Stipulated Decision',
+            eventCode: STIPULATED_DECISION_EVENT_CODE,
+            isOnDocketRecord: true,
+            servedAt: new Date().toISOString(),
+          },
+        ],
+      });
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time');
+  });
+
+  it('returns the expected policy url for a privatePractitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: 'privatePractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Stipulated Decision',
+            eventCode: STIPULATED_DECISION_EVENT_CODE,
+            isOnDocketRecord: true,
+            servedAt: new Date().toISOString(),
+          },
+        ],
+      });
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      docketNumber: mockCase.docketNumber,
+      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+
+    expect(url).toEqual('localhost');
+  });
+
+  it('returns the expected policy url for a petitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Stipulated Decision',
+            eventCode: STIPULATED_DECISION_EVENT_CODE,
+            isOnDocketRecord: true,
             servedAt: new Date().toISOString(),
           },
         ],

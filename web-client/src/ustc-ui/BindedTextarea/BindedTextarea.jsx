@@ -13,16 +13,9 @@ export const BindedTextarea = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  function BindedTextarea({
-    ariaLabel,
-    bind,
-    className,
-    id,
-    name,
-    onChange,
-    simpleSetter,
-    value,
-  }) {
+  function BindedTextarea(props) {
+    const { bind, className, onChange, simpleSetter, value } = props;
+
     let textValue, setText;
 
     if (bind) {
@@ -34,15 +27,21 @@ export const BindedTextarea = connect(
 
     setText = decorateWithPostCallback(setText, onChange);
 
-    return (
-      <textarea
-        aria-label={ariaLabel || name}
-        className={classNames('usa-textarea', className)}
-        id={id}
-        name={name}
-        value={textValue || ''}
-        onChange={e => setText(e.target.value)}
-      ></textarea>
-    );
+    const prohibitedKeysOnTextarea = [
+      'bind',
+      'children',
+      'get',
+      'reaction',
+      'simpleSetter',
+    ];
+    const textAreaProps = {
+      ...props,
+      className: classNames('usa-textarea', className),
+      onChange: e => setText(e.target.value),
+      value: textValue || '',
+    };
+    prohibitedKeysOnTextarea.forEach(attr => delete textAreaProps[attr]);
+
+    return <textarea {...textAreaProps}></textarea>;
   },
 );

@@ -33,7 +33,10 @@ export const CaseSearchByName = connect(
   }) {
     return (
       <>
-        <div className="header-with-blue-background display-flex flex-justify">
+        <div
+          className="header-with-blue-background display-flex flex-justify"
+          id="case-search-by-name"
+        >
           <h3>Search by Name</h3>
         </div>
         <div className="blue-container advanced-search__form-container">
@@ -45,6 +48,7 @@ export const CaseSearchByName = connect(
                     Petitioner name <span className="usa-hint">(required)</span>
                   </label>
                   <input
+                    aria-describedby="case-search-by-name"
                     className="usa-input"
                     id="petitioner-name"
                     name="petitionerName"
@@ -79,7 +83,7 @@ export const CaseSearchByName = connect(
                     </legend>
                     <div className="usa-form-group--year display-inline-block">
                       <input
-                        aria-describedby="year-filed-legend"
+                        aria-describedby="case-search-by-name year-filed-legend"
                         aria-label="starting year, four digits"
                         className="usa-input"
                         id="year-filed-min"
@@ -103,7 +107,7 @@ export const CaseSearchByName = connect(
                     <span className="margin-right-2">to</span>
                     <div className="usa-form-group--year display-inline-block">
                       <input
-                        aria-describedby="year-filed-legend"
+                        aria-describedby="case-search-by-name year-filed-legend"
                         aria-label="ending year, four digits"
                         className="usa-input"
                         id="year-filed-max"
@@ -137,6 +141,7 @@ export const CaseSearchByName = connect(
                       Country
                     </label>
                     <BindedSelect
+                      aria-describedby="case-search-by-name"
                       bind="advancedSearchForm.caseSearchByName.countryType"
                       id="country-type"
                       name="countryType"
@@ -156,6 +161,7 @@ export const CaseSearchByName = connect(
                         State
                       </label>
                       <BindedSelect
+                        aria-describedby="case-search-by-name"
                         bind="advancedSearchForm.caseSearchByName.petitionerState"
                         id="petitioner-state"
                         name="petitionerState"
@@ -189,6 +195,7 @@ export const CaseSearchByName = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <Button
+                  aria-describedby="case-search-by-name"
                   className="advanced-search__button"
                   id="advanced-search-button"
                   onClick={e => {
@@ -200,6 +207,7 @@ export const CaseSearchByName = connect(
                 </Button>
                 <Button
                   link
+                  aria-describedby="case-search-by-name"
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
                   onClick={e => {
                     e.preventDefault();

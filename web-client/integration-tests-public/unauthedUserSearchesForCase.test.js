@@ -1,24 +1,18 @@
-import { fakeFile, setupTest } from './helpers';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 
-import {
-  loginAs,
-  setupTest as setupTestClient,
-} from '../integration-tests/helpers';
-
-// Petitioner
-import { petitionerCancelsCreateCase } from '../integration-tests/journey/petitionerCancelsCreateCase';
-import { petitionerChoosesCaseType } from '../integration-tests/journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from '../integration-tests/journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from '../integration-tests/journey/petitionerCreatesNewCase';
-
-// Docket clerk
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
+import { docketClerkAddsStipulatedDecisionDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsStipulatedDecisionDocketEntryFromOrder';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
-
-// Public User
 import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
+import {
+  loginAs,
+  setupTest as setupTestClient,
+  uploadPetition,
+} from '../integration-tests/helpers';
+import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
+import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
@@ -26,17 +20,40 @@ import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDeta
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
 const test = setupTest();
-
 const testClient = setupTestClient();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
 testClient.draftOrders = [];
 
-describe('Petitioner creates cases to search for', () => {
-  jest.setTimeout(10000);
+describe('Petitioner creates case to search for', () => {
+  beforeAll(() => {
+    jest.setTimeout(10000);
+  });
+
   loginAs(testClient, 'petitioner@example.com');
-  petitionerCancelsCreateCase(testClient);
-  petitionerChoosesProcedureType(testClient);
-  petitionerChoosesCaseType(testClient);
-  petitionerCreatesNewCase(testClient, fakeFile);
+
+  it('Create case', async () => {
+    const caseDetail = await uploadPetition(testClient, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Aliens, Dude',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'CT',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    testClient.docketNumber = caseDetail.docketNumber;
+  });
+});
+
+describe('Petitions clerk serves case to IRS', () => {
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
 });
 
 describe('Docket clerk creates a draft order (should not be viewable to the public)', () => {
@@ -73,6 +90,18 @@ describe('Docket clerk creates and serves a transcript (should not be viewable t
     year: '2019',
   });
   docketClerkServesDocument(testClient, 2);
+});
+
+describe('Docket clerk creates and serves a Stipulated Decision (should not be viewable to the public)', () => {
+  loginAs(testClient, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(testClient, {
+    documentTitle: 'Order of Dismissal',
+    eventCode: 'OD',
+    expectedDocumentType: 'Order of Dismissal',
+  });
+  docketClerkSignsOrder(testClient, 3);
+  docketClerkAddsStipulatedDecisionDocketEntryFromOrder(testClient, 3);
+  docketClerkServesDocument(testClient, 3);
 });
 
 describe('Unauthed user searches for a case and views a case detail page', () => {
