@@ -1,11 +1,17 @@
 const {
+  applicationContext,
+  applicationContextForClient,
+} = require('../test/createTestApplicationContext');
+const {
   processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamRecordsInteractor', () => {
+  const mockJobId = 'a5e664f1-2d8c-4e53-b3db-c24f30273dd9';
+
   beforeAll(() => {
     applicationContext.getSearchClient().bulk.mockReturnValue({ body: {} });
+    applicationContext.getUniqueId.mockReturnValue(mockJobId);
   });
 
   it('does not call bulk function if recordsToProcess is an empty array', async () => {
@@ -744,7 +750,7 @@ describe('processStreamRecordsInteractor', () => {
     );
   });
 
-  it('logs error if deleteRecord throws an error', async () => {
+  it('logs error thrown when trying to delete a record', async () => {
     applicationContext.getSearchClient().bulk.mockResolvedValue({
       errors: [{ badError: true }],
       items: [
@@ -790,7 +796,16 @@ describe('processStreamRecordsInteractor', () => {
         },
       ],
     });
-
+    expect(applicationContext.logger.info).toBeCalledTimes(3);
+    expect(applicationContext.logger.info.mock.calls[0][0]).toBe(
+      `processStreamRecordsInteractor job ${mockJobId} started at time:`,
+    );
+    expect(applicationContext.logger.info.mock.calls[1][0]).toBe(
+      `processStreamRecordsInteractor job ${mockJobId} deleteRecord error for record 2_2:`,
+    );
+    expect(applicationContext.logger.info.mock.calls[2][0]).toBe(
+      `processStreamRecordsInteractor job ${mockJobId} completed at time:`,
+    );
     expect(applicationContext.notifyHoneybadger).toBeCalledTimes(1);
     expect(applicationContext.notifyHoneybadger.mock.calls[0][0]).toEqual(
       error,
