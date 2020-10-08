@@ -348,7 +348,6 @@ const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
-const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
@@ -889,7 +888,6 @@ app.get(
  * users
  */
 app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
-app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
 app.put(
   '/users/:userId/case/:docketNumber',
   lambdaWrapper(privatePractitionerCaseAssociationLambda),
