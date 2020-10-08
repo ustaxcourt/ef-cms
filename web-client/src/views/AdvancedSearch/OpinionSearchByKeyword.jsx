@@ -27,6 +27,7 @@ export const OpinionSearchByKeyword = connect(
                 Search for...
               </label>
               <input
+                aria-describedby="opinion-search-form"
                 className="usa-input"
                 id="opinion-search"
                 name="keyword"

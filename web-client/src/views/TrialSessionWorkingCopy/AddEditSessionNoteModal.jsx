@@ -35,7 +35,7 @@ export const AddEditSessionNoteModal = connect(
             Judge’s notes
           </label>
           <BindedTextarea
-            ariaLabel="notes"
+            aria-label="notes"
             bind="modal.notes"
             id="case-notes"
             onChange={() => {
