@@ -95,6 +95,7 @@ describe('Petitions Clerk', () => {
             ...BASE_CASE.contactPrimary,
             ...createRandomContact(),
           },
+          docketEntries: [BASE_CASE.docketEntries[0]],
           docketNumber,
           docketNumberWithSuffix: docketNumber,
           preferredTrialCity: testData.preferredTrialCity,
@@ -131,7 +132,7 @@ describe('Petitions Clerk', () => {
   });
 
   describe('after a new trial session is created', () => {
-    it('it is possible to manually add, view, and remove first case from an UNSET trial session', () => {
+    it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
       goToCaseOverview(firstDocketNumber);
       manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();

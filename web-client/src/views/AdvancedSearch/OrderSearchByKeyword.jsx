@@ -19,13 +19,14 @@ export const OrderSearchByKeyword = connect(
     return (
       <>
         <div className="grid-row grid-gap">
-          <div className="tablet:grid-col-12">
+          <div className="tablet:grid-col-12" id="search-description">
             <h4>Enter Keyword or Phrase</h4>
             <FormGroup errorText={validationErrors.keyword}>
               <label className="usa-label" htmlFor="order-search">
                 Search for...
               </label>
               <input
+                aria-describedby="search-orders-header search-description"
                 className="usa-input"
                 id="order-search"
                 name="keyword"

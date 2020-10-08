@@ -18,7 +18,7 @@ export const DocumentSearchResults = connect(
     showMoreResultsSequence,
   }) {
     return (
-      <>
+      <div aria-live="polite">
         {advancedDocumentSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">
@@ -102,7 +102,7 @@ export const DocumentSearchResults = connect(
             <p>Check your search terms and try again.</p>
           </div>
         )}
-      </>
+      </div>
     );
   },
 );

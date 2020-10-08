@@ -4,6 +4,7 @@ const {
 const {
   INITIAL_DOCUMENT_TYPES,
   ROLES,
+  STIPULATED_DECISION_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -76,8 +77,23 @@ exports.getDownloadPolicyUrlInteractor = async ({
         );
       }
 
+      const userAssociatedWithCase = await applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser({
+          applicationContext,
+          docketNumber: caseEntity.docketNumber,
+          userId: user.userId,
+        });
+
       if (docketEntryEntity.isCourtIssued()) {
         if (!docketEntryEntity.servedAt) {
+          throw new UnauthorizedError(
+            'Unauthorized to view document at this time',
+          );
+        } else if (
+          docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
+          !userAssociatedWithCase
+        ) {
           throw new UnauthorizedError(
             'Unauthorized to view document at this time',
           );
@@ -87,14 +103,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
           'Unauthorized to view document at this time',
         );
       } else {
-        const userAssociatedWithCase = await applicationContext
-          .getPersistenceGateway()
-          .verifyCaseForUser({
-            applicationContext,
-            docketNumber: caseEntity.docketNumber,
-            userId: user.userId,
-          });
-
         if (!userAssociatedWithCase) {
           throw new UnauthorizedError('Unauthorized');
         }
