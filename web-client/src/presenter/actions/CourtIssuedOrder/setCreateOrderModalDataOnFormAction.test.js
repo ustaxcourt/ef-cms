@@ -61,29 +61,4 @@ describe('setCreateOrderModalDataOnFormAction', () => {
       '9400ee05-40bd-41a0-afbe-4d18d3c85317',
     );
   });
-
-  it('tries to get the parentMessageId from state if not found on props or state.modal', async () => {
-    const result = await runAction(setCreateOrderModalDataOnFormAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          richText: 'something',
-        },
-        modal: {
-          documentTitle: 'Order to Do Something',
-          documentType: 'Order',
-          eventCode: 'O',
-        },
-        parentMessageId: '9400ee05-40bd-41a0-afbe-4d18d3c85317',
-      },
-    });
-    expect(result.state.form.parentMessageId).toEqual(
-      '9400ee05-40bd-41a0-afbe-4d18d3c85317',
-    );
-    expect(result.state.parentMessageId).toEqual(
-      '9400ee05-40bd-41a0-afbe-4d18d3c85317',
-    );
-  });
 });
