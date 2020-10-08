@@ -149,10 +149,10 @@
   "scripts": {
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
     "build:assets": "node shared/createModule.js",
-    "build:client": "USTC_ENV=prod parcel build --no-source-maps web-client/src/index.pug",
+    "build:client": "USTC_ENV=prod parcel build web-client/src/index.pug",
     "build:entity:docs": "node shared/src/tools/generateMarkdownSchema.js",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
-    "build:public": "USTC_ENV=prod parcel build --no-source-maps -d dist-public web-client/src/index-public.pug -o index.html",
+    "build:public": "USTC_ENV=prod parcel build -d dist-public web-client/src/index-public.pug -o index.html",
     "clean:public": "rm -rf dist-public/",
     "clean": "./reset-dependencies.sh CLEAN_ONLY",
     "cypress:open": "TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop cypress open",
