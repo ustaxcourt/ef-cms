@@ -211,6 +211,7 @@ describe('migrateCaseInteractor', () => {
         postalCode: '17860',
         state: 'LA',
       },
+      email: 'practitioner1@example.com',
       name: 'Keelie Bruce',
       role: 'privatePractitioner',
       userId: '26e21f82-d029-4603-a954-544d8123ea04',
@@ -229,6 +230,7 @@ describe('migrateCaseInteractor', () => {
             {
               barNumber: 'PT1234',
               contact: { address1: '123 Main St' },
+              email: 'practitioner2@example.com',
               name: 'Saul Goodman',
               representingPrimary: true,
               role: 'privatePractitioner',
