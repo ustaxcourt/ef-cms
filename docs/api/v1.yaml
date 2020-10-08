@@ -41,6 +41,8 @@ paths:
                 $ref: '#/components/schemas/Case'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
   /cases/{docketNumber}/entries/{docketEntryId}/document-download-url:
     get:
       summary: fetches a temporary file download url
@@ -71,6 +73,8 @@ paths:
                 $ref: '#/components/schemas/DocketEntryDownloadUrl'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
 
 components:
   securitySchemes:
@@ -81,6 +85,12 @@ components:
   responses:
     UnauthorizedError:
       description: unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: not found
       content:
         application/json:
           schema:
