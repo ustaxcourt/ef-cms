@@ -1,13 +1,14 @@
 const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
+  CASE_STATUS_TYPES,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -66,10 +67,10 @@ exports.updatePetitionDetailsInteractor = async ({
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCase.addDocument(
-        new Document(
+      newCase.addDocketEntry(
+        new DocketEntry(
           {
-            description: 'Filing Fee Paid',
+            documentTitle: 'Filing Fee Paid',
             documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
             eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
             filingDate: newCase.petitionPaymentDate,
@@ -83,10 +84,10 @@ exports.updatePetitionDetailsInteractor = async ({
         ),
       );
     } else if (isWaived) {
-      newCase.addDocument(
-        new Document(
+      newCase.addDocketEntry(
+        new DocketEntry(
           {
-            description: 'Filing Fee Waived',
+            documentTitle: 'Filing Fee Waived',
             documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
             eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
             filingDate: newCase.petitionPaymentWaivedDate,
@@ -100,6 +101,20 @@ exports.updatePetitionDetailsInteractor = async ({
         ),
       );
     }
+  }
+
+  if (
+    newCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    oldCase.preferredTrialCity !== newCase.preferredTrialCity
+  ) {
+    const caseSortTags = newCase.generateTrialSortTags();
+    await applicationContext
+      .getPersistenceGateway()
+      .updateCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags,
+        docketNumber: newCase.validate().toRawObject().docketNumber,
+      });
   }
 
   const updatedCase = await applicationContext

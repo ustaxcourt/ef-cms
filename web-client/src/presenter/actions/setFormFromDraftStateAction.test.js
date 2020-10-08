@@ -4,13 +4,13 @@ import { runAction } from 'cerebral/test';
 import { setFormFromDraftStateAction } from './setFormFromDraftStateAction';
 
 describe('setFormFromDraftStateAction', () => {
-  const documentIdToEdit = '123';
+  const docketEntryIdToEdit = '123';
   const documentToMatch = {
-    documentId: documentIdToEdit,
+    docketEntryId: docketEntryIdToEdit,
     documentType: 'Order',
   };
 
-  documentToMatch.draftState = { ...documentToMatch };
+  documentToMatch.draftOrderState = { ...documentToMatch };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -23,16 +23,16 @@ describe('setFormFromDraftStateAction', () => {
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
-        documentIdToEdit: documentIdToEdit,
+        docketEntryIdToEdit: docketEntryIdToEdit,
       },
     });
     expect(result.state.form.documentType).toEqual(
@@ -40,21 +40,21 @@ describe('setFormFromDraftStateAction', () => {
     );
   });
 
-  it('does nothing if documentIdToEdit is not passed in via props', async () => {
+  it('does nothing if docketEntryIdToEdit is not passed in via props', async () => {
     const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
       },
     });
@@ -62,26 +62,26 @@ describe('setFormFromDraftStateAction', () => {
     expect(result.state.form).toBeUndefined();
   });
 
-  it('sets state.form to the documentIdToEdit if draftState does not exist for the selected document', async () => {
+  it('sets state.form to the docketEntryIdToEdit if draftOrderState does not exist for the selected document', async () => {
     const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,
       },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
-        documentIdToEdit: '321',
+        docketEntryIdToEdit: '321',
       },
     });
     expect(result.state.form).toEqual({
-      documentIdToEdit: '321',
+      docketEntryIdToEdit: '321',
       documentType: 'Petition',
     });
   });

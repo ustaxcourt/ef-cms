@@ -31,42 +31,33 @@ describe('fileCourtIssuedOrderInteractor', () => {
       state: 'CA',
     },
     createdAt: '',
+    docketEntries: [
+      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
+      },
+    ],
     docketNumber: '45678-18',
-    docketRecord: [
-      {
-        description: 'first record',
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-        eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
-      },
-    ],
-    documents: [
-      {
-        docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: mockUserId,
-      },
-      {
-        docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: mockUserId,
-      },
-      {
-        docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: mockUserId,
-      },
-    ],
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -133,17 +124,18 @@ describe('fileCourtIssuedOrderInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(4);
   });
 
-  it('should add order document to case and set freeText to the document title if it is a generic order (eventCode O)', async () => {
+  it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
         documentType: 'Order',
+        draftOrderState: {},
         eventCode: 'O',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
@@ -157,12 +149,50 @@ describe('fileCourtIssuedOrderInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(4);
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3],
-    ).toMatchObject({ freeText: 'Order to do anything' });
+        .caseToUpdate.docketEntries[3],
+    ).toMatchObject({
+      draftOrderState: { freeText: 'Order to do anything' },
+      freeText: 'Order to do anything',
+    });
+  });
+
+  it('should delete draftOrderState properties if they exists on the documentMetadata, after saving the document', async () => {
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: {},
+        documentTitle: 'Order to do anything',
+        documentType: 'Order',
+        draftOrderState: {
+          documentContents: 'something',
+          editorDelta: 'something',
+          richText: 'something',
+        },
+        eventCode: 'O',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3].draftOrderState.documentContents,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3].draftOrderState.editorDelta,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3].draftOrderState.richText,
+    ).toBeUndefined();
   });
 
   it('should add a generic notice document to case, set freeText to the document title, and set the document to signed', async () => {
@@ -185,10 +215,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(4);
     const result = applicationContext.getPersistenceGateway().updateCase.mock
-      .calls[0][0].caseToUpdate.documents[3];
+      .calls[0][0].caseToUpdate.docketEntries[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
   });
@@ -216,14 +246,14 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3].documentContents,
+        .caseToUpdate.docketEntries[3].documentContents,
     ).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3],
+        .caseToUpdate.docketEntries[3],
     ).toMatchObject({
       documentContentsId: expect.anything(),
-      draftState: {},
+      draftOrderState: {},
     });
   });
 
@@ -353,10 +383,12 @@ describe('fileCourtIssuedOrderInteractor', () => {
 
     const lastDocumentIndex =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length - 1;
+        .caseToUpdate.docketEntries.length - 1;
 
     const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.documents[lastDocumentIndex];
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
+      lastDocumentIndex
+    ];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: true,

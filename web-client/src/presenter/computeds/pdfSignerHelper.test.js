@@ -12,14 +12,14 @@ let mockState;
 beforeAll(() => {
   mockState = {
     caseDetail: {
-      documents: [
+      docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           eventCode: 'PSDE',
         },
       ],
     },
-    documentId: '123',
+    docketEntryId: '123',
     form: {},
     pdfForSigning: {
       signatureData: true,
@@ -184,14 +184,14 @@ describe('pdfSignerHelper', () => {
       const { showSkipSignatureButton } = runCompute(pdfSignerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
-                documentId: '123',
+                docketEntryId: '123',
                 eventCode: 'O',
               },
             ],
           },
-          documentId: '123',
+          docketEntryId: '123',
           form: {
             message: 'a',
           },
@@ -210,14 +210,14 @@ describe('pdfSignerHelper', () => {
       const { showSkipSignatureButton } = runCompute(pdfSignerHelper, {
         state: {
           caseDetail: {
-            documents: [
+            docketEntries: [
               {
-                documentId: '123',
+                docketEntryId: '123',
                 eventCode: 'O',
               },
             ],
           },
-          documentId: '123',
+          docketEntryId: '123',
           form: {
             message: 'a',
           },

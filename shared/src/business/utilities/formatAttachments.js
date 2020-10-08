@@ -3,26 +3,22 @@
  *
  * @params {object} params the params object
  * @param {array} attachments attachments to format
- * @param {object} caseDetail the case detail with documents, archivedDocuments (optional), and correspondence (optional)
+ * @param {object} caseDetail the case detail with documents, archivedDocketEntries (optional), and correspondence (optional)
  * @returns {array} the formatted array of attachment objects
  */
-export const formatAttachments = ({ attachments, caseDetail }) => {
-  const {
-    archivedDocuments = [],
-    archivedCorrespondences = [],
-    correspondence = [],
-    documents,
-  } = caseDetail;
-
-  const allDocuments = [
-    ...archivedDocuments,
-    ...archivedCorrespondences,
-    ...documents,
-    ...correspondence,
-  ];
-
+export const formatAttachments = ({
+  applicationContext,
+  attachments,
+  caseDetail,
+}) => {
   const formattedAttachments = attachments.map(({ documentId }) => {
-    const document = allDocuments.find(d => d.documentId === documentId);
+    const document = applicationContext
+      .getUtilities()
+      .getAttachmentDocumentById({
+        caseDetail,
+        documentId,
+        useArchived: true,
+      });
 
     if (document) {
       return {

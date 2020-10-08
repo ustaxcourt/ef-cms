@@ -8,13 +8,13 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateDocketRecordSequence: sequences.validateDocketRecordSequence,
+    validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
   },
   function EditDocketEntryMetaFormNoDocument({
     form,
     updateFormValueSequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validationErrors,
   }) {
     return (
@@ -33,31 +33,31 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             month: form.filingDateMonth,
             year: form.filingDateYear,
           }}
-          onBlur={validateDocketRecordSequence}
+          onBlur={validateDocumentSequence}
           onChange={updateFormValueSequence}
         />
 
-        <FormGroup errorText={validationErrors.description}>
+        <FormGroup errorText={validationErrors.documentTitle}>
           <label
             className="usa-label"
-            htmlFor="description"
-            id="description-label"
+            htmlFor="documentTitle"
+            id="documentTitle-label"
           >
             Filings and proceedings
           </label>
           <input
-            aria-describedby="description-label"
+            aria-describedby="documentTitle-label"
             className="usa-input"
-            id="description"
-            name="description"
+            id="documentTitle"
+            name="documentTitle"
             type="text"
-            value={form.description || ''}
+            value={form.documentTitle || ''}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateDocketRecordSequence();
+              validateDocumentSequence();
             }}
           />
         </FormGroup>

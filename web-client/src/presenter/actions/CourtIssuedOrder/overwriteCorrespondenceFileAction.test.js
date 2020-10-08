@@ -16,7 +16,7 @@ describe('overwriteCorrespondenceFileAction', () => {
     };
   });
 
-  it('returns the success path with the documentId when the correspondence file was successfully uploaded', async () => {
+  it('returns the success path with the docketEntryId when the correspondence file was successfully uploaded', async () => {
     applicationContextForClient
       .getUseCases()
       .uploadCorrespondenceDocumentInteractor.mockReturnValue(
@@ -28,9 +28,7 @@ describe('overwriteCorrespondenceFileAction', () => {
         presenter,
       },
       state: {
-        documentToEdit: {
-          documentId: 'document-id-123',
-        },
+        docketEntryId: 'document-id-123',
         form: {
           primaryDocumentFile: {},
         },
@@ -41,6 +39,14 @@ describe('overwriteCorrespondenceFileAction', () => {
       applicationContextForClient.getUseCases()
         .uploadCorrespondenceDocumentInteractor,
     ).toBeCalled();
+    expect(
+      applicationContextForClient.getUseCases()
+        .uploadCorrespondenceDocumentInteractor,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        keyToOverwrite: 'document-id-123',
+      }),
+    );
     expect(successStub).toHaveBeenCalledWith({
       primaryDocumentFileId: 'document-id-123',
     });
@@ -56,9 +62,7 @@ describe('overwriteCorrespondenceFileAction', () => {
     runAction(overwriteCorrespondenceFileAction, {
       modules: { presenter },
       state: {
-        documentToEdit: {
-          documentId: 'document-id-123',
-        },
+        docketEntryId: 'document-id-123',
         form: {
           primaryDocumentFile: {},
         },

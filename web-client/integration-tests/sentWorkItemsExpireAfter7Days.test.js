@@ -37,6 +37,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       section: 'petitions',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
+    applicationContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = new Date();
     const CREATED_7_DAYS_AGO = new Date();
@@ -56,13 +57,13 @@ describe('verify old sent work items do not show up in the outbox', () => {
       completedBy: 'Test Petitionsclerk',
       completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       createdAt: CREATED_8_DAYS_AGO.toISOString(),
-      docketNumber: caseDetail.docketNumber,
-      docketNumberSuffix: null,
-      document: {
+      docketEntry: {
         createdAt: '2019-06-25T15:14:11.924Z',
-        documentId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+        docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
         documentType: 'Petition',
       },
+      docketNumber: caseDetail.docketNumber,
+      docketNumberSuffix: null,
       isInitializeCase: false,
       section: 'petitions',
       sentBy: 'Test petitionsclerk1',

@@ -13,8 +13,6 @@ const {
 const { createISODateString } = require('../../utilities/DateHandler');
 
 describe('fileCorrespondenceDocumentInteractor', () => {
-  const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-
   const mockUser = {
     name: 'Docket Clerk',
     role: ROLES.docketClerk,
@@ -33,28 +31,21 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       postalCode: '12345',
       state: 'TN',
     },
-    docketNumber: '123-45',
-    docketRecord: [
+    docketEntries: [
       {
-        description: 'Docket Record 1',
-        docketRecordId: mockDocumentId,
-        documentId: mockDocumentId,
-        eventCode: 'OAJ',
-        filingDate: createISODateString(),
-        index: 0,
-      },
-    ],
-    documents: [
-      {
-        documentId: mockDocumentId,
+        docketEntryId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+        documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
+        filingDate: createISODateString(),
+        index: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: '611dc444-fd8f-43a0-8844-c4d57745c718',
         signedJudgeName: 'Judy',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
     ],
+    docketNumber: '123-45',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -123,7 +114,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       correspondence: {
-        documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
+        correspondenceId: '14bb669b-0962-4781-87a0-50718f556e2b',
         documentTitle: 'A title',
         filedBy: mockUser.name,
         filingDate: '2001-02-01',
@@ -151,7 +142,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       ...mockCase,
       correspondence: [
         {
-          documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
+          correspondenceId: '14bb669b-0962-4781-87a0-50718f556e2b',
           documentTitle: 'A title',
           filedBy: mockUser.name,
           filingDate: '2001-02-01',

@@ -15,14 +15,14 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
       docketNumber: test.docketNumber,
     });
 
-    const petitionDocumentId = test
-      .getState('caseDetail.documents')
-      .find(d => d.eventCode === 'P').documentId;
+    const petitionDocketEntryId = test
+      .getState('caseDetail.docketEntries')
+      .find(d => d.eventCode === 'P').docketEntryId;
 
     await test.runSequence('gotoCaseDetailSequence', {
+      docketEntryId: petitionDocketEntryId,
       docketNumber: test.docketNumber,
       docketRecordTab: 'documentView',
-      documentId: petitionDocumentId,
     });
 
     await test.runSequence('loadDefaultDocketViewerDocumentToDisplaySequence');
@@ -36,7 +36,7 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
 
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
-      redirectUrl: `/case-detail/${test.docketNumber}/document-view?documentId=${petitionDocumentId}`,
+      redirectUrl: `/case-detail/${test.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
     });
 
     expect(test.getState('currentPage')).toEqual('PetitionQc');
@@ -71,6 +71,8 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
       state: test.getState(),
     }).find(item => item.docketNumber === test.docketNumber);
 
-    expect(formattedWorkItem.editLink).toContain('/document-view?documentId=');
+    expect(formattedWorkItem.editLink).toContain(
+      '/document-view?docketEntryId=',
+    );
   });
 };

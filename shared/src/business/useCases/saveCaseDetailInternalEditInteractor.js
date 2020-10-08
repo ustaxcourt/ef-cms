@@ -110,9 +110,9 @@ exports.saveCaseDetailInternalEditInteractor = async ({
       caseToUpdate,
     });
   } else {
-    const petitionDocument = caseEntity.getPetitionDocument();
+    const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
-    const initializeCaseWorkItem = petitionDocument.workItem;
+    const initializeCaseWorkItem = petitionDocketEntry.workItem;
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,

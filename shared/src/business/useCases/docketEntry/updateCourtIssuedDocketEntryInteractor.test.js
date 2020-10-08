@@ -33,45 +33,34 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      docketRecord: [
+      docketEntries: [
         {
-          description: 'first record',
-          docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-          eventCode: 'P',
-          filingDate: '2018-03-01T00:01:00.000Z',
-          index: 1,
-        },
-      ],
-      documents: [
-        {
+          docketEntryId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           docketNumber: '45678-18',
-          documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
+          docketEntryId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           docketNumber: '45678-18',
-          documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
           eventCode: 'O',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -83,17 +72,17 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
             assigneeName: 'bob',
             caseStatus: CASE_STATUS_TYPES.new,
             caseTitle: 'Johnny Joe Jacobson',
+            docketEntry: {},
             docketNumber: '101-18',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            document: {},
             messages: [],
             section: DOCKET_SECTION,
             sentBy: 'bob',
           },
         },
         {
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           docketNumber: '45678-18',
-          documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'Transcript',
           eventCode: TRANSCRIPT_EVENT_CODE,
@@ -102,15 +91,16 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
             assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
             assigneeName: 'bob',
             caseStatus: CASE_STATUS_TYPES.new,
+            docketEntry: {},
             docketNumber: '101-18',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            document: {},
             messages: [],
             section: DOCKET_SECTION,
             sentBy: 'bob',
           },
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -136,8 +126,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
@@ -156,8 +146,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
           eventCode: 'O',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -178,8 +168,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -211,8 +201,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       applicationContext,
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         docketNumber: caseRecord.docketNumber,
-        documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
@@ -226,7 +216,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[4],
+        .caseToUpdate.docketEntries[4],
     ).toMatchObject({
       secondaryDate: '2019-03-01T21:40:46.415Z',
     });
@@ -242,8 +232,8 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         eventCode: 'O',
         objections: OBJECTIONS_OPTIONS_MAP.NO,
@@ -258,7 +248,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3].objections,
+        .caseToUpdate.docketEntries[3].objections,
     ).toBeUndefined();
   });
 });

@@ -10,49 +10,50 @@ const { omit } = require('lodash');
  * @param {object} options the providers object
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
- * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {object} options.docketEntryEntity the docket entry entity we are creating the cover for
  * @param {boolean} options.useInitialData whether to use the initial docket record suffix and case caption
  * @returns {object} the key/value pairs of computed strings
  */
 exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
-  documentEntity,
+  docketEntryEntity,
+  filingDateUpdated,
   useInitialData,
 }) => {
-  const isLodged = documentEntity.lodged;
-  const { certificateOfService, isPaper } = documentEntity;
+  const isLodged = docketEntryEntity.lodged;
+  const { certificateOfService, isPaper } = docketEntryEntity;
 
   const dateServedFormatted =
-    (documentEntity.servedAt &&
+    (docketEntryEntity.servedAt &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.servedAt, 'MMDDYY')) ||
+        .formatDateString(docketEntryEntity.servedAt, 'MMDDYY')) ||
     '';
 
   let dateReceivedFormatted;
 
   if (isPaper) {
     dateReceivedFormatted =
-      (documentEntity.createdAt &&
+      (docketEntryEntity.createdAt &&
         applicationContext
           .getUtilities()
-          .formatDateString(documentEntity.createdAt, 'MMDDYY')) ||
+          .formatDateString(docketEntryEntity.createdAt, 'MMDDYY')) ||
       '';
   } else {
     dateReceivedFormatted =
-      (documentEntity.createdAt &&
+      (docketEntryEntity.createdAt &&
         applicationContext
           .getUtilities()
-          .formatDateString(documentEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
+          .formatDateString(docketEntryEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
       '';
   }
 
   const dateFiledFormatted =
-    (documentEntity.filingDate &&
+    (docketEntryEntity.filingDate &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.filingDate, 'MMDDYY')) ||
+        .formatDateString(docketEntryEntity.filingDate, 'MMDDYY')) ||
     '';
 
   const caseCaptionToUse = useInitialData
@@ -72,9 +73,9 @@ exports.generateCoverSheetData = ({
   }
 
   let documentTitle =
-    documentEntity.documentTitle || documentEntity.documentType;
-  if (documentEntity.additionalInfo && documentEntity.addToCoversheet) {
-    documentTitle += ` ${documentEntity.additionalInfo}`;
+    docketEntryEntity.documentTitle || docketEntryEntity.documentType;
+  if (docketEntryEntity.additionalInfo && docketEntryEntity.addToCoversheet) {
+    documentTitle += ` ${docketEntryEntity.additionalInfo}`;
   }
 
   const docketNumberWithSuffix =
@@ -86,17 +87,19 @@ exports.generateCoverSheetData = ({
     certificateOfService,
     dateFiledLodged: dateFiledFormatted,
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
-    dateReceived: dateReceivedFormatted,
+    dateReceived: filingDateUpdated
+      ? dateFiledFormatted
+      : dateReceivedFormatted,
     dateServed: dateServedFormatted,
     docketNumberWithSuffix,
     documentTitle,
-    electronicallyFiled: !documentEntity.isPaper,
-    mailingDate: documentEntity.mailingDate || '',
+    electronicallyFiled: !docketEntryEntity.isPaper,
+    mailingDate: docketEntryEntity.mailingDate || '',
   };
 
   if (
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      documentEntity.eventCode,
+      docketEntryEntity.eventCode,
     )
   ) {
     coverSheetData = omit(coverSheetData, [
@@ -114,14 +117,15 @@ exports.generateCoverSheetData = ({
  * @param {object} options the providers object
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
- * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {object} options.docketEntryEntity the docket entry entity we are creating the cover for
  * @param {object} options.pdfData the original document pdf data
  * @returns {object} the new pdf with a coversheet attached
  */
 exports.addCoverToPdf = async ({
   applicationContext,
   caseEntity,
-  documentEntity,
+  docketEntryEntity,
+  filingDateUpdated = false,
   pdfData,
   replaceCoversheet = false,
   useInitialData = false,
@@ -129,7 +133,8 @@ exports.addCoverToPdf = async ({
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
     caseEntity,
-    documentEntity,
+    docketEntryEntity,
+    filingDateUpdated,
     useInitialData,
   });
 
@@ -175,12 +180,13 @@ exports.addCoverToPdf = async ({
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.documentId the document id
+ * @param {string} providers.docketEntryId the docket entry id
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
+  filingDateUpdated = false,
   replaceCoversheet = false,
   useInitialData = false,
 }) => {
@@ -193,7 +199,9 @@ exports.addCoversheetInteractor = async ({
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
-  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
 
   let pdfData;
   try {
@@ -201,37 +209,38 @@ exports.addCoversheetInteractor = async ({
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
+        Key: docketEntryId,
       })
       .promise();
     pdfData = Body;
   } catch (err) {
-    err.message = `${err.message} document id is ${documentId}`;
+    err.message = `${err.message} docket entry id is ${docketEntryId}`;
     throw err;
   }
 
   const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
-    documentEntity,
+    docketEntryEntity,
+    filingDateUpdated,
     pdfData,
     replaceCoversheet,
     useInitialData,
   });
 
-  documentEntity.setAsProcessingStatusAsCompleted();
-  documentEntity.setNumberOfPages(numberOfPages);
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
+  docketEntryEntity.setNumberOfPages(numberOfPages);
 
-  await applicationContext.getPersistenceGateway().updateDocument({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
+    docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    document: documentEntity.validate().toRawObject(),
-    documentId,
+    document: docketEntryEntity.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
-    documentId,
+    key: docketEntryId,
   });
 };

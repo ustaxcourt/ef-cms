@@ -28,23 +28,23 @@ export const caseDetailEditHelper = (get, applicationContext) => {
       PARTY_TYPES.partnershipBBA,
       PARTY_TYPES.corporation,
     ].includes(caseDetail.partyType) &&
-    caseDetail.documents
+    caseDetail.docketEntries
   ) {
-    const odsDocs = caseDetail.documents.filter(document => {
+    const odsDocs = caseDetail.docketEntries.filter(document => {
       return document.documentType === 'Ownership Disclosure Statement';
     });
     showOwnershipDisclosureStatement = true;
     if (odsDocs[0]) {
-      ownershipDisclosureStatementDocumentId = odsDocs[0].documentId;
+      ownershipDisclosureStatementDocumentId = odsDocs[0].docketEntryId;
     }
   }
 
-  if (caseDetail.documents) {
-    const rptDocs = caseDetail.documents.filter(document => {
+  if (caseDetail.docketEntries) {
+    const rptDocs = caseDetail.docketEntries.filter(document => {
       return document.documentType.includes('Request for Place of Trial');
     });
     if (rptDocs[0]) {
-      requestForPlaceOfTrialDocumentId = rptDocs[0].documentId;
+      requestForPlaceOfTrialDocumentId = rptDocs[0].docketEntryId;
       requestForPlaceOfTrialDocumentTitle = rptDocs[0].documentTitle;
     }
   }

@@ -10,7 +10,7 @@ describe('advancedDocumentSearch', () => {
 
   const orderQueryParams = [
     { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'document|' } },
+    { match: { 'sk.S': 'docket-entry|' } },
     {
       exists: {
         field: 'servedAt',
@@ -36,7 +36,7 @@ describe('advancedDocumentSearch', () => {
 
   const opinionQueryParams = [
     { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'document|' } },
+    { match: { 'sk.S': 'docket-entry|' } },
     {
       exists: {
         field: 'servedAt',
@@ -131,9 +131,9 @@ describe('advancedDocumentSearch', () => {
       ...orderQueryParams,
       {
         bool: {
-          must: {
+          should: {
             match: {
-              'signedJudgeName.S': 'Judge Guy Fieri',
+              'signedJudgeName.S': 'Guy Fieri',
             },
           },
         },
@@ -173,9 +173,9 @@ describe('advancedDocumentSearch', () => {
       ...opinionQueryParams,
       {
         bool: {
-          must: {
+          should: {
             match: {
-              'judge.S': 'Judge Guy Fieri',
+              'judge.S': 'Guy Fieri',
             },
           },
         },
@@ -262,5 +262,72 @@ describe('advancedDocumentSearch', () => {
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...opinionQueryParams,
     ]);
+  });
+
+  describe('judge filter search', () => {
+    it('should strip out the "Chief" title from a judge\'s name', async () => {
+      await advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: opinionEventCodes,
+        judge: 'Chief Guy Fieri',
+        judgeType: 'judge',
+      });
+
+      expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+        ...opinionQueryParams,
+        {
+          bool: {
+            should: {
+              match: {
+                'judge.S': 'Guy Fieri',
+              },
+            },
+          },
+        },
+      ]);
+    });
+    it('should strip out the "Legacy" title from a judge\'s name', async () => {
+      await advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: opinionEventCodes,
+        judge: 'Legacy Guy Fieri',
+        judgeType: 'signedJudgeName',
+      });
+
+      expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+        ...opinionQueryParams,
+        {
+          bool: {
+            should: {
+              match: {
+                'signedJudgeName.S': 'Guy Fieri',
+              },
+            },
+          },
+        },
+      ]);
+    });
+
+    it('should strip out the "Judge" title from a judge\'s name', async () => {
+      await advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: opinionEventCodes,
+        judge: 'Legacy Judge Guy Fieri',
+        judgeType: 'judge',
+      });
+
+      expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+        ...opinionQueryParams,
+        {
+          bool: {
+            should: {
+              match: {
+                'judge.S': 'Guy Fieri',
+              },
+            },
+          },
+        },
+      ]);
+    });
   });
 });

@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
@@ -11,13 +11,13 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.documentIdToEdit the id of the document to update
+ * @param {object} providers.docketEntryIdToEdit the id of the docket entry to update
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the document is updated
  */
 exports.updateCourtIssuedOrderInteractor = async ({
   applicationContext,
-  documentIdToEdit,
+  docketEntryIdToEdit,
   documentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -40,8 +40,8 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId: documentIdToEdit,
+  const currentDocument = caseEntity.getDocketEntryById({
+    docketEntryId: docketEntryIdToEdit,
   });
 
   if (!currentDocument) {
@@ -53,38 +53,41 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
     const contentToStore = {
       documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState.richText,
+      richText: documentMetadata.draftOrderState.richText,
     };
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
-      documentId: documentContentsId,
+      key: documentContentsId,
       useTempBucket: false,
     });
 
     delete documentMetadata.documentContents;
-    delete documentMetadata.draftState.documentContents;
-    delete documentMetadata.draftState.richText;
-    delete documentMetadata.draftState.editorDelta;
+    delete documentMetadata.draftOrderState.documentContents;
+    delete documentMetadata.draftOrderState.richText;
+    delete documentMetadata.draftOrderState.editorDelta;
   }
 
   const editableFields = {
     documentTitle: documentMetadata.documentTitle,
     documentType: documentMetadata.documentType,
-    draftState: documentMetadata.draftState,
+    draftOrderState: documentMetadata.draftOrderState,
     freeText: documentMetadata.freeText,
   };
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
+    .countPagesInDocument({
+      applicationContext,
+      docketEntryId: docketEntryIdToEdit,
+    });
 
-  const documentEntity = new Document(
+  const docketEntryEntity = new DocketEntry(
     {
       ...currentDocument,
       ...editableFields,
-      documentId: documentIdToEdit,
+      docketEntryId: docketEntryIdToEdit,
       filedBy: user.name,
       numberOfPages,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -92,12 +95,12 @@ exports.updateCourtIssuedOrderInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.setAsProcessingStatusAsCompleted();
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   // we always un-sign the order document on updates because the court user will need to sign it again
-  documentEntity.unsignDocument();
+  docketEntryEntity.unsignDocument();
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

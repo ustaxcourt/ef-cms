@@ -11,14 +11,14 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Generic Document',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -28,15 +28,15 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
               workItem: { isRead: true },
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -46,14 +46,14 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -63,15 +63,15 @@ describe('editDocketEntryHelper', () => {
     const result = runCompute(editDocketEntryHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
               workItem: { isRead: false },
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(result.showPaperServiceWarning).toEqual(true);

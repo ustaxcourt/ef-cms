@@ -52,8 +52,6 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.petitioner) {
     showEditContacts = true;
-  } else if (user.role === USER_ROLES.irsPractitioner) {
-    showEditContacts = false;
   } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
   } else if (user.role === USER_ROLES.docketClerk) {
@@ -62,15 +60,24 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const petitionDocument = applicationContext
+  const petitionDocketEntry = applicationContext
     .getUtilities()
-    .getPetitionDocumentFromDocuments(caseDetail.documents);
-  const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+    .getPetitionDocketEntryFromDocketEntries(caseDetail.docketEntries);
+  const petitionIsServed =
+    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+
+  const hasPrivatePractitioners =
+    !!caseDetail.privatePractitioners &&
+    !!caseDetail.privatePractitioners.length;
+  const hasIrsPractitioners =
+    !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
 
   return {
     caseDeadlines,
     documentDetailTab,
     hasConsolidatedCases,
+    hasIrsPractitioners,
+    hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
@@ -89,15 +96,9 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
     showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
-    showPractitionerSection:
-      !isExternalUser ||
-      (caseDetail.privatePractitioners &&
-        !!caseDetail.privatePractitioners.length),
+    showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    showRespondentSection:
-      !isExternalUser ||
-      (caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length),
     userCanViewCase:
       (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,

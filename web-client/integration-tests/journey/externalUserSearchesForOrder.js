@@ -11,7 +11,7 @@ export const externalUserSearchesForOrder = test => {
     expect(test.getState('searchResults')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentId: test.draftOrders[0].documentId,
+          docketEntryId: test.draftOrders[0].docketEntryId,
         }),
       ]),
     );

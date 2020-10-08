@@ -13,17 +13,17 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       },
     );
 
-    const { documentId } = test;
+    const { docketEntryId } = test;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.documentId === documentId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: draftOrderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: draftOrderDocument.documentId,
     });
 
     expect(test.getState('form.eventCode')).toEqual(
@@ -56,8 +56,8 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       },
     );
 
-    const newDocketEntry = caseDetailFormatted.documents.find(
-      entry => entry.documentId === documentId,
+    const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
+      entry => entry.docketEntryId === docketEntryId,
     );
 
     expect(newDocketEntry).toBeTruthy();

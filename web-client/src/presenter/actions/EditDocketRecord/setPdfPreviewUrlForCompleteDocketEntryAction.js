@@ -17,10 +17,10 @@ export const setPdfPreviewUrlForCompleteDocketEntryAction = async ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const { documentId } = props;
+  const { docketEntryId } = props;
 
-  const caseDocument = caseDetail.documents.find(
-    entry => entry.documentId === documentId,
+  const caseDocument = caseDetail.docketEntries.find(
+    entry => entry.docketEntryId === docketEntryId,
   );
 
   if (caseDocument && caseDocument.isFileAttached) {
@@ -31,7 +31,7 @@ export const setPdfPreviewUrlForCompleteDocketEntryAction = async ({
       .getDocumentDownloadUrlInteractor({
         applicationContext,
         docketNumber: caseDetail.docketNumber,
-        documentId,
+        key: docketEntryId,
       });
 
     store.set(state.pdfPreviewUrl, url);

@@ -39,7 +39,7 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          documents: [
+          docketEntries: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
               documentType:
@@ -91,6 +91,31 @@ describe('reviewSavedPetitionHelper', () => {
       shouldShowIrsNoticeDate: true,
       stinFile: { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
     });
+  });
+
+  it('returns an undefined requestForPlaceOfTrialFile if the RQT docket entry is a minute entry', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          docketEntries: [
+            {
+              documentType:
+                INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+              isMinuteEntry: true,
+            },
+          ],
+          hasVerifiedIrsNotice: true,
+          irsNoticeDate: '2020-01-05T03:30:45.007Z',
+          orderForAmendedPetitionAndFilingFee: true,
+          petitionPaymentDate: '2020-03-14T14:02:04.007Z',
+          petitionPaymentMethod: 'pay.gov',
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
+          receivedAt: '2020-01-05T03:30:45.007Z',
+        },
+      },
+    });
+
+    expect(result.requestForPlaceOfTrialFile).toBeUndefined();
   });
 
   it('returns a petitionPaymentStatusFormatted for a waived payment status', () => {

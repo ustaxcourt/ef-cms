@@ -9,11 +9,11 @@ import { state } from 'cerebral';
  * @returns {void} sets the documentToEdit on state
  */
 export const setDocumentToEditAction = ({ props, store }) => {
-  const { caseDetail, documentIdToEdit } = props;
+  const { caseDetail, docketEntryIdToEdit } = props;
 
-  if (documentIdToEdit) {
-    const documentToEdit = caseDetail.documents.find(
-      document => document.documentId === documentIdToEdit,
+  if (docketEntryIdToEdit) {
+    const documentToEdit = caseDetail.docketEntries.find(
+      docketEntry => docketEntry.docketEntryId === docketEntryIdToEdit,
     );
 
     store.set(state.documentToEdit, documentToEdit);

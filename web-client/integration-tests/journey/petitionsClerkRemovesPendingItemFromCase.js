@@ -4,7 +4,7 @@ export const petitionsClerkRemovesPendingItemFromCase = test => {
       docketNumber: test.docketNumber,
     });
 
-    const documents = test.getState('caseDetail.documents');
+    const documents = test.getState('caseDetail.docketEntries');
 
     const pendingDocument = documents.find(
       document => document.pending === true,
@@ -13,7 +13,7 @@ export const petitionsClerkRemovesPendingItemFromCase = test => {
     await test.runSequence(
       'openConfirmRemoveCaseDetailPendingItemModalSequence',
       {
-        documentId: pendingDocument.documentId,
+        docketEntryId: pendingDocument.docketEntryId,
       },
     );
 

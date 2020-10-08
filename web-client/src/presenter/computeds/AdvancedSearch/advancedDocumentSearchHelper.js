@@ -1,4 +1,3 @@
-import { Document } from '../../../../../shared/src/business/entities/Document';
 import {
   OPINION_EVENT_CODES,
   ORDER_EVENT_CODES,
@@ -56,11 +55,10 @@ export const formatDocumentSearchResultRecord = (
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
-  result.formattedDocumentType = Document.getFormattedType(result.documentType);
 
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {
-    result.documentTitle = result.formattedDocumentType;
+    result.documentTitle = result.documentType;
   }
 
   if (OPINION_EVENT_CODES.includes(result.eventCode)) {

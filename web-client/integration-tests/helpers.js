@@ -54,6 +54,7 @@ Object.assign(applicationContext, {
     });
   },
   getEnvironment: () => ({
+    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerInterface,
@@ -61,6 +62,10 @@ Object.assign(applicationContext, {
 
 export const fakeFile = (() => {
   return getFakeFile();
+})();
+
+export const fakeFile1 = (() => {
+  return getFakeFile(false, true);
 })();
 
 export const getFormattedDocumentQCMyInbox = async test => {
@@ -150,10 +155,10 @@ export const getFormattedDocumentQCSectionOutbox = async test => {
   });
 };
 
-export const serveDocument = async ({ docketNumber, documentId, test }) => {
+export const serveDocument = async ({ docketEntryId, docketNumber, test }) => {
   await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    docketEntryId,
     docketNumber,
-    documentId,
   });
 
   await test.runSequence('openConfirmInitiateServiceModalSequence');
@@ -161,15 +166,15 @@ export const serveDocument = async ({ docketNumber, documentId, test }) => {
 };
 
 export const createCourtIssuedDocketEntry = async ({
+  docketEntryId,
   docketNumber,
-  documentId,
   eventCode,
   test,
   trialLocation,
 }) => {
   await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    docketEntryId,
     docketNumber,
-    documentId,
   });
 
   if (eventCode) {
@@ -194,10 +199,28 @@ export const createCourtIssuedDocketEntry = async ({
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getInboxCount = test => {
+export const getIndividualInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
-  }).inboxCount;
+  }).individualInboxCount;
+};
+
+export const getSectionInboxCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInboxCount;
+};
+
+export const getSectionInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInProgressCount;
+};
+
+export const getIndividualInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).individualInProgressCount;
 };
 
 export const findWorkItemByDocketNumber = (queue, docketNumber) => {
@@ -562,10 +585,10 @@ export const setBatchPages = ({ test }) => {
 };
 
 export const getPetitionDocumentForCase = caseDetail => {
-  // In our tests, we had numerous instances of `case.documents[0]`, which would
+  // In our tests, we had numerous instances of `case.docketEntries[0]`, which would
   // return the petition document most of the time, but occasionally fail,
   // producing unintended results.
-  return caseDetail.documents.find(
+  return caseDetail.docketEntries.find(
     document => document.documentType === 'Petition',
   );
 };

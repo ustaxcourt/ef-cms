@@ -18,12 +18,12 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
     const proposedStipulatedDecision = workQueueFormatted.find(
       workItem => workItem.docketNumber === test.docketNumber,
     );
-    test.proposedStipDecisionDocumentId =
-      proposedStipulatedDecision.document.documentId;
+    test.proposedStipDecisionDocketEntryId =
+      proposedStipulatedDecision.docketEntry.docketEntryId;
 
     await test.runSequence('gotoEditDocketEntrySequence', {
+      docketEntryId: proposedStipulatedDecision.docketEntry.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: proposedStipulatedDecision.document.documentId,
     });
 
     await test.runSequence('openCompleteAndSendMessageModalSequence');

@@ -17,12 +17,11 @@ describe('addCoversheetInteractor', () => {
       name: 'Daenerys Stormborn',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
-    docketNumber: '101-19',
-    documents: [
+    docketEntries: [
       {
         certificateOfService: false,
         createdAt: '2019-04-19T14:45:15.595Z',
-        documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -32,6 +31,7 @@ describe('addCoversheetInteractor', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
     ],
+    docketNumber: '101-19',
     partyType: PARTY_TYPES.petitioner,
   };
 
@@ -43,15 +43,14 @@ describe('addCoversheetInteractor', () => {
     contactSecondary: {
       name: 'Janie Petitioner',
     },
-    docketNumber: '102-19',
-    documents: [
+    docketEntries: [
       {
-        ...testingCaseData.documents[0],
+        ...testingCaseData.docketEntries[0],
         addToCoversheet: true,
         additionalInfo: 'Additional Info Something',
         certificateOfService: true,
         certificateOfServiceDate: '2019-04-20',
-        documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+        docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
         eventCode: 'M008',
@@ -61,6 +60,7 @@ describe('addCoversheetInteractor', () => {
         lodged: true,
       },
     ],
+    docketNumber: '102-19',
     partyType: PARTY_TYPES.petitionerSpouse,
   };
 
@@ -81,8 +81,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     await addCoversheetInteractor(params);
@@ -102,8 +102,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       replaceCoversheet: true,
     };
 
@@ -124,14 +124,14 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     await addCoversheetInteractor(params);
 
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();
   });
 
@@ -140,27 +140,18 @@ describe('addCoversheetInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...testingCaseData,
-        docketRecord: [
-          {
-            description: 'Test Docket Record',
-            documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            eventCode: 'O',
-            filingDate: new Date('2000-01-01').toISOString(),
-            index: 0,
-          },
-        ],
       });
 
     const params = {
       applicationContext,
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
     await addCoversheetInteractor(params);
 
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();
   });
 
@@ -171,8 +162,8 @@ describe('addCoversheetInteractor', () => {
 
     const params = {
       applicationContext,
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
       docketNumber: '101-19',
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 
     await addCoversheetInteractor(params);
@@ -191,14 +182,13 @@ describe('addCoversheetInteractor', () => {
       contactSecondary: {
         name: 'Janie Petitioner',
       },
-      docketNumber: '102-19',
-      documents: [
+      docketEntries: [
         {
-          ...testingCaseData.documents[0],
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -207,6 +197,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       ],
+      docketNumber: '102-19',
       partyType: PARTY_TYPES.petitionerSpouse,
     };
 
@@ -217,12 +208,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -241,12 +232,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: false,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -264,12 +255,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -288,13 +279,13 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
           createdAt: null,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -312,12 +303,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -336,12 +327,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -361,43 +352,45 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
+        filingDateUpdated: false,
       });
 
       expect(result.dateReceived).toEqual('04/19/19 10:45 am');
     });
 
-    it('shows does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
+    it('does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
           createdAt: null,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
+        filingDateUpdated: false,
       });
 
       expect(result.dateReceived).toEqual('');
@@ -410,12 +403,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -434,13 +427,13 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
           createdAt: null,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -459,12 +452,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -485,12 +478,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -510,12 +503,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -536,12 +529,12 @@ describe('addCoversheetInteractor', () => {
           caseCaption: 'Janie Petitioner, Petitioner',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -561,12 +554,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -585,12 +578,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -609,12 +602,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -634,12 +627,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -658,12 +651,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner & Janie Petitioner, Petitioners',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -682,12 +675,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -706,12 +699,12 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -733,12 +726,12 @@ describe('addCoversheetInteractor', () => {
           initialCaption: 'Janie and Jackie Petitioner, Petitioners',
           initialDocketNumberSuffix: 'Z',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'M008',
@@ -762,12 +755,12 @@ describe('addCoversheetInteractor', () => {
           initialCaption: 'Janie and Jackie Petitioner, Petitioners',
           initialDocketNumberSuffix: 'Z',
         },
-        documentEntity: {
-          ...testingCaseData.documents[0],
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'Additional Info Something',
           certificateOfService: true,
-          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
           eventCode: 'USCA',
@@ -781,6 +774,58 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toBeUndefined();
       expect(result.electronicallyFiled).toBeUndefined();
       expect(result.dateServed).toBeUndefined();
+    });
+
+    it('sets the dateRecieved to dateFiledFormatted when the filingDate has been updated', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+        },
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          createdAt: '2019-02-19T14:45:15.595Z',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
+          filingDate: '2019-05-19T14:45:15.595Z',
+          isPaper: false,
+        },
+        filingDateUpdated: true,
+      });
+
+      expect(result.dateReceived).toBe('05/19/19');
+    });
+
+    it('sets the dateRecieved to createdAt date when the filingDate has not been updated', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+        },
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          createdAt: '2019-02-15T14:45:15.595Z',
+          docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
+          filingDate: '2019-05-19T14:45:15.595Z',
+          isPaper: true,
+        },
+        filingDateUpdated: false,
+      });
+
+      expect(result.dateReceived).toBe('02/15/19');
     });
   });
 });

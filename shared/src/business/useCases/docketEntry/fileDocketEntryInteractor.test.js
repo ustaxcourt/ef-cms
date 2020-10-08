@@ -35,11 +35,10 @@ describe('fileDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      documents: [
+      docketEntries: [
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -47,8 +46,8 @@ describe('fileDocketEntryInteractor', () => {
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -56,8 +55,8 @@ describe('fileDocketEntryInteractor', () => {
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -65,6 +64,7 @@ describe('fileDocketEntryInteractor', () => {
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -125,6 +125,10 @@ describe('fileDocketEntryInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryEntity,
+    ).toMatchObject({ index: 1 });
   });
 
   it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
@@ -190,7 +194,7 @@ describe('fileDocketEntryInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).not.toBeCalled();
+    ).toBeCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {

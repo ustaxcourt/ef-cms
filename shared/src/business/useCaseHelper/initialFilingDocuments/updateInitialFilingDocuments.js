@@ -2,7 +2,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
 } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { omit } = require('lodash');
 
 const addNewInitialFilingToCase = ({
@@ -49,9 +49,9 @@ const addNewInitialFilingToCase = ({
     };
   }
 
-  const documentToAdd = new Document(documentMeta, { applicationContext });
+  const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
 
-  caseEntity.documents.push(documentToAdd);
+  caseEntity.docketEntries.push(documentToAdd);
 };
 
 const deleteInitialFilingFromCase = async ({
@@ -59,19 +59,19 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  caseEntity.deleteDocumentById({
-    documentId: originalCaseDocument.documentId,
+  caseEntity.deleteDocketEntryById({
+    docketEntryId: originalCaseDocument.docketEntryId,
   });
 
-  await applicationContext.getPersistenceGateway().deleteDocument({
+  await applicationContext.getPersistenceGateway().deleteDocketEntry({
     applicationContext,
+    docketEntryId: originalCaseDocument.docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    documentId: originalCaseDocument.documentId,
   });
 
   await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
     applicationContext,
-    key: originalCaseDocument.documentId,
+    key: originalCaseDocument.docketEntryId,
   });
 };
 
@@ -88,15 +88,17 @@ exports.updateInitialFilingDocuments = async ({
 
   for (const key of Object.keys(initialDocumentTypesWithoutPetition)) {
     const documentType = INITIAL_DOCUMENT_TYPES_MAP[key];
-    const originalCaseDocument = caseEntity.documents.find(
+    const originalCaseDocument = caseEntity.docketEntries.find(
       doc => doc.documentType === documentType,
     );
-    const currentCaseDocument = caseToUpdate.documents.find(
+    const currentCaseDocument = caseToUpdate.docketEntries.find(
       doc => doc.documentType === documentType,
     );
 
     if (originalCaseDocument && currentCaseDocument) {
-      if (originalCaseDocument.documentId !== currentCaseDocument.documentId) {
+      if (
+        originalCaseDocument.docketEntryId !== currentCaseDocument.docketEntryId
+      ) {
         addNewInitialFilingToCase({
           applicationContext,
           caseEntity,

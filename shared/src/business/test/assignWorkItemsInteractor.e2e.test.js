@@ -43,15 +43,6 @@ describe('assignWorkItemsInteractor integration test', () => {
           state: 'AK',
         },
         contactSecondary: {},
-        docketRecord: [
-          {
-            description: 'first record',
-            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-            eventCode: 'P',
-            filingDate: '2018-03-01T00:01:00.000Z',
-            index: 1,
-          },
-        ],
         filingType: 'Myself',
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
@@ -74,7 +65,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       docketNumber,
     });
 
-    const { workItem } = createdCase.documents.find(
+    const { workItem } = createdCase.docketEntries.find(
       d => d.documentType === 'Petition',
     );
 
@@ -99,13 +90,13 @@ describe('assignWorkItemsInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19S',
         isInitializeCase: true,
         section: PETITIONS_SECTION,
         sentBy: 'Test Petitionsclerk',
@@ -120,13 +111,13 @@ describe('assignWorkItemsInteractor integration test', () => {
     });
 
     expect(
-      caseAfterAssign.documents.find(d => d.documentType === 'Petition'),
+      caseAfterAssign.docketEntries.find(d => d.documentType === 'Petition'),
     ).toMatchObject({
       documentType: 'Petition',
       workItem: {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        document: {
+        docketEntry: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
         },

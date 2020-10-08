@@ -40,10 +40,38 @@ const filterEmptyStrings = params => {
 };
 
 const getTableName = ({ applicationContext }) =>
-  `efcms-${
+  (applicationContext.environment &&
+    applicationContext.environment.dynamoDbTableName) ||
+  (applicationContext.getEnvironment() &&
+    applicationContext.getEnvironment().dynamoDbTableName);
+const getDeployTableName = ({ applicationContext }) =>
+  `efcms-deploy-${
     (applicationContext.environment || applicationContext.getEnvironment())
       .stage
   }`;
+
+exports.describeTable = async ({ applicationContext }) => {
+  const dynamoClient = applicationContext.getDynamoClient();
+
+  const params = {
+    TableName: getTableName({ applicationContext }),
+  };
+
+  return await dynamoClient.describeTable(params).promise();
+};
+
+exports.describeDeployTable = async ({ applicationContext }) => {
+  const dynamoClient = applicationContext.getDynamoClient({
+    useMasterRegion: true,
+  });
+
+  const params = {
+    TableName: getDeployTableName({ applicationContext }),
+  };
+
+  return await dynamoClient.describeTable(params).promise();
+};
+
 /**
  *
  * @param {object} params the params to put

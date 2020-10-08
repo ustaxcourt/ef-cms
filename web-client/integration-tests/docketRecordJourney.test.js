@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -32,11 +33,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile, 'Birmingham, Alabama', false);
   it('verifies docket entries exist for petition for an unserved case', async () => {
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    expect(formattedDocketEntries).toMatchObject([
+    expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'P',
@@ -49,11 +50,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   petitionsClerkSubmitsCaseToIrs(test);
   it('verifies docket entries exist for petition, APW, DISC and RQT for a served case', async () => {
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    expect(formattedDocketEntries).toMatchObject([
+    expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'P',
@@ -142,12 +143,12 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       isSavingForLater: true,
     });
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
     //4654- docket entries for initial filing type documents are not created until after the case has been served
-    expect(formattedDocketEntries[4]).toBeUndefined();
+    expect(formattedDocketEntriesOnDocketRecord[4]).toBeUndefined();
   });
 
   loginAs(test, 'petitionsclerk@example.com');
@@ -214,12 +215,12 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: test.docketNumber,
     });
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
     //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
-    expect(formattedDocketEntries[4]).toMatchObject({
+    expect(formattedDocketEntriesOnDocketRecord[4]).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'RQT',
       showNotServed: true,
@@ -261,11 +262,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     await test.runSequence('updatePetitionDetailsSequence');
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const feeEntry = formattedDocketEntries.find(
+    const feeEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'FEE',
     );
 
@@ -282,19 +283,19 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const uploadedDocument = test.draftOrders[0];
 
     await createCourtIssuedDocketEntry({
+      docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: uploadedDocument.documentId,
       eventCode: 'HEAR',
       test,
-      trialLocation: 'Brimingham, AL',
+      trialLocation: 'Birmingham, AL',
     });
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const docketEntry = formattedDocketEntries.find(
-      entry => entry.documentId === uploadedDocument.documentId,
+    const docketEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.docketEntryId === uploadedDocument.docketEntryId,
     );
     expect(docketEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
@@ -316,16 +317,16 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   docketClerkSignsOrder(test, 1);
   docketClerkAddsDocketEntryFromOrder(test, 1);
   it('verifies the docket record after adding a draft order to the docket record (not served)', async () => {
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const orderEntry = formattedDocketEntries[8];
+    const orderEntry = formattedDocketEntriesOnDocketRecord[8];
 
+    expect(orderEntry.index).toBeUndefined();
     expect(orderEntry).toMatchObject({
       createdAtFormatted: undefined,
       eventCode: 'O',
-      index: undefined,
       servedAtFormatted: undefined,
       showNotServed: true,
     });
@@ -343,11 +344,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   docketClerkAddsDocketEntryFromOrder(test, 2);
   docketClerkServesDocument(test, 2);
   it('verifies the docket record after adding a draft order to the docket record and serving', async () => {
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const orderEntry = formattedDocketEntries[8];
+    const orderEntry = formattedDocketEntriesOnDocketRecord[8];
 
     expect(orderEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
@@ -405,18 +406,18 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       isSavingForLater: true,
     });
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const entry = formattedDocketEntries[6];
+    const entry = formattedDocketEntriesOnDocketRecord[6];
 
-    test.documentId = entry.documentId;
+    test.docketEntryId = entry.docketEntryId;
 
+    expect(entry.index).toBeUndefined();
     expect(entry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'A',
-      index: undefined,
       showNotServed: true,
     });
   });
@@ -427,17 +428,17 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
 
     await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      documentId: test.documentId,
+      docketEntryId: test.docketEntryId,
     });
 
     await test.runSequence('servePaperFiledDocumentSequence');
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const servedEntry = formattedDocketEntries.find(
-      entry => entry.documentId === test.documentId,
+    const servedEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.docketEntryId === test.docketEntryId,
     );
 
     expect(servedEntry).toMatchObject({
@@ -455,11 +456,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
     test.docketNumber = caseDetail.docketNumber;
 
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    expect(formattedDocketEntries).toMatchObject([
+    expect(formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'P',
@@ -485,14 +486,41 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(test);
 
+  loginAs(test, 'docketclerk@example.com');
+  const today = applicationContext.getUtilities().formatNow('MMDDYYYY');
+  const [todayMonth, todayDay, todayYear] = today.split('/');
+
+  docketClerkAddsDocketEntryWithoutFile(test, {
+    dateReceivedDay: todayDay,
+    dateReceivedMonth: todayMonth,
+    dateReceivedYear: todayYear,
+  });
+  it('verifies the docket record after filing a paper document without a file', async () => {
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
+
+    expect(formattedDocketEntriesOnDocketRecord.length).toEqual(4);
+    const entry = formattedDocketEntriesOnDocketRecord[3];
+
+    expect(entry.index).toBeUndefined();
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'ADMR',
+      isInProgress: true,
+      showNotServed: true,
+      showServed: false,
+    });
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerFilesADocumentForCase(test, fakeFile);
   it('verifies the docket record after filing a document electronically after serving the petition', async () => {
-    const { formattedDocketEntries } = await getFormattedCaseDetailForTest(
-      test,
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
 
-    const entry = formattedDocketEntries[3];
+    const entry = formattedDocketEntriesOnDocketRecord[3];
 
     expect(entry).toMatchObject({
       createdAtFormatted: expect.anything(),

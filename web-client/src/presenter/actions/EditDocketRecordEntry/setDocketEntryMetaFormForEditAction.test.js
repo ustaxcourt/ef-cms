@@ -12,37 +12,23 @@ describe('setDocketEntryMetaFormForEditAction', () => {
 
   beforeAll(() => {
     caseDetail = {
-      docketNumber: '123-45',
-      docketRecord: [
+      docketEntries: [
+        { index: 1 },
         {
-          index: 1,
-        },
-        {
-          documentId: '123',
-          index: 2,
-        },
-        {
-          documentId: '234',
-          index: 3,
-        },
-        {
-          documentId: '456',
-          index: 4,
-          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
-        },
-      ],
-      documents: [
-        {
-          documentId: '123',
+          docketEntryId: '123',
           eventCode: 'O',
+          index: 2,
+          isOnDocketRecord: true,
           lodged: false,
         },
         {
           certificateOfService: true,
           certificateOfServiceDate: '2020-02-02',
-          documentId: '234',
+          docketEntryId: '234',
           eventCode: 'A',
           filingDate: '2020-01-01',
+          index: 3,
+          isOnDocketRecord: true,
           lodged: false,
           servedAt: '2020-01-01',
           servedParties: [{ name: 'Party Man' }],
@@ -50,12 +36,16 @@ describe('setDocketEntryMetaFormForEditAction', () => {
         {
           certificateOfService: true,
           certificateOfServiceDate: '2020-02-02',
-          documentId: '456',
+          docketEntryId: '456',
           eventCode: 'A',
           filingDate: '2020-01-01',
+          index: 4,
+          isOnDocketRecord: true,
           lodged: false,
+          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
         },
       ],
+      docketNumber: '123-45',
     };
   });
 
@@ -85,7 +75,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     });
 
     expect(result.state.form).toMatchObject({
-      documentId: '123',
+      docketEntryId: '123',
       eventCode: 'O',
       index: 2,
       lodged: false,
@@ -109,7 +99,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
       certificateOfServiceDay: '2',
       certificateOfServiceMonth: '2',
       certificateOfServiceYear: '2020',
-      documentId: '234',
+      docketEntryId: '234',
       eventCode: 'A',
       filingDate: '2020-01-01',
       filingDateDay: '1',

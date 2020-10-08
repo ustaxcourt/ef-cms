@@ -289,6 +289,13 @@ table.work-queue {
     }
   }
 
+  th.message-unread-column,
+  td.message-unread-column {
+    width: 20px;
+    padding: 15px 0;
+    text-align: right;
+  }
+
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
 
@@ -414,6 +421,7 @@ table.docket-record {
       text-align: right;
 
       svg {
+        margin-top: 4px;
         margin-right: 0;
       }
     }
@@ -433,7 +441,7 @@ table.docket-record {
 
     tr.qc-untouched {
       td {
-        font-weight: bold;
+        font-weight: $font-semibold;
       }
       .fa-star {
         color: color($theme-color-secondary-dark);
@@ -444,6 +452,10 @@ table.docket-record {
       td {
         background: $color-primary-alt-lightest;
       }
+    }
+
+    button.view-pdf-link {
+      padding: 0;
     }
   }
 

@@ -12,7 +12,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -104,12 +104,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         trialSessionId: trialSessionEntity.trialSessionId,
       });
 
-    const newNoticeOfTrialIssuedDocumentId = applicationContext.getUniqueId();
+    const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: noticeOfTrialIssuedFile,
-      documentId: newNoticeOfTrialIssuedDocumentId,
+      key: newNoticeOfTrialIssuedDocketEntryId,
     });
 
     const trialSessionStartDate = applicationContext
@@ -118,13 +118,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocumentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
 
-    const noticeOfTrialDocument = new Document(
+    const noticeOfTrialDocketEntry = new DocketEntry(
       {
-        description: noticeOfTrialDocumentTitle,
-        documentId: newNoticeOfTrialIssuedDocumentId,
+        docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
+        isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
@@ -133,7 +133,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(noticeOfTrialDocument);
+    noticeOfTrialDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeOfTrialDocketEntry.docketEntryId,
+      });
+
+    caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
     caseEntity.setNoticeOfTrialDate();
 
     // Standing Pretrial Notice/Order
@@ -167,21 +174,22 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
     }
 
-    const newStandingPretrialDocumentId = applicationContext.getUniqueId();
+    const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: standingPretrialFile,
-      documentId: newStandingPretrialDocumentId,
+      key: newStandingPretrialDocketEntryId,
     });
 
-    const standingPretrialDocument = new Document(
+    const standingPretrialDocketEntry = new DocketEntry(
       {
         description: standingPretrialDocumentTitle,
-        documentId: newStandingPretrialDocumentId,
+        docketEntryId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
+        isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
@@ -189,22 +197,29 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.addDocument(standingPretrialDocument);
+    standingPretrialDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: standingPretrialDocketEntry.docketEntryId,
+      });
+
+    caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
     // Serve notice
     const servedParties = await serveNoticesForCase({
       caseEntity,
-      noticeDocumentEntity: noticeOfTrialDocument,
+      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
       noticeDocumentPdfData: noticeOfTrialIssuedFile,
-      standingPretrialDocumentEntity: standingPretrialDocument,
+      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
       standingPretrialPdfData: standingPretrialFile,
     });
 
-    noticeOfTrialDocument.setAsServed(servedParties.all);
-    standingPretrialDocument.setAsServed(servedParties.all);
+    noticeOfTrialDocketEntry.setAsServed(servedParties.all);
+    standingPretrialDocketEntry.setAsServed(servedParties.all);
 
-    caseEntity.updateDocument(noticeOfTrialDocument); // to generate an index
-    caseEntity.updateDocument(standingPretrialDocument); // to generate an index
+    caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
+    caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -221,17 +236,17 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    *
    * @param {object} deconstructed function arguments
    * @param {object} deconstructed.caseEntity the case entity
-   * @param {object} deconstructed.noticeDocumentEntity the notice document entity
+   * @param {object} deconstructed.noticeDocketEntryEntity the notice document entity
    * @param {Uint8Array} deconstructed.noticeDocumentPdfData the pdf data of the notice doc
-   * @param {object} deconstructed.standingPretrialDocumentEntity the standing pretrial document entity
+   * @param {object} deconstructed.standingPretrialDocketEntryEntity the standing pretrial document entity
    * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data of the standing pretrial doc
    * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticesForCase = async ({
     caseEntity,
-    noticeDocumentEntity,
+    noticeDocketEntryEntity,
     noticeDocumentPdfData,
-    standingPretrialDocumentEntity,
+    standingPretrialDocketEntryEntity,
     standingPretrialPdfData,
   }) => {
     const servedParties = aggregatePartiesForService(caseEntity);
@@ -239,14 +254,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeDocumentEntity,
+      docketEntryEntity: noticeDocketEntryEntity,
       servedParties,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: standingPretrialDocumentEntity,
+      docketEntryEntity: standingPretrialDocketEntryEntity,
       servedParties,
     });
 
@@ -303,15 +318,15 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   }
 
   let hasPaper = newPdfDoc.getPages().length;
-  let documentId = null;
+  let docketEntryId = null;
   let pdfUrl = null;
   if (hasPaper) {
     const paperServicePdfData = await newPdfDoc.save();
-    documentId = applicationContext.getUniqueId();
+    docketEntryId = applicationContext.getUniqueId();
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
-      documentId,
+      key: docketEntryId,
       useTempBucket: true,
     });
     hasPaper = true;
@@ -319,7 +334,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     pdfUrl = (
       await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
         applicationContext,
-        documentId,
+        key: docketEntryId,
         useTempBucket: true,
       })
     ).url;
@@ -329,7 +344,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      documentId,
+      docketEntryId,
       hasPaper,
       pdfUrl,
     },

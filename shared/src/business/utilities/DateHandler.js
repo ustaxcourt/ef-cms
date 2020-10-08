@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+const momentPackage = require('moment');
 
 const FORMATS = {
   DATE_TIME: 'MM/DD/YY hh:mm a',
@@ -195,12 +196,81 @@ const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
   return differenceInDays;
 };
 
+/**
+ * properly casts a variety of inputs to a UTC ISOString
+ * directly using the moment library to inspect the formatting of the input
+ * before sending to application context functions to be transformed
+ *
+ * @param {object} applicationContext the application context
+ * @param {string} dateString the date string to cast to an ISO string
+ * @returns {string} the ISO string.
+ */
+const castToISO = dateString => {
+  if (dateString === '') {
+    return null;
+  }
+
+  const formatDate = ds => createISODateString(ds, 'YYYY-MM-DD');
+
+  dateString = dateString
+    .split('-')
+    .map(segment => segment.padStart(2, '0'))
+    .join('-');
+  if (momentPackage.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
+    return formatDate(`${dateString}-01-01`);
+  } else if (momentPackage.utc(dateString, 'YYYY-MM-DD', true).isValid()) {
+    return formatDate(dateString);
+  } else if (isStringISOFormatted(dateString)) {
+    return dateString;
+  } else {
+    return '-1';
+  }
+};
+
+/**
+ * checks if the new date contains all expected parts and returns date as an
+ * ISO string; otherwise, it returns null
+ *
+ * @param {object} applicationContext the application context*
+ * @param {string} updatedDateString the new date string to verify
+ * @returns {string} the updatedDateString if everything is correct.
+ */
+const checkDate = updatedDateString => {
+  const hasAllDateParts = /.+-.+-.+/;
+
+  if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
+    updatedDateString = null;
+  } else if (dateHasText(updatedDateString)) {
+    updatedDateString = '-1';
+  } else if (
+    !updatedDateString.includes('undefined') &&
+    hasAllDateParts.test(updatedDateString)
+  ) {
+    updatedDateString = castToISO(updatedDateString);
+  } else {
+    return null;
+  }
+  return updatedDateString;
+};
+
+const dateHasText = updatedDateString => {
+  const letterMatcher = /[0-9]+$/;
+  const dateParts = updatedDateString.split('-');
+  return (
+    !letterMatcher.test(dateParts[0]) ||
+    !letterMatcher.test(dateParts[1]) ||
+    !letterMatcher.test(dateParts[2])
+  );
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
   calculateDifferenceInDays,
   calculateISODate,
   calendarDatesCompared,
+  castToISO,
+  checkDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,

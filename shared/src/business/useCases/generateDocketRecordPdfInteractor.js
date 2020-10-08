@@ -1,5 +1,6 @@
 const { Case } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
+const { User } = require('../entities/User');
 
 /**
  * generateDocketRecordPdfInteractor
@@ -15,6 +16,19 @@ exports.generateDocketRecordPdfInteractor = async ({
   docketRecordSort,
   includePartyDetail = false,
 }) => {
+  const user = applicationContext.getCurrentUser();
+  const isAssociated = await applicationContext
+    .getPersistenceGateway()
+    .verifyCaseForUser({
+      applicationContext,
+      docketNumber,
+      userId: user.userId,
+    });
+  const isInternal = User.isInternalUser(user.role);
+
+  const shouldIncludePartyDetail =
+    includePartyDetail && (isAssociated || isInternal);
+
   const caseSource = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -42,8 +56,10 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketNumberWithSuffix: `${caseEntity.docketNumber}${
         caseEntity.docketNumberSuffix || ''
       }`,
-      entries: formattedCaseDetail.docketRecordWithDocument,
-      includePartyDetail,
+      entries: formattedCaseDetail.formattedDocketEntries.filter(
+        d => d.isOnDocketRecord,
+      ),
+      includePartyDetail: shouldIncludePartyDetail,
     },
   });
 

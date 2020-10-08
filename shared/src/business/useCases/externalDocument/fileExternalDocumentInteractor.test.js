@@ -16,7 +16,7 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
-  const mockDocumentId = applicationContext.getUniqueId();
+  const mockDocketEntryId = applicationContext.getUniqueId();
 
   let caseRecord;
 
@@ -35,12 +35,11 @@ describe('fileExternalDocumentInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      documents: [
+      docketEntries: [
         {
-          description: 'first record',
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: '45678-18',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+          documentTitle: 'first record',
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
@@ -50,30 +49,31 @@ describe('fileExternalDocumentInteractor', () => {
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -119,7 +119,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocumentId,
+        primaryDocumentId: mockDocketEntryId,
       },
     });
 
@@ -133,7 +133,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase.documents[4].servedAt).toBeDefined();
+    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -148,7 +148,7 @@ describe('fileExternalDocumentInteractor', () => {
         primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         scenario: 'Nonstandard H',
         secondaryDocument: {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentTitle: 'Motion for Judgment on the Pleadings',
           documentType: 'Motion for Judgment on the Pleadings',
           eventCode: 'M121',
@@ -156,7 +156,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
         secondarySupportingDocuments: [
           {
-            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
             documentTitle: 'Motion for in Camera Review',
             documentType: 'Motion for in Camera Review',
             eventCode: 'M135',
@@ -165,7 +165,7 @@ describe('fileExternalDocumentInteractor', () => {
         ],
         supportingDocuments: [
           {
-            documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
             documentTitle: 'Civil Penalty Approval Form',
             documentType: 'Civil Penalty Approval Form',
             eventCode: 'CIVP',
@@ -175,7 +175,7 @@ describe('fileExternalDocumentInteractor', () => {
       },
     });
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-    expect(updatedCase.documents).toMatchObject([
+    expect(updatedCase.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
       {},
       {},
@@ -208,7 +208,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+      docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
@@ -229,8 +229,8 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase.documents[3].status).toBeUndefined();
-    expect(updatedCase.documents[3].servedAt).toBeUndefined();
+    expect(updatedCase.docketEntries[3].status).toBeUndefined();
+    expect(updatedCase.docketEntries[3].servedAt).toBeUndefined();
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {
@@ -326,7 +326,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
-      documentIds: [],
+      docketEntryIds: [],
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,

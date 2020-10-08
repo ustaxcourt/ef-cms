@@ -20,23 +20,23 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       },
     );
 
-    const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
     const petitionDocument = getPetitionDocumentForCase(
       test.getState('caseDetail'),
     );
-    expect(documentId).toBeDefined();
-    expect(petitionDocument.documentId).toBeDefined();
+    expect(docketEntryId).toBeDefined();
+    expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId,
       docketNumber: test.docketNumber,
-      documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('documentId')).toEqual(documentId);
+    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     expect(test.getState('form')).toMatchObject({
       dateReceivedDay: '1',
@@ -78,7 +78,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
-      value: petitionDocument.documentId,
+      value: petitionDocument.docketEntryId,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -129,11 +129,11 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description: 'Notice of No Objection to Petition',
+      descriptionDisplay: 'Notice of No Objection to Petition',
     });
 
-    const updatedDocument = caseDetailFormatted.documents.find(
-      document => document.documentId === documentId,
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+      document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Notice of No Objection to Petition',

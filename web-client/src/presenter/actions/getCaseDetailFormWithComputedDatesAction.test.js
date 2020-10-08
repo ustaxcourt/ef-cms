@@ -1,49 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  castToISO,
-  getCaseDetailFormWithComputedDatesAction,
-} from './getCaseDetailFormWithComputedDatesAction';
+import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const modules = { presenter };
-
-describe('castToISO', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
-  it('returns an iso string when the date string passed in is valid', () => {
-    expect(castToISO(applicationContext, '2010-10-10')).toEqual(
-      '2010-10-10T04:00:00.000Z',
-    );
-  });
-
-  it('returns an iso string when the date string of 2009-01-01 passed in is valid', () => {
-    expect(castToISO(applicationContext, '2009-01-01')).toEqual(
-      '2009-01-01T05:00:00.000Z',
-    );
-  });
-
-  it('returns an iso string for 01-01-2009 when the date string of 2009 is passed in', () => {
-    expect(castToISO(applicationContext, '2009')).toEqual(
-      '2009-01-01T05:00:00.000Z',
-    );
-  });
-
-  it('returns null when the date string passed in is invalid', () => {
-    expect(castToISO(applicationContext, 'x-10-10')).toEqual('-1');
-  });
-
-  it('returns null when the date string passed in is an empty string', () => {
-    expect(castToISO(applicationContext, '')).toEqual(null);
-  });
-
-  it('returns the same iso string passed in when an iso string is passed in', () => {
-    expect(castToISO(applicationContext, '1990-01-01T05:00:00.000Z')).toEqual(
-      '1990-01-01T05:00:00.000Z',
-    );
-  });
-});
 
 describe('getCaseDetailFormWithComputedDatesAction', () => {
   beforeAll(() => {
@@ -79,7 +39,7 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     });
   });
 
-  it('should leave the dates as -1 if they are invalid', async () => {
+  it('should leave the dates as -1 when they are invalid', async () => {
     const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
       state: {
@@ -109,7 +69,7 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     });
   });
 
-  it('should delete the date if year is missing', async () => {
+  it('should return -1 when the year is missing', async () => {
     const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
 
@@ -136,15 +96,15 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     });
     expect(results.output).toEqual({
       formWithComputedDates: {
-        irsNoticeDate: null,
-        petitionPaymentDate: null,
-        petitionPaymentWaivedDate: null,
-        receivedAt: null,
+        irsNoticeDate: '-1',
+        petitionPaymentDate: '-1',
+        petitionPaymentWaivedDate: '-1',
+        receivedAt: '-1',
       },
     });
   });
 
-  it('should delete the date if year and month are missing', async () => {
+  it('should return -1 when the year and month are missing', async () => {
     const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
 
@@ -160,9 +120,9 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
           paymentDateWaivedMonth: '',
           paymentDateWaivedYear: '',
           paymentDateYear: '',
-          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
-          receivedAt: '2018-12-24T05:00:00.000Z',
+          petitionPaymentDate: '2018-12-24',
+          petitionPaymentWaivedDate: '2018-12-24',
+          receivedAt: '2018-12-24',
           receivedAtDay: '24',
           receivedAtMonth: '',
           receivedAtYear: '',
@@ -171,10 +131,45 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     });
     expect(results.output).toEqual({
       formWithComputedDates: {
-        irsNoticeDate: null,
-        petitionPaymentDate: null,
-        petitionPaymentWaivedDate: null,
-        receivedAt: null,
+        irsNoticeDate: '-1',
+        petitionPaymentDate: '-1',
+        petitionPaymentWaivedDate: '-1',
+        receivedAt: '-1',
+      },
+    });
+  });
+
+  it('should return -1 when there are alphanumeric characters present in the date', async () => {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
+      modules,
+
+      state: {
+        form: {
+          irsDay: '24',
+          irsMonth: 'example',
+          irsNoticeDate: null,
+          irsYear: '',
+          paymentDateDay: '24',
+          paymentDateMonth: 'example',
+          paymentDateWaivedDay: '24',
+          paymentDateWaivedMonth: 'example',
+          paymentDateWaivedYear: '',
+          paymentDateYear: '',
+          petitionPaymentDate: '2018-12-24',
+          petitionPaymentWaivedDate: '2018-12-24',
+          receivedAt: '2018-12-24',
+          receivedAtDay: '24',
+          receivedAtMonth: '',
+          receivedAtYear: 'example',
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      formWithComputedDates: {
+        irsNoticeDate: '-1',
+        petitionPaymentDate: '-1',
+        petitionPaymentWaivedDate: '-1',
+        receivedAt: '-1',
       },
     });
   });
@@ -187,7 +182,7 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
         form: {
           irsDay: '',
           irsMonth: '',
-          irsNoticeDate: '2018-12-24T05:00:00.000Z',
+          irsNoticeDate: '2018-12-24',
           irsYear: '',
           paymentDateDay: '',
           paymentDateMonth: '',
@@ -195,9 +190,9 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
           paymentDateWaivedMonth: '',
           paymentDateWaivedYear: '',
           paymentDateYear: '',
-          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
-          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
-          receivedAt: '2018-12-24T05:00:00.000Z',
+          petitionPaymentDate: '2018-12-24',
+          petitionPaymentWaivedDate: '2018-12-24',
+          receivedAt: '2018-12-24',
           receivedAtDay: '',
           receivedAtMonth: '',
           receivedAtYear: '',

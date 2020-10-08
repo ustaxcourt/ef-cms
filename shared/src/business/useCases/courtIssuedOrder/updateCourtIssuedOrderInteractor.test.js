@@ -31,43 +31,34 @@ describe('updateCourtIssuedOrderInteractor', () => {
       state: 'CA',
     },
     createdAt: '',
-    docketNumber: '45678-18',
-    docketRecord: [
+    docketEntries: [
       {
-        description: 'first record',
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-        eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
-      },
-    ],
-    documents: [
-      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '45678-18',
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
       {
+        docketEntryId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         docketNumber: '45678-18',
-        documentId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
       {
+        docketEntryId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         docketNumber: '45678-18',
-        documentId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
     ],
+    docketNumber: '45678-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -106,7 +97,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     await expect(
       updateCourtIssuedOrderInteractor({
         applicationContext,
-        documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
@@ -122,7 +113,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     await expect(
       updateCourtIssuedOrderInteractor({
         applicationContext,
-        documentIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
+        docketEntryIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
@@ -135,11 +126,11 @@ describe('updateCourtIssuedOrderInteractor', () => {
   it('update existing document within case', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
-        draftState: {},
+        draftOrderState: {},
         eventCode: 'OSC',
       },
     });
@@ -149,19 +140,19 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(3);
   });
 
   it('stores documentContents in S3 if present', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentContents: 'the contents!',
         documentType: 'Order to Show Cause',
-        draftState: {
+        draftOrderState: {
           documentContents: 'the contents!',
           richText: '<b>the contents!</b>',
         },
@@ -179,22 +170,22 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toMatchObject({ useTempBucket: false });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[2].documentContents,
+        .caseToUpdate.docketEntries[2].documentContents,
     ).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[2].draftState,
+        .caseToUpdate.docketEntries[2].draftOrderState,
     ).toBeUndefined();
   });
 
   it('does not update non-editable fields on document', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
-        draftState: {},
+        draftOrderState: {},
         eventCode: 'OSC',
         judge: 'Judge Judgy',
       },
@@ -205,7 +196,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents.length,
+        .caseToUpdate.docketEntries.length,
     ).toEqual(3);
   });
 });

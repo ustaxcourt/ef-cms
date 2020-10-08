@@ -12,7 +12,7 @@ export const DocumentViewer = connect(
       sequences.loadDefaultDocketViewerDocumentToDisplaySequence,
     setViewerDocumentToDisplaySequence:
       sequences.setViewerDocumentToDisplaySequence,
-    viewDocumentId: state.viewerDocumentToDisplay.documentId,
+    viewDocumentId: state.viewerDocumentToDisplay.docketEntryId,
   },
   function DocumentViewer({
     formattedCaseDetail,
@@ -36,57 +36,59 @@ export const DocumentViewer = connect(
                 <div className="grid-col-5">Filings and proceedings</div>
                 <div className="grid-col-2"></div>
               </div>
-              {formattedCaseDetail.formattedDocketEntries.map((entry, idx) => {
-                // TODO: should live in a computed
-                if (entry.isFileAttached) {
-                  return (
-                    <Button
-                      className={classNames(
-                        'usa-button--unstyled attachment-viewer-button',
-                        viewDocumentId === entry.documentId && 'active',
-                      )}
-                      isActive={viewDocumentId === entry.documentId}
-                      key={idx}
-                      onClick={() => {
-                        setViewerDocumentToDisplaySequence({
-                          viewerDocumentToDisplay: entry,
-                        });
-                      }}
-                    >
-                      <div className="grid-row margin-left-205">
-                        <div className="grid-col-2 text-align-center">
-                          {entry.index}
-                        </div>
-                        <div
-                          className={classNames(
-                            'grid-col-3',
-                            entry.isStricken && 'stricken-docket-record',
-                          )}
-                        >
-                          {entry.createdAtFormatted}
-                        </div>
-                        <div className="grid-col-5">
-                          <span
+              {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
+                (entry, idx) => {
+                  // TODO: should live in a computed
+                  if (entry.isFileAttached) {
+                    return (
+                      <Button
+                        className={classNames(
+                          'usa-button--unstyled attachment-viewer-button',
+                          viewDocumentId === entry.docketEntryId && 'active',
+                        )}
+                        isActive={viewDocumentId === entry.docketEntryId}
+                        key={idx}
+                        onClick={() => {
+                          setViewerDocumentToDisplaySequence({
+                            viewerDocumentToDisplay: entry,
+                          });
+                        }}
+                      >
+                        <div className="grid-row margin-left-205">
+                          <div className="grid-col-2 text-align-center">
+                            {entry.index}
+                          </div>
+                          <div
                             className={classNames(
+                              'grid-col-3',
                               entry.isStricken && 'stricken-docket-record',
                             )}
                           >
-                            {entry.description}
-                          </span>
-                          {entry.isStricken && ' (STRICKEN)'}
-                        </div>
-                        <div className="grid-col-2 padding-left-105">
-                          {entry.showNotServed && (
-                            <span className="text-semibold not-served">
-                              Not served
+                            {entry.createdAtFormatted}
+                          </div>
+                          <div className="grid-col-5">
+                            <span
+                              className={classNames(
+                                entry.isStricken && 'stricken-docket-record',
+                              )}
+                            >
+                              {entry.descriptionDisplay}
                             </span>
-                          )}
+                            {entry.isStricken && ' (STRICKEN)'}
+                          </div>
+                          <div className="grid-col-2 padding-left-105">
+                            {entry.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </Button>
-                  );
-                }
-              })}
+                      </Button>
+                    );
+                  }
+                },
+              )}
             </div>
           </div>
 

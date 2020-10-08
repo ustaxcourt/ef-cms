@@ -19,19 +19,19 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       },
     );
 
-    const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
-    expect(documentId).toBeDefined();
+    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
+    expect(docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId,
       docketNumber: test.docketNumber,
-      documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('documentId')).toEqual(documentId);
+    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
@@ -71,11 +71,11 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description: 'First Request for Admissions some additional info',
+      descriptionDisplay: 'First Request for Admissions some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.documents.find(
-      document => document.documentId === documentId,
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+      document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
       documentTitle: 'First Request for Admissions',

@@ -30,7 +30,7 @@ describe('messages journey', () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
-    test.documentId = caseDetail.documents[0].documentId;
+    test.documentId = caseDetail.docketEntries[0].docketEntryId;
   });
 
   loginAs(test, 'petitionsclerk@example.com');

@@ -121,9 +121,9 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       isSavingForLater: true,
     });
 
-    test.documentId = test
-      .getState('caseDetail.documents')
-      .find(doc => doc.eventCode === docketEntryEventCode).documentId;
+    test.docketEntryId = test
+      .getState('caseDetail.docketEntries')
+      .find(doc => doc.eventCode === docketEntryEventCode).docketEntryId;
 
     expect(test.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',

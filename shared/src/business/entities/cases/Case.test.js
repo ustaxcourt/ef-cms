@@ -71,7 +71,7 @@ describe('Case entity', () => {
     ]);
   });
 
-  describe('archivedDocuments', () => {
+  describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
       myCase = new Case(
@@ -82,7 +82,7 @@ describe('Case entity', () => {
       );
     });
 
-    it('should not populate archivedDocuments when the user is an external user and filtered is true', () => {
+    it('should not populate archivedDocketEntries when the user is an external user and filtered is true', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
       ); //petitioner user
@@ -90,28 +90,30 @@ describe('Case entity', () => {
       myCase = new Case(
         {
           ...MOCK_CASE,
-          archivedDocuments: [...MOCK_DOCUMENTS],
+          archivedDocketEntries: [...MOCK_DOCUMENTS],
           userId: applicationContext.getCurrentUser().userId,
         },
         { applicationContext, filtered: true },
       );
 
-      expect(myCase.archivedDocuments).toBeUndefined();
+      expect(myCase.archivedDocketEntries).toBeUndefined();
     });
 
-    it('should set archivedDocuments to the value provided when the user is an internal user', () => {
+    it('should set archivedDocketEntries to the value provided when the user is an internal user', () => {
       myCase = new Case(
         {
           ...MOCK_CASE,
-          archivedDocuments: [...MOCK_DOCUMENTS],
+          archivedDocketEntries: [...MOCK_DOCUMENTS],
         },
         { applicationContext },
       );
-      expect(myCase.archivedDocuments.length).toEqual(MOCK_DOCUMENTS.length);
+      expect(myCase.archivedDocketEntries.length).toEqual(
+        MOCK_DOCUMENTS.length,
+      );
     });
 
-    it('should set archivedDocuments to an empty list when a value is not provided and the user is an internal user', () => {
-      expect(myCase.archivedDocuments).toEqual([]);
+    it('should set archivedDocketEntries to an empty list when a value is not provided and the user is an internal user', () => {
+      expect(myCase.archivedDocketEntries).toEqual([]);
     });
   });
 
@@ -564,12 +566,12 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid case with a document', () => {
+    it('Creates an invalid case with a docket entry', () => {
       const myCase = new Case(
         {
-          documents: [
+          docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               documentType: 'testing',
             },
           ],
@@ -582,10 +584,10 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid case with no documents', () => {
+    it('Creates an invalid case with no docket entries', () => {
       const myCase = new Case(
         {
-          documents: [],
+          docketEntries: [],
         },
         {
           applicationContext,
@@ -949,19 +951,6 @@ describe('Case entity', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
-          docketRecord: [
-            {
-              description: 'Petition',
-              documentId: '123',
-              filedBy: 'Test Petitioner',
-              filingDate: '2019-03-01T21:42:29.073Z',
-            },
-            {
-              description:
-                'Request for Place of Trial at Charleston, West Virginia',
-              filingDate: '2019-03-01T21:42:29.073Z',
-            },
-          ],
         },
         {
           applicationContext,
@@ -1199,29 +1188,6 @@ describe('Case entity', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
-          docketRecord: [
-            {
-              index: 1,
-            },
-            {
-              index: 2,
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const nextIndex = caseRecord.generateNextDocketRecordIndex();
-      expect(nextIndex).toEqual(4); // because there is one document with isOnDocketRecord = true
-    });
-
-    it('returns an index of 1 if the docketRecord array is empty', () => {
-      const caseRecord = new Case(
-        {
-          ...MOCK_CASE,
-          docketRecord: [],
         },
         {
           applicationContext,
@@ -1231,15 +1197,30 @@ describe('Case entity', () => {
       const nextIndex = caseRecord.generateNextDocketRecordIndex();
       expect(nextIndex).toEqual(2); // because there is one document with isOnDocketRecord = true
     });
+
+    it('returns an index of 1 if the docketEntries array is empty', () => {
+      const caseRecord = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const nextIndex = caseRecord.generateNextDocketRecordIndex();
+      expect(nextIndex).toEqual(1); // because there is one document with isOnDocketRecord = true
+    });
   });
 
-  describe('archiveDocument', () => {
+  describe('archiveDocketEntry', () => {
     let caseRecord;
-    let documentToArchive;
+    let docketEntryToArchive;
     beforeEach(() => {
-      documentToArchive = {
+      docketEntryToArchive = {
         archived: undefined,
-        documentId: '79c29d3f-d292-482c-b722-388577154664',
+        docketEntryId: '79c29d3f-d292-482c-b722-388577154664',
         documentType: 'Order',
         eventCode: 'O',
         filedBy: 'Test Petitioner',
@@ -1250,7 +1231,7 @@ describe('Case entity', () => {
       caseRecord = new Case(
         {
           ...MOCK_CASE,
-          documents: [...MOCK_CASE.documents, documentToArchive],
+          docketEntries: [...MOCK_CASE.docketEntries, docketEntryToArchive],
         },
         {
           applicationContext,
@@ -1258,30 +1239,36 @@ describe('Case entity', () => {
       );
     });
 
-    it('marks the document as archived', () => {
-      caseRecord.archiveDocument(documentToArchive, { applicationContext });
-      const archivedDocument = caseRecord.archivedDocuments.find(
-        d => d.documentId === documentToArchive.documentId,
+    it('marks the docket entry as archived', () => {
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      });
+      const archivedDocketEntry = caseRecord.archivedDocketEntries.find(
+        d => d.docketEntryId === docketEntryToArchive.docketEntryId,
       );
-      expect(archivedDocument.archived).toBeTruthy();
+      expect(archivedDocketEntry.archived).toBeTruthy();
     });
 
-    it('adds the provided document to the case archivedDocuments', () => {
-      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+    it('adds the provided docket entry to the case archivedDocketEntries', () => {
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      });
 
       expect(
-        caseRecord.archivedDocuments.find(
-          d => d.documentId === documentToArchive.documentId,
+        caseRecord.archivedDocketEntries.find(
+          d => d.docketEntryId === docketEntryToArchive.docketEntryId,
         ),
       ).toBeDefined();
     });
 
-    it('removes the provided document from the case documents array', () => {
-      caseRecord.archiveDocument(documentToArchive, { applicationContext });
+    it('removes the provided docket entry from the case docketEntries array', () => {
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      });
 
       expect(
-        caseRecord.documents.find(
-          d => d.documentId === documentToArchive.documentId,
+        caseRecord.docketEntries.find(
+          d => d.docketEntryId === docketEntryToArchive.docketEntryId,
         ),
       ).toBeUndefined();
     });
@@ -1292,7 +1279,7 @@ describe('Case entity', () => {
     let correspondenceToArchive;
     beforeEach(() => {
       correspondenceToArchive = new Correspondence({
-        documentId: '123-abc',
+        correspondenceId: '123-abc',
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
       });
@@ -1312,34 +1299,22 @@ describe('Case entity', () => {
       caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
-      const archivedDocument = caseRecord.archivedCorrespondences.find(
-        d => d.documentId === correspondenceToArchive.documentId,
+      const archivedDocketEntry = caseRecord.archivedCorrespondences.find(
+        d => d.correspondenceId === correspondenceToArchive.correspondenceId,
       );
-      expect(archivedDocument.archived).toBeTruthy();
+      expect(archivedDocketEntry.archived).toBeTruthy();
     });
 
-    it('adds the provided document to the case archivedDocuments', () => {
+    it('adds the provided document to the case archivedDocketEntries', () => {
       caseRecord.archiveCorrespondence(correspondenceToArchive, {
         applicationContext,
       });
 
       expect(
         caseRecord.archivedCorrespondences.find(
-          d => d.documentId === correspondenceToArchive.documentId,
+          d => d.correspondenceId === correspondenceToArchive.correspondenceId,
         ),
       ).toBeDefined();
-    });
-
-    it('removes the provided document from the case documents array', () => {
-      caseRecord.archiveCorrespondence(correspondenceToArchive, {
-        applicationContext,
-      });
-
-      expect(
-        caseRecord.documents.find(
-          d => d.documentId === correspondenceToArchive.documentId,
-        ),
-      ).toBeUndefined();
     });
   });
 
@@ -1384,21 +1359,21 @@ describe('Case entity', () => {
   });
 
   describe('addDocument', () => {
-    it('attaches the document to the case', () => {
+    it('attaches the docket entry to the case', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
       );
-      caseToVerify.addDocument({
-        documentId: '123',
+      caseToVerify.addDocketEntry({
+        docketEntryId: '123',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
-      expect(caseToVerify.documents.length).toEqual(1);
-      expect(caseToVerify.documents[0]).toMatchObject({
-        documentId: '123',
+      expect(caseToVerify.docketEntries.length).toEqual(1);
+      expect(caseToVerify.docketEntries[0]).toMatchObject({
+        docketEntryId: '123',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
@@ -1423,8 +1398,8 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(1);
-      expect(caseToVerify.documents[0]).toMatchObject({
+      expect(caseToVerify.docketEntries.length).toEqual(1);
+      expect(caseToVerify.docketEntries[0]).toMatchObject({
         index: 1,
         isMinuteEntry: true,
         isOnDocketRecord: true,
@@ -1446,7 +1421,7 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(0);
+      expect(caseToVerify.docketEntries.length).toEqual(0);
     });
 
     it('should not create a notice of docket number change document if suffix has not changed', () => {
@@ -1460,28 +1435,28 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(0);
+      expect(caseToVerify.docketEntries.length).toEqual(0);
     });
 
     it('should add notice of docket number change document when the docket number changes from the last updated docket number', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very Berry New Caption',
-          docketNumber: '123-19',
-          documents: [
+          docketEntries: [
             {
-              description:
+              documentTitle:
                 "Docket Number is amended from '123-19A' to '123-19B'",
               index: 1,
               isOnDocketRecord: true,
             },
             {
-              description:
+              documentTitle:
                 "Docket Number is amended from '123-19B' to '123-19P'",
               index: 2,
               isOnDocketRecord: true,
             },
           ],
+          docketNumber: '123-19',
           status: CASE_STATUS_TYPES.generalDocket,
         },
         {
@@ -1492,12 +1467,12 @@ describe('Case entity', () => {
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(3);
-      expect(caseToVerify.documents[2].description).toEqual(
+      expect(caseToVerify.docketEntries.length).toEqual(3);
+      expect(caseToVerify.docketEntries[2].documentTitle).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
-      expect(caseToVerify.documents[2].eventCode).toEqual('MIND');
-      expect(caseToVerify.documents[2].index).toEqual(3);
+      expect(caseToVerify.docketEntries[2].eventCode).toEqual('MIND');
+      expect(caseToVerify.docketEntries[2].index).toEqual(3);
     });
   });
 
@@ -1511,7 +1486,7 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(0);
+      expect(caseToVerify.docketEntries.length).toEqual(0);
     });
 
     it('should not add a notice of caption changed document when the caption is initially being set', () => {
@@ -1525,7 +1500,7 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(0);
+      expect(caseToVerify.docketEntries.length).toEqual(0);
     });
 
     it('should not add a notice of caption changed document when the caption is equivalent to the initial caption', () => {
@@ -1540,7 +1515,7 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(0);
+      expect(caseToVerify.docketEntries.length).toEqual(0);
     });
 
     it('should add a notice of caption changed document with event code MINC when the caption changes from the initial caption', () => {
@@ -1556,23 +1531,23 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(1);
-      expect(caseToVerify.documents[0].eventCode).toEqual('MINC');
+      expect(caseToVerify.docketEntries.length).toEqual(1);
+      expect(caseToVerify.docketEntries[0].eventCode).toEqual('MINC');
     });
 
     it('should not add a notice of caption changed document when the caption is equivalent to the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very New Caption',
-          documents: [
+          docketEntries: [
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 1,
               isOnDocketRecord: true,
             },
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 2,
               isOnDocketRecord: true,
@@ -1586,22 +1561,22 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(2);
+      expect(caseToVerify.docketEntries.length).toEqual(2);
     });
 
     it('should add a notice of caption changed document when the caption changes from the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very Berry New Caption',
-          documents: [
+          docketEntries: [
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 1,
               isOnDocketRecord: true,
             },
             {
-              description:
+              documentTitle:
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
               index: 2,
               isOnDocketRecord: true,
@@ -1616,8 +1591,8 @@ describe('Case entity', () => {
       ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
-      expect(caseToVerify.documents.length).toEqual(3);
-      expect(caseToVerify.documents[2]).toMatchObject({
+      expect(caseToVerify.docketEntries.length).toEqual(3);
+      expect(caseToVerify.docketEntries[2]).toMatchObject({
         index: 3,
         isOnDocketRecord: true,
       });
@@ -1625,10 +1600,10 @@ describe('Case entity', () => {
   });
 
   describe('checkForReadyForTrial', () => {
-    it('should not change the status if no answer documents have been filed', () => {
+    it('should not change the status if no answer docketEntries have been filed', () => {
       const caseToCheck = new Case(
         {
-          documents: [],
+          docketEntries: [],
           status: CASE_STATUS_TYPES.generalDocket,
         },
         {
@@ -1638,10 +1613,10 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
-    it('should not change the status if an answer document has been filed, but the cutoff has not elapsed', () => {
+    it('should not change the status if an answer docket entry has been filed, but the cutoff has not elapsed', () => {
       const caseToCheck = new Case(
         {
-          documents: [
+          docketEntries: [
             {
               createdAt: prepareDateFromString().toISOString(),
               eventCode: 'A',
@@ -1656,10 +1631,10 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
-    it('should not change the status if a non answer document has been filed before the cutoff', () => {
+    it('should not change the status if a non answer docket entry has been filed before the cutoff', () => {
       const caseToCheck = new Case(
         {
-          documents: [
+          docketEntries: [
             {
               createdAt: prepareDateFromString()
                 .subtract(1, 'year')
@@ -1685,7 +1660,7 @@ describe('Case entity', () => {
       */
       const caseToCheck = new Case(
         {
-          documents: [
+          docketEntries: [
             {
               createdAt: prepareDateFromString()
                 .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS, ANSWER_CUTOFF_UNIT)
@@ -1712,7 +1687,7 @@ describe('Case entity', () => {
 
       const caseToCheck = new Case(
         {
-          documents: [
+          docketEntries: [
             {
               createdAt,
               eventCode: 'A',
@@ -1735,7 +1710,7 @@ describe('Case entity', () => {
 
       const caseToCheck = new Case(
         {
-          documents: [
+          docketEntries: [
             {
               createdAt,
               eventCode: 'A',
@@ -2000,20 +1975,22 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getDocumentById', () => {
-    it('should get the document by an Id', () => {
+  describe('getDocketEntryById', () => {
+    it('should get the docket entry by an Id', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const result = myCase.getDocumentById({
-        documentId: MOCK_DOCUMENTS[0].documentId,
+      const result = myCase.getDocketEntryById({
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
       });
-      expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+      expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
     });
+  });
 
+  describe('getCorrespondenceById', () => {
     it('should get a correspondence document by id', () => {
       const mockCorrespondence = new Correspondence({
-        documentId: '123-abc',
+        correspondenceId: '123-abc',
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
       });
@@ -2024,27 +2001,134 @@ describe('Case entity', () => {
         },
       );
 
-      const result = myCase.getDocumentById({
-        documentId: mockCorrespondence.documentId,
+      const result = myCase.getCorrespondenceById({
+        correspondenceId: mockCorrespondence.correspondenceId,
       });
 
-      expect(result.documentId).toEqual(mockCorrespondence.documentId);
+      expect(result.correspondenceId).toEqual(
+        mockCorrespondence.correspondenceId,
+      );
     });
   });
 
-  describe('deleteDocumentById', () => {
+  describe('getAttachmentDocumentById', () => {
+    it('should get a docket entry document', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const result = Case.getAttachmentDocumentById({
+        caseDetail: myCase.toRawObject(),
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
+      });
+      expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
+    });
+
+    it('should get a correspondence document', () => {
+      const mockCorrespondenceId = '640ac314-0579-4081-8176-88cbe75e16a5';
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          correspondence: [
+            {
+              archived: false,
+              correspondenceId: mockCorrespondenceId,
+              documentTitle: 'test',
+              filingDate: '2019-03-01T21:40:46.415Z',
+              userId: 'ec91e317-bfb2-4696-8ae3-064b5c556a56',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = Case.getAttachmentDocumentById({
+        caseDetail: myCase.toRawObject(),
+        documentId: mockCorrespondenceId,
+      });
+      expect(result.correspondenceId).toEqual(mockCorrespondenceId);
+    });
+
+    it('should get an archived docket entry document if useArchived is true', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocketEntries: MOCK_DOCUMENTS,
+          docketEntries: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = Case.getAttachmentDocumentById({
+        caseDetail: myCase.toRawObject(),
+        documentId: MOCK_DOCUMENTS[0].docketEntryId,
+        useArchived: true,
+      });
+      expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
+    });
+
+    it('should return undefined when attempting to get an archived docket entry and useArchived is not pased in', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedDocketEntries: MOCK_DOCUMENTS,
+          docketEntries: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = Case.getAttachmentDocumentById({
+        caseDetail: myCase.toRawObject(),
+        documentId: MOCK_DOCUMENTS[0].docketEntryId,
+      });
+      expect(result).toBeUndefined();
+    });
+
+    it('should get an archived correspondence document', () => {
+      const mockCorrespondenceId = '640ac314-0579-4081-8176-88cbe75e16a5';
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          archivedCorrespondences: [
+            {
+              archived: true,
+              correspondenceId: mockCorrespondenceId,
+              documentTitle: 'test',
+              filingDate: '2019-03-01T21:40:46.415Z',
+              userId: 'ec91e317-bfb2-4696-8ae3-064b5c556a56',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = Case.getAttachmentDocumentById({
+        caseDetail: myCase.toRawObject(),
+        documentId: mockCorrespondenceId,
+        useArchived: true,
+      });
+      expect(result.correspondenceId).toEqual(mockCorrespondenceId);
+    });
+  });
+
+  describe('deleteDocketEntryById', () => {
     it('should delete the document with the given id', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const documentIdToDelete = MOCK_DOCUMENTS[1].documentId;
-      expect(myCase.documents.length).toEqual(4);
-      myCase.deleteDocumentById({
-        documentId: documentIdToDelete,
+      const docketEntryIdToDelete = MOCK_DOCUMENTS[1].docketEntryId;
+      expect(myCase.docketEntries.length).toEqual(4);
+      myCase.deleteDocketEntryById({
+        docketEntryId: docketEntryIdToDelete,
       });
-      expect(myCase.documents.length).toEqual(3);
+      expect(myCase.docketEntries.length).toEqual(3);
       expect(
-        myCase.documents.find(d => d.documentId === documentIdToDelete),
+        myCase.docketEntries.find(
+          d => d.docketEntryId === docketEntryIdToDelete,
+        ),
       ).toBeUndefined();
     });
 
@@ -2052,12 +2136,12 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const documentIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
-      expect(myCase.documents.length).toEqual(4);
-      myCase.deleteDocumentById({
-        documentId: documentIdToDelete,
+      const docketEntryIdToDelete = '016fda7d-eb0a-4194-b603-ef422c898122';
+      expect(myCase.docketEntries.length).toEqual(4);
+      myCase.deleteDocketEntryById({
+        docketEntryId: docketEntryIdToDelete,
       });
-      expect(myCase.documents.length).toEqual(4);
+      expect(myCase.docketEntries.length).toEqual(4);
     });
   });
 
@@ -2077,12 +2161,12 @@ describe('Case entity', () => {
       );
       expect(myCase.correspondence.length).toEqual(1);
       myCase.deleteCorrespondenceById({
-        correspondenceId: mockCorrespondence.documentId,
+        correspondenceId: mockCorrespondence.correspondenceId,
       });
       expect(myCase.correspondence.length).toEqual(0);
       expect(
         myCase.correspondence.find(
-          d => d.documentId === mockCorrespondence.documentId,
+          d => d.correspondenceId === mockCorrespondence.correspondenceId,
         ),
       ).toBeUndefined();
     });
@@ -2102,12 +2186,12 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getPetitionDocument', () => {
-    it('should get the petition document by documentType', () => {
+  describe('getPetitionDocketEntry', () => {
+    it('should get the petition docket entry by documentType', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      const result = myCase.getPetitionDocument();
+      const result = myCase.getPetitionDocketEntry();
       expect(result.documentType).toEqual(
         INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
@@ -2115,11 +2199,11 @@ describe('Case entity', () => {
   });
 
   describe('getIrsSendDate', () => {
-    it('should get the IRS send date from the petition document', () => {
+    it('should get the IRS send date from the petition docket entry', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          documents: [
+          docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
         },
@@ -2131,11 +2215,11 @@ describe('Case entity', () => {
       expect(result).toEqual('2019-03-01T21:40:46.415Z');
     });
 
-    it('should return undefined for irsSendDate if the petition document is not served', () => {
+    it('should return undefined for irsSendDate if the petition docket entry is not served', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          documents: [{ documentType: 'Petition' }],
+          docketEntries: [{ documentType: 'Petition' }],
         },
         {
           applicationContext,
@@ -2145,11 +2229,11 @@ describe('Case entity', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should return undefined for irsSendDate if the petition document is not found', () => {
+    it('should return undefined for irsSendDate if the petition docket entry is not found', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          documents: [
+          docketEntries: [
             { documentType: 'Answer', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
         },
@@ -2169,40 +2253,42 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updateDocument', () => {
+  describe('updateDocketEntry', () => {
     it('should update the document', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
 
-      myCase.updateDocument({
-        documentId: MOCK_DOCUMENTS[0].documentId,
+      myCase.updateDocketEntry({
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(
-        myCase.documents.find(
-          d => d.documentId === MOCK_DOCUMENTS[0].documentId,
+        myCase.docketEntries.find(
+          d => d.docketEntryId === MOCK_DOCUMENTS[0].docketEntryId,
         ).processingStatus,
       ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
 
-    it('should not change any documents if no match is found', () => {
+    it('should not change any docketEntries if no match is found', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
 
-      myCase.updateDocument({
-        documentId: '11001001',
+      myCase.updateDocketEntry({
+        docketEntryId: '11001001',
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
-      expect(myCase.documents).toMatchObject(MOCK_DOCUMENTS);
+      expect(myCase.docketEntries).toMatchObject(MOCK_DOCUMENTS);
     });
+  });
 
+  describe('updateCorrespondence', () => {
     it('should update a correspondence document', () => {
       const mockCorrespondence = new Correspondence({
-        documentId: '123-abc',
+        correspondenceId: '123-abc',
         documentTitle: 'My Correspondence',
         filedBy: 'Docket clerk',
       });
@@ -2213,14 +2299,14 @@ describe('Case entity', () => {
         },
       );
 
-      myCase.updateDocument({
-        documentId: mockCorrespondence.documentId,
+      myCase.updateCorrespondence({
+        correspondenceId: mockCorrespondence.correspondenceId,
         documentTitle: 'updated title',
       });
 
       expect(
         myCase.correspondence.find(
-          d => d.documentId === mockCorrespondence.documentId,
+          d => d.correspondenceId === mockCorrespondence.correspondenceId,
         ).documentTitle,
       ).toEqual('updated title');
     });
@@ -2648,7 +2734,7 @@ describe('Case entity', () => {
   });
 
   describe('hasPendingItems', () => {
-    it('should not show the case as having pending items if no documents are pending', () => {
+    it('should not show the case as having pending items if no docketEntries are pending', () => {
       const caseToUpdate = new Case(
         {
           ...MOCK_CASE_WITHOUT_PENDING,
@@ -2661,11 +2747,11 @@ describe('Case entity', () => {
       expect(caseToUpdate.hasPendingItems).toEqual(false);
       expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
     });
-    it('should show the case as having pending items if some documents are pending', () => {
+    it('should show the case as having pending items if some docketEntries are pending', () => {
       const mockCase = {
         ...MOCK_CASE,
       };
-      mockCase.documents[0].pending = true;
+      mockCase.docketEntries[0].pending = true;
 
       const caseToUpdate = new Case(mockCase, {
         applicationContext,
@@ -3329,7 +3415,7 @@ describe('Case entity', () => {
     });
 
     it('returns true if the user is an irs superuser and the petition document is served', () => {
-      caseEntity.documents = [
+      caseEntity.docketEntries = [
         {
           documentType: 'Petition',
           servedAt: '2019-03-01T21:40:46.415Z',
@@ -3347,8 +3433,8 @@ describe('Case entity', () => {
       expect(isAssociated).toBeTruthy();
     });
 
-    it('returns false if the user is an irs superuser and the case does not have documents', () => {
-      caseEntity.documents = undefined;
+    it('returns false if the user is an irs superuser and the case does not have docketEntries', () => {
+      caseEntity.docketEntries = undefined;
 
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity,
@@ -3451,7 +3537,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
       caseEntity.fileCorrespondence({
-        documentId: 'yeehaw',
+        correspondenceId: 'yeehaw',
         documentTitle: 'Correspondence document',
       });
 
@@ -3678,7 +3764,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          documents: [
+          docketEntries: [
             ...MOCK_DOCUMENTS,
             {
               ...MOCK_DOCUMENTS[0],
@@ -3696,7 +3782,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          documents: [
+          docketEntries: [
             ...MOCK_DOCUMENTS,
             {
               ...MOCK_DOCUMENTS[0],
@@ -3719,6 +3805,26 @@ describe('Case entity', () => {
       );
       expect(myCase).toMatchObject({
         contactSecondary: undefined,
+      });
+    });
+
+    describe('judgeUserId', () => {
+      it('sets the judgeUserId property when a value is passed in', () => {
+        const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+        const myCase = new Case(
+          { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
+          { applicationContext },
+        );
+        expect(myCase).toMatchObject({
+          judgeUserId: mockJudgeUserId,
+        });
+        expect(myCase.isValid()).toBeTruthy();
+      });
+
+      it('does not fail validation without a judgeUserId', () => {
+        const myCase = new Case(MOCK_CASE, { applicationContext });
+        expect(myCase.judgeUserId).toBeUndefined();
+        expect(myCase.isValid()).toBeTruthy();
       });
     });
   });

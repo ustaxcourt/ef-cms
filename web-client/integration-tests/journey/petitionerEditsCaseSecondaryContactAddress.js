@@ -38,9 +38,9 @@ export const petitionerEditsCaseSecondaryContactAddress = test => {
       },
     );
 
-    const noticeDocument = caseDetailFormatted.docketRecordWithDocument.find(
+    const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
       entry =>
-        entry.record.description ===
+        entry.descriptionDisplay ===
         'Notice of Change of Address for Mona Schultz',
     );
     expect(noticeDocument).toBeTruthy();

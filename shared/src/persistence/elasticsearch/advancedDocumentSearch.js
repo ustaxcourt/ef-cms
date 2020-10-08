@@ -16,11 +16,11 @@ exports.advancedDocumentSearch = async ({
     'caseCaption',
     'contactPrimary',
     'contactSecondary',
+    'docketEntryId',
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',
     'documentContents',
-    'documentId',
     'documentTitle',
     'documentType',
     'eventCode',
@@ -68,13 +68,13 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (judge) {
+    const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
-
     queryParams.push({
       bool: {
-        must: {
+        should: {
           match: {
-            [judgeField]: judge,
+            [judgeField]: judgeName,
           },
         },
       },
@@ -129,7 +129,7 @@ exports.advancedDocumentSearch = async ({
         bool: {
           must: [
             { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'document|' } },
+            { match: { 'sk.S': 'docket-entry|' } },
             {
               exists: {
                 field: 'servedAt',
@@ -141,13 +141,12 @@ exports.advancedDocumentSearch = async ({
       },
       size: 5000,
     },
-    index: 'efcms-document',
+    index: 'efcms-docket-entry',
   };
 
   const { results } = await search({
     applicationContext,
     searchParameters: documentQuery,
   });
-
   return results;
 };

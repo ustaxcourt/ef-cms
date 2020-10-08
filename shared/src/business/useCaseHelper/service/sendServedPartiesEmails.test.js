@@ -16,13 +16,16 @@ describe('sendServedPartiesEmails', () => {
       applicationContext,
       caseEntity: {
         caseCaption: 'A Caption',
+        docketEntries: [
+          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+        ],
         docketNumber: '123-20',
-        docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      documentEntity: {
-        documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
-        documentTitle: 'The Document',
+      docketEntryEntity: {
+        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+        documentType: 'The Document',
+        index: 1,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
       servedParties: {
@@ -51,13 +54,16 @@ describe('sendServedPartiesEmails', () => {
       applicationContext,
       caseEntity: {
         caseCaption: 'A Caption',
+        docketEntries: [
+          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+        ],
         docketNumber: '123-20',
-        docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         status: CASE_STATUS_TYPES.new,
       },
-      documentEntity: {
-        documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+      docketEntryEntity: {
+        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
+        index: 1,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
       servedParties: {
@@ -82,13 +88,16 @@ describe('sendServedPartiesEmails', () => {
       applicationContext,
       caseEntity: {
         caseCaption: 'A Caption',
+        docketEntries: [
+          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+        ],
         docketNumber: '123-20',
-        docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      documentEntity: {
-        documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+      docketEntryEntity: {
+        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
+        index: 1,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
       servedParties: {

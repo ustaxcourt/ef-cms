@@ -6,11 +6,11 @@ export const pdfSignerHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const form = get(state.form);
   const caseDetail = get(state.caseDetail);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const pdfForSigning = get(state.pdfForSigning);
   const { isPdfAlreadySigned, signatureApplied, signatureData } = pdfForSigning;
-  const caseDocument = caseDetail.documents.find(
-    doc => doc.documentId === documentId,
+  const caseDocument = caseDetail.docketEntries.find(
+    doc => doc.docketEntryId === docketEntryId,
   );
 
   const isPlaced = signatureData || isPdfAlreadySigned;

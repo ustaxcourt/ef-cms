@@ -18,25 +18,25 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
     );
     await test.runSequence('setDocumentForPreviewSequence');
 
-    const documentIdToReplace = test.getState('documentId');
+    const docketEntryIdToReplace = test.getState('docketEntryId');
     const previousPetitionDocument = test
-      .getState('caseDetail.documents')
-      .find(entry => entry.documentId === documentIdToReplace);
+      .getState('caseDetail.docketEntries')
+      .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const previousDocketRecordEntry = test
-      .getState('caseDetail.docketRecord')
-      .find(entry => entry.documentId === documentIdToReplace);
+      .getState('caseDetail.docketEntries')
+      .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const previousPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
-    }).find(item => item.document.documentId === documentIdToReplace);
+    }).find(item => item.docketEntry.docketEntryId === docketEntryIdToReplace);
 
-    expect(documentIdToReplace).toBeDefined();
+    expect(docketEntryIdToReplace).toBeDefined();
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
     await test.runSequence('deleteUploadedPdfSequence');
 
     const deletedDocument = test
-      .getState('form.documents')
-      .find(doc => doc.documentId === documentIdToReplace);
+      .getState('form.docketEntries')
+      .find(doc => doc.docketEntryId === docketEntryIdToReplace);
     expect(deletedDocument).toBeUndefined();
     expect(test.getState('pdfPreviewUrl')).toBeUndefined();
 
@@ -58,14 +58,14 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({});
 
     const updatedPetitionDocument = test
-      .getState('caseDetail.documents')
+      .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode);
     const updatedDocketRecordEntry = test
-      .getState('caseDetail.docketRecord')
-      .find(entry => entry.documentId === documentIdToReplace);
+      .getState('caseDetail.docketEntries')
+      .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const updatedPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
-    }).find(item => item.document.documentId === documentIdToReplace);
+    }).find(item => item.docketEntry.docketEntryId === docketEntryIdToReplace);
 
     expect(previousPetitionDocument).toEqual(updatedPetitionDocument);
     expect(previousDocketRecordEntry).toEqual(updatedDocketRecordEntry);

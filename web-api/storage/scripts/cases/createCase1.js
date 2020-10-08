@@ -18,7 +18,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: petitionFile,
-      documentId: petitionFileId,
+      key: petitionFileId,
     });
 
     const stinFile = getFakeFile();
@@ -27,7 +27,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: stinFile,
-      documentId: stinFileId,
+      key: stinFileId,
     });
 
     caseDetail = await applicationContext.getUseCases().createCaseInteractor({
@@ -56,18 +56,18 @@ module.exports.createCase1 = async () => {
       stinFileId,
     });
 
-    const addCoversheet = document => {
+    const addCoversheet = docketEntry => {
       return applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: caseDetail.docketNumber,
-        documentId: document.documentId,
       });
     };
 
     const coversheets = [];
 
-    for (const document of caseDetail.documents) {
-      coversheets.push(addCoversheet(document));
+    for (const docketEntry of caseDetail.docketEntries) {
+      coversheets.push(addCoversheet(docketEntry));
     }
 
     await Promise.all(coversheets);
@@ -84,15 +84,15 @@ module.exports.createCase1 = async () => {
       richText: '<p>Testing</p>',
     };
 
-    documentMetadata.draftState = { ...documentMetadata };
-    const documentId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
+    documentMetadata.draftOrderState = { ...documentMetadata };
+    const docketEntryId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
 
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
 
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
@@ -100,8 +100,8 @@ module.exports.createCase1 = async () => {
       docketNumber,
       //todo - do not hard code a judge
       nameForSigning: 'Maurice B. Foley',
-      originalDocumentId: documentId,
-      signedDocumentId: documentId,
+      originalDocketEntryId: docketEntryId,
+      signedDocketEntryId: docketEntryId,
     });
   });
 
@@ -117,15 +117,15 @@ module.exports.createCase1 = async () => {
       scenario: 'Type A',
     };
 
-    documentMetadata.draftState = { ...documentMetadata };
-    const documentId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
+    documentMetadata.draftOrderState = { ...documentMetadata };
+    const docketEntryId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
 
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId: documentId,
+        primaryDocumentFileId: docketEntryId,
       });
   });
 };

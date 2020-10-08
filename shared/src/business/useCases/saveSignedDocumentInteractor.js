@@ -3,19 +3,19 @@ const {
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { Message } = require('../entities/Message');
 const { orderBy } = require('lodash');
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
-  originalDocumentId,
+  originalDocketEntryId,
 }) => {
   const originalDocument = await applicationContext
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      documentId: originalDocumentId,
+      key: originalDocketEntryId,
       protocol: 'S3',
       useTempBucket: false,
     });
@@ -24,7 +24,7 @@ const saveOriginalDocumentWithNewId = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: originalDocument,
-    documentId: documentIdBeforeSignature,
+    key: documentIdBeforeSignature,
   });
 
   return documentIdBeforeSignature;
@@ -32,14 +32,14 @@ const saveOriginalDocumentWithNewId = async ({
 
 const replaceOriginalWithSignedDocument = async ({
   applicationContext,
-  originalDocumentId,
-  signedDocumentId,
+  originalDocketEntryId,
+  signedDocketEntryId,
 }) => {
   const signedDocument = await applicationContext
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      documentId: signedDocumentId,
+      key: signedDocketEntryId,
       protocol: 'S3',
       useTempBucket: false,
     });
@@ -47,7 +47,7 @@ const replaceOriginalWithSignedDocument = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: signedDocument,
-    documentId: originalDocumentId,
+    key: originalDocketEntryId,
   });
 };
 
@@ -58,18 +58,18 @@ const replaceOriginalWithSignedDocument = async ({
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.nameForSigning the name on the signature of the signed document
- * @param {string} providers.originalDocumentId the id of the original (unsigned) document
+ * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
  * @param {string} providers.parentMessageId the id of the parent message to add the signed document to
- * @param {string} providers.signedDocumentId the id of the signed document
+ * @param {string} providers.signedDocketEntryId the id of the signed document
  * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
 exports.saveSignedDocumentInteractor = async ({
   applicationContext,
   docketNumber,
   nameForSigning,
-  originalDocumentId,
+  originalDocketEntryId,
   parentMessageId,
-  signedDocumentId,
+  signedDocketEntryId,
 }) => {
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
@@ -79,22 +79,24 @@ exports.saveSignedDocumentInteractor = async ({
       docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
-  const originalDocumentEntity = caseEntity.documents.find(
-    document => document.documentId === originalDocumentId,
+  const originalDocketEntryEntity = caseEntity.docketEntries.find(
+    docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
 
-  let signedDocumentEntity;
-  if (originalDocumentEntity.documentType === 'Proposed Stipulated Decision') {
-    signedDocumentEntity = new Document(
+  let signedDocketEntryEntity;
+  if (
+    originalDocketEntryEntity.documentType === 'Proposed Stipulated Decision'
+  ) {
+    signedDocketEntryEntity = new DocketEntry(
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
-        documentId: signedDocumentId,
+        docketEntryId: signedDocketEntryId,
         documentTitle:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         documentType:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         eventCode: SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
-        filedBy: originalDocumentEntity.filedBy,
+        filedBy: originalDocketEntryEntity.filedBy,
         isDraft: true,
         isPaper: false,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -103,9 +105,9 @@ exports.saveSignedDocumentInteractor = async ({
       { applicationContext },
     );
 
-    signedDocumentEntity.setSigned(user.userId, nameForSigning);
+    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
 
-    caseEntity.addDocument(signedDocumentEntity);
+    caseEntity.addDocketEntry(signedDocketEntryEntity);
 
     if (parentMessageId) {
       const messages = await applicationContext
@@ -121,8 +123,8 @@ exports.saveSignedDocumentInteractor = async ({
         applicationContext,
       }).validate();
       messageEntity.addAttachment({
-        documentId: signedDocumentEntity.documentId,
-        documentTitle: signedDocumentEntity.documentTitle,
+        documentId: signedDocketEntryEntity.docketEntryId,
+        documentTitle: signedDocketEntryEntity.documentTitle,
       });
 
       await applicationContext.getPersistenceGateway().updateMessage({
@@ -133,18 +135,18 @@ exports.saveSignedDocumentInteractor = async ({
   } else {
     const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
       applicationContext,
-      originalDocumentId,
+      originalDocketEntryId,
     });
 
     await replaceOriginalWithSignedDocument({
       applicationContext,
-      originalDocumentId,
-      signedDocumentId,
+      originalDocketEntryId,
+      signedDocketEntryId,
     });
 
-    signedDocumentEntity = new Document(
+    signedDocketEntryEntity = new DocketEntry(
       {
-        ...originalDocumentEntity,
+        ...originalDocketEntryEntity,
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentIdBeforeSignature,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -153,8 +155,8 @@ exports.saveSignedDocumentInteractor = async ({
       { applicationContext },
     );
 
-    signedDocumentEntity.setSigned(user.userId, nameForSigning);
-    caseEntity.updateDocument(signedDocumentEntity);
+    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+    caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
@@ -162,5 +164,8 @@ exports.saveSignedDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  return { caseEntity, signedDocumentId: signedDocumentEntity.documentId };
+  return {
+    caseEntity,
+    signedDocketEntryId: signedDocketEntryEntity.docketEntryId,
+  };
 };

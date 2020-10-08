@@ -22,23 +22,23 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
       },
     );
 
-    const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
     const petitionDocument = getPetitionDocumentForCase(
       test.getState('caseDetail'),
     );
-    expect(documentId).toBeDefined();
-    expect(petitionDocument.documentId).toBeDefined();
+    expect(docketEntryId).toBeDefined();
+    expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId,
       docketNumber: test.docketNumber,
-      documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('documentId')).toEqual(documentId);
+    expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
@@ -68,7 +68,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.previousDocument',
-      value: petitionDocument.documentId,
+      value: petitionDocument.docketEntryId,
     });
 
     await test.runSequence('fileDocketEntrySequence', {
@@ -91,12 +91,12 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
+      descriptionDisplay:
         'Motion for Leave to File First Amended Petition some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.documents.find(
-      document => document.documentId === documentId,
+    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+      document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Motion for Leave to File First Amended Petition',

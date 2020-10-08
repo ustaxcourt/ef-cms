@@ -20,70 +20,49 @@ const caseDetail = {
     postalCode: '12345',
     state: 'AL',
   },
-  docketNumber: '123-45',
-  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-  docketRecord: [
+  docketEntries: [
     {
-      createdAt: '2011-10-05T14:48:00.000Z',
-      description: 'Test Description',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-      filingDate: '2011-10-05T14:48:00.000Z',
-      index: '1',
+      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     },
     {
-      createdAt: '2011-10-05T14:48:00.000Z',
-      description: 'Test Description',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-      filingDate: '2011-10-05T14:48:00.000Z',
-      index: '2',
-    },
-    {
-      createdAt: '2011-10-05T14:48:00.000Z',
-      description: 'Test Description',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-      filingDate: '2011-10-05T14:48:00.000Z',
-      filingsAndProceedings: 'Test F&P',
-      index: '3',
-    },
-  ],
-  documents: [
-    {
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    },
-    {
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
     },
     {
       additionalInfo2: 'Additional Info 2',
-      documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
       isStatusServed: true,
       servedAtFormatted: '03/27/19',
     },
   ],
+  docketNumber: '123-45',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
   privatePractitioners: [],
 };
 
-beforeAll(() => {
-  applicationContext.getCurrentUser.mockReturnValue(
-    MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-  );
-  applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber.mockReturnValue({ ...caseDetail });
-  applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
-      return contentHtml;
-    });
-  applicationContext
-    .getUseCaseHelpers()
-    .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrlAndID);
-  applicationContext.getUniqueId.mockReturnValue(mockId);
-});
-
 describe('generateDocketRecordPdfInteractor', () => {
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({ ...caseDetail });
+    applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
+        return contentHtml;
+      });
+    applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrlAndID);
+    applicationContext.getUniqueId.mockReturnValue(mockId);
+  });
+
   it('Calls docketRecord document generator to build a PDF', async () => {
     await generateDocketRecordPdfInteractor({
       applicationContext,
@@ -95,6 +74,60 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
         .data,
     ).toMatchObject({ includePartyDetail: true });
+  });
+
+  describe('party detail is requested', () => {
+    it('user is associated with the case', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(true);
+      await generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseDetail,
+        includePartyDetail: true,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data,
+      ).toMatchObject({ includePartyDetail: true });
+    });
+
+    it('user has an internal role', async () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'], // docket clerk
+      );
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(false);
+      await generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseDetail,
+        includePartyDetail: true,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data,
+      ).toMatchObject({ includePartyDetail: true });
+    });
+
+    it('user is NOT associated with the case and does NOT have an internal role', async () => {
+      applicationContext.getCurrentUser.mockReturnValue({});
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(false);
+      await generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseDetail,
+        includePartyDetail: true,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data,
+      ).toMatchObject({ includePartyDetail: false });
+    });
   });
 
   it('Returns a file ID and url to the generated file', async () => {

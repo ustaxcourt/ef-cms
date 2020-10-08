@@ -65,9 +65,8 @@ describe('migrateCaseInteractor', () => {
         postalCode: '69580',
         state: 'WI',
       },
+      docketEntries: MOCK_CASE.docketEntries,
       docketNumber: '00101-00',
-      docketRecord: MOCK_CASE.docketRecord,
-      documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
       partyType: PARTY_TYPES.petitioner,
@@ -157,18 +156,6 @@ describe('migrateCaseInteractor', () => {
       ).rejects.toThrow('The Case entity was invalid');
     });
 
-    it('should fail to migrate a case when the docket record is invalid', async () => {
-      await expect(
-        migrateCaseInteractor({
-          applicationContext,
-          caseMetadata: {
-            ...caseMetadata,
-            docketRecord: [{}],
-          },
-        }),
-      ).rejects.toThrow('The Case entity was invalid');
-    });
-
     it('should provide developer-friendly feedback when the case is invalid', async () => {
       let error, results;
       try {
@@ -176,8 +163,10 @@ describe('migrateCaseInteractor', () => {
           applicationContext,
           caseMetadata: {
             ...MOCK_CASE,
+            docketEntries: [
+              { ...MOCK_CASE.docketEntries[0], docketEntryId: 'invalid' },
+            ],
             docketNumber: 'ABC',
-            documents: [{ ...MOCK_CASE.documents[0], documentId: 'invalid' }],
           },
         });
       } catch (e) {
@@ -189,7 +178,7 @@ describe('migrateCaseInteractor', () => {
         "'docketNumber' with value 'ABC' fails to match the required pattern",
       );
       expect(error.message).toContain(
-        "'documents[0].documentId' must be a valid GUID",
+        "'docketEntries[0].docketEntryId' must be a valid GUID",
       );
     });
   });
@@ -394,7 +383,7 @@ describe('migrateCaseInteractor', () => {
       ).toBeCalled();
       expect(
         applicationContext.getPersistenceGateway().deleteDocumentFromS3,
-      ).toBeCalledTimes(4); // MOCK_CASE has 4 documents
+      ).toBeCalledTimes(0); // MOCK_CASE has 4 documents
       expect(result).toBeDefined();
       expect(
         applicationContext.getPersistenceGateway().createCase,
@@ -457,5 +446,62 @@ describe('migrateCaseInteractor', () => {
         },
       }),
     ).rejects.toThrow('The Case entity was invalid');
+  });
+
+  it('should update all correspondence items on the case', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        correspondence: [
+          {
+            correspondenceId: 'c19A4C0E-7267-4A61-A089-2D063E5AB875',
+            documentTitle: 'Correspondence One',
+            userId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+          },
+          {
+            correspondenceId: 'c29A4C0E-7267-4A61-A089-2D063E5AB875',
+            documentTitle: 'Correspondence Two',
+            userId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+          },
+          {
+            correspondenceId: 'c39A4C0E-7267-4A61-A089-2D063E5AB875',
+            documentTitle: 'Correspondence Three',
+            userId: '4C9A4C0E-7267-4A61-A089-2D063E5AB875',
+          },
+        ],
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence,
+    ).toHaveBeenCalledTimes(3);
+  });
+
+  it('should call updateCase if the case has a leadDocketNumber', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        leadDocketNumber: '123-45',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not call updateCase if the case has no leadDocketNumber', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 });

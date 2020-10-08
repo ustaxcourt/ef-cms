@@ -18,10 +18,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   const docketNumber0 = '101-19';
   const docketNumber1 = '102-19';
   const docketNumber2 = '103-19';
-  const documentId0 = 'd0d0d0d0-b37b-479d-9201-067ec6e335bb';
-  const documentId1 = 'd1d1d1d1-b37b-479d-9201-067ec6e335bb';
-  const documentId2 = 'd2d2d2d2-b37b-479d-9201-067ec6e335bb';
-  const documentId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
+  const docketEntryId0 = 'd0d0d0d0-b37b-479d-9201-067ec6e335bb';
+  const docketEntryId1 = 'd1d1d1d1-b37b-479d-9201-067ec6e335bb';
+  const docketEntryId2 = 'd2d2d2d2-b37b-479d-9201-067ec6e335bb';
+  const docketEntryId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
 
   beforeEach(() => {
     caseRecords = [
@@ -39,9 +39,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber0,
-        docketRecord: [],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
@@ -64,9 +63,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber1,
-        docketRecord: [],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
@@ -89,9 +87,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           state: 'CA',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber2,
-        docketRecord: [],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
@@ -131,9 +128,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   });
 
   it('should associate the document with all selected cases from the consolidated set', async () => {
-    expect(caseRecords[0].documents.length).toEqual(4);
-    expect(caseRecords[1].documents.length).toEqual(4);
-    expect(caseRecords[2].documents.length).toEqual(4);
+    expect(caseRecords[0].docketEntries.length).toEqual(4);
+    expect(caseRecords[1].docketEntries.length).toEqual(4);
+    expect(caseRecords[2].docketEntries.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -143,23 +140,23 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: documentId0,
+        primaryDocumentId: docketEntryId0,
       },
       leadDocketNumber: docketNumber0,
     });
 
-    expect(result[0].documents[4].documentId).toEqual(documentId0);
-    expect(result[1].documents[4].documentId).toEqual(documentId0);
-    expect(result[0].documents[4].isOnDocketRecord).toEqual(true);
-    expect(result[1].documents[4].isOnDocketRecord).toEqual(true);
-    expect(result[2].documents.length).toEqual(4);
+    expect(result[0].docketEntries[4].docketEntryId).toEqual(docketEntryId0);
+    expect(result[1].docketEntries[4].docketEntryId).toEqual(docketEntryId0);
+    expect(result[0].docketEntries[4].isOnDocketRecord).toEqual(true);
+    expect(result[1].docketEntries[4].isOnDocketRecord).toEqual(true);
+    expect(result[2].docketEntries.length).toEqual(4);
   });
 
   // skipping this test until we have better acceptance criteria about consolidated cases
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
     await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      documentIds: [documentId0],
+      docketEntryIds: [docketEntryId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -180,7 +177,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: documentId0,
+        primaryDocumentId: docketEntryId0,
       },
       leadDocketNumber: docketNumber0,
     });
@@ -193,13 +190,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       record => record.docketNumber === docketNumber1,
     );
 
-    expect(lowestDocketNumberCase.documents[4].workItem).toBeDefined();
-    expect(nonLowestDocketNumberCase.documents[4].workItem).toBeUndefined();
+    expect(lowestDocketNumberCase.docketEntries[4].workItem).toBeDefined();
+    expect(nonLowestDocketNumberCase.docketEntries[4].workItem).toBeUndefined();
   });
 
   it('should file multiple documents for each case if a secondary document is provided', async () => {
-    expect(caseRecords[0].documents.length).toEqual(4);
-    expect(caseRecords[1].documents.length).toEqual(4);
+    expect(caseRecords[0].docketEntries.length).toEqual(4);
+    expect(caseRecords[1].docketEntries.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -209,9 +206,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: documentId0,
+        primaryDocumentId: docketEntryId0,
         secondaryDocument: {
-          documentId: documentId1,
+          docketEntryId: docketEntryId1,
           documentTitle: 'Redacted',
           documentType: 'Redacted',
           eventCode: 'REDC',
@@ -221,13 +218,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadDocketNumber: docketNumber0,
     });
 
-    expect(result[0].documents.length).toEqual(6);
-    expect(result[1].documents.length).toEqual(6);
+    expect(result[0].docketEntries.length).toEqual(6);
+    expect(result[1].docketEntries.length).toEqual(6);
   });
 
   it('should file multiple documents for each case when supporting documents are provided', async () => {
-    expect(caseRecords[0].documents.length).toEqual(4);
-    expect(caseRecords[1].documents.length).toEqual(4);
+    expect(caseRecords[0].docketEntries.length).toEqual(4);
+    expect(caseRecords[1].docketEntries.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -237,9 +234,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: documentId0,
+        primaryDocumentId: docketEntryId0,
         secondaryDocument: {
-          documentId: documentId1,
+          docketEntryId: docketEntryId1,
           documentTitle: 'Redacted',
           documentType: 'Redacted',
           eventCode: 'REDC',
@@ -247,7 +244,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         secondarySupportingDocuments: [
           {
-            documentId: documentId2,
+            docketEntryId: docketEntryId2,
             documentTitle: 'Redacted',
             documentType: 'Redacted',
             eventCode: 'REDC',
@@ -256,7 +253,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         ],
         supportingDocuments: [
           {
-            documentId: documentId3,
+            docketEntryId: docketEntryId3,
             documentTitle: 'Redacted',
             documentType: 'Redacted',
             eventCode: 'REDC',
@@ -267,7 +264,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadDocketNumber: docketNumber0,
     });
 
-    expect(result[0].documents.length).toEqual(8);
-    expect(result[1].documents.length).toEqual(8);
+    expect(result[0].docketEntries.length).toEqual(8);
+    expect(result[1].docketEntries.length).toEqual(8);
   });
 });

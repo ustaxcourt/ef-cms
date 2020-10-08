@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * gets the eventCode of the selected document from the caseDetail.documents, then sets the
+ * gets the eventCode of the selected document from the caseDetail.docketEntries, then sets the
  * eventCode, documentType, documentTitle, and scenario on the form for the selected
  * document from the COURT_ISSUED_EVENT_CODES
  *
@@ -18,8 +18,8 @@ export const setCourtIssuedDocumentInitialDataAction = ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const document = (caseDetail.documents || []).find(
-    item => item.documentId === props.documentId,
+  const document = (caseDetail.docketEntries || []).find(
+    item => item.docketEntryId === props.docketEntryId,
   );
 
   if (document) {

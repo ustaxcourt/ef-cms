@@ -1328,7 +1328,7 @@
         }
       }
     },
-    "/cases/{docketNumber}/remove-pending/{documentId}": {
+    "/cases/{docketNumber}/remove-pending/{docketEntryId}": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -1337,7 +1337,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2283,7 +2283,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}": {
+    "/case-documents/{docketNumber}/{docketEntryId}": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2292,7 +2292,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2344,7 +2344,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/document-download-url": {
+    "/case-documents/{docketNumber}/{key}/document-download-url": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2353,7 +2353,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2397,7 +2397,7 @@
         }
       }
     },
-    "/public-api/{docketNumber}/{documentId}/public-document-download-url": {
+    "/public-api/{docketNumber}/{key}/public-document-download-url": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2406,7 +2406,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2450,10 +2450,10 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/download-policy-url": {
+    "/case-documents/{docketNumber}/{key}/download-policy-url": {
       "parameters": [
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2508,10 +2508,54 @@
         }
       }
     },
-    "/documents/{documentId}/virus-scan": {
+    "/public-api/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "returns the health of various services",
+        "description": "Returns the health of various services.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/health"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/{key}/virus-scan": {
       "parameters": [
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2557,10 +2601,10 @@
         }
       }
     },
-    "/documents/{documentId}/validate": {
+    "/documents/{key}/validate": {
       "parameters": [
         {
-          "name": "documentId",
+          "name": "key",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2762,7 +2806,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/work-items": {
+    "/case-documents/{docketNumber}/{docketEntryId}/work-items": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2771,7 +2815,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2820,7 +2864,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/serve-court-issued": {
+    "/case-documents/{docketNumber}/{docketEntryId}/serve-court-issued": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2829,7 +2873,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2878,7 +2922,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/serve": {
+    "/case-documents/{docketNumber}/{docketEntryId}/serve": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2887,7 +2931,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2902,7 +2946,65 @@
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/case"
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{docketNumber}/{docketEntryId}/remove-pdf": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["case-documents"],
+        "summary": "deletes the pdf from a given docket entry",
+        "description": "Deletes the pdf from a given docket entry\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
             }
           }
         },
@@ -3024,6 +3126,51 @@
             "description": "422 response",
             "schema": {
               "$ref": "#/definitions/unprocessableEntityError"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/judges": {
+
+      "post": {
+        "tags": ["judges"],
+        "summary": "creates a judge user",
+        "description": "creates a judge user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
             }
           }
         },
@@ -3689,7 +3836,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/coversheet": {
+    "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -3698,7 +3845,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -3744,7 +3891,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/{documentId}/sign": {
+    "/case-documents/{docketNumber}/{docketEntryId}/sign": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -3753,7 +3900,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4510,7 +4657,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/court-issued-orders/{documentId}": {
+    "/case-documents/{docketNumber}/court-issued-orders/{docketEntryId}": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -4519,7 +4666,7 @@
           "type": "string"
         },
         {
-          "name": "documentId",
+          "name": "docketEntryId",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4543,7 +4690,7 @@
                   "documentType": {
                     "type": "string"
                   },
-                  "draftState": {
+                  "draftOrderState": {
                     "type": "object"
                   },
                   "eventCode": {
@@ -6149,6 +6296,71 @@
         }
       }
     },
+    "/messages/{messageId}/read": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "marks a message as read",
+        "description": "Marks a message as read.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/message"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "messageId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "docket number",
+          "description": "the associated docket number",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "docketNumber": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public-api/todays-opinions": {
       "get": {
         "tags": ["case-documents"],
@@ -6203,6 +6415,81 @@
     }
   },
   "definitions": {
+    "health": {
+      "type": "object",
+      "properties": {
+        "clamAV": {
+          "type": "boolean",
+          "description": "the status of clamav"
+        },
+        "cognito": {
+          "type": "boolean",
+          "description": "the status of cognito ui"
+        },
+        "dynamo": {
+          "type": "object",
+          "properties": {
+            "efcms": {
+              "type": "boolean",
+              "description": "the status of main dynamo table"
+            },
+            "efcmsDeploy": {
+              "type": "boolean",
+              "description": "the status of deploy dynamo table"
+            }
+          }
+        },
+        "dynamsoft": {
+          "type": "boolean",
+          "description": "the status of static hosted dynamsoft files"
+        },
+        "elasticsearch": {
+          "type": "boolean",
+          "description": "the status of elasticsearch"
+        },
+        "emailService": {
+          "type": "boolean",
+          "description": "the status of ses"
+        },
+        "s3": {
+          "type": "object",
+          "properties": {
+            "app": {
+              "type": "boolean",
+              "description": "the status of app bucket"
+            },
+            "appFailover": {
+              "type": "boolean",
+              "description": "the status of app failover bucket"
+            },
+            "eastDocuments": {
+              "type": "boolean",
+              "description": "the status of east documents bucket"
+            },
+            "eastTempDocuments": {
+              "type": "boolean",
+              "description": "the status of east temp documents bucket"
+            },
+            "public": {
+              "type": "boolean",
+              "description": "the status of public ui bucket"
+            },
+            "publicFailover": {
+              "type": "boolean",
+              "description": "the status of public failover ui bucket"
+            },
+            "westDocuments": {
+              "type": "boolean",
+              "description": "the status of west documents bucket"
+            },
+            "westTempDocuments": {
+              "type": "boolean",
+              "description": "the status of west temp documents"
+            }
+          }
+        }
+      }
+    },
     "policyUrl": {
       "type": "object",
       "properties": {
@@ -6221,7 +6508,7 @@
       "properties": {
         "createdAt": {
           "type": "string",
-          "description": "date document created"
+          "description": "date docket entry was created"
         },
         "documentType": {
           "type": "string",
@@ -6229,22 +6516,22 @@
         },
         "filedBy": {
           "type": "boolean",
-          "description": "the user name who filed the document"
+          "description": "the user name who filed the docket entry"
         },
-        "documentId": {
+        "docketEntryId": {
           "type": "string",
-          "description": "id of rawDocument"
+          "description": "id of rawDocketEntry"
         },
         "userId": {
           "type": "string",
-          "description": "id of user who created the document"
+          "description": "id of user who created the docket entry"
         },
         "status": {
           "type": "string",
-          "description": "the status of the document"
+          "description": "the status of the docket entry"
         }
       },
-      "description": "a document response"
+      "description": "a docket entry response"
     },
     "unprocessableEntityError": {
       "type": "object",
@@ -6273,7 +6560,7 @@
             "documentType": {
               "type": "string"
             },
-            "documentId": {
+            "docketEntryId": {
               "type": "string"
             },
             "createAt": {
@@ -6380,9 +6667,9 @@
           "type": "string",
           "description": "date case created"
         },
-        "documents": {
+        "docketEntries": {
           "type": "array",
-          "description": "array of rawDocument ids and types associated with the case",
+          "description": "array of rawDocketEntry ids and types associated with the case",
           "items": {
             "type": "object",
             "properties": {
@@ -6393,7 +6680,7 @@
                 "type": "object",
                 "properties": {}
               },
-              "documentId": {
+              "docketEntryId": {
                 "type": "string"
               }
             }

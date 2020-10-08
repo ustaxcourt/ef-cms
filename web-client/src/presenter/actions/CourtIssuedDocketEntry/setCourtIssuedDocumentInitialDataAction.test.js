@@ -6,29 +6,29 @@ import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumen
 
 presenter.providers.applicationContext = applicationContext;
 
-const documentIds = [
+const docketEntryIds = [
   'ddfd978d-6be6-4877-b004-2b5735a41fee',
   '11597d22-0874-4c5e-ac98-a843d1472baf',
 ];
 
-MOCK_CASE.documents.push({
-  documentId: documentIds[0],
+MOCK_CASE.docketEntries.push({
+  docketEntryId: docketEntryIds[0],
   eventCode: 'OF',
 });
-MOCK_CASE.documents.push({
-  documentId: documentIds[1],
+MOCK_CASE.docketEntries.push({
+  docketEntryId: docketEntryIds[1],
   eventCode: 'O',
   freeText: 'something',
 });
 
 describe('setCourtIssuedDocumentInitialDataAction', () => {
-  it('should set correct values on state.form for the documentId passed in via props', async () => {
+  it('should set correct values on state.form for the docketEntryId passed in via props', async () => {
     const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
         presenter,
       },
       props: {
-        documentId: documentIds[0],
+        docketEntryId: docketEntryIds[0],
       },
       state: {
         caseDetail: MOCK_CASE,
@@ -53,7 +53,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
         presenter,
       },
       props: {
-        documentId: documentIds[1],
+        docketEntryId: docketEntryIds[1],
       },
       state: {
         caseDetail: MOCK_CASE,
@@ -73,13 +73,13 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     });
   });
 
-  it('should not set state.form if the documentId cannot be found in caseDetail', async () => {
+  it('should not set state.form if the docketEntryId cannot be found in caseDetail', async () => {
     const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
         presenter,
       },
       props: {
-        documentId: '123',
+        docketEntryId: '123',
       },
       state: {
         caseDetail: MOCK_CASE,
@@ -96,7 +96,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
         presenter,
       },
       props: {
-        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859', //Petition document on MOCK_CASE
+        docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859', //Petition document on MOCK_CASE
       },
       state: {
         caseDetail: MOCK_CASE,

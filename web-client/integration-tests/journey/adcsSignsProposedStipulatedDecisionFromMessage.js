@@ -21,10 +21,10 @@ export const adcsSignsProposedStipulatedDecisionFromMessage = test => {
     expect(test.getState('currentPage')).toEqual('MessageDetail');
 
     await test.runSequence('gotoSignOrderSequence', {
+      docketEntryId: test.proposedStipDecisionDocketEntryId,
       docketNumber: test.docketNumber,
-      documentId: test.proposedStipDecisionDocumentId,
       parentMessageId: foundMessage.parentMessageId,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${foundMessage.parentMessageId}?documentId=${test.proposedStipDecisionDocumentId}`,
+      redirectUrl: `/messages/${test.docketNumber}/message-detail/${foundMessage.parentMessageId}?docketEntryId=${test.proposedStipDecisionDocketEntryId}`,
     });
     expect(test.getState('currentPage')).toEqual('SignOrder');
 
@@ -39,7 +39,7 @@ export const adcsSignsProposedStipulatedDecisionFromMessage = test => {
 
     expect(test.getState('currentPage')).toEqual('MessageDetail');
     expect(test.getState('messageDetail.0.attachments').length).toEqual(2);
-    test.stipDecisionDocumentId = test.getState(
+    test.stipDecisionDocketEntryId = test.getState(
       'messageDetail.0.attachments.1.documentId',
     );
   });

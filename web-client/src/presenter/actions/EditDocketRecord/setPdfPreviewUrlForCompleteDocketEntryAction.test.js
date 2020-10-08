@@ -24,17 +24,17 @@ describe('setPdfPreviewUrlForCompleteDocketEntryAction', () => {
           presenter,
         },
         props: {
-          documentId: DOCUMENT_ID,
+          docketEntryId: DOCUMENT_ID,
         },
         state: {
           caseDetail: {
-            docketNumber: '123-20',
-            documents: [
+            docketEntries: [
               {
-                documentId: DOCUMENT_ID,
+                docketEntryId: DOCUMENT_ID,
                 isFileAttached: true,
               },
             ],
+            docketNumber: '123-20',
           },
           currentViewMetadata: {},
         },
@@ -57,17 +57,17 @@ describe('setPdfPreviewUrlForCompleteDocketEntryAction', () => {
           presenter,
         },
         props: {
-          documentId: DOCUMENT_ID,
+          docketEntryId: DOCUMENT_ID,
         },
         state: {
           caseDetail: {
-            docketNumber: '123-20',
-            documents: [
+            docketEntries: [
               {
-                documentId: DOCUMENT_ID,
+                docketEntryId: DOCUMENT_ID,
                 isFileAttached: false,
               },
             ],
+            docketNumber: '123-20',
           },
           currentViewMetadata: {},
         },

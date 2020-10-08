@@ -16,23 +16,23 @@ describe('updateDocketEntryInteractor', () => {
   let mockCurrentUser;
 
   const workItem = {
-    docketNumber: '45678-18',
-    document: {
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    docketEntry: {
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
       eventCode: 'A',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },
+    docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     updatedAt: new Date().toISOString(),
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
-  const documents = [
+  const docketEntries = [
     {
+      docketEntryId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
       docketNumber: '45678-18',
-      documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
       documentType: 'Petition',
       eventCode: 'P',
       filedBy: 'Test Petitioner',
@@ -40,8 +40,8 @@ describe('updateDocketEntryInteractor', () => {
       workItems: [workItem],
     },
     {
+      docketEntryId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
       docketNumber: '45678-18',
-      documentId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
       documentType: 'Record on Appeal',
       eventCode: 'ROA',
       filedBy: 'Test Petitioner',
@@ -49,8 +49,8 @@ describe('updateDocketEntryInteractor', () => {
       workItems: [workItem],
     },
     {
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '45678-18',
-      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
       eventCode: 'A',
       filedBy: 'Test Petitioner',
@@ -58,8 +58,8 @@ describe('updateDocketEntryInteractor', () => {
       workItem,
     },
     {
+      docketEntryId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
       docketNumber: '45678-18',
-      documentId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
       documentType: 'Record on Appeal',
       eventCode: 'ROA',
       filedBy: 'Test Petitioner',
@@ -67,8 +67,8 @@ describe('updateDocketEntryInteractor', () => {
       workItems: [workItem],
     },
     {
+      docketEntryId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
       docketNumber: '45678-18',
-      documentId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',
@@ -91,47 +91,8 @@ describe('updateDocketEntryInteractor', () => {
       state: 'CA',
     },
     createdAt: '',
+    docketEntries,
     docketNumber: '45678-18',
-    docketRecord: [
-      {
-        description: 'Petition',
-        docketRecordId: 'e275309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
-        eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
-      },
-      {
-        description: 'first record',
-        docketRecordId: '8675309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
-        eventCode: 'ROA',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 2,
-      },
-      {
-        description: 'second record',
-        docketRecordId: 'c575309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        eventCode: 'A',
-        filingDate: '2018-03-01T00:01:00.000Z',
-      },
-      {
-        description: 'third record',
-        docketRecordId: 'd375309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
-        eventCode: 'ROA',
-        filingDate: '2018-03-01T00:01:00.000Z',
-      },
-      {
-        description: 'Request for Place of Trial',
-        docketRecordId: 'f175309b-18d0-43ec-bafb-654e83405411',
-        documentId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
-        eventCode: 'RQT',
-        filingDate: '2018-03-01T00:01:00.000Z',
-      },
-    ],
-    documents,
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -241,7 +202,7 @@ describe('updateDocketEntryInteractor', () => {
   });
 
   it('adds documents and workitems but does not try to delete workitem because they all have files attached', async () => {
-    workItem.document.isFileAttached = true;
+    workItem.docketEntry.isFileAttached = true;
     await expect(
       updateDocketEntryInteractor({
         applicationContext,
@@ -314,7 +275,7 @@ describe('updateDocketEntryInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[2],
+        .caseToUpdate.docketEntries[2],
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       freeText: 'Some text about this document',

@@ -19,10 +19,10 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultCorrespondenceDocumentIdAction } from '../actions/setDefaultCorrespondenceDocumentIdAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
-import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
@@ -30,9 +30,9 @@ import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
-  setDefaultDraftDocumentIdAction,
+  setTrialSessionJudgeAction,
   setDefaultCorrespondenceDocumentIdAction,
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
@@ -46,7 +46,7 @@ const gotoCaseDetailExternal = [
 ];
 
 const gotoCaseDetailInternalWithNotes = [
-  setDocumentIdAction,
+  setDocketEntryIdAction,
   getJudgesCaseNoteForCaseAction,
   setJudgesCaseNoteOnCaseDetailAction,
   gotoCaseDetailInternal,

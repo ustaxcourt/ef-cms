@@ -5,7 +5,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
 
   const {
-    documents,
+    docketEntries,
     hasVerifiedIrsNotice,
     irsNoticeDate,
     petitionPaymentDate,
@@ -60,10 +60,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       .formatDateString(irsNoticeDate, 'MMDDYY');
   }
 
-  const documentsByType = (documents || []).reduce((acc, document) => {
-    acc[document.documentType] = document;
-    return acc;
-  }, {});
+  const documentsByType = (docketEntries || [])
+    .filter(d => !d.isMinuteEntry)
+    .reduce((acc, docketEntry) => {
+      acc[docketEntry.documentType] = docketEntry;
+      return acc;
+    }, {});
 
   // orders needed summary
   const hasOrders = [

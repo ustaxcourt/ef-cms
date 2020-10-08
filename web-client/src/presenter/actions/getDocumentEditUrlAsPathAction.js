@@ -2,7 +2,7 @@ import { getDocumentEditUrl } from '../utilities/getDocumentEditUrl';
 import { state } from 'cerebral';
 
 /**
- * returns the editUrl as path for the document in props.documentIdToEdit
+ * returns the editUrl as path for the document in props.docketEntryIdToEdit
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -15,12 +15,12 @@ export const getDocumentEditUrlAsPathAction = ({
   get,
   props,
 }) => {
-  const { caseDetail, documentIdToEdit } = props;
+  const { caseDetail, docketEntryIdToEdit } = props;
   const parentMessageId = get(state.parentMessageId);
 
-  if (documentIdToEdit) {
-    const documentToEdit = caseDetail.documents.find(
-      document => document.documentId === documentIdToEdit,
+  if (docketEntryIdToEdit) {
+    const documentToEdit = caseDetail.docketEntries.find(
+      document => document.docketEntryId === docketEntryIdToEdit,
     );
 
     let editUrl = getDocumentEditUrl({

@@ -4,8 +4,8 @@ export const docketClerkEditsSignedUploadedCourtIssuedDocument = (
 ) => {
   return it('Docket Clerk edits a signed uploaded court issued document', async () => {
     await test.runSequence('openConfirmEditModalSequence', {
+      docketEntryIdToEdit: test.docketEntryId,
       docketNumber: test.docketNumber,
-      documentIdToEdit: test.documentId,
     });
 
     await test.runSequence('navigateToEditOrderSequence');
@@ -28,8 +28,8 @@ export const docketClerkEditsSignedUploadedCourtIssuedDocument = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDocument = test
-      .getState('caseDetail.documents')
-      .find(d => d.documentId === test.documentId);
+      .getState('caseDetail.docketEntries')
+      .find(d => d.docketEntryId === test.docketEntryId);
     expect(caseDocument.signedAt).toEqual(null);
   });
 };

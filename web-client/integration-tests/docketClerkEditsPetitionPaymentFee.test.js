@@ -1,5 +1,8 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { PAYMENT_STATUS } from '../../shared/src/business/entities/EntityConstants';
+import {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
@@ -29,7 +32,7 @@ describe('docket clerk edits a petition payment fee', () => {
     expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual(
       PAYMENT_STATUS.UNPAID,
     );
-    expect(test.getState('caseDetail.docketRecord')).not.toContainEqual({
+    expect(test.getState('caseDetail.docketEntries')).not.toContainEqual({
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
       filingDate: '2001-01-01T05:00:00.000Z',
@@ -80,10 +83,12 @@ describe('docket clerk edits a petition payment fee', () => {
 
     expect(
       test
-        .getState('caseDetail.documents')
-        .find(r => r.description === 'Filing Fee Paid'),
+        .getState('caseDetail.docketEntries')
+        .find(
+          r => r.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+        ),
     ).toMatchObject({
-      description: 'Filing Fee Paid',
+      documentTitle: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
       eventCode: 'FEE',
       filingDate: '2001-01-01T05:00:00.000Z',
       index: 3,

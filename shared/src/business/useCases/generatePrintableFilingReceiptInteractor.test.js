@@ -6,7 +6,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generatePrintableFilingReceiptInteractor', () => {
-  const mockPrimaryDocumentId = MOCK_CASE.documents[0].documentId;
+  const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
@@ -27,7 +27,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
-        primaryDocumentId: mockPrimaryDocumentId,
+        primaryDocumentId: mockPrimaryDocketEntryId,
       },
     });
 
@@ -49,14 +49,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
-        primaryDocumentId: mockPrimaryDocumentId,
-        secondaryDocument: { documentId: 4 },
+        primaryDocumentId: mockPrimaryDocketEntryId,
+        secondaryDocument: { docketEntryId: 4 },
         secondaryDocumentFile: { fakeDocument: true },
         secondarySupportingDocuments: [
-          { documentId: '3' },
-          { documentId: '7' },
+          { docketEntryId: '3' },
+          { docketEntryId: '7' },
         ],
-        supportingDocuments: [{ documentId: '1' }, { documentId: '2' }],
+        supportingDocuments: [{ docketEntryId: '1' }, { docketEntryId: '2' }],
       },
     });
 
@@ -72,14 +72,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
-        primaryDocumentId: mockPrimaryDocumentId,
-        secondaryDocument: { documentId: 4 },
+        primaryDocumentId: mockPrimaryDocketEntryId,
+        secondaryDocument: { docketEntryId: 4 },
         secondaryDocumentFile: { fakeDocument: true },
         secondarySupportingDocuments: [
-          { documentId: '3' },
-          { documentId: '7' },
+          { docketEntryId: '3' },
+          { docketEntryId: '7' },
         ],
-        supportingDocuments: [{ documentId: '1' }, { documentId: '2' }],
+        supportingDocuments: [{ docketEntryId: '1' }, { docketEntryId: '2' }],
       },
     });
 

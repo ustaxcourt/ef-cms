@@ -1,17 +1,17 @@
 import { state } from 'cerebral';
 
 export const paperDocketEntryHelper = get => {
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const isEditingDocketEntry = get(state.isEditingDocketEntry);
   const caseDetail = get(state.caseDetail);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
 
   const allCaseDocuments = [
-    ...(caseDetail.documents || []),
+    ...(caseDetail.docketEntries || []),
     ...(caseDetail.correspondence || []),
   ];
   const document = allCaseDocuments.find(
-    item => item.documentId === documentId,
+    item => item.docketEntryId === docketEntryId,
   );
 
   const docketEntryHasDocument =

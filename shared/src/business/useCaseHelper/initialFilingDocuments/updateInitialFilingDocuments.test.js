@@ -2,15 +2,18 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  PARTY_TYPES,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
+const {
   updateInitialFilingDocuments,
 } = require('./updateInitialFilingDocuments');
 const { Case } = require('../../../business/entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
-    documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+    docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
     filedBy: 'Test Petitioner',
@@ -30,13 +33,13 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should add a new initial filing document to the case when the document does not exist on the original case', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, documents: [] },
+      { ...MOCK_CASE, docketEntries: [] },
       { applicationContext },
     );
 
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
     };
 
     await updateInitialFilingDocuments({
@@ -46,21 +49,21 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const rqtFile = mockOriginalCase.documents.find(
-      d => d.documentId === mockRQT.documentId,
+    const rqtFile = mockOriginalCase.docketEntries.find(
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(rqtFile).toBeDefined();
   });
 
   it('should set isFileAttached and isPaper to true', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, documents: [] },
+      { ...MOCK_CASE, docketEntries: [] },
       { applicationContext },
     );
 
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
     };
 
     await updateInitialFilingDocuments({
@@ -70,19 +73,63 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const filedDocument = mockOriginalCase.documents.find(
-      d => d.documentId === mockRQT.documentId,
+    const filedDocument = mockOriginalCase.docketEntries.find(
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(filedDocument.isFileAttached).toBeTruthy();
     expect(filedDocument.isPaper).toBeTruthy();
   });
 
-  it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
-    mockCaseToUpdate = { ...MOCK_CASE, documents: [] };
+  it('should set partyPrimary and partySecondary to true if there is a contactSecondary', async () => {
     mockOriginalCase = new Case(
       {
         ...MOCK_CASE,
-        documents: [...MOCK_CASE.documents, mockRQT],
+        contactSecondary: {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          name: 'Test Petitioner',
+          postalCode: '12345',
+          state: 'TX',
+        },
+        docketEntries: [],
+        partyType: PARTY_TYPES.petitionerSpouse,
+      },
+      { applicationContext },
+    );
+
+    mockCaseToUpdate = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        name: 'Test Petitioner',
+        postalCode: '12345',
+        state: 'TX',
+      },
+      docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
+      partyType: PARTY_TYPES.petitionerSpouse,
+    };
+
+    await updateInitialFilingDocuments({
+      applicationContext,
+      authorizedUser: petitionsClerkUser,
+      caseEntity: mockOriginalCase,
+      caseToUpdate: mockCaseToUpdate,
+    });
+
+    const filedDocument = mockOriginalCase.docketEntries.find(
+      d => d.docketEntryId === mockRQT.docketEntryId,
+    );
+    expect(filedDocument.partyPrimary).toBeTruthy();
+    expect(filedDocument.partySecondary).toBeTruthy();
+  });
+
+  it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {
+    mockCaseToUpdate = { ...MOCK_CASE, docketEntries: [] };
+    mockOriginalCase = new Case(
+      {
+        ...MOCK_CASE,
+        docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
       },
       { applicationContext },
     );
@@ -94,25 +141,25 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const rqtFile = mockOriginalCase.documents.find(
-      d => d.documentId === mockRQT.documentId,
+    const rqtFile = mockOriginalCase.docketEntries.find(
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(rqtFile).toBeUndefined();
   });
 
   it('should remove the original document and add the new one to the case when the document has been re-added', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, documents: [...MOCK_CASE.documents, mockRQT] },
+      { ...MOCK_CASE, docketEntries: [...MOCK_CASE.docketEntries, mockRQT] },
       { applicationContext },
     );
 
     const mockNewRQT = {
       ...mockRQT,
-      documentId: applicationContext.getUniqueId(),
+      docketEntryId: applicationContext.getUniqueId(),
     };
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      documents: [...MOCK_CASE.documents, mockNewRQT],
+      docketEntries: [...MOCK_CASE.docketEntries, mockNewRQT],
     };
 
     await updateInitialFilingDocuments({
@@ -122,12 +169,12 @@ describe('addNewInitialFilingToCase', () => {
       caseToUpdate: mockCaseToUpdate,
     });
 
-    const oldRqtFile = mockOriginalCase.documents.find(
-      d => d.documentId === mockRQT.documentId,
+    const oldRqtFile = mockOriginalCase.docketEntries.find(
+      d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(oldRqtFile).toBeUndefined();
-    const newRqtFile = mockOriginalCase.documents.find(
-      d => d.documentId === mockNewRQT.documentId,
+    const newRqtFile = mockOriginalCase.docketEntries.find(
+      d => d.docketEntryId === mockNewRQT.docketEntryId,
     );
     expect(newRqtFile).toBeDefined();
   });

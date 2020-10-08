@@ -20,17 +20,17 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.documents.find(
-      doc => doc.documentId === documentId,
+    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     // Type H
@@ -100,12 +100,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.documents.find(
-      doc => doc.documentId === documentId,
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2018-01-01',
+      date: '2018-01-01T05:00:00.000Z',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
       documentType: 'Transcript',
       eventCode: TRANSCRIPT_EVENT_CODE,
@@ -113,12 +113,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     });
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     expect(test.getState('form')).toMatchObject({
-      date: '2018-01-01',
+      date: '2018-01-01T05:00:00.000Z',
       day: '1',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
       documentType: 'Transcript',

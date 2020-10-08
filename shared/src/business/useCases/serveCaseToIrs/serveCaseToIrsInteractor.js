@@ -14,7 +14,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -25,10 +25,10 @@ exports.addDocketEntryForPaymentStatus = ({
   user,
 }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    caseEntity.addDocument(
-      new Document(
+    caseEntity.addDocketEntry(
+      new DocketEntry(
         {
-          description: 'Filing Fee Paid',
+          documentTitle: 'Filing Fee Paid',
           documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
           eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
           filingDate: caseEntity.petitionPaymentDate,
@@ -42,10 +42,10 @@ exports.addDocketEntryForPaymentStatus = ({
       ),
     );
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    caseEntity.addDocument(
-      new Document(
+    caseEntity.addDocketEntry(
+      new DocketEntry(
         {
-          description: 'Filing Fee Waived',
+          documentTitle: 'Filing Fee Waived',
           documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
           eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
           filingDate: caseEntity.petitionPaymentWaivedDate,
@@ -62,7 +62,7 @@ exports.addDocketEntryForPaymentStatus = ({
 };
 
 exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
-  const stinDocument = caseEntity.documents.find(
+  const stinDocument = caseEntity.docketEntries.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
@@ -70,10 +70,10 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   if (stinDocument) {
     await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
       applicationContext,
-      key: stinDocument.documentId,
+      key: stinDocument.docketEntryId,
     });
 
-    return stinDocument.documentId;
+    return stinDocument.docketEntryId;
   }
 };
 
@@ -90,13 +90,13 @@ const addDocketEntries = ({ caseEntity }) => {
   );
 
   for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
-    const foundDocument = caseEntity.documents.find(
+    const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
 
-    if (foundDocument) {
-      foundDocument.isOnDocketRecord = true;
-      caseEntity.updateDocument(foundDocument);
+    if (foundDocketEntry) {
+      foundDocketEntry.isOnDocketRecord = true;
+      caseEntity.updateDocketEntry(foundDocketEntry);
     }
   }
 };
@@ -133,21 +133,21 @@ exports.serveCaseToIrsInteractor = async ({
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-    const initialDocument = caseEntity.documents.find(
+    const initialDocketEntry = caseEntity.docketEntries.find(
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocument) {
-      initialDocument.setAsServed([
+    if (initialDocketEntry) {
+      initialDocketEntry.setAsServed([
         {
           name: 'IRS',
           role: ROLES.irsSuperuser,
         },
       ]);
-      caseEntity.updateDocument(initialDocument);
+      caseEntity.updateDocketEntry(initialDocketEntry);
 
       if (
-        initialDocument.documentType ===
+        initialDocketEntry.documentType ===
         INITIAL_DOCUMENT_TYPES.petition.documentType
       ) {
         await applicationContext
@@ -155,13 +155,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            documentEntity: initialDocument,
+            docketEntryEntity: initialDocketEntry,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity: initialDocument,
+          docketEntryEntity: initialDocketEntry,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
@@ -183,21 +183,21 @@ exports.serveCaseToIrsInteractor = async ({
     .validate();
 
   //This functionality will probably change soon
-  //  deletedStinDocumentId = await exports.deleteStinIfAvailable({
+  //  deletedStinDocketEntryId = await exports.deleteStinIfAvailable({
   //   applicationContext,
   //   caseEntity,
   // });
-  // caseEntity.documents = caseEntity.documents.filter(
-  //   item => item.documentId !== deletedStinDocumentId,
+  // caseEntity.docketEntries = caseEntity.docketEntries.filter(
+  //   item => item.docketEntryId !== deletedStinDocketEntryId,
   // );
 
-  const petitionDocument = caseEntity.documents.find(
+  const petitionDocument = caseEntity.docketEntries.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
   const initializeCaseWorkItem = petitionDocument.workItem;
 
-  initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
   initializeCaseWorkItem.docketNumberWithSuffix =
     caseEntity.docketNumberWithSuffix;
@@ -223,34 +223,47 @@ exports.serveCaseToIrsInteractor = async ({
     applicationContext,
     workItemToUpdate: initializeCaseWorkItem,
   });
+  const caseWithServedDocketEntryInformation = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({ applicationContext, caseToUpdate: caseEntity });
 
-  for (const doc of caseEntity.documents) {
+  const caseEntityToUpdate = new Case(caseWithServedDocketEntryInformation, {
+    applicationContext,
+  });
+
+  for (const doc of caseEntityToUpdate.docketEntries) {
     if (doc.isFileAttached) {
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        docketNumber: caseEntity.docketNumber,
-        documentId: doc.documentId,
-        replaceCoversheet: !caseEntity.isPaper,
-        useInitialData: !caseEntity.isPaper,
+        docketEntryId: doc.docketEntryId,
+        docketNumber: caseEntityToUpdate.docketNumber,
+        replaceCoversheet: !caseEntityToUpdate.isPaper,
+        useInitialData: !caseEntityToUpdate.isPaper,
       });
 
       doc.numberOfPages = await applicationContext
         .getUseCaseHelpers()
         .countPagesInDocument({
           applicationContext,
-          documentId: doc.documentId,
+          docketEntryId: doc.docketEntryId,
         });
     }
   }
 
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
-  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
+    caseEntityToUpdate,
+  );
+  const {
+    docketNumberWithSuffix,
+    preferredTrialCity,
+    receivedAt,
+  } = caseEntityToUpdate;
 
   const address = {
-    ...caseEntity.contactPrimary,
+    ...caseEntityToUpdate.contactPrimary,
     countryName:
-      caseEntity.contactPrimary.countryType !== COUNTRY_TYPES.DOMESTIC
-        ? caseEntity.contactPrimary.country
+      caseEntityToUpdate.contactPrimary.countryType !== COUNTRY_TYPES.DOMESTIC
+        ? caseEntityToUpdate.contactPrimary.country
         : '',
   };
 
@@ -269,11 +282,14 @@ exports.serveCaseToIrsInteractor = async ({
           .formatDateString(receivedAt, 'MMMM D, YYYY'),
         servedDate: applicationContext
           .getUtilities()
-          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+          .formatDateString(
+            caseEntityToUpdate.getIrsSendDate(),
+            'MMMM D, YYYY',
+          ),
       },
     });
 
-  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
+  const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -291,21 +307,21 @@ exports.serveCaseToIrsInteractor = async ({
 
   let urlToReturn;
 
-  if (caseEntity.isPaper) {
-    addDocketEntries({ caseEntity });
+  if (caseEntityToUpdate.isPaper) {
+    addDocketEntries({ caseEntity: caseEntityToUpdate });
 
     ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
       applicationContext,
-      documentId: caseConfirmationPdfName,
+      key: caseConfirmationPdfName,
       useTempBucket: false,
     }));
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntityToUpdate.validate().toRawObject(),
   });
 
   return urlToReturn;

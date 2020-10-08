@@ -21,7 +21,7 @@ describe('editDocketEntryMetaHelper', () => {
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
-            documentId: '123',
+            docketEntryId: '123',
             documentType: 'Motion to Withdraw as Counsel',
           },
         },
@@ -33,11 +33,11 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            documents: [],
+            docketEntries: [],
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
-            documentId: '123',
+            docketEntryId: '123',
             documentType: 'Amendment [anything]',
             eventCode: 'ADMT',
             previousDocument: {
@@ -53,11 +53,11 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            documents: [],
+            docketEntries: [],
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
-            documentId: '123',
+            docketEntryId: '123',
             documentType: 'Amendment [anything]',
             eventCode: 'ADMT',
             previousDocument: {
@@ -76,7 +76,7 @@ describe('editDocketEntryMetaHelper', () => {
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
-            documentId: '123',
+            docketEntryId: '123',
             documentType: 'Answer',
           },
         },
@@ -91,7 +91,7 @@ describe('editDocketEntryMetaHelper', () => {
             partyType: PARTY_TYPES.petitioner,
           },
           form: {
-            documentId: '123',
+            docketEntryId: '123',
             documentType: 'Answer',
             isStricken: true,
             strickenAt: '2019-03-01T21:40:46.415Z',

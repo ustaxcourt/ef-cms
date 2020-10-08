@@ -11,13 +11,13 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
- * @param {object} providers.documentId the id of the document no longer pending
+ * @param {object} providers.docketEntryId the id of the docket entry no longer pending
  * @returns {object} the updated case data
  */
 exports.removeCasePendingItemInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -29,9 +29,9 @@ exports.removeCasePendingItemInteractor = async ({
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  caseToUpdate.documents.forEach(document => {
-    if (document.documentId === documentId) {
-      document.pending = false;
+  caseToUpdate.docketEntries.forEach(docketEntry => {
+    if (docketEntry.docketEntryId === docketEntryId) {
+      docketEntry.pending = false;
     }
   });
 

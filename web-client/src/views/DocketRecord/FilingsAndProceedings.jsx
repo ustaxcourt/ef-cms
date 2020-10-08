@@ -34,14 +34,15 @@ export const FilingsAndProceedings = connect(
           <NonMobile>
             <Button
               link
-              aria-label={`View PDF: ${entry.description}`}
+              aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(
+                'text-left',
                 entry.isStricken && 'stricken-docket-record',
               )}
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
+                  docketEntryId: entry.docketEntryId,
                   docketNumber: caseDetail.docketNumber,
-                  documentId: entry.documentId,
                 })
               }
             >
@@ -83,7 +84,7 @@ export const FilingsAndProceedings = connect(
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
-            {entry.description}
+            {entry.descriptionDisplay}
           </>
         )}
 
@@ -99,7 +100,7 @@ export const FilingsAndProceedings = connect(
             onClick={() =>
               changeTabAndSetViewerDocumentToDisplaySequence({
                 docketRecordTab: 'documentView',
-                viewerDocumentToDisplay: { documentId: entry.documentId },
+                viewerDocumentToDisplay: { docketEntryId: entry.docketEntryId },
               })
             }
           >

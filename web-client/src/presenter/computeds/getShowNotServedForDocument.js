@@ -1,13 +1,13 @@
 export const getShowNotServedForDocument = ({
   caseDetail,
-  documentId,
+  docketEntryId,
   draftDocuments,
   UNSERVABLE_EVENT_CODES,
 }) => {
   let showNotServed = false;
 
-  const caseDocument = caseDetail.documents.find(
-    document => document.documentId === documentId,
+  const caseDocument = caseDetail.docketEntries.find(
+    document => document.docketEntryId === docketEntryId,
   );
 
   if (caseDocument) {
@@ -17,7 +17,7 @@ export const getShowNotServedForDocument = ({
 
     const isDraftDocument =
       draftDocuments &&
-      !!draftDocuments.find(draft => draft.documentId === documentId);
+      !!draftDocuments.find(draft => draft.docketEntryId === docketEntryId);
 
     showNotServed = !isUnservable && !caseDocument.servedAt && !isDraftDocument;
   }

@@ -35,6 +35,7 @@ import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
+import { clearDraftDocumentViewerDocketEntryIdSequence } from './sequences/clearDraftDocumentViewerDocketEntryIdSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -177,6 +178,7 @@ import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialM
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
+import { openCaseInNewTabSequence } from './sequences/openCaseInNewTabSequence';
 import { openCaseInventoryReportModalSequence } from './sequences/openCaseInventoryReportModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
@@ -400,7 +402,7 @@ import { validateCaseInventoryReportModalSequence } from './sequences/validateCa
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
-import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
+import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
 import { validateEditPrivatePractitionersSequence } from './sequences/caseAssociation/validateEditPrivatePractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -472,6 +474,7 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearAdvancedSearchFormSequence,
     clearAlertSequence,
+    clearDraftDocumentViewerDocketEntryIdSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
@@ -614,6 +617,7 @@ export const presenter = {
     openCancelDraftDocumentModalSequence,
     openCaseDifferenceModalSequence,
     openCaseDocumentDownloadUrlSequence,
+    openCaseInNewTabSequence,
     openCaseInventoryReportModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
@@ -835,7 +839,7 @@ export const presenter = {
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
-    validateDocketRecordSequence,
+    validateDocumentSequence,
     validateEditIrsPractitionersSequence,
     validateEditPrivatePractitionersSequence,
     validateExternalDocumentInformationSequence,

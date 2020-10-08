@@ -1,11 +1,21 @@
-exports.countPagesInDocument = async ({ applicationContext, documentId }) => {
+exports.countPagesInDocument = async ({
+  applicationContext,
+  docketEntryId,
+  documentBytes,
+}) => {
+  let bytes;
   const { PDFDocument } = await applicationContext.getPdfLib();
-  const bytes = await applicationContext.getPersistenceGateway().getDocument({
-    applicationContext,
-    documentId,
-    protocol: 'S3',
-    useTempBucket: false,
-  });
+  if (documentBytes) {
+    bytes = documentBytes;
+  } else {
+    bytes = await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      key: docketEntryId,
+      protocol: 'S3',
+      useTempBucket: false,
+    });
+  }
+
   const pdfDoc = await PDFDocument.load(bytes);
   return pdfDoc.getPages().length;
 };

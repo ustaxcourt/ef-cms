@@ -93,22 +93,25 @@ describe('updateCounselOnCaseInteractor', () => {
           name: 'Guy Fieri',
           phone: '1234567890',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'CA',
         },
+        contactSecondary: {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'CA',
+        },
+        docketEntries: MOCK_CASE.docketEntries,
         docketNumber,
-        docketRecord: [
-          {
-            description: 'first record',
-            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-            eventCode: 'P',
-            filingDate: '2018-03-01T00:01:00.000Z',
-            index: 1,
-          },
-        ],
-        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         irsPractitioners: mockIrsPractitioners,
-        partyType: PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity: 'Fresno, California',
         privatePractitioners: mockPrivatePractitioners,
         procedureType: 'Regular',
@@ -191,6 +194,28 @@ describe('updateCounselOnCaseInteractor', () => {
     expect(updatedPractitioner.representingSecondary).toBe(false);
     expect(updatedPractitioner.serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+  });
+
+  it('updates the service indicator on the contacts when they are being represented', async () => {
+    const results = await updateCounselOnCaseInteractor({
+      applicationContext,
+      docketNumber: '123-19',
+      userData: {
+        email: 'not.editable@example.com',
+        name: 'Saul Goodman',
+        representingPrimary: true,
+        representingSecondary: true,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
+    });
+
+    expect(results.contactPrimary.serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
+    expect(results.contactSecondary.serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
 

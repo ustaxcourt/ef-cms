@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -39,8 +39,8 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocument = caseEntity.getDocumentById({
-    documentId: docketEntryMeta.documentId,
+  const originalDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId: docketEntryMeta.docketEntryId,
   });
 
   const editableFields = {
@@ -52,7 +52,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     certificateOfService: docketEntryMeta.certificateOfService,
     certificateOfServiceDate: docketEntryMeta.certificateOfServiceDate,
     date: docketEntryMeta.date,
-    description: docketEntryMeta.description,
     docketNumbers: docketEntryMeta.docketNumbers,
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
@@ -76,23 +75,19 @@ exports.updateDocketEntryMetaInteractor = async ({
     trialLocation: docketEntryMeta.trialLocation,
   };
 
-  if (originalDocument) {
+  if (originalDocketEntry) {
     const servedAtUpdated =
       editableFields.servedAt &&
-      editableFields.servedAt !== originalDocument.servedAt;
+      editableFields.servedAt !== originalDocketEntry.servedAt;
     const filingDateUpdated =
       editableFields.filingDate &&
-      editableFields.filingDate !== originalDocument.filingDate;
+      editableFields.filingDate !== originalDocketEntry.filingDate;
     const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
-    const documentEntity = new Document(
+    const docketEntryEntity = new DocketEntry(
       {
-        ...originalDocument,
+        ...originalDocketEntry,
         ...editableFields,
-        description:
-          editableFields.documentTitle ||
-          editableFields.description ||
-          originalDocument.description,
         filedBy: undefined, // allow constructor to re-generate
         ...caseEntity.getCaseContacts({
           contactPrimary: true,
@@ -102,14 +97,22 @@ exports.updateDocketEntryMetaInteractor = async ({
       { applicationContext },
     );
 
-    caseEntity.updateDocument(documentEntity);
+    caseEntity.updateDocketEntry(docketEntryEntity);
 
     if (shouldGenerateCoversheet) {
+      await applicationContext.getPersistenceGateway().updateDocketEntry({
+        applicationContext,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        docketNumber,
+        document: docketEntryEntity.validate(),
+      });
+
       // servedAt or filingDate has changed, generate a new coversheet
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
+        docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
-        documentId: originalDocument.documentId,
+        filingDateUpdated,
       });
     }
   }

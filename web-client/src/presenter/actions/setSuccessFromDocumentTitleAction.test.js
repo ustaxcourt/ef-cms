@@ -13,15 +13,15 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentTitle: 'Order',
               eventCode: 'O',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
 
@@ -35,15 +35,15 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Order',
               eventCode: 'O',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
 
@@ -57,14 +57,14 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Order',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
         isCreatingOrder: true,
       },
     });
@@ -81,15 +81,15 @@ describe('setSuccessFromDocumentTitleAction,', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Proposed Stipulated Decision',
               eventCode: 'PSDE',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
 

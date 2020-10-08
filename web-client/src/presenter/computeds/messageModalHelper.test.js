@@ -21,26 +21,26 @@ describe('messageModalHelper', () => {
       ...MOCK_CASE,
       correspondence: [
         {
-          documentId: '986',
+          correspondenceId: '986',
           documentTitle: 'Test Correspondence',
         },
       ],
-      docketRecord: [
-        { documentId: '123', index: 1 },
-        { documentId: '234', index: 2 },
-        { index: 3 }, // note: no document
-      ],
-      documents: [
+      docketEntries: [
         {
           documentId: '123',
           documentType: 'Petition',
+          index: 1,
           isFileAttached: true,
+          isOnDocketRecord: true,
         },
         {
           documentId: '234',
           documentTitle: 'Some Document',
+          index: 2,
           isFileAttached: true,
+          isOnDocketRecord: true,
         },
+        { index: 3, isOnDocketRecord: true },
         { documentId: '345', documentType: 'Order', isDraft: true },
       ],
     };
@@ -80,7 +80,7 @@ describe('messageModalHelper', () => {
     });
 
     expect(result.correspondence).toMatchObject([
-      { documentId: '986', documentTitle: 'Test Correspondence' },
+      { correspondenceId: '986', documentTitle: 'Test Correspondence' },
     ]);
   });
 
@@ -104,8 +104,8 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
-          correspondence: [{ documentId: '123' }],
-          documents: [],
+          correspondence: [{ correspondenceId: '123' }],
+          docketEntries: [],
         },
         modal: {
           form: {},
@@ -124,7 +124,7 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          documents: [],
+          docketEntries: [],
         },
         modal: {
           form: {},
@@ -138,14 +138,19 @@ describe('messageModalHelper', () => {
     expect(result.hasDocuments).toEqual(false);
   });
 
-  it('returns hasDocuments true when there are documents with files attached on the case', () => {
+  it('returns hasDocuments true when there are docketEntries with files attached on the case', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
-          docketRecord: [{ documentId: '123', index: 1 }],
-          documents: [
-            { documentId: '123', isDraft: true, isFileAttached: true },
+          docketEntries: [
+            {
+              documentId: '123',
+              index: 1,
+              isDraft: true,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+            },
           ],
         },
         modal: {
@@ -160,13 +165,12 @@ describe('messageModalHelper', () => {
     expect(result.hasDocuments).toEqual(true);
   });
 
-  it('returns hasDocuments false when there are NO documents on the case', () => {
+  it('returns hasDocuments false when there are NO docketEntries on the case', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
-          docketRecord: [],
-          documents: [],
+          docketEntries: [],
         },
         modal: {
           form: {},
@@ -185,8 +189,7 @@ describe('messageModalHelper', () => {
       state: {
         caseDetail: {
           correspondence: [],
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             { documentId: '123', documentType: 'Order', isDraft: true },
           ],
         },
@@ -206,9 +209,15 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
-          correspondence: [{ documentId: '234' }],
-          docketRecord: [{ documentId: '123', index: 1 }],
-          documents: [{ documentId: '123', documentType: 'Order' }],
+          correspondence: [{ correspondenceId: '234' }],
+          docketEntries: [
+            {
+              documentId: '123',
+              documentType: 'Order',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
         },
         modal: {
           form: {},

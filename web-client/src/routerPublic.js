@@ -22,6 +22,9 @@ const revokeObjectURL = url => {
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
+    // expose route function on window for use with cypress
+    // eslint-disable-next-line no-underscore-dangle
+    window.__cy_route = path => router.route(path || '/');
 
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
@@ -38,6 +41,11 @@ const router = {
     route('/todays-opinions', () => {
       setPageTitle('Today’s Opinions');
       app.getSequence('gotoTodaysOpinionsSequence')();
+    });
+
+    route('/health', () => {
+      setPageTitle('Health Check');
+      return app.getSequence('gotoHealthCheckSequence')();
     });
 
     route('/', () => {

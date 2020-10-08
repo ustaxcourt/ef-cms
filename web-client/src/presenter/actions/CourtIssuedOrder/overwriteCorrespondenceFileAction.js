@@ -15,7 +15,7 @@ export const overwriteCorrespondenceFileAction = async ({
   path,
 }) => {
   const { primaryDocumentFile } = get(state.form);
-  const documentToEdit = get(state.documentToEdit);
+  const docketEntryId = get(state.docketEntryId);
 
   try {
     const primaryDocumentFileId = await applicationContext
@@ -23,7 +23,7 @@ export const overwriteCorrespondenceFileAction = async ({
       .uploadCorrespondenceDocumentInteractor({
         applicationContext,
         documentFile: primaryDocumentFile,
-        documentIdToOverwrite: documentToEdit.documentId,
+        keyToOverwrite: docketEntryId,
       });
 
     return path.success({

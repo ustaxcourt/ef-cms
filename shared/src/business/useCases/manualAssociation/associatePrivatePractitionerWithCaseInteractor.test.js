@@ -25,20 +25,10 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       postalCode: '12345',
       state: 'CA',
     },
-    docketNumber: '123-19',
-    docketRecord: [
-      {
-        description: 'first record',
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-        eventCode: 'P',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 1,
-      },
-    ],
-    documents: [
+    docketEntries: [
       {
         createdAt: '2018-11-21T20:49:28.192Z',
-        documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Petition',
         documentType: 'Petition',
         eventCode: 'P',
@@ -47,6 +37,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
         userId: 'd13d017b-28d1-45b6-aa7d-f54865b0121b',
       },
     ],
+    docketNumber: '123-19',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',

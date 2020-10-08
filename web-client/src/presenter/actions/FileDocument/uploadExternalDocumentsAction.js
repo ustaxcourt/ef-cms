@@ -32,7 +32,7 @@ export const uploadExternalDocumentsAction = async ({
 
   if (form.secondaryDocumentFile) {
     documentFiles.secondary = form.secondaryDocumentFile;
-    documentFiles.isFileAttached = true;
+    documentMetadata.secondaryDocument.isFileAttached = true;
   }
 
   if (form.hasSupportingDocuments) {
@@ -66,7 +66,7 @@ export const uploadExternalDocumentsAction = async ({
     return path.error();
   }
 
-  const pendingDocuments = caseDetail.documents.filter(
+  const pendingDocuments = caseDetail.docketEntries.filter(
     document =>
       document.processingStatus === 'pending' &&
       document.isFileAttached !== false,
@@ -74,8 +74,8 @@ export const uploadExternalDocumentsAction = async ({
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: document.docketEntryId,
       docketNumber: caseDetail.docketNumber,
-      documentId: document.documentId,
     });
   };
 

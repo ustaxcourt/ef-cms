@@ -7,23 +7,20 @@ const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 exports.sendServedPartiesEmails = async ({
   applicationContext,
   caseEntity,
-  documentEntity,
+  docketEntryEntity,
   servedParties,
 }) => {
-  const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
+  const { caseCaption, docketNumberWithSuffix } = caseEntity;
 
   const {
-    documentId,
+    docketEntryId,
     documentTitle,
     documentType,
     eventCode,
     filedBy,
+    index: docketEntryNumber,
     servedAt,
-  } = documentEntity;
-
-  const docketEntry = caseEntity.docketRecord.find(
-    entry => entry.documentId === documentId,
-  );
+  } = docketEntryEntity;
 
   const currentDate = applicationContext
     .getUtilities()
@@ -45,12 +42,12 @@ exports.sendServedPartiesEmails = async ({
         data: {
           caseDetail: {
             caseTitle: Case.getCaseTitle(caseCaption),
-            docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
+            docketNumber: docketNumberWithSuffix,
           },
           currentDate,
-          docketEntryNumber: docketEntry && docketEntry.index,
+          docketEntryNumber,
           documentDetail: {
-            documentId,
+            docketEntryId,
             documentTitle: documentTitle || documentType,
             eventCode,
             filedBy,
@@ -69,9 +66,7 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        docketNumber: `${caseEntity.docketNumber}${
-          caseEntity.docketNumberSuffix || ''
-        }`,
+        docketNumber: docketNumberWithSuffix,
         emailContent: '',
       },
       destinations,

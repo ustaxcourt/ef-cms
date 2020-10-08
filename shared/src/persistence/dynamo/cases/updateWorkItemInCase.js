@@ -5,13 +5,13 @@ exports.updateWorkItemInCase = async ({
   caseToUpdate,
   workItem,
 }) => {
-  let documentId = null;
-  caseToUpdate.documents.forEach(document => {
+  let docketEntryId = null;
+  caseToUpdate.docketEntries.forEach(document => {
     if (
       document.workItem &&
       document.workItem.workItemId === workItem.workItemId
     ) {
-      ({ documentId } = document);
+      ({ docketEntryId } = document);
     }
   });
 
@@ -24,7 +24,7 @@ exports.updateWorkItemInCase = async ({
     },
     Key: {
       pk: `case|${caseToUpdate.docketNumber}`,
-      sk: `document|${documentId}`,
+      sk: `docket-entry|${docketEntryId}`,
     },
     UpdateExpression: 'SET #workItem = :workItem',
     applicationContext,

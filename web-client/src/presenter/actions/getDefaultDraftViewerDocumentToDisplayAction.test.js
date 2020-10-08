@@ -17,24 +17,18 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
-                documentId: '123',
-                index: 1,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                docketEntryId: '123',
                 documentType: 'Petition',
               },
               {
-                documentId: '234',
+                docketEntryId: '234',
                 documentType: 'Order',
                 isDraft: true,
               },
               {
-                documentId: '345',
+                docketEntryId: '345',
                 documentType: 'Notice',
               },
             ],
@@ -43,7 +37,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toMatchObject({
-      viewerDraftDocumentToDisplay: { documentId: '234' },
+      viewerDraftDocumentToDisplay: { docketEntryId: '234' },
     });
   });
 
@@ -56,15 +50,9 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
-                documentId: '123',
-                index: 1,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                docketEntryId: '123',
                 documentType: 'Petition',
               },
             ],
@@ -77,43 +65,37 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns the correct document if props.documentId is set', async () => {
+  it('returns the correct document when state.draftDocumentViewerDocketEntryId is set', async () => {
     const result = await runAction(
       getDefaultDraftViewerDocumentToDisplayAction,
       {
         modules: {
           presenter,
         },
-        props: { documentId: '345' },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
-                documentId: '123',
-                index: 1,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                docketEntryId: '123',
                 documentType: 'Petition',
               },
               {
-                documentId: '234',
+                docketEntryId: '234',
                 documentType: 'Order',
               },
               {
-                documentId: '345',
+                docketEntryId: '345',
                 documentType: 'Notice',
                 isDraft: true,
               },
             ],
           },
+          draftDocumentViewerDocketEntryId: '345',
         },
       },
     );
     expect(result.output).toMatchObject({
-      viewerDraftDocumentToDisplay: { documentId: '345' },
+      viewerDraftDocumentToDisplay: { docketEntryId: '345' },
     });
   });
 });

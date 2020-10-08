@@ -19,7 +19,7 @@ const {
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
   Case,
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -50,15 +50,23 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  documentUrlTranslator,
+} = require('../../../src/business/utilities/documentUrlTranslator');
+const {
+  filterQcItemsByAssociatedJudge,
+} = require('../utilities/filterQcItemsByAssociatedJudge');
+const {
+  filterWorkItemsForUser,
+} = require('../../../src/business/utilities/filterWorkItemsForUser');
+const {
   formatAttachments,
 } = require('../../../src/business/utilities/formatAttachments');
 const {
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecordWithDocument,
-  formatDocument,
+  formatDocketEntry,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
@@ -72,6 +80,10 @@ const {
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
+const {
+  getDocQcSectionForUser,
+  getWorkQueueFilters,
+} = require('../utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -185,6 +197,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
       .mockImplementation(compareCasesByDocketNumber),
@@ -201,16 +214,19 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    filterQcItemsByAssociatedJudge: jest
+      .fn()
+      .mockImplementation(filterQcItemsByAssociatedJudge),
+    filterWorkItemsForUser: jest
+      .fn()
+      .mockImplementation(filterWorkItemsForUser),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
     formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
-    formatDocketRecordWithDocument: jest
-      .fn()
-      .mockImplementation(formatDocketRecordWithDocument),
-    formatDocument: jest.fn().mockImplementation(formatDocument),
+    formatDocketEntry: jest.fn().mockImplementation(formatDocketEntry),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
@@ -218,7 +234,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
+    getAttachmentDocumentById: jest
+      .fn()
+      .mockImplementation(Case.getAttachmentDocumentById),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getDocQcSectionForUser: jest
+      .fn()
+      .mockImplementation(getDocQcSectionForUser),
     getDocumentTypeForAddressChange: jest
       .fn()
       .mockImplementation(getDocumentTypeForAddressChange),
@@ -226,10 +248,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
-    getPetitionDocumentFromDocuments: jest
+    getPetitionDocketEntryFromDocketEntries: jest
       .fn()
-      .mockImplementation(getPetitionDocumentFromDocuments),
+      .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
@@ -244,7 +267,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
-    sortDocketRecords: jest.fn().mockImplementation(sortDocketRecords),
+    sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
   });
 
   const mockGetHttpClientReturnValue = {
@@ -318,8 +341,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteSectionOutboxRecord,
-    deleteUserOutboxRecord,
+    deleteSectionOutboxRecord: jest
+      .fn()
+      .mockImplementation(deleteSectionOutboxRecord),
+    deleteUserOutboxRecord: jest
+      .fn()
+      .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
     getAllCaseDeadlines: jest.fn(),
@@ -329,7 +356,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
-    getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
+    getDocumentQCInboxForSection: jest
+      .fn()
+      .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDocumentQCInboxForUser: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForUserPersistence),
@@ -387,11 +416,15 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(() => new Uint8Array([])),
     docketNumberGenerator: mockCreateDocketNumberGenerator,
+    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     environment: {
+      appEndpoint: 'localhost:1234',
+      dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
     },
     filterCaseMetadata: jest.fn(),
+    getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),

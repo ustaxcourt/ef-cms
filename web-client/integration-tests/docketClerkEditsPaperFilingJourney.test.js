@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
 
 const test = setupTest();
 
@@ -81,19 +81,19 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDocument = test.getState('caseDetail.documents.0');
+    const caseDocument = test.getState('caseDetail.docketEntries.0');
     expect(caseDocument).toMatchObject({
       documentType: 'Answer',
       eventCode: 'A',
       isFileAttached: true,
     });
-    test.documentId = caseDocument.documentId;
+    test.docketEntryId = caseDocument.docketEntryId;
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {
     await test.runSequence('gotoCompleteDocketEntrySequence', {
+      docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: test.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
@@ -103,6 +103,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
     );
 
     await test.runSequence('removeScannedPdfSequence');
+    await wait(200);
 
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'scan',

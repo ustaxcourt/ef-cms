@@ -57,9 +57,7 @@ describe('createCase integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Rick Petitioner, Petitioner',
-      docketNumber: '101-19',
-      docketNumberWithSuffix: '101-19S',
-      documents: [
+      docketEntries: [
         {
           documentType: 'Petition',
           eventCode: 'P',
@@ -68,12 +66,12 @@ describe('createCase integration test', () => {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
-            docketNumber: '101-19',
-            docketNumberWithSuffix: '101-19S',
-            document: {
+            docketEntry: {
               documentType: 'Petition',
               filedBy: 'Petr. Rick Petitioner',
             },
+            docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19S',
             isInitializeCase: true,
             section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
@@ -81,7 +79,9 @@ describe('createCase integration test', () => {
           },
         },
         {
-          description: 'Request for Place of Trial at Aberdeen, South Dakota',
+          documentTitle: 'Request for Place of Trial at Aberdeen, South Dakota',
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: 'RQT',
         },
         {
@@ -91,6 +91,8 @@ describe('createCase integration test', () => {
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
+      docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19S',
       initialCaption: 'Rick Petitioner, Petitioner',
       initialDocketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       noticeOfAttachments: false,
@@ -121,14 +123,14 @@ describe('createCase integration test', () => {
       {
         assigneeName: null,
         caseStatus: CASE_STATUS_TYPES.new,
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19S',
-        document: {
+        docketEntry: {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
+        docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19S',
         isInitializeCase: true,
         section: PETITIONS_SECTION,
         sentBy: 'Alex Petitionsclerk',

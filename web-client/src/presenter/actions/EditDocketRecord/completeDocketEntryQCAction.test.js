@@ -5,10 +5,10 @@ import { runAction } from 'cerebral/test';
 
 describe('completeDocketEntryQCAction', () => {
   const caseDetail = {
-    docketNumber: '123-45',
-    documents: [
-      { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
+    docketEntries: [
+      { docketEntryId: '123-456-789-abc', documentTitle: "bob's burgers" },
     ],
+    docketNumber: '123-45',
   };
 
   beforeAll(() => {
@@ -26,7 +26,7 @@ describe('completeDocketEntryQCAction', () => {
       },
       state: {
         caseDetail,
-        documentId: '123-456-789-abc',
+        docketEntryId: '123-456-789-abc',
         form: {
           primaryDocumentFile: {},
         },
@@ -46,7 +46,7 @@ describe('completeDocketEntryQCAction', () => {
       caseDetail,
       docketNumber: caseDetail.docketNumber,
       updatedDocument: {
-        documentId: '123-456-789-abc',
+        docketEntryId: '123-456-789-abc',
         documentTitle: "bob's burgers",
       },
     });

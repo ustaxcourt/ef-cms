@@ -25,8 +25,8 @@ export const docketClerkAddsDocketEntryFromMessage = test => {
     expect(orderDocument.documentTitle).toEqual('Order');
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.documentId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
       redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
 
@@ -49,8 +49,8 @@ export const docketClerkAddsDocketEntryFromMessage = test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    const caseOrderDocketEntry = caseDetailFormatted.documents.find(
-      d => d.documentId === orderDocument.documentId,
+    const caseOrderDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
+      d => d.docketEntryId === orderDocument.documentId,
     );
     expect(caseOrderDocketEntry).toBeDefined();
     expect(caseOrderDocketEntry.isOnDocketRecord).toEqual(true);

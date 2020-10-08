@@ -10,10 +10,12 @@ export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
       docketNumber: test.docketNumber,
     });
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const documents = test.getState('caseDetail.documents');
-    const orderDocument = documents.find(doc => doc.documentId === documentId);
+    const documents = test.getState('caseDetail.docketEntries');
+    const orderDocument = documents.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(orderDocument.servedAt).toBeDefined();
 

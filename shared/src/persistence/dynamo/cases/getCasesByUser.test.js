@@ -55,11 +55,10 @@ describe('getCasesByUser', () => {
     expect(result).toEqual([
       {
         archivedCorrespondences: [],
-        archivedDocuments: [],
+        archivedDocketEntries: [],
         correspondence: [],
+        docketEntries: [],
         docketNumber: '123-20',
-        docketRecord: [],
-        documents: [],
         irsPractitioners: [],
         pk: 'case|123-20',
         privatePractitioners: [],

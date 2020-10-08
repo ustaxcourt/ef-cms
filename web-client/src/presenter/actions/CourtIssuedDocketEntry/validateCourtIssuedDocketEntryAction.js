@@ -16,7 +16,7 @@ export const validateCourtIssuedDocketEntryAction = ({
 }) => {
   const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const entryMetadata = get(state.form);
 
   let errors = applicationContext
@@ -29,7 +29,9 @@ export const validateCourtIssuedDocketEntryAction = ({
   // Additional validation to determine if the signature required warning should be displayed
   if (EVENT_CODES_REQUIRING_SIGNATURE.includes(entryMetadata.eventCode)) {
     const document =
-      caseDetail.documents.find(doc => doc.documentId === documentId) || {};
+      caseDetail.docketEntries.find(
+        doc => doc.docketEntryId === docketEntryId,
+      ) || {};
 
     if (!document.signedAt) {
       if (!errors) {

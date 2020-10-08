@@ -10,7 +10,11 @@ const {
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
-  formatDocument,
+  DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../../entities/EntityConstants');
+const {
+  formatDocketEntry,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
 const {
@@ -22,8 +26,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -50,8 +53,8 @@ exports.completeDocketEntryQCInteractor = async ({
   }
 
   const {
+    docketEntryId,
     docketNumber,
-    documentId,
     overridePaperServiceAddress,
   } = entryMetadata;
 
@@ -67,13 +70,12 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
-  const { index: docketRecordIndexUpdated } = [
-    ...caseEntity.docketRecord,
-    ...caseEntity.documents.filter(d => d.isOnDocketRecord),
-  ].find(record => record.documentId === documentId);
+  const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
+    record => record.docketEntryId === docketEntryId,
+  );
 
-  const currentDocument = caseEntity.getDocumentById({
-    documentId,
+  const currentDocketEntry = caseEntity.getDocketEntryById({
+    docketEntryId,
   });
 
   const editableFields = {
@@ -104,12 +106,12 @@ exports.completeDocketEntryQCInteractor = async ({
     serviceDate: entryMetadata.serviceDate,
   };
 
-  const updatedDocument = new Document(
+  const updatedDocketEntry = new DocketEntry(
     {
-      ...currentDocument,
+      ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      description: editableFields.documentTitle,
+      documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
@@ -120,36 +122,36 @@ exports.completeDocketEntryQCInteractor = async ({
     },
     { applicationContext },
   ).validate();
-  updatedDocument.setQCed(user);
+  updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = updatedDocument.documentTitle;
-  if (updatedDocument.additionalInfo) {
-    updatedDocumentTitle += ` ${updatedDocument.additionalInfo}`;
+  let updatedDocumentTitle = updatedDocketEntry.documentTitle;
+  if (updatedDocketEntry.additionalInfo) {
+    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
   }
   updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocument(applicationContext, updatedDocument),
+    formatDocketEntry(applicationContext, updatedDocketEntry),
   )}`;
-  if (updatedDocument.additionalInfo2) {
-    updatedDocumentTitle += ` ${updatedDocument.additionalInfo2}`;
+  if (updatedDocketEntry.additionalInfo2) {
+    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
   }
 
-  let currentDocumentTitle = currentDocument.documentTitle;
-  if (currentDocument.additionalInfo) {
-    currentDocumentTitle += ` ${currentDocument.additionalInfo}`;
+  let currentDocumentTitle = currentDocketEntry.documentTitle;
+  if (currentDocketEntry.additionalInfo) {
+    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
   }
   currentDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocument(applicationContext, currentDocument),
+    formatDocketEntry(applicationContext, currentDocketEntry),
   )}`;
-  if (currentDocument.additionalInfo2) {
-    currentDocumentTitle += ` ${currentDocument.additionalInfo2}`;
+  if (currentDocketEntry.additionalInfo2) {
+    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;
   }
 
   const needsNewCoversheet =
-    updatedDocument.additionalInfo !== currentDocument.additionalInfo ||
+    updatedDocketEntry.additionalInfo !== currentDocketEntry.additionalInfo ||
     updatedDocumentTitle !== currentDocumentTitle;
 
   const needsNoticeOfDocketChange =
-    updatedDocument.filedBy !== currentDocument.filedBy ||
+    updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
     updatedDocumentTitle !== currentDocumentTitle;
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -163,8 +165,8 @@ exports.completeDocketEntryQCInteractor = async ({
       caseToUpdate.docketNumberSuffix || ''
     }`,
     filingParties: {
-      after: updatedDocument.filedBy,
-      before: currentDocument.filedBy,
+      after: updatedDocketEntry.filedBy,
+      before: currentDocketEntry.filedBy,
     },
     filingsAndProceedings: {
       after: updatedDocumentTitle,
@@ -172,9 +174,11 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
-  caseEntity.updateDocument(updatedDocument);
+  caseEntity.updateDocketEntry(updatedDocketEntry);
 
-  const workItemToUpdate = updatedDocument.workItem;
+  caseEntity.updateAutomaticBlocked({});
+
+  const workItemToUpdate = updatedDocketEntry.workItem;
 
   if (workItemToUpdate) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
@@ -185,12 +189,12 @@ exports.completeDocketEntryQCInteractor = async ({
     Object.assign(workItemToUpdate, {
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
+      docketEntry: {
+        ...updatedDocketEntry.toRawObject(),
+        createdAt: updatedDocketEntry.createdAt,
+      },
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
-        ...updatedDocument.toRawObject(),
-        createdAt: updatedDocument.createdAt,
-      },
     });
 
     if (!workItemToUpdate.completedAt) {
@@ -230,14 +234,14 @@ exports.completeDocketEntryQCInteractor = async ({
 
   if (
     overridePaperServiceAddress ||
-    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocument.documentType)
+    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType)
   ) {
     if (servedParties.paper.length > 0) {
       const { Body: pdfData } = await applicationContext
         .getStorageClient()
         .getObject({
           Bucket: applicationContext.environment.documentsBucketName,
-          Key: updatedDocument.documentId,
+          Key: updatedDocketEntry.docketEntryId,
         })
         .promise();
 
@@ -262,7 +266,7 @@ exports.completeDocketEntryQCInteractor = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
-        documentId: paperServicePdfId,
+        key: paperServicePdfId,
         useTempBucket: true,
       });
 
@@ -272,49 +276,56 @@ exports.completeDocketEntryQCInteractor = async ({
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
-          documentId: paperServicePdfId,
+          key: paperServicePdfId,
           useTempBucket: true,
         });
 
       paperServicePdfUrl = url;
-      paperServiceDocumentTitle = updatedDocument.documentTitle;
+      paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
     }
   } else if (needsNoticeOfDocketChange) {
-    const noticeDocumentId = await generateNoticeOfDocketChangePdf({
+    const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocument = new Document(
+    let noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...NOTICE_OF_DOCKET_CHANGE,
-        documentId: noticeDocumentId,
+        docketEntryId: noticeDocketEntryId,
+        documentTitle: replaceBracketed(
+          NOTICE_OF_DOCKET_CHANGE.documentTitle,
+          docketChangeInfo.docketEntryIndex,
+        ),
+        isFileAttached: true,
         isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
     );
 
-    noticeUpdatedDocument.documentTitle = replaceBracketed(
-      NOTICE_OF_DOCKET_CHANGE.documentTitle,
-      docketChangeInfo.docketEntryIndex,
-    );
-    noticeUpdatedDocument.description = noticeUpdatedDocument.documentTitle; // TODO 636 clean this up
+    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+      });
 
-    noticeUpdatedDocument.setAsServed(servedParties.all);
+    noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
-    caseEntity.addDocument(noticeUpdatedDocument);
+    caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
 
     const { Body: pdfData } = await applicationContext
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
-        Key: noticeUpdatedDocument.documentId,
+        Key: noticeUpdatedDocketEntry.docketEntryId,
       })
       .promise();
 
     const serviceStampDate = formatDateString(
-      noticeUpdatedDocument.servedAt,
+      noticeUpdatedDocketEntry.servedAt,
       'MMDDYY',
     );
 
@@ -327,13 +338,13 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: newPdfData,
-      documentId: noticeUpdatedDocument.documentId,
+      key: noticeUpdatedDocketEntry.docketEntryId,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      documentEntity: noticeUpdatedDocument,
+      docketEntryEntity: noticeUpdatedDocketEntry,
       servedParties,
     });
 
@@ -357,7 +368,7 @@ exports.completeDocketEntryQCInteractor = async ({
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
-        documentId: paperServicePdfId,
+        key: paperServicePdfId,
         useTempBucket: true,
       });
 
@@ -367,12 +378,12 @@ exports.completeDocketEntryQCInteractor = async ({
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
-          documentId: paperServicePdfId,
+          key: paperServicePdfId,
           useTempBucket: true,
         });
 
       paperServicePdfUrl = url;
-      paperServiceDocumentTitle = noticeUpdatedDocument.documentTitle;
+      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
     }
   }
 
@@ -384,8 +395,8 @@ exports.completeDocketEntryQCInteractor = async ({
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber: caseEntity.docketNumber,
-      documentId,
     });
   }
 

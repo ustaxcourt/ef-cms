@@ -1,3 +1,5 @@
+const { isObject, isString } = require('lodash');
+
 exports.getIndexNameForRecord = record => {
   let index = null;
 
@@ -9,12 +11,20 @@ exports.getIndexNameForRecord = record => {
   ];
 
   const isRecordOfType = (record, type) => {
-    if (record && record.entityName && record.entityName.S) {
-      if (type === 'User' && userEntityNames.includes(record.entityName.S)) {
+    let entityName;
+
+    if (record && record.entityName && isString(record.entityName)) {
+      ({ entityName } = record);
+    } else if (record && isObject(record.entityName)) {
+      entityName = record.entityName.S;
+    }
+
+    if (entityName) {
+      if (type === 'User' && userEntityNames.includes(entityName)) {
         return true;
       }
 
-      if (record.entityName.S === type) {
+      if (entityName === type) {
         return true;
       }
     }
@@ -22,8 +32,8 @@ exports.getIndexNameForRecord = record => {
 
   if (isRecordOfType(record, 'Case')) {
     index = 'efcms-case';
-  } else if (isRecordOfType(record, 'Document')) {
-    index = 'efcms-document';
+  } else if (isRecordOfType(record, 'DocketEntry')) {
+    index = 'efcms-docket-entry';
   } else if (isRecordOfType(record, 'User')) {
     index = 'efcms-user';
   } else if (isRecordOfType(record, 'Message')) {

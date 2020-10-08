@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -17,22 +17,21 @@ export const setDocketEntryFormForDocketEditAction = ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const { documentId } = props;
+  const { docketEntryId } = props;
 
-  const initialDocument = caseDetail.documents.find(
-    entry => entry.documentId === documentId,
+  const docketEntry = omit(
+    caseDetail.docketEntries.find(
+      entry => entry.docketEntryId === docketEntryId,
+    ),
+    ['workItem'],
   );
 
-  let docketEntryFormData = omit(initialDocument, ['workItem']);
+  let docketEntryFormData = cloneDeep(docketEntry);
 
-  const docketRecordEntry = caseDetail.docketRecord.find(
-    entry => entry.documentId === documentId,
-  );
-
-  if (docketRecordEntry && docketRecordEntry.editState) {
-    const parsedJson = JSON.parse(docketRecordEntry.editState);
+  if (docketEntry && docketEntry.editState) {
+    const parsedJson = JSON.parse(docketEntry.editState);
     if (parsedJson.docketNumber) {
-      docketEntryFormData = JSON.parse(docketRecordEntry.editState);
+      docketEntryFormData = JSON.parse(docketEntry.editState);
     }
   }
 

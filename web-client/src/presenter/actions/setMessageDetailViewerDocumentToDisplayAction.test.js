@@ -26,8 +26,11 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [{ docketEntryId: '1234' }],
             docketNumber: '123-45',
-            documents: [{ documentId: '1234' }],
           },
           viewerDocumentToDisplay: null,
         },
@@ -53,8 +56,11 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [{ docketEntryId: '1234' }],
             docketNumber: '123-45',
-            documents: [{ documentId: '1234' }],
           },
           viewerDocumentToDisplay: null,
         },
@@ -77,9 +83,11 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            archivedDocuments: [{ archived: true, documentId: '1234' }],
+            archivedCorrespondences: [],
+            archivedDocketEntries: [{ archived: true, docketEntryId: '1234' }],
+            correspondence: [],
+            docketEntries: [],
             docketNumber: '123-45',
-            documents: [],
           },
           viewerDocumentToDisplay: null,
         },

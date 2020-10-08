@@ -17,9 +17,9 @@ describe('gotoPrintablePendingReportForCaseSequence', () => {
         'http://example.com/mock-pdf-url',
       );
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
-      documents: [
+      docketEntries: [
         {
-          documentId: '123',
+          docketEntryId: '123',
           documentType: 'Proposed Stipulated Decision',
         },
       ],

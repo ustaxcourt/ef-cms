@@ -47,30 +47,47 @@ export const DatePickerComponent = ({
     }
   }, [values]);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.addEventListener('change', e => {
-        if (values) {
-          const [year, month, day] = e.target.value.split('-');
-          onChange({
-            key: names.day,
-            value: day,
-          });
-          onChange({
-            key: names.month,
-            value: month,
-          });
-          onChange({
-            key: names.year,
-            value: year,
-          });
-          onBlur();
-        } else {
-          onChange(e);
-          onBlur();
-        }
-      });
+  const splitDate = dateString => {
+    if (dateString.includes('/')) {
+      return dateString.split('/');
+    } else if (dateString.includes('-')) {
+      return dateString.split('-');
+    } else {
+      return [dateString, null, null];
     }
+  };
+
+  /**when using a modal, document.getElementById does not successfully find the
+   date input, causing us to use inputRef. However, inputRef does not return the date in the expected format
+   (MM/DD/YYY) but instead returns it as YYY/MM/DD **/
+
+  useEffect(() => {
+    const input = document.getElementById(`${name}-date`) || inputRef.current;
+
+    input.addEventListener('change', e => {
+      if (values) {
+        let [month, day, year] = splitDate(e.target.value);
+        if (month.length > 2) {
+          [year, month, day] = splitDate(e.target.value);
+        }
+        onChange({
+          key: names.day,
+          value: day,
+        });
+        onChange({
+          key: names.month,
+          value: month,
+        });
+        onChange({
+          key: names.year,
+          value: year,
+        });
+        onBlur();
+      } else {
+        onChange(e);
+        onBlur();
+      }
+    });
   }, [inputRef]);
 
   return (

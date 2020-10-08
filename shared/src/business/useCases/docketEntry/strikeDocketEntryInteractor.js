@@ -6,17 +6,18 @@ const { Case } = require('../../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * strikes a given docket record on a case
+ * strikes a given docket entry on a case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.documentMeta document details to go on the record
- * @returns {object} the updated case after the documents are added
+ * @param {string} providers.docketEntryId the docket entry id to strike
+ * @param {string} providers.docketNumber the docket number of the case
+ * @returns {object} the updated case after the docket entry is stricken
  */
 exports.strikeDocketEntryInteractor = async ({
   applicationContext,
+  docketEntryId,
   docketNumber,
-  documentId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -38,25 +39,27 @@ exports.strikeDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
 
-  if (!documentEntity) {
-    throw new NotFoundError('Document not found');
+  if (!docketEntryEntity) {
+    throw new NotFoundError('Docket entry not found');
   }
 
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  documentEntity.strikeEntry({ name: user.name, userId: user.userId });
+  docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
 
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateDocument({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
+    docketEntryId,
     docketNumber,
-    document: documentEntity.validate().toRawObject(),
-    documentId,
+    document: docketEntryEntity.validate().toRawObject(),
   });
 
   return caseEntity.toRawObject();

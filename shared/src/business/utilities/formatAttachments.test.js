@@ -1,37 +1,38 @@
-import { formatAttachments } from './formatAttachments';
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { formatAttachments } = require('./formatAttachments');
 
 describe('formatAttachments', () => {
-  const mockDocuments = [
+  const mockDocketEntries = [
     {
-      documentId: '1',
+      docketEntryId: '1',
       documentTitle: 'Test Document One',
     },
     {
-      documentId: '2',
+      docketEntryId: '2',
       documentType: 'Test Document Two',
     },
   ];
 
   const mockCorrespondenceDocuments = [
     {
-      documentId: '3',
+      correspondenceId: '3',
       documentTitle: 'Test Correspondence One',
     },
     {
-      documentId: '4',
+      correspondenceId: '4',
       documentType: 'Test Correspondence Two',
     },
   ];
 
-  const mockArchivedDocuments = [
+  const mockArchivedDocketEntries = [
     {
       archived: true,
-      documentId: '5',
+      docketEntryId: '5',
       documentTitle: 'Test Archived One',
     },
     {
       archived: true,
-      documentId: '6',
+      docketEntryId: '6',
       documentType: 'Test Archived Two',
     },
   ];
@@ -39,18 +40,19 @@ describe('formatAttachments', () => {
   const mockArchivedCorrespondenceDocuments = [
     {
       archived: true,
-      documentId: '7',
+      correspondenceId: '7',
       documentTitle: 'Test Archived Correspondence One',
     },
     {
       archived: true,
-      documentId: '8',
+      correspondenceId: '8',
       documentType: 'Test Archived Correspondence Two',
     },
   ];
 
-  it('formats documents in the attachments array based on meta from documents in the documents, correspondence, archivedDocuments, and archivedCorrespondences arrays', () => {
+  it('formats docketEntries in the attachments array based on meta from docketEntries in the docketEntries, correspondence, archivedDocketEntries, and archivedCorrespondences arrays', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [
         { documentId: '1' },
         { documentId: '3' },
@@ -59,9 +61,9 @@ describe('formatAttachments', () => {
       ],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
@@ -83,6 +85,7 @@ describe('formatAttachments', () => {
 
   it('sets the documentTitle from documentType if documentTitle is not set on the document meta', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [
         { documentId: '2' },
         { documentId: '4' },
@@ -91,9 +94,9 @@ describe('formatAttachments', () => {
       ],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
@@ -113,27 +116,15 @@ describe('formatAttachments', () => {
     ]);
   });
 
-  it('defaults the archivedDocuments, archivedCorrespondences, and correspondence arrays to empty arrays if they are not on caseDetail', () => {
+  it('returns a placeholder document if an attachment is not found in the aggregated docketEntries', () => {
     const result = formatAttachments({
-      attachments: [{ documentId: '1' }],
-      caseDetail: {
-        documents: mockDocuments,
-      },
-    });
-
-    expect(result).toEqual([
-      { archived: false, documentId: '1', documentTitle: 'Test Document One' },
-    ]);
-  });
-
-  it('returns a placeholder document if an attachment is not found in the aggregated documents', () => {
-    const result = formatAttachments({
+      applicationContext,
       attachments: [{ documentId: '999' }],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 
@@ -148,12 +139,13 @@ describe('formatAttachments', () => {
 
   it('returns an empty array if there are no attachments', () => {
     const result = formatAttachments({
+      applicationContext,
       attachments: [],
       caseDetail: {
         archivedCorrespondences: mockArchivedCorrespondenceDocuments,
-        archivedDocuments: mockArchivedDocuments,
+        archivedDocketEntries: mockArchivedDocketEntries,
         correspondence: mockCorrespondenceDocuments,
-        documents: mockDocuments,
+        docketEntries: mockDocketEntries,
       },
     });
 

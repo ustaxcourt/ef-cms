@@ -28,12 +28,11 @@ describe('strikeDocketEntryInteractor', () => {
         state: 'CA',
       },
       createdAt: '',
-      docketNumber: '45678-18',
-      documents: [
+      docketEntries: [
         {
-          description: 'first record',
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: '45678-18',
-          documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+          documentTitle: 'first record',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -42,6 +41,7 @@ describe('strikeDocketEntryInteractor', () => {
           userId: mockUserId,
         },
       ],
+      docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
@@ -66,8 +66,8 @@ describe('strikeDocketEntryInteractor', () => {
     await expect(
       strikeDocketEntryInteractor({
         applicationContext,
+        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -82,13 +82,13 @@ describe('strikeDocketEntryInteractor', () => {
     await expect(
       strikeDocketEntryInteractor({
         applicationContext,
+        docketEntryId: 'does-not-exist',
         docketNumber: caseRecord.docketNumber,
-        docketRecordId: 'does-not-exist',
       }),
-    ).rejects.toThrow('Document not found');
+    ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call getCaseByDocketNumber, getUserById, and updateDocument', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and updateDocketEntry', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -97,8 +97,8 @@ describe('strikeDocketEntryInteractor', () => {
 
     await strikeDocketEntryInteractor({
       applicationContext,
+      docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
       docketNumber: caseRecord.docketNumber,
-      documentId: '8675309b-18d0-43ec-bafb-654e83405411',
     });
 
     expect(
@@ -108,28 +108,28 @@ describe('strikeDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getUserById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateDocument.mock.calls[0][0]
-        .document,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
     ).toMatchObject({ strickenAt: expect.anything() });
   });
 
   it('should throw an error if the document is not on the docket record', async () => {
-    caseRecord.documents[0].isOnDocketRecord = false;
+    caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
       strikeDocketEntryInteractor({
         applicationContext,
+        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
-        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
     ).rejects.toThrow(
       'Cannot strike a document that is not on the docket record.',
     );
     expect(
-      applicationContext.getPersistenceGateway().updateDocument,
+      applicationContext.getPersistenceGateway().updateDocketEntry,
     ).not.toHaveBeenCalled();
   });
 });

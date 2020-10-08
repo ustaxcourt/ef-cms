@@ -22,10 +22,10 @@ describe('uploadExternalDocumentsAction', () => {
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the pending document', async () => {
     uploadExternalDocumentsInteractor.mockReturnValue({
       ...MOCK_CASE,
-      documents: [
+      docketEntries: [
         {
           createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -58,18 +58,18 @@ describe('uploadExternalDocumentsAction', () => {
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
     expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
+      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and also skip addCoversheetInteractor for any pending documents without a file attached', async () => {
     uploadExternalDocumentsInteractor.mockReturnValue({
       ...MOCK_CASE,
-      documents: [
+      docketEntries: [
         {
           createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -78,7 +78,7 @@ describe('uploadExternalDocumentsAction', () => {
         },
         {
           createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -112,8 +112,8 @@ describe('uploadExternalDocumentsAction', () => {
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
     expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
+      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
-      documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
   });
 
@@ -131,6 +131,7 @@ describe('uploadExternalDocumentsAction', () => {
           hasSecondarySupportingDocuments: true,
           hasSupportingDocuments: true,
           primaryDocumentFile: { data: 'something' },
+          secondaryDocument: {},
           secondaryDocumentFile: { data: 'something2' },
           secondarySupportingDocuments: [
             {

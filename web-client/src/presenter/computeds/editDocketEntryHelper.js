@@ -2,11 +2,11 @@ import { state } from 'cerebral';
 
 export const editDocketEntryHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
 
-  const currentDocument = caseDetail.documents.find(
-    document => document.documentId === documentId,
+  const currentDocument = caseDetail.docketEntries.find(
+    docketEntry => docketEntry.docketEntryId === docketEntryId,
   );
 
   let showPaperServiceWarning = false;
@@ -21,9 +21,9 @@ export const editDocketEntryHelper = (get, applicationContext) => {
     }
   }
 
-  const formattedDocument = applicationContext
+  const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, currentDocument);
+    .formatDocketEntry(applicationContext, currentDocument);
 
-  return { formattedDocument, showPaperServiceWarning };
+  return { formattedDocketEntry, showPaperServiceWarning };
 };

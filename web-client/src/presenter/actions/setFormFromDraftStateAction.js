@@ -8,16 +8,16 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const setFormFromDraftStateAction = ({ props, store }) => {
-  const { caseDetail, documentIdToEdit } = props;
+  const { caseDetail, docketEntryIdToEdit } = props;
 
-  if (documentIdToEdit) {
-    const documentToEdit = caseDetail.documents.find(
-      document => document.documentId === documentIdToEdit,
+  if (docketEntryIdToEdit) {
+    const documentToEdit = caseDetail.docketEntries.find(
+      docketEntry => docketEntry.docketEntryId === docketEntryIdToEdit,
     );
 
     store.set(state.form, {
-      ...documentToEdit.draftState,
-      documentIdToEdit,
+      ...documentToEdit.draftOrderState,
+      docketEntryIdToEdit,
       documentTitle: documentToEdit.documentTitle,
       documentType: documentToEdit.documentType,
     });

@@ -5,9 +5,9 @@ import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defau
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { setAdvancedSearchPropsOnFormAction } from '../actions/AdvancedSearch/setAdvancedSearchPropsOnFormAction';
+import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
-import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 
 export const gotoAdvancedSearchSequence = [
   clearSearchResultsAction,
@@ -15,7 +15,7 @@ export const gotoAdvancedSearchSequence = [
   closeMobileMenuAction,
   defaultAdvancedSearchFormAction,
   getUsersInSectionAction({ section: 'judge' }),
-  setUsersByKeyAction('judges'),
+  setAllAndCurrentJudgesAction,
   getOpinionTypesAction,
   setOpinionTypesAction,
   setAdvancedSearchPropsOnFormAction,

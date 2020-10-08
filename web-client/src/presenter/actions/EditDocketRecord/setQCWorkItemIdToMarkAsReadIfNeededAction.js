@@ -11,10 +11,12 @@ import { state } from 'cerebral';
 export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({ get, props }) => {
   let workItemIdToMarkAsRead;
   const caseDetail = get(state.caseDetail);
-  const { documentId } = props;
+  const { docketEntryId } = props;
 
   const initialDocument =
-    caseDetail.documents.find(entry => entry.documentId === documentId) || {};
+    caseDetail.docketEntries.find(
+      entry => entry.docketEntryId === docketEntryId,
+    ) || {};
 
   const unreadQCWorkItem =
     initialDocument.workItem && !initialDocument.workItem.isRead

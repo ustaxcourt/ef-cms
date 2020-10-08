@@ -21,13 +21,13 @@ describe('setFileDocumentFormValueAction', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               documentTitle: 'Test Document Title One',
             },
             {
-              documentId: '234',
+              docketEntryId: '234',
               documentTitle: 'Test Document Title Two',
             },
           ],
@@ -36,7 +36,7 @@ describe('setFileDocumentFormValueAction', () => {
     });
 
     expect(state.form.previousDocument).toEqual({
-      documentId: '234',
+      docketEntryId: '234',
       documentTitle: 'Test Document Title Two',
     });
   });
@@ -49,13 +49,13 @@ describe('setFileDocumentFormValueAction', () => {
       },
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: '123',
+              docketEntryId: '123',
               documentTitle: 'Test Document Title One',
             },
             {
-              documentId: '234',
+              docketEntryId: '234',
               documentTitle: 'Test Document Title Two',
             },
           ],
@@ -64,7 +64,7 @@ describe('setFileDocumentFormValueAction', () => {
     });
 
     expect(state.form.secondaryDocument.previousDocument).toEqual({
-      documentId: '234',
+      docketEntryId: '234',
       documentTitle: 'Test Document Title Two',
     });
   });

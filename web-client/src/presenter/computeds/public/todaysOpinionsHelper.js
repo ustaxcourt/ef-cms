@@ -1,4 +1,3 @@
-import { Document } from '../../../../../shared/src/business/entities/Document';
 import { state } from 'cerebral';
 
 export const todaysOpinionsHelper = (get, applicationContext) => {
@@ -11,7 +10,6 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
 
   const formattedOpinions = todaysOpinions.map(opinion => ({
     ...opinion,
-    formattedDocumentType: Document.getFormattedType(opinion.documentType),
     formattedFilingDate: applicationContext
       .getUtilities()
       .formatDateString(opinion.filingDate, 'MMDDYY'),

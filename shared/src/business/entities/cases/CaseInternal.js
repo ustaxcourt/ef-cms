@@ -17,7 +17,7 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { Document } = require('../Document');
+const { DocketEntry } = require('../DocketEntry');
 const { Statistic } = require('../Statistic');
 
 /**
@@ -80,9 +80,9 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
       )
     : [];
 
-  this.archivedDocuments = Array.isArray(rawCase.archivedDocuments)
-    ? rawCase.archivedDocuments.map(
-        doc => new Document(doc, { applicationContext }),
+  this.archivedDocketEntries = Array.isArray(rawCase.archivedDocketEntries)
+    ? rawCase.archivedDocketEntries.map(
+        doc => new DocketEntry(doc, { applicationContext }),
       )
     : [];
 
@@ -146,7 +146,7 @@ const paperRequirements = joi
       },
     ),
     archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
-    archivedDocuments: Case.VALIDATION_RULES.archivedDocuments,
+    archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
     contactPrimary: joi.object().required(),

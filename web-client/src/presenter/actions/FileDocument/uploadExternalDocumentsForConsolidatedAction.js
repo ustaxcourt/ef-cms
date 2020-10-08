@@ -64,7 +64,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   }
 
   const getPendingDocumentsForCase = caseDetail =>
-    caseDetail.documents.filter(
+    caseDetail.docketEntries.filter(
       document => document.processingStatus === 'pending',
     );
 
@@ -77,8 +77,8 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      docketEntryId: document.docketEntryId,
       docketNumber,
-      documentId: document.documentId,
     });
   };
 

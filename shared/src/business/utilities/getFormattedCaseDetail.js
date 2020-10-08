@@ -31,80 +31,6 @@ const getServedPartiesCode = servedParties => {
   return servedPartiesCode;
 };
 
-const formatDocument = (applicationContext, document) => {
-  const result = cloneDeep(document);
-
-  result.createdAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYY');
-
-  result.servedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.servedAt, 'MMDDYY');
-
-  result.signedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.signedAt, 'MMDDYY');
-
-  result.signedAtFormattedTZ = applicationContext
-    .getUtilities()
-    .formatDateString(result.signedAt, 'DATE_TIME_TZ');
-
-  if (result.certificateOfServiceDate) {
-    result.certificateOfServiceDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
-  }
-  if (result.lodged) {
-    result.eventCode = 'MISCL';
-  }
-  result.showLegacySealed = !!result.isLegacySealed;
-  result.showServedAt = !!result.servedAt;
-  result.isStatusServed = !!result.servedAt;
-  result.isPetition =
-    result.documentType === 'Petition' || result.eventCode === 'P';
-
-  result.isCourtIssuedDocument =
-    !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
-    result.documentType === 'Stipulated Decision';
-
-  const qcWorkItem = result.workItem;
-
-  result.qcWorkItemsCompleted = !!(qcWorkItem && qcWorkItem.completedAt);
-
-  result.isUnservable =
-    UNSERVABLE_EVENT_CODES.includes(document.eventCode) ||
-    document.isLegacyServed;
-
-  result.isInProgress =
-    (!result.isCourtIssuedDocument &&
-      result.isFileAttached === false &&
-      !result.isUnservable) ||
-    (result.isFileAttached === true &&
-      !result.servedAt &&
-      !result.isUnservable);
-
-  result.isNotServedDocument = !result.servedAt && !result.isLegacyServed;
-
-  result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
-
-  result.qcWorkItemsUntouched =
-    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
-
-  // Served parties code - R = Respondent, P = Petitioner, B = Both
-  result.servedPartiesCode = getServedPartiesCode(result.servedParties);
-
-  return result;
-};
-
-const formatDocketRecord = (applicationContext, docketRecord) => {
-  const result = cloneDeep(docketRecord);
-  result.createdAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYY');
-  return result;
-};
-
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = document => {
   const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
@@ -140,75 +66,132 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
   return result;
 };
 
-const formatDocketRecordWithDocument = (
-  applicationContext,
-  docketRecords,
-  documents = [],
-) => {
-  const documentMap = documents.reduce((acc, document) => {
-    acc[document.documentId] = document;
-    return acc;
-  }, {});
+const formatDocketEntry = (applicationContext, docketEntry) => {
+  const formattedEntry = cloneDeep(docketEntry);
 
-  // TODO 636
-  return [
-    ...docketRecords,
-    ...documents.filter(d => d.isOnDocketRecord === true),
-  ].map(record => {
-    let formattedDocument;
+  formattedEntry.servedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(formattedEntry.servedAt, 'MMDDYY');
 
-    const { index } = record;
+  formattedEntry.signedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(formattedEntry.signedAt, 'MMDDYY');
 
-    if (record.documentId && documentMap[record.documentId]) {
-      formattedDocument = formatDocument(
-        applicationContext,
-        documentMap[record.documentId],
-      );
+  formattedEntry.signedAtFormattedTZ = applicationContext
+    .getUtilities()
+    .formatDateString(formattedEntry.signedAt, 'DATE_TIME_TZ');
 
-      if (
-        formattedDocument.isCourtIssuedDocument &&
-        !formattedDocument.servedAt &&
-        !formattedDocument.isUnservable
-      ) {
-        record.createdAtFormatted = undefined;
-      }
+  if (formattedEntry.certificateOfServiceDate) {
+    formattedEntry.certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.certificateOfServiceDate, 'MMDDYY');
+  }
+  if (formattedEntry.lodged) {
+    formattedEntry.eventCode = 'MISCL';
+  }
+  formattedEntry.showLegacySealed = !!formattedEntry.isLegacySealed;
+  formattedEntry.showServedAt = !!formattedEntry.servedAt;
+  formattedEntry.isStatusServed = !!formattedEntry.servedAt;
+  formattedEntry.isPetition =
+    formattedEntry.documentType === 'Petition' ||
+    formattedEntry.eventCode === 'P';
 
-      record.isAvailableToUser = documentMeetsAgeRequirements(
-        documentMap[record.documentId],
-      );
+  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
+    formattedEntry.documentType,
+  );
 
-      record.filingsAndProceedings = getFilingsAndProceedings(
-        formattedDocument,
-      );
+  const qcWorkItem = formattedEntry.workItem;
 
-      if (formattedDocument.additionalInfo) {
-        record.description += ` ${formattedDocument.additionalInfo}`;
-      }
-    }
+  formattedEntry.qcWorkItemsCompleted = !!(
+    qcWorkItem && qcWorkItem.completedAt
+  );
 
-    return { document: formattedDocument, index, record };
-  });
+  formattedEntry.isUnservable =
+    UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
+    formattedEntry.isLegacyServed;
+
+  formattedEntry.isInProgress =
+    (!formattedEntry.isCourtIssuedDocument &&
+      formattedEntry.isFileAttached === false &&
+      !formattedEntry.isMinuteEntry &&
+      !formattedEntry.isUnservable) ||
+    (formattedEntry.isFileAttached === true &&
+      !formattedEntry.servedAt &&
+      !formattedEntry.isUnservable);
+
+  formattedEntry.isNotServedDocument =
+    !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
+
+  formattedEntry.isTranscript =
+    formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
+
+  formattedEntry.qcWorkItemsUntouched =
+    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+
+  // Served parties code - R = Respondent, P = Petitioner, B = Both
+  formattedEntry.servedPartiesCode = getServedPartiesCode(
+    formattedEntry.servedParties,
+  );
+
+  if (
+    formattedEntry.isCourtIssuedDocument &&
+    !formattedEntry.servedAt &&
+    !formattedEntry.isUnservable &&
+    formattedEntry.isOnDocketRecord
+  ) {
+    formattedEntry.createdAtFormatted = undefined;
+  } else if (formattedEntry.isOnDocketRecord) {
+    formattedEntry.createdAtFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.filingDate, 'MMDDYY');
+  } else {
+    formattedEntry.createdAtFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.createdAt, 'MMDDYY');
+  }
+
+  formattedEntry.isAvailableToUser = documentMeetsAgeRequirements(
+    formattedEntry,
+  );
+
+  formattedEntry.filingsAndProceedings = getFilingsAndProceedings(
+    formattedEntry,
+  );
+
+  if (!formattedEntry.descriptionDisplay) {
+    formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
+  }
+
+  if (formattedEntry.additionalInfo) {
+    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+  }
+
+  if (formattedEntry.lodged) {
+    formattedEntry.eventCode = 'MISCL';
+  }
+
+  return { ...formattedEntry };
 };
 
-const getFilingsAndProceedings = formattedDocument => {
+const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
     `${
-      formattedDocument.certificateOfService
-        ? `(C/S ${formattedDocument.certificateOfServiceDateFormatted})`
+      formattedDocketEntry.certificateOfService
+        ? `(C/S ${formattedDocketEntry.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
-    `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
+    `${formattedDocketEntry.exhibits ? '(Exhibit(s))' : ''}`,
+    `${formattedDocketEntry.attachments ? '(Attachment(s))' : ''}`,
     `${
-      formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.YES
+      formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
         ? '(Objection)'
-        : formattedDocument.objections === OBJECTIONS_OPTIONS_MAP.NO
+        : formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.NO
         ? '(No Objection)'
         : ''
     }`,
-    `${formattedDocument.lodged ? '(Lodged)' : ''}`,
+    `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
@@ -230,45 +213,34 @@ const formatCase = (applicationContext, caseDetail) => {
   }
   const result = cloneDeep(caseDetail);
 
-  result.docketRecordWithDocument = [];
+  if (result.docketEntries) {
+    result.draftDocuments = result.docketEntries
+      .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
+      .map(docketEntry => ({
+        ...formatDocketEntry(applicationContext, docketEntry),
+        editUrl:
+          docketEntry.documentType === 'Miscellaneous'
+            ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${docketEntry.docketEntryId}`
+            : `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}`,
+        signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
+        signedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(docketEntry.signedAt, 'MMDDYY'),
+        signedAtFormattedTZ: applicationContext
+          .getUtilities()
+          .formatDateString(docketEntry.signedAt, 'DATE_TIME_TZ'),
+      }));
 
-  if (result.documents) {
-    result.documents = result.documents.map(d =>
-      formatDocument(applicationContext, d),
+    result.formattedDocketEntries = result.docketEntries.map(d =>
+      formatDocketEntry(applicationContext, d),
+    );
+    // establish an initial sort by ascending index
+    result.formattedDocketEntries.sort(byIndexSortFunction);
+
+    result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
+      entry => entry.pending,
     );
   }
-
-  if (result.docketRecord) {
-    result.docketRecord = result.docketRecord.map(d =>
-      formatDocketRecord(applicationContext, d),
-    );
-    result.docketRecordWithDocument = formatDocketRecordWithDocument(
-      applicationContext,
-      result.docketRecord,
-      result.documents,
-    );
-  }
-
-  result.pendingItemsDocketEntries = result.docketRecordWithDocument.filter(
-    entry => entry.document && entry.document.pending,
-  );
-
-  result.draftDocuments = (result.documents || [])
-    .filter(document => document.isDraft && !document.archived)
-    .map(document => ({
-      ...document,
-      editUrl:
-        document.documentType === 'Miscellaneous'
-          ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
-          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-      signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
-      signedAtFormatted: applicationContext
-        .getUtilities()
-        .formatDateString(document.signedAt, 'MMDDYY'),
-      signedAtFormattedTZ: applicationContext
-        .getUtilities()
-        .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
-    }));
 
   if (result.correspondence && result.correspondence.length) {
     result.correspondence.forEach(doc => {
@@ -277,10 +249,6 @@ const formatCase = (applicationContext, caseDetail) => {
         .formatDateString(doc.filingDate, 'MMDDYY');
     });
   }
-  // establish an initial sort by ascending index
-  result.docketRecordWithDocument.sort((a, b) => {
-    return a.index - b.index;
-  });
 
   const formatCounsel = counsel => {
     let formattedName = counsel.name;
@@ -291,10 +259,10 @@ const formatCase = (applicationContext, caseDetail) => {
     counsel.formattedName = formattedName;
 
     if (counsel.representing) {
-      counsel.representingNames = [];
+      counsel.representingFormatted = [];
 
       if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingNames.push({
+        counsel.representingFormatted.push({
           name: caseDetail.contactPrimary.name,
           secondaryName: caseDetail.contactPrimary.secondaryName,
           title: caseDetail.contactPrimary.title,
@@ -305,7 +273,7 @@ const formatCase = (applicationContext, caseDetail) => {
         caseDetail.contactSecondary &&
         counsel.representing.includes(caseDetail.contactSecondary.contactId)
       ) {
-        counsel.representingNames.push({
+        counsel.representingFormatted.push({
           name: caseDetail.contactSecondary.name,
           secondaryName: caseDetail.contactSecondary.secondaryName,
           title: caseDetail.contactSecondary.title,
@@ -314,7 +282,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
       caseDetail.otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
-          counsel.representingNames.push({
+          counsel.representingFormatted.push({
             name: otherPetitioner.name,
             secondaryName: otherPetitioner.secondaryName,
             title: otherPetitioner.title,
@@ -324,7 +292,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
       caseDetail.otherFilers.forEach(otherFiler => {
         if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingNames.push({
+          counsel.representingFormatted.push({
             name: otherFiler.name,
             secondaryName: otherFiler.secondaryName,
             title: otherFiler.title,
@@ -453,15 +421,22 @@ const formatCase = (applicationContext, caseDetail) => {
   return result;
 };
 
+const byIndexSortFunction = (a, b) => {
+  if (!a.index && !b.index) {
+    return 0;
+  } else if (!a.index) {
+    return 1;
+  } else if (!b.index) {
+    return -1;
+  }
+  return a.index - b.index;
+};
+
 const getDocketRecordSortFunc = sortBy => {
-  const byIndex = (a, b) => a.index - b.index;
   const byDate = (a, b) => {
-    const compared = calendarDatesCompared(
-      a.record.filingDate,
-      b.record.filingDate,
-    );
+    const compared = calendarDatesCompared(a.filingDate, b.filingDate);
     if (compared === 0) {
-      return byIndex(a, b);
+      return byIndexSortFunction(a, b);
     }
     return compared;
   };
@@ -469,7 +444,7 @@ const getDocketRecordSortFunc = sortBy => {
   switch (sortBy) {
     case 'byIndex': // fall-through
     case 'byIndexDesc':
-      return byIndex;
+      return byIndexSortFunction;
     case 'byDate': // fall through, is the default sort method
     case 'byDateDesc':
     default:
@@ -479,19 +454,19 @@ const getDocketRecordSortFunc = sortBy => {
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
 const sortUndefined = (a, b) => {
-  if (a.record.createdAtFormatted && !b.record.createdAtFormatted) {
+  if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
   }
 
-  if (!a.record.createdAtFormatted && b.record.createdAtFormatted) {
+  if (!a.createdAtFormatted && b.createdAtFormatted) {
     return 1;
   }
 };
 
-const sortDocketRecords = (docketRecords = [], sortBy = '') => {
+const sortDocketEntries = (docketEntries = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
   const isReversed = sortBy.includes('Desc');
-  const result = docketRecords.sort(sortFunc);
+  const result = docketEntries.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
     return result.reverse().sort(sortUndefined);
@@ -511,8 +486,8 @@ const getFormattedCaseDetail = ({
       .setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail),
   };
-  result.docketRecordWithDocument = sortDocketRecords(
-    result.docketRecordWithDocument,
+  result.formattedDocketEntries = sortDocketEntries(
+    result.formattedDocketEntries,
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
@@ -525,11 +500,9 @@ module.exports = {
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
-  formatDocketRecord,
-  formatDocketRecordWithDocument,
-  formatDocument,
+  formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   getServedPartiesCode,
-  sortDocketRecords,
+  sortDocketEntries,
 };

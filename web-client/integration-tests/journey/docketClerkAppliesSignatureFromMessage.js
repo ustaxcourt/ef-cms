@@ -25,8 +25,8 @@ export const docketClerkAppliesSignatureFromMessage = test => {
     expect(orderDocument.documentTitle).toEqual('Order');
 
     await test.runSequence('gotoSignOrderSequence', {
+      docketEntryId: orderDocument.documentId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
       parentMessageId: test.parentMessageId,
       redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
     });
@@ -48,8 +48,8 @@ export const docketClerkAppliesSignatureFromMessage = test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    const caseOrderDocument = caseDetailFormatted.documents.find(
-      d => d.documentId === orderDocument.documentId,
+    const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      d => d.docketEntryId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toBeDefined();
   });

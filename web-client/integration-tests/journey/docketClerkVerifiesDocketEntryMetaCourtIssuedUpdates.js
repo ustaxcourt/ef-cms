@@ -10,11 +10,11 @@ export const docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDetail = test.getState('caseDetail');
-    const docketRecordEntry = caseDetail.documents.find(
+    const docketRecordEntry = caseDetail.docketEntries.find(
       entry => entry.index === docketRecordIndex,
     );
 
-    expect(docketRecordEntry.description).toEqual(
+    expect(docketRecordEntry.documentTitle).toEqual(
       'Order for Amended Petition on 04-04-2050 be free',
     );
   });

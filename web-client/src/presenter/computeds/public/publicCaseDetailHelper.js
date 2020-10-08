@@ -1,5 +1,5 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
-import { uniqBy } from 'lodash';
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
@@ -12,82 +12,62 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
-  const formattedDocketRecord = publicCase.documents
-    .filter(d => d.isOnDocketRecord)
-    .map(d =>
-      applicationContext
-        .getUtilities()
-        .formatDocketRecord(applicationContext, d),
-    );
-
-  // TODO 636 (remove uniqBy after we remove docketRecord from getFormattedCaseDetail)
-  const formattedDocketRecordWithDocument = uniqBy(
-    applicationContext
-      .getUtilities()
-      .formatDocketRecordWithDocument(
-        applicationContext,
-        formattedDocketRecord,
-        publicCase.documents,
-      ),
-    'index',
+  const formattedDocketRecordWithDocument = publicCase.docketEntries.map(d =>
+    applicationContext.getUtilities().formatDocketEntry(applicationContext, d),
   );
 
   let sortedFormattedDocketRecord = applicationContext
     .getUtilities()
-    .sortDocketRecords(formattedDocketRecordWithDocument, 'byIndex');
+    .sortDocketEntries(formattedDocketRecordWithDocument, 'byIndex');
 
   sortedFormattedDocketRecord = applicationContext
     .getUtilities()
-    .sortDocketRecords(sortedFormattedDocketRecord, 'byDate');
+    .sortDocketEntries(sortedFormattedDocketRecord, 'byDate');
 
-  const formattedDocketEntries = sortedFormattedDocketRecord.map(
-    ({ document, index, record }) => {
+  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecord.map(
+    entry => {
+      const record = cloneDeep(entry);
       let filingsAndProceedingsWithAdditionalInfo = '';
-      if (document && document.documentTitle && document.additionalInfo) {
-        filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo}`;
+      if (record.documentTitle && record.additionalInfo) {
+        filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
       }
       if (record.filingsAndProceedings) {
         filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
       }
-      if (document && document.additionalInfo2) {
-        filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
+      if (record.additionalInfo2) {
+        filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
       }
 
       return {
         action: record.action,
         createdAtFormatted: record.createdAtFormatted,
         description: record.description,
-        descriptionDisplay:
-          (document && document.documentTitle) || record.description,
-        documentId: document && document.documentId,
-        eventCode: record.eventCode || (document && document.eventCode),
-        filedBy: document && document.filedBy,
+        descriptionDisplay: record.documentTitle || record.description,
+        docketEntryId: record.docketEntryId,
+        eventCode: record.eventCode,
+        filedBy: record.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
-        hasDocument: !!document && !document.isMinuteEntry,
-        index,
-        isPaper: document && document.isPaper,
+        hasDocument: !record.isMinuteEntry,
+        index: record.index,
+        isPaper: record.isPaper,
         isStricken: record.isStricken,
-        numberOfPages:
-          (document && (record.numberOfPages || document.numberOfPages)) || 0,
-        servedAtFormatted: document && document.servedAtFormatted,
-        servedPartiesCode: document && document.servedPartiesCode,
+        numberOfPages: record.numberOfPages || 0,
+        servedAtFormatted: record.servedAtFormatted,
+        servedPartiesCode: record.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
-          !document ||
           record.isStricken ||
-          (document &&
-            (!document.isCourtIssuedDocument ||
-              document.isNotServedDocument ||
-              document.isTranscript)),
+          !record.isCourtIssuedDocument ||
+          record.isNotServedDocument ||
+          record.isTranscript,
         showLinkToDocument:
-          document &&
-          document.processingStatus ===
+          record.processingStatus ===
             DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
-          document.isCourtIssuedDocument &&
-          !document.isNotServedDocument &&
+          record.isCourtIssuedDocument &&
+          !record.isNotServedDocument &&
           !record.isStricken &&
-          !document.isTranscript,
-        showNotServed: document && document.isNotServedDocument,
-        showServed: document && document.isStatusServed,
+          !record.isTranscript,
+        showNotServed: record.isNotServedDocument,
+        showServed: record.isStatusServed,
         signatory: record.signatory,
       };
     },
@@ -97,6 +77,6 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
   return {
     formattedCaseDetail,
-    formattedDocketEntries,
+    formattedDocketEntriesOnDocketRecord,
   };
 };

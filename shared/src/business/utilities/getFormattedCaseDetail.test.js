@@ -1,15 +1,6 @@
-import {
-  TRANSCRIPT_AGE_DAYS_MIN,
-  documentMeetsAgeRequirements,
-  formatCase,
-  formatCaseDeadlines,
-  formatDocument,
-  getFilingsAndProceedings,
-  getFormattedCaseDetail,
-  sortDocketRecords,
-} from './getFormattedCaseDetail';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
-import { calculateISODate, createISODateString } from './DateHandler';
+const {
+  applicationContext,
+} = require('../../../../web-client/src/applicationContext');
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -19,6 +10,17 @@ const {
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
+const {
+  documentMeetsAgeRequirements,
+  formatCase,
+  formatCaseDeadlines,
+  formatDocketEntry,
+  getFilingsAndProceedings,
+  getFormattedCaseDetail,
+  sortDocketEntries,
+  TRANSCRIPT_AGE_DAYS_MIN,
+} = require('./getFormattedCaseDetail');
+const { calculateISODate, createISODateString } = require('./DateHandler');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>
@@ -27,6 +29,7 @@ applicationContext.getCurrentUser = () =>
 const mockCaseDetailBase = {
   correspondence: [],
   createdAt: new Date(),
+  docketEntries: [],
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
@@ -53,98 +56,97 @@ describe('formatCase', () => {
   });
 
   it('should format documents if the case documents array is set', () => {
+    const documents = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: 'd-1-2-3',
+        documentType: 'Petition',
+        eventCode: 'P',
+        index: 1,
+        isLegacySealed: true,
+        isOnDocketRecord: true,
+        servedAt: getDateISO(),
+        workItem: {
+          completedAt: getDateISO(),
+        },
+      },
+      {
+        createdAt: getDateISO(),
+        docketEntryId: 'd-1-4-3',
+        documentType: 'Amended Answer',
+        eventCode: 'ABC',
+        index: 2,
+        isOnDocketRecord: true,
+        servedAt: getDateISO(),
+        workItem: {
+          completedAt: getDateISO(),
+        },
+      },
+    ];
+
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          documentId: 'd-1-2-3',
-          hi: 'there',
-          index: '1',
-        },
-        {
-          documentId: 'd-1-4-3',
-          hi: 'there',
-          index: '2',
-        },
-      ],
-      documents: [
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
-          documentType: 'Petition',
-          eventCode: 'P',
-          isLegacySealed: true,
-          servedAt: getDateISO(),
-          workItem: {
-            completedAt: getDateISO(),
-          },
-        },
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-4-3',
-          documentType: 'Amended Answer',
-          eventCode: 'ABC',
-          servedAt: getDateISO(),
-          workItem: {
-            completedAt: getDateISO(),
-          },
-        },
-      ],
+      docketEntries: documents,
+      documents,
     });
-    expect(result.documents[0].isPetition).toBeTruthy();
-    expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
-    expect(result.documents[0].qcWorkItemsUntouched).toEqual(false);
+    expect(result.formattedDocketEntries[0].isPetition).toBeTruthy();
+    expect(result.formattedDocketEntries[0].qcWorkItemsCompleted).toBeTruthy();
+    expect(result.formattedDocketEntries[0].qcWorkItemsUntouched).toEqual(
+      false,
+    );
 
-    expect(result.documents[0]).toHaveProperty('createdAtFormatted');
-    expect(result.documents[0]).toHaveProperty('servedAtFormatted');
-    expect(result.documents[0]).toHaveProperty('showServedAt');
-    expect(result.documents[0]).toHaveProperty('isStatusServed');
-    expect(result.documents[0]).toHaveProperty('isPetition');
-    expect(result.documents[0]).toHaveProperty('servedPartiesCode');
-    expect(result.documents[0].showLegacySealed).toBeTruthy();
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'createdAtFormatted',
+    );
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'servedAtFormatted',
+    );
+    expect(result.formattedDocketEntries[0]).toHaveProperty('showServedAt');
+    expect(result.formattedDocketEntries[0]).toHaveProperty('isStatusServed');
+    expect(result.formattedDocketEntries[0]).toHaveProperty('isPetition');
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'servedPartiesCode',
+    );
+    expect(result.formattedDocketEntries[0].showLegacySealed).toBeTruthy();
 
-    expect(result.documents[1].showLegacySealed).toBeFalsy();
-    expect(result.documents[1].qcWorkItemsUntouched).toEqual(false);
+    expect(result.formattedDocketEntries[1].showLegacySealed).toBeFalsy();
+    expect(result.formattedDocketEntries[1].qcWorkItemsUntouched).toEqual(
+      false,
+    );
   });
 
-  it('should correctly format legacy served documents', () => {
+  it('should correctly format legacy served docket entries', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: 'd-1-2-3',
+        documentType: 'Petition',
+        eventCode: 'P',
+        index: 1,
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+      },
+      {
+        createdAt: getDateISO(),
+        docketEntryId: 'd-1-4-3',
+        documentType: 'Amended Answer',
+        eventCode: 'ABC',
+        index: 2,
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+      },
+    ];
+
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          documentId: 'd-1-2-3',
-          hi: 'there',
-          index: '1',
-        },
-        {
-          documentId: 'd-1-4-3',
-          hi: 'there',
-          index: '2',
-        },
-      ],
-      documents: [
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
-          documentType: 'Petition',
-          eventCode: 'P',
-          isLegacyServed: true,
-        },
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-4-3',
-          documentType: 'Amended Answer',
-          eventCode: 'ABC',
-          isLegacyServed: true,
-        },
-      ],
+      docketEntries,
     });
 
-    expect(result.documents[0].isNotServedDocument).toBeFalsy();
-    expect(result.documents[0].isUnservable).toBeTruthy();
+    expect(result.formattedDocketEntries[0].isNotServedDocument).toBeFalsy();
+    expect(result.formattedDocketEntries[0].isUnservable).toBeTruthy();
 
-    expect(result.documents[1].isNotServedDocument).toBeFalsy();
-    expect(result.documents[1].isUnservable).toBeTruthy();
+    expect(result.formattedDocketEntries[1].isNotServedDocument).toBeFalsy();
+    expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
   it('should format the filing date of all correspondence documents', () => {
@@ -162,111 +164,100 @@ describe('formatCase', () => {
     expect(result.correspondence[0].formattedFilingDate).toEqual('05/21/20');
   });
 
-  it('should format docket records if the case docket record array is set', () => {
+  it('should format docket entries from documents', () => {
+    const documents = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '123',
+        index: '1',
+        isOnDocketRecord: true,
+      },
+    ];
+
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          index: '1',
-        },
-      ],
+      docketEntries: documents,
+      documents,
     });
 
-    expect(result.docketRecord[0]).toHaveProperty('createdAtFormatted');
-    expect(result).toHaveProperty('docketRecordWithDocument');
+    expect(result.formattedDocketEntries[0]).toHaveProperty(
+      'createdAtFormatted',
+    );
+    expect(result).toHaveProperty('formattedDocketEntries');
   });
 
-  it('should format docket records and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
+  it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
+    const documents = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        documentType: 'Petition',
+        filingDate: getDateISO(),
+        index: '1',
+        isOnDocketRecord: true,
+      },
+    ];
+
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-      ],
-      documents: [
-        {
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentType: 'Petition',
-        },
-      ],
+      docketEntries: documents,
+      documents,
     });
 
-    expect(result).toHaveProperty('docketRecordWithDocument');
-    expect(
-      result.docketRecordWithDocument[0].record.createdAtFormatted,
-    ).toBeDefined();
+    expect(result).toHaveProperty('formattedDocketEntries');
+    expect(result.formattedDocketEntries[0].createdAtFormatted).toBeDefined();
   });
 
   it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
+    const documents = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        documentTitle: 'Order [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        eventCode: 'OAJ',
+        filingDate: getDateISO(),
+        index: 1,
+        isOnDocketRecord: true,
+        scenario: 'Type B',
+      },
+    ];
+
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-      ],
-      documents: [
-        {
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentTitle: 'Order [Judge Name] [Anything]',
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          scenario: 'Type B',
-        },
-      ],
+      docketEntries: documents,
+      documents,
     });
 
-    expect(result).toHaveProperty('docketRecordWithDocument');
-    expect(
-      result.docketRecordWithDocument[0].record.createdAtFormatted,
-    ).toBeUndefined();
+    expect(result).toHaveProperty('formattedDocketEntries');
+    expect(result.formattedDocketEntries[0].createdAtFormatted).toBeUndefined();
   });
 
   it('should return docket entries with pending documents for pendingItemsDocketEntries', () => {
+    const documents = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        documentType: 'Administrative Record',
+        filingDate: getDateISO(),
+        index: '1',
+        isOnDocketRecord: true,
+        pending: true,
+      },
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
+        documentType: 'Administrative Record',
+        filingDate: getDateISO(),
+        index: '2',
+        isOnDocketRecord: true,
+      },
+    ];
+
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          document: {
-            documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-            documentType: 'Administrative Record',
-            pending: true,
-          },
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-        {
-          createdAt: getDateISO(),
-          document: {
-            documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
-            documentType: 'Administrative Record',
-          },
-          documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
-          filingDate: getDateISO(),
-          index: '1',
-        },
-      ],
-      documents: [
-        {
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentType: 'Administrative Record',
-          pending: true,
-        },
-        {
-          documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
-          documentType: 'Administrative Record',
-        },
-      ],
+      docketEntries: documents,
+      documents,
     });
 
     expect(result.pendingItemsDocketEntries).toMatchObject([
@@ -276,12 +267,12 @@ describe('formatCase', () => {
     ]);
   });
 
-  it('should return an empty array for docketRecordWithDocument and pendingItemsDocketEntries if docketRecord does not exist', () => {
+  it('should return an empty array for formattedDocketEntries and pendingItemsDocketEntries if docketRecord does not exist', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
     });
 
-    expect(result.docketRecordWithDocument).toEqual([]);
+    expect(result.formattedDocketEntries).toEqual([]);
     expect(result.pendingItemsDocketEntries).toEqual([]);
   });
 
@@ -333,26 +324,21 @@ describe('formatCase', () => {
   it('should apply additional information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          description: 'desc',
-          documentId: 'd-1-2-3',
-          index: '1',
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           additionalInfo: 'additional information',
           createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'desc',
           documentType: 'Petition',
+          index: '1',
+          isOnDocketRecord: true,
           servedAt: getDateISO(),
         },
       ],
     });
 
-    expect(result.docketRecord[0].description).toEqual(
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
       'desc additional information',
     );
   });
@@ -360,25 +346,21 @@ describe('formatCase', () => {
   it('should format certificate of service date', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
-          index: '1',
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           certificateOfServiceDate: getDateISO(),
           createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
+          docketEntryId: 'd-1-2-3',
           documentType: 'Petition',
+          index: '1',
           servedAt: getDateISO(),
         },
       ],
     });
 
-    expect(result.documents[0].certificateOfServiceDateFormatted).toEqual(
+    expect(
+      result.formattedDocketEntries[0].certificateOfServiceDateFormatted,
+    ).toEqual(
       applicationContext
         .getUtilities()
         .formatDateString(getDateISO(), 'MMDDYY'),
@@ -631,9 +613,9 @@ describe('formatCaseDeadlines', () => {
   });
 });
 
-describe('formatDocument', () => {
+describe('formatDocketEntry', () => {
   it('should format the servedAt date', () => {
-    const results = formatDocument(applicationContext, {
+    const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
     });
     expect(results).toMatchObject({
@@ -642,11 +624,11 @@ describe('formatDocument', () => {
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const result = formatDocument(
+    const result = formatDocketEntry(
       applicationContext,
 
       {
-        documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+        docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
         documentType: 'Motion for Leave to File Administrative Record',
         eventCode: 'M115',
         lodged: true,
@@ -657,7 +639,7 @@ describe('formatDocument', () => {
   });
 
   it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
-    const results = formatDocument(applicationContext, {
+    const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
     });
@@ -667,12 +649,68 @@ describe('formatDocument', () => {
   });
 
   it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
-    const results = formatDocument(applicationContext, {
+    const results = formatDocketEntry(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
       servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+    });
+  });
+
+  describe('isInProgress', () => {
+    it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'A', //not unservable, not court-issued
+        isFileAttached: false,
+        isMinuteEntry: false,
+      });
+      expect(results.isInProgress).toEqual(true);
+    });
+
+    it('should return isInProgress true if the document has a file attached and is not served or unservable', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'A', //not unservable
+        isFileAttached: true,
+      });
+      expect(results.isInProgress).toEqual(true);
+    });
+
+    it('should return isInProgress false if the document is court-issued', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'O', //court-issued
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document has a file attached and is served', () => {
+      const results = formatDocketEntry(applicationContext, {
+        isFileAttached: true,
+        servedAt: '2019-03-01T21:40:46.415Z',
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document has a file attached and is unservable', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'CTRA', //unservable
+        isFileAttached: true,
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document is a minute entry', () => {
+      const results = formatDocketEntry(applicationContext, {
+        isMinuteEntry: true,
+      });
+      expect(results.isInProgress).toEqual(false);
+    });
+
+    it('should return isInProgress false if the document is unservable', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'CTRA', //unservable
+      });
+      expect(results.isInProgress).toEqual(false);
     });
   });
 });
@@ -720,7 +758,7 @@ describe('getFormattedCaseDetail', () => {
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
-    expect(result).toHaveProperty('docketRecordWithDocument');
+    expect(result).toHaveProperty('formattedDocketEntries');
     expect(result).toHaveProperty('docketRecordSort');
     expect(result).toHaveProperty('caseDeadlines');
   });
@@ -730,26 +768,25 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDetail: {
         ...mockCaseDetailBase,
-        docketRecord: [],
-        documents: [
+        docketEntries: [
           {
             archived: false,
             createdAt: getDateISO(),
-            documentId: 'd-1-2-3',
+            docketEntryId: 'd-1-2-3',
             documentType: 'Order',
             isDraft: true,
           },
           {
             archived: false,
             createdAt: getDateISO(),
-            documentId: 'd-2-3-4',
+            docketEntryId: 'd-2-3-4',
             documentType: 'Stipulated Decision',
             isDraft: true,
           },
           {
             archived: false,
             createdAt: getDateISO(),
-            documentId: 'd-3-4-5',
+            docketEntryId: 'd-3-4-5',
             documentType: 'Miscellaneous',
             isDraft: true,
           },
@@ -846,192 +883,152 @@ it('should format filing fee string for an unpaid petition fee', () => {
   expect(result.filingFee).toEqual('Not Paid  ');
 });
 
-describe('sortDocketRecords', () => {
+describe('sortDocketEntries', () => {
   it('should sort docket records by date by default', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'
-    const result = sortDocketRecords(
+    const result = sortDocketEntries(
       [
         {
-          index: '2',
-          record: {
-            filingDate: '2019-07-08',
-          },
+          filingDate: '2019-07-08',
+          index: 2,
         },
         {
-          index: '1',
-          record: {
-            filingDate: '2019-08-03T00:06:44.000Z',
-          },
+          filingDate: '2019-08-03T00:06:44.000Z',
+          index: 1,
         },
         {
-          index: '4',
-          record: {
-            filingDate: '2019-07-08T00:01:19.000Z',
-          },
+          filingDate: '2019-07-08T00:01:19.000Z',
+          index: 4,
         },
         {
-          index: '3',
-          record: {
-            filingDate: '2017-01-01T00:01:02.025Z',
-          },
+          filingDate: '2017-01-01T00:01:02.025Z',
+          index: 3,
         },
         {
-          index: '5',
-          record: {
-            filingDate: '2017-01-01T00:01:12.025Z',
-          },
+          filingDate: '2017-01-01T00:01:12.025Z',
+          index: 5,
         },
       ],
       'Desc',
     );
 
-    expect(result[0].index).toEqual('1');
+    expect(result[0].index).toEqual(1);
   });
 
   it('should sort items by index when item calendar dates match', () => {
-    const result = sortDocketRecords(
+    const result = sortDocketEntries(
       [
         {
-          index: '2',
-          record: {
-            filingDate: '2019-08-03T00:10:02.000Z', // 8/2 @ 8:10:02PM EST
-          },
+          filingDate: '2019-08-03T00:10:02.000Z', // 8/2 @ 8:10:02PM EST
+          index: 2,
         },
         {
-          index: '1',
-          record: {
-            filingDate: '2019-08-03T00:10:00.000Z', // 8/2 @ 8:10:00PM EST
-          },
+          filingDate: '2019-08-03T00:10:00.000Z', // 8/2 @ 8:10:00PM EST
+          index: 1,
         },
         {
-          index: '4',
-          record: {
-            filingDate: '2019-08-03T02:06:10.000Z', // 8/2 @ 10:10:00PM EST
-          },
+          filingDate: '2019-08-03T02:06:10.000Z', // 8/2 @ 10:10:00PM EST
+          index: 4,
         },
         {
-          index: '3',
-          record: {
-            filingDate: '2019-08-03T06:06:44.000Z', // 8/3 @ 2:10:02AM EST
-          },
+          filingDate: '2019-08-03T06:06:44.000Z', // 8/3 @ 2:10:02AM EST
+          index: 3,
         },
         {
-          index: '5',
-          record: {
-            filingDate: '2019-09-01T00:01:12.025Z', // 8/31 @ 8:01:12AM EST
-          },
+          filingDate: '2019-09-01T00:01:12.025Z', // 8/31 @ 8:01:12AM EST
+          index: 5,
         },
       ],
       'byDate',
     );
 
-    expect(result[0].index).toEqual('1');
+    expect(result[0].index).toEqual(1);
     expect(result).toMatchObject([
       {
-        index: '1',
+        index: 1,
       },
       {
-        index: '2',
+        index: 2,
       },
       {
-        index: '4',
+        index: 4,
       },
       {
-        index: '3',
+        index: 3,
       },
       {
-        index: '5',
+        index: 5,
       },
     ]);
   });
 
   it('should sort docket records by index when sortBy is byIndex', () => {
-    const result = sortDocketRecords(
+    const result = sortDocketEntries(
       [
         {
-          index: '2',
-          record: {
-            filingDate: getDateISO(),
-          },
+          filingDate: getDateISO(),
+          index: 2,
         },
         {
-          index: '3',
-          record: {
-            filingDate: getDateISO(),
-          },
+          filingDate: getDateISO(),
+          index: 3,
         },
         {
-          index: '1',
-          record: {
-            filingDate: getDateISO(),
-          },
+          filingDate: getDateISO(),
+          index: 1,
         },
       ],
       'byIndex',
     );
 
-    expect(result[1].index).toEqual('2');
+    expect(result[1].index).toEqual(2);
   });
 
   it('should sort docket records in reverse if Desc is included in sortBy', () => {
-    const result = sortDocketRecords(
+    const result = sortDocketEntries(
       [
         {
-          index: '2',
-          record: {
-            filingDate: getDateISO(),
-          },
+          filingDate: getDateISO(),
+          index: 2,
         },
         {
-          index: '3',
-          record: {
-            filingDate: getDateISO(),
-          },
+          filingDate: getDateISO(),
+          index: 3,
         },
         {
-          index: '1',
-          record: {
-            filingDate: getDateISO(),
-          },
+          filingDate: getDateISO(),
+          index: 1,
         },
       ],
       'byIndexDesc',
     );
 
-    expect(result[0].index).toEqual('3');
+    expect(result[0].index).toEqual(3);
   });
 
   it('should return empty array if nothing is passed in', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'
-    const result = sortDocketRecords();
+    const result = sortDocketEntries();
 
     expect(result).toEqual([]);
   });
 
   it('should sort items that do not display a filingDate (based on createdAtFormatted) at the bottom', () => {
-    const result = sortDocketRecords(
+    const result = sortDocketEntries(
       [
         {
-          index: '2',
-          record: {
-            createdAtFormatted: '2019-08-04T00:10:02.000Z',
-          },
+          createdAtFormatted: '2019-08-04T00:10:02.000Z',
+          index: 2,
         },
         {
-          record: {
-            createdAtFormatted: undefined,
-          },
+          createdAtFormatted: undefined,
         },
         {
-          index: '1',
-          record: {
-            createdAtFormatted: '2019-08-03T00:10:02.000Z',
-          },
+          createdAtFormatted: '2019-08-03T00:10:02.000Z',
+          index: 1,
         },
         {
-          record: {
-            createdAtFormatted: undefined,
-          },
+          createdAtFormatted: undefined,
         },
       ],
       'byIndexDesc',
@@ -1039,26 +1036,18 @@ describe('sortDocketRecords', () => {
 
     expect(result).toEqual([
       {
-        index: '1',
-        record: {
-          createdAtFormatted: '2019-08-03T00:10:02.000Z',
-        },
+        createdAtFormatted: '2019-08-04T00:10:02.000Z',
+        index: 2,
       },
       {
-        index: '2',
-        record: {
-          createdAtFormatted: '2019-08-04T00:10:02.000Z',
-        },
+        createdAtFormatted: '2019-08-03T00:10:02.000Z',
+        index: 1,
       },
       {
-        record: {
-          createdAtFormatted: undefined,
-        },
+        createdAtFormatted: undefined,
       },
       {
-        record: {
-          createdAtFormatted: undefined,
-        },
+        createdAtFormatted: undefined,
       },
     ]);
   });

@@ -2,23 +2,20 @@ import { state } from 'cerebral';
 
 export const formattedDocument = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
-  const documentId = get(state.documentId);
+  const docketEntryId = get(state.docketEntryId);
 
-  const allCaseDocuments = [
-    ...(caseDetail.documents || []),
-    ...(caseDetail.correspondence || []),
-  ];
-  const document = allCaseDocuments.find(
-    item => item.documentId === documentId,
-  );
+  const document = applicationContext.getUtilities().getAttachmentDocumentById({
+    caseDetail,
+    documentId: docketEntryId,
+  });
 
   if (!document) {
     return;
   }
 
-  const documentFormatted = applicationContext
+  const docketEntryFormatted = applicationContext
     .getUtilities()
-    .formatDocument(applicationContext, document);
+    .formatDocketEntry(applicationContext, document);
 
-  return documentFormatted;
+  return docketEntryFormatted;
 };

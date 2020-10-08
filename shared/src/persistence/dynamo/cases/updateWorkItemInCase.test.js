@@ -18,13 +18,13 @@ describe('updateWorkItemInCase', () => {
     await updateWorkItemInCase({
       applicationContext,
       caseToUpdate: {
-        docketNumber: '123-20',
-        documents: [
+        docketEntries: [
           {
-            documentId: '321',
+            docketEntryId: '321',
             workItem: { workItemId: '456' },
           },
         ],
+        docketNumber: '123-20',
       },
       workItem: {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -40,7 +40,7 @@ describe('updateWorkItemInCase', () => {
       },
       Key: {
         pk: 'case|123-20',
-        sk: 'document|321',
+        sk: 'docket-entry|321',
       },
       UpdateExpression: 'SET #workItem = :workItem',
       applicationContext: { environment: { stage: 'local' } },

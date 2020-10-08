@@ -6,20 +6,20 @@ import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardData
 describe('updateDocketEntryWizardDataAction', () => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   const caseDetail = {
-    documents: [
+    docketEntries: [
       {
-        documentId: '1',
+        docketEntryId: '1',
         documentTitle: 'A Document',
         documentType: 'A Document',
       },
       {
-        documentId: '2',
+        docketEntryId: '2',
         documentTitle: 'B Document',
         documentType: 'B Document',
         relationship: DOCUMENT_RELATIONSHIPS.SECONDARY,
       },
       {
-        documentId: '3',
+        docketEntryId: '3',
         documentTitle: 'C Document',
         documentType: 'C Document',
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -107,7 +107,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           },
         },
         screenMetadata: {
-          filedDocumentIds: ['3'],
+          filedDocketEntryIds: ['3'],
           primary: { something: true, somethingElse: false },
           supporting: true,
         },
@@ -115,14 +115,14 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
 
     expect(result.state.form.previousDocument).toEqual({
-      documentId: '3',
+      docketEntryId: '3',
       documentTitle: 'C Document',
       documentType: 'C Document',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
     });
     expect(result.state.form).toEqual({
       previousDocument: {
-        documentId: '3',
+        docketEntryId: '3',
         documentTitle: 'C Document',
         documentType: 'C Document',
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -151,7 +151,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           },
         },
         screenMetadata: {
-          filedDocumentIds: ['2', '3'],
+          filedDocketEntryIds: ['2', '3'],
           primary: { something: true, somethingElse: false },
           secondary: { something: true, somethingElse: false },
           supporting: true,
@@ -202,7 +202,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           exhibits: 'something',
         },
         screenMetadata: {
-          filedDocumentIds: ['3', '2'],
+          filedDocketEntryIds: ['3', '2'],
           primary: { primarySomething: true },
           supporting: true,
         },
@@ -227,7 +227,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           certificateOfService: false,
         },
         screenMetadata: {
-          filedDocumentIds: ['3', '2'],
+          filedDocketEntryIds: ['3', '2'],
           secondary: { secondarySomething: 'abc' },
           supporting: true,
         },
@@ -251,7 +251,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           certificateOfService: false,
         },
         screenMetadata: {
-          filedDocumentIds: ['1', '2'],
+          filedDocketEntryIds: ['1', '2'],
           secondary: { secondarySomething: 'abc' },
           supporting: true,
         },
@@ -275,7 +275,7 @@ describe('updateDocketEntryWizardDataAction', () => {
           exhibits: 'something',
         },
         screenMetadata: {
-          filedDocumentIds: ['3', '2'],
+          filedDocketEntryIds: ['3', '2'],
           primary: { primarySomething: true },
           supporting: false,
         },
@@ -357,5 +357,23 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
 
     expect(result.state.form.additionalInfo2).toEqual('abc');
+  });
+
+  it('should not override documentTitle', async () => {
+    const mockDocumentTitle = 'Entry of Disappearance';
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      modules: { presenter },
+      props: {
+        key: 'initEventCode',
+        value: 'EA',
+      },
+      state: {
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+      },
+    });
+
+    expect(result.state.form.documentTitle).toEqual(mockDocumentTitle);
   });
 });

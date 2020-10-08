@@ -3,6 +3,7 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  ROLES,
 } = require('../../../business/entities/EntityConstants');
 const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
 
@@ -29,11 +30,10 @@ describe('getCaseByDocketNumber', () => {
 
     expect(result).toEqual({
       archivedCorrespondences: [],
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       correspondence: [],
+      docketEntries: [],
       docketNumber: '123-20',
-      docketRecord: [],
-      documents: [],
       irsPractitioners: [],
       pk: 'case|123-20',
       privatePractitioners: [],
@@ -49,6 +49,7 @@ describe('getCaseByDocketNumber', () => {
           Items: [
             {
               docketNumber: '123-20',
+              judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
               pk: 'case|123-20',
               sk: 'case|23',
               status: CASE_STATUS_TYPES.new,
@@ -64,33 +65,35 @@ describe('getCaseByDocketNumber', () => {
               userId: 'abc-123',
             },
             {
-              docketRecordId: 'abc-123',
-              pk: 'case|123-20',
-              sk: 'docket-record|123',
-            },
-            {
               archived: true,
-              documentId: 'abc-123',
+              docketEntryId: 'abc-123',
               pk: 'case|123-20',
-              sk: 'document|123',
+              sk: 'docket-entry|123',
             },
             {
               archived: false,
-              documentId: 'abc-124',
+              docketEntryId: 'abc-124',
               pk: 'case|123-20',
-              sk: 'document|124',
+              sk: 'docket-entry|124',
             },
             {
               archived: true,
-              documentId: 'abc-123',
+              correspondenceId: 'abc-123',
               pk: 'case|123-20',
               sk: 'correspondence|123',
             },
             {
               archived: false,
-              documentId: 'abc-124',
+              correspondenceId: 'abc-124',
               pk: 'case|123-20',
               sk: 'correspondence|124',
+            },
+            {
+              name: 'Judge Fieri',
+              pk: 'case|123-20',
+              role: ROLES.legacyJudge,
+              sk: 'user|ce92c582-186f-45a7-a5f5-e1cec03521ad',
+              userId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
             },
           ],
         }),
@@ -105,46 +108,41 @@ describe('getCaseByDocketNumber', () => {
       archivedCorrespondences: [
         {
           archived: true,
-          documentId: 'abc-123',
+          correspondenceId: 'abc-123',
           pk: 'case|123-20',
           sk: 'correspondence|123',
         },
       ],
-      archivedDocuments: [
+      archivedDocketEntries: [
         {
           archived: true,
-          documentId: 'abc-123',
+          docketEntryId: 'abc-123',
           pk: 'case|123-20',
-          sk: 'document|123',
+          sk: 'docket-entry|123',
         },
       ],
+      associatedJudge: 'Judge Fieri',
       correspondence: [
         {
           archived: false,
-          documentId: 'abc-124',
+          correspondenceId: 'abc-124',
           pk: 'case|123-20',
           sk: 'correspondence|124',
         },
       ],
-      docketNumber: '123-20',
-      docketRecord: [
-        {
-          docketRecordId: 'abc-123',
-          pk: 'case|123-20',
-          sk: 'docket-record|123',
-        },
-      ],
-      documents: [
+      docketEntries: [
         {
           archived: false,
-          documentId: 'abc-124',
+          docketEntryId: 'abc-124',
           pk: 'case|123-20',
-          sk: 'document|124',
+          sk: 'docket-entry|124',
         },
       ],
+      docketNumber: '123-20',
       irsPractitioners: [
         { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
+      judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
       pk: 'case|123-20',
       privatePractitioners: [
         {
@@ -170,10 +168,9 @@ describe('getCaseByDocketNumber', () => {
 
     expect(result).toEqual({
       archivedCorrespondences: [],
-      archivedDocuments: [],
+      archivedDocketEntries: [],
       correspondence: [],
-      docketRecord: [],
-      documents: [],
+      docketEntries: [],
       irsPractitioners: [],
       privatePractitioners: [],
     });

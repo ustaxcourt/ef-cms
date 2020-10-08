@@ -9,13 +9,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document
- * @param {string} providers.documentId the document id
+ * @param {string} providers.key the key of the document to get
  * @returns {string} the document download url
  */
 exports.getPublicDownloadPolicyUrlInteractor = async ({
   applicationContext,
   docketNumber,
-  documentId,
+  key,
 }) => {
   const caseToCheck = await applicationContext
     .getPersistenceGateway()
@@ -26,16 +26,21 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
 
   const caseEntity = new Case(caseToCheck, { applicationContext });
 
-  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId: key,
+  });
 
-  const isPrivate = isPrivateDocument(documentEntity, caseEntity.docketRecord);
+  const isPrivate = isPrivateDocument(
+    docketEntryEntity,
+    caseEntity.docketEntries,
+  );
 
   if (isPrivate) {
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
   const isOpinionDocument = OPINION_EVENT_CODES.includes(
-    documentEntity.eventCode,
+    docketEntryEntity.eventCode,
   );
 
   // opinion documents are public even in sealed cases
@@ -49,6 +54,6 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
     .getPersistenceGateway()
     .getPublicDownloadPolicyUrl({
       applicationContext,
-      documentId,
+      key,
     });
 };

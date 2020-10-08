@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
 import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
@@ -7,7 +8,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -20,6 +21,7 @@ import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   startShowValidationAction,
+  filterEmptyStatisticsAction,
   getCaseDetailFormWithComputedDatesAction,
   validateCaseDetailAction,
   {
@@ -37,7 +39,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setCaseAction,
       setCaseOnFormAction,
       setPetitionIdAction,
-      setDocumentIdAction,
+      setDocketEntryIdAction,
       navigateToReviewSavedPetitionAction,
     ],
   },

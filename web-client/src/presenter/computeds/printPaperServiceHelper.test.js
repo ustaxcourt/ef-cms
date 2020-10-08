@@ -6,26 +6,26 @@ describe('printPaperServiceHelper', () => {
     const { documentTitle } = runCompute(printPaperServiceHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Document',
             },
           ],
         },
-        documentId: 'abc',
+        docketEntryId: 'abc',
       },
     });
     expect(documentTitle).toEqual('Document');
   });
 
-  it('should return an empty object if documentId is not set', () => {
+  it('should return an empty object if docketEntryId is not set', () => {
     const result = runCompute(printPaperServiceHelper, {
       state: {
         caseDetail: {
-          documents: [
+          docketEntries: [
             {
-              documentId: 'abc',
+              docketEntryId: 'abc',
               documentType: 'Document',
             },
           ],

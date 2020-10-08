@@ -30,6 +30,9 @@ const {
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
+  DOCKET_ENTRY_VALIDATION_RULES,
+} = require('../EntityValidationConstants');
+const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
@@ -45,8 +48,7 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketRecord } = require('../DocketRecord');
-const { Document } = require('../Document');
+const { DocketEntry } = require('../DocketEntry');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -65,9 +67,8 @@ Case.VALIDATION_ERROR_MESSAGES = {
   ],
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
+  docketEntries: 'At least one valid docket entry is required',
   docketNumber: 'Docket number is required',
-  docketRecord: 'At least one valid Docket Record is required',
-  documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
   hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
@@ -175,12 +176,12 @@ Case.prototype.init = function init(
       this.statistics = [];
     }
 
-    if (Array.isArray(rawCase.archivedDocuments)) {
-      this.archivedDocuments = rawCase.archivedDocuments.map(
-        document => new Document(document, { applicationContext }),
+    if (Array.isArray(rawCase.archivedDocketEntries)) {
+      this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
+        docketEntry => new DocketEntry(docketEntry, { applicationContext }),
       );
     } else {
-      this.archivedDocuments = [];
+      this.archivedDocketEntries = [];
     }
 
     if (Array.isArray(rawCase.archivedCorrespondences)) {
@@ -206,6 +207,7 @@ Case.prototype.init = function init(
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
+  this.judgeUserId = rawCase.judgeUserId;
   this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
@@ -248,21 +250,23 @@ Case.prototype.init = function init(
     this.correspondence = [];
   }
 
-  if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents
-      .map(document => new Document(document, { applicationContext }))
+  if (Array.isArray(rawCase.docketEntries)) {
+    this.docketEntries = rawCase.docketEntries
+      .map(docketEntry => new DocketEntry(docketEntry, { applicationContext }))
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     this.isSealed =
       this.isSealed ||
-      this.documents.some(
-        document => document.isSealed || document.isLegacySealed,
+      this.docketEntries.some(
+        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
       );
   } else {
-    this.documents = [];
+    this.docketEntries = [];
   }
 
-  this.hasPendingItems = this.documents.some(document => document.pending);
+  this.hasPendingItems = this.docketEntries.some(
+    docketEntry => docketEntry.pending,
+  );
 
   if (Array.isArray(rawCase.privatePractitioners)) {
     this.privatePractitioners = rawCase.privatePractitioners.map(
@@ -278,14 +282,6 @@ Case.prototype.init = function init(
     );
   } else {
     this.irsPractitioners = [];
-  }
-
-  if (Array.isArray(rawCase.docketRecord)) {
-    this.docketRecord = rawCase.docketRecord.map(
-      docketRecord => new DocketRecord(docketRecord, { applicationContext }),
-    );
-  } else {
-    this.docketRecord = [];
   }
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -328,12 +324,12 @@ Case.VALIDATION_RULES = {
     .items(Correspondence.VALIDATION_RULES)
     .optional()
     .description('List of Correspondence Entities that were archived.'),
-  archivedDocuments: joi
+  archivedDocketEntries: joi
     .array()
-    .items(Document.VALIDATION_RULES)
+    .items(DOCKET_ENTRY_VALIDATION_RULES)
     .optional()
     .description(
-      'List of Document Entities that were archived instead of added to the docket record.',
+      'List of DocketEntry Entities that were archived instead of added to the docket record.',
     ),
   associatedJudge: JoiValidationConstants.STRING.max(50)
     .optional()
@@ -411,6 +407,11 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Damages for the case.'),
+  docketEntries: joi
+    .array()
+    .items(DOCKET_ENTRY_VALIDATION_RULES)
+    .required()
+    .description('List of DocketEntry Entities for the case.'),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
@@ -420,14 +421,6 @@ Case.VALIDATION_RULES = {
   docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
     'Auto-generated from docket number and the suffix.',
   ),
-  docketRecord: JoiValidationConstants.DOCKET_RECORD.items(
-    DocketRecord.VALIDATION_RULES,
-  ).required(),
-  documents: joi
-    .array()
-    .items(Document.VALIDATION_RULES)
-    .required()
-    .description('List of Document Entities for the case.'),
   entityName: JoiValidationConstants.STRING.valid('Case').required(),
   filingType: JoiValidationConstants.STRING.valid(
     ...FILING_TYPES[ROLES.petitioner],
@@ -452,8 +445,7 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
-  initialCaption: JoiValidationConstants.STRING.max(500)
-    .allow(null)
+  initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
     .optional()
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: JoiValidationConstants.STRING.valid(
@@ -476,6 +468,9 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
+  judgeUserId: JoiValidationConstants.UUID.optional().description(
+    'Unique ID for the associated judge.',
+  ),
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
@@ -752,7 +747,7 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.documents.some(document => document.pending);
+  return this.docketEntries.some(docketEntry => docketEntry.pending);
 };
 
 /**
@@ -775,15 +770,22 @@ Case.prototype.attachIrsPractitioner = function (practitioner) {
 };
 
 /**
- * archives a document and adds it to the archivedDocuments array on the case
+ * archives a docket entry and adds it to the archivedDocketEntries array on the case
  *
- * @param {string} document the document to archive
+ * @param {string} docketEntry the docketEntry to archive
  */
-Case.prototype.archiveDocument = function (document, { applicationContext }) {
-  const documentToArchive = new Document(document, { applicationContext });
-  documentToArchive.archive();
-  this.archivedDocuments.push(documentToArchive);
-  this.deleteDocumentById({ documentId: documentToArchive.documentId });
+Case.prototype.archiveDocketEntry = function (
+  docketEntry,
+  { applicationContext },
+) {
+  const docketEntryToArchive = new DocketEntry(docketEntry, {
+    applicationContext,
+  });
+  docketEntryToArchive.archive();
+  this.archivedDocketEntries.push(docketEntryToArchive);
+  this.deleteDocketEntryById({
+    docketEntryId: docketEntryToArchive.docketEntryId,
+  });
 };
 
 /**
@@ -801,7 +803,7 @@ Case.prototype.archiveCorrespondence = function (
   correspondenceToArchive.archived = true;
   this.archivedCorrespondences.push(correspondenceToArchive);
   this.deleteCorrespondenceById({
-    correspondenceId: correspondenceToArchive.documentId,
+    correspondenceId: correspondenceToArchive.correspondenceId,
   });
 };
 
@@ -867,21 +869,21 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
 
 /**
  *
- * @param {object} document the document to add to the case
+ * @param {object} docketEntryEntity the docket entry to add to the case
  */
-Case.prototype.addDocument = function (documentEntity) {
-  if (documentEntity.isOnDocketRecord) {
+Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
-      documentEntity,
+      docketEntry: docketEntryEntity,
     });
 
     if (updateIndex) {
-      documentEntity.index = this.generateNextDocketRecordIndex();
+      docketEntryEntity.index = this.generateNextDocketRecordIndex();
     }
   }
 
-  this.documents = [...this.documents, documentEntity];
+  this.docketEntries = [...this.docketEntries, docketEntryEntity];
 };
 
 Case.prototype.closeCase = function () {
@@ -913,8 +915,8 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   const caseCaptionRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastCaption = this.initialCaption;
 
-  this.documents.forEach(document => {
-    const result = caseCaptionRegex.exec(document.description);
+  this.docketEntries.forEach(docketEntry => {
+    const result = caseCaptionRegex.exec(docketEntry.documentTitle);
     if (result) {
       const [, , changedCaption] = result;
       lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
@@ -927,10 +929,10 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
   if (needsCaptionChangedRecord) {
     const { userId } = applicationContext.getCurrentUser();
 
-    this.addDocument(
-      new Document(
+    this.addDocketEntry(
+      new DocketEntry(
         {
-          description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
+          documentTitle: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
           documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
           eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
           filingDate: createISODateString(),
@@ -963,8 +965,8 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  this.documents.forEach(document => {
-    const result = docketNumberRegex.exec(document.description);
+  this.docketEntries.forEach(docketEntry => {
+    const result = docketNumberRegex.exec(docketEntry.documentTitle);
     if (result) {
       const [, , changedDocketNumber] = result;
       lastDocketNumber = changedDocketNumber;
@@ -977,10 +979,10 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
   if (needsDocketNumberChangeRecord) {
     const { userId } = applicationContext.getCurrentUser();
 
-    this.addDocument(
-      new Document(
+    this.addDocketEntry(
+      new DocketEntry(
         {
-          description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+          documentTitle: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
           documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,
           eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
           filingDate: createISODateString(),
@@ -999,35 +1001,78 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 };
 
 /**
- * gets the document with id documentId from the documents or correspondence arrays
+ * gets the docketEntry with id docketEntryId from the docketEntries array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the document to retrieve
- * @returns {object} the retrieved document
+ * @params {string} params.docketEntryId the id of the docketEntry to retrieve
+ * @returns {object} the retrieved docketEntry
  */
-Case.prototype.getDocumentById = function ({ documentId }) {
-  const allCaseDocuments = [...this.documents, ...this.correspondence];
-
-  return allCaseDocuments.find(document => document.documentId === documentId);
+Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
+  return this.docketEntries.find(
+    docketEntry => docketEntry.docketEntryId === docketEntryId,
+  );
 };
 
 /**
- * deletes the document with id documentId from the documents array
+ * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
- * @params {string} params.documentId the id of the document to remove from the documents array
+ * @params {string} params.correspondenceId the id of the correspondence to retrieve
+ * @returns {object} the retrieved correspondence
+ */
+Case.prototype.getCorrespondenceById = function ({ correspondenceId }) {
+  return this.correspondence.find(
+    correspondence => correspondence.correspondenceId === correspondenceId,
+  );
+};
+
+/**
+ * gets a document from docketEntries or correspondence arrays
+ *
+ * @params {object} params the params object
+ * @params {string} params.correspondenceId the id of the correspondence to retrieve
+ * @returns {object} the retrieved correspondence
+ */
+Case.getAttachmentDocumentById = function ({
+  caseDetail,
+  documentId,
+  useArchived = false,
+}) {
+  let allCaseDocuments = [
+    ...caseDetail.correspondence,
+    ...caseDetail.docketEntries,
+  ];
+  if (useArchived) {
+    allCaseDocuments = [
+      ...allCaseDocuments,
+      ...caseDetail.archivedDocketEntries,
+      ...caseDetail.archivedCorrespondences,
+    ];
+  }
+  return allCaseDocuments.find(
+    d =>
+      d &&
+      (d.docketEntryId === documentId || d.correspondenceId === documentId),
+  );
+};
+
+/**
+ * deletes the docket entry with id docketEntryId from the docketEntries array
+ *
+ * @params {object} params the params object
+ * @params {string} params.docketEntryId the id of the docket entry to remove from the docketEntries array
  * @returns {Case} the updated case entity
  */
-Case.prototype.deleteDocumentById = function ({ documentId }) {
-  this.documents = this.documents.filter(
-    item => item.documentId !== documentId,
+Case.prototype.deleteDocketEntryById = function ({ docketEntryId }) {
+  this.docketEntries = this.docketEntries.filter(
+    item => item.docketEntryId !== docketEntryId,
   );
 
   return this;
 };
 
 /**
- * deletes the correspondence with id documentId from the correspondence array
+ * deletes the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
  * @params {string} params.correspondenceId the id of the correspondence to remove from the correspondence array
@@ -1035,27 +1080,27 @@ Case.prototype.deleteDocumentById = function ({ documentId }) {
  */
 Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   this.correspondence = this.correspondence.filter(
-    item => item.documentId !== correspondenceId,
+    item => item.correspondenceId !== correspondenceId,
   );
 
   return this;
 };
 
-const getPetitionDocumentFromDocuments = function (documents) {
-  return documents.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+const getPetitionDocketEntryFromDocketEntries = function (docketEntries) {
+  return docketEntries.find(
+    docketEntry =>
+      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
-Case.prototype.getPetitionDocument = function () {
-  return getPetitionDocumentFromDocuments(this.documents);
+Case.prototype.getPetitionDocketEntry = function () {
+  return getPetitionDocketEntryFromDocketEntries(this.docketEntries);
 };
 
 Case.prototype.getIrsSendDate = function () {
-  const petitionDocument = this.getPetitionDocument();
-  if (petitionDocument) {
-    return petitionDocument.servedAt;
+  const petitionDocketEntry = this.getPetitionDocketEntry();
+  if (petitionDocketEntry) {
+    return petitionDocketEntry.servedAt;
   }
 };
 
@@ -1065,41 +1110,38 @@ Case.prototype.getIrsSendDate = function () {
  * @returns {number} the next docket record index
  */
 Case.prototype.generateNextDocketRecordIndex = function () {
-  const recordsWithIndex = [
-    ...this.docketRecord,
-    ...this.documents.filter(d => d.isOnDocketRecord),
-  ]
-    .filter(record => record.index !== undefined)
-    .sort((a, b) => a.index - b.index);
-  const nextIndex = recordsWithIndex.length + 1;
+  const nextIndex =
+    this.docketEntries
+      .filter(d => d.isOnDocketRecord && d.index !== undefined)
+      .sort((a, b) => a.index - b.index).length + 1;
   return nextIndex;
 };
 
 /**
  *
- * @param {Document|Correspondence} updatedDocument the document or correspondence to update on the case
+ * @param {DocketEntry} updatedDocketEntry the docket entry to update on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocument = function (updatedDocument) {
-  const allCaseDocuments = [...this.documents, ...this.correspondence];
-  const foundDocument = allCaseDocuments.find(
-    document => document.documentId === updatedDocument.documentId,
+Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
+  const foundDocketEntry = this.docketEntries.find(
+    docketEntry =>
+      docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocument) Object.assign(foundDocument, updatedDocument);
+  if (foundDocketEntry) {
+    Object.assign(foundDocketEntry, updatedDocketEntry);
 
-  if (updatedDocument.isOnDocketRecord) {
-    const updateIndex = shouldGenerateDocketRecordIndex({
-      caseDetail: this,
-      documentEntity: foundDocument,
-    });
+    if (foundDocketEntry.isOnDocketRecord) {
+      const updateIndex = shouldGenerateDocketRecordIndex({
+        caseDetail: this,
+        docketEntry: foundDocketEntry,
+      });
 
-    if (updateIndex) {
-      updatedDocument.index = this.generateNextDocketRecordIndex();
+      if (updateIndex) {
+        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+      }
     }
   }
-
-  if (foundDocument) Object.assign(foundDocument, updatedDocument);
 
   return this;
 };
@@ -1128,15 +1170,15 @@ Case.prototype.checkForReadyForTrial = function () {
     this.status === CASE_STATUS_TYPES.generalDocket;
 
   if (isCaseGeneralDocketNotAtIssue) {
-    this.documents.forEach(document => {
+    this.docketEntries.forEach(docketEntry => {
       const isAnswerDocument = includes(
         ANSWER_DOCUMENT_CODES,
-        document.eventCode,
+        docketEntry.eventCode,
       );
 
       const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
         currentDate,
-        document.createdAt,
+        docketEntry.createdAt,
       );
 
       const requiredTimeElapsedSinceFiling =
@@ -1261,11 +1303,12 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
-  const petitionDocument = (caseRaw.documents || []).find(
+  const petitionDocketEntry = (caseRaw.docketEntries || []).find(
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed = petitionDocument && !!petitionDocument.servedAt;
+  const isPetitionServed =
+    petitionDocketEntry && !!petitionDocketEntry.servedAt;
 
   return (
     isIrsPractitioner ||
@@ -1661,6 +1704,24 @@ Case.prototype.fileCorrespondence = function (correspondenceEntity) {
 };
 
 /**
+ * updates the correspondence document on the case
+ *
+ * @param {Correspondence} correspondenceEntity the correspondence document to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.updateCorrespondence = function (correspondenceEntity) {
+  const foundCorrespondence = this.correspondence.find(
+    correspondence =>
+      correspondence.correspondenceId === correspondenceEntity.correspondenceId,
+  );
+
+  if (foundCorrespondence)
+    Object.assign(foundCorrespondence, correspondenceEntity);
+
+  return this;
+};
+
+/**
  * adds the statistic to the list of statistics on the case
  *
  * @param {Statistic} statisticEntity the statistic to add to the case
@@ -1713,6 +1774,6 @@ Case.prototype.deleteStatistic = function (statisticId) {
 
 module.exports = {
   Case: validEntityDecorator(Case),
-  getPetitionDocumentFromDocuments,
+  getPetitionDocketEntryFromDocketEntries,
   isAssociatedUser,
 };

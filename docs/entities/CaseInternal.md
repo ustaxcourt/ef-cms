@@ -24,7 +24,7 @@
               flags: 
                 presence: "optional"
                 description: "A correspondence document that was archived."
-            documentId: 
+            correspondenceId: 
               type: "string"
               flags: 
                 presence: "required"
@@ -95,11 +95,11 @@
                     options: 
                       version: 
                         - "uuidv4"
-    archivedDocuments: 
+    archivedDocketEntries: 
       type: "array"
       flags: 
         presence: "optional"
-        description: "List of Document Entities that were archived instead of added to the docket record."
+        description: "List of DocketEntry Entities that were archived instead of added to the docket record."
       items: 
         - 
           type: "object"
@@ -211,11 +211,22 @@
                 description: "An optional date used when generating a fully concatenated document title."
               allow: 
                 - null
-            description: 
+            docketEntryId: 
               type: "string"
               flags: 
-                presence: "optional"
-                description: "Text that describes this entry on the Docket Record, which may be part of the Filings and Proceedings value."
+                presence: "required"
+                description: "System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
             docketNumber: 
               type: "string"
               flags: 
@@ -249,22 +260,6 @@
               flags: 
                 presence: "optional"
                 description: "The S3 ID containing the text contents of the document."
-              rules: 
-                - 
-                  name: "min"
-                  args: 
-                    limit: 1
-                - 
-                  name: "guid"
-                  args: 
-                    options: 
-                      version: 
-                        - "uuidv4"
-            documentId: 
-              type: "string"
-              flags: 
-                presence: "required"
-                description: "ID of the associated PDF document in the S3 bucket."
               rules: 
                 - 
                   name: "min"
@@ -657,7 +652,7 @@
                 - "U.S.C.A"
                 - "Unsworn Declaration under Penalty of Perjury in Support"
                 - "Writ of Habeas Corpus Ad Testificandum"
-            draftState: 
+            draftOrderState: 
               type: "object"
               flags: 
                 presence: "optional"
@@ -694,7 +689,7 @@
                   args: 
                     limit: 1
               allow: 
-                - "Document"
+                - "DocketEntry"
             eventCode: 
               type: "string"
               flags: 
@@ -1394,6 +1389,7 @@
                                   presence: "optional"
                                 allow: 
                                   - ""
+                                  - null
                         otherwise: 
                           type: "any"
                           flags: 
@@ -1404,6 +1400,7 @@
                       presence: "optional"
                     allow: 
                       - ""
+                      - null
             filingDate: 
               type: "date"
               flags: 
@@ -1517,11 +1514,11 @@
             isMinuteEntry: 
               type: "boolean"
               flags: 
-                presence: "optional"
+                presence: "required"
             isOnDocketRecord: 
               type: "boolean"
               flags: 
-                presence: "optional"
+                presence: "required"
             isPaper: 
               type: "boolean"
               flags: 
@@ -1622,6 +1619,22 @@
                     type: "any"
                     flags: 
                       presence: "optional"
+            judgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "Unique ID for the associated judge."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
             lodged: 
               type: "boolean"
               flags: 
@@ -1727,7 +1740,7 @@
               flags: 
                 presence: "optional"
               keys: 
-                documentId: 
+                docketEntryId: 
                   type: "string"
                   flags: 
                     presence: "optional"
@@ -3079,6 +3092,7 @@
                         - "irsPractitioner"
                         - "irsSuperuser"
                         - "judge"
+                        - "legacyJudge"
                         - "petitioner"
                         - "petitionsclerk"
                         - "privatePractitioner"
@@ -3446,398 +3460,6 @@
               type: "object"
               flags: 
                 presence: "optional"
-              keys: 
-                assigneeId: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "guid"
-                      args: 
-                        options: 
-                          version: 
-                            - "uuidv4"
-                  allow: 
-                    - null
-                assigneeName: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "max"
-                      args: 
-                        limit: 100
-                  allow: 
-                    - null
-                associatedJudge: 
-                  type: "string"
-                  flags: 
-                    presence: "required"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "max"
-                      args: 
-                        limit: 100
-                caseIsInProgress: 
-                  type: "boolean"
-                  flags: 
-                    presence: "optional"
-                caseStatus: 
-                  type: "string"
-                  flags: 
-                    only: true
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                  allow: 
-                    - "Assigned - Case"
-                    - "Assigned - Motion"
-                    - "Calendared"
-                    - "CAV"
-                    - "Closed"
-                    - "General Docket - Not at Issue"
-                    - "General Docket - At Issue (Ready for Trial)"
-                    - "Jurisdiction Retained"
-                    - "New"
-                    - "On Appeal"
-                    - "Rule 155"
-                    - "Submitted"
-                caseTitle: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "max"
-                      args: 
-                        limit: 500
-                completedAt: 
-                  type: "date"
-                  flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
-                    presence: "optional"
-                completedBy: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "max"
-                      args: 
-                        limit: 100
-                  allow: 
-                    - null
-                completedByUserId: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "guid"
-                      args: 
-                        options: 
-                          version: 
-                            - "uuidv4"
-                  allow: 
-                    - null
-                completedMessage: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "max"
-                      args: 
-                        limit: 100
-                  allow: 
-                    - null
-                createdAt: 
-                  type: "date"
-                  flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
-                    presence: "optional"
-                docketNumber: 
-                  type: "string"
-                  flags: 
-                    presence: "required"
-                    description: "Unique case identifier in XXXXX-YY format."
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "pattern"
-                      args: 
-                        regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
-                docketNumberWithSuffix: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                    description: "Auto-generated from docket number and the suffix."
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                document: 
-                  type: "object"
-                  flags: 
-                    presence: "required"
-                entityName: 
-                  type: "string"
-                  flags: 
-                    only: true
-                    presence: "required"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                  allow: 
-                    - "WorkItem"
-                hideFromPendingMessages: 
-                  type: "boolean"
-                  flags: 
-                    presence: "optional"
-                highPriority: 
-                  type: "boolean"
-                  flags: 
-                    presence: "optional"
-                inProgress: 
-                  type: "boolean"
-                  flags: 
-                    presence: "optional"
-                isInitializeCase: 
-                  type: "boolean"
-                  flags: 
-                    presence: "optional"
-                isRead: 
-                  type: "boolean"
-                  flags: 
-                    presence: "optional"
-                section: 
-                  type: "string"
-                  flags: 
-                    only: true
-                    presence: "required"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                  allow: 
-                    - "adc"
-                    - "admissions"
-                    - "chambers"
-                    - "clerkofcourt"
-                    - "docket"
-                    - "petitions"
-                    - "trialClerks"
-                    - "armensChambers"
-                    - "ashfordsChambers"
-                    - "buchsChambers"
-                    - "carluzzosChambers"
-                    - "cohensChambers"
-                    - "colvinsChambers"
-                    - "copelandsChambers"
-                    - "foleysChambers"
-                    - "galesChambers"
-                    - "gerbersChambers"
-                    - "goekesChambers"
-                    - "gustafsonsChambers"
-                    - "guysChambers"
-                    - "halpernsChambers"
-                    - "holmesChambers"
-                    - "jacobsChambers"
-                    - "jonesChambers"
-                    - "kerrigansChambers"
-                    - "laubersChambers"
-                    - "leydensChambers"
-                    - "marvelsChambers"
-                    - "morrisonsChambers"
-                    - "negasChambers"
-                    - "panuthosChambers"
-                    - "parisChambers"
-                    - "pughsChambers"
-                    - "ruwesChambers"
-                    - "thorntonsChambers"
-                    - "torosChambers"
-                    - "urdasChambers"
-                    - "vasquezsChambers"
-                    - "wellsChambers"
-                    - "admin"
-                    - "admissionsclerk"
-                    - "docketclerk"
-                    - "floater"
-                    - "inactivePractitioner"
-                    - "irsPractitioner"
-                    - "irsSuperuser"
-                    - "judge"
-                    - "petitioner"
-                    - "petitionsclerk"
-                    - "privatePractitioner"
-                    - "trialclerk"
-                    - "irsSystem"
-                sentBy: 
-                  type: "string"
-                  flags: 
-                    presence: "required"
-                    description: "The name of the user that sent the WorkItem"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "max"
-                      args: 
-                        limit: 100
-                sentBySection: 
-                  type: "string"
-                  flags: 
-                    only: true
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                  allow: 
-                    - "adc"
-                    - "admissions"
-                    - "chambers"
-                    - "clerkofcourt"
-                    - "docket"
-                    - "petitions"
-                    - "trialClerks"
-                    - "armensChambers"
-                    - "ashfordsChambers"
-                    - "buchsChambers"
-                    - "carluzzosChambers"
-                    - "cohensChambers"
-                    - "colvinsChambers"
-                    - "copelandsChambers"
-                    - "foleysChambers"
-                    - "galesChambers"
-                    - "gerbersChambers"
-                    - "goekesChambers"
-                    - "gustafsonsChambers"
-                    - "guysChambers"
-                    - "halpernsChambers"
-                    - "holmesChambers"
-                    - "jacobsChambers"
-                    - "jonesChambers"
-                    - "kerrigansChambers"
-                    - "laubersChambers"
-                    - "leydensChambers"
-                    - "marvelsChambers"
-                    - "morrisonsChambers"
-                    - "negasChambers"
-                    - "panuthosChambers"
-                    - "parisChambers"
-                    - "pughsChambers"
-                    - "ruwesChambers"
-                    - "thorntonsChambers"
-                    - "torosChambers"
-                    - "urdasChambers"
-                    - "vasquezsChambers"
-                    - "wellsChambers"
-                    - "admin"
-                    - "admissionsclerk"
-                    - "docketclerk"
-                    - "floater"
-                    - "inactivePractitioner"
-                    - "irsPractitioner"
-                    - "irsSuperuser"
-                    - "judge"
-                    - "petitioner"
-                    - "petitionsclerk"
-                    - "privatePractitioner"
-                    - "trialclerk"
-                sentByUserId: 
-                  type: "string"
-                  flags: 
-                    presence: "optional"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "guid"
-                      args: 
-                        options: 
-                          version: 
-                            - "uuidv4"
-                trialDate: 
-                  type: "date"
-                  flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
-                    presence: "optional"
-                  allow: 
-                    - null
-                updatedAt: 
-                  type: "date"
-                  flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
-                    presence: "required"
-                workItemId: 
-                  type: "string"
-                  flags: 
-                    presence: "required"
-                  rules: 
-                    - 
-                      name: "min"
-                      args: 
-                        limit: 1
-                    - 
-                      name: "guid"
-                      args: 
-                        options: 
-                          version: 
-                            - "uuidv4"
     caseCaption: 
       type: "string"
       flags: 

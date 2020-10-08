@@ -17,25 +17,26 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
-                documentId: '123',
+                docketEntryId: '123',
                 index: 1,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
               },
               {
                 index: 2,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
               {
-                documentId: '234',
+                docketEntryId: '234',
                 index: 3,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-              },
-              {
-                documentId: '234',
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -43,7 +44,7 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toMatchObject({
-      viewerDocumentToDisplay: { documentId: '123' },
+      viewerDocumentToDisplay: { docketEntryId: '123' },
     });
   });
 
@@ -56,21 +57,25 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
                 index: 1,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
               {
-                documentId: '123',
+                docketEntryId: '123',
                 index: 2,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
               },
               {
                 index: 3,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
             ],
           },
@@ -78,7 +83,7 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toMatchObject({
-      viewerDocumentToDisplay: { documentId: '123' },
+      viewerDocumentToDisplay: { docketEntryId: '123' },
     });
   });
 
@@ -91,18 +96,26 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
                 index: 1,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
               {
                 index: 2,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
               {
                 index: 3,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
             ],
-            documents: [],
           },
         },
       },
@@ -112,7 +125,7 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns the correct docket record entry if state.documentId is set', async () => {
+  it('returns the correct docket record entry if state.docketEntryId is set', async () => {
     const result = await runAction(
       getDefaultDocketViewerDocumentToDisplayAction,
       {
@@ -121,34 +134,35 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
         },
         state: {
           caseDetail: {
-            docketRecord: [
+            docketEntries: [
               {
-                documentId: '123',
+                docketEntryId: '123',
                 index: 1,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
               },
               {
                 index: 2,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
               },
               {
-                documentId: '234',
+                docketEntryId: '234',
                 index: 3,
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-              },
-              {
-                documentId: '234',
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
               },
             ],
           },
-          documentId: '234',
+          docketEntryId: '234',
         },
       },
     );
     expect(result.output).toMatchObject({
-      viewerDocumentToDisplay: { documentId: '234' },
+      viewerDocumentToDisplay: { docketEntryId: '234' },
     });
   });
 });

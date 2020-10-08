@@ -9,20 +9,19 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
   it('sets the workItemIdToMarkAsRead for an unread qc work item', async () => {
     const result = await runAction(setQCWorkItemIdToMarkAsReadIfNeededAction, {
       props: {
-        documentId: '123-abc-123-abc',
+        docketEntryId: '123-abc-123-abc',
       },
       state: {
         caseDetail: {
-          docketNumber: '123-45',
-          docketRecord: [],
-          documents: [
+          docketEntries: [
             {
-              documentId: '123-abc-123-abc',
+              docketEntryId: '123-abc-123-abc',
               lodged: true,
               workItem: { isRead: false, workItemId: 'ThisIsAnId' },
             },
-            { documentId: '321-cba-321-cba' },
+            { docketEntryId: '321-cba-321-cba' },
           ],
+          docketNumber: '123-45',
         },
         form: {},
       },

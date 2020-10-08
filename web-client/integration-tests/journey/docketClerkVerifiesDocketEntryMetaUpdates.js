@@ -10,7 +10,7 @@ export const docketClerkVerifiesDocketEntryMetaUpdates = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDetail = test.getState('caseDetail');
-    const docketRecordEntry = caseDetail.documents.find(
+    const docketRecordEntry = caseDetail.docketEntries.find(
       entry => entry.index === docketRecordIndex,
     );
 
@@ -18,7 +18,7 @@ export const docketClerkVerifiesDocketEntryMetaUpdates = (
     expect(docketRecordEntry.filedBy).toEqual(
       'Resp. & Petr. Mona Schultz, Brianna Noble',
     );
-    expect(docketRecordEntry.description).toEqual(
+    expect(docketRecordEntry.documentTitle).toEqual(
       'First Request for Admissions',
     );
   });

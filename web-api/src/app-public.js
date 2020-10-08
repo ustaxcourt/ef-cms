@@ -37,6 +37,7 @@ const {
 const {
   orderPublicSearchLambda,
 } = require('./public-api/orderPublicSearchLambda');
+const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
 const { getPublicCaseLambda } = require('./public-api/getPublicCaseLambda');
 const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
@@ -59,8 +60,9 @@ app.post(
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
 );
 app.get(
-  '/public-api/:docketNumber/:documentId/public-document-download-url',
+  '/public-api/:docketNumber/:key/public-document-download-url',
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
+app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
 
 exports.app = app;

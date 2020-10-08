@@ -17,17 +17,17 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       },
     );
 
-    const { documentId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.documents.find(
-      doc => doc.documentId === documentId,
+    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     // Type D
@@ -89,24 +89,24 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.documents.find(
-      doc => doc.documentId === documentId,
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2050-01-01',
+      date: '2050-01-01T05:00:00.000Z',
       documentTitle: 'Order for Filing Fee on 01-01-2050',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
     });
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+      docketEntryId: orderDocument.docketEntryId,
       docketNumber: test.docketNumber,
-      documentId: orderDocument.documentId,
     });
 
     expect(test.getState('form')).toMatchObject({
-      date: '2050-01-01',
+      date: '2050-01-01T05:00:00.000Z',
       day: '1',
       documentTitle: 'Order for Filing Fee on 01-01-2050',
       documentType: 'Order for Filing Fee',

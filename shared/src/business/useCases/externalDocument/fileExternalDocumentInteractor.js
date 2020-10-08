@@ -11,7 +11,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { Document } = require('../../entities/Document');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -79,7 +79,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
-        supportingDocuments[i].documentId,
+        supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
@@ -90,7 +90,7 @@ exports.fileExternalDocumentInteractor = async ({
     secondaryDocument.lodged = true;
 
     documentsToAdd.push([
-      secondaryDocument.documentId,
+      secondaryDocument.docketEntryId,
       secondaryDocument,
       DOCUMENT_RELATIONSHIPS.SECONDARY,
     ]);
@@ -99,7 +99,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
-        secondarySupportingDocuments[i].documentId,
+        secondarySupportingDocuments[i].docketEntryId,
         secondarySupportingDocuments[i],
         DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
@@ -108,13 +108,13 @@ exports.fileExternalDocumentInteractor = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  for (let [documentId, metadata, relationship] of documentsToAdd) {
-    if (documentId && metadata) {
-      const documentEntity = new Document(
+  for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
+    if (docketEntryId && metadata) {
+      const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
           ...metadata,
-          documentId,
+          docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
           partyPrimary:
@@ -143,12 +143,12 @@ exports.fileExternalDocumentInteractor = async ({
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+          docketEntry: {
+            ...docketEntryEntity.toRawObject(),
+            createdAt: docketEntryEntity.createdAt,
+          },
           docketNumber: caseToUpdate.docketNumber,
           docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-          document: {
-            ...documentEntity.toRawObject(),
-            createdAt: documentEntity.createdAt,
-          },
           highPriority: highPriorityWorkItem,
           section: DOCKET_SECTION,
           sentBy: user.name,
@@ -158,20 +158,20 @@ exports.fileExternalDocumentInteractor = async ({
         { applicationContext },
       );
 
-      documentEntity.setWorkItem(workItem);
+      docketEntryEntity.setWorkItem(workItem);
 
       workItems.push(workItem);
-      caseEntity.addDocument(documentEntity);
+      caseEntity.addDocketEntry(docketEntryEntity);
 
-      const isAutoServed = documentEntity.isAutoServed();
+      const isAutoServed = docketEntryEntity.isAutoServed();
 
       if (isAutoServed) {
-        documentEntity.setAsServed(servedParties.all);
+        docketEntryEntity.setAsServed(servedParties.all);
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          documentEntity,
+          docketEntryEntity,
           servedParties,
         });
       }

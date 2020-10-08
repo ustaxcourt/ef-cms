@@ -8,13 +8,13 @@ presenter.providers.applicationContext = applicationContext;
 describe('setDocumentToDisplayFromDocumentIdAction', () => {
   let caseDetail;
   const docketNumber = '123-45';
-  const documentId = '456';
+  const docketEntryId = '456';
   const url = 'www.example.com';
 
   beforeAll(() => {
     caseDetail = {
+      docketEntries: [],
       docketNumber,
-      documents: [],
     };
 
     applicationContext
@@ -24,14 +24,14 @@ describe('setDocumentToDisplayFromDocumentIdAction', () => {
       });
   });
 
-  it('sets state.iframeSrc to the document URL associated with the documentId in state', async () => {
+  it('sets state.iframeSrc to the document URL associated with the docketEntryId in state', async () => {
     const { state } = await runAction(
       setDocumentToDisplayFromDocumentIdAction,
       {
         modules: {
           presenter,
         },
-        state: { caseDetail, documentId, iframeSrc: undefined },
+        state: { caseDetail, docketEntryId, iframeSrc: undefined },
       },
     );
 

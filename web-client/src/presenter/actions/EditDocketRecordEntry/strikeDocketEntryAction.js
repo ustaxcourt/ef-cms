@@ -15,13 +15,13 @@ export const strikeDocketEntryAction = async ({
   path,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const { documentId } = get(state.form);
+  const { docketEntryId } = get(state.form);
 
   try {
     await applicationContext.getUseCases().strikeDocketEntryInteractor({
       applicationContext,
+      docketEntryId,
       docketNumber,
-      documentId,
     });
     return path.success({
       alertSuccess: {

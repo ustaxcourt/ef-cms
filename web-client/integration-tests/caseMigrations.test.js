@@ -63,7 +63,7 @@ const correspondenceCase = {
   },
   correspondence: [
     {
-      documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
+      correspondenceId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
       documentTitle: 'Receipt',
       filingDate: '2014-01-14T09:53:55.513-05:00',
       userId: '337d6ccc-0f5f-447d-a688-a925da37f252',
@@ -191,33 +191,26 @@ const legacyServedDocumentCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Sixth Migrated Case',
-  docketNumber: '156-21',
-  docketRecord: [
-    ...MOCK_CASE.docketRecord,
-    {
-      description: 'Answer',
-      docketRecordId: 'c48eac57-8249-4e48-a66b-3e23f76fa418',
-      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
-      eventCode: 'A',
-      filingDate: '2018-11-21T20:49:28.192Z',
-      index: 4,
-    },
-  ],
-  documents: [
-    ...MOCK_CASE.documents,
+  docketEntries: [
+    ...MOCK_CASE.docketEntries,
     {
       createdAt: '2018-11-21T20:49:28.192Z',
+      description: 'Answer',
+      docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
       docketNumber: '101-21',
-      documentId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
       documentTitle: 'Answer',
       documentType: 'Answer',
       eventCode: 'A',
       filedBy: 'Test Petitioner',
+      filingDate: '2018-11-21T20:49:28.192Z',
+      index: 4,
       isLegacyServed: true,
+      isOnDocketRecord: true,
       processingStatus: 'complete',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ],
+  docketNumber: '156-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -319,7 +312,7 @@ describe('Case migration journey', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: legacyServedDocumentCase.docketNumber,
     });
-    const caseDocuments = test.getState('caseDetail.documents');
+    const caseDocuments = test.getState('caseDetail.docketEntries');
     expect(caseDocuments.length).toBe(5);
 
     const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);
@@ -328,8 +321,8 @@ describe('Case migration journey', () => {
     const formattedCase = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-    expect(formattedCase.formattedDocketEntries[4].showNotServed).toBe(false);
-    expect(formattedCase.formattedDocketEntries[4].isInProgress).toBe(false);
+    expect(formattedCase.formattedDocketEntries[1].showNotServed).toBe(false);
+    expect(formattedCase.formattedDocketEntries[1].isInProgress).toBe(false);
   });
 
   loginAs(test, 'privatePractitioner@example.com');

@@ -1,9 +1,9 @@
 const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
 const getDocumentInfo = ({ applicationContext, documentData }) => {
-  const document = new Document(documentData, {
+  const document = new DocketEntry(documentData, {
     applicationContext,
   });
 
@@ -45,8 +45,8 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     documentData: documentsFiled,
   });
 
-  const primaryDocumentRecord = caseEntity.documents.find(
-    doc => doc.documentId === documentsFiled.primaryDocumentId,
+  const primaryDocumentRecord = caseEntity.docketEntries.find(
+    doc => doc.docketEntryId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
 
@@ -87,12 +87,12 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     },
   });
 
-  const documentId = applicationContext.getUniqueId();
+  const key = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: pdf,
-    documentId,
+    key,
     useTempBucket: true,
   });
 
@@ -100,7 +100,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    documentId,
+    key,
     useTempBucket: true,
   });
 

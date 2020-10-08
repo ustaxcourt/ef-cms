@@ -1,90 +1,101 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocumentToFormAction } from './setDocumentToFormAction';
 
 describe('setDocumentToFormAction', () => {
-  let documentIdToEdit;
+  let docketEntryIdToEdit;
   let documentToMatch;
 
-  it('sets state.form for the given case and documentId', async () => {
-    documentIdToEdit = '123';
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContextForClient;
+  });
+
+  it('sets state.form for the given case and docketEntryId', async () => {
+    docketEntryIdToEdit = '123';
     documentToMatch = {
-      documentId: documentIdToEdit,
-      documentIdToEdit: documentIdToEdit,
+      docketEntryId: docketEntryIdToEdit,
+      docketEntryIdToEdit,
       documentType: 'Order',
       primaryDocumentFile: true,
     };
 
     const result = await runAction(setDocumentToFormAction, {
+      modules: { presenter },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          correspondence: [],
+          docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
-        documentId: documentIdToEdit,
+        docketEntryId: docketEntryIdToEdit,
       },
     });
 
     expect(result.state.form).toEqual(documentToMatch);
   });
 
-  it('sets state.form for the given case and documentId when the document is a correspondence', async () => {
-    documentIdToEdit = '234';
+  it('sets state.form for the given case and docketEntryId when the document is a correspondence', async () => {
+    docketEntryIdToEdit = '234';
     const mockCorrespondence = {
-      documentId: '234',
+      correspondenceId: '234',
       documentTitle: 'a lovely correspondence',
     };
 
     const result = await runAction(setDocumentToFormAction, {
+      modules: { presenter },
       props: {
         caseDetail: {
           correspondence: [mockCorrespondence],
-          docketNumber: '123-45',
-          documents: [
+          docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
           ],
+          docketNumber: '123-45',
         },
-        documentId: documentIdToEdit,
+        docketEntryId: docketEntryIdToEdit,
       },
     });
 
     expect(result.state.form).toEqual({
       ...mockCorrespondence,
-      documentIdToEdit: documentIdToEdit,
+      docketEntryIdToEdit: docketEntryIdToEdit,
       primaryDocumentFile: true,
     });
   });
 
-  it('does nothing if documentId does not match a document', async () => {
-    documentIdToEdit = '123';
+  it('does nothing if docketEntryId does not match a document', async () => {
+    docketEntryIdToEdit = '123';
     documentToMatch = {
-      documentId: documentIdToEdit,
-      documentIdToEdit: documentIdToEdit,
+      docketEntryId: docketEntryIdToEdit,
+      docketEntryIdToEdit: docketEntryIdToEdit,
       documentType: 'Order',
       primaryDocumentFile: true,
     };
 
     const result = await runAction(setDocumentToFormAction, {
+      modules: { presenter },
       props: {
         caseDetail: {
-          docketNumber: '123-45',
-          documents: [
+          correspondence: [],
+          docketEntries: [
             {
-              documentId: '321',
+              docketEntryId: '321',
               documentType: 'Petition',
             },
             documentToMatch,
           ],
+          docketNumber: '123-45',
         },
-        documentId: '890',
+        docketEntryId: '890',
       },
     });
 

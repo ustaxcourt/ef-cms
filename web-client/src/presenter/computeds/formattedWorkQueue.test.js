@@ -48,14 +48,14 @@ describe('formatted work queue computed', () => {
     assigneeName: 'Unassigned',
     caseStatus: STATUS_TYPES.generalDocket,
     createdAtFormatted: '12/27/18',
+    docketEntry: {
+      attachments: true,
+      docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      documentType: 'Answer',
+    },
     docketNumber: '101-18',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '101-18S',
-    document: {
-      attachments: true,
-      documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
-      documentType: 'Answer',
-    },
     isCourtIssuedDocument: false,
     section: PETITIONS_SECTION,
     selected: true,
@@ -77,6 +77,10 @@ describe('formatted work queue computed', () => {
       };
     };
 
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(() => true);
+
     formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
       ...applicationContext,
     });
@@ -87,15 +91,15 @@ describe('formatted work queue computed', () => {
     assigneeName: null,
     caseStatus: STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
+    docketEntry: {
+      attachments: true,
+      createdAt: '2018-12-27T18:05:54.164Z',
+      docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      documentType: 'Answer',
+    },
     docketNumber: '101-18',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '101-18S',
-    document: {
-      attachments: true,
-      createdAt: '2018-12-27T18:05:54.164Z',
-      documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
-      documentType: 'Answer',
-    },
     section: PETITIONS_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
@@ -259,6 +263,12 @@ describe('formatted work queue computed', () => {
       userId: JUDGE_USER_ID_1,
     };
 
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(
+        item => item.associatedJudge && item.associatedJudge === judgeUser.name,
+      );
+
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(judgeUser),
@@ -301,6 +311,12 @@ describe('formatted work queue computed', () => {
       role: USER_ROLES.adc,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
+
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(
+        item => !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE,
+      );
 
     const result = runCompute(formattedWorkQueue, {
       state: {
@@ -368,8 +384,8 @@ describe('formatted work queue computed', () => {
             associatedJudge: CHIEF_JUDGE,
             caseIsInProgress: true,
             caseStatus: STATUS_TYPES.new,
-            document: {
-              ...qcWorkItem.document,
+            docketEntry: {
+              ...qcWorkItem.docketEntry,
               status: 'processing',
             },
             workItemId: WORK_ITEM_ID_4,
@@ -559,7 +575,7 @@ describe('formatted work queue computed', () => {
     };
     const baseDocument = {
       createdAt: '2019-12-16T16:48:02.888Z',
-      documentId: '6db35185-2445-4952-9449-5479a5cadab0',
+      docketEntryId: '6db35185-2445-4952-9449-5479a5cadab0',
       filedBy: 'Petr. Ori Petersen',
       partyPrimary: true,
       partySecondary: false,
@@ -570,7 +586,7 @@ describe('formatted work queue computed', () => {
     const baseWorkItemEditLink =
       '/case-detail/114-19/documents/6db35185-2445-4952-9449-5479a5cadab0';
     const documentViewLink =
-      '/case-detail/114-19/document-view?documentId=6db35185-2445-4952-9449-5479a5cadab0';
+      '/case-detail/114-19/document-view?docketEntryId=6db35185-2445-4952-9449-5479a5cadab0';
 
     it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
@@ -580,7 +596,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             documentType: 'Petition',
             eventCode: 'P',
@@ -605,7 +621,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             documentType: 'Order that case is assigned',
             eventCode: 'OAJ',
@@ -630,7 +646,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             documentType: 'Order that case is assigned',
             eventCode: 'OAJ',
@@ -655,7 +671,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             category: 'Miscellaneous',
             documentTitle: 'Administrative Record',
@@ -689,7 +705,7 @@ describe('formatted work queue computed', () => {
         workItem: {
           ...baseWorkItem,
           completedAt: '2019-03-01T21:40:46.415Z',
-          document: {
+          docketEntry: {
             ...baseDocument,
             category: 'Miscellaneous',
             documentTitle: 'Administrative Record',
@@ -714,7 +730,7 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual(
-        `/case-detail/${baseWorkItem.docketNumber}/document-view?documentId=${baseDocument.documentId}`,
+        `/case-detail/${baseWorkItem.docketNumber}/document-view?docketEntryId=${baseDocument.docketEntryId}`,
       );
     });
 
@@ -727,7 +743,7 @@ describe('formatted work queue computed', () => {
         workItem: {
           ...baseWorkItem,
           completedAt: '2019-03-01T21:40:46.415Z',
-          document: {
+          docketEntry: {
             ...baseDocument,
             category: 'Miscellaneous',
             documentTitle: 'Administrative Record',
@@ -751,11 +767,44 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual(
-        `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocument.documentId}/complete`,
+        `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocument.docketEntryId}/complete`,
       );
     });
 
-    it('should return default edit link if document is in progress and user is petitionsClerk', () => {
+    it('should return default document view link when the document has been processed, is unservable, and the user is docketClerk', () => {
+      const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-02-28T21:14:39.488Z',
+          docketEntry: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Hearing Exhibits for A document from the west',
+            documentType: 'Hearing Exhibits',
+            eventCode: UNSERVABLE_EVENT_CODES[0],
+            isFileAttached: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+            scenario: 'Standard',
+          },
+          isInitializeCase: false,
+          section: DOCKET_SECTION,
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      });
+      expect(result).toEqual(documentViewLink);
+    });
+
+    it('should return default document view link if document is in progress and user is petitionsClerk', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -763,7 +812,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             category: 'Miscellaneous',
             documentTitle: 'Administrative Record',
@@ -784,7 +833,7 @@ describe('formatted work queue computed', () => {
           queue: 'section',
         },
       });
-      expect(result).toEqual(baseWorkItemEditLink);
+      expect(result).toEqual(documentViewLink);
     });
 
     it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {
@@ -795,7 +844,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             category: 'Miscellaneous',
             documentTitle: 'Administrative Record',
@@ -825,7 +874,7 @@ describe('formatted work queue computed', () => {
         permissions,
         workItem: {
           ...baseWorkItem,
-          document: {
+          docketEntry: {
             ...baseDocument,
             category: 'Miscellaneous',
             documentTitle: 'Administrative Record',
@@ -856,7 +905,7 @@ describe('formatted work queue computed', () => {
         workItem: {
           ...baseWorkItem,
           caseIsInProgress: true,
-          document: {
+          docketEntry: {
             ...baseDocument,
             documentType: 'Petition',
             eventCode: 'P',
@@ -1105,11 +1154,11 @@ describe('formatted work queue computed', () => {
       expect(result.selected).toEqual(true);
     });
 
-    it('should return document.createdAt for receivedAt', () => {
+    it('should return docketEntry.createdAt for receivedAt', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           createdAt: '2018-12-26T18:05:54.166Z',
           receivedAt: '2018-12-27T18:05:54.166Z',
         },
@@ -1119,15 +1168,15 @@ describe('formatted work queue computed', () => {
         applicationContext,
         workItem,
       });
-      expect(result.receivedAt).toEqual(result.document.receivedAt);
+      expect(result.receivedAt).toEqual(result.docketEntry.receivedAt);
     });
 
-    it('should return document.createdAt for receivedAt when document.receivedAt is today', () => {
+    it('should return docketEntry.createdAt for receivedAt when docketEntry.receivedAt is today', () => {
       const now = new Date().toISOString();
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           createdAt: '2018-12-27T18:05:54.166Z',
           receivedAt: now,
         },
@@ -1137,14 +1186,14 @@ describe('formatted work queue computed', () => {
         applicationContext,
         workItem,
       });
-      expect(result.receivedAt).toEqual(result.document.createdAt);
+      expect(result.receivedAt).toEqual(result.docketEntry.createdAt);
     });
 
     it('should return received as receivedAt when receivedAt is NOT today', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           createdAt: '2018-12-27T18:05:54.166Z',
           receivedAt: '2018-12-27T18:05:54.166Z',
         },
@@ -1160,8 +1209,8 @@ describe('formatted work queue computed', () => {
     it('should return isCourtIssuedDocument as true when the documentType is a court issued document type', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           documentType: 'Petition',
         },
       };
@@ -1169,7 +1218,7 @@ describe('formatted work queue computed', () => {
       let result = formatWorkItem({ applicationContext, workItem });
       expect(result.isCourtIssuedDocument).toEqual(false);
 
-      workItem.document.documentType = 'Transcript';
+      workItem.docketEntry.documentType = 'Transcript';
 
       result = formatWorkItem({ applicationContext, workItem });
       expect(result.isCourtIssuedDocument).toEqual(true);
@@ -1178,8 +1227,8 @@ describe('formatted work queue computed', () => {
     it('should return isOrder as true when the documentType is a court issued document type', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           documentType: 'Petition',
         },
       };
@@ -1187,7 +1236,7 @@ describe('formatted work queue computed', () => {
       let result = formatWorkItem({ applicationContext, workItem });
       expect(result.isOrder).toEqual(false);
 
-      workItem.document.documentType = 'Order';
+      workItem.docketEntry.documentType = 'Order';
 
       result = formatWorkItem({ applicationContext, workItem });
       expect(result.isOrder).toEqual(true);
@@ -1196,41 +1245,41 @@ describe('formatted work queue computed', () => {
     it('should return the documentType as descriptionDisplay if no documentTitle is present', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
+        docketEntry: {
           ...FORMATTED_WORK_ITEM.document,
           documentType: 'Document Type',
         },
       };
 
       const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.document.descriptionDisplay).toEqual('Document Type');
+      expect(result.docketEntry.descriptionDisplay).toEqual('Document Type');
     });
 
     it('should return the documentTitle as descriptionDisplay if no additionalInfo is present', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           documentTitle: 'Document Title',
         },
       };
 
       const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.document.descriptionDisplay).toEqual('Document Title');
+      expect(result.docketEntry.descriptionDisplay).toEqual('Document Title');
     });
 
     it('should return the documentTitle with additionalInfo as descriptionDisplay if documentTitle and additionalInfo are present', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
-        document: {
-          ...FORMATTED_WORK_ITEM.document,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
           additionalInfo: 'with Additional Info',
           documentTitle: 'Document Title',
         },
       };
 
       const result = formatWorkItem({ applicationContext, workItem });
-      expect(result.document.descriptionDisplay).toEqual(
+      expect(result.docketEntry.descriptionDisplay).toEqual(
         'Document Title with Additional Info',
       );
     });
