@@ -5,6 +5,7 @@ import {
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
+import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForSealedCaseByName } from './journey/unauthedUserSearchesForSealedCaseByName';
@@ -16,7 +17,7 @@ const test = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-describe('Petitioner creates cases to search for', () => {
+describe('Petitioner creates case to search for', () => {
   beforeAll(() => {
     jest.setTimeout(10000);
   });
@@ -40,6 +41,11 @@ describe('Petitioner creates cases to search for', () => {
     test.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
+});
+
+describe('Petitions clerk serves case to IRS', () => {
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
 });
 
 describe('Docket clerk seals the case (should not be viewable to the public)', () => {
