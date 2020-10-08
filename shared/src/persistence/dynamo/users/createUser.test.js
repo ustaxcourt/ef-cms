@@ -9,6 +9,8 @@ const {
 const { createUser, createUserRecords } = require('./createUser');
 
 describe('createUser', () => {
+  process.env.DEFAULT_ACCOUNT_PASS = 'anything';
+
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
   const petitionsClerkUser = {
     name: 'Test Petitionsclerk',
