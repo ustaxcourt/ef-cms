@@ -16,7 +16,9 @@ export const setCreateOrderModalDataOnFormAction = ({ get, props, store }) => {
   const eventCode = props.eventCode || get(state.modal.eventCode);
 
   const parentMessageId =
-    props.parentMessageId || get(state.modal.parentMessageId);
+    props.parentMessageId ||
+    get(state.modal.parentMessageId) ||
+    get(state.parentMessageId);
 
   if (documentTitle && documentType && eventCode) {
     store.set(state.form.documentTitle, documentTitle);
