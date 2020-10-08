@@ -179,7 +179,7 @@ exports.processStreamRecordsInteractor = async ({
             });
 
           applicationContext.logger.info(
-            `processStreamRecordsInteractor job ${processJobId} indexRecord error:`,
+            `processStreamRecordsInteractor job ${processJobId} indexRecord error during bulkIndexRecords:`,
             e,
           );
           await applicationContext.notifyHoneybadger(e);
@@ -210,11 +210,28 @@ exports.processStreamRecordsInteractor = async ({
         records: recordsToProcess,
       });
 
-      for (const record of recordsToReprocess) {
-        try {
-          const newImage = record.dynamodb.NewImage;
+      const reIndexRecord = record => async e => {
+        await applicationContext
+          .getPersistenceGateway()
+          .createElasticsearchReindexRecord({
+            applicationContext,
+            recordPk: record.dynamodb.Keys.pk.S,
+            recordSk: record.dynamodb.Keys.sk.S,
+          });
 
-          await applicationContext.getPersistenceGateway().indexRecord({
+        applicationContext.logger.info(
+          `processStreamRecordsInteractor job ${processJobId} indexRecord error during record reprocessing:`,
+          e,
+        );
+        await applicationContext.notifyHoneybadger(e);
+      };
+
+      const reprocessRecord = record => {
+        const newImage = record.dynamodb.NewImage;
+
+        applicationContext
+          .getPersistenceGateway()
+          .indexRecord({
             applicationContext,
             fullRecord: newImage,
             isAlreadyMarshalled: true,
@@ -222,20 +239,11 @@ exports.processStreamRecordsInteractor = async ({
               recordPk: record.dynamodb.Keys.pk.S,
               recordSk: record.dynamodb.Keys.sk.S,
             },
-          });
-        } catch (e) {
-          await applicationContext
-            .getPersistenceGateway()
-            .createElasticsearchReindexRecord({
-              applicationContext,
-              recordPk: record.dynamodb.Keys.pk.S,
-              recordSk: record.dynamodb.Keys.sk.S,
-            });
+          })
+          .catch(reIndexRecord(record));
+      };
 
-          applicationContext.logger.info('Error', e);
-          await applicationContext.notifyHoneybadger(e);
-        }
-      }
+      await Promise.allSettled(recordsToReprocess.map(reprocessRecord));
     }
   }
 

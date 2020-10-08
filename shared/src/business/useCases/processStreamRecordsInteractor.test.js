@@ -1,10 +1,7 @@
 const {
-  applicationContext,
-  applicationContextForClient,
-} = require('../test/createTestApplicationContext');
-const {
   processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamRecordsInteractor', () => {
   const mockJobId = 'a5e664f1-2d8c-4e53-b3db-c24f30273dd9';
@@ -744,6 +741,16 @@ describe('processStreamRecordsInteractor', () => {
       ],
     });
 
+    expect(applicationContext.logger.info).toBeCalledTimes(3);
+    expect(applicationContext.logger.info.mock.calls[0][0]).toBe(
+      `processStreamRecordsInteractor job ${mockJobId} started at time:`,
+    );
+    expect(applicationContext.logger.info.mock.calls[1][0]).toBe(
+      `processStreamRecordsInteractor job ${mockJobId} bulkDeleteRecords error:`,
+    );
+    expect(applicationContext.logger.info.mock.calls[2][0]).toBe(
+      `processStreamRecordsInteractor job ${mockJobId} completed at time:`,
+    );
     expect(applicationContext.notifyHoneybadger).toBeCalledTimes(1);
     expect(applicationContext.notifyHoneybadger.mock.calls[0][0]).toEqual(
       error,
