@@ -68,6 +68,16 @@ describe('User entity', () => {
     expect(user.entityName).toEqual('User');
   });
 
+  it('Creates a valid floater user', () => {
+    const user = new User({
+      name: 'Saul Goodman',
+      role: ROLES.floater,
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+    });
+    expect(user.isValid()).toBeTruthy();
+    expect(user.entityName).toEqual('User');
+  });
+
   it('Creates a valid privatePractitioner user', () => {
     const user = new User({
       barNumber: 'SG101',
@@ -115,6 +125,7 @@ describe('User entity', () => {
       role: undefined,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
+
     expect(user.role).toBe(ROLES.petitioner);
   });
 
@@ -154,6 +165,9 @@ describe('User entity', () => {
     });
     it('should return true when the user role is trialclerk', () => {
       expect(User.isInternalUser(ROLES.trialClerk)).toEqual(true);
+    });
+    it('should return true when the user role is floater', () => {
+      expect(User.isInternalUser(ROLES.floater)).toEqual(true);
     });
   });
 });

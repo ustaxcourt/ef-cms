@@ -38,7 +38,7 @@ export const AddEditCaseNoteModal = connect(
             Case note
           </label>
           <BindedTextarea
-            ariaLabel="notes"
+            aria-label="notes"
             bind="modal.notes"
             id="procedural-notes"
             onChange={() => {

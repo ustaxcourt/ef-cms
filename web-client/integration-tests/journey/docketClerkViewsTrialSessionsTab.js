@@ -1,5 +1,6 @@
 import { formattedTrialSessions as formattedTrialSessionsComputed } from '../../src/presenter/computeds/formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
+import { trialSessionsHelper as trialSessionsHelperComputed } from '../../src/presenter/computeds/trialSessionsHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedTrialSessions = withAppContextDecorator(
@@ -23,6 +24,24 @@ export const docketClerkViewsTrialSessionsTab = (test, overrides = {}) => {
     const formatted = runCompute(formattedTrialSessions, {
       state: test.getState(),
     });
+
+    const trialSessionsHelper = withAppContextDecorator(
+      trialSessionsHelperComputed,
+    );
+
+    const helper = runCompute(trialSessionsHelper, {
+      state: test.getState(),
+    });
+
+    const legacyJudge = helper.trialSessionJudges.find(
+      judge => judge.role === 'legacyJudge',
+    );
+
+    if (status === 'Closed' || status === 'All') {
+      expect(legacyJudge).toBeTruthy();
+    } else {
+      expect(legacyJudge).toBeFalsy();
+    }
 
     const filteredSessions = formatted.filteredTrialSessions[status];
 

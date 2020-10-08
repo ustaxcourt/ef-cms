@@ -59,6 +59,21 @@ describe('NoticeOfReceiptOfPetition', () => {
     expect(textContent).toContain('June 3, 2020');
   });
 
+  it('does not render Request for Place of Trial section if preferredTrialCity is not present', () => {
+    const wrapper = shallow(
+      <NoticeOfReceiptOfPetition
+        address={address}
+        caseCaptionExtension={caseCaptionExtension}
+        caseTitle={caseTitle}
+        docketNumberWithSuffix={docketNumberWithSuffix}
+        receivedAtFormatted="December 1, 2019"
+        servedDate="June 3, 2020"
+      />,
+    );
+    const textContent = wrapper.text();
+    expect(textContent).not.toContain('Request for Place of Trial');
+  });
+
   it('renders the the petitioner mailing address', () => {
     const wrapper = mount(
       <NoticeOfReceiptOfPetition

@@ -10,8 +10,16 @@
   {
     "eventCode": "OAJ",
     "documentType": "Order that case is assigned",
-    "documentTitle": "Order [Judge name] [Anything]",
+    "documentTitle": "Order that case is assigned to [Judge name] [Anything]",
     "scenario": "Type B",
+    "isOrder": true,
+    "requiresSignature": true
+  },
+  {
+    "eventCode": "SPOS",
+    "documentType": "Standing Pretrial Order",
+    "documentTitle": "Standing Pretrial Order",
+    "scenario": "Type A",
     "isOrder": true,
     "requiresSignature": true
   },

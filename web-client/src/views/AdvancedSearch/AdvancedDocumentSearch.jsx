@@ -27,7 +27,7 @@ export const AdvancedDocumentSearch = connect(
     const narrowYourSearch = () => {
       return (
         <>
-          <h4>Narrow your Search (optional)</h4>
+          <h4 id="narrow-search-header">Narrow your Search (optional)</h4>
           <FormGroup
             className="margin-bottom-0"
             errorText={validationErrors.chooseOneValue}

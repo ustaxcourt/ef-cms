@@ -141,6 +141,17 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.formattedDocumentTitle).toEqual('Circle of Life');
   });
 
+  it('should return an empty string for a formattedDocumentTitle if generatedDocumentTitle and attachments are undefined', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        form: {},
+      },
+    });
+
+    expect(result.formattedDocumentTitle).toEqual('');
+  });
+
   it('should return a formatted document title with `(Attachment(s))` when present', () => {
     const withAttachments = cloneDeep(state);
     withAttachments.form.attachments = true;

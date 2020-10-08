@@ -83,11 +83,29 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
     const caseDocument = test.getState('caseDetail.docketEntries.0');
     expect(caseDocument).toMatchObject({
+      documentTitle: 'Answer',
       documentType: 'Answer',
       eventCode: 'A',
       isFileAttached: true,
     });
     test.docketEntryId = caseDocument.docketEntryId;
+  });
+
+  it('open modal to serve paper-filed document (but do not serve)', async () => {
+    const caseDocument = test.getState('caseDetail.docketEntries.0');
+
+    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
+      docketRecordTab: 'documentView',
+      viewerDocumentToDisplay: caseDocument,
+    });
+
+    await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
+      docketEntryId: test.docketEntryId,
+    });
+
+    expect(
+      test.getState('viewerDocumentToDisplay.documentTitle'),
+    ).toBeDefined();
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {

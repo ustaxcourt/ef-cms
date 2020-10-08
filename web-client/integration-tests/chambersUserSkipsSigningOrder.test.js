@@ -22,7 +22,7 @@ describe('chambers user skips signing an order', () => {
 
   loginAs(test, 'armensChambers@example.com');
 
-  chambersUserViewsCaseDetail(test, 3);
+  chambersUserViewsCaseDetail(test, 2);
   chambersUserViewsDraftDocuments(test);
   chambersUserAddsOrderToCase(test);
   chambersUserSkipSigningOrder(test);

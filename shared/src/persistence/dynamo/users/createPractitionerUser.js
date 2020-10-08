@@ -66,6 +66,10 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
         .adminCreateUser({
           UserAttributes: [
             {
+              Name: 'email_verified',
+              Value: 'True',
+            },
+            {
               Name: 'email',
               Value: user.email,
             },

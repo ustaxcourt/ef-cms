@@ -15,6 +15,7 @@ Valid Case object example:
 {
   "entityName":"Case",
   "associatedJudge":"Chief Judge",
+  "judgeUserId":"d8123f6c-6d8f-4c7a-80d9-6c1f9d033692",
   "automaticBlocked":true,
   "automaticBlockedDate":"2020-09-01T13:22:16.435Z",
   "automaticBlockedReason":"Pending Item and Due Date",
@@ -681,6 +682,7 @@ Valid Case object example:
       "signedAt":"2020-07-17T19:28:17.635Z",
       "signedByUserId":"e1d0b1c2-e531-4e07-ab82-851ee9acde64",
       "signedJudgeName":"Maurice B. Foley",
+      "judgeUserId":"31d0b1c2-e531-4e07-ab82-851ee9acde62",
       "userId":"e1d0b1c2-e531-4e07-ab82-851ee9acde64",
       "workItem":{
         "entityName":"WorkItem",
@@ -1345,7 +1347,8 @@ Valid Case object example:
     "phone":"+1 (809) 471-2617",
     "postalCode":"19959",
     "serviceIndicator":"Electronic",
-    "state":"IN"
+    "state":"IN",
+    "hasEAccess":true
   }
 }
 ```

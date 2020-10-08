@@ -260,6 +260,17 @@ Case.prototype.init = function init(
       this.docketEntries.some(
         docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
       );
+
+    if (
+      filtered &&
+      applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
+      (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
+        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+    ) {
+      this.docketEntries = this.docketEntries.filter(
+        d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+    }
   } else {
     this.docketEntries = [];
   }
@@ -1300,6 +1311,10 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
+  const isPrimaryContact = caseRaw.contactPrimary.contactId === user.userId;
+  const isSecondaryContact =
+    caseRaw.contactSecondary &&
+    caseRaw.contactSecondary.contactId === user.userId;
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
@@ -1313,6 +1328,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   return (
     isIrsPractitioner ||
     isPrivatePractitioner ||
+    isPrimaryContact ||
+    isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
 };

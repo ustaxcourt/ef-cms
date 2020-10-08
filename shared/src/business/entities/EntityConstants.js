@@ -759,6 +759,10 @@ const JUDGES_CHAMBERS = {
     label: 'Copeland’s Chambers',
     section: 'copelandsChambers',
   },
+  DREDDS_CHAMBERS_SECTION: {
+    label: 'Dredds’s Chambers',
+    section: 'dreddsChambers',
+  },
   FOLEYS_CHAMBERS_SECTION: {
     label: 'Foley’s Chambers',
     section: 'foleysChambers',
@@ -858,6 +862,14 @@ const JUDGES_CHAMBERS = {
   WELLS_CHAMBERS_SECTION: {
     label: 'Wells’ Chambers',
     section: 'wellsChambers',
+  },
+  GREAVES_CHAMBERS_SECTION: {
+    label: 'Greaves’ Chambers',
+    section: 'greavesChambers',
+  },
+  MARSHALLS_CHAMBERS_SECTION: {
+    label: 'Marshall’s Chambers',
+    section: 'marshallsChambers',
   },
 };
 

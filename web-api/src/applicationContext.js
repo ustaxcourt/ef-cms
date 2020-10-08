@@ -165,6 +165,9 @@ const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
 const {
+  createMigratedPetitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser');
+const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
@@ -613,6 +616,9 @@ const {
 const {
   getUploadPolicyInteractor,
 } = require('../../shared/src/business/useCases/getUploadPolicyInteractor');
+const {
+  getUserByEmail,
+} = require('../../shared/src/persistence/dynamo/users/getUserByEmail');
 const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
@@ -1148,6 +1154,7 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createElasticsearchReindexRecord,
     createMessage,
+    createMigratedPetitionerUser,
     createPractitionerUser,
     createSectionInboxRecord,
     createTrialSession,
@@ -1247,6 +1254,7 @@ const gatewayMethods = {
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
+  getUserByEmail,
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
@@ -1288,6 +1296,9 @@ module.exports = appContextUser => {
                 Username: uuidv4(),
               },
             }),
+          }),
+          adminDisableUser: () => ({
+            promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
             promise: () => ({

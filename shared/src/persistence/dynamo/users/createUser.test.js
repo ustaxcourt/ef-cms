@@ -8,29 +8,26 @@ const {
 } = require('../../../business/entities/EntityConstants');
 const { createUser, createUserRecords } = require('./createUser');
 
-const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-const petitionsClerkUser = {
-  name: 'Test Petitionsclerk',
-  role: ROLES.petitionsClerk,
-  section: PETITIONS_SECTION,
-};
-
-const privatePractitionerUser = {
-  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithoutBarNumber = {
-  barNumber: '',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
 describe('createUser', () => {
+  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+  const petitionsClerkUser = {
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    section: PETITIONS_SECTION,
+  };
+  const privatePractitionerUser = {
+    barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithoutBarNumber = {
+    barNumber: '',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: async () =>
@@ -62,13 +59,74 @@ describe('createUser', () => {
       section: PETITIONS_SECTION,
     };
 
-    await createUser({ applicationContext, user: petitionsclerkUser });
+    await createUser({
+      applicationContext,
+      user: petitionsclerkUser,
+    });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
     expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
+  });
+
+  it('should create a user and cognito record, but disable the cognito user', async () => {
+    const petitionsclerkUser = {
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({
+      applicationContext,
+      disableCognitoUser: true,
+      user: petitionsclerkUser,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminDisableUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+
+  it('should call adminCreateUser with the correct UserAttributes', async () => {
+    const petitionsclerkUser = {
+      email: 'test@example.com',
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({ applicationContext, user: petitionsclerkUser });
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith({
+      MessageAction: 'SUPPRESS',
+      TemporaryPassword: expect.anything(),
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: 'test@example.com',
+        },
+        {
+          Name: 'custom:role',
+          Value: 'petitionsclerk',
+        },
+        {
+          Name: 'name',
+          Value: 'Test Petitionsclerk',
+        },
+      ],
+      UserPoolId: undefined,
+      Username: 'test@example.com',
+    });
   });
 
   it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
