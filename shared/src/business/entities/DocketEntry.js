@@ -60,6 +60,7 @@ DocketEntry.prototype.init = function init(
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
+    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
     this.userId = rawDocketEntry.userId;
     this.workItem = rawDocketEntry.workItem
       ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
@@ -282,6 +283,7 @@ DocketEntry.prototype.setQCed = function (user) {
 DocketEntry.prototype.unsignDocument = function () {
   this.signedAt = null;
   this.signedJudgeName = null;
+  this.signedJudgeUserId = null;
   this.signedByUserId = null;
 };
 
