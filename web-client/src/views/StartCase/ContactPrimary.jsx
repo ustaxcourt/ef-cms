@@ -17,6 +17,7 @@ export const ContactPrimary = connect(
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
+    phoneNumberOptional: props.phoneNumberOptional,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
@@ -31,6 +32,7 @@ export const ContactPrimary = connect(
     onChange,
     onChangeSequence,
     parentView,
+    phoneNumberOptional = true,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors,
     wrapperClassName,
@@ -210,14 +212,15 @@ export const ContactPrimary = connect(
           >
             <label className="usa-label" htmlFor="phone">
               Phone number
-              {contactsHelper.contactPrimary.phoneNumberLabelHint && (
-                <>
-                  {' '}
-                  <span className="usa-hint">
-                    ({contactsHelper.contactPrimary.phoneNumberLabelHint})
-                  </span>
-                </>
-              )}
+              {phoneNumberOptional &&
+                contactsHelper.contactPrimary.phoneNumberLabelHint && (
+                  <>
+                    {' '}
+                    <span className="usa-hint">
+                      ({contactsHelper.contactPrimary.phoneNumberLabelHint})
+                    </span>
+                  </>
+                )}
             </label>
             <input
               autoCapitalize="none"
