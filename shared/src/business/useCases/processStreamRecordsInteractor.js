@@ -140,7 +140,7 @@ exports.processStreamRecordsInteractor = async ({
             recordId: failedRecord['_id'],
           });
         } catch (e) {
-          await catchDeleteRecordError(failedRecord)();
+          await catchDeleteRecordError(failedRecord)(e);
         }
       };
 
@@ -198,7 +198,7 @@ exports.processStreamRecordsInteractor = async ({
               },
             });
           } catch (e) {
-            await catchAndReIndex(failedRecord)();
+            await catchAndReIndex(failedRecord)(e);
           }
         };
 
