@@ -226,10 +226,10 @@ exports.processStreamRecordsInteractor = async ({
         await applicationContext.notifyHoneybadger(e);
       };
 
-      const reprocessRecord = record => {
+      const reprocessRecord = async record => {
         const newImage = record.dynamodb.NewImage;
 
-        applicationContext
+        return await applicationContext
           .getPersistenceGateway()
           .indexRecord({
             applicationContext,
