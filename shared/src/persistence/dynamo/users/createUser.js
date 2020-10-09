@@ -144,7 +144,7 @@ exports.createUser = async ({
 
   // note: this will only be called on local envs
   if (!userId) {
-    ({ userId } = user);
+    userId = applicationContext.getUniqueId();
   }
 
   return await exports.createUserRecords({
