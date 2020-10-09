@@ -132,15 +132,16 @@ exports.processStreamRecordsInteractor = async ({
         await applicationContext.notifyHoneybadger(e);
       };
 
-      const processRecordDeletion = failedRecord => {
-        return applicationContext
-          .getPersistenceGateway()
-          .deleteRecord({
+      const processRecordDeletion = async failedRecord => {
+        try {
+          await applicationContext.getPersistenceGateway().deleteRecord({
             applicationContext,
             indexName: failedRecord['_index'],
             recordId: failedRecord['_id'],
-          })
-          .catch(catchDeleteRecordError(failedRecord));
+          });
+        } catch (e) {
+          await catchDeleteRecordError(failedRecord)();
+        }
       };
 
       const deletionRequests = failedRecords.map(processRecordDeletion);
@@ -185,10 +186,9 @@ exports.processStreamRecordsInteractor = async ({
           await applicationContext.notifyHoneybadger(e);
         };
 
-        const indexRecord = failedRecord => {
-          applicationContext
-            .getPersistenceGateway()
-            .indexRecord({
+        const indexRecord = async failedRecord => {
+          try {
+            await applicationContext.getPersistenceGateway().indexRecord({
               applicationContext,
               fullRecord: { ...failedRecord },
               isAlreadyMarshalled: true,
@@ -196,8 +196,10 @@ exports.processStreamRecordsInteractor = async ({
                 recordPk: failedRecord.pk.S,
                 recordSk: failedRecord.sk.S,
               },
-            })
-            .catch(catchAndReIndex(failedRecord));
+            });
+          } catch (e) {
+            await catchAndReIndex(failedRecord)();
+          }
         };
 
         await Promise.allSettled(failedRecords.map(indexRecord));
@@ -229,9 +231,8 @@ exports.processStreamRecordsInteractor = async ({
       const reprocessRecord = async record => {
         const newImage = record.dynamodb.NewImage;
 
-        return await applicationContext
-          .getPersistenceGateway()
-          .indexRecord({
+        try {
+          await applicationContext.getPersistenceGateway().indexRecord({
             applicationContext,
             fullRecord: newImage,
             isAlreadyMarshalled: true,
@@ -239,8 +240,10 @@ exports.processStreamRecordsInteractor = async ({
               recordPk: record.dynamodb.Keys.pk.S,
               recordSk: record.dynamodb.Keys.sk.S,
             },
-          })
-          .catch(reIndexRecord(record));
+          });
+        } catch (e) {
+          await reIndexRecord(record)();
+        }
       };
 
       await Promise.allSettled(recordsToReprocess.map(reprocessRecord));
