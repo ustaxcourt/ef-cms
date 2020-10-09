@@ -31,7 +31,7 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
 
     // the current judge on the case is selected by default.
     // set to empty string to test validation
-    expect(test.getState('modal.associatedJudge')).toEqual('Judge Cohen');
+    expect(test.getState('modal.associatedJudge')).toEqual('Cohen');
     await test.runSequence('updateModalValueSequence', {
       key: 'associatedJudge',
       value: '',
