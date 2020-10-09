@@ -18,7 +18,7 @@
 
 * [Docket Document QC](./DocketDocumentQC.md)
    * [Docket Document QC Process](./Docket-Document-QC-Process.md)
-   * [Edit Docket Entry](./Edit-Docket-Record.md)
+   * [Edit Docket Entry](./Edit-Docket-Entry.md)
    * [Add Docket Entry - Externally Filed Documents](./Add-Docket-Entry---Externally-Filed-Documents.md)
 * [Court Issued Documents](./Court-Issued-Documents.md)
    * [Creating, Signing, and Saving Orders and Notices](./Creating,-Signing,-and-Saving-Orders-and-Notices.md)   
