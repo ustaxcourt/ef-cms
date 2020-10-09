@@ -3394,6 +3394,24 @@
                               - "uuidv4"
                     allow: 
                       - null
+            signedJudgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "The user id of the judge who signed the document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
+              allow: 
+                - null
             strickenAt: 
               type: "date"
               flags: 
@@ -7112,6 +7130,24 @@
                               - "uuidv4"
                     allow: 
                       - null
+            signedJudgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "The user id of the judge who signed the document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
+              allow: 
+                - null
             strickenAt: 
               type: "date"
               flags: 

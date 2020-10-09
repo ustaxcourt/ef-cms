@@ -175,7 +175,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentTitle: 'Order for Stuff',
             documentType: 'OAPF - Order for Amended Petition and Filing Fee',
             filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Cohen',
+            judge: 'Cohen',
           },
         ],
       },
@@ -203,7 +203,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedFiledDate: '03/01/19',
-        judge: 'Judge Cohen',
+        judge: 'Cohen',
       },
     ]);
   });
@@ -241,7 +241,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentType: 'Summary Opinion',
             eventCode: 'SOP',
             filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Cohen',
+            judge: 'Cohen',
           },
         ],
       },
@@ -270,7 +270,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedFiledDate: '03/01/19',
-        judge: 'Judge Cohen',
+        judge: 'Cohen',
       },
     ]);
   });

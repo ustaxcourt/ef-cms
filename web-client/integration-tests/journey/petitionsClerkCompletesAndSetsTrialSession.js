@@ -40,7 +40,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
-        name: 'Judge Cohen',
+        name: 'Cohen',
         userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
       },
     });
