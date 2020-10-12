@@ -55,6 +55,24 @@ describe('updateCaseModalHelper', () => {
     expect(result.showCalendaredAlert).toBeTruthy();
   });
 
+  it('returns showCaseStatusDropdown true if the case is not currently calendared', () => {
+    const result = runCompute(updateCaseModalHelper, {
+      state: {
+        caseDetail: { ...mockCase, status: CASE_STATUS_TYPES.new },
+      },
+    });
+    expect(result.showCaseStatusDropdown).toBeTruthy();
+  });
+
+  it('returns showCaseStatusDropdown false if the case is currently calendared', () => {
+    const result = runCompute(updateCaseModalHelper, {
+      state: {
+        caseDetail: { ...mockCase, status: CASE_STATUS_TYPES.calendared },
+      },
+    });
+    expect(result.showCaseStatusDropdown).toBeFalsy();
+  });
+
   it('returns a filtered list of caseStatusOptions', () => {
     const result = runCompute(updateCaseModalHelper, {
       state: {
