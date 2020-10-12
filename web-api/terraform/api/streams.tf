@@ -7,7 +7,7 @@ resource "aws_lambda_function" "zip_streams" {
   function_name    = "streams_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "streams.handler"
-  timeout          = "30"
+  timeout          = "60"
   memory_size      = "768"
 
   runtime = "nodejs12.x"
@@ -23,4 +23,5 @@ resource "aws_lambda_event_source_mapping" "streams_mapping" {
   event_source_arn  = var.stream_arn
   function_name     = aws_lambda_function.zip_streams[0].arn
   starting_position = "LATEST"
+  bisect_batch_on_function_error = "true"
 }
