@@ -326,7 +326,7 @@
   {
     "eventCode": "MOP",
     "documentType": "Memorandum Opinion",
-    "documentTitle": "Memorandum Opinion [judge]",
+    "documentTitle": "Memorandum Opinion [judge] [Anything]",
     "scenario": "Type B",
     "isOpinion": true
   },
@@ -341,7 +341,7 @@
   {
     "eventCode": "SOP",
     "documentType": "Summary Opinion",
-    "documentTitle": "Summary Opinion [judge]",
+    "documentTitle": "Summary Opinion [judge] [Anything]",
     "scenario": "Type B",
     "isOpinion": true
   },
@@ -404,7 +404,7 @@
   {
     "eventCode": "TCOP",
     "documentType": "T.C. Opinion",
-    "documentTitle": "T.C. Opinion [judge] [anything]",
+    "documentTitle": "T.C. Opinion [judge] [Anything]",
     "scenario": "Type B",
     "isOpinion": true
   },
