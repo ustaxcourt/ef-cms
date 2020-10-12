@@ -615,7 +615,7 @@ Case.VALIDATION_RULES = {
     {
       is: PAYMENT_STATUS.PAID,
       otherwise: joi.optional().allow(null),
-      then: joi.required(),
+      then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
@@ -635,7 +635,7 @@ Case.VALIDATION_RULES = {
     {
       is: PAYMENT_STATUS.WAIVED,
       otherwise: joi.allow(null).optional(),
-      then: joi.required(),
+      then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
   preferredTrialCity: joi
@@ -1617,7 +1617,7 @@ Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
     reason.push('Case procedure is not the same');
   }
 
-  if (this.trialLocation !== caseEntity.trialLocation) {
+  if (this.preferredTrialCity !== caseEntity.preferredTrialCity) {
     canConsolidate = false;
     reason.push('Place of trial is not the same');
   }
