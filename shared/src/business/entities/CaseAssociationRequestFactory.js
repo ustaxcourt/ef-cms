@@ -85,6 +85,7 @@ function CaseAssociationRequestFactory(rawProps) {
 
   const documentWithConcatentatedPetitionerNames = [
     'Entry of Appearance',
+    'Limited Entry of Appearance',
     'Substitution of Counsel',
   ].includes(rawProps.documentType);
 

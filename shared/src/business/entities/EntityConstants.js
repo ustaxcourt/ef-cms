@@ -345,6 +345,11 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     eventCode: 'EA',
   },
   {
+    documentType: 'Limited Entry of Appearance',
+    documentTitle: 'Limited Entry of Appearance',
+    eventCode: 'LEA',
+  },
+  {
     documentType: 'Substitution of Counsel',
     documentTitle: 'Substitution of Counsel',
     eventCode: 'SOC',
