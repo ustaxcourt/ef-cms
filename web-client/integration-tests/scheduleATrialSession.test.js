@@ -34,7 +34,7 @@ describe('Schedule A Trial Session', () => {
   const overrides2 = {
     judge: {},
     preferredTrialCity: trialLocation2,
-    trialLocation,
+    trialLocation: trialLocation2,
   };
 
   test.casesReadyForTrial = [];
