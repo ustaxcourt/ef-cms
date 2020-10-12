@@ -146,6 +146,17 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Limited Entry of Appearance",
+      "documentType": "Limited Entry of Appearance",
+      "category": "Appearance and Representation",
+      "eventCode": "LEA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
       "category": "Appearance and Representation",
