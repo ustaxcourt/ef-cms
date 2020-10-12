@@ -82,7 +82,9 @@ exports.updateDocketEntryMetaInteractor = async ({
     const filingDateUpdated =
       editableFields.filingDate &&
       editableFields.filingDate !== originalDocketEntry.filingDate;
-    const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
+    const shouldGenerateCoversheet =
+      (servedAtUpdated || filingDateUpdated) &&
+      !originalDocketEntry.isMinuteEntry;
 
     const docketEntryEntity = new DocketEntry(
       {
