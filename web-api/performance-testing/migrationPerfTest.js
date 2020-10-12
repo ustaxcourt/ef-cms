@@ -20,14 +20,14 @@ const cognito = new CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
-const ClientId = '5imm0ecu6ndbp8bl20b1nojanm';
-const UserPoolId = 'us-east-1_1QQo1Dzuy';
+const ClientId = '6s19vi286kt2uo5vurfhs8pilj';
+const UserPoolId = 'us-east-1_YXunNYxRg';
 const USERNAME = 'migrator@example.com';
 const PASSWORD = process.env.DEFAULT_ACCOUNT_PASS;
 const CHUNK_SIZE = 50;
 
 const color = process.env.DEPLOYING_COLOR || 'blue';
-const domain = process.env.EFCMS_DOMAIN || 'exp2.ustc-case-mgmt.flexion.us';
+const domain = process.env.EFCMS_DOMAIN || 'exp3.ustc-case-mgmt.flexion.us';
 
 const migrationEndpoint = `https://api-${color}.${domain}/migrate/case`;
 
@@ -94,6 +94,7 @@ const MIGRATE_LABEL = `Migrating ${MIGRATE_CASE_COUNT} cases`;
       const isRejected = p.status == 'rejected';
       if (isRejected) {
         console.log('>>> Index failed at', i);
+        console.log(p.reason);
       }
     });
     migratedCasesCompleted += chunkJob.length;
