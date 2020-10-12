@@ -7,7 +7,7 @@ export const EditDocketEntryMetaDocketEntryPreview = connect(
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     documentTitlePreview: state.screenMetadata.documentTitlePreview,
     editType: state.screenMetadata.editType,
-    noDocumentDescription: state.form.description,
+    noDocumentDescription: state.form.documentTitle,
   },
   function EditDocketEntryMetaDocketEntryPreview({
     addCourtIssuedDocketEntryHelper,
