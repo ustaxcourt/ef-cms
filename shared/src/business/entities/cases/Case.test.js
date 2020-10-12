@@ -1005,6 +1005,41 @@ describe('Case entity', () => {
         });
       });
     });
+
+    it('fails validation if a petition fee payment date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentDate: '2050-10-01T21:40:46.415Z',
+          petitionPaymentMethod: 'Magic Beans',
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentDate: expect.anything(),
+      });
+    });
+
+    it('fails validation if a petition fee waived date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2050-10-01T21:40:46.415Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentWaivedDate: expect.anything(),
+      });
+    });
   });
 
   describe('validate', () => {
