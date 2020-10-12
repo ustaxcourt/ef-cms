@@ -107,7 +107,6 @@ describe('formattedCaseDetail', () => {
       documentTitle: 'Amended Petition',
       documentType: 'Amended Petition',
       eventCode: 'PAP',
-      exhibits: false,
       filingDate: '2019-04-19T17:29:13.120Z',
       hasSupportingDocuments: true,
       isFileAttached: true,
@@ -131,7 +130,6 @@ describe('formattedCaseDetail', () => {
         'First Amended Unsworn Declaration under Penalty of Perjury in Support',
       documentType: 'Amended',
       eventCode: 'ADED',
-      exhibits: true,
       filingDate: '2019-04-19T17:31:09.515Z',
       hasSupportingDocuments: true,
       isFileAttached: true,
@@ -161,7 +159,6 @@ describe('formattedCaseDetail', () => {
         'Motion for Leave to File Computation for Entry of Decision',
       documentType: 'Motion for Leave to File',
       eventCode: 'M115',
-      exhibits: true,
       filingDate: '2019-04-19T17:39:10.476Z',
       hasSecondarySupportingDocuments: false,
       hasSupportingDocuments: true,
@@ -304,13 +301,12 @@ describe('formattedCaseDetail', () => {
       {
         descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        filingsAndProceedings: '(Exhibit(s))',
+        filingsAndProceedings: '',
       },
       {
         descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
-        filingsAndProceedings:
-          '(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        filingsAndProceedings: '(C/S 06/07/18) (Attachment(s)) (Objection)',
       },
       {
         descriptionDisplay:
@@ -336,7 +332,7 @@ describe('formattedCaseDetail', () => {
       {
         descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
+        filingsAndProceedingsWithAdditionalInfo: '',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
@@ -347,7 +343,7 @@ describe('formattedCaseDetail', () => {
         descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
         filingsAndProceedingsWithAdditionalInfo:
-          ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+          ' (C/S 06/07/18) (Attachment(s)) (Objection)',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
