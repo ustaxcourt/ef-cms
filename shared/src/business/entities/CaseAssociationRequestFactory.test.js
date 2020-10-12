@@ -114,12 +114,6 @@ describe('CaseAssociationRequestFactory', () => {
           'Motion to Substitute Parties and Change Caption';
       });
 
-      it('should require exhibits be selected', () => {
-        expect(errors().exhibits).toEqual(VALIDATION_ERROR_MESSAGES.exhibits);
-        rawEntity.exhibits = false;
-        expect(errors().exhibits).toEqual(undefined);
-      });
-
       it('should require attachments be selected', () => {
         expect(errors().attachments).toEqual(
           VALIDATION_ERROR_MESSAGES.attachments,

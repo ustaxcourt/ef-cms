@@ -186,7 +186,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
         ? `(C/S ${formattedDocketEntry.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${formattedDocketEntry.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocketEntry.attachments ? '(Attachment(s))' : ''}`,
     `${
       formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
