@@ -33,6 +33,7 @@ export const submitCaseAssociationRequestAction = async ({
 
   const documentWithImmediateAssociation = [
     'Entry of Appearance',
+    'Limited Entry of Appearance',
     'Substitution of Counsel',
   ].includes(documentMetadata.documentType);
 
