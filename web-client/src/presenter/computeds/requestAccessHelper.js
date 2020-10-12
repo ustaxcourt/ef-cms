@@ -74,19 +74,6 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const documentsForSelect = getDocumentTypesForSelect(documents);
 
-  const shouldShowExhibits = ![
-    USER_ROLES.privatePractitioner,
-    USER_ROLES.irsPractitioner,
-  ].includes(user.role);
-
-  const documentWithExhibits =
-    [
-      'Motion to Substitute Parties and Change Caption',
-      'Notice of Intervention',
-      'Notice of Election to Participate',
-      'Notice of Election to Intervene',
-    ].includes(documentType) && shouldShowExhibits;
-
   const documentWithAttachments = [
     'Motion to Substitute Parties and Change Caption',
     'Notice of Intervention',
@@ -108,13 +95,10 @@ export const requestAccessHelper = (get, applicationContext) => {
     validationErrors.representingSecondary;
 
   const showFilingIncludes =
-    form.certificateOfService ||
-    (documentWithExhibits && form.exhibits) ||
-    (documentWithAttachments && form.attachments);
+    form.certificateOfService || (documentWithAttachments && form.attachments);
 
   const showFilingNotIncludes =
     !form.certificateOfService ||
-    (documentWithExhibits && !form.exhibits) ||
     (documentWithAttachments && !form.attachments) ||
     (documentWithSupportingDocuments && !form.hasSupportingDocuments);
 
@@ -123,7 +107,6 @@ export const requestAccessHelper = (get, applicationContext) => {
   let exported = {
     certificateOfServiceDateFormatted,
     documentWithAttachments,
-    documentWithExhibits,
     documentWithObjections,
     documentWithSupportingDocuments,
     documents,
