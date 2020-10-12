@@ -162,7 +162,7 @@ export const MessageDocument = connect(
                   iconColor="white"
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
-                      documentId: viewerDocumentToDisplay.documentId,
+                      docketEntryId: viewerDocumentToDisplay.documentId,
                       redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
