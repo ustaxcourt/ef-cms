@@ -83,7 +83,7 @@ exports.addDocketEntryAndServeOpinion = () => {
     .find('div')
     .contains('Memorandum Opinion')
     .click();
-  cy.get('#judge').select('Chief Judge Foley');
+  cy.get('#judge').select('Foley');
   cy.get('#free-text').type('Opinion for a smoke test');
   cy.get('#serve-to-parties-btn').click();
   cy.get('button').contains('Yes, Serve').click();
