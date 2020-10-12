@@ -1,8 +1,8 @@
-import { navigateToCaseDetailCaseInformationAction } from './navigateToCaseDetailCaseInformationAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from './navigateToCaseDetailCaseInformationActionFactory';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('navigateToCaseDetailCaseInformationAction', () => {
+describe('navigateToCaseDetailCaseInformationActionFactory', () => {
   let routeMock;
 
   beforeAll(() => {
@@ -13,7 +13,7 @@ describe('navigateToCaseDetailCaseInformationAction', () => {
   });
 
   it('should call the router to navigate to the case detail page for the given props.docketNumber', async () => {
-    await runAction(navigateToCaseDetailCaseInformationAction, {
+    await runAction(navigateToCaseDetailCaseInformationActionFactory(), {
       modules: {
         presenter,
       },
@@ -28,7 +28,7 @@ describe('navigateToCaseDetailCaseInformationAction', () => {
   });
 
   it('should call the router to navigate to the case detail page for the given props.caseDetail.caaseId', async () => {
-    await runAction(navigateToCaseDetailCaseInformationAction, {
+    await runAction(navigateToCaseDetailCaseInformationActionFactory(), {
       modules: {
         presenter,
       },
@@ -45,7 +45,7 @@ describe('navigateToCaseDetailCaseInformationAction', () => {
   });
 
   it('should call the router to navigate to the case detail page for the given state.caseDetail.docketNumber', async () => {
-    await runAction(navigateToCaseDetailCaseInformationAction, {
+    await runAction(navigateToCaseDetailCaseInformationActionFactory(), {
       modules: {
         presenter,
       },
@@ -59,6 +59,38 @@ describe('navigateToCaseDetailCaseInformationAction', () => {
 
     expect(routeMock).toHaveBeenCalledWith(
       '/case-detail/123-45/case-information',
+    );
+  });
+
+  it('should not call the router if docketNumber is not set', async () => {
+    await runAction(navigateToCaseDetailCaseInformationActionFactory(), {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: {},
+      },
+    });
+
+    expect(routeMock).not.toHaveBeenCalled();
+  });
+
+  it('should call the router to navigate to the case detail page with caseInformationTab in query string when caseInformationTab is passed in', async () => {
+    await runAction(
+      navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          docketNumber: '123-45',
+        },
+      },
+    );
+
+    expect(routeMock).toHaveBeenCalledWith(
+      '/case-detail/123-45/case-information?caseInformationTab=petitioner',
     );
   });
 });
