@@ -48,7 +48,6 @@ describe('PublicCase', () => {
         caseCaption: expect.anything(),
         contactPrimary: expect.anything(),
         contactSecondary: expect.anything(),
-        createdAt: expect.anything(),
         receivedAt: expect.anything(),
       });
     });
@@ -79,7 +78,6 @@ describe('PublicCase', () => {
         name: undefined,
         state: undefined,
       },
-      createdAt: 'testing',
       docketEntries: [],
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
@@ -108,7 +106,6 @@ describe('PublicCase', () => {
       caseCaption: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
-      createdAt: 'testing',
       docketEntries: [],
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
@@ -147,7 +144,6 @@ describe('PublicCase', () => {
       caseCaption: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
-      createdAt: 'testing',
       docketEntries: [
         {
           additionalInfo: undefined,
