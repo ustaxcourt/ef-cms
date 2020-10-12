@@ -259,7 +259,7 @@
       "ordinalField": "What iteration is this filing?"
     },
     {
-      "documentTitle": "Amended Certificate of Service of [Document Name]",
+      "documentTitle": "Amended Certificate of Service of [Document Name] [Date]",
       "documentType": "Amended Certificate of Service",
       "category": "Miscellaneous",
       "eventCode": "AMDC",
