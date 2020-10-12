@@ -43,6 +43,19 @@ describe('updateDocketEntryMetaInteractor', () => {
         signedJudgeName: 'Dredd',
         userId: mockUserId,
       },
+      {
+        docketEntryId: 'd5b97867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Test Entry 2',
+        documentType: 'Request for Place of Trial',
+        eventCode: 'RQT',
+        filingDate: '2019-01-01T00:01:00.000Z',
+        index: 3,
+        isMinuteEntry: true,
+        partyPrimary: true,
+        servedAt: '2019-01-02T00:01:00.000Z',
+        servedParties: [{ name: 'Some Other Party' }],
+        userId: mockUserId,
+      },
     ];
 
     const caseByDocketNumber = {
@@ -291,6 +304,21 @@ describe('updateDocketEntryMetaInteractor', () => {
         ...docketEntries[0],
         filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not call addCoversheetInteractor if filingDate field is changed and the docket entry is a minute entry', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[2], // minute entry
+        filingDate: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
     });

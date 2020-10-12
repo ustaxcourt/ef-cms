@@ -36,15 +36,18 @@ describe('setDocketEntryMetaTypeAction', () => {
     expect(result.state.docketEntryId).toEqual('123');
   });
 
-  it('Should return NoDocument when there is no document', async () => {
+  it('Should return NoDocument when the docket entry is a minute entry', async () => {
     const result = await runAction(setDocketEntryMetaTypeAction, {
       modules: { presenter },
       state: {
-        form: {},
+        form: {
+          docketEntryId: '123',
+          isMinuteEntry: true,
+        },
       },
     });
 
     expect(result.state.screenMetadata.editType).toEqual('NoDocument');
-    expect(result.state.docketEntryId).toBeUndefined();
+    expect(result.state.docketEntryId).toEqual('123');
   });
 });
