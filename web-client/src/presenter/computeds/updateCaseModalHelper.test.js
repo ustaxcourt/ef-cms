@@ -64,7 +64,7 @@ describe('updateCaseModalHelper', () => {
     expect(result.showCaseStatusDropdown).toBeTruthy();
   });
 
-  it('returns showCaseStatusDropdown true if the case is currently calendared', () => {
+  it('returns showCaseStatusDropdown false if the case is currently calendared', () => {
     const result = runCompute(updateCaseModalHelper, {
       state: {
         caseDetail: { ...mockCase, status: CASE_STATUS_TYPES.calendared },
