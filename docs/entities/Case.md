@@ -70728,9 +70728,17 @@
                 override: true
               - "Paid"
           then: 
-            type: "any"
+            type: "date"
             flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
               presence: "required"
+            rules: 
+              - 
+                name: "max"
+                args: 
+                  date: "now"
           otherwise: 
             type: "any"
             flags: 
@@ -70796,9 +70804,17 @@
                 override: true
               - "Waived"
           then: 
-            type: "any"
+            type: "date"
             flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
               presence: "required"
+            rules: 
+              - 
+                name: "max"
+                args: 
+                  date: "now"
           otherwise: 
             type: "any"
             flags: 
