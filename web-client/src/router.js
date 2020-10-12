@@ -150,6 +150,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/case-information?..',
+      ifHasAccess(docketNumber => {
+        const { caseInformationTab } = route.query();
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          caseInformationTab,
+          docketNumber,
+          primaryTab: 'caseInformation',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/draft-documents',
       ifHasAccess(docketNumber => {
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
