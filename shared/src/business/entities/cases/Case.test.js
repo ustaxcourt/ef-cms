@@ -3172,8 +3172,8 @@ describe('Case entity', () => {
         expect(result.reason).toEqual(['Case procedure is not the same']);
       });
 
-      it('should fail when case trial locations are not the same', () => {
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+      it('should fail when case requested place of trials are not the same', () => {
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3227,7 +3227,7 @@ describe('Case entity', () => {
 
       it('should return all reasons for the failure if the case status is eligible', () => {
         pendingCaseEntity.procedureType = 'small';
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({

@@ -1563,7 +1563,7 @@ Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
     reason.push('Case procedure is not the same');
   }
 
-  if (this.trialLocation !== caseEntity.trialLocation) {
+  if (this.preferredTrialCity !== caseEntity.preferredTrialCity) {
     canConsolidate = false;
     reason.push('Place of trial is not the same');
   }
