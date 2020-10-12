@@ -1917,6 +1917,16 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Withdrawal as Counsel",
+      "documentType": "Notice of Withdrawal as Counsel",
+      "category": "Notice",
+      "eventCode": "NOTW",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
     }
   ],
   "Petition": [
