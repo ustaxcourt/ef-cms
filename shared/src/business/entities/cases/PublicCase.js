@@ -28,14 +28,13 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
-  this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.docketNumberWithSuffix =
     rawCase.docketNumberWithSuffix ||
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.receivedAt = rawCase.receivedAt;
-  this.isSealed = !!rawCase.sealedDate;
+  this.isSealed = !!rawCase.sealedDate; // if true only return docket number with suffix
 
   this.contactPrimary = rawCase.contactPrimary
     ? new PublicContact(rawCase.contactPrimary)
