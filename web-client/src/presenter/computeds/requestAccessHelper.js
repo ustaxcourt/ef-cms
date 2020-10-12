@@ -33,17 +33,17 @@ export const requestAccessHelper = (get, applicationContext) => {
       eventCode: 'SOC',
       scenario: 'Standard',
     },
-    {
-      documentTitleTemplate:
-        'Limited Entry of Appearance for [Petitioner Names]',
-      documentType: 'Limited Entry of Appearance',
-      eventCode: 'LEA',
-      scenario: 'Standard',
-    },
   ];
 
   if (user.role === USER_ROLES.privatePractitioner) {
     documents.push(
+      {
+        documentTitleTemplate:
+          'Limited Entry of Appearance for [Petitioner Names]',
+        documentType: 'Limited Entry of Appearance',
+        eventCode: 'LEA',
+        scenario: 'Standard',
+      },
       {
         documentTitleTemplate:
           'Motion to Substitute Parties and Change Caption',
