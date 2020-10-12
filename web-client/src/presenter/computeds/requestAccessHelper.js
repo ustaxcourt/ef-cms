@@ -39,6 +39,13 @@ export const requestAccessHelper = (get, applicationContext) => {
     documents.push(
       {
         documentTitleTemplate:
+          'Limited Entry of Appearance for [Petitioner Names]',
+        documentType: 'Limited Entry of Appearance',
+        eventCode: 'LEA',
+        scenario: 'Standard',
+      },
+      {
+        documentTitleTemplate:
           'Motion to Substitute Parties and Change Caption',
         documentType: 'Motion to Substitute Parties and Change Caption',
         eventCode: 'M107',

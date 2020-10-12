@@ -83,12 +83,12 @@ describe('requestAccessHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('returns correct number of document options for user role practitioner', () => {
+  it('returns correct number of document options for user role privatePractitioner', () => {
     const result = runCompute(requestAccessHelper, { state });
-    expect(result.documents.length).toEqual(6);
+    expect(result.documents.length).toEqual(7);
   });
 
-  it('returns correct number of document options for user role respondent', () => {
+  it('returns correct number of document options for user role irsPractitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.irsPractitioner,
     });
