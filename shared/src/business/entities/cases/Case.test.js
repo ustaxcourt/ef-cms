@@ -627,7 +627,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
     });
 
@@ -635,7 +635,7 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case from an already existing case json when the docketNumber has leading zeroes', () => {
@@ -645,7 +645,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.docketNumber).toBe('101-20');
     });
 
@@ -774,7 +774,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with an invalid trial time', () => {
@@ -842,7 +842,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with blocked set to true and a blockedReason and blockedDate', () => {
@@ -857,7 +857,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with a trial time', () => {
@@ -870,7 +870,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with automaticBlocked set to true and a valid automaticBlockedReason and automaticBlockedDate', () => {
@@ -885,7 +885,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with automaticBlocked set to true and an invalid automaticBlockedReason and automaticBlockedDate', () => {
@@ -927,7 +927,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with closed status and no closed date', () => {
@@ -957,7 +957,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with sealedDate set to a valid date', () => {
@@ -970,7 +970,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     describe('with different payment statuses', () => {
@@ -3995,13 +3995,13 @@ describe('Case entity', () => {
         expect(myCase).toMatchObject({
           judgeUserId: mockJudgeUserId,
         });
-        expect(myCase.isValid()).toBeTruthy();
+        expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
 
       it('does not fail validation without a judgeUserId', () => {
         const myCase = new Case(MOCK_CASE, { applicationContext });
         expect(myCase.judgeUserId).toBeUndefined();
-        expect(myCase.isValid()).toBeTruthy();
+        expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
     });
   });
