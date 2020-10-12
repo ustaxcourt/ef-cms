@@ -91,14 +91,14 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay:
-        'Certificate of Service Petition 05-05-2015 some additional info',
+        'Certificate of Service of Petition 05-05-2015 some additional info',
     });
 
     const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
-      documentTitle: 'Certificate of Service Petition 05-05-2015',
+      documentTitle: 'Certificate of Service of Petition 05-05-2015',
       documentType: 'Certificate of Service',
       eventCode: 'MISCL',
       serviceDate: '2015-05-05',
