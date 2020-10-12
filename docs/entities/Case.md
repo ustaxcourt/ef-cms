@@ -530,6 +530,7 @@
                 - "Notice of Termination Assessment"
                 - "Notice of Trial"
                 - "Notice of Unavailability"
+                - "Notice of Withdrawal as Counsel"
                 - "Objection"
                 - "Objection [anything]"
                 - "Opposition"
@@ -911,6 +912,7 @@
                 - "NOI"
                 - "NOST"
                 - "NOT"
+                - "NOTW"
                 - "NOU"
                 - "NPB"
                 - "NPJR"
@@ -1259,6 +1261,7 @@
                       - "Notice of Telephone Number"
                       - "Notice of Termination Assessment"
                       - "Notice of Unavailability"
+                      - "Notice of Withdrawal as Counsel"
                       - "Redacted Petition"
                       - "Prehearing Memorandum"
                       - "Pretrial Memorandum"
@@ -2012,6 +2015,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -2526,6 +2530,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -2870,6 +2875,7 @@
                     - "NOI"
                     - "NOST"
                     - "NOT"
+                    - "NOTW"
                     - "NOU"
                     - "NPB"
                     - "NPJR"
@@ -4272,6 +4278,7 @@
                 - "Notice of Termination Assessment"
                 - "Notice of Trial"
                 - "Notice of Unavailability"
+                - "Notice of Withdrawal as Counsel"
                 - "Objection"
                 - "Objection [anything]"
                 - "Opposition"
@@ -4653,6 +4660,7 @@
                 - "NOI"
                 - "NOST"
                 - "NOT"
+                - "NOTW"
                 - "NOU"
                 - "NPB"
                 - "NPJR"
@@ -5001,6 +5009,7 @@
                       - "Notice of Telephone Number"
                       - "Notice of Termination Assessment"
                       - "Notice of Unavailability"
+                      - "Notice of Withdrawal as Counsel"
                       - "Redacted Petition"
                       - "Prehearing Memorandum"
                       - "Pretrial Memorandum"
@@ -5754,6 +5763,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -6268,6 +6278,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -6612,6 +6623,7 @@
                     - "NOI"
                     - "NOST"
                     - "NOT"
+                    - "NOTW"
                     - "NOU"
                     - "NPB"
                     - "NPJR"
@@ -70716,9 +70728,17 @@
                 override: true
               - "Paid"
           then: 
-            type: "any"
+            type: "date"
             flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
               presence: "required"
+            rules: 
+              - 
+                name: "max"
+                args: 
+                  date: "now"
           otherwise: 
             type: "any"
             flags: 
@@ -70784,9 +70804,17 @@
                 override: true
               - "Waived"
           then: 
-            type: "any"
+            type: "date"
             flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
               presence: "required"
+            rules: 
+              - 
+                name: "max"
+                args: 
+                  date: "now"
           otherwise: 
             type: "any"
             flags: 

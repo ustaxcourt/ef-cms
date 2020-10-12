@@ -8,7 +8,7 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     test.setState('caseDetail', {});
 
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+      docketNumber: test.docketNumberDifferentPlaceOfTrial || test.docketNumber,
     });
 
     const currentStatus = test.getState('caseDetail.status');

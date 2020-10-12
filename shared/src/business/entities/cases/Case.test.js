@@ -1005,6 +1005,41 @@ describe('Case entity', () => {
         });
       });
     });
+
+    it('fails validation if a petition fee payment date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentDate: '2050-10-01T21:40:46.415Z',
+          petitionPaymentMethod: 'Magic Beans',
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentDate: expect.anything(),
+      });
+    });
+
+    it('fails validation if a petition fee waived date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2050-10-01T21:40:46.415Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentWaivedDate: expect.anything(),
+      });
+    });
   });
 
   describe('validate', () => {
@@ -3172,8 +3207,8 @@ describe('Case entity', () => {
         expect(result.reason).toEqual(['Case procedure is not the same']);
       });
 
-      it('should fail when case trial locations are not the same', () => {
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+      it('should fail when case requested place of trials are not the same', () => {
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3227,7 +3262,7 @@ describe('Case entity', () => {
 
       it('should return all reasons for the failure if the case status is eligible', () => {
         pendingCaseEntity.procedureType = 'small';
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({

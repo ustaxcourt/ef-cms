@@ -39,7 +39,6 @@ function CaseAssociationRequestFactory(rawProps) {
     this.documentTitleTemplate = rawPropsParam.documentTitleTemplate;
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
-    this.exhibits = rawPropsParam.exhibits;
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
     this.objections = rawPropsParam.objections;
     this.partyPrivatePractitioner = rawPropsParam.partyPrivatePractitioner;
@@ -59,13 +58,6 @@ function CaseAssociationRequestFactory(rawProps) {
       });
     }
   };
-
-  const documentWithExhibits = [
-    'Motion to Substitute Parties and Change Caption',
-    'Notice of Intervention',
-    'Notice of Election to Participate',
-    'Notice of Election to Intervene',
-  ].includes(rawProps.documentType);
 
   const documentWithAttachments = [
     'Motion to Substitute Parties and Change Caption',
@@ -140,7 +132,6 @@ function CaseAssociationRequestFactory(rawProps) {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
       'now',
     ).required(),
-    exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: JoiValidationConstants.STRING.valid(
       ...OBJECTIONS_OPTIONS,
@@ -156,10 +147,6 @@ function CaseAssociationRequestFactory(rawProps) {
 
   if (rawProps.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');
-  }
-
-  if (documentWithExhibits) {
-    makeRequired('exhibits');
   }
 
   if (documentWithAttachments) {
@@ -195,7 +182,6 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
   documentTitleTemplate: 'Select a document',
   eventCode: 'Select a document',
-  exhibits: 'Enter selection for Exhibits.',
   representingPrimary: 'Select a party',
   representingSecondary: 'Select a party',
   scenario: 'Select a document',
