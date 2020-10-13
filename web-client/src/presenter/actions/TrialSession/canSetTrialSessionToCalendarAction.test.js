@@ -76,7 +76,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
         trialSession: {
           ...VALID_TRIAL_SESSION,
           address1: '123 Flavor Ave',
-          judge: { name: 'Judge Armen' },
+          judge: { name: 'Judge Colvin' },
           postalCode: '12345',
           state: 'TN',
         },
