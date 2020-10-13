@@ -20,8 +20,8 @@ describe('getCaseDeadlinesAction', () => {
       },
       state: {
         screenMetadata: {
-          filterEndDateState: END_DATE,
-          filterStartDateState: START_DATE,
+          filterEndDate: END_DATE,
+          filterStartDate: START_DATE,
         },
       },
     });

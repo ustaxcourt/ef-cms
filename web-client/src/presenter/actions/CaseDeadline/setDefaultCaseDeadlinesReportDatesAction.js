@@ -25,6 +25,6 @@ export const setDefaultCaseDeadlinesReportDatesAction = async ({
     .getUtilities()
     .createEndOfDayISO({ day, month, year });
 
-  store.set(state.screenMetadata.filterStartDateState, currentDateStart);
-  store.set(state.screenMetadata.filterEndDateState, currentDateEnd);
+  store.set(state.screenMetadata.filterStartDate, currentDateStart);
+  store.set(state.screenMetadata.filterEndDate, currentDateEnd);
 };

@@ -1,5 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -20,6 +22,8 @@ export const updateDateRangeForDeadlinesSequence = [
       clearAlertsAction,
       updateDateRangeForDeadlinesAction,
       stopShowValidationAction,
+      getCaseDeadlinesAction,
+      setCaseDeadlinesAction,
     ],
   },
 ];
