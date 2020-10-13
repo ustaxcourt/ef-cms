@@ -149,8 +149,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
     return (
       userPermissions.EDIT_DOCKET_ENTRY &&
-      (entry.isMinuteEntry || entry.qcWorkItemsCompleted) &&
-      !hasSystemGeneratedDocument &&
+      (hasSystemGeneratedDocument ||
+        entry.isMinuteEntry ||
+        entry.qcWorkItemsCompleted) &&
       (!hasCourtIssuedDocument ||
         hasServedCourtIssuedDocument ||
         hasUnservableCourtIssuedDocument)

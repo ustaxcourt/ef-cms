@@ -25,6 +25,6 @@ export const setTrialSessionJudgeAction = async ({
         trialSessionId: caseDetail.trialSessionId,
       });
 
-    store.set(state.trialSessionJudge, judge);
+    store.set(state.trialSessionJudge, judge || { name: 'Unassigned' });
   }
 };

@@ -181,9 +181,21 @@ Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUs
   this.damages = rawCase.damages;
   this.highPriority = rawCase.highPriority;
   this.highPriorityReason = rawCase.highPriorityReason;
+  this.judgeUserId = rawCase.judgeUserId;
   this.litigationCosts = rawCase.litigationCosts;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.status = rawCase.status || CASE_STATUS_TYPES.new;
+
+  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+  this.orderDesignatingPlaceOfTrial =
+    rawCase.orderDesignatingPlaceOfTrial || false;
+  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
+  this.orderForAmendedPetitionAndFilingFee =
+    rawCase.orderForAmendedPetitionAndFilingFee || false;
+  this.orderForFilingFee = rawCase.orderForFilingFee || false;
+  this.orderForOds = rawCase.orderForOds || false;
+  this.orderForRatification = rawCase.orderForRatification || false;
+  this.orderToShowCause = rawCase.orderToShowCause || false;
 
   this.assignArchivedDocketEntries({ applicationContext, rawCase });
   this.assignStatistics({ applicationContext, rawCase });
@@ -211,7 +223,6 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
-  this.judgeUserId = rawCase.judgeUserId;
   this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
@@ -244,17 +255,6 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
-  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
-
-  this.orderDesignatingPlaceOfTrial =
-    rawCase.orderDesignatingPlaceOfTrial || false;
-  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
-  this.orderForAmendedPetitionAndFilingFee =
-    rawCase.orderForAmendedPetitionAndFilingFee || false;
-  this.orderForFilingFee = rawCase.orderForFilingFee || false;
-  this.orderForOds = rawCase.orderForOds || false;
-  this.orderForRatification = rawCase.orderForRatification || false;
-  this.orderToShowCause = rawCase.orderToShowCause || false;
 
   this.docketNumberWithSuffix =
     this.docketNumber + (this.docketNumberSuffix || '');
@@ -267,7 +267,10 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
 }) {
   if (Array.isArray(rawCase.docketEntries)) {
     this.docketEntries = rawCase.docketEntries
-      .map(docketEntry => new DocketEntry(docketEntry, { applicationContext }))
+      .map(
+        docketEntry =>
+          new DocketEntry(docketEntry, { applicationContext, filtered }),
+      )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     this.isSealed =
