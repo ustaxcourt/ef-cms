@@ -2,6 +2,9 @@ const AWS = require('aws-sdk');
 const {
   migrateItems: migration0001,
 } = require('./migrations/0001-eligible-for-trial-case-id');
+const {
+  migrateItems: migration0002,
+} = require('./migrations/0002-case-deadline-catalog');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -23,6 +26,7 @@ const reprocessItems = async items => {
   const moreUnprocessedItems = [];
 
   items = migration0001(items);
+  items = await migration0002(items, documentClient);
 
   for (let item of items) {
     const results = await documentClient
@@ -46,6 +50,7 @@ const processItems = async ({ documentClient, items }) => {
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
     c = migration0001(c);
+    c = await migration0002(c, documentClient);
 
     const results = await documentClient
       .batchWrite({
