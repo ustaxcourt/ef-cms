@@ -866,9 +866,6 @@ const {
   updateCaseCorrespondence,
 } = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
 const {
-  updateCaseDeadline,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
-const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
 const {
@@ -1163,7 +1160,6 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
     updateCase,
-    updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
