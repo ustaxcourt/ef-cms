@@ -23,7 +23,7 @@ describe('deleteUserCaseNoteInteractor', () => {
 
   it('deletes a case note', async () => {
     const mockUser = new User({
-      name: 'Judge Armen',
+      name: 'Judge Colvin',
       role: ROLES.judge,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
