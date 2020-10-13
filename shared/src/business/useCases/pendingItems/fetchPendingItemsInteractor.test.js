@@ -29,7 +29,7 @@ describe('fetchPendingItemsInteractor', () => {
 
     const results = await fetchPendingItemsInteractor({
       applicationContext,
-      judge: 'Judge Armen',
+      judge: 'Judge Colvin',
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -51,7 +51,7 @@ describe('fetchPendingItemsInteractor', () => {
     try {
       await fetchPendingItemsInteractor({
         applicationContext,
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
       });
     } catch (err) {
       error = err;

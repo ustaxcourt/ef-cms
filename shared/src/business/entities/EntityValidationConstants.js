@@ -346,6 +346,9 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       }),
     })
     .description('The judge who signed the document.'),
+  signedJudgeUserId: JoiValidationConstants.UUID.optional() // Optional for now, but should eventually follow same logic as signedJudgeName
+    .allow(null)
+    .description('The user id of the judge who signed the document.'),
   strickenAt: JoiValidationConstants.ISO_DATE.max('now')
     .optional()
     .description('Date that this Docket Record item was stricken.'),

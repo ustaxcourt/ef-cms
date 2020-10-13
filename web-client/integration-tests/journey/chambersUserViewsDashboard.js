@@ -18,7 +18,7 @@ export const chambersUserViewsDashboard = test => {
     expect(messages.length).toBeGreaterThan(0);
     expect(messages[0].subject).toEqual(test.testMessageSubject);
     expect(trialSessionsSummaryHelperComputed.judgeUserId).toEqual(
-      'dabbad00-18d0-43ec-bafb-654e83405416', //judgeArmen
+      'dabbad00-18d0-43ec-bafb-654e83405416', //judgeColvin
     );
   });
 };

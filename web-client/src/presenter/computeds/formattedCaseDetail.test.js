@@ -77,7 +77,7 @@ describe('formattedCaseDetail', () => {
   };
   const chambersUser = {
     role: USER_ROLES.chambers,
-    section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+    section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
     userId: '555',
   };
   const trialClerkUser = {
@@ -107,7 +107,6 @@ describe('formattedCaseDetail', () => {
       documentTitle: 'Amended Petition',
       documentType: 'Amended Petition',
       eventCode: 'PAP',
-      exhibits: false,
       filingDate: '2019-04-19T17:29:13.120Z',
       hasSupportingDocuments: true,
       isFileAttached: true,
@@ -131,7 +130,6 @@ describe('formattedCaseDetail', () => {
         'First Amended Unsworn Declaration under Penalty of Perjury in Support',
       documentType: 'Amended',
       eventCode: 'ADED',
-      exhibits: true,
       filingDate: '2019-04-19T17:31:09.515Z',
       hasSupportingDocuments: true,
       isFileAttached: true,
@@ -161,7 +159,6 @@ describe('formattedCaseDetail', () => {
         'Motion for Leave to File Computation for Entry of Decision',
       documentType: 'Motion for Leave to File',
       eventCode: 'M115',
-      exhibits: true,
       filingDate: '2019-04-19T17:39:10.476Z',
       hasSecondarySupportingDocuments: false,
       hasSupportingDocuments: true,
@@ -304,13 +301,12 @@ describe('formattedCaseDetail', () => {
       {
         descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        filingsAndProceedings: '(Exhibit(s))',
+        filingsAndProceedings: '',
       },
       {
         descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
-        filingsAndProceedings:
-          '(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        filingsAndProceedings: '(C/S 06/07/18) (Attachment(s)) (Objection)',
       },
       {
         descriptionDisplay:
@@ -336,7 +332,7 @@ describe('formattedCaseDetail', () => {
       {
         descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
+        filingsAndProceedingsWithAdditionalInfo: '',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
@@ -347,7 +343,7 @@ describe('formattedCaseDetail', () => {
         descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
         filingsAndProceedingsWithAdditionalInfo:
-          ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+          ' (C/S 06/07/18) (Attachment(s)) (Objection)',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
@@ -1139,6 +1135,7 @@ describe('formattedCaseDetail', () => {
             eventCode: 'NTD',
             filingDate: '2019-06-21T17:29:13.120Z',
             isOnDocketRecord: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
           },
           {
             attachments: false,
@@ -1266,7 +1263,7 @@ describe('formattedCaseDetail', () => {
       ).toEqual(true);
     });
 
-    it('should not show the edit button if the docket entry has a system generated document', () => {
+    it('should show the edit button if the docket entry has a system generated document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1277,10 +1274,9 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-
       expect(
         result.formattedDocketEntries[4].showEditDocketRecordEntry,
-      ).toBeFalsy();
+      ).toBeTruthy();
     });
 
     it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
@@ -2684,7 +2680,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: mockTrialSessionId,
           },
           judgeUser: {
-            section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+            section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
             userId: judgeUser.userId,
           },
           ...getBaseState(chambersUser),

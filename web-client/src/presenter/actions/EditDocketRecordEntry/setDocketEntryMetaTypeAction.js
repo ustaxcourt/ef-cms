@@ -13,14 +13,14 @@ export const setDocketEntryMetaTypeAction = ({
   get,
   store,
 }) => {
-  const { docketEntryId, eventCode } = get(state.form);
+  const { docketEntryId, eventCode, isMinuteEntry } = get(state.form);
 
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
   const COURT_ISSUED_EVENT_CODES_MAP = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedEvent => courtIssuedEvent.eventCode,
   );
 
-  const hasDocument = !!docketEntryId;
+  const hasDocument = !isMinuteEntry;
 
   const isCourtIssuedDocument =
     hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
