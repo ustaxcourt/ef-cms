@@ -20,7 +20,7 @@ describe('CourtIssuedDocumentTypeB', () => {
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
         freeText: 'Some free text',
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
         scenario: 'Type B',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
@@ -34,11 +34,11 @@ describe('CourtIssuedDocumentTypeB', () => {
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
         freeText: 'Some free text',
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
         scenario: 'Type B',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order that case is assigned to Judge Armen Some free text',
+        'Order that case is assigned to Judge Colvin Some free text',
       );
     });
 
@@ -47,11 +47,11 @@ describe('CourtIssuedDocumentTypeB', () => {
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
         scenario: 'Type B',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order that case is assigned to Judge Armen',
+        'Order that case is assigned to Judge Colvin',
       );
     });
   });

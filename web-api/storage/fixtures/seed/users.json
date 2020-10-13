@@ -35,11 +35,11 @@
   },
   {
     "role": "judge",
-    "name": "Armen",
-    "section": "armensChambers",
+    "name": "Colvin",
+    "section": "colvinsChambers",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeArmen@example.com",
-    "judgeFullName": "Robert N. Armen, Jr.",
+    "email": "judgeColvin@example.com",
+    "judgeFullName": "John O. Colvin",
     "judgeTitle": "Special Trial Judge",
     "entityName": "User"
   },
@@ -473,10 +473,10 @@
   },
   {
     "role": "chambers",
-    "name": "Test Armen's Chambers",
-    "section": "armensChambers",
+    "name": "Test Colvin's Chambers",
+    "section": "colvinsChambers",
     "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "email": "armensChambers@example.com",
+    "email": "colvinsChambers@example.com",
     "entityName": "User"
   },
   {
