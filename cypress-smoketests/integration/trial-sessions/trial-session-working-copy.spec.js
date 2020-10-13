@@ -158,9 +158,9 @@ describe('Petitions Clerk', () => {
   });
 });
 
-describe('Judge', () => {
-  let judgeUserId;
+let judgeUserId;
 
+describe('Judge', () => {
   before(async () => {
     const judgeToCreate = {
       email: 'judge.smoke@example.com',
@@ -179,7 +179,6 @@ describe('Judge', () => {
     token = results.AuthenticationResult.IdToken;
 
     const restApi = await getRestApi();
-    let judgeUserId;
 
     cy.request(
       {
@@ -191,9 +190,9 @@ describe('Judge', () => {
         method: 'POST',
         url: `${restApi}/users`,
       },
-      ({ userId }) => {
-        // eslint-disable-next-line no-unused-vars
-        judgeUserId = userId;
+      response => {
+        console.log('response', response);
+        judgeUserId = response.userId;
       },
     );
 
