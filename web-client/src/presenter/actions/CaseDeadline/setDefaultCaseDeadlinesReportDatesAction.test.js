@@ -22,10 +22,10 @@ describe('setDefaultCaseDeadlinesReportDatesAction', () => {
       },
     });
 
-    expect(result.state.screenMetadata.filterStartDateState).toEqual(
+    expect(result.state.screenMetadata.filterStartDate).toEqual(
       '2020-01-01T05:00:00.000Z',
     );
-    expect(result.state.screenMetadata.filterEndDateState).toEqual(
+    expect(result.state.screenMetadata.filterEndDate).toEqual(
       '2020-01-02T04:59:59.999Z',
     );
   });

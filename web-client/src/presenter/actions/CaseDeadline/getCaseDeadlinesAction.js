@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @returns {object} the case deadlines
  */
 export const getCaseDeadlinesAction = async ({ applicationContext, get }) => {
-  const startDate = get(state.screenMetadata.filterStartDateState);
-  const endDate = get(state.screenMetadata.filterEndDateState);
+  const startDate = get(state.screenMetadata.filterStartDate);
+  const endDate = get(state.screenMetadata.filterEndDate);
 
   const caseDeadlines = await applicationContext
     .getUseCases()
