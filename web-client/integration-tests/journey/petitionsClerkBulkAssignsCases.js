@@ -1,12 +1,22 @@
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+
 export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
   return it('Petitions clerk bulk assigns cases', async () => {
+    const workQueueFormatted = await runCompute(formattedWorkQueue, {
+      state: test.getState(),
+    });
+
     const selectedWorkItems = createdCases.map(newCase => {
-      const firstDocument = newCase.docketEntries.find(
-        entry => entry.index === 1,
+      const workItem = workQueueFormatted.find(
+        w => w.docketNumber === newCase.docketNumber,
       );
 
       return {
-        workItemId: firstDocument.workItem.workItemId,
+        workItemId: workItem.workItemId,
       };
     });
 
