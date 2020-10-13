@@ -7,15 +7,17 @@ exports.getCaseDeadlinesByDateRange = async ({
 }) => {
   const mappings = await client.query({
     ExpressionAttributeNames: {
+      '#gsi1pk': 'gsi1pk',
       '#pk': 'pk',
-      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
       ':endDate': endDate,
-      ':pk': 'case-deadline-catalog',
+      ':gsi1pk': 'case-deadline-catalog',
       ':startDate': startDate,
     },
-    KeyConditionExpression: '#pk = :pk and #sk between :startDate and :endDate',
+    IndexName: 'gsi1',
+    KeyConditionExpression:
+      '#gsi1pk = :gsi1pk and #pk between :startDate and :endDate',
     applicationContext,
   });
 
