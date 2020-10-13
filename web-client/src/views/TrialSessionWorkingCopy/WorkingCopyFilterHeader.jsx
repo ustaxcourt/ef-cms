@@ -53,6 +53,7 @@ export const WorkingCopyFilterHeader = connect(
                 <label
                   className="usa-checkbox__label inline-block"
                   htmlFor="filters.showAll"
+                  id="label-filter-showAll"
                 >
                   Show All
                 </label>

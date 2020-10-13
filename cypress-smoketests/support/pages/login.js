@@ -30,7 +30,7 @@ exports.confirmUser = async ({ email }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
-  const { Session } = await cognito
+  const initAuthResponse = await cognito
     .adminInitiateAuth({
       AuthFlow: 'ADMIN_NO_SRP_AUTH',
       AuthParameters: {
@@ -42,18 +42,20 @@ exports.confirmUser = async ({ email }) => {
     })
     .promise();
 
-  await cognito
-    .adminRespondToAuthChallenge({
-      ChallengeName: 'NEW_PASSWORD_REQUIRED',
-      ChallengeResponses: {
-        NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
-        USERNAME: email,
-      },
-      ClientId: clientId,
-      Session,
-      UserPoolId: userPoolId,
-    })
-    .promise();
+  if (initAuthResponse.Session) {
+    await cognito
+      .adminRespondToAuthChallenge({
+        ChallengeName: 'NEW_PASSWORD_REQUIRED',
+        ChallengeResponses: {
+          NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
+          USERNAME: email,
+        },
+        ClientId: clientId,
+        Session: initAuthResponse.Session,
+        UserPoolId: userPoolId,
+      })
+      .promise();
+  }
 };
 
 const getClientId = async userPoolId => {
