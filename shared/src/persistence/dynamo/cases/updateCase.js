@@ -252,7 +252,13 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         );
       }
     }
+  }
 
+  if (
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix
+  ) {
     const messageMappings = await client.query({
       ExpressionAttributeNames: {
         '#pk': 'pk',
