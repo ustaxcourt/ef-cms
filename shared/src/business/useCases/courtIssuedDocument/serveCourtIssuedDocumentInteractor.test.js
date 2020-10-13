@@ -218,7 +218,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         gsi1pk: 'trial-session-catalog',
         isCalendared: true,
         judge: {
-          name: 'Judge Armen',
+          name: 'Judge Colvin',
           userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
         },
         maxCases: 100,
@@ -406,7 +406,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         gsi1pk: 'trial-session-catalog',
         isCalendared: false,
         judge: {
-          name: 'Judge Armen',
+          name: 'Judge Colvin',
           userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
         },
         maxCases: 100,

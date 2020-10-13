@@ -53,7 +53,7 @@ describe('fetchPendingItems', () => {
   it('calls search function with correct params when provided a judge and returns records', async () => {
     const results = await fetchPendingItems({
       applicationContext,
-      judge: 'Judge Armen',
+      judge: 'Judge Colvin',
     });
 
     expect(
@@ -76,7 +76,7 @@ describe('fetchPendingItems', () => {
       ]);
     const results = await fetchPendingItems({
       applicationContext,
-      judge: 'Judge Armen',
+      judge: 'Judge Colvin',
     });
 
     expect(

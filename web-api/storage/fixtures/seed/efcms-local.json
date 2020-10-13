@@ -11,7 +11,7 @@
     "term": "Fall",
     "pk": "trial-session|c5bee7c0-bd98-4504-890b-b00eb398e547",
     "judge": {
-      "name": "Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-09-25T05:00:00.000Z",
@@ -215,8 +215,8 @@
     "entityName": "DocketEntry",
     "docketEntryId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
     "sk": "docket-entry|130a3790-7e82-4f5c-8158-17f5d9d560e7",
-    "judge": "Armen",
-    "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+    "judge": "Colvin",
+    "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
     "relationship": "primaryDocument",
     "index": 4,
     "isFileAttached": true,
@@ -225,7 +225,7 @@
     "processingStatus": "complete",
     "freeText": "Some very strong opinions about sunglasses",
     "signedAt": "2020-05-13T14:50:04.930Z",
-    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
+    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Colvin Some very strong opinions about sunglasses\",\"judge\":\"Judge Colvin\",\"freeText\":\"Some very strong opinions about sunglasses\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
     "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-05-13T14:50:46.374Z",
     "pk": "case|105-20",
@@ -417,7 +417,7 @@
     "pk": "case-by-docket-number|112-19"
   },
   {
-    "associatedJudge": "Armen",
+    "associatedJudge": "Colvin",
     "procedureType": "Small",
     "contactSecondary": {},
     "isPaper": false,
@@ -685,7 +685,7 @@
     "term": "Fall",
     "pk": "trial-session|c7220f03-e46e-4d5e-8e1d-a640e64df552",
     "judge": {
-      "name": "Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": true,
@@ -1294,7 +1294,7 @@
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -1302,7 +1302,7 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketNumberWithSuffix": "103-19S",
@@ -1637,7 +1637,7 @@
     "pk": "case|122-20"
   },
   {
-    "associatedJudge": "Armen",
+    "associatedJudge": "Colvin",
     "isSealed": false,
     "procedureType": "Regular",
     "contactSecondary": {},
@@ -1742,7 +1742,7 @@
     "pending": false,
     "isDraft": false,
     "workItem": {
-      "associatedJudge": "Armen",
+      "associatedJudge": "Colvin",
       "caseStatus": "General Docket - Not at Issue",
       "caseTitle": "Reuben Blair",
       "section": "docket",
@@ -2063,14 +2063,14 @@
       "documentType": "Answer"
     },
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-19",
@@ -2691,9 +2691,9 @@
           "freeText": "Some very strong opinions about sunglasses",
           "signedAt": "2020-05-13T14:50:04.930Z",
           "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
-          "judge": "Armen",
+          "judge": "Colvin",
           "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+          "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
           "relationship": "primaryDocument",
           "docketNumber": "105-20"
         },
@@ -2717,8 +2717,8 @@
       "numberOfPages": 1,
       "scenario": "Type B",
       "entityName": "Document",
-      "judge": "Armen",
-      "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+      "judge": "Colvin",
+      "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
       "relationship": "primaryDocument",
       "isFileAttached": true,
       "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -3009,7 +3009,7 @@
     "completedBy": "Test Docketclerk1"
   },
   {
-    "associatedJudge": "Armen",
+    "associatedJudge": "Colvin",
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
@@ -3331,14 +3331,14 @@
       "documentType": "Proposed Stipulated Decision"
     },
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
@@ -3399,9 +3399,9 @@
           "freeText": "Some very strong opinions about sunglasses",
           "signedAt": "2020-05-13T14:50:04.930Z",
           "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
-          "judge": "Armen",
+          "judge": "Colvin",
           "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+          "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
           "relationship": "primaryDocument",
           "docketNumber": "105-20"
         },
@@ -3425,8 +3425,8 @@
       "numberOfPages": 1,
       "scenario": "Type B",
       "entityName": "Document",
-      "judge": "Armen",
-      "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+      "judge": "Colvin",
+      "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
       "relationship": "primaryDocument",
       "isFileAttached": true,
       "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -4751,7 +4751,7 @@
     "term": "Fall",
     "pk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
-      "name": "Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": true,
@@ -5068,7 +5068,7 @@
     "term": "Fall",
     "pk": "trial-session|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
     "judge": {
-      "name": "Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2020-11-25T05:00:00.000Z",
@@ -5326,14 +5326,14 @@
       "documentType": "Answer"
     },
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "section-outbox|petitions",
     "docketNumber": "103-19",
@@ -6631,11 +6631,11 @@
     "role": "chambers",
     "entityName": "User",
     "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "name": "Test Armen's Chambers",
-    "section": "armensChambers",
+    "name": "Test Colvin's Chambers",
+    "section": "colvinsChambers",
     "pk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
     "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "email": "armensChambers@example.com"
+    "email": "colvinsChambers@example.com"
   },
   {
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -7924,11 +7924,11 @@
   },
   {
     "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "pk": "section|armensChambers"
+    "pk": "section|colvinsChambers"
   },
   {
     "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
-    "pk": "section|armensChambers"
+    "pk": "section|colvinsChambers"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -7937,7 +7937,7 @@
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -7945,7 +7945,7 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketEntry": {
@@ -7956,7 +7956,7 @@
       "documentType": "Proposed Stipulated Decision",
       "docketEntryId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
-    "pk": "section|armensChambers",
+    "pk": "section|colvinsChambers",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:23:51.565Z"
@@ -7968,7 +7968,7 @@
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -7976,7 +7976,7 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketEntry": {
@@ -7988,7 +7988,7 @@
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
       "documentTitle": "Answer by Test Respondent"
     },
-    "pk": "section|armensChambers",
+    "pk": "section|colvinsChambers",
     "docketNumber": "103-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:33:24.183Z"
@@ -8081,16 +8081,16 @@
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
   },
   {
-    "judgeTitle": "Special Trial Judge",
-    "judgeFullName": "Robert N. Armen, Jr.",
+    "judgeTitle": "Judge",
+    "judgeFullName": "John O. Colvin",
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
-    "name": "Armen",
-    "section": "armensChambers",
+    "name": "Colvin",
+    "section": "colvinsChambers",
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeArmen@example.com"
+    "email": "judgeColvin@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8099,7 +8099,7 @@
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -8107,7 +8107,7 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketEntry": {
@@ -8130,7 +8130,7 @@
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -8138,7 +8138,7 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketEntry": {
@@ -9354,7 +9354,7 @@
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -9362,7 +9362,7 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketNumberWithSuffix": "106-19",
@@ -9522,14 +9522,14 @@
       "documentType": "Proposed Stipulated Decision"
     },
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneename": "Armen",
+    "assigneename": "Colvin",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
