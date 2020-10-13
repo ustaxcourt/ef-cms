@@ -2831,9 +2831,9 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
 
-      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Armen');
+      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Colvin');
 
-      expect(caseToUpdate.associatedJudge).toEqual('Judge Armen');
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Colvin');
       expect(caseToUpdate.trialDate).toBeFalsy();
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();

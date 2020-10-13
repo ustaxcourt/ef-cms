@@ -267,7 +267,10 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
 }) {
   if (Array.isArray(rawCase.docketEntries)) {
     this.docketEntries = rawCase.docketEntries
-      .map(docketEntry => new DocketEntry(docketEntry, { applicationContext }))
+      .map(
+        docketEntry =>
+          new DocketEntry(docketEntry, { applicationContext, filtered }),
+      )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     this.isSealed =

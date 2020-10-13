@@ -77,7 +77,7 @@ describe('formattedCaseDetail', () => {
   };
   const chambersUser = {
     role: USER_ROLES.chambers,
-    section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+    section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
     userId: '555',
   };
   const trialClerkUser = {
@@ -176,6 +176,7 @@ describe('formattedCaseDetail', () => {
       supportingDocumentFreeText: 'Rachael',
     },
     {
+      addToCoversheet: true,
       additionalInfo: 'Additional Info',
       additionalInfo2: 'Additional Info2',
       category: 'Supporting Document',
@@ -2680,7 +2681,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: mockTrialSessionId,
           },
           judgeUser: {
-            section: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+            section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
             userId: judgeUser.userId,
           },
           ...getBaseState(chambersUser),
