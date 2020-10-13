@@ -45,7 +45,6 @@
   "docketEntries": [
     {
       "entityName": "DocketEntry",
-      "editState": "{}",
       "draftOrderState": null,
       "isDraft": false,
       "pending": false,
@@ -224,7 +223,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"A\",\"category\":\"Answer (filed by respondent only)\",\"documentTitle\":\"Answer\",\"documentType\":\"Answer\",\"scenario\":\"Standard\",\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"partyPrimary\":true,\"caseId\":\"13de0327-51f1-42bb-ac8e-90f8ec5cea08\",\"createdAt\":\"2001-10-10\",\"docketNumber\":\"543-20\",\"isFileAttached\":false,\"isPaper\":true,\"isUpdating\":false,\"receivedAt\":\"2001-10-10\"}",
       "isDraft": false,
       "pending": false,
       "processingStatus": "pending",
@@ -293,7 +291,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{\"certificateOfServiceDate\":null,\"documentTitle\":\"Answer\",\"documentType\":\"Answer\",\"eventCode\":\"A\",\"isFileAttached\":true,\"lodged\":false,\"partyPrimary\":true,\"receivedAt\":\"2001-10-10\",\"scenario\":\"Standard\"}",
       "draftOrderState": null,
       "isDraft": false,
       "pending": false,
@@ -375,7 +372,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{}",
       "draftOrderState": null,
       "isDraft": false,
       "pending": false,
@@ -457,7 +453,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{}",
       "draftOrderState": null,
       "isDraft": false,
       "pending": false,
@@ -641,7 +636,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{\"eventCode\":\"OSC\",\"documentType\":\"Order to Show Cause\",\"documentTitle\":\"Order to Show Cause [Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order to Show Cause\",\"caseId\":\"13de0327-51f1-42bb-ac8e-90f8ec5cea08\",\"docketEntryId\":\"389c2e46-224a-4bbd-abde-de5ea2c20a67\"}",
       "draftOrderState": {
         "documentContents": "asdf\n",
         "richText": "<p>asdf</p>"
@@ -817,7 +811,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{}",
       "isDraft": false,
       "pending": true,
       "processingStatus": "pending",
@@ -891,7 +884,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"7\",\"dateReceivedDay\":\"29\",\"dateReceivedYear\":\"2020\",\"eventCode\":\"DSC\",\"category\":\"Appearance and Representation\",\"documentTitle\":\"Designation of Counsel Jo Smith to Receive Service\",\"documentType\":\"Designation of Counsel to Receive Service\",\"scenario\":\"Nonstandard B\",\"freeText\":\"Jo Smith\",\"partyPrimary\":true,\"certificateOfServiceDate\":null,\"dateReceived\":\"2020-07-29\",\"createdAt\":\"2020-07-29\",\"docketNumber\":\"543-20\",\"isFileAttached\":false,\"isPaper\":true,\"isUpdating\":false,\"receivedAt\":\"2020-07-29\"}",
       "isDraft": false,
       "pending": false,
       "processingStatus": "pending",
@@ -964,7 +956,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{\"eventCode\":\"SDEC\",\"documentType\":\"Stipulated Decision\",\"documentTitle\":\"Stipulated Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"requiresSignature\":true,\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Stipulated Decision Entered, Judge Buch\",\"judge\":\"Judge Buch\",\"docketNumber\":\"543-20\",\"docketEntryId\":\"e897e70a-66b6-469c-be60-5cee95aacf71\"}",
       "draftOrderState": null,
       "isDraft": false,
       "judge": "Judge Buch",
@@ -1121,7 +1112,6 @@
     },
     {
       "entityName": "DocketEntry",
-      "editState": "{\"eventCode\":\"OAP\",\"documentType\":\"Order for Amended Petition\",\"documentTitle\":\"Order for Amended Petition on [Date] [Anything]\",\"scenario\":\"Type D\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"date\":\"2020-08-06\",\"generatedDocumentTitle\":\"Order for Amended Petition on 08-06-2020\",\"searchText\":\"OAP\",\"month\":\"8\",\"year\":\"2020\",\"day\":\"6\",\"docketNumber\":\"543-20\",\"docketEntryId\":\"c077853b-211e-4482-9f64-56a53e7b0788\"}",
       "draftOrderState": {
         "eventCode": "OD",
         "documentTitle": "Order of Dismissal",

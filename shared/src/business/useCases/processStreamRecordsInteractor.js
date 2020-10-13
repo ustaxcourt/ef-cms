@@ -1,132 +1,4 @@
-const AWS = require('aws-sdk');
-const { createISODateString } = require('../utilities/DateHandler');
-
-const getRemoveRecords = ({ records }) => {
-  return records.filter(record => record.eventName === 'REMOVE');
-};
-
-/**
- * filters out records we do not want to index with elasticsearch
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Array} providers.records the array of records to filter
- * @returns {Array} the filtered records
- */
-const filterRecords = async ({ applicationContext, processJobId, records }) => {
-  const filteredRecords = records.filter(
-    record =>
-      !record.dynamodb.Keys.pk.S.includes('work-item|') &&
-      ['INSERT', 'MODIFY'].includes(record.eventName),
-  );
-
-  const caseRecords = filteredRecords.filter(record =>
-    record.dynamodb.Keys.pk.S.includes('case|'),
-  );
-
-  applicationContext.logger.info(
-    `processStreamRecordsInteractor job ${processJobId} fetching records ${caseRecords.length}:`,
-  );
-
-  applicationContext.logger.time(
-    `processStreamRecordsInteractor job ${processJobId} fetching records ${caseRecords.length} time`,
-  );
-
-  const cases = {};
-  const documentContents = {};
-  await Promise.all(
-    caseRecords.map(async caseRecord => {
-      const docketNumber = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
-
-      const fullCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-
-      cases[docketNumber] = fullCase;
-
-      for (const document of fullCase.docketEntries) {
-        if (document.documentContentsId) {
-          const buffer = await applicationContext
-            .getPersistenceGateway()
-            .getDocument({
-              applicationContext,
-              key: document.documentContentsId,
-              protocol: 'S3',
-              useTempBucket: false,
-            });
-
-          documentContents[document.documentContentsId] = JSON.parse(
-            buffer.toString(),
-          ).documentContents;
-        }
-      }
-    }),
-  );
-
-  applicationContext.logger.timeEnd(
-    `processStreamRecordsInteractor job ${processJobId} fetching records ${caseRecords.length} time`,
-  );
-
-  for (let caseRecord of caseRecords) {
-    const docketNumber = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
-
-    const fullCase = cases[docketNumber];
-
-    if (fullCase.docketNumber) {
-      filteredRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: caseRecord.dynamodb.Keys.pk.S,
-            },
-            sk: {
-              S: caseRecord.dynamodb.Keys.pk.S,
-            },
-          },
-          NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
-        },
-        eventName: 'MODIFY',
-      });
-
-      //also reindex all of the docketEntries on the case
-      const { docketEntries } = fullCase;
-      for (const document of docketEntries) {
-        if (document.documentContentsId) {
-          document.documentContents =
-            documentContents[document.documentContentsId];
-        }
-
-        const documentWithCaseInfo = {
-          ...AWS.DynamoDB.Converter.marshall(fullCase),
-          ...AWS.DynamoDB.Converter.marshall(document),
-          docketEntries: undefined,
-          entityName: { S: 'DocketEntry' },
-          sk: { S: `docket-entry|${document.docketEntryId}` },
-        };
-
-        filteredRecords.push({
-          dynamodb: {
-            Keys: {
-              pk: {
-                S: caseRecord.dynamodb.Keys.pk.S,
-              },
-              sk: {
-                S: `docket-entry|${document.docketEntryId}`,
-              },
-            },
-            NewImage: documentWithCaseInfo,
-          },
-          eventName: 'MODIFY',
-        });
-      }
-    }
-  }
-
-  return filteredRecords;
-};
+const { get } = require('lodash');
 
 /**
  * @param {object} providers the providers object
@@ -138,165 +10,55 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  const processJobId = applicationContext.getUniqueId();
-
-  applicationContext.logger.info(
-    `processStreamRecordsInteractor job ${processJobId} started at time:`,
-    createISODateString(),
-  );
-
-  const removeRecords = getRemoveRecords({ records: recordsToProcess });
-
-  if (removeRecords.length) {
-    applicationContext.logger.time(
-      `processStreamRecordsInteractor job ${processJobId} index remove items`,
-    );
-    try {
-      const {
-        failedRecords,
-      } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
-        applicationContext,
-        records: removeRecords,
-      });
-
-      const catchDeleteRecordError = failedRecord => async e => {
-        applicationContext.logger.info(
-          `processStreamRecordsInteractor job ${processJobId} deleteRecord error for record ${failedRecord['_id']}:`,
-          e,
-        );
-        await applicationContext.notifyHoneybadger(e);
-      };
-
-      const processRecordDeletion = async failedRecord => {
-        try {
-          await applicationContext.getPersistenceGateway().deleteRecord({
-            applicationContext,
-            indexName: failedRecord['_index'],
-            recordId: failedRecord['_id'],
-          });
-        } catch (e) {
-          await catchDeleteRecordError(failedRecord)(e);
-        }
-      };
-
-      const deletionRequests = failedRecords.map(processRecordDeletion);
-      await Promise.allSettled(deletionRequests);
-    } catch (e) {
-      applicationContext.logger.info(
-        `processStreamRecordsInteractor job ${processJobId} bulkDeleteRecords error:`,
-        e,
-      );
-      await applicationContext.notifyHoneybadger(e);
-    }
-
-    applicationContext.logger.timeEnd(
-      `processStreamRecordsInteractor job ${processJobId} index remove items`,
-    );
-  }
-
-  const filteredRecords = await filterRecords({
-    applicationContext,
-    records: recordsToProcess,
+  recordsToProcess = recordsToProcess.filter(record => {
+    // to prevent global tables writing extra data
+    const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
+    const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
+    const newTime = get(record, NEW_TIME_KEY);
+    const oldTime = get(record, OLD_TIME_KEY);
+    return newTime && newTime !== oldTime;
   });
 
-  if (filteredRecords.length) {
-    applicationContext.logger.time(
-      `processStreamRecordsInteractor job ${processJobId} index filteredRecords`,
-    );
-    try {
-      const {
+  const removeRecords = recordsToProcess.filter(
+    record => record.eventName === 'REMOVE',
+  );
+  const insertModifyRecords = recordsToProcess.filter(
+    record => record.eventName !== 'REMOVE',
+  );
+
+  if (removeRecords.length) {
+    applicationContext.logger.info('should be removing', removeRecords);
+    const {
+      failedRecords,
+    } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
+      applicationContext,
+      records: removeRecords,
+    });
+
+    if (failedRecords.length > 0) {
+      applicationContext.logger.info(
+        'the records that failed to delete',
         failedRecords,
-      } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
-        applicationContext,
-        records: filteredRecords,
-      });
-
-      if (failedRecords.length) {
-        const catchAndReIndex = failedRecord => async e => {
-          await applicationContext
-            .getPersistenceGateway()
-            .createElasticsearchReindexRecord({
-              applicationContext,
-              recordPk: failedRecord.pk.S,
-              recordSk: failedRecord.sk.S,
-            });
-
-          applicationContext.logger.info(
-            `processStreamRecordsInteractor job ${processJobId} indexRecord error during bulkIndexRecords:`,
-            e,
-          );
-          await applicationContext.notifyHoneybadger(e);
-        };
-
-        const indexRecord = async failedRecord => {
-          try {
-            await applicationContext.getPersistenceGateway().indexRecord({
-              applicationContext,
-              fullRecord: { ...failedRecord },
-              isAlreadyMarshalled: true,
-              record: {
-                recordPk: failedRecord.pk.S,
-                recordSk: failedRecord.sk.S,
-              },
-            });
-          } catch (e) {
-            await catchAndReIndex(failedRecord)(e);
-          }
-        };
-
-        await Promise.allSettled(failedRecords.map(indexRecord));
-      }
-    } catch {
-      //if the bulk index fails, try each single index individually and
-      //add the failing ones to the reindex list
-      const recordsToReprocess = await filterRecords({
-        applicationContext,
-        records: recordsToProcess,
-      });
-
-      const reIndexRecord = record => async e => {
-        await applicationContext
-          .getPersistenceGateway()
-          .createElasticsearchReindexRecord({
-            applicationContext,
-            recordPk: record.dynamodb.Keys.pk.S,
-            recordSk: record.dynamodb.Keys.sk.S,
-          });
-
-        applicationContext.logger.info(
-          `processStreamRecordsInteractor job ${processJobId} indexRecord error during record reprocessing:`,
-          e,
-        );
-        await applicationContext.notifyHoneybadger(e);
-      };
-
-      const reprocessRecord = async record => {
-        const newImage = record.dynamodb.NewImage;
-
-        try {
-          await applicationContext.getPersistenceGateway().indexRecord({
-            applicationContext,
-            fullRecord: newImage,
-            isAlreadyMarshalled: true,
-            record: {
-              recordPk: record.dynamodb.Keys.pk.S,
-              recordSk: record.dynamodb.Keys.sk.S,
-            },
-          });
-        } catch (e) {
-          await reIndexRecord(record)();
-        }
-      };
-
-      await Promise.allSettled(recordsToReprocess.map(reprocessRecord));
+      );
+      throw new Error('failed to delete records');
     }
-    applicationContext.logger.timeEnd(
-      `processStreamRecordsInteractor job ${processJobId} index filteredRecords`,
-    );
   }
 
-  applicationContext.logger.info(
-    `processStreamRecordsInteractor job ${processJobId} completed at time:`,
-    createISODateString(),
-  );
+  if (insertModifyRecords.length) {
+    applicationContext.logger.info('should be adding', insertModifyRecords);
+    const {
+      failedRecords,
+    } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+      applicationContext,
+      records: insertModifyRecords,
+    });
+
+    if (failedRecords.length > 0) {
+      applicationContext.logger.info(
+        'the records that failed to index',
+        failedRecords,
+      );
+      throw new Error('failed to index records');
+    }
+  }
 };
