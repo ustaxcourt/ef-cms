@@ -22,6 +22,7 @@ const { Case } = require('../../../business/entities/cases/Case');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit } = require('lodash');
+const { updateMessage } = require('../messages/updateMessage');
 
 /**
  * updateCase
@@ -250,6 +251,35 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           }),
         );
       }
+    }
+
+    const messageMappings = await client.query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${caseToUpdate.docketNumber}`,
+        ':prefix': 'message',
+      },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      applicationContext,
+    });
+
+    for (let message of messageMappings) {
+      if (oldCase.status !== caseToUpdate.status) {
+        message.caseStatus = caseToUpdate.status;
+      }
+      if (oldCase.caseCaption !== caseToUpdate.caseCaption) {
+        message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
+      }
+      if (oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix) {
+        message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
+      }
+      updateMessage({
+        applicationContext,
+        message,
+      });
     }
   }
 
