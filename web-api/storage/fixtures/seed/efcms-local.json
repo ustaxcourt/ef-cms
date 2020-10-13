@@ -1290,6 +1290,7 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -1302,7 +1303,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Armen",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketNumberWithSuffix": "103-19S",
@@ -1441,6 +1441,11 @@
   {
     "sk": "case|124-20",
     "docketNumber": "124-20",
+    "pk": "catalog"
+  },
+  {
+    "sk": "case|125-20",
+    "docketNumber": "125-20",
     "pk": "catalog"
   },
   {
@@ -2051,6 +2056,7 @@
   },
   {
     "docketNumberSuffix": "S",
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -2070,7 +2076,6 @@
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneename": "Armen",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-19",
@@ -3320,6 +3325,7 @@
   },
   {
     "docketNumberSuffix": null,
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -3338,7 +3344,6 @@
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneename": "Armen",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
@@ -3940,6 +3945,18 @@
     "docketNumber": "121-20",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-08-10T17:16:49.188Z"
+  },
+  {
+    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline-catalog|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "2019-08-22T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
+  },
+  {
+    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline-catalog|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "pk": "2019-08-22T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "0402cea0-727e-4155-8357-5df4fe30196c",
@@ -4687,6 +4704,49 @@
     "updatedAt": "2020-09-30T20:22:10.387Z"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-13T19:21:25.226Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "docketNumberWithSuffix": "125-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-13T19:21:25.223Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-13T19:21:25.226Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "processingStatus": "pending",
+      "createdAt": "2020-10-13T19:21:25.225Z",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "cb566d31-5525-4bce-ac8f-f7ad5cd01ee5",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "section|petitions",
+    "docketNumber": "125-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-13T19:21:25.226Z"
+  },
+  {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "pk": "trial-session-working-copy|c5bee7c0-bd98-4504-890b-b00eb398e547",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -5314,6 +5374,7 @@
   },
   {
     "docketNumberSuffix": "S",
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -5333,7 +5394,6 @@
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneename": "Armen",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "section-outbox|petitions",
     "docketNumber": "103-19",
@@ -6604,26 +6664,6 @@
     "email": "irsPractitioner3@example.com"
   },
   {
-    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "case-deadline-catalog"
-  },
-  {
     "sk": "case|110-19",
     "pk": "case-by-docket-number|110-19"
   },
@@ -6727,11 +6767,6 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-19",
     "status": "New"
-  },
-  {
-    "pk": "user-email|petitioner@example.com",
-    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -6910,6 +6945,17 @@
     "docketNumberWithSuffix": "123-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "123-20",
+    "status": "New"
+  },
+  {
+    "createdAt": "2020-10-13T19:21:25.223Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|125-20",
+    "sk": "case|125-20",
+    "docketNumberWithSuffix": "125-20W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "125-20",
     "status": "New"
   },
   {
@@ -7130,6 +7176,12 @@
     "docketNumber": "122-20",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-25T19:27:00.207Z"
+  },
+  {
+    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "sk": "case-deadline-catalog|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "pk": "2019-08-23T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
@@ -7933,6 +7985,7 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": null,
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -7945,7 +7998,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Armen",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketEntry": {
@@ -7964,6 +8016,7 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": "S",
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -7976,7 +8029,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Armen",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketEntry": {
@@ -8059,7 +8111,7 @@
   },
   {
     "sk": "docketNumberCounter-2020",
-    "id": 24,
+    "id": 25,
     "pk": "docketNumberCounter-2020"
   },
   {
@@ -8081,6 +8133,11 @@
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
   },
   {
+    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-email|petitioner@example.com"
+  },
+  {
     "judgeTitle": "Special Trial Judge",
     "judgeFullName": "Robert N. Armen, Jr.",
     "role": "judge",
@@ -8095,6 +8152,7 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": null,
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -8107,7 +8165,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Armen",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketEntry": {
@@ -8126,6 +8183,7 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": "S",
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -8138,7 +8196,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Armen",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketEntry": {
@@ -9050,6 +9107,12 @@
     "pk": "case|124-20"
   },
   {
+    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline-catalog|ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "2019-08-25T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -9350,6 +9413,7 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -9362,7 +9426,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Armen",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketNumberWithSuffix": "106-19",
@@ -9511,6 +9574,7 @@
   },
   {
     "docketNumberSuffix": null,
+    "assigneename": "Armen",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -9529,7 +9593,6 @@
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneename": "Armen",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
@@ -10276,6 +10339,49 @@
     "email": "irsPractitioner@example.com"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-13T19:21:25.226Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "docketNumberWithSuffix": "125-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-13T19:21:25.223Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-13T19:21:25.226Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "processingStatus": "pending",
+      "createdAt": "2020-10-13T19:21:25.225Z",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "cb566d31-5525-4bce-ac8f-f7ad5cd01ee5",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "work-item|ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "docketNumber": "125-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-13T19:21:25.226Z"
+  },
+  {
     "role": "adc",
     "entityName": "User",
     "sk": "user|6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10491,6 +10597,178 @@
   {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "pk": "irsPractitioner|Stuart Morrison"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-10-13T19:21:25.225Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "46660c79-9872-43ef-9cb6-4cc16f570e29",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2020-10-13T19:21:25.223Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|125-20",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "125-20W",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000125,
+    "archivedDocketEntries": [],
+    "noticeOfTrialDate": "2020-10-13T19:21:25.225Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|125-20",
+    "docketNumber": "125-20",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-10-13T19:21:25.223Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2020-10-13T19:21:25.227Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "processingStatus": "complete",
+    "createdAt": "2020-10-13T19:21:25.227Z",
+    "entityName": "DocketEntry",
+    "docketEntryId": "1bcac569-5e21-466f-bf0e-1a74a4a28015",
+    "sk": "docket-entry|1bcac569-5e21-466f-bf0e-1a74a4a28015",
+    "pk": "case|125-20",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-10-13T19:21:25.223Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "isFileAttached": true,
+    "receivedAt": "2020-10-13T19:21:25.227Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": false,
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "createdAt": "2020-10-13T19:21:25.227Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "b6d7c728-ead9-4dc2-873f-3ea1cc5faad8",
+    "sk": "docket-entry|b6d7c728-ead9-4dc2-873f-3ea1cc5faad8",
+    "partySecondary": false,
+    "pk": "case|125-20",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-10-13T19:21:25.223Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-10-13T19:21:25.226Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "125-20W",
+      "docketEntry": {
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-10-13T19:21:25.223Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "isFileAttached": true,
+        "receivedAt": "2020-10-13T19:21:25.226Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "processingStatus": "pending",
+        "createdAt": "2020-10-13T19:21:25.225Z",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "cb566d31-5525-4bce-ac8f-f7ad5cd01ee5",
+        "partySecondary": false,
+        "documentTitle": "Petition",
+        "privatePractitioners": []
+      },
+      "docketNumber": "125-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-10-13T19:21:25.226Z"
+    },
+    "receivedAt": "2020-10-13T19:21:25.226Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-10-13T19:21:25.225Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "cb566d31-5525-4bce-ac8f-f7ad5cd01ee5",
+    "sk": "docket-entry|cb566d31-5525-4bce-ac8f-f7ad5cd01ee5",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|125-20"
+  },
+  {
+    "sk": "work-item|ec3e6ce5-d615-49b4-81c2-9dde2604f366",
+    "pk": "case|125-20"
   },
   {
     "role": "admissionsclerk",

@@ -40,9 +40,9 @@ describe('createCaseDeadline', () => {
       applicationContext.getDocumentClient().put.mock.calls[2][0],
     ).toMatchObject({
       Item: {
-        gsi1pk: `case-deadline-catalog|${CASE_DEADLINE_ID}`,
-        pk: 'case-deadline-catalog',
-        sk: '2019-03-01T21:42:29.073Z',
+        gsi1pk: 'case-deadline-catalog',
+        pk: '2019-03-01T21:42:29.073Z',
+        sk: `case-deadline-catalog|${CASE_DEADLINE_ID}`,
       },
     });
   });

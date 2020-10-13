@@ -14,27 +14,37 @@ exports.deleteCaseDeadline = async ({
   caseDeadlineId,
   docketNumber,
 }) => {
-  await Promise.all([
-    client.delete({
-      applicationContext,
-      key: {
-        pk: `case-deadline|${caseDeadlineId}`,
-        sk: `case-deadline|${caseDeadlineId}`,
-      },
-    }),
-    client.delete({
-      applicationContext,
-      key: {
-        pk: `case|${docketNumber}`,
-        sk: `case-deadline|${caseDeadlineId}`,
-      },
-    }),
-    client.delete({
-      applicationContext,
-      key: {
-        gsi1pk: `case-deadline-catalog|${caseDeadlineId}`,
-        pk: 'case-deadline-catalog',
-      },
-    }),
-  ]);
+  const originalCaseDeadline = await client.get({
+    Key: {
+      pk: `case-deadline|${caseDeadlineId}`,
+      sk: `case-deadline|${caseDeadlineId}`,
+    },
+    applicationContext,
+  });
+
+  if (originalCaseDeadline) {
+    await Promise.all([
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case-deadline|${caseDeadlineId}`,
+          sk: `case-deadline|${caseDeadlineId}`,
+        },
+      }),
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${docketNumber}`,
+          sk: `case-deadline|${caseDeadlineId}`,
+        },
+      }),
+      client.delete({
+        applicationContext,
+        key: {
+          pk: originalCaseDeadline.deadlineDate,
+          sk: `case-deadline-catalog|${caseDeadlineId}`,
+        },
+      }),
+    ]);
+  }
 };
