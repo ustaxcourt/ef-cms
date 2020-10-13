@@ -5,6 +5,8 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.endDate the end date
+ * @param {string} providers.startDate the start date
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getCaseDeadlinesInteractor = ({

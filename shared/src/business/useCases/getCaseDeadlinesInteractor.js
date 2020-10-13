@@ -12,7 +12,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Promise} the promise of the getCaseDeadlines call
+ * @param {string} providers.endDate the end date
+ * @param {string} providers.startDate the start date
+ * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
  */
 exports.getCaseDeadlinesInteractor = async ({
   applicationContext,
