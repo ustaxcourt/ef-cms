@@ -21,7 +21,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
 
     const results = await generatePrintableCaseInventoryReportInteractor({
       applicationContext,
-      associatedJudge: 'Judge Armen',
+      associatedJudge: 'Judge Colvin',
     });
 
     expect(
@@ -39,7 +39,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
     await expect(
       generatePrintableCaseInventoryReportInteractor({
         applicationContext,
-        associatedJudge: 'Judge Armen',
+        associatedJudge: 'Judge Colvin',
       }),
     ).rejects.toThrow('Unauthorized');
   });

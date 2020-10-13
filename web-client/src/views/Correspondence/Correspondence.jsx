@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 export const Correspondence = connect(
   {
-    correspondenceDocumentId: state.screenMetadata.correspondenceDocumentId,
+    correspondenceId: state.correspondenceId,
     formattedCaseDetail: state.formattedCaseDetail,
     loadDefaultViewerCorrespondenceSequence:
       sequences.loadDefaultViewerCorrespondenceSequence,
@@ -18,7 +18,7 @@ export const Correspondence = connect(
     viewerCorrespondenceToDisplay: state.viewerCorrespondenceToDisplay,
   },
   function Correspondence({
-    correspondenceDocumentId,
+    correspondenceId,
     formattedCaseDetail,
     loadDefaultViewerCorrespondenceSequence,
     setViewerCorrespondenceToDisplaySequence,
@@ -27,7 +27,7 @@ export const Correspondence = connect(
   }) {
     useEffect(() => {
       loadDefaultViewerCorrespondenceSequence({
-        docketEntryId: correspondenceDocumentId,
+        correspondenceId,
       });
       return;
     }, []);
