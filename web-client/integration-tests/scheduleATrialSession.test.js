@@ -5,6 +5,7 @@ import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTria
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
+import { petitionsClerkManuallyAddsCaseToTrialWithoutJudge } from './journey/petitionsClerkManuallyAddsCaseToTrialWithoutJudge';
 import { petitionsClerkManuallyRemovesCaseFromTrial } from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -25,9 +26,15 @@ describe('Schedule A Trial Session', () => {
 
   const caseCount = 2;
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const trialLocation2 = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     trialLocation,
+  };
+  const overrides2 = {
+    judge: {},
+    preferredTrialCity: trialLocation2,
+    trialLocation: trialLocation2,
   };
 
   test.casesReadyForTrial = [];
@@ -83,4 +90,13 @@ describe('Schedule A Trial Session', () => {
   petitionsClerkSetsATrialSessionsSchedule(test);
   // only 2 cases should have been calendared because only 2 were marked as QCed
   petitionsClerkViewsACalendaredTrialSession(test, caseCount);
+
+  // create a trial session without a judge
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(test, overrides2);
+  docketClerkViewsTrialSessionList(test, overrides2);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  makeCaseReadyForTrial(test, caseCount + 2, overrides2);
+  petitionsClerkManuallyAddsCaseToTrialWithoutJudge(test);
 });
