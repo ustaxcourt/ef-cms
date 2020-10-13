@@ -4,20 +4,18 @@ import { setCorrespondenceIdToDisplayAction } from './setCorrespondenceIdToDispl
 
 describe('setCorrespondenceIdToDisplayAction', () => {
   it('should set state.correspondenceDocumentId to the value passed in props', async () => {
-    const mockCorrespondenceDocumentId = '123';
+    const mockCorrespondenceId = '123';
 
     const result = await runAction(setCorrespondenceIdToDisplayAction, {
       modules: {
         presenter,
       },
       props: {
-        correspondenceId: mockCorrespondenceDocumentId,
+        correspondenceId: mockCorrespondenceId,
       },
       state: {},
     });
 
-    expect(result.state.correspondenceDocumentId).toBe(
-      mockCorrespondenceDocumentId,
-    );
+    expect(result.state.correspondenceId).toBe(mockCorrespondenceId);
   });
 });

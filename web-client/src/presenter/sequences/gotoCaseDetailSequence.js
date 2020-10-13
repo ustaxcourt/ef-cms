@@ -17,6 +17,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
+import { setCorrespondenceIdToDisplayAction } from '../actions/CorrespondenceDocument/setCorrespondenceIdToDisplayAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultCorrespondenceDocumentIdAction } from '../actions/setDefaultCorrespondenceDocumentIdAction';
@@ -39,7 +40,6 @@ const gotoCaseDetailInternal = [
   setTrialSessionJudgeAction,
   getJudgeForCurrentUserAction,
   setJudgeUserAction,
-  setDefaultCorrespondenceDocumentIdAction,
   setDocketEntryIdAction,
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
