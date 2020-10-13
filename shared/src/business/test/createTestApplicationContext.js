@@ -349,10 +349,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
-    getAllCaseDeadlines: jest.fn(),
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
+    getCaseDeadlinesByDateRange: jest.fn(),
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),

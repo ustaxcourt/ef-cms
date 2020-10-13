@@ -1,15 +1,19 @@
 const { get } = require('../requests');
 
 /**
- * getAllCaseDeadlinesInteractorProxy
+ * getCaseDeadlinesInteractorProxy
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getAllCaseDeadlinesInteractor = ({ applicationContext }) => {
+exports.getCaseDeadlinesInteractor = ({
+  applicationContext,
+  endDate,
+  startDate,
+}) => {
   return get({
     applicationContext,
-    endpoint: '/case-deadlines',
+    endpoint: `/case-deadlines/${startDate}/${endDate}`,
   });
 };
