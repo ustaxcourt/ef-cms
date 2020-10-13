@@ -151,7 +151,7 @@ describe('Petitions Clerk', () => {
   });
 });
 
-describe('Judge', () => {
+describe.skip('Judge', () => {
   before(async () => {
     const result = await getUserToken(
       'jcohen@example.com',
