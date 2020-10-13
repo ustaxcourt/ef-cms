@@ -5,13 +5,11 @@ const {
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
-const {
-  getAllCaseDeadlinesInteractor,
-} = require('./getAllCaseDeadlinesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getCaseDeadlinesInteractor } = require('./getCaseDeadlinesInteractor');
 const { User } = require('../entities/User');
 
-describe('getAllCaseDeadlinesInteractor', () => {
+describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
     {
       caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
@@ -73,7 +71,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
     applicationContext.environment.stage = 'local';
     applicationContext
       .getPersistenceGateway()
-      .getAllCaseDeadlines.mockReturnValue(mockDeadlines);
+      .getCaseDeadlinesByDateRange.mockReturnValue(mockDeadlines);
     applicationContext
       .getPersistenceGateway()
       .getCasesByDocketNumbers.mockReturnValue(mockCases);
@@ -83,7 +81,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(new User({}));
 
     await expect(
-      getAllCaseDeadlinesInteractor({
+      getCaseDeadlinesInteractor({
         applicationContext,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -97,7 +95,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
     });
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
 
-    const caseDeadlines = await getAllCaseDeadlinesInteractor({
+    const caseDeadlines = await getCaseDeadlinesInteractor({
       applicationContext,
     });
 

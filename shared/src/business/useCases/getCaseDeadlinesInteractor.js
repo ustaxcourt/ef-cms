@@ -8,13 +8,19 @@ const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * getAllCaseDeadlinesInteractor
+ * getCaseDeadlinesInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Promise} the promise of the getCaseDeadlines call
+ * @param {string} providers.endDate the end date
+ * @param {string} providers.startDate the start date
+ * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
  */
-exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
+exports.getCaseDeadlinesInteractor = async ({
+  applicationContext,
+  endDate,
+  startDate,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
@@ -23,8 +29,10 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
 
   const allCaseDeadlines = await applicationContext
     .getPersistenceGateway()
-    .getAllCaseDeadlines({
+    .getCaseDeadlinesByDateRange({
       applicationContext,
+      endDate,
+      startDate,
     });
 
   const validatedCaseDeadlines = CaseDeadline.validateRawCollection(

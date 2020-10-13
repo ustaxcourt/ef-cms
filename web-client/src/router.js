@@ -1060,7 +1060,7 @@ const router = {
       '/reports/case-deadlines',
       ifHasAccess(() => {
         setPageTitle('Case deadlines');
-        return app.getSequence('gotoAllCaseDeadlinesSequence')();
+        return app.getSequence('gotoCaseDeadlineReportSequence')();
       }),
     );
 
