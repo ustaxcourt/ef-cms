@@ -627,7 +627,7 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be true if the eventCode is PSDE and the PSDE is not served', () => {
+    it('should be undefined if the eventCode is PSDE and the PSDE is not served', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
