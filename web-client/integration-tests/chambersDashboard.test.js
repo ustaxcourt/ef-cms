@@ -19,6 +19,6 @@ describe('Chambers dashboard', () => {
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesMessageToChambers(test);
 
-  loginAs(test, 'armensChambers@example.com');
+  loginAs(test, 'colvinsChambers@example.com');
   chambersUserViewsDashboard(test);
 });

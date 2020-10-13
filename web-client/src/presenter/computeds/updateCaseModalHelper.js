@@ -14,14 +14,16 @@ export const updateCaseModalHelper = (get, applicationContext) => {
     selectedStatus,
   );
 
-  const showCalendaredAlert = caseDetail.status === STATUS_TYPES.calendared;
-
+  const isCalendared = caseDetail.status === STATUS_TYPES.calendared;
+  const showCalendaredAlert = isCalendared;
+  const showCaseStatusDropdown = !isCalendared;
   const showNewStatusOption = caseDetail.status === STATUS_TYPES.new;
 
   return {
     caseStatusOptions: STATUS_TYPES_MANUAL_UPDATE,
     showAssociatedJudgeOptions,
     showCalendaredAlert,
+    showCaseStatusDropdown,
     showNewStatusOption,
   };
 };

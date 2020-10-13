@@ -37,7 +37,7 @@ faker.seed(faker.random.number());
 let token = null;
 const testData = {
   docketNumbers: [],
-  judgeName: 'Judge Cohen',
+  judgeName: 'Cohen',
   preferredTrialCity: 'Boise, Idaho',
   trialClerk: 'Test trialclerk3',
   trialSessionIds: [],
@@ -151,7 +151,7 @@ describe('Petitions Clerk', () => {
   });
 });
 
-describe('Judge', () => {
+describe.skip('Judge', () => {
   before(async () => {
     const result = await getUserToken(
       'jcohen@example.com',

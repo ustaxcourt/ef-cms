@@ -69,7 +69,7 @@ exports.updatePetitionerInformationInteractor = async ({
       city: contactSecondary.city,
       country: contactSecondary.country,
       countryType: contactSecondary.countryType,
-      inCareOf: contactPrimary.inCareOf,
+      inCareOf: contactSecondary.inCareOf,
       name: contactSecondary.name,
       phone: contactSecondary.phone,
       postalCode: contactSecondary.postalCode,
