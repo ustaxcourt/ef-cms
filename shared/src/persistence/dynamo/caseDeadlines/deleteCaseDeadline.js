@@ -14,37 +14,27 @@ exports.deleteCaseDeadline = async ({
   caseDeadlineId,
   docketNumber,
 }) => {
-  const results = [];
-
-  results.push(
-    await client.delete({
+  await Promise.all([
+    client.delete({
       applicationContext,
       key: {
         pk: `case-deadline|${caseDeadlineId}`,
         sk: `case-deadline|${caseDeadlineId}`,
       },
     }),
-  );
-
-  results.push(
-    await client.delete({
+    client.delete({
       applicationContext,
       key: {
         pk: `case|${docketNumber}`,
         sk: `case-deadline|${caseDeadlineId}`,
       },
     }),
-  );
-
-  results.push(
-    await client.delete({
+    client.delete({
       applicationContext,
       key: {
+        gsi1pk: `case-deadline-catalog|${caseDeadlineId}`,
         pk: 'case-deadline-catalog',
-        sk: `case-deadline|${caseDeadlineId}`,
       },
     }),
-  );
-
-  return results;
+  ]);
 };

@@ -10,12 +10,14 @@ const { put } = require('../../dynamodbClientService');
 exports.createCaseDeadlineCatalogRecord = async ({
   applicationContext,
   caseDeadlineId,
+  deadlineDate,
 }) => {
   await put({
     Item: {
       caseDeadlineId,
+      gsi1pk: `case-deadline-catalog|${caseDeadlineId}`,
       pk: 'case-deadline-catalog',
-      sk: `case-deadline|${caseDeadlineId}`,
+      sk: deadlineDate,
     },
     applicationContext,
   });
