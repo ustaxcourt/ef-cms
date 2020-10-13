@@ -4,20 +4,20 @@ import { setCorrespondenceIdToDisplayAction } from './setCorrespondenceIdToDispl
 
 describe('setCorrespondenceIdToDisplayAction', () => {
   it('should set state.correspondenceDocumentId to the value passed in props', async () => {
+    const mockCorrespondenceDocumentId = '123';
+
     const result = await runAction(setCorrespondenceIdToDisplayAction, {
       modules: {
         presenter,
       },
       props: {
-        correspondenceId: '123',
-        documentTitle: 'correspondence to delete',
+        correspondenceId: mockCorrespondenceDocumentId,
       },
       state: {},
     });
 
-    expect(result.state.modal.correspondenceToDelete).toMatchObject({
-      correspondenceId: '123',
-      documentTitle: 'correspondence to delete',
-    });
+    expect(result.state.correspondenceDocumentId).toBe(
+      mockCorrespondenceDocumentId,
+    );
   });
 });
