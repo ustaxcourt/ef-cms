@@ -15,7 +15,6 @@ const SectionWorkQueueTable = connect(
     workQueueLength,
   }) {
     const rowIndexes = range(0, workQueueLength);
-    console.log(' > table');
     return (
       <table
         aria-describedby="tab-work-queue"
@@ -145,7 +144,6 @@ SectionWorkQueueTable.Actions = connect(
     selectedWorkItemsLength,
     users,
   }) {
-    console.log(' > actions ');
     return (
       <div className="action-section">
         <span className="assign-work-item-count">
@@ -184,7 +182,6 @@ export const SectionWorkQueueInbox = connect(
     showSendToBar: state.workQueueHelper.showSendToBar,
   },
   function SectionWorkQueueInbox({ formattedWorkQueueLength, showSendToBar }) {
-    console.log(' > inbox');
     return (
       <React.Fragment>
         {showSendToBar && <SectionWorkQueueTable.Actions />}
