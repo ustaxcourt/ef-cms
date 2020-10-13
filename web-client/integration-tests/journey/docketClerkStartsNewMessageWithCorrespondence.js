@@ -17,8 +17,10 @@ export const docketClerkStartsNewMessageWithCorrespondence = test => {
     let helper = getHelper();
 
     expect(helper.hasCorrespondence).toEqual(true);
-    expect(helper.correspondence).toMatchObject([
-      expect.objectContaining(test.correspondenceDocument),
-    ]);
+    expect(helper.correspondence).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(test.correspondenceDocument),
+      ]),
+    );
   });
 };
