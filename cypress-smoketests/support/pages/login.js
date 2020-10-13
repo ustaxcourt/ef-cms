@@ -28,7 +28,7 @@ exports.disableUser = async ({ userId }) => {
 
 exports.confirmUser = async ({ email }) => {
   const userPoolId = await getUserPoolId();
-  const clientId = await getClientId({ userPoolId });
+  const clientId = await getClientId(userPoolId);
 
   const { Session } = await cognito
     .adminInitiateAuth({
