@@ -3,9 +3,7 @@ export const chambersUserAppliesSignatureToDraftDocument = test => {
     expect(test.getState('pdfForSigning.nameForSigning')).toEqual(
       'John O. Colvin',
     );
-    expect(test.getState('pdfForSigning.nameForSigningLine2')).toEqual(
-      'Special Trial Judge',
-    );
+    expect(test.getState('pdfForSigning.nameForSigningLine2')).toEqual('Judge');
 
     await test.runSequence('setPDFSignatureDataSequence', {
       isPdfAlreadySigned: false,

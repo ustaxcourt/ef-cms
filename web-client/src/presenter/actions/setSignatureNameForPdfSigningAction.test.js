@@ -43,20 +43,16 @@ describe('setSignatureNameForPdfSigningAction', () => {
   });
 
   it('sets the chamber judge for chamber users', async () => {
-    judgeUser.judgeFullName = 'Robert N. Colvin, Jr.';
-    judgeUser.judgeTitle = 'Special Trial Judge';
+    judgeUser.judgeFullName = 'John O. Colvin';
+    judgeUser.judgeTitle = 'Judge';
     user.section = 'colvinChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
       },
     });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual(
-      'Robert N. Colvin, Jr.',
-    );
-    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
-      'Special Trial Judge',
-    );
+    expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
+    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual('Judge');
   });
 
   it('sets special trial for special trial judge', async () => {
@@ -68,9 +64,7 @@ describe('setSignatureNameForPdfSigningAction', () => {
         presenter,
       },
     });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual(
-      'Robert N. Colvin, Jr.',
-    );
+    expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
     expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
       'Special Trial Judge',
     );
