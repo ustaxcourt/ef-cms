@@ -25,7 +25,7 @@ export const docketClerkAddsCorrespondence = (test, correspondenceTitle) =>
       ]),
     );
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    const displayedCorrespondenceId = test.getState('correspondenceDocumentId');
+    const displayedCorrespondenceId = test.getState('correspondenceId');
     const mostRecentCorrespondence = test
       .getState('caseDetail.correspondence')
       .slice(-1)

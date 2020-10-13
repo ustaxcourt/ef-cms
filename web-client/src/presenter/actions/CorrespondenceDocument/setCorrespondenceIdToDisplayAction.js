@@ -9,5 +9,5 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const setCorrespondenceIdToDisplayAction = async ({ props, store }) => {
-  store.set(state.correspondenceDocumentId, props.correspondenceId);
+  store.set(state.correspondenceId, props.correspondenceId);
 };
