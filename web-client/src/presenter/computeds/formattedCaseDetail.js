@@ -194,7 +194,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
     if (entry.documentTitle) {
       formattedResult.descriptionDisplay = entry.documentTitle;
-      if (entry.additionalInfo) {
+      if (entry.additionalInfo && entry.addToCoversheet) {
         formattedResult.descriptionDisplay += ` ${entry.additionalInfo}`;
       }
     }
