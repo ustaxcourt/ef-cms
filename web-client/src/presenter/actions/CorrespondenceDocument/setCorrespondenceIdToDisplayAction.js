@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
- * @param {Function} providers.store the cerebral store object
+ * @param {object} providers.store the cerebral store object
  * @returns {Promise} async action
  */
 export const setCorrespondenceIdToDisplayAction = async ({ props, store }) => {
