@@ -796,6 +796,8 @@ jobs:
       - run:
           name: 'Pa11y Smoke Tests'
           command: npm run test:pa11y:smoketests
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
 
   switch-colors:
     docker:
