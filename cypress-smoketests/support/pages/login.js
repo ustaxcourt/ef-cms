@@ -9,10 +9,52 @@ AWS.config.region = awsRegion;
 
 const ENV = Cypress.env('ENV');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 const cognito = new AWS.CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
+
+exports.disableUser = async ({ userId }) => {
+  const userPoolId = await getUserPoolId();
+
+  await cognito
+    .adminDisableUser({
+      UserPoolId: userPoolId,
+      Username: userId,
+    })
+    .promise();
+};
+
+exports.confirmUser = async ({ email }) => {
+  const userPoolId = await getUserPoolId();
+  const clientId = await getClientId({ userPoolId });
+
+  const { Session } = await cognito
+    .adminInitiateAuth({
+      AuthFlow: 'ADMIN_NO_SRP_AUTH',
+      AuthParameters: {
+        PASSWORD: DEFAULT_ACCOUNT_PASS,
+        USERNAME: email,
+      },
+      ClientId: clientId,
+      UserPoolId: userPoolId,
+    })
+    .promise();
+
+  await cognito
+    .adminRespondToAuthChallenge({
+      ChallengeName: 'NEW_PASSWORD_REQUIRED',
+      ChallengeResponses: {
+        NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
+        USERNAME: email,
+      },
+      ClientId: clientId,
+      Session,
+      UserPoolId: userPoolId,
+    })
+    .promise();
+};
 
 const getClientId = async userPoolId => {
   const results = await cognito

@@ -27,10 +27,16 @@ const {
   submitPetition,
 } = require('../../support/pages/create-electronic-petition');
 const {
+  confirmUser,
+  disableUser,
+  getRestApi,
+  getUserToken,
+  login,
+} = require('../../support/pages/login');
+const {
   goToCaseOverview,
   manuallyAddCaseToNewTrialSession,
 } = require('../../support/pages/case-detail');
-const { getUserToken, login } = require('../../support/pages/login');
 
 faker.seed(faker.random.number());
 
@@ -43,6 +49,7 @@ const testData = {
   trialSessionIds: [],
 };
 
+const USTC_ADMIN_PASS = Cypress.env('USTC_ADMIN_PASS');
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Petitioner', () => {
@@ -152,12 +159,55 @@ describe('Petitions Clerk', () => {
 });
 
 describe('Judge', () => {
+  let judgeUserId;
+
   before(async () => {
+    const judgeToCreate = {
+      email: 'judge.smoke@example.com',
+      judgeFullName: 'Big Smokey',
+      judgeTitle: 'Judge',
+      name: 'Smokey',
+      password: DEFAULT_ACCOUNT_PASS,
+      role: 'judge',
+      section: 'cohensChambers',
+    };
+
+    const results = await getUserToken(
+      'ustcadmin@example.com',
+      USTC_ADMIN_PASS,
+    );
+    token = results.AuthenticationResult.IdToken;
+
+    const restApi = await getRestApi();
+    let judgeUserId;
+
+    cy.request(
+      {
+        body: judgeToCreate,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        url: `${restApi}/users`,
+      },
+      ({ userId }) => {
+        // eslint-disable-next-line no-unused-vars
+        judgeUserId = userId;
+      },
+    );
+
+    await confirmUser({ email: 'judge.smoke@example.com' });
+
     const result = await getUserToken(
-      'jcohen@example.com',
+      'judge.smoke@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
+  });
+
+  after(async () => {
+    await disableUser({ userId: judgeUserId });
   });
 
   it('should be able to login', () => {
@@ -192,7 +242,7 @@ describe('Judge', () => {
 // This test is currently failing as the story involves importing current and legacy judges.
 // Currently, multiple entries with the same judge name are avilable in the judge dropdown and therefore
 // the 'correct' judge user is not being associated with the newly created trial session.
-describe.skip('Judge Chambers', () => {
+describe('Judge Chambers', () => {
   before(async () => {
     const result = await getUserToken(
       'cohensChambers1@example.com',
