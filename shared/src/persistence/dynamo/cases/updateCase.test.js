@@ -5,19 +5,39 @@ const {
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  PETITIONS_SECTION,
 } = require('../../../business/entities/EntityConstants');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCase } = require('./updateCase');
+jest.mock('../messages/updateMessage');
+const { updateMessage } = require('../messages/updateMessage');
 
 describe('updateCase', () => {
   const mockCorrespondenceId = applicationContext.getUniqueId();
-  let firstQueryStub;
-  let secondQueryStub;
+
+  let caseQueryMockData;
+  let messageQueryMockData;
+  let caseMappingsQueryMockData;
 
   let mockCase;
 
+  const mockMessage = {
+    createdAt: '2019-03-01T21:40:46.415Z',
+    docketNumber: '101-18',
+    from: 'Test Petitionsclerk',
+    fromSection: PETITIONS_SECTION,
+    fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
+    message: 'hey there',
+    messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+    parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
+    subject: 'hello',
+    to: 'Test Petitionsclerk2',
+    toSection: PETITIONS_SECTION,
+    toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
+  };
+
   beforeEach(() => {
-    firstQueryStub = [
+    caseQueryMockData = [
       {
         docketNumberSuffix: null,
         inProgress: false,
@@ -27,7 +47,16 @@ describe('updateCase', () => {
       },
     ];
 
-    secondQueryStub = [
+    messageQueryMockData = [
+      {
+        gsi1pk: `message|${mockMessage.parentMessageId}`,
+        pk: 'case|101-18',
+        sk: `message|${mockMessage.messageId}`,
+        ...mockMessage,
+      },
+    ];
+
+    caseMappingsQueryMockData = [
       {
         gsi1pk: 'user-case|101-18',
         leadDocketNumber: '123-20',
@@ -47,8 +76,8 @@ describe('updateCase', () => {
 
     applicationContext
       .getDocumentClient()
-      .query.mockReturnValueOnce(firstQueryStub)
-      .mockReturnValueOnce(secondQueryStub)
+      .query.mockReturnValueOnce(caseQueryMockData)
+      .mockReturnValueOnce(caseMappingsQueryMockData)
       .mockReturnValue([
         {
           sk: '123',
@@ -72,13 +101,13 @@ describe('updateCase', () => {
    * Adds mock private practitioners to test fixture
    */
   function addPrivatePractitioners() {
-    firstQueryStub.push({
+    caseQueryMockData.push({
       name: 'Guy Fieri',
       pk: 'case|101-18',
       sk: 'privatePractitioner|user-id-existing-123',
       userId: 'user-id-existing-123',
     });
-    firstQueryStub.push({
+    caseQueryMockData.push({
       name: 'Rachel Ray',
       pk: 'case|101-18',
       sk: 'privatePractitioner|user-id-existing-234',
@@ -90,7 +119,7 @@ describe('updateCase', () => {
    * Adds mock archived correspondences to test fixture
    */
   function addArchivedCorrespondences() {
-    firstQueryStub.push({
+    caseQueryMockData.push({
       archived: true,
       correspondenceId: 'archived-correspondence-id-existing-123',
       documentTitle: 'My Correspondence',
@@ -99,7 +128,7 @@ describe('updateCase', () => {
       sk: 'correspondence|archived-correspondence-id-existing-123',
       userId: 'user-id-existing-234',
     });
-    firstQueryStub.push({
+    caseQueryMockData.push({
       archived: true,
       correspondenceId: mockCorrespondenceId,
       documentTitle: 'My Correspondence',
@@ -114,12 +143,12 @@ describe('updateCase', () => {
    * Adds mock documents to test fixture
    */
   function addDocuments() {
-    firstQueryStub.push({
+    caseQueryMockData.push({
       ...MOCK_DOCUMENTS[0],
       pk: 'case|101-18',
       sk: 'docket-entry|a-document-id-123',
     });
-    firstQueryStub.push({
+    caseQueryMockData.push({
       ...MOCK_DOCUMENTS[1],
       pk: 'case|101-18',
       sk: 'docket-entry|a-document-id-456',
@@ -207,6 +236,30 @@ describe('updateCase', () => {
       ExpressionAttributeValues: {
         ':caseIsInProgress': true,
       },
+    });
+  });
+
+  it('updates fields on case messages', async () => {
+    await updateCase({
+      applicationContext,
+      caseToUpdate: {
+        associatedJudge: 'Judge Buch',
+        caseCaption: 'Johnny Joe Jacobson, Petitioner',
+        docketNumber: '101-18',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+        inProgress: true,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+        userId: 'petitioner',
+      },
+    });
+
+    expect(updateMessage).toHaveBeenCalled();
+    expect(updateMessage.mock.calls[0][0].message).toEqual({
+      caseStatus: 'Calendared',
+      caseTitle: 'Johnny Joe Jacobson',
+      docketNumberSuffix: 'W',
+      sk: '123',
     });
   });
 
@@ -307,13 +360,13 @@ describe('updateCase', () => {
     });
 
     it('updates a irsPractitioner on a case', async () => {
-      firstQueryStub.push({
+      caseQueryMockData.push({
         name: 'Guy Fieri',
         pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
-      firstQueryStub.push({
+      caseQueryMockData.push({
         name: 'Rachel Ray',
         pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-234',
@@ -351,13 +404,13 @@ describe('updateCase', () => {
     });
 
     it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
-      firstQueryStub.push({
+      caseQueryMockData.push({
         name: 'Guy Fieri',
         pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-123',
         userId: 'user-id-existing-123',
       });
-      firstQueryStub.push({
+      caseQueryMockData.push({
         name: 'Rachel Ray',
         pk: 'case|101-18',
         sk: 'irsPractitioner|user-id-existing-234',
@@ -741,9 +794,10 @@ describe('updateCase', () => {
     beforeEach(() => {
       applicationContext.getDocumentClient().query = jest
         .fn()
-        .mockResolvedValueOnce(firstQueryStub) // getting case
+        .mockResolvedValueOnce(caseQueryMockData) // getting case
         .mockResolvedValueOnce([]) // work item mappings
-        .mockResolvedValue(secondQueryStub);
+        .mockResolvedValueOnce([messageQueryMockData]) // work item mappings
+        .mockResolvedValue(caseMappingsQueryMockData);
 
       client.query = applicationContext.getDocumentClient().query;
     });
