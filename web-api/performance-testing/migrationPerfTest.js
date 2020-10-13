@@ -4,8 +4,6 @@ const migratedCase = require('./migratedCase');
 const { chunk, range } = require('lodash');
 const { CognitoIdentityServiceProvider } = require('aws-sdk');
 
-axiosRetry(axios, { retries: 20, retryDelay: axiosRetry.exponentialDelay });
-
 /*
 What are the OTHER bottlenecks?
  * tax court network
@@ -34,7 +32,7 @@ const migrationEndpoint = `https://api-${color}.${domain}/migrate/case`;
 let docketNumberCounter = 101;
 
 const getMigratedCase = () => {
-  const docketNumber = `${docketNumberCounter++}-77`;
+  const docketNumber = `${docketNumberCounter++}-80`;
   const docketNumberSuffix = 'L';
   const docketNumberWithSuffix = `${docketNumber}L`;
   return {
@@ -80,6 +78,18 @@ const MIGRATE_LABEL = `Migrating ${MIGRATE_CASE_COUNT} cases`;
       'Content-Type': 'application/json',
     },
     timeout: 30000,
+  });
+
+  axiosRetry(axiosInstance, {
+    retries: 20,
+    retryCondition: error => {
+      return (
+        axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+        error.code == 'ECONNABORTED'
+      );
+    },
+    retryDelay: axiosRetry.exponentialDelay,
+    shouldResetTimeout: true,
   });
 
   let migratedCasesCompleted = 0;
