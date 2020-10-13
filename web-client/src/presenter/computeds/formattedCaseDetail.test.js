@@ -1135,6 +1135,7 @@ describe('formattedCaseDetail', () => {
             eventCode: 'NTD',
             filingDate: '2019-06-21T17:29:13.120Z',
             isOnDocketRecord: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
           },
           {
             attachments: false,
@@ -1262,7 +1263,7 @@ describe('formattedCaseDetail', () => {
       ).toEqual(true);
     });
 
-    it('should not show the edit button if the docket entry has a system generated document', () => {
+    it('should show the edit button if the docket entry has a system generated document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1273,10 +1274,9 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-
       expect(
         result.formattedDocketEntries[4].showEditDocketRecordEntry,
-      ).toBeFalsy();
+      ).toBeTruthy();
     });
 
     it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
