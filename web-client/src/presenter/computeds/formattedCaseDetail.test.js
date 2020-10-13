@@ -176,6 +176,7 @@ describe('formattedCaseDetail', () => {
       supportingDocumentFreeText: 'Rachael',
     },
     {
+      addToCoversheet: true,
       additionalInfo: 'Additional Info',
       additionalInfo2: 'Additional Info2',
       category: 'Supporting Document',
