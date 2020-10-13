@@ -2,17 +2,18 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
-import { getAllCaseDeadlinesAction } from '../actions/CaseDeadline/getAllCaseDeadlinesAction';
+import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultCaseDeadlinesReportDatesAction } from '../actions/CaseDeadline/setDefaultCaseDeadlinesReportDatesAction';
 import { setDefaultDateOnCalendarAction } from '../actions/CaseDeadline/setDefaultDateOnCalendarAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoAllCaseDeadlines = [
+const gotoCaseDeadlineReport = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScreenMetadataAction,
@@ -21,16 +22,20 @@ const gotoAllCaseDeadlines = [
   parallel([
     fetchUserNotificationsSequence,
     getSetJudgesSequence,
-    [getAllCaseDeadlinesAction, setCaseDeadlinesAction],
+    [
+      setDefaultCaseDeadlinesReportDatesAction,
+      getCaseDeadlinesAction,
+      setCaseDeadlinesAction,
+    ],
   ]),
   setDefaultDateOnCalendarAction,
   setCurrentPageAction('CaseDeadlines'),
 ];
 
-export const gotoAllCaseDeadlinesSequence = [
+export const gotoCaseDeadlineReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAllCaseDeadlines,
+    isLoggedIn: gotoCaseDeadlineReport,
     unauthorized: [redirectToCognitoAction],
   },
 ];

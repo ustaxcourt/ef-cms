@@ -352,12 +352,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCaseDeadlines,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
-const {
-  getAllCaseDeadlinesInteractor,
-} = require('../../shared/src/business/useCases/getAllCaseDeadlinesInteractor');
-const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -376,11 +370,17 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getCaseDeadlinesByDateRange,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDateRange');
+const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
+const {
+  getCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/getCaseDeadlinesInteractor');
 const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
@@ -1197,11 +1197,11 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCaseDeadlines,
   getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
+  getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCasesByDocketNumbers,
@@ -1535,10 +1535,10 @@ module.exports = appContextUser => {
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
-        getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
+        getCaseDeadlinesInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,

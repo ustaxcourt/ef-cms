@@ -1,6 +1,6 @@
 export const petitionsClerkViewsDeadlineReport = test => {
   return it('Petitions clerk views deadline report', async () => {
-    await test.runSequence('gotoAllCaseDeadlinesSequence');
+    await test.runSequence('gotoCaseDeadlineReportSequence');
     expect(test.getState('currentPage')).toEqual('CaseDeadlines');
     expect(test.getState('allCaseDeadlines').length).toBeGreaterThan(0);
     expect(test.getState('judges').length).toBeGreaterThan(0);
