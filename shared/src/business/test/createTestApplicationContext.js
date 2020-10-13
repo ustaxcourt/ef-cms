@@ -203,12 +203,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+    createEndOfDayISO: jest
+      .fn()
+      .mockImplementation(DateHandler.createEndOfDayISO),
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
     createISODateStringFromObject: jest
       .fn()
       .mockImplementation(DateHandler.createISODateStringFromObject),
+    createStartOfDayISO: jest
+      .fn()
+      .mockImplementation(DateHandler.createStartOfDayISO),
     dateStringsCompared: jest
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),

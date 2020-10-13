@@ -11,8 +11,20 @@ export const setDefaultCaseDeadlinesReportDatesAction = async ({
   applicationContext,
   store,
 }) => {
-  const startOfToday = applicationContext.getUtilities().formatNow();
-  const endOfToday = applicationContext.getUtilities().formatNow();
-  store.set(state.screenMetadata.filterStartDateState, startOfToday);
-  store.set(state.screenMetadata.filterEndDateState, endOfToday);
+  const {
+    day,
+    month,
+    year,
+  } = applicationContext
+    .getUtilities()
+    .deconstructDate(applicationContext.getUtilities().createISODateString());
+  const currentDateStart = applicationContext
+    .getUtilities()
+    .createStartOfDayISO({ day, month, year });
+  const currentDateEnd = applicationContext
+    .getUtilities()
+    .createEndOfDayISO({ day, month, year });
+
+  store.set(state.screenMetadata.filterStartDateState, currentDateStart);
+  store.set(state.screenMetadata.filterEndDateState, currentDateEnd);
 };

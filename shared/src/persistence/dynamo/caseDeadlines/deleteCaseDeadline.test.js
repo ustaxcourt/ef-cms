@@ -4,7 +4,7 @@ const {
 const { deleteCaseDeadline } = require('./deleteCaseDeadline');
 
 describe('deleteCaseDeadline', () => {
-  it('deletes the case deadline', async () => {
+  it('deletes the case deadline records', async () => {
     await deleteCaseDeadline({
       applicationContext,
       caseDeadlineId: '123',
@@ -31,8 +31,8 @@ describe('deleteCaseDeadline', () => {
       applicationContext.getDocumentClient().delete.mock.calls[2][0],
     ).toMatchObject({
       Key: {
+        gsi1pk: 'case-deadline-catalog|123',
         pk: 'case-deadline-catalog',
-        sk: 'case-deadline|123',
       },
     });
   });
