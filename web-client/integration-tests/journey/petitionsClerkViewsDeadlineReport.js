@@ -10,6 +10,8 @@ export const petitionsClerkViewsDeadlineReport = test => {
       startDate: new Date('01/01/2025'),
     });
 
+    await test.runSequence('updateDateRangeForDeadlinesSequence');
+
     expect(test.getState('allCaseDeadlines').length).toBeGreaterThan(0);
 
     if (test.caseDeadline) {

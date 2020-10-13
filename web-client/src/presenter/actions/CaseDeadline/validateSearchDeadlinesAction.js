@@ -14,8 +14,8 @@ export const validateSearchDeadlinesAction = ({
   get,
   path,
 }) => {
-  const startDate = get(state.screenMetadata.filterStartDateState);
-  const endDate = get(state.screenMetadata.filterEndDateState);
+  const startDate = get(state.screenMetadata.filterStartDate);
+  const endDate = get(state.screenMetadata.filterEndDate);
 
   const errors = applicationContext
     .getUseCases()
