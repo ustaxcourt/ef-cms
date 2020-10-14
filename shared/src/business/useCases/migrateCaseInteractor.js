@@ -38,9 +38,7 @@ const createUserAccount = async ({
   } else {
     const userToAdd = new User({
       ...contactData,
-      contact: {
-        ...contactData,
-      },
+      contact: undefined, // petitioners should never have this defined
       userId: contactData.contactId, // this will be overwritten in createUser to the userId that cognito generates
     });
 
