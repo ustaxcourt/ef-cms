@@ -11,7 +11,7 @@ const {
  * @param {object} providers.caseDeadline the case deadline data
  */
 exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
-  const { caseDeadlineId } = caseDeadline;
+  const { caseDeadlineId, deadlineDate } = caseDeadline;
   await client.put({
     Item: {
       pk: `case-deadline|${caseDeadlineId}`,
@@ -32,5 +32,6 @@ exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
   await createCaseDeadlineCatalogRecord({
     applicationContext,
     caseDeadlineId,
+    deadlineDate,
   });
 };

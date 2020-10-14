@@ -696,6 +696,49 @@
     "status": "Closed"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-13T20:23:17.559Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "docketNumberWithSuffix": "125-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-13T20:23:17.556Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-13T20:23:17.558Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "processingStatus": "pending",
+      "createdAt": "2020-10-13T20:23:17.558Z",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "docketNumber": "125-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-13T20:23:17.559Z"
+  },
+  {
     "sk": "case|103-20",
     "pk": "case-by-docket-number|103-20"
   },
@@ -1290,6 +1333,7 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -1302,7 +1346,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketNumberWithSuffix": "103-19S",
@@ -1441,6 +1484,11 @@
   {
     "sk": "case|124-20",
     "docketNumber": "124-20",
+    "pk": "catalog"
+  },
+  {
+    "sk": "case|125-20",
+    "docketNumber": "125-20",
     "pk": "catalog"
   },
   {
@@ -2051,6 +2099,7 @@
   },
   {
     "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -2070,7 +2119,6 @@
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneename": "Colvin",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-19",
@@ -3320,6 +3368,7 @@
   },
   {
     "docketNumberSuffix": null,
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -3338,7 +3387,6 @@
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneename": "Colvin",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
@@ -3940,6 +3988,18 @@
     "docketNumber": "121-20",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-08-10T17:16:49.188Z"
+  },
+  {
+    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline-catalog|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "2019-08-22T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
+  },
+  {
+    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline-catalog|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "pk": "2019-08-22T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "0402cea0-727e-4155-8357-5df4fe30196c",
@@ -4566,6 +4626,49 @@
     "sentByUserId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-19",
     "updatedAt": "2019-03-27T21:53:00.297Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-13T20:23:17.559Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "docketNumberWithSuffix": "125-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-13T20:23:17.556Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-13T20:23:17.558Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "processingStatus": "pending",
+      "createdAt": "2020-10-13T20:23:17.558Z",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "section|petitions",
+    "docketNumber": "125-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-13T20:23:17.559Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -5314,6 +5417,7 @@
   },
   {
     "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -5333,7 +5437,6 @@
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneename": "Colvin",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "section-outbox|petitions",
     "docketNumber": "103-19",
@@ -6604,26 +6707,6 @@
     "email": "irsPractitioner3@example.com"
   },
   {
-    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "case-deadline-catalog"
-  },
-  {
     "sk": "case|110-19",
     "pk": "case-by-docket-number|110-19"
   },
@@ -6727,11 +6810,6 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-19",
     "status": "New"
-  },
-  {
-    "pk": "user-email|petitioner@example.com",
-    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -6910,6 +6988,17 @@
     "docketNumberWithSuffix": "123-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "123-20",
+    "status": "New"
+  },
+  {
+    "createdAt": "2020-10-13T20:23:17.556Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|125-20",
+    "sk": "case|125-20",
+    "docketNumberWithSuffix": "125-20W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "125-20",
     "status": "New"
   },
   {
@@ -7130,6 +7219,12 @@
     "docketNumber": "122-20",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-25T19:27:00.207Z"
+  },
+  {
+    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "sk": "case-deadline-catalog|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "pk": "2019-08-23T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
@@ -7923,77 +8018,6 @@
     "pk": "section|clerkofcourt"
   },
   {
-    "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "pk": "section|colvinsChambers"
-  },
-  {
-    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
-    "pk": "section|colvinsChambers"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "docketNumberSuffix": null,
-    "caseStatus": "New",
-    "caseIsInProgress": false,
-    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "caseTitle": "Denise Gould",
-    "section": "colvinsChambers",
-    "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Docketclerk",
-    "sentBySection": "docket",
-    "createdAt": "2019-08-08T14:23:51.565Z",
-    "highPriority": false,
-    "assigneename": "Colvin",
-    "entityName": "WorkItem",
-    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "docketEntry": {
-      "createdAt": "2019-07-12T17:11:26.955Z",
-      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-      "documentTitle": "Proposed Stipulated Decision",
-      "numberOfPages": 1,
-      "documentType": "Proposed Stipulated Decision",
-      "docketEntryId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
-    },
-    "pk": "section|colvinsChambers",
-    "docketNumber": "106-19",
-    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T14:23:51.565Z"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "docketNumberSuffix": "S",
-    "caseStatus": "New",
-    "caseIsInProgress": false,
-    "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "caseTitle": "Samson Workman",
-    "section": "colvinsChambers",
-    "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "createdAt": "2019-08-08T14:33:24.183Z",
-    "highPriority": false,
-    "assigneename": "Colvin",
-    "entityName": "WorkItem",
-    "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "docketEntry": {
-      "createdAt": "2019-03-01T22:54:05.993Z",
-      "numberOfPages": 1,
-      "filingDate": "2019-03-01T22:54:05.993Z",
-      "documentType": "Answer",
-      "docketEntryId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
-      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
-      "documentTitle": "Answer by Test Respondent"
-    },
-    "pk": "section|colvinsChambers",
-    "docketNumber": "103-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T14:33:24.183Z"
-  },
-  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Birmingham, Alabama",
@@ -8059,7 +8083,7 @@
   },
   {
     "sk": "docketNumberCounter-2020",
-    "id": 24,
+    "id": 25,
     "pk": "docketNumberCounter-2020"
   },
   {
@@ -8081,6 +8105,11 @@
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
   },
   {
+    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-email|petitioner@example.com"
+  },
+  {
     "judgeTitle": "Judge",
     "judgeFullName": "John O. Colvin",
     "role": "judge",
@@ -8095,6 +8124,7 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": null,
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -8107,7 +8137,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketEntry": {
@@ -8126,6 +8155,7 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -8138,7 +8168,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketEntry": {
@@ -9050,6 +9079,12 @@
     "pk": "case|124-20"
   },
   {
+    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline-catalog|ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "2019-08-25T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -9350,6 +9385,7 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -9362,7 +9398,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneename": "Colvin",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketNumberWithSuffix": "106-19",
@@ -9511,6 +9546,7 @@
   },
   {
     "docketNumberSuffix": null,
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -9529,7 +9565,6 @@
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneename": "Colvin",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
@@ -10493,6 +10528,178 @@
     "pk": "irsPractitioner|Stuart Morrison"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-10-13T20:23:17.557Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "4c3c60ac-7628-459b-bc11-1d43a26405b3",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2020-10-13T20:23:17.556Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|125-20",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "125-20W",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000125,
+    "archivedDocketEntries": [],
+    "noticeOfTrialDate": "2020-10-13T20:23:17.557Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|125-20",
+    "docketNumber": "125-20",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-10-13T20:23:17.556Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "b7e11e69-a529-4a97-977f-e5fd286838f2",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-10-13T20:23:17.559Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "125-20W",
+      "docketEntry": {
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-10-13T20:23:17.556Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "isFileAttached": true,
+        "receivedAt": "2020-10-13T20:23:17.558Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "processingStatus": "pending",
+        "createdAt": "2020-10-13T20:23:17.558Z",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+        "partySecondary": false,
+        "documentTitle": "Petition",
+        "privatePractitioners": []
+      },
+      "docketNumber": "125-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-10-13T20:23:17.559Z"
+    },
+    "receivedAt": "2020-10-13T20:23:17.558Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-10-13T20:23:17.558Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+    "sk": "docket-entry|39f9757c-6818-4b5c-8486-fd4fb61873a1",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|125-20"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-10-13T20:23:17.556Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2020-10-13T20:23:17.560Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "processingStatus": "complete",
+    "createdAt": "2020-10-13T20:23:17.559Z",
+    "entityName": "DocketEntry",
+    "docketEntryId": "907e9f21-fa58-474d-a2bf-22d06aa0b582",
+    "sk": "docket-entry|907e9f21-fa58-474d-a2bf-22d06aa0b582",
+    "pk": "case|125-20",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-10-13T20:23:17.556Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "isFileAttached": true,
+    "receivedAt": "2020-10-13T20:23:17.560Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": false,
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "createdAt": "2020-10-13T20:23:17.560Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
+    "sk": "docket-entry|c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
+    "partySecondary": false,
+    "pk": "case|125-20",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": []
+  },
+  {
+    "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "pk": "case|125-20"
+  },
+  {
     "role": "admissionsclerk",
     "entityName": "User",
     "sk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
@@ -10768,6 +10975,77 @@
     "pk": "user|dabbad05-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
     "email": "judgeGustafson@example.com"
+  },
+  {
+    "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
+    "pk": "section|colvinsChambers"
+  },
+  {
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "pk": "section|colvinsChambers"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "docketNumberSuffix": null,
+    "assigneename": "Colvin",
+    "caseStatus": "New",
+    "caseIsInProgress": false,
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "caseTitle": "Denise Gould",
+    "section": "colvinsChambers",
+    "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "createdAt": "2019-08-08T14:23:51.565Z",
+    "highPriority": false,
+    "entityName": "WorkItem",
+    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "docketEntry": {
+      "createdAt": "2019-07-12T17:11:26.955Z",
+      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+      "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
+      "documentType": "Proposed Stipulated Decision",
+      "docketEntryId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
+    },
+    "pk": "section|colvinsChambers",
+    "docketNumber": "106-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-08T14:23:51.565Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
+    "caseStatus": "New",
+    "caseIsInProgress": false,
+    "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
+    "caseTitle": "Samson Workman",
+    "section": "colvinsChambers",
+    "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "createdAt": "2019-08-08T14:33:24.183Z",
+    "highPriority": false,
+    "entityName": "WorkItem",
+    "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
+    "docketEntry": {
+      "createdAt": "2019-03-01T22:54:05.993Z",
+      "numberOfPages": 1,
+      "filingDate": "2019-03-01T22:54:05.993Z",
+      "documentType": "Answer",
+      "docketEntryId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+      "documentTitle": "Answer by Test Respondent"
+    },
+    "pk": "section|colvinsChambers",
+    "docketNumber": "103-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-08T14:33:24.183Z"
   },
   {
     "role": "floater",
