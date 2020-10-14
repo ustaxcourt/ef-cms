@@ -29,10 +29,13 @@ const domain = process.env.EFCMS_DOMAIN || 'exp3.ustc-case-mgmt.flexion.us';
 
 const migrationEndpoint = `https://api-${color}.${domain}/migrate/case`;
 
+let MIGRATE_CASE_COUNT,
+  MIGRATE_CASE_YEAR = '82';
+
 let docketNumberCounter = 101;
 
 const getMigratedCase = () => {
-  const docketNumber = `${docketNumberCounter++}-82`;
+  const docketNumber = `${docketNumberCounter++}-${MIGRATE_CASE_YEAR}`;
   const docketNumberSuffix = 'L';
   const docketNumberWithSuffix = `${docketNumber}L`;
 
@@ -49,17 +52,23 @@ const getMigratedCase = () => {
     docketNumberWithSuffix,
   };
 
+  if (process.env.DEBUG) {
+    console.log(JSON.stringify(ret, null, 2));
+  }
+
   return ret;
 };
 
-let MIGRATE_CASE_COUNT;
 try {
   MIGRATE_CASE_COUNT = parseInt(process.argv[2]);
-  if (isNaN(MIGRATE_CASE_COUNT)) {
+  if (process.argv[3]) {
+    MIGRATE_CASE_YEAR = parseInt(process.argv[3]);
+  }
+  if (isNaN(MIGRATE_CASE_COUNT) || isNaN(MIGRATE_CASE_YEAR)) {
     throw new Error('must provide a number');
   }
 } catch (e) {
-  console.log('Please provide a number of cases to be migrated.');
+  console.log('Usage: > node migrationPerfTest.js <quantity> (<year>)');
   process.exit(0);
 }
 
