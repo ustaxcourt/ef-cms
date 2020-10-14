@@ -3,6 +3,7 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_SECTION,
@@ -449,7 +450,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
-  it('updates the automaticBlocked status of a case', async () => {
+  it('updates automaticBlocked on a case and all associated case trial sort mappings', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
     const { caseDetail } = await completeDocketEntryQCInteractor({
@@ -469,6 +470,13 @@ describe('completeDocketEntryQCInteractor', () => {
       },
     });
 
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
     expect(caseDetail.automaticBlocked).toBeTruthy();
   });
 });
