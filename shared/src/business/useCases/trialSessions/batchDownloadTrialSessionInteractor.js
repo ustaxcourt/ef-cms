@@ -70,7 +70,7 @@ const batchDownloadTrialSessionInteractor = async ({
 
   sessionCases.forEach(caseToBatch => {
     const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
-      d => d.isOnDocketRecord,
+      d => d.isOnDocketRecord && d.isFileAttached,
     );
 
     const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
@@ -148,7 +148,9 @@ const batchDownloadTrialSessionInteractor = async ({
     extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
   };
 
-  await Promise.all(sessionCases.map(generateDocumentAndDocketRecordForCase));
+  for (const sessionCase of sessionCases) {
+    await generateDocumentAndDocketRecordForCase(sessionCase);
+  }
 
   const onEntry = entryData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({

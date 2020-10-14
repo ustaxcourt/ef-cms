@@ -50,6 +50,7 @@ const RespondentInformation = connect(
                 <address aria-labelledby="respondent-label">
                   {respondent.name && (
                     <AddressDisplay
+                      showEmail
                       contact={{
                         ...respondent,
                         ...respondent.contact,

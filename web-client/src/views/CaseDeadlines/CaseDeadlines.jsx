@@ -89,8 +89,8 @@ export const CaseDeadlines = connect(
                   </div>
                   <div className="grid-col-3">
                     <BindedSelect
-                      ariaDescribedBy="case-deadlines-tab filterHeading"
-                      ariaLabel="judge"
+                      aria-describedby="case-deadlines-tab filterHeading"
+                      aria-label="judge"
                       bind="screenMetadata.caseDeadlinesFilter.judge"
                       className="select-left"
                       id="judgeFilter"

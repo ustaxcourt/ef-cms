@@ -490,7 +490,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
   });
 
-  it('should set showNewTabLink to true if user is an internal user ', () => {
+  it('should set showNewTabLink to true if user is an internal user', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',

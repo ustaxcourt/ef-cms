@@ -228,6 +228,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
+  loginAs(test, 'testFloater@example.com');
+  it('allows access to the floater user to view the case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+  });
+
   loginAs(test, 'docketclerk@example.com');
   it('updates the fee payment status on case detail and verifies minute entry on the docket record', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -287,7 +294,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: test.docketNumber,
       eventCode: 'HEAR',
       test,
-      trialLocation: 'Brimingham, AL',
+      trialLocation: 'Birmingham, AL',
     });
 
     const {

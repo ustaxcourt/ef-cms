@@ -32,7 +32,7 @@ export const PublicSearch = connect(
   }) {
     return (
       <>
-        <BigHeader text="Welcome to the U.S Tax Court’s Case Management System" />
+        <BigHeader text="Welcome to the U.S. Tax Court’s Case Management System" />
 
         <section className="usa-section grid-container advanced-search">
           <SuccessNotification />

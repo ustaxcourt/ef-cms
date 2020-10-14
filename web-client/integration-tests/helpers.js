@@ -54,6 +54,7 @@ Object.assign(applicationContext, {
     });
   },
   getEnvironment: () => ({
+    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerInterface,
@@ -61,6 +62,10 @@ Object.assign(applicationContext, {
 
 export const fakeFile = (() => {
   return getFakeFile();
+})();
+
+export const fakeFile1 = (() => {
+  return getFakeFile(false, true);
 })();
 
 export const getFormattedDocumentQCMyInbox = async test => {
@@ -194,10 +199,28 @@ export const createCourtIssuedDocketEntry = async ({
   await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getInboxCount = test => {
+export const getIndividualInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
-  }).inboxCount;
+  }).individualInboxCount;
+};
+
+export const getSectionInboxCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInboxCount;
+};
+
+export const getSectionInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).sectionInProgressCount;
+};
+
+export const getIndividualInProgressCount = test => {
+  return runCompute(workQueueHelper, {
+    state: test.getState(),
+  }).individualInProgressCount;
 };
 
 export const findWorkItemByDocketNumber = (queue, docketNumber) => {

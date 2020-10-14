@@ -220,9 +220,13 @@ export const MessageDetail = connect(
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewerDocumentToDisplay === attachment && 'active',
+                          viewerDocumentToDisplay.documentId ===
+                            attachment.documentId && 'active',
                         )}
-                        isActive={viewerDocumentToDisplay === attachment}
+                        isActive={
+                          viewerDocumentToDisplay.documentId ===
+                          attachment.documentId
+                        }
                         key={idx}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({

@@ -50,9 +50,10 @@ export const petitionsClerkCreatesNewCase = (
       key: 'receivedAtDay',
       value: '01',
     });
+    const receivedAtYear = '2001';
     await test.runSequence('updateFormValueSequence', {
       key: 'receivedAtYear',
-      value: '2001',
+      value: receivedAtYear,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -200,6 +201,11 @@ export const petitionsClerkCreatesNewCase = (
     await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    const docketNumber = test.getState('caseDetail.docketNumber');
+    const receivedDocketNumberYear = docketNumber.slice(-2);
+    const expectedDocketNumberYear = receivedAtYear.slice(-2);
+    expect(receivedDocketNumberYear).toBe(expectedDocketNumberYear);
 
     if (shouldServe) {
       await test.runSequence('serveCaseToIrsSequence');

@@ -15,8 +15,10 @@ describe('formattedCaseDetail', () => {
   let globalUser;
   const {
     DOCUMENT_RELATIONSHIPS,
+    JUDGES_CHAMBERS,
     OBJECTIONS_OPTIONS_MAP,
     STATUS_TYPES,
+    TRIAL_CLERKS_SECTION,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -59,15 +61,29 @@ describe('formattedCaseDetail', () => {
 
   const petitionsClerkUser = {
     role: USER_ROLES.petitionsClerk,
-    userId: '123',
+    userId: '111',
   };
   const docketClerkUser = {
     role: USER_ROLES.docketClerk,
-    userId: '234',
+    userId: '222',
   };
   const petitionerUser = {
     role: USER_ROLES.petitioner,
-    userId: '456',
+    userId: '333',
+  };
+  const judgeUser = {
+    role: USER_ROLES.judge,
+    userId: '444',
+  };
+  const chambersUser = {
+    role: USER_ROLES.chambers,
+    section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+    userId: '555',
+  };
+  const trialClerkUser = {
+    role: USER_ROLES.trialClerk,
+    section: TRIAL_CLERKS_SECTION,
+    userId: '777',
   };
 
   const simpleDocketEntries = [
@@ -91,7 +107,6 @@ describe('formattedCaseDetail', () => {
       documentTitle: 'Amended Petition',
       documentType: 'Amended Petition',
       eventCode: 'PAP',
-      exhibits: false,
       filingDate: '2019-04-19T17:29:13.120Z',
       hasSupportingDocuments: true,
       isFileAttached: true,
@@ -115,7 +130,6 @@ describe('formattedCaseDetail', () => {
         'First Amended Unsworn Declaration under Penalty of Perjury in Support',
       documentType: 'Amended',
       eventCode: 'ADED',
-      exhibits: true,
       filingDate: '2019-04-19T17:31:09.515Z',
       hasSupportingDocuments: true,
       isFileAttached: true,
@@ -145,7 +159,6 @@ describe('formattedCaseDetail', () => {
         'Motion for Leave to File Computation for Entry of Decision',
       documentType: 'Motion for Leave to File',
       eventCode: 'M115',
-      exhibits: true,
       filingDate: '2019-04-19T17:39:10.476Z',
       hasSecondarySupportingDocuments: false,
       hasSupportingDocuments: true,
@@ -163,6 +176,7 @@ describe('formattedCaseDetail', () => {
       supportingDocumentFreeText: 'Rachael',
     },
     {
+      addToCoversheet: true,
       additionalInfo: 'Additional Info',
       additionalInfo2: 'Additional Info2',
       category: 'Supporting Document',
@@ -288,13 +302,12 @@ describe('formattedCaseDetail', () => {
       {
         descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        filingsAndProceedings: '(Exhibit(s))',
+        filingsAndProceedings: '',
       },
       {
         descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
-        filingsAndProceedings:
-          '(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        filingsAndProceedings: '(C/S 06/07/18) (Attachment(s)) (Objection)',
       },
       {
         descriptionDisplay:
@@ -320,7 +333,7 @@ describe('formattedCaseDetail', () => {
       {
         descriptionDisplay:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
+        filingsAndProceedingsWithAdditionalInfo: '',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
@@ -331,7 +344,7 @@ describe('formattedCaseDetail', () => {
         descriptionDisplay:
           'Motion for Leave to File Computation for Entry of Decision',
         filingsAndProceedingsWithAdditionalInfo:
-          ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+          ' (C/S 06/07/18) (Attachment(s)) (Objection)',
         isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
@@ -1123,6 +1136,7 @@ describe('formattedCaseDetail', () => {
             eventCode: 'NTD',
             filingDate: '2019-06-21T17:29:13.120Z',
             isOnDocketRecord: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
           },
           {
             attachments: false,
@@ -1250,7 +1264,7 @@ describe('formattedCaseDetail', () => {
       ).toEqual(true);
     });
 
-    it('should not show the edit button if the docket entry has a system generated document', () => {
+    it('should show the edit button if the docket entry has a system generated document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1261,10 +1275,9 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
-
       expect(
         result.formattedDocketEntries[4].showEditDocketRecordEntry,
-      ).toBeFalsy();
+      ).toBeTruthy();
     });
 
     it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
@@ -1857,6 +1870,36 @@ describe('formattedCaseDetail', () => {
         },
         output: false,
       },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isInitialDocument: false,
+          isServed: true,
+          isStipDecision: true,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: false,
+          userHasNoAccessToDocument: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isInitialDocument: false,
+          isServed: true,
+          isStipDecision: true,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: true,
+          userHasNoAccessToDocument: false,
+        },
+        output: true,
+      },
     ];
 
     tests.forEach(({ inputs, output }) => {
@@ -2008,6 +2051,726 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result).toMatchObject([{ createdAtFormatted: '02/02/20' }]);
+    });
+  });
+
+  describe('formattedDocketEntriesOnDocketRecord and formattedPendingDocketEntriesOnDocketRecord', () => {
+    it('should return formatted docket entries that are on the docket record, and in the pending list', () => {
+      const caseDetail = {
+        archivedCorrespondences: [],
+        archivedDocketEntries: [],
+        associatedJudge: 'Chief Judge',
+        automaticBlocked: true,
+        automaticBlockedDate: '2020-09-18T17:38:32.439Z',
+        automaticBlockedReason: 'Pending Item',
+        caseCaption: 'Mona Schultz, Petitioner',
+        caseType: 'CDP (Lien/Levy)',
+        contactPrimary: {
+          address1: '734 Cowley Parkway',
+          address2: 'Cum aut velit volupt',
+          address3: 'Et sunt veritatis ei',
+          city: 'Et id aut est velit',
+          contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          isAddressSealed: false,
+          name: 'Mona Schultz',
+          phone: '+1 (884) 358-9729',
+          postalCode: '77546',
+          sealedAndUnavailable: false,
+          serviceIndicator: 'Electronic',
+          state: 'CT',
+        },
+        correspondence: [],
+        createdAt: '2020-09-18T17:38:31.772Z',
+        docketEntries: [
+          {
+            createdAt: '2020-09-18T17:38:31.774Z',
+            docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            entityName: 'DocketEntry',
+            eventCode: 'P',
+            filedBy: 'Petr. Mona Schultz',
+            filingDate: '2020-09-18T17:38:31.772Z',
+            index: 1,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 11,
+            partyPrimary: true,
+            partySecondary: false,
+            pending: false,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:31.775Z',
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            workItem: {
+              assigneeId: null,
+              assigneeName: null,
+              associatedJudge: 'Chief Judge',
+              caseStatus: 'New',
+              caseTitle: 'Mona Schultz',
+              createdAt: '2020-09-18T17:38:31.775Z',
+              docketEntry: {
+                createdAt: '2020-09-18T17:38:31.774Z',
+                docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+                documentTitle: 'Petition',
+                documentType: 'Petition',
+                entityName: 'DocketEntry',
+                eventCode: 'P',
+                filedBy: 'Petr. Mona Schultz',
+                filingDate: '2020-09-18T17:38:31.772Z',
+                isDraft: false,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+                partyPrimary: true,
+                partySecondary: false,
+                pending: false,
+                privatePractitioners: [],
+                processingStatus: 'pending',
+                receivedAt: '2020-09-18T17:38:31.775Z',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              docketNumber: '169-20',
+              docketNumberWithSuffix: '169-20L',
+              entityName: 'WorkItem',
+              isInitializeCase: true,
+              section: 'petitions',
+              sentBy: 'Test Petitioner',
+              sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              updatedAt: '2020-09-18T17:38:31.775Z',
+              workItemId: 'e4c84638-0401-4061-8eff-c6cac530ae51',
+            },
+          },
+          {
+            createdAt: '2020-09-18T17:38:31.775Z',
+            docketEntryId: '087eb3f6-b164-40f3-980f-835da7292097',
+            documentTitle: 'Request for Place of Trial at Seattle, Washington',
+            documentType: 'Request for Place of Trial',
+            entityName: 'DocketEntry',
+            eventCode: 'RQT',
+            filingDate: '2020-09-18T17:38:31.772Z',
+            index: 2,
+            isDraft: false,
+            isFileAttached: false,
+            isMinuteEntry: true,
+            isOnDocketRecord: true,
+            isStricken: false,
+            pending: false,
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:31.776Z',
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+          {
+            createdAt: '2020-09-18T17:38:31.776Z',
+            docketEntryId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
+            documentTitle: 'Statement of Taxpayer Identification',
+            documentType: 'Statement of Taxpayer Identification',
+            entityName: 'DocketEntry',
+            eventCode: 'STIN',
+            filedBy: 'Petr. Mona Schultz',
+            filingDate: '2020-09-18T17:38:31.772Z',
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: false,
+            isStricken: false,
+            numberOfPages: 11,
+            partyPrimary: true,
+            partySecondary: false,
+            pending: false,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:31.776Z',
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            certificateOfServiceDate: null,
+            createdAt: '2020-09-18T17:38:32.417Z',
+            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+            docketNumber: '169-20',
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            draftOrderState: null,
+            entityName: 'DocketEntry',
+            eventCode: 'PSDE',
+            filedBy: 'Resp.',
+            filingDate: '2020-09-18T17:38:32.418Z',
+            hasSupportingDocuments: false,
+            index: 3,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 2,
+            partyIrsPractitioner: true,
+            pending: true,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:32.418Z',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+            servedAt: '2020-09-18T17:38:32.418Z',
+            servedParties: [
+              { email: 'petitioner@example.com', name: 'Mona Schultz' },
+            ],
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            workItem: {
+              assigneeId: null,
+              assigneeName: null,
+              associatedJudge: 'Chief Judge',
+              caseStatus: 'New',
+              caseTitle: 'Mona Schultz',
+              createdAt: '2020-09-18T17:38:32.418Z',
+              docketEntry: {
+                attachments: false,
+                certificateOfService: false,
+                certificateOfServiceDate: null,
+                createdAt: '2020-09-18T17:38:32.417Z',
+                docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+                docketNumber: '169-20',
+                documentTitle: 'Proposed Stipulated Decision',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'DocketEntry',
+                eventCode: 'PSDE',
+                filedBy: 'Resp.',
+                filingDate: '2020-09-18T17:38:32.418Z',
+                hasSupportingDocuments: false,
+                isDraft: false,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+                partyIrsPractitioner: true,
+                pending: true,
+                privatePractitioners: [],
+                processingStatus: 'pending',
+                receivedAt: '2020-09-18T17:38:32.418Z',
+                relationship: 'primaryDocument',
+                scenario: 'Standard',
+                userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              docketNumber: '169-20',
+              docketNumberWithSuffix: '169-20L',
+              entityName: 'WorkItem',
+              highPriority: false,
+              section: 'docket',
+              sentBy: 'Test IRS Practitioner',
+              sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+              updatedAt: '2020-09-18T17:38:32.418Z',
+              workItemId: '5f4eb5ac-099d-4e14-8b26-dfbf1828f0d7',
+            },
+          },
+        ],
+        docketNumber: '169-20',
+        docketNumberSuffix: 'L',
+        docketNumberWithSuffix: '169-20L',
+        entityName: 'Case',
+        filingType: 'Myself',
+        hasPendingItems: true,
+        initialCaption: 'Mona Schultz, Petitioner',
+        initialDocketNumberSuffix: 'L',
+        irsPractitioners: [
+          {
+            barNumber: 'RT6789',
+            contact: {
+              address1: '234 Main St',
+              address2: 'Apartment 4',
+              address3: 'Under the stairs',
+              city: 'Chicago',
+              countryType: 'domestic',
+              phone: '+1 (555) 555-5555',
+              postalCode: '61234',
+              state: 'IL',
+            },
+            email: 'irsPractitioner@example.com',
+            entityName: 'IrsPractitioner',
+            name: 'Test IRS Practitioner',
+            role: 'irsPractitioner',
+            serviceIndicator: 'Electronic',
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+        ],
+        isPaper: false,
+        isSealed: false,
+        noticeOfAttachments: false,
+        noticeOfTrialDate: '2020-09-18T17:38:31.772Z',
+        orderDesignatingPlaceOfTrial: false,
+        orderForAmendedPetition: false,
+        orderForAmendedPetitionAndFilingFee: false,
+        orderForFilingFee: true,
+        orderForOds: false,
+        orderForRatification: false,
+        orderToShowCause: false,
+        otherFilers: [],
+        otherPetitioners: [],
+        partyType: 'Petitioner',
+        petitionPaymentStatus: 'Not Paid',
+        preferredTrialCity: 'Seattle, Washington',
+        privatePractitioners: [],
+        procedureType: 'Regular',
+        qcCompleteForTrial: {},
+        receivedAt: '2020-09-18T17:38:31.772Z',
+        sortableDocketNumber: 20000169,
+        statistics: [],
+        status: 'New',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          isOnDocketRecord: true,
+        },
+        {
+          isOnDocketRecord: true,
+        },
+        {
+          isOnDocketRecord: true,
+        },
+      ]);
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          isOnDocketRecord: true,
+          pending: true,
+        },
+      ]);
+    });
+  });
+
+  describe('userIsAssignedToSession', () => {
+    const caseDetail = {
+      archivedCorrespondences: [],
+      archivedDocketEntries: [],
+      associatedJudge: 'Chief Judge',
+      automaticBlocked: true,
+      automaticBlockedDate: '2020-09-18T17:38:32.439Z',
+      automaticBlockedReason: 'Pending Item',
+      caseCaption: 'Mona Schultz, Petitioner',
+      caseType: 'CDP (Lien/Levy)',
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        address2: 'Cum aut velit volupt',
+        address3: 'Et sunt veritatis ei',
+        city: 'Et id aut est velit',
+        contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+        countryType: 'domestic',
+        email: 'petitioner@example.com',
+        isAddressSealed: false,
+        name: 'Mona Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        sealedAndUnavailable: false,
+        serviceIndicator: 'Electronic',
+        state: 'CT',
+      },
+      correspondence: [],
+      createdAt: '2020-09-18T17:38:31.772Z',
+      docketEntries: [
+        {
+          createdAt: '2020-09-18T17:38:31.774Z',
+          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          documentTitle: 'Petition',
+          documentType: 'Petition',
+          entityName: 'DocketEntry',
+          eventCode: 'P',
+          filedBy: 'Petr. Mona Schultz',
+          filingDate: '2020-09-18T17:38:31.772Z',
+          index: 1,
+          isDraft: false,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isStricken: false,
+          numberOfPages: 11,
+          partyPrimary: true,
+          partySecondary: false,
+          pending: false,
+          privatePractitioners: [],
+          processingStatus: 'complete',
+          receivedAt: '2020-09-18T17:38:31.775Z',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItem: {
+            assigneeId: null,
+            assigneeName: null,
+            associatedJudge: 'Chief Judge',
+            caseStatus: 'New',
+            caseTitle: 'Mona Schultz',
+            createdAt: '2020-09-18T17:38:31.775Z',
+            docketEntry: {
+              createdAt: '2020-09-18T17:38:31.774Z',
+              docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              entityName: 'DocketEntry',
+              eventCode: 'P',
+              filedBy: 'Petr. Mona Schultz',
+              filingDate: '2020-09-18T17:38:31.772Z',
+              isDraft: false,
+              isFileAttached: true,
+              isMinuteEntry: false,
+              isOnDocketRecord: true,
+              isStricken: false,
+              partyPrimary: true,
+              partySecondary: false,
+              pending: false,
+              privatePractitioners: [],
+              processingStatus: 'pending',
+              receivedAt: '2020-09-18T17:38:31.775Z',
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+            docketNumber: '169-20',
+            docketNumberWithSuffix: '169-20L',
+            entityName: 'WorkItem',
+            isInitializeCase: true,
+            section: 'petitions',
+            sentBy: 'Test Petitioner',
+            sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            updatedAt: '2020-09-18T17:38:31.775Z',
+            workItemId: 'e4c84638-0401-4061-8eff-c6cac530ae51',
+          },
+        },
+        {
+          createdAt: '2020-09-18T17:38:31.775Z',
+          docketEntryId: '087eb3f6-b164-40f3-980f-835da7292097',
+          documentTitle: 'Request for Place of Trial at Seattle, Washington',
+          documentType: 'Request for Place of Trial',
+          entityName: 'DocketEntry',
+          eventCode: 'RQT',
+          filingDate: '2020-09-18T17:38:31.772Z',
+          index: 2,
+          isDraft: false,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          isStricken: false,
+          pending: false,
+          processingStatus: 'complete',
+          receivedAt: '2020-09-18T17:38:31.776Z',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        {
+          createdAt: '2020-09-18T17:38:31.776Z',
+          docketEntryId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
+          documentTitle: 'Statement of Taxpayer Identification',
+          documentType: 'Statement of Taxpayer Identification',
+          entityName: 'DocketEntry',
+          eventCode: 'STIN',
+          filedBy: 'Petr. Mona Schultz',
+          filingDate: '2020-09-18T17:38:31.772Z',
+          isDraft: false,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: false,
+          isStricken: false,
+          numberOfPages: 11,
+          partyPrimary: true,
+          partySecondary: false,
+          pending: false,
+          privatePractitioners: [],
+          processingStatus: 'complete',
+          receivedAt: '2020-09-18T17:38:31.776Z',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          createdAt: '2020-09-18T17:38:32.417Z',
+          docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+          docketNumber: '169-20',
+          documentTitle: 'Proposed Stipulated Decision',
+          documentType: 'Proposed Stipulated Decision',
+          draftOrderState: null,
+          entityName: 'DocketEntry',
+          eventCode: 'PSDE',
+          filedBy: 'Resp.',
+          filingDate: '2020-09-18T17:38:32.418Z',
+          hasSupportingDocuments: false,
+          index: 3,
+          isDraft: false,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isStricken: false,
+          numberOfPages: 2,
+          partyIrsPractitioner: true,
+          pending: true,
+          privatePractitioners: [],
+          processingStatus: 'complete',
+          receivedAt: '2020-09-18T17:38:32.418Z',
+          relationship: 'primaryDocument',
+          scenario: 'Standard',
+          servedAt: '2020-09-18T17:38:32.418Z',
+          servedParties: [
+            { email: 'petitioner@example.com', name: 'Mona Schultz' },
+          ],
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          workItem: {
+            assigneeId: null,
+            assigneeName: null,
+            associatedJudge: 'Chief Judge',
+            caseStatus: 'New',
+            caseTitle: 'Mona Schultz',
+            createdAt: '2020-09-18T17:38:32.418Z',
+            docketEntry: {
+              attachments: false,
+              certificateOfService: false,
+              certificateOfServiceDate: null,
+              createdAt: '2020-09-18T17:38:32.417Z',
+              docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+              docketNumber: '169-20',
+              documentTitle: 'Proposed Stipulated Decision',
+              documentType: 'Proposed Stipulated Decision',
+              entityName: 'DocketEntry',
+              eventCode: 'PSDE',
+              filedBy: 'Resp.',
+              filingDate: '2020-09-18T17:38:32.418Z',
+              hasSupportingDocuments: false,
+              isDraft: false,
+              isFileAttached: true,
+              isMinuteEntry: false,
+              isOnDocketRecord: true,
+              isStricken: false,
+              partyIrsPractitioner: true,
+              pending: true,
+              privatePractitioners: [],
+              processingStatus: 'pending',
+              receivedAt: '2020-09-18T17:38:32.418Z',
+              relationship: 'primaryDocument',
+              scenario: 'Standard',
+              userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+            docketNumber: '169-20',
+            docketNumberWithSuffix: '169-20L',
+            entityName: 'WorkItem',
+            highPriority: false,
+            section: 'docket',
+            sentBy: 'Test IRS Practitioner',
+            sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+            updatedAt: '2020-09-18T17:38:32.418Z',
+            workItemId: '5f4eb5ac-099d-4e14-8b26-dfbf1828f0d7',
+          },
+        },
+      ],
+      docketNumber: '169-20',
+      docketNumberSuffix: 'L',
+      docketNumberWithSuffix: '169-20L',
+      entityName: 'Case',
+      filingType: 'Myself',
+      hasPendingItems: true,
+      initialCaption: 'Mona Schultz, Petitioner',
+      initialDocketNumberSuffix: 'L',
+      irsPractitioners: [
+        {
+          barNumber: 'RT6789',
+          contact: {
+            address1: '234 Main St',
+            address2: 'Apartment 4',
+            address3: 'Under the stairs',
+            city: 'Chicago',
+            countryType: 'domestic',
+            phone: '+1 (555) 555-5555',
+            postalCode: '61234',
+            state: 'IL',
+          },
+          email: 'irsPractitioner@example.com',
+          entityName: 'IrsPractitioner',
+          name: 'Test IRS Practitioner',
+          role: 'irsPractitioner',
+          serviceIndicator: 'Electronic',
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isPaper: false,
+      isSealed: false,
+      noticeOfAttachments: false,
+      noticeOfTrialDate: '2020-09-18T17:38:31.772Z',
+      orderDesignatingPlaceOfTrial: false,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: true,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: false,
+      otherFilers: [],
+      otherPetitioners: [],
+      partyType: 'Petitioner',
+      petitionPaymentStatus: 'Not Paid',
+      preferredTrialCity: 'Seattle, Washington',
+      privatePractitioners: [],
+      procedureType: 'Regular',
+      qcCompleteForTrial: {},
+      receivedAt: '2020-09-18T17:38:31.772Z',
+      sortableDocketNumber: 20000169,
+      statistics: [],
+      status: 'New',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    };
+
+    it("should be true when the case's trial session judge is the currently logged in user", () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          ...getBaseState(judgeUser),
+          trialSessions: [
+            {
+              judge: {
+                userId: judgeUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeTruthy();
+    });
+
+    it("should be false when the case's trial session judge is not the currently logged in user", () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          ...getBaseState(petitionsClerkUser),
+          trialSessions: [
+            {
+              judge: {
+                userId: judgeUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeFalsy();
+    });
+
+    it('should be true when the current user is a chambers user for the judge assigned to the trial session the case is scheduled for', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          judgeUser: {
+            section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+            userId: judgeUser.userId,
+          },
+          ...getBaseState(chambersUser),
+          trialSessions: [
+            {
+              judge: {
+                userId: judgeUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeTruthy();
+    });
+
+    it('should be false when the current user is a chambers user for a different judge than the one assigned to the case', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          judgeUser: {
+            section: JUDGES_CHAMBERS.BUCHS_CHAMBERS_SECTION.section,
+            userId: judgeUser.userId,
+          },
+          ...getBaseState(chambersUser),
+          trialSessions: [
+            {
+              judge: {
+                userId: judgeUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeFalsy();
+    });
+
+    it('should be true when the current user is the trial clerk assigned to the trial session the case is scheduled for', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          ...getBaseState(trialClerkUser),
+          trialSessions: [
+            {
+              trialClerk: {
+                userId: trialClerkUser.userId,
+              },
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeTruthy();
+    });
+
+    it('should be false when the current user is a trial clerk and is not assigned to the trial session the case is scheduled for', () => {
+      const mockTrialSessionId = applicationContext.getUniqueId();
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...caseDetail,
+            trialSessionId: mockTrialSessionId,
+          },
+          ...getBaseState(trialClerkUser),
+          trialSessions: [
+            {
+              trialClerk: {},
+              trialSessionId: mockTrialSessionId,
+            },
+          ],
+        },
+      });
+
+      expect(result.userIsAssignedToSession).toBeFalsy();
     });
   });
 });

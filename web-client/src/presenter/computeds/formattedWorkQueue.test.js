@@ -77,6 +77,10 @@ describe('formatted work queue computed', () => {
       };
     };
 
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(() => true);
+
     formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
       ...applicationContext,
     });
@@ -259,6 +263,12 @@ describe('formatted work queue computed', () => {
       userId: JUDGE_USER_ID_1,
     };
 
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(
+        item => item.associatedJudge && item.associatedJudge === judgeUser.name,
+      );
+
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(judgeUser),
@@ -301,6 +311,12 @@ describe('formatted work queue computed', () => {
       role: USER_ROLES.adc,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
+
+    applicationContext
+      .getUtilities()
+      .filterQcItemsByAssociatedJudge.mockReturnValue(
+        item => !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE,
+      );
 
     const result = runCompute(formattedWorkQueue, {
       state: {
@@ -755,7 +771,40 @@ describe('formatted work queue computed', () => {
       );
     });
 
-    it('should return default edit link if document is in progress and user is petitionsClerk', () => {
+    it('should return default document view link when the document has been processed, is unservable, and the user is docketClerk', () => {
+      const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-02-28T21:14:39.488Z',
+          docketEntry: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Hearing Exhibits for A document from the west',
+            documentType: 'Hearing Exhibits',
+            eventCode: UNSERVABLE_EVENT_CODES[0],
+            isFileAttached: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+            scenario: 'Standard',
+          },
+          isInitializeCase: false,
+          section: DOCKET_SECTION,
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      });
+      expect(result).toEqual(documentViewLink);
+    });
+
+    it('should return default document view link if document is in progress and user is petitionsClerk', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -784,7 +833,7 @@ describe('formatted work queue computed', () => {
           queue: 'section',
         },
       });
-      expect(result).toEqual(baseWorkItemEditLink);
+      expect(result).toEqual(documentViewLink);
     });
 
     it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {

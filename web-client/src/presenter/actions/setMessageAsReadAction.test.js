@@ -9,20 +9,28 @@ describe('setMessageAsReadAction', () => {
   });
 
   it('should set message as read', async () => {
-    await runAction(setMessageAsReadAction, {
+    const result = await runAction(setMessageAsReadAction, {
       modules: { presenter },
       props: {
-        messageToMarkRead: [
-          {
-            docketNumber: '123-45',
-            messageId: '123',
-          },
-        ],
+        messageToMarkRead: {
+          docketNumber: '123-45',
+          messageId: '123',
+        },
+      },
+      state: {
+        notifications: {
+          unreadMessageCount: 1,
+        },
       },
     });
 
     expect(
       applicationContext.getUseCases().setMessageAsReadInteractor,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      docketNumber: '123-45',
+      messageId: '123',
+    });
+    expect(result.state.notifications.unreadMessageCount).toBe(0);
   });
 });

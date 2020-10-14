@@ -8,6 +8,7 @@ const {
   PAYMENT_STATUS,
   ROLES,
   SERVED_PARTIES_CODES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const {
@@ -55,8 +56,8 @@ describe('formatCase', () => {
     expect(result).toMatchObject({});
   });
 
-  it('should format documents if the case documents array is set', () => {
-    const documents = [
+  it('should format docketEntries if the case docketEntries array is set', () => {
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: 'd-1-2-3',
@@ -86,8 +87,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
     expect(result.formattedDocketEntries[0].isPetition).toBeTruthy();
     expect(result.formattedDocketEntries[0].qcWorkItemsCompleted).toBeTruthy();
@@ -321,7 +321,33 @@ describe('formatCase', () => {
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
-  it('should apply additional information', () => {
+  it('should append additional information to the hyperlinked descriptionDisplay when addToCoversheet is true', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries: [
+        {
+          addToCoversheet: true,
+          additionalInfo: 'additional information',
+          createdAt: getDateISO(),
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'desc',
+          documentType: 'Petition',
+          index: '1',
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+        },
+      ],
+    });
+
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
+      'desc additional information',
+    );
+    expect(
+      result.formattedDocketEntries[0].additionalInfoDisplay,
+    ).toBeUndefined();
+  });
+
+  it('should not append additional information to the hyperlinked descriptionDisplay when addToCoversheet is undefined', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       docketEntries: [
@@ -338,8 +364,9 @@ describe('formatCase', () => {
       ],
     });
 
-    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
-      'desc additional information',
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual('desc');
+    expect(result.formattedDocketEntries[0].additionalInfoDisplay).toEqual(
+      'additional information',
     );
   });
 
@@ -624,18 +651,45 @@ describe('formatDocketEntry', () => {
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const result = formatDocketEntry(
-      applicationContext,
-
-      {
-        docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-        documentType: 'Motion for Leave to File Administrative Record',
-        eventCode: 'M115',
-        lodged: true,
-      },
-    );
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Motion for Leave to File Administrative Record',
+      eventCode: 'M115',
+      lodged: true,
+    });
 
     expect(result.eventCode).toEqual('MISCL');
+  });
+
+  it('should return isTranscript true for transcript documents', () => {
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Transcript',
+      eventCode: TRANSCRIPT_EVENT_CODE,
+    });
+
+    expect(result.isTranscript).toEqual(true);
+  });
+
+  it('should return isStipDecision true for stipulated decision documents', () => {
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Stipulated Decision',
+      eventCode: STIPULATED_DECISION_EVENT_CODE,
+    });
+
+    expect(result.isStipDecision).toEqual(true);
+  });
+
+  it('should return isTranscript and isStipDecision false for non-transcript documents', () => {
+    const result = formatDocketEntry(applicationContext, {
+      docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+      documentType: 'Answer',
+      eventCode: 'A',
+    });
+
+    expect(result.isTranscript).toEqual(false);
+    expect(result.isStipDecision).toEqual(false);
   });
 
   it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
@@ -716,18 +770,17 @@ describe('formatDocketEntry', () => {
 });
 
 describe('getFilingsAndProceedings', () => {
-  it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
+  it('returns a value based on document properties (attachments, C/S,  objections, and lodged)', () => {
     const result = getFilingsAndProceedings({
       attachments: true,
       certificateOfService: true,
       certificateOfServiceDateFormatted: '11/12/1999',
-      exhibits: true,
       lodged: true,
       objections: OBJECTIONS_OPTIONS_MAP.YES,
     });
 
     expect(result).toEqual(
-      '(C/S 11/12/1999) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)',
+      '(C/S 11/12/1999) (Attachment(s)) (Objection) (Lodged)',
     );
   });
 
@@ -735,7 +788,6 @@ describe('getFilingsAndProceedings', () => {
     const result = getFilingsAndProceedings({
       attachments: false,
       certificateOfService: false,
-      exhibits: false,
       lodged: false,
       objections: OBJECTIONS_OPTIONS_MAP.NO,
     });
@@ -811,6 +863,47 @@ describe('getFormattedCaseDetail', () => {
         signUrl: '/case-detail/123-45/edit-order/d-3-4-5/sign',
         signedAtFormatted: undefined,
       },
+    ]);
+  });
+
+  it('should sort draft documents by their receievedAt', () => {
+    const result = getFormattedCaseDetail({
+      applicationContext,
+      caseDetail: {
+        ...mockCaseDetailBase,
+        docketEntries: [
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            docketEntryId: 'd-1-2-3',
+            documentType: 'Order',
+            isDraft: true,
+            receivedAt: '2019-08-03T06:26:44.000Z',
+          },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            docketEntryId: 'd-2-3-4',
+            documentType: 'Stipulated Decision',
+            isDraft: true,
+            receivedAt: '2019-08-03T06:10:44.000Z',
+          },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            docketEntryId: 'd-3-4-5',
+            documentType: 'Miscellaneous',
+            isDraft: true,
+            receivedAt: '2018-07-03T06:26:44.000Z',
+          },
+        ],
+      },
+    });
+
+    expect(result.draftDocuments).toMatchObject([
+      { receivedAt: '2018-07-03T06:26:44.000Z' },
+      { receivedAt: '2019-08-03T06:10:44.000Z' },
+      { receivedAt: '2019-08-03T06:26:44.000Z' },
     ]);
   });
 });

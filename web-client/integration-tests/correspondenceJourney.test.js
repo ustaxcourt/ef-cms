@@ -4,13 +4,16 @@ import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorres
 import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
 import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
 import { docketClerkStartsNewMessageWithCorrespondence } from './journey/docketClerkStartsNewMessageWithCorrespondence';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
-const test = setupTest();
-let caseDetail;
-const correspondenceTitle = 'My correspondence';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Adds correspondence to a case', () => {
+  let caseDetail;
+
+  const test = setupTest();
+
+  const firstCorrespondenceTitle = 'My first correspondence';
+  const secondCorrespondenceTitle = 'My second correspondence';
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -24,9 +27,10 @@ describe('Adds correspondence to a case', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkNavigatesToAddCorrespondence(test);
-  docketClerkAddsCorrespondence(test, correspondenceTitle);
-  docketClerkNavigatesToEditCorrespondence(test, correspondenceTitle);
+  docketClerkAddsCorrespondence(test, firstCorrespondenceTitle);
+  docketClerkAddsCorrespondence(test, secondCorrespondenceTitle);
+  docketClerkNavigatesToEditCorrespondence(test, firstCorrespondenceTitle);
   docketClerkStartsNewMessageWithCorrespondence(test);
-  docketClerkEditsCorrespondence(test);
+  docketClerkEditsCorrespondence(test, fakeFile);
   docketClerkDeletesCorrespondence(test);
 });

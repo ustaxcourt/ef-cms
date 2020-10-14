@@ -16,7 +16,7 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
   props,
   store,
 }) => {
-  const { docketNumber } = props;
+  const { docketNumber, docketNumberWithSuffix } = props;
 
   const notes = _get(get(state.trialSessionWorkingCopy.userNotes), [
     docketNumber,
@@ -34,5 +34,6 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
 
   store.set(state.modal.caseTitle, caseTitle);
   store.set(state.modal.docketNumber, docketNumber);
+  store.set(state.modal.docketNumberWithSuffix, docketNumberWithSuffix);
   store.set(state.modal.notes, notes);
 };

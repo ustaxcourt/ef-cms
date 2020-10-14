@@ -27,14 +27,18 @@ proxy-request-times.json
 puppeteer_lambda_layer.tar.gz
 puppeteer_lambda_layer.zip
 reports/test-reporter.xml
+aws/lambdas/*.zip
 shared/coverage
 shared/pdf-tests/*.html
+web-api/bulk-import-log.txt
 web-api/runtimes/clamav/bin
 web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
 web-api/runtimes/clamav/clamav_lambda_layer.zip
 web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
+web-api/migration-terraform/main/lambdas/migration-segments.js.zip
+web-api/migration-terraform/main/lambdas/migration.js.zip
 web-api/terraform/template/lambdas/api-public.js.zip
 web-api/terraform/template/lambdas/api.js.zip
 web-api/terraform/template/lambdas/cognito-authorizer.js.zip
@@ -52,3 +56,4 @@ web-client/reports
 web-client/terraform/common/cloudfront-edge/header-security-lambda.js.zip
 web-client/terraform/common/cloudfront-edge/strip-basepath-lambda.js.zip
 web-client/tests_output/
+terraform-cache/

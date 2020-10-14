@@ -928,7 +928,6 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
-          exhibits: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
@@ -955,7 +954,6 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
-          exhibits: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           otherFilingParty: 'Bob Barker',
@@ -983,7 +981,6 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
-          exhibits: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: false,
@@ -1012,7 +1009,6 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
-          exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
@@ -1042,7 +1038,6 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
-          exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           otherFilingParty: 'Bob Barker',
@@ -1073,7 +1068,6 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
-          exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           otherFilingParty: 'Bob Barker',
@@ -1108,7 +1102,6 @@ describe('DocketEntry entity', () => {
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
-          exhibits: true,
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.YES,
@@ -1301,7 +1294,6 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
-          exhibits: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: true,
@@ -1329,7 +1321,6 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
-          exhibits: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyPrimary: false,
@@ -1358,7 +1349,6 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
-          exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
@@ -1393,7 +1383,6 @@ describe('DocketEntry entity', () => {
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
-          exhibits: true,
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.YES,
@@ -1609,6 +1598,30 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+    });
+
+    it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentTitle: 'Notice of Election to Participate',
+          documentType: 'Notice of Election to Participate',
+        },
+        { applicationContext },
+      );
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Notice of Election to Intervene';
+      docketEntry.documentType = 'Notice of Election to Intervene';
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Notice of Election to Participate';
+      docketEntry.documentType = 'Notice of Election to Participate';
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Notice of Intervention';
+      docketEntry.documentType = 'Notice of Intervention';
       expect(docketEntry.isAutoServed()).toBeTruthy();
     });
 
@@ -1889,6 +1902,45 @@ describe('DocketEntry entity', () => {
         strickenBy: undefined,
         strickenByUserId: undefined,
       });
+    });
+  });
+
+  describe('judgeUserId', () => {
+    it('sets the judgeUserId property when a value is passed in', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+      const docketEntry = new DocketEntry(
+        {
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          judgeUserId: mockJudgeUserId,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+
+      expect(docketEntry).toMatchObject({
+        judgeUserId: mockJudgeUserId,
+      });
+      expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('does not fail validation without a judgeUserId', () => {
+      const docketEntry = new DocketEntry(
+        {
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+        },
+        { applicationContext },
+      );
+      expect(docketEntry.judgeUserId).toBeUndefined();
+      expect(docketEntry.isValid()).toBeTruthy();
     });
   });
 });

@@ -92,6 +92,7 @@ exports.createCaseFromPaperInteractor = async ({
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
       applicationContext,
+      receivedAt: petitionMetadata.receivedAt,
     },
   );
 

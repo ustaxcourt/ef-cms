@@ -1,29 +1,27 @@
 describe('Health check', () => {
   it("should retrieve the status of the application's critical services", () => {
     const domain = Cypress.env('EFCMS_DOMAIN');
+    const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
     cy.request({
       followRedirect: true,
       method: 'GET',
-      url: `https://public-api.${domain}/public-api/health`,
+      url: `https://public-api-${DEPLOYING_COLOR}.${domain}/public-api/health`,
     }).should(response => {
-      expect(response.body).to.have.property('clamAV');
-      expect(response.body).to.have.property('cognito');
-      expect(response.body).to.have.property('dynamsoft');
-      expect(response.body).to.have.property('elasticsearch');
-      expect(response.body).to.have.property('emailService');
-      expect(response.body).to.have.property('s3');
-      expect(response.body).to.have.property('dynamo');
-      expect(response.body.dynamo).to.have.property('efcms');
-      expect(response.body.dynamo).to.have.property('efcmsDeploy');
-      expect(response.body.s3).to.have.property('app');
-      expect(response.body.s3).to.have.property('westTempDocuments');
-      expect(response.body.s3).to.have.property('westDocuments');
-      expect(response.body.s3).to.have.property('publicFailover');
-      expect(response.body.s3).to.have.property('public');
-      expect(response.body.s3).to.have.property('eastTempDocuments');
-      expect(response.body.s3).to.have.property('eastDocuments');
-      expect(response.body.s3).to.have.property('appFailover');
+      expect(response.body.clamAV).to.be.false;
+      expect(response.body.cognito).to.be.true;
+      expect(response.body.dynamsoft).to.be.true;
+      expect(response.body.elasticsearch).to.be.true;
+      expect(response.body.dynamo.efcms).to.be.true;
+      expect(response.body.dynamo.efcmsDeploy).to.be.true;
+      expect(response.body.s3.app).to.be.true;
+      expect(response.body.s3.westTempDocuments).to.be.true;
+      expect(response.body.s3.westDocuments).to.be.true;
+      expect(response.body.s3.publicFailover).to.be.true;
+      expect(response.body.s3.public).to.be.true;
+      expect(response.body.s3.eastTempDocuments).to.be.true;
+      expect(response.body.s3.eastDocuments).to.be.true;
+      expect(response.body.s3.appFailover).to.be.true;
     });
   });
 });

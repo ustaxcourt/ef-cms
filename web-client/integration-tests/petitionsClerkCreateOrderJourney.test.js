@@ -3,10 +3,13 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { petitionsClerkAddsDocketEntryForOrderAndSavesForLater } from './journey/petitionsClerkAddsDocketEntryForOrderAndSavesForLater';
 import { petitionsClerkAddsGenericOrderToCase } from './journey/petitionsClerkAddsGenericOrderToCase';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
+import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 import { petitionsClerkEditsDraftOrder } from './journey/petitionsClerkEditsDraftOrder';
 import { petitionsClerkEditsGenericOrder } from './journey/petitionsClerkEditsGenericOrder';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
 import { petitionsClerkViewsAddDocketEntryForGenericOrder } from './journey/petitionsClerkViewsAddDocketEntryForGenericOrder';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -39,6 +42,7 @@ describe('Petitions Clerk Create Order Journey', () => {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
   });
+  petitionsClerkCreatesMessageToChambers(test);
   petitionsDeletesOrderFromCase(test);
   petitionsClerkViewsDraftDocuments(test, 0);
 
@@ -48,4 +52,6 @@ describe('Petitions Clerk Create Order Journey', () => {
   petitionsClerkEditsGenericOrder(test);
   petitionsClerkSignsOrder(test);
   petitionsClerkViewsAddDocketEntryForGenericOrder(test);
+  petitionsClerkServesElectronicCaseToIrs(test);
+  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(test);
 });

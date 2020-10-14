@@ -22,18 +22,21 @@ import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailInternal = connect(
   {
     caseDetailInternalTabs:
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
+    clearViewerDocumentToDisplaySequence:
+      sequences.clearViewerDocumentToDisplaySequence,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
     showModal: state.modal.showModal,
   },
   function CaseDetailInternal({
     caseDetailInternalTabs,
+    clearViewerDocumentToDisplaySequence,
     showEditPetition,
     showModal,
   }) {
@@ -53,6 +56,9 @@ export const CaseDetailInternal = connect(
             <Tabs
               bind="currentViewMetadata.caseDetail.docketRecordTab"
               className="classic-horizontal-header3 tab-border"
+              onSelect={tabName =>
+                clearViewerDocumentToDisplaySequence({ tabName })
+              }
             >
               <Tab
                 id="tab-docket-sub-record"

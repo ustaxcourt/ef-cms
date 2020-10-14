@@ -24,6 +24,9 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'contactPrimary.M.contactId.S': {
+      type: 'text',
+    },
     'contactPrimary.M.countryType.S': {
       type: 'text',
     },
@@ -34,6 +37,9 @@ module.exports = {
       type: 'text',
     },
     'contactPrimary.M.state.S': {
+      type: 'text',
+    },
+    'contactSecondary.M.contactId.S': {
       type: 'text',
     },
     'contactSecondary.M.countryType.S': {

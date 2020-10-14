@@ -46,5 +46,13 @@ export const petitionsClerkManuallyAddsCaseToTrial = test => {
 
     await test.runSequence('addCaseToTrialSessionSequence');
     await wait(1000);
+
+    const trialSessionJudge = test.getState('trialSessionJudge');
+    expect(trialSessionJudge).toMatchObject(
+      expect.objectContaining({
+        name: expect.anything(),
+        userId: expect.anything(),
+      }),
+    );
   });
 };

@@ -18,20 +18,21 @@ exports.getPublicCaseInteractor = async ({
   applicationContext,
   docketNumber,
 }) => {
-  let caseRecord = await applicationContext
+  const rawCaseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber: Case.stripLeadingZeros(docketNumber),
     });
 
-  if (!caseRecord) {
+  if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;
   }
 
-  if (caseRecord.sealedDate) {
+  let caseRecord = rawCaseRecord;
+  if (rawCaseRecord.sealedDate) {
     caseRecord = caseSealedFormatter(caseRecord);
   }
   caseRecord = caseContactAddressSealedFormatter(caseRecord, {});
