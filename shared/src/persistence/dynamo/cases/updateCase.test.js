@@ -5,7 +5,6 @@ const {
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
-  PETITIONS_SECTION,
 } = require('../../../business/entities/EntityConstants');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCase } = require('./updateCase');
@@ -16,25 +15,9 @@ describe('updateCase', () => {
   const mockCorrespondenceId = applicationContext.getUniqueId();
 
   let caseQueryMockData;
-  let messageQueryMockData;
   let caseMappingsQueryMockData;
 
   let mockCase;
-
-  const mockMessage = {
-    createdAt: '2019-03-01T21:40:46.415Z',
-    docketNumber: '101-18',
-    from: 'Test Petitionsclerk',
-    fromSection: PETITIONS_SECTION,
-    fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
-    message: 'hey there',
-    messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
-    parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
-    subject: 'hello',
-    to: 'Test Petitionsclerk2',
-    toSection: PETITIONS_SECTION,
-    toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
-  };
 
   beforeEach(() => {
     caseQueryMockData = [
@@ -44,15 +27,6 @@ describe('updateCase', () => {
         pk: 'case|101-18',
         sk: 'case|101-18',
         status: CASE_STATUS_TYPES.generalDocket,
-      },
-    ];
-
-    messageQueryMockData = [
-      {
-        gsi1pk: `message|${mockMessage.parentMessageId}`,
-        pk: 'case|101-18',
-        sk: `message|${mockMessage.messageId}`,
-        ...mockMessage,
       },
     ];
 
@@ -796,7 +770,6 @@ describe('updateCase', () => {
         .fn()
         .mockResolvedValueOnce(caseQueryMockData) // getting case
         .mockResolvedValueOnce([]) // work item mappings
-        .mockResolvedValueOnce([messageQueryMockData]) // work item mappings
         .mockResolvedValue(caseMappingsQueryMockData);
 
       client.query = applicationContext.getDocumentClient().query;
