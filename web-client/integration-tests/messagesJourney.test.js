@@ -1,14 +1,17 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAddsDocketEntryFromMessage';
 import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
 import { docketClerkCompletesMessageThread } from './journey/docketClerkCompletesMessageThread';
 import { docketClerkEditsOrderFromMessage } from './journey/docketClerkEditsOrderFromMessage';
 import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRemovesSignatureFromMessage';
+import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
+import { petitionsClerk1VerifiesCaseStatusOnMessage } from './journey/petitionsClerk1VerifiesCaseStatusOnMessage';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments';
@@ -19,6 +22,7 @@ import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsRe
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
 const test = setupTest();
+const { STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
   beforeAll(() => {
@@ -37,9 +41,17 @@ describe('messages journey', () => {
   petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
   createNewMessageOnCase(test);
   petitionsClerkViewsSentMessagesBox(test);
+  petitionsClerk1VerifiesCaseStatusOnMessage(test, STATUS_TYPES.new);
+
+  loginAs(test, 'docketclerk1@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
+  petitionsClerk1VerifiesCaseStatusOnMessage(
+    test,
+    STATUS_TYPES.generalDocketReadyForTrial,
+  );
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1RepliesToMessage(test);
 
