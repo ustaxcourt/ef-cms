@@ -8,6 +8,7 @@ import React from 'react';
 export const CreateMessageModalDialog = connect(
   {
     constants: state.constants,
+    createMessageModalHelper: state.createMessageModalHelper,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
     updateChambersInCreateMessageModalSequence:
@@ -15,7 +16,6 @@ export const CreateMessageModalDialog = connect(
     updateModalFormValueSequence: sequences.updateModalFormValueSequence,
     updateSectionInCreateMessageModalSequence:
       sequences.updateSectionInCreateMessageModalSequence,
-    users: state.users,
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
@@ -23,6 +23,7 @@ export const CreateMessageModalDialog = connect(
   },
   function CreateMessageModalDialog({
     constants,
+    createMessageModalHelper,
     form,
     onConfirmSequence = 'createMessageSequence',
     showChambersSelect,
@@ -30,7 +31,6 @@ export const CreateMessageModalDialog = connect(
     updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence,
     updateSectionInCreateMessageModalSequence,
-    users,
     validateCreateMessageInModalSequence,
     validationErrors,
     workQueueSectionHelper,
@@ -124,7 +124,7 @@ export const CreateMessageModalDialog = connect(
             }}
           >
             <option value="">- Select -</option>
-            {users.map(user => (
+            {createMessageModalHelper.formattedUsers.map(user => (
               <option key={user.userId} value={user.userId}>
                 {user.name}
               </option>

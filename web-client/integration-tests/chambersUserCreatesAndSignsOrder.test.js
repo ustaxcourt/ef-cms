@@ -25,7 +25,7 @@ describe('Chambers dashboard', () => {
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'armensChambers@example.com');
+  loginAs(test, 'colvinsChambers@example.com');
   chambersUserViewsCaseDetail(test, 2);
   chambersUserViewsDraftDocuments(test);
   chambersUserAddsOrderToCase(test);

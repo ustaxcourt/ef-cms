@@ -14,7 +14,7 @@ export const userSendsMessageToJudge = (test, subject) => {
     });
   };
 
-  return it('internal user sends message to judgeArmen', async () => {
+  return it('internal user sends message to judgeColvin', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -23,12 +23,12 @@ export const userSendsMessageToJudge = (test, subject) => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+      value: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
-      value: 'dabbad00-18d0-43ec-bafb-654e83405416', //judgeArmen
+      value: 'dabbad00-18d0-43ec-bafb-654e83405416', //judgeColvin
     });
 
     const messageDocument = getHelper().documents[0];

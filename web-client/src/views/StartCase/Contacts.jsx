@@ -10,6 +10,7 @@ export const Contacts = connect({}, function Contacts({
   onBlur,
   onChange,
   parentView,
+  phoneNumberOptional,
   showPrimaryContact,
   showPrimaryServiceIndicator,
   showSecondaryContact,
@@ -26,6 +27,7 @@ export const Contacts = connect({}, function Contacts({
             bind={bind}
             contactsHelper={contactsHelper}
             parentView={parentView}
+            phoneNumberOptional={phoneNumberOptional}
             wrapperClassName={wrapperClassName}
             onBlur={onBlur}
             onChange={onChange}
