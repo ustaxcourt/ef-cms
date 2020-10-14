@@ -10,6 +10,6 @@ exports.getCaseDeadlinesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().getCaseDeadlinesInteractor({
       applicationContext,
-      ...event.pathParameters,
+      ...event.queryStringParameters,
     });
   });
