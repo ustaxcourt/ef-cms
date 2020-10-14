@@ -207,26 +207,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Proposed Trial Exhibits",
-      "documentType": "Proposed Trial Exhibits",
-      "category": "Miscellaneous",
-      "eventCode": "PTE",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Notice of Completion",
-      "documentType": "Notice of Completion",
-      "category": "Notice",
-      "eventCode": "NOC",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Revised Computation",
       "documentType": "Revised Computation",
       "category": "Decision",
@@ -333,6 +313,16 @@
       "documentType": "Partial Administrative Record",
       "category": "Miscellaneous",
       "eventCode": "PARD",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Proposed Trial Exhibits",
+      "documentType": "Proposed Trial Exhibits",
+      "category": "Miscellaneous",
+      "eventCode": "PTE",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1703,6 +1693,16 @@
       "documentType": "Notice of Clarification of Tax Matters Partner",
       "category": "Notice",
       "eventCode": "NCTP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Completion",
+      "documentType": "Notice of Completion",
+      "category": "Notice",
+      "eventCode": "NOC",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
