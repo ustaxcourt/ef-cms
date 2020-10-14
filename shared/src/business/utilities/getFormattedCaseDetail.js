@@ -167,7 +167,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   }
 
   if (formattedEntry.additionalInfo) {
-    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+    if (formattedEntry.addToCoversheet) {
+      formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+    } else {
+      formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
+    }
   }
 
   if (formattedEntry.lodged) {

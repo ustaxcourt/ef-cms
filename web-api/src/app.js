@@ -125,14 +125,14 @@ const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
 const {
-  getAllCaseDeadlinesLambda,
-} = require('./caseDeadline/getAllCaseDeadlinesLambda');
-const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
+const {
+  getCaseDeadlinesLambda,
+} = require('./caseDeadline/getCaseDeadlinesLambda');
 const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
@@ -422,7 +422,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
-  app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
+  app.get(
+    '/case-deadlines/:startDate/:endDate',
+    lambdaWrapper(getCaseDeadlinesLambda),
+  );
 }
 /**
  * case-documents

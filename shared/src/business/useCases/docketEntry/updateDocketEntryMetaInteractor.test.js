@@ -254,6 +254,21 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should not generate a new coversheet for a court-issued docket entry if the servedAt field is changed', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[1],
+        filingDate: '2019-01-02T00:01:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should make a call to update the docketEntryEntity before adding a coversheet when the filingDate field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
