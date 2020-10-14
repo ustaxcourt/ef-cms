@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { get, memoize, partition } = require('lodash');
+const { flattenDeep, get, memoize, partition } = require('lodash');
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
@@ -13,98 +13,87 @@ const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  await Promise.all(
-    caseEntityRecords.map(async caseRecord => {
-      const caseEntry = AWS.DynamoDB.Converter.unmarshall(
-        caseRecord.dynamodb.NewImage,
-      );
-
-      const fullCase = await utils.getCase({
+  const indexDocketEntry = async (fullCase, docketEntry) => {
+    if (docketEntry.documentContentsId) {
+      const buffer = await utils.getDocument({
         applicationContext,
-        docketNumber: caseEntry.docketNumber,
+        documentContentsId: docketEntry.documentContentsId,
       });
+      const { documentContents } = JSON.parse(buffer.toString());
+      docketEntry.documentContents = documentContents;
+    }
 
-      const { docketEntries } = fullCase;
+    const docketEntryWithCase = {
+      ...AWS.DynamoDB.Converter.marshall(fullCase),
+      ...AWS.DynamoDB.Converter.marshall(docketEntry),
+    };
 
-      const docketEntryRecords = await Promise.all(
-        docketEntries.map(async docketEntry => {
-          if (docketEntry.documentContentsId) {
-            const buffer = await utils.getDocument({
-              applicationContext,
-              documentContentsId: docketEntry.documentContentsId,
-            });
-            const { documentContents } = JSON.parse(buffer.toString());
-            docketEntry.documentContents = documentContents;
-          }
+    return {
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: docketEntry.pk,
+          },
+          sk: {
+            S: docketEntry.sk,
+          },
+        },
+        NewImage: docketEntryWithCase,
+      },
+      eventName: 'MODIFY',
+    };
+  };
 
-          const docketEntryWithCase = {
-            ...AWS.DynamoDB.Converter.marshall(fullCase),
-            ...AWS.DynamoDB.Converter.marshall(docketEntry),
-          };
+  const indexCaseEntry = async caseRecord => {
+    const caseEntry = AWS.DynamoDB.Converter.unmarshall(
+      caseRecord.dynamodb.NewImage,
+    );
 
-          return {
-            dynamodb: {
-              Keys: {
-                pk: {
-                  S: docketEntry.pk,
-                },
-                sk: {
-                  S: docketEntry.sk,
-                },
-              },
-              NewImage: docketEntryWithCase,
-            },
-            eventName: 'MODIFY',
-          };
-        }),
-      );
+    const fullCase = await utils.getCase({
+      applicationContext,
+      docketNumber: caseEntry.docketNumber,
+    });
 
-      const {
-        failedRecords,
-      } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
-        applicationContext,
-        records: docketEntryRecords,
-      });
+    const { docketEntries } = fullCase;
 
-      if (failedRecords.length > 0) {
-        applicationContext.logger.info(
-          'the docket entry records that failed to index',
-          failedRecords,
-        );
-        throw new Error('failed to index docket entry records');
-      }
+    const docketEntryRecords = await Promise.all(
+      docketEntries.map(entry => indexDocketEntry(fullCase, entry)),
+    );
 
-      const failedCaseRecords = (
-        await applicationContext.getPersistenceGateway().bulkIndexRecords({
-          applicationContext,
-          records: [
-            {
-              dynamodb: {
-                Keys: {
-                  pk: {
-                    S: fullCase.pk,
-                  },
-                  sk: {
-                    S: fullCase.sk,
-                  },
-                },
-                NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
-              },
-              eventName: 'MODIFY',
-            },
-          ],
-        })
-      ).failedRecords;
+    docketEntryRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: fullCase.pk,
+          },
+          sk: {
+            S: fullCase.sk,
+          },
+        },
+        NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
+      },
+      eventName: 'MODIFY',
+    });
 
-      if (failedCaseRecords.length > 0) {
-        applicationContext.logger.info(
-          'the docket entry records that failed to index',
-          failedCaseRecords,
-        );
-        throw new Error('failed to index case entry records');
-      }
-    }),
-  );
+    return docketEntryRecords;
+  };
+
+  const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
+
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+    applicationContext,
+    records: flattenDeep(indexRecords),
+  });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.info(
+      'the case or docket entry records that failed to index',
+      failedRecords,
+    );
+    throw new Error('failed to index case entry or docket entry records');
+  }
 };
 
 /**
@@ -275,11 +264,19 @@ exports.processStreamRecordsInteractor = async ({
     getDocument,
   };
 
-  await processRemoveEntries({ applicationContext, removeRecords });
+  try {
+    await processRemoveEntries({ applicationContext, removeRecords });
 
-  await Promise.all([
-    processCaseEntries({ applicationContext, caseEntityRecords, utils }),
-    processDocketEntries({ applicationContext, docketEntryRecords, utils }),
-    processOtherEntries({ applicationContext, otherRecords }),
-  ]);
+    await Promise.all([
+      processCaseEntries({ applicationContext, caseEntityRecords, utils }),
+      processDocketEntries({ applicationContext, docketEntryRecords, utils }),
+      processOtherEntries({ applicationContext, otherRecords }),
+    ]);
+  } catch (err) {
+    applicationContext.logger.info(
+      'processStreamRecordsInteractor failed to process the records',
+      err,
+    );
+    throw err;
+  }
 };
