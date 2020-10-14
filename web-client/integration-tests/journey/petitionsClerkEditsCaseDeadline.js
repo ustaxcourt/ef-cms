@@ -78,11 +78,5 @@ In a day or two`,
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('updateCaseDeadlineSequence');
-
-    const formMonth = test.getState('form.month');
-    const formDay = test.getState('form.day');
-    const formYear = test.getState('form.year');
-
-    test.caseDeadline = `${formYear}-${formMonth}-${formDay}`;
   });
 };
