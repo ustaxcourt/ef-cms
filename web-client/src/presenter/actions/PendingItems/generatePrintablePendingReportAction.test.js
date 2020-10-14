@@ -58,7 +58,7 @@ describe('generatePrintablePendingReportAction', () => {
       modules: {
         presenter,
       },
-      props: { judgeFilter: 'Judge Armen' },
+      props: { judgeFilter: 'Judge Colvin' },
       state: {},
     });
 
