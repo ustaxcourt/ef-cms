@@ -121,10 +121,7 @@ exports.processStreamRecordsInteractor = async ({
 
             const docketEntryWithCase = {
               ...AWS.DynamoDB.Converter.marshall(fullCase),
-              ...AWS.DynamoDB.Converter.marshall({
-                ...docketEntry,
-                isSealed: fullCase.isSealed,
-              }),
+              ...AWS.DynamoDB.Converter.marshall(docketEntry),
             };
 
             return {
@@ -215,10 +212,7 @@ exports.processStreamRecordsInteractor = async ({
 
         const docketEntryWithCase = {
           ...AWS.DynamoDB.Converter.marshall(fullCase),
-          ...AWS.DynamoDB.Converter.marshall({
-            ...fullDocketEntry,
-            isSealed: fullCase.isSealed,
-          }),
+          ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
         };
 
         return {
