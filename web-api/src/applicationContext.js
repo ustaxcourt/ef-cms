@@ -156,9 +156,6 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
-  createJudgeUserInteractor,
-} = require('../../shared/src/business/useCases/judges/createJudgeUserInteractor');
-const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -1501,7 +1498,6 @@ module.exports = appContextUser => {
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
-        createJudgeUserInteractor,
         createMessageInteractor,
         createPetitionerAccountInteractor,
         createPractitionerUserInteractor,
