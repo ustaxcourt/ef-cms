@@ -91,9 +91,7 @@ exports.changeCaseTrialStatus = (docketNumber, status = 'Set for Trial') => {
 
 exports.checkShowAllFilterOnWorkingCopy = trialSessionId => {
   cy.goToRoute(`/trial-session-working-copy/${trialSessionId}`);
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1000);
-  cy.get('#label-filter-showAll').click();
+  cy.get('label[for="filters.showAll"]').click();
 };
 
 exports.filterWorkingCopyByStatus = ({
