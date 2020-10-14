@@ -19,7 +19,7 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'experimental3' ]] ; then
-  echo "3"
+  echo "1"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'staging' ]] ; then

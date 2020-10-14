@@ -66,8 +66,8 @@ module "elasticsearch_3" {
 
   environment       = var.environment
   domain_name       = "efcms-search-${var.environment}-3"
-  es_instance_count = 3
-  es_instance_type  = "m5.large.elasticsearch"
+  es_instance_count = var.es_instance_count
+  es_instance_type  = "t2.small.elasticsearch"
 
   providers = {
     aws.us-east-1 = aws.us-east-1
