@@ -35,12 +35,21 @@ const getMigratedCase = () => {
   const docketNumber = `${docketNumberCounter++}-82`;
   const docketNumberSuffix = 'L';
   const docketNumberWithSuffix = `${docketNumber}L`;
-  return {
+
+  const docketEntries = migratedCase.docketEntries.map(entry => ({
+    ...entry,
+    docketNumber,
+  }));
+
+  const ret = {
     ...migratedCase,
+    docketEntries,
     docketNumber,
     docketNumberSuffix,
     docketNumberWithSuffix,
   };
+
+  return ret;
 };
 
 let MIGRATE_CASE_COUNT;
