@@ -321,7 +321,33 @@ describe('formatCase', () => {
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
-  it('should apply additional information', () => {
+  it('should append additional information to the hyperlinked descriptionDisplay when addToCoversheet is true', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries: [
+        {
+          addToCoversheet: true,
+          additionalInfo: 'additional information',
+          createdAt: getDateISO(),
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'desc',
+          documentType: 'Petition',
+          index: '1',
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+        },
+      ],
+    });
+
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
+      'desc additional information',
+    );
+    expect(
+      result.formattedDocketEntries[0].additionalInfoDisplay,
+    ).toBeUndefined();
+  });
+
+  it('should not append additional information to the hyperlinked descriptionDisplay when addToCoversheet is undefined', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       docketEntries: [
@@ -338,8 +364,9 @@ describe('formatCase', () => {
       ],
     });
 
-    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
-      'desc additional information',
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual('desc');
+    expect(result.formattedDocketEntries[0].additionalInfoDisplay).toEqual(
+      'additional information',
     );
   });
 

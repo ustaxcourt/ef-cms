@@ -28,9 +28,15 @@ exports.updateCaseDeadlineInteractor = async ({
   });
   caseDeadlineToUpdate = caseDeadlineToUpdate.validate().toRawObject();
 
-  await applicationContext.getPersistenceGateway().updateCaseDeadline({
+  await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,
-    caseDeadlineToUpdate,
+    caseDeadlineId: caseDeadlineToUpdate.caseDeadlineId,
+    docketNumber: caseDeadlineToUpdate.docketNumber,
+  });
+
+  await applicationContext.getPersistenceGateway().createCaseDeadline({
+    applicationContext,
+    caseDeadline: caseDeadlineToUpdate,
   });
 
   return caseDeadlineToUpdate;
