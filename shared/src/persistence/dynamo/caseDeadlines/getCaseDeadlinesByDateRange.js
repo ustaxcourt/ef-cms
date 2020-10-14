@@ -1,14 +1,23 @@
 const client = require('../../dynamodbClientService');
 
-exports.getAllCaseDeadlines = async ({ applicationContext }) => {
+exports.getCaseDeadlinesByDateRange = async ({
+  applicationContext,
+  endDate,
+  startDate,
+}) => {
   const mappings = await client.query({
     ExpressionAttributeNames: {
+      '#gsi1pk': 'gsi1pk',
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':pk': 'case-deadline-catalog',
+      ':endDate': endDate,
+      ':gsi1pk': 'case-deadline-catalog',
+      ':startDate': startDate,
     },
-    KeyConditionExpression: '#pk = :pk',
+    IndexName: 'gsi1',
+    KeyConditionExpression:
+      '#gsi1pk = :gsi1pk and #pk between :startDate and :endDate',
     applicationContext,
   });
 

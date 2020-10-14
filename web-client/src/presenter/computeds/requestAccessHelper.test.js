@@ -64,31 +64,18 @@ describe('requestAccessHelper', () => {
     expect(result.partyValidationError).toBeUndefined();
   });
 
-  it('does not show exhibits for document inclusion for privatePractitioners', () => {
-    const result = runCompute(requestAccessHelper, {
-      state: {
-        ...state,
-        form: {
-          documentType: 'Motion to Substitute Parties and Change Caption',
-          primaryDocumentFile: { some: 'file' },
-        },
-      },
-    });
-    expect(result.documentWithExhibits).toBeFalsy();
-  });
-
   it('shows party validation error if any one of the party validation errors exists', () => {
     state.validationErrors = { representingPrimary: 'You did something bad.' };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('returns correct number of document options for user role practitioner', () => {
+  it('returns correct number of document options for user role privatePractitioner', () => {
     const result = runCompute(requestAccessHelper, { state });
-    expect(result.documents.length).toEqual(6);
+    expect(result.documents.length).toEqual(7);
   });
 
-  it('returns correct number of document options for user role respondent', () => {
+  it('returns correct number of document options for user role irsPractitioner', () => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.irsPractitioner,
     });
@@ -105,24 +92,22 @@ describe('requestAccessHelper', () => {
       attachments: true,
       certificateOfService: false,
       documentType: 'Notice of Intervention',
-      exhibits: false,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
   });
 
-  it('does not show filing includes if certificate of service, exhibits, and attachments are false', () => {
+  it('does not show filing includes if certificate of service and attachments are false', () => {
     state.form = {
       attachments: false,
       certificateOfService: false,
       documentType: 'Notice of Intervention',
-      exhibits: false,
     };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(false);
   });
 
-  it('shows filing not includes if certificate of service, exhibits, attachments, or supporting documents is false', () => {
+  it('shows filing not includes if certificate of service, attachments, or supporting documents is false', () => {
     state.form = { certificateOfService: false };
     let result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
@@ -130,7 +115,6 @@ describe('requestAccessHelper', () => {
     state.form = {
       certificateOfService: true,
       documentType: 'Notice of Intervention',
-      exhibits: false,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
@@ -139,7 +123,6 @@ describe('requestAccessHelper', () => {
       attachments: false,
       certificateOfService: true,
       documentType: 'Notice of Intervention',
-      exhibits: true,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
@@ -148,19 +131,17 @@ describe('requestAccessHelper', () => {
       attachments: true,
       certificateOfService: true,
       documentType: 'Motion to Substitute Parties and Change Caption',
-      exhibits: true,
       hasSupportingDocuments: false,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
   });
 
-  it('does not show filing not includes if certificate of service, exhibits, attachments, and supporting documents are true', () => {
+  it('does not show filing not includes if certificate of service, attachments, and supporting documents are true', () => {
     state.form = {
       attachments: true,
       certificateOfService: true,
       documentType: 'Motion to Substitute Parties and Change Caption',
-      exhibits: true,
       hasSupportingDocuments: true,
     };
     const result = runCompute(requestAccessHelper, { state });

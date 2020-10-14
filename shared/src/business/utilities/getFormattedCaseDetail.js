@@ -167,7 +167,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   }
 
   if (formattedEntry.additionalInfo) {
-    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+    if (formattedEntry.addToCoversheet) {
+      formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+    } else {
+      formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
+    }
   }
 
   if (formattedEntry.lodged) {
@@ -186,7 +190,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
         ? `(C/S ${formattedDocketEntry.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${formattedDocketEntry.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocketEntry.attachments ? '(Attachment(s))' : ''}`,
     `${
       formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES

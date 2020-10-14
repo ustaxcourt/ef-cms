@@ -258,6 +258,7 @@
         - "Hearing Exhibits"
         - "Hearing before"
         - "Letter"
+        - "Limited Entry of Appearance"
         - "Memorandum"
         - "Memorandum Opinion"
         - "Memorandum in Support"
@@ -435,6 +436,7 @@
         - "Notice of Termination Assessment"
         - "Notice of Trial"
         - "Notice of Unavailability"
+        - "Notice of Withdrawal as Counsel"
         - "Objection"
         - "Objection [anything]"
         - "Opposition"
@@ -646,6 +648,7 @@
         - "FTRL"
         - "HE"
         - "HEAR"
+        - "LEA"
         - "LTR"
         - "M000"
         - "M001"
@@ -815,6 +818,7 @@
         - "NOI"
         - "NOST"
         - "NOT"
+        - "NOTW"
         - "NOU"
         - "NPB"
         - "NPJR"
@@ -1163,6 +1167,7 @@
               - "Notice of Telephone Number"
               - "Notice of Termination Assessment"
               - "Notice of Unavailability"
+              - "Notice of Withdrawal as Counsel"
               - "Redacted Petition"
               - "Prehearing Memorandum"
               - "Pretrial Memorandum"
@@ -1216,6 +1221,7 @@
               - "Memorandum in Support"
               - "Unsworn Declaration under Penalty of Perjury in Support"
               - "Entry of Appearance"
+              - "Limited Entry of Appearance"
               - "Substitution of Counsel"
               - "Application"
               - "Application for Examination Pursuant to Rule 73"
@@ -1737,6 +1743,7 @@
             - "Hearing Exhibits"
             - "Hearing before"
             - "Letter"
+            - "Limited Entry of Appearance"
             - "Memorandum"
             - "Memorandum Opinion"
             - "Memorandum in Support"
@@ -1914,6 +1921,7 @@
             - "Notice of Termination Assessment"
             - "Notice of Trial"
             - "Notice of Unavailability"
+            - "Notice of Withdrawal as Counsel"
             - "Objection"
             - "Objection [anything]"
             - "Opposition"
@@ -2250,6 +2258,7 @@
             - "Hearing Exhibits"
             - "Hearing before"
             - "Letter"
+            - "Limited Entry of Appearance"
             - "Memorandum"
             - "Memorandum Opinion"
             - "Memorandum in Support"
@@ -2427,6 +2436,7 @@
             - "Notice of Termination Assessment"
             - "Notice of Trial"
             - "Notice of Unavailability"
+            - "Notice of Withdrawal as Counsel"
             - "Objection"
             - "Objection [anything]"
             - "Opposition"
@@ -2601,6 +2611,7 @@
             - "FTRL"
             - "HE"
             - "HEAR"
+            - "LEA"
             - "LTR"
             - "M000"
             - "M001"
@@ -2770,6 +2781,7 @@
             - "NOI"
             - "NOST"
             - "NOT"
+            - "NOTW"
             - "NOU"
             - "NPB"
             - "NPJR"
@@ -3300,6 +3312,24 @@
                       - "uuidv4"
             allow: 
               - null
+    signedJudgeUserId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The user id of the judge who signed the document."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
+      allow: 
+        - null
     strickenAt: 
       type: "date"
       flags: 

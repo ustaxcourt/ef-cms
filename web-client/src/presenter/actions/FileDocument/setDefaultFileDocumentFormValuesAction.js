@@ -21,7 +21,6 @@ export const setDefaultFileDocumentFormValuesAction = ({
 
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
-  store.set(state.form.exhibits, false);
   store.set(state.form.hasSupportingDocuments, false);
   store.set(state.form.hasSecondarySupportingDocuments, false);
   store.set(state.form.practitioner, []);

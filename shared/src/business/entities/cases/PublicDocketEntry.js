@@ -22,7 +22,6 @@ function PublicDocketEntry() {}
 PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.additionalInfo = rawDocketEntry.additionalInfo;
   this.additionalInfo2 = rawDocketEntry.additionalInfo2;
-  this.createdAt = rawDocketEntry.createdAt;
   this.docketEntryId = rawDocketEntry.docketEntryId;
   this.docketNumber = rawDocketEntry.docketNumber;
   this.documentTitle = rawDocketEntry.documentTitle;

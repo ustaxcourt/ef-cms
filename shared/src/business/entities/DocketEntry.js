@@ -43,6 +43,7 @@ DocketEntry.prototype.init = function init(
     this.draftOrderState = rawDocketEntry.draftOrderState;
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
+    this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
         ? DocketEntry.isPendingOnCreation(rawDocketEntry)
@@ -60,6 +61,9 @@ DocketEntry.prototype.init = function init(
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
+    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
+    this.strickenBy = rawDocketEntry.strickenBy;
+    this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
     this.workItem = rawDocketEntry.workItem
       ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
@@ -102,7 +106,6 @@ DocketEntry.prototype.init = function init(
   this.isPaper = rawDocketEntry.isPaper;
   this.isSealed = rawDocketEntry.isSealed;
   this.isStricken = rawDocketEntry.isStricken || false;
-  this.judgeUserId = rawDocketEntry.judgeUserId;
   this.lodged = rawDocketEntry.lodged;
   this.mailingDate = rawDocketEntry.mailingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
@@ -122,8 +125,6 @@ DocketEntry.prototype.init = function init(
   this.serviceDate = rawDocketEntry.serviceDate;
   this.serviceStamp = rawDocketEntry.serviceStamp;
   this.strickenAt = rawDocketEntry.strickenAt;
-  this.strickenBy = rawDocketEntry.strickenBy;
-  this.strickenByUserId = rawDocketEntry.strickenByUserId;
   this.supportingDocument = rawDocketEntry.supportingDocument;
   this.trialLocation = rawDocketEntry.trialLocation;
 
@@ -282,6 +283,7 @@ DocketEntry.prototype.setQCed = function (user) {
 DocketEntry.prototype.unsignDocument = function () {
   this.signedAt = null;
   this.signedJudgeName = null;
+  this.signedJudgeUserId = null;
   this.signedByUserId = null;
 };
 
