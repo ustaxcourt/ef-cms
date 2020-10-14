@@ -32,7 +32,7 @@ const migrationEndpoint = `https://api-${color}.${domain}/migrate/case`;
 let docketNumberCounter = 101;
 
 const getMigratedCase = () => {
-  const docketNumber = `${docketNumberCounter++}-80`;
+  const docketNumber = `${docketNumberCounter++}-82`;
   const docketNumberSuffix = 'L';
   const docketNumberWithSuffix = `${docketNumber}L`;
   return {
@@ -81,11 +81,11 @@ const MIGRATE_LABEL = `Migrating ${MIGRATE_CASE_COUNT} cases`;
   });
 
   axiosRetry(axiosInstance, {
-    retries: 20,
+    retries: 10,
     retryCondition: error => {
       return (
         axiosRetry.isNetworkOrIdempotentRequestError(error) ||
-        error.code == 'ECONNABORTED'
+        error.response === undefined
       );
     },
     retryDelay: axiosRetry.exponentialDelay,
