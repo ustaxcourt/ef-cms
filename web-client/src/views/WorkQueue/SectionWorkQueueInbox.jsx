@@ -7,14 +7,23 @@ import React from 'react';
 
 const SectionWorkQueueTable = connect(
   {
-    workQueueHelper: state.workQueueHelper,
+    hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
+    hideIconColumn: state.workQueueHelper.hideIconColumn,
+    showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
+    showSelectColumn: state.workQueueHelper.showSelectColumn,
     workQueueLength: state.formattedWorkQueue.length,
   },
   function SectionWorkQueueTableComponent({
-    workQueueHelper,
+    hideFiledByColumn,
+    hideIconColumn,
+    showAssignedToColumn,
+    showSelectColumn,
     workQueueLength,
   }) {
-    const rowIndexes = range(0, workQueueLength);
+    console.log(' > table rerender with all the rows!');
+    const rowIndexes = range(0, workQueueLength).map(
+      i => `SectionWorkQueueTable-${i}`,
+    );
     return (
       <table
         aria-describedby="tab-work-queue"
@@ -23,21 +32,21 @@ const SectionWorkQueueTable = connect(
       >
         <thead>
           <tr>
-            {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
+            {showSelectColumn && <th colSpan="2">&nbsp;</th>}
             <th aria-label="Docket Number">Docket No.</th>
             <th>Filed</th>
             <th>Case Title</th>
-            {!workQueueHelper.hideIconColumn && (
+            {!hideIconColumn && (
               <th aria-label="Status Icon" className="padding-right-0" />
             )}
             <th>Document</th>
-            {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+            {!hideFiledByColumn && <th>Filed By</th>}
             <th>Case Status</th>
-            {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
+            {showAssignedToColumn && <th>Assigned To</th>}
           </tr>
         </thead>
-        {rowIndexes.map(idx => (
-          <SectionWorkQueueTable.Row idx={idx} key={idx} />
+        {rowIndexes.map((key, idx) => (
+          <SectionWorkQueueTable.Row idx={idx} key={key} />
         ))}
       </table>
     );
@@ -46,19 +55,25 @@ const SectionWorkQueueTable = connect(
 
 SectionWorkQueueTable.Row = connect(
   {
+    hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
+    hideIconColumn: state.workQueueHelper.hideIconColumn,
     item: state.formattedWorkQueue[props.idx],
     selectWorkItemSequence: sequences.selectWorkItemSequence,
-    workQueueHelper: state.workQueueHelper,
+    showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
+    showSelectColumn: state.workQueueHelper.showSelectColumn,
   },
   function SectionWorkQueueTableRowComponent({
+    hideFiledByColumn,
+    hideIconColumn,
     item,
     selectWorkItemSequence,
-    workQueueHelper,
+    showAssignedToColumn,
+    showSelectColumn,
   }) {
     return (
       <tbody>
         <tr>
-          {workQueueHelper.showSelectColumn && (
+          {showSelectColumn && (
             <>
               <td aria-hidden="true" className="focus-toggle" />
               <td className="message-select-control">
@@ -91,7 +106,7 @@ SectionWorkQueueTable.Row = connect(
           <td className="message-queue-row message-queue-case-title">
             {item.caseTitle}
           </td>
-          {!workQueueHelper.hideIconColumn && (
+          {!hideIconColumn && (
             <td className="message-queue-row has-icon padding-right-0">
               {item.showUnassignedIcon && (
                 <Icon
@@ -118,11 +133,11 @@ SectionWorkQueueTable.Row = connect(
               </a>
             </div>
           </td>
-          {!workQueueHelper.hideFiledByColumn && (
+          {!hideFiledByColumn && (
             <td className="message-queue-row">{item.docketEntry.filedBy}</td>
           )}
           <td className="message-queue-row">{item.caseStatus}</td>
-          {workQueueHelper.showAssignedToColumn && (
+          {showAssignedToColumn && (
             <td className="to message-queue-row">{item.assigneeName}</td>
           )}
         </tr>
@@ -144,6 +159,7 @@ SectionWorkQueueTable.Actions = connect(
     selectedWorkItemsLength,
     users,
   }) {
+    console.log('render actions');
     return (
       <div className="action-section">
         <span className="assign-work-item-count">
@@ -182,6 +198,7 @@ export const SectionWorkQueueInbox = connect(
     showSendToBar: state.workQueueHelper.showSendToBar,
   },
   function SectionWorkQueueInbox({ formattedWorkQueueLength, showSendToBar }) {
+    console.log('render all of it');
     return (
       <React.Fragment>
         {showSendToBar && <SectionWorkQueueTable.Actions />}
