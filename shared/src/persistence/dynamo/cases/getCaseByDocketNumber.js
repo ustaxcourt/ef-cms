@@ -24,7 +24,7 @@ exports.getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  if (!caseItems) {
+  if (caseItems.length === 0) {
     return null;
   }
 
