@@ -796,7 +796,6 @@ describe('updateCase', () => {
         .fn()
         .mockResolvedValueOnce(caseQueryMockData) // getting case
         .mockResolvedValueOnce([]) // work item mappings
-        .mockResolvedValueOnce([messageQueryMockData]) // work item mappings
         .mockResolvedValue(caseMappingsQueryMockData);
 
       client.query = applicationContext.getDocumentClient().query;
