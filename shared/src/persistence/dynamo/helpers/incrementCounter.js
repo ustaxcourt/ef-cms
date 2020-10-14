@@ -6,24 +6,27 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.key the key of the item to increment
+ * @param {string} providers.year the year of the item to increment, formatted as YYYY
  * @returns {Promise} the promise of the call to persistence
  */
-exports.incrementCounter = ({ applicationContext, key }) => {
-  const year = new Date().getFullYear().toString();
+exports.incrementCounter = ({ applicationContext, key, year }) => {
+  if (!year) {
+    year = new Date().getFullYear().toString();
+  }
 
   return client.updateConsistent({
     ExpressionAttributeNames: {
-      '#a': 'id',
+      '#id': 'id',
     },
     ExpressionAttributeValues: {
-      ':x': 1,
+      ':value': 1,
     },
     Key: {
       pk: `${key}-${year}`,
       sk: `${key}-${year}`,
     },
     ReturnValues: 'UPDATED_NEW',
-    UpdateExpression: 'ADD #a :x',
+    UpdateExpression: 'ADD #id :value',
     applicationContext,
   });
 };

@@ -27,7 +27,7 @@ export const CourtIssuedNonstandardForm = connect(
     addCourtIssuedDocketEntryNonstandardHelper:
       state.addCourtIssuedDocketEntryNonstandardHelper,
     form: state.form,
-    judgeUsers: state.judgeUsers,
+    judgeUsers: state.judges,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence:

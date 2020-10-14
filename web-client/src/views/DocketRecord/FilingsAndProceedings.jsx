@@ -36,6 +36,7 @@ export const FilingsAndProceedings = connect(
               link
               aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(
+                'text-left',
                 entry.isStricken && 'stricken-docket-record',
               )}
               onClick={() =>
@@ -99,7 +100,7 @@ export const FilingsAndProceedings = connect(
             onClick={() =>
               changeTabAndSetViewerDocumentToDisplaySequence({
                 docketRecordTab: 'documentView',
-                viewerDocumentToDisplay: { docketEntryId: entry.docketEntryId },
+                viewerDocumentToDisplay: entry,
               })
             }
           >

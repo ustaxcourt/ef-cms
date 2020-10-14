@@ -9,7 +9,7 @@ import React from 'react';
 export const OrderSearch = connect(
   {
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    judges: state.judges,
+    judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
@@ -25,7 +25,10 @@ export const OrderSearch = connect(
   }) {
     return (
       <>
-        <div className="header-with-blue-background grid-row">
+        <div
+          className="header-with-blue-background grid-row"
+          id="search-orders-header"
+        >
           <h3>Search Orders</h3>
         </div>
         <div className="blue-container order-search-container">

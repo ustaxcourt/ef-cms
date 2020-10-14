@@ -43,5 +43,5 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   docketClerkAddsDocketEntryFromDraft(test, 0);
 
   loginAs(test, 'petitioner@example.com');
-  petitionerViewsCaseDetail(test, { documentCount: 4 });
+  petitionerViewsCaseDetail(test, { documentCount: 3 });
 });

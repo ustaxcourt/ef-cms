@@ -3,9 +3,68 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
+
+/**
+ * Creates a new user account for a case if one does not already exist
+ * or associates an existing user account with the case
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseEntity the case entity to associate the user with
+ * @param {string} providers.contactType contactPrimary or contactSecondary
+ * @param {object} providers.user the user to associate with the case
+ * @returns {object} the updated case entity
+ */
+const createUserAccount = async ({
+  applicationContext,
+  caseEntity,
+  contactData,
+  contactType,
+}) => {
+  const foundUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserByEmail({
+      applicationContext,
+      email: caseEntity[contactType].email,
+    });
+
+  if (foundUser) {
+    caseEntity[contactType].contactId = foundUser.userId;
+  } else {
+    const userToAdd = new User({
+      ...contactData,
+      contact: {
+        ...contactData,
+      },
+      userId: contactData.contactId, // this will be overwritten in createUser to the userId that cognito generates
+    });
+
+    const newUser = await applicationContext
+      .getPersistenceGateway()
+      .createMigratedPetitionerUser({
+        applicationContext,
+        user: userToAdd.validate().toRawObject(),
+      });
+
+    caseEntity[contactType].contactId = newUser.userId; // update contactId to match the userId cognito generates
+  }
+
+  const userCaseEntity = new UserCase(caseEntity).validate().toRawObject();
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber: caseEntity.docketNumber,
+    userCase: userCaseEntity,
+    userId: caseEntity[contactType].contactId,
+  });
+  return caseEntity;
+};
+
+exports.createUserAccount = createUserAccount;
 
 /**
  *
@@ -47,7 +106,7 @@ exports.migrateCaseInteractor = async ({
     }
   }
 
-  const caseToAdd = new Case(
+  let caseToAdd = new Case(
     {
       ...caseMetadata,
       userId: user.userId,
@@ -70,6 +129,7 @@ exports.migrateCaseInteractor = async ({
 
     if (practitioner) {
       casePractitioner.contact = practitioner.contact;
+      casePractitioner.email = practitioner.email;
       casePractitioner.name = practitioner.name;
       casePractitioner.userId = practitioner.userId;
 
@@ -114,6 +174,28 @@ exports.migrateCaseInteractor = async ({
     caseToAdd.setAsCalendared(trialSessionEntity);
   }
 
+  caseToAdd.validateForMigration();
+
+  const contactTypes = ['contactPrimary', 'contactSecondary'];
+
+  for (const contactType of contactTypes) {
+    if (caseToAdd[contactType]) {
+      const shouldCreateUserAccount =
+        !!caseToAdd[contactType].hasEAccess &&
+        caseToAdd.status !== CASE_STATUS_TYPES.closed;
+      if (shouldCreateUserAccount) {
+        caseToAdd = await createUserAccount({
+          applicationContext,
+          caseEntity: caseToAdd,
+          contactData: caseToAdd[contactType],
+          contactType,
+        });
+      } else {
+        caseToAdd[contactType].hasEAccess = false;
+      }
+    }
+  }
+
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
   await applicationContext.getPersistenceGateway().createCase({
@@ -125,7 +207,7 @@ exports.migrateCaseInteractor = async ({
     await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
-      docketNumber: caseToAdd.docketNumber,
+      docketNumber: caseValidatedRaw.docketNumber,
     });
   }
 

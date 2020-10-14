@@ -1,6 +1,6 @@
 const joi = require('joi');
 const {
-  CHAMBERS_SECTIONS,
+  CHAMBERS_SECTIONS_WITH_LEGACY,
   COUNTRY_TYPES,
   ROLES,
   SECTIONS,
@@ -53,7 +53,7 @@ const userDecorator = (obj, rawObj) => {
       state: rawObj.contact.state,
     };
   }
-  if (obj.role === ROLES.judge) {
+  if (obj.role === ROLES.judge || obj.role === ROLES.legacyJudge) {
     obj.judgeFullName = rawObj.judgeFullName;
     obj.judgeTitle = rawObj.judgeTitle;
   }
@@ -97,7 +97,7 @@ const baseUserValidation = {
     then: joi.optional(),
   }),
   judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
-    is: ROLES.judge,
+    is: ROLES.judge || ROLES.judgeTitle,
     otherwise: joi.optional().allow(null),
     then: joi.optional(),
   }),
@@ -118,7 +118,7 @@ const userValidation = {
     ),
   section: JoiValidationConstants.STRING.valid(
     ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
+    ...CHAMBERS_SECTIONS_WITH_LEGACY,
     ...Object.values(ROLES),
   ).optional(),
   token: JoiValidationConstants.STRING.optional(),

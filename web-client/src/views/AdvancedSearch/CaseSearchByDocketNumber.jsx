@@ -24,7 +24,10 @@ export const CaseSearchByDocketNumber = connect(
   }) {
     return (
       <>
-        <div className="header-with-blue-background display-flex flex-justify">
+        <div
+          className="header-with-blue-background display-flex flex-justify"
+          id="search-by-docket-number"
+        >
           <h3>Search by Docket Number</h3>
         </div>
         <div className="blue-container advanced-search__form-container">
@@ -42,6 +45,7 @@ export const CaseSearchByDocketNumber = connect(
                     Example of docket number format: 123-19
                   </span>
                   <input
+                    aria-describedby="search-by-docket-number"
                     className="usa-input"
                     id="docket-number"
                     name="docketNumber"
@@ -68,6 +72,7 @@ export const CaseSearchByDocketNumber = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <Button
+                  aria-describedby="search-by-docket-number"
                   className="advanced-search__button"
                   id="docket-search-button"
                   onClick={e => {
@@ -79,6 +84,7 @@ export const CaseSearchByDocketNumber = connect(
                 </Button>
                 <Button
                   link
+                  aria-describedby="search-by-docket-number"
                   className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
                   onClick={e => {
                     e.preventDefault();

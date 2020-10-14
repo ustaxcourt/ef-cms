@@ -86,6 +86,7 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `IRS_SUPERUSER_EMAIL_STG` | Email address used to serve all new petitions to the IRS for STG |
   | `IRS_SUPERUSER_EMAIL_TEST` | Email address used to serve all new petitions to the IRS for TEST |
   | `IRS_SUPERUSER_EMAIL_PROD` | Email address used to serve all new petitions to the IRS for PROD |
+  | `DEFAULT_ACCOUNT_PASS` | Default password for all test accounts and some password resets |
   | `STATUSPAGE_DNS_RECORD` | DNS record for Statuspage of CNAME `status.${EFCMS_DOMAIN}` (optional) |
 
 - Run a build in CircleCI.
