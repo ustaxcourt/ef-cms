@@ -91,7 +91,7 @@ exports.changeCaseTrialStatus = (docketNumber, status = 'Set for Trial') => {
 
 exports.checkShowAllFilterOnWorkingCopy = trialSessionId => {
   cy.goToRoute(`/trial-session-working-copy/${trialSessionId}`);
-  cy.get('label:contains("Show All")').click();
+  cy.get('label[for="filters.showAll"]').click();
 };
 
 exports.filterWorkingCopyByStatus = ({
