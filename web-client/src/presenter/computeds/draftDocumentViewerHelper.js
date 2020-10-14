@@ -19,20 +19,6 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
 
   const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
 
-  const documentRequiresSignature =
-    viewerDraftDocumentToDisplay &&
-    EVENT_CODES_REQUIRING_SIGNATURE.includes(
-      viewerDraftDocumentToDisplay.eventCode,
-    );
-
-  const isNotice =
-    viewerDraftDocumentToDisplay &&
-    NOTICE_EVENT_CODES.includes(viewerDraftDocumentToDisplay.eventCode);
-
-  const isStipulatedDecision =
-    viewerDraftDocumentToDisplay &&
-    viewerDraftDocumentToDisplay.eventCode === STIPULATED_DECISION_EVENT_CODE;
-
   const formattedDocumentToDisplay =
     viewerDraftDocumentToDisplay &&
     formattedCaseDetail.draftDocuments &&
@@ -41,18 +27,30 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
         draftDocument.docketEntryId ===
         viewerDraftDocumentToDisplay.docketEntryId,
     );
+
   if (!formattedDocumentToDisplay) {
     return {
       createdByLabel: '',
       documentTitle: '',
     };
   }
+
+  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+    formattedDocumentToDisplay.eventCode,
+  );
+
+  const isNotice = NOTICE_EVENT_CODES.includes(
+    formattedDocumentToDisplay.eventCode,
+  );
+
+  const isStipulatedDecision =
+    formattedDocumentToDisplay.eventCode === STIPULATED_DECISION_EVENT_CODE;
+
+  const documentIsSigned = !!formattedDocumentToDisplay.signedAt;
+
   const createdByLabel = formattedDocumentToDisplay.filedBy
     ? `Created by ${formattedDocumentToDisplay.filedBy}`
     : '';
-
-  const documentIsSigned =
-    viewerDraftDocumentToDisplay && !!formattedDocumentToDisplay.signedAt;
 
   const isInternalUser = applicationContext
     .getUtilities()

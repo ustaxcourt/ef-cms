@@ -74,6 +74,10 @@ exports.removeCaseFromTrialInteractor = async ({
       docketNumber: caseEntity.docketNumber,
     });
 
+  await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+
   const updatedCase = await applicationContext
     .getPersistenceGateway()
     .updateCase({

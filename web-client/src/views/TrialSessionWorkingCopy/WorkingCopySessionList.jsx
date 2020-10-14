@@ -133,7 +133,7 @@ export const WorkingCopySessionList = connect(
                   </td>
                   <td className="minw-30">
                     <BindedSelect
-                      ariaLabel="trial status"
+                      aria-label="trial status"
                       bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
                       id={`trialSessionWorkingCopy-${item.docketNumber}`}
                       onChange={value => {
@@ -160,9 +160,11 @@ export const WorkingCopySessionList = connect(
                         link
                         className="margin-top-1"
                         icon="plus-circle"
+                        id={`add-note-${item.docketNumber}`}
                         onClick={() => {
                           openAddEditUserCaseNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
+                            docketNumberWithSuffix: item.docketNumberWithSuffix,
                           });
                         }}
                       >

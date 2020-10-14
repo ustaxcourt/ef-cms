@@ -199,7 +199,6 @@ describe('updateDocketEntryWizardDataAction', () => {
         caseDetail,
         form: {
           attachments: 'something else',
-          exhibits: 'something',
         },
         screenMetadata: {
           filedDocketEntryIds: ['3', '2'],
@@ -210,7 +209,6 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
 
     expect(result.state.form.attachments).toEqual(undefined);
-    expect(result.state.form.exhibits).toEqual(undefined);
     expect(result.state.form.primarySomething).toEqual(true);
   });
 
@@ -272,7 +270,6 @@ describe('updateDocketEntryWizardDataAction', () => {
         caseDetail,
         form: {
           attachments: 'something else',
-          exhibits: 'something',
         },
         screenMetadata: {
           filedDocketEntryIds: ['3', '2'],
@@ -283,7 +280,6 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
 
     expect(result.state.form.attachments).toEqual('something else');
-    expect(result.state.form.exhibits).toEqual('something');
     expect(result.state.form.primarySomething).toBeUndefined();
   });
 
@@ -357,5 +353,23 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
 
     expect(result.state.form.additionalInfo2).toEqual('abc');
+  });
+
+  it('should not override documentTitle', async () => {
+    const mockDocumentTitle = 'Entry of Disappearance';
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      modules: { presenter },
+      props: {
+        key: 'initEventCode',
+        value: 'EA',
+      },
+      state: {
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+      },
+    });
+
+    expect(result.state.form.documentTitle).toEqual(mockDocumentTitle);
   });
 });

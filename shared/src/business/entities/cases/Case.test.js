@@ -322,6 +322,119 @@ describe('Case entity', () => {
       );
       expect(Object.keys(myCase)).toContain('associatedJudge');
     });
+
+    it('returns STIN docket entry if filtered is false and the user is docketclerk', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: false,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).toBeDefined();
+    });
+
+    it('returns STIN docket entry if filtered is true and the user is IRS superuser', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'],
+      ); //irsSuperuser user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).toBeDefined();
+    });
+
+    it('returns STIN docket entry if filtered is true and the user is petitionsclerk and the petition is not served', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitionsclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).toBeDefined();
+    });
+
+    it('does not return STIN docket entry if filtered is true and the user is docketclerk and the petition is not served', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
+
+      const myCase = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).not.toBeDefined();
+    });
+
+    it('does not return STIN docket entry if filtered is true and the user is petitionsclerk and the petition is served', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitionsclerk user
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketNumber: '101-18',
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              eventCode: 'P',
+              filedBy: 'Test Petitioner',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              processingStatus: 'complete',
+              servedAt: '2018-11-21T20:49:28.192Z',
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+            MOCK_CASE.docketEntries.find(
+              d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+            ),
+          ],
+        },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      const stinDocketEntry = myCase.docketEntries.find(
+        d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+      expect(stinDocketEntry).not.toBeDefined();
+    });
   });
 
   describe('Other Petitioners', () => {
@@ -514,7 +627,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
     });
 
@@ -522,7 +635,7 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case from an already existing case json when the docketNumber has leading zeroes', () => {
@@ -532,7 +645,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.docketNumber).toBe('101-20');
     });
 
@@ -661,7 +774,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with an invalid trial time', () => {
@@ -729,7 +842,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with blocked set to true and a blockedReason and blockedDate', () => {
@@ -744,7 +857,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with a trial time', () => {
@@ -757,7 +870,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with automaticBlocked set to true and a valid automaticBlockedReason and automaticBlockedDate', () => {
@@ -772,7 +885,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with automaticBlocked set to true and an invalid automaticBlockedReason and automaticBlockedDate', () => {
@@ -814,7 +927,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with closed status and no closed date', () => {
@@ -844,7 +957,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with sealedDate set to a valid date', () => {
@@ -857,7 +970,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     describe('with different payment statuses', () => {
@@ -890,6 +1003,41 @@ describe('Case entity', () => {
         expect(myCase.getFormattedValidationErrors()).toMatchObject({
           petitionPaymentWaivedDate: expect.anything(),
         });
+      });
+    });
+
+    it('fails validation if a petition fee payment date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentDate: '2050-10-01T21:40:46.415Z',
+          petitionPaymentMethod: 'Magic Beans',
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentDate: expect.anything(),
+      });
+    });
+
+    it('fails validation if a petition fee waived date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2050-10-01T21:40:46.415Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentWaivedDate: expect.anything(),
       });
     });
   });
@@ -2683,9 +2831,9 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
 
-      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Armen');
+      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Colvin');
 
-      expect(caseToUpdate.associatedJudge).toEqual('Judge Armen');
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Colvin');
       expect(caseToUpdate.trialDate).toBeFalsy();
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
@@ -3059,8 +3207,8 @@ describe('Case entity', () => {
         expect(result.reason).toEqual(['Case procedure is not the same']);
       });
 
-      it('should fail when case trial locations are not the same', () => {
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+      it('should fail when case requested place of trials are not the same', () => {
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3114,7 +3262,7 @@ describe('Case entity', () => {
 
       it('should return all reasons for the failure if the case status is eligible', () => {
         pendingCaseEntity.procedureType = 'small';
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({
@@ -3364,6 +3512,8 @@ describe('Case entity', () => {
 
   describe('isAssociatedUser', () => {
     let caseEntity;
+    const CONTACT_PRIMARY_ID = '3855b2dd-4094-4526-acc0-b48d7eed1f28';
+    const CONTACT_SECONDARY_ID = '90035070-d10f-49cc-b08c-bb9d09993f5b';
     beforeEach(() => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
@@ -3371,9 +3521,18 @@ describe('Case entity', () => {
       caseEntity = new Case(
         {
           ...MOCK_CASE,
+          contactPrimary: {
+            ...MOCK_CASE.contactPrimary,
+            contactId: CONTACT_PRIMARY_ID,
+          },
+          contactSecondary: {
+            ...MOCK_CASE.contactPrimary,
+            contactId: CONTACT_SECONDARY_ID,
+          },
           irsPractitioners: [
             { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
           ],
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners: [
             { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
           ],
@@ -3454,6 +3613,24 @@ describe('Case entity', () => {
       });
 
       expect(isAssociated).toBeFalsy();
+    });
+
+    it('returns true if the user is the primary contact on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: CONTACT_PRIMARY_ID },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns true if the user is the secondary contact on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        user: { userId: CONTACT_SECONDARY_ID },
+      });
+
+      expect(isAssociated).toBeTruthy();
     });
   });
 
@@ -3805,6 +3982,26 @@ describe('Case entity', () => {
       );
       expect(myCase).toMatchObject({
         contactSecondary: undefined,
+      });
+    });
+
+    describe('judgeUserId', () => {
+      it('sets the judgeUserId property when a value is passed in', () => {
+        const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+        const myCase = new Case(
+          { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
+          { applicationContext },
+        );
+        expect(myCase).toMatchObject({
+          judgeUserId: mockJudgeUserId,
+        });
+        expect(myCase.getFormattedValidationErrors()).toEqual(null);
+      });
+
+      it('does not fail validation without a judgeUserId', () => {
+        const myCase = new Case(MOCK_CASE, { applicationContext });
+        expect(myCase.judgeUserId).toBeUndefined();
+        expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
     });
   });

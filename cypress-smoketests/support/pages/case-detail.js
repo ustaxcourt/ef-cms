@@ -96,6 +96,9 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
   cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+};
+
+exports.clickSaveUploadedPdfButton = () => {
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('h1:contains("Drafts")').should('exist');
   cy.get('h3:contains("An Uploaded PDF")').should('exist');
@@ -109,6 +112,7 @@ exports.manuallyAddCaseToNewTrialSession = trialSessionId => {
     .should('have.value', trialSessionId);
   cy.get('#modal-root .modal-button-confirm').click();
   cy.get('.usa-alert--success').should('contain', 'Case scheduled for trial.');
+  cy.get('h3:contains("Trial - Scheduled")').should('exist');
 };
 
 exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {

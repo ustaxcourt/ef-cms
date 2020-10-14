@@ -332,7 +332,7 @@ petitionsclerk@example.com
 petitionsclerk1@example.com
 trialclerk@example.com
 judgeArmen@example.com
-armensChambers@example.com
+colvinsChambers@example.com
 judgeAshford@example.com
 ashfordsChambers@example.com
 judgeBuch@example.com
@@ -375,9 +375,7 @@ cohensChambers1@example.com – cohensChambers5@example.com
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
 
-The password for all accounts is:
-
-`Testing1234$`
+The password for all accounts is set as an environment variable: `DEFAULT_ACCOUNT_PASS`.
 
 ## Editor configuration
 

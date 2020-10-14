@@ -31,6 +31,10 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -121,6 +125,36 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  const workItemToUpdate = currentDocketEntry.workItem;
+
+  if (workItemToUpdate) {
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
+    });
+
+    workItemToUpdate.setAsCompleted({
+      message: 'completed',
+      user,
+    });
+
+    workItemToUpdate.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemForDocketClerkFilingExternalDocument({
+        applicationContext,
+        workItem: workItemToUpdate.validate().toRawObject(),
+      });
+  }
 
   return {
     paperServicePdfUrl,

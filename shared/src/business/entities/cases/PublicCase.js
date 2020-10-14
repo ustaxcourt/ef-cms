@@ -3,6 +3,7 @@ const {
   COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
@@ -27,14 +28,13 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
-  this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.docketNumberWithSuffix =
     rawCase.docketNumberWithSuffix ||
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.receivedAt = rawCase.receivedAt;
-  this.isSealed = !!rawCase.sealedDate;
+  this.isSealed = !!rawCase.sealedDate; // if true only return docket number with suffix
 
   this.contactPrimary = rawCase.contactPrimary
     ? new PublicContact(rawCase.contactPrimary)
@@ -102,7 +102,7 @@ joiValidationDecorator(
 const isPrivateDocument = function (document) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-  const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isStipDecision = document.eventCode === STIPULATED_DECISION_EVENT_CODE;
   const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
   const isDocumentOnDocketRecord = document.isOnDocketRecord;
@@ -111,7 +111,7 @@ const isPrivateDocument = function (document) {
   );
 
   const isPublicDocumentType =
-    (isStipDecision || isOrder || isCourtIssuedDocument) && !isTranscript;
+    (isOrder || isCourtIssuedDocument) && !isTranscript && !isStipDecision;
 
   return (
     (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType

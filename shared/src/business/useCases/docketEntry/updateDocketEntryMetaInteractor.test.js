@@ -43,6 +43,19 @@ describe('updateDocketEntryMetaInteractor', () => {
         signedJudgeName: 'Dredd',
         userId: mockUserId,
       },
+      {
+        docketEntryId: 'd5b97867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Test Entry 2',
+        documentType: 'Request for Place of Trial',
+        eventCode: 'RQT',
+        filingDate: '2019-01-01T00:01:00.000Z',
+        index: 3,
+        isMinuteEntry: true,
+        partyPrimary: true,
+        servedAt: '2019-01-02T00:01:00.000Z',
+        servedParties: [{ name: 'Some Other Party' }],
+        userId: mockUserId,
+      },
     ];
 
     const caseByDocketNumber = {
@@ -241,7 +254,44 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should generate a new coversheet for the document if the filingDate field is changed', async () => {
+  it('should not generate a new coversheet for a court-issued docket entry if the servedAt field is changed', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[1],
+        filingDate: '2019-01-02T00:01:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should make a call to update the docketEntryEntity before adding a coversheet when the filingDate field is changed', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[0],
+        filingDate: '2020-08-01T00:01:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0],
+    ).toMatchObject({
+      docketNumber: '101-20',
+      document: { filingDate: '2020-08-01T00:01:00.000Z' },
+    });
+  });
+
+  it('should add a new coversheet when filingDate field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       docketEntryMeta: {
@@ -254,6 +304,12 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+    ).toMatchObject({
+      docketNumber: '101-20',
+      filingDateUpdated: true,
+    });
   });
 
   it('should NOT generate a new coversheet for the document if the servedAt and filingDate fields are NOT changed', async () => {
@@ -263,6 +319,21 @@ describe('updateDocketEntryMetaInteractor', () => {
         ...docketEntries[0],
         filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not call addCoversheetInteractor if filingDate field is changed and the docket entry is a minute entry', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[2], // minute entry
+        filingDate: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
     });

@@ -1,5 +1,12 @@
 const AWS = require('aws-sdk');
 
+const tableName = process.argv[2];
+
+if (!tableName) {
+  console.error('Table name to export is required');
+  process.exit(1);
+}
+
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',
@@ -7,7 +14,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 documentClient
   .scan({
-    TableName: 'efcms-local',
+    TableName: tableName,
   })
   .promise()
   .then(documents => {

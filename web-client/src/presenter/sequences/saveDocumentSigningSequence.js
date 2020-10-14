@@ -7,6 +7,7 @@ import { followRedirectAction } from '../actions/followRedirectAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
+import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -18,6 +19,7 @@ export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   setSaveAlertsForNavigationAction,
   setSuccessFromDocumentTitleAction,
   completeDocumentSigningAction,
+  setDefaultDraftDocumentIdAction,
   setRedirectUrlAction,
   completeWorkItemForDocumentSigningAction,
   setDocumentDetailTabAction,

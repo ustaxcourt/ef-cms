@@ -27,7 +27,7 @@ export const AdvancedDocumentSearch = connect(
     const narrowYourSearch = () => {
       return (
         <>
-          <h4>Narrow your Search (optional)</h4>
+          <h4 id="narrow-search-header">Narrow your Search (optional)</h4>
           <FormGroup
             className="margin-bottom-0"
             errorText={validationErrors.chooseOneValue}
@@ -132,9 +132,11 @@ export const AdvancedDocumentSearch = connect(
                   }
                   endDateOptional={true}
                   endName="endDate"
-                  endPickerCls="grid-col-5"
+                  endPickerCls="grid-col-12"
                   endValue={advancedSearchForm[formType].endDate}
-                  pickerSpacer={() => <div className="margin-left-3" />}
+                  pickerSpacer={() => (
+                    <div className="margin-left-3 margin-top-2" />
+                  )}
                   rangePickerCls="grid-row grid-gap-lg"
                   showHint={true}
                   startDateErrorText={
@@ -143,7 +145,7 @@ export const AdvancedDocumentSearch = connect(
                   }
                   startDateOptional={true}
                   startName="startDate"
-                  startPickerCls="grid-col-5"
+                  startPickerCls="grid-col-12"
                   startValue={advancedSearchForm[formType].startDate}
                   onChangeEnd={e => {
                     updateSequence({

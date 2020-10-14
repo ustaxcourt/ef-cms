@@ -26,12 +26,13 @@ const { goToMyDocumentQC } = require('../support/pages/document-qc');
 const barNumberToSearchBy = 'PT1234';
 let testData = {};
 let token;
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Create and serve a case to search for', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -54,7 +55,7 @@ describe('Case Advanced Search', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -78,7 +79,7 @@ describe('Practitioner Search', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -102,7 +103,7 @@ describe('Opinion Search', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -114,11 +115,11 @@ describe('Opinion Search', () => {
   it('should create an opinion to search for', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
     createOpinion();
-    addDocketEntryAndServeOpinion();
+    addDocketEntryAndServeOpinion(testData);
   });
 
   it('should be able to search for an opinion by keyword', () => {
     goToOpinionSearch();
-    searchOpinionByKeyword('smoke test');
+    searchOpinionByKeyword(testData.documentDescription);
   });
 });

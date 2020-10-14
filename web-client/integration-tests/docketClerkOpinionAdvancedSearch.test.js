@@ -15,6 +15,12 @@ describe('docket clerk opinion advanced search', () => {
 
     await test.runSequence('gotoAdvancedSearchSequence');
 
+    const judges = test.getState('legacyAndCurrentJudges');
+    expect(judges.length).toBeGreaterThan(0);
+
+    const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
+    expect(legacyJudge).toBeTruthy();
+
     await test.runSequence('submitOpinionAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
@@ -41,7 +47,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
-          opinionType: 'Summary Opinion',
+          opinionType: 'Memorandum Opinion',
           startDate: '1995-08-03',
         },
       });
@@ -69,7 +75,7 @@ describe('docket clerk opinion advanced search', () => {
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
             documentTitle:
-              'T.C. Opinion Judge Armen Some very strong opinions about sunglasses',
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
           }),
         ]),
       );
@@ -91,7 +97,7 @@ describe('docket clerk opinion advanced search', () => {
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
             documentTitle:
-              'T.C. Opinion Judge Armen Some very strong opinions about sunglasses',
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
           }),
         ]),
       );
@@ -132,7 +138,7 @@ describe('docket clerk opinion advanced search', () => {
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
             documentTitle:
-              'T.C. Opinion Judge Armen Some very strong opinions about sunglasses',
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
           }),
         ]),
       );

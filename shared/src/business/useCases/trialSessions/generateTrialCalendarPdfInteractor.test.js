@@ -14,9 +14,13 @@ describe('generateTrialCalendarPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([
-        MOCK_CASE,
-        MOCK_CASE,
-        MOCK_CASE,
+        { ...MOCK_CASE, docketNumberWithSuffix: '101-18' },
+        { ...MOCK_CASE, docketNumberWithSuffix: '102-19' },
+        {
+          ...MOCK_CASE,
+          docketNumberWithSuffix: '123-20',
+          removedFromTrial: true,
+        },
       ]);
 
     applicationContext
@@ -73,6 +77,25 @@ describe('generateTrialCalendarPdfInteractor', () => {
       applicationContext.getDocumentGenerators().trialCalendar.mock.calls
         .length,
     ).toBe(1);
+    expect(
+      applicationContext.getDocumentGenerators().trialCalendar,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          cases: expect.arrayContaining([
+            expect.objectContaining({
+              docketNumber: '101-18',
+            }),
+            expect.objectContaining({
+              docketNumber: '102-19',
+            }),
+            expect.not.objectContaining({
+              docketNumber: '123-20',
+            }),
+          ]),
+        }),
+      }),
+    );
   });
 
   it('should return the trial session calendar pdf url', async () => {
