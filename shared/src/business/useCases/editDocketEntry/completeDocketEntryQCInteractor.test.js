@@ -3,6 +3,7 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_SECTION,
