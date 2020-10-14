@@ -84,8 +84,8 @@ export const MessageDocument = connect(
                   icon="edit"
                   onClick={() =>
                     openConfirmEditModalSequence({
+                      docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
                       docketNumber: caseDetail.docketNumber,
-                      documentIdToEdit: viewerDocumentToDisplay.documentId,
                       parentMessageId,
                       redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     })
