@@ -70,6 +70,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:UpdateUserPool",
         "cognito-idp:DescribeUserPoolClient",
         "cognito-idp:AdminInitiateAuth",
+        "cognito-idp:AdminDisableUser",
         "cognito-idp:SignUp",
         "cognito-idp:ListUserPools",
         "cognito-idp:ListUserPoolClients",
