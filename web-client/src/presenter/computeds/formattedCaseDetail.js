@@ -14,12 +14,35 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
+const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
+  const sessions = get(state.trialSessions);
+  let session;
+  if (sessions) {
+    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
+  }
+
+  const judge = get(state.judgeUser);
+
+  const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
+  const isChambersUserAssigned =
+    judge &&
+    session?.judge?.userId === judge?.userId &&
+    judge?.section === currentUser.section;
+  const isTrialClerkUserAssigned =
+    session?.trialClerk?.userId === currentUser.userId;
+
+  return (
+    isJudgeUserAssigned || isTrialClerkUserAssigned || isChambersUserAssigned
+  );
+};
+
 export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
   isInitialDocument,
   isServed,
+  isStipDecision,
   isStricken,
   isUnservable,
   userHasAccessToCase,
@@ -31,7 +54,7 @@ export const getShowDocumentViewerLink = ({
     if (isStricken) return false;
     if (userHasNoAccessToDocument) return false;
 
-    if (isCourtIssuedDocument) {
+    if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
     } else {
@@ -195,6 +218,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       isExternalUser,
       isInitialDocument,
       isServed: !!entry.servedAt,
+      isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
       userHasAccessToCase,
@@ -243,6 +267,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.consolidatedCases = result.consolidatedCases || [];
+
+  result.userIsAssignedToSession = getUserIsAssignedToSession({
+    currentUser: user,
+    get,
+    result,
+  });
 
   result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
   result.docketRecordSort = docketRecordSort;

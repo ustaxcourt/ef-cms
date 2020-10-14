@@ -17,17 +17,14 @@
 [ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
+[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
 
 ENV=$1
 REGION="us-east-1"
 
-USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
-USER_POOL_ID="${USER_POOL_ID%\"}"
-USER_POOL_ID="${USER_POOL_ID#\"}"
+USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
-CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}")
-CLIENT_ID="${CLIENT_ID%\"}"
-CLIENT_ID="${CLIENT_ID#\"}"
+CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}" --output text)
 
 echo "" > cases.txt
 
@@ -36,7 +33,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --client-id "${CLIENT_ID}" \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME="petitioner1@example.com"',PASSWORD'="Testing1234$")
+  --auth-parameters USERNAME="petitioner1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
 petitionerToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
 response=$(aws cognito-idp admin-initiate-auth \
@@ -44,7 +41,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --client-id "${CLIENT_ID}" \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="Testing1234$")
+  --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
 petitionsclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
 response=$(aws cognito-idp admin-initiate-auth \
@@ -52,7 +49,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --client-id "${CLIENT_ID}" \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME="docketclerk1@example.com"',PASSWORD'="Testing1234$")
+  --auth-parameters USERNAME="docketclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
 docketclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
 while read -r line

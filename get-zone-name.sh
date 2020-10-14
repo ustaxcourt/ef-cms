@@ -18,6 +18,8 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
   echo "${ZONE_NAME_EXP1}"
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "${ZONE_NAME_EXP2}"
+elif [[ $BRANCH == 'experimental3' ]] ; then
+  echo "${ZONE_NAME_EXP3}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${ZONE_NAME_IRS}"
 elif [[ $BRANCH == 'test' ]] ; then

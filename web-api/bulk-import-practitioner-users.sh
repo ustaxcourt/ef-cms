@@ -11,16 +11,15 @@
 [ -z "$2" ] && echo "The FILE_NAME must be provided as the \$2 argument.  An example value of this includes './practitioner_users.csv'" && exit 1
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
+[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 
 ENV=$1
 REGION="us-east-1"
 FILE_NAME=$2
 
-USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
-USER_POOL_ID="${USER_POOL_ID%\"}"
-USER_POOL_ID="${USER_POOL_ID#\"}"
+USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
-ENV=${ENV} STAGE=${ENV} REGION=${REGION} DYNAMODB_ENDPOINT=dynamodb.${REGION}.amazonaws.com \
+ENV=${ENV} STAGE=${ENV} DEPLOYING_COLOR=${DEPLOYING_COLOR} REGION=${REGION} DYNAMODB_ENDPOINT=dynamodb.${REGION}.amazonaws.com \
 S3_ENDPOINT=s3.${REGION}.amazonaws.com DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-${REGION} \
 USER_POOL_ID=${USER_POOL_ID} \
 node ./bulkImportPractitionerUsers.js ${FILE_NAME} >> bulk-import-log.txt

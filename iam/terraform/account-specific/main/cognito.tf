@@ -11,17 +11,17 @@ resource "aws_cognito_user_pool" "log_viewers" {
 }
 
 resource "aws_cognito_user_pool_domain" "log_viewers" {
-  domain       = "ef-cms-info"
+  domain       = "ef-cms-info-${var.cognito_suffix}"
   user_pool_id = aws_cognito_user_pool.log_viewers.id
 }
 
 resource "aws_cognito_identity_pool" "log_viewers" {
-  identity_pool_name = "kibana dashboard identity pool"
+  identity_pool_name               = "kibana dashboard identity pool"
   allow_unauthenticated_identities = false
 }
 
 resource "aws_iam_role" "es_kibana_role" {
-  name = "es_kibana_role"
+  name               = "es_kibana_role"
   assume_role_policy = <<CONFIG
 {
   "Version": "2012-10-17",

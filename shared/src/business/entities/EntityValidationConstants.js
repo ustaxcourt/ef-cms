@@ -192,6 +192,9 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       otherwise: joi.optional(),
       then: joi.required(),
     }),
+  judgeUserId: JoiValidationConstants.UUID.optional().description(
+    'Unique ID for the associated judge.',
+  ),
   lodged: joi
     .boolean()
     .optional()

@@ -133,7 +133,7 @@ describe('remove case from trial session', () => {
     });
   });
 
-  it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a not calendared session', async () => {
+  it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, updateCaseAutomaticBlock, and updateCase persistence methods with correct parameters for a not calendared session', async () => {
     mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: false };
 
     await removeCaseFromTrialInteractor({
@@ -175,6 +175,13 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
+        .calls[0][0].caseEntity,
+    ).toMatchObject({ docketNumber: '101-18' });
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
