@@ -127,13 +127,6 @@ describe('dynamodbClientService', function () {
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
     });
-    it('should return nothing if the promise is rejected', async () => {
-      applicationContext
-        .getDocumentClient()
-        .get.mockReturnValue({ promise: () => Promise.reject({}) });
-      const result = await get({ applicationContext });
-      expect(result).toBeUndefined();
-    });
   });
 
   describe('query', () => {
