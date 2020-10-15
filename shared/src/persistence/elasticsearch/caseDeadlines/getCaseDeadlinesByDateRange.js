@@ -41,6 +41,7 @@ exports.getCaseDeadlinesByDateRange = async ({
         },
       },
       size,
+      sort: [{ 'deadlineDate.S': { order: 'asc' } }],
     },
     index: 'efcms-case-deadline',
   };
