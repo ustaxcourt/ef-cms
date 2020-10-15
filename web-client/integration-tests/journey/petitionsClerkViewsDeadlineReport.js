@@ -1,6 +1,10 @@
-import { caseDeadlineReportHelper } from '../../src/presenter/computeds/caseDeadlineReportHelper';
+import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDeadlineReportHelper = withAppContextDecorator(
+  caseDeadlineReportHelperComputed,
+);
 
 export const petitionsClerkViewsDeadlineReport = (test, overrides = {}) => {
   return it('Petitions clerk views deadline report', async () => {
@@ -37,12 +41,9 @@ export const petitionsClerkViewsDeadlineReport = (test, overrides = {}) => {
 
     expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
 
-    const helper = runCompute(
-      withAppContextDecorator(caseDeadlineReportHelper),
-      {
-        state: test.getState(),
-      },
-    );
+    let helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
 
     expect(helper.showLoadMoreButton).toBeTruthy();
 
@@ -55,5 +56,11 @@ export const petitionsClerkViewsDeadlineReport = (test, overrides = {}) => {
     );
 
     expect(deadlinesForThisCase.length).toEqual(2);
+
+    helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper.showLoadMoreButton).toBeFalsy();
   });
 };

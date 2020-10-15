@@ -1,11 +1,10 @@
 import { state } from 'cerebral';
 
 /**
- * get case deadlines between start and end date
+ * clears state.caseDeadlineReport
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {function} providers.get the get function
+ * @param {object} providers.store the store object
  * @returns {object} the case deadlines
  */
 export const clearCaseDeadlineReportAction = async ({ store }) => {
