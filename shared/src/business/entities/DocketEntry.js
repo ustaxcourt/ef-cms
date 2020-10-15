@@ -55,7 +55,6 @@ DocketEntry.prototype.init = function init(
         documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.processingStatus = rawDocketEntry.processingStatus || 'pending';
     this.qcAt = rawDocketEntry.qcAt;
     this.qcByUserId = rawDocketEntry.qcByUserId;
     this.signedAt = rawDocketEntry.signedAt;
@@ -115,6 +114,7 @@ DocketEntry.prototype.init = function init(
   this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
   this.partyPrimary = rawDocketEntry.partyPrimary;
   this.partySecondary = rawDocketEntry.partySecondary;
+  this.processingStatus = rawDocketEntry.processingStatus || 'pending';
   this.receivedAt = rawDocketEntry.receivedAt || createISODateString();
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;

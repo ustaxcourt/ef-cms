@@ -84,7 +84,7 @@ exports.createUser = async ({
       .getCognito()
       .adminCreateUser({
         MessageAction: 'SUPPRESS',
-        TemporaryPassword: password || process.env.DEFAULT_ACCOUNT_PASS,
+        TemporaryPassword: password,
         UserAttributes: [
           {
             Name: 'email_verified',
@@ -140,11 +140,6 @@ exports.createUser = async ({
       UserPoolId: userPoolId,
       Username: userId,
     });
-  }
-
-  // note: this will only be called on local envs
-  if (!userId) {
-    userId = applicationContext.getUniqueId();
   }
 
   return await exports.createUserRecords({
