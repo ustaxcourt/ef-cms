@@ -34,6 +34,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           },
         ],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [],
       },
@@ -69,6 +70,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketEntries: [],
         docketNumber: '123-20',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        docketNumberWithSuffix: '123-20S',
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -88,7 +90,8 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     });
 
     const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
-    expect(caseDetail.docketNumber).toEqual('123-20S');
+    expect(caseDetail.docketNumber).toEqual('123-20');
+    expect(caseDetail.docketNumberWithSuffix).toEqual('123-20S');
   });
 
   it('should add a `representing` field to practitioners with the names of parties they represent', async () => {
@@ -104,6 +107,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketEntries: [],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -147,6 +151,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketEntries: [],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         privatePractitioners: [],
       },
       docketEntryEntity: {
@@ -171,6 +176,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketEntries: [],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
       },
@@ -196,6 +202,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketEntries: [],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         preferredTrialCity: '',
         privatePractitioners: [],
       },
