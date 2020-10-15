@@ -17,11 +17,15 @@ const associatedFieldsVisible = () => {
   expect(test.getState('caseDetail.contactPrimary')).toBeDefined();
 };
 
-// const associatedFieldsBlocked = () => {
-//   expect(test.getState('caseDetail.contactPrimary')).toBeUndefined();
-//   expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-//   expect(test.getState('caseDetail.userId')).toBeUndefined();
-// };
+const associatedFieldsBlocked = () => {
+  expect(test.getState('caseDetail.contactPrimary')).toEqual({
+    name: expect.anything(),
+    state: expect.anything(),
+  });
+  expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
+  expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
+  expect(test.getState('caseDetail.userId')).toBeUndefined();
+};
 
 const internalFieldsVisible = () => {
   expect(test.getState('caseDetail.archivedCorrespondences')).toBeDefined();
@@ -162,7 +166,7 @@ describe('Case permissions test', () => {
     });
 
     publicFieldsVisible();
-    // associatedFieldsBlocked();
+    associatedFieldsBlocked();
     internalFieldsBlocked();
     stinBlocked();
   });
