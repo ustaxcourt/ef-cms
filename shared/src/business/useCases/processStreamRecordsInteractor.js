@@ -111,6 +111,10 @@ const processCaseEntries = async ({
       'the case or docket entry records that failed to index',
       failedRecords,
     );
+    applicationContext.notifyHoneybadger(
+      'the case or docket entry records that failed to index',
+      failedRecords,
+    );
     throw new Error('failed to index case entry or docket entry records');
   }
 };
@@ -200,6 +204,10 @@ const processDocketEntries = async ({
       'the docket entry records that failed to index',
       failedRecords,
     );
+    applicationContext.notifyHoneybadger(
+      'the docket entry records that failed to index',
+      failedRecords,
+    );
     throw new Error('failed to index docket entry records');
   }
 };
@@ -227,6 +235,10 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
+      'the records that failed to index',
+      failedRecords,
+    );
+    applicationContext.notifyHoneybadger(
       'the records that failed to index',
       failedRecords,
     );
@@ -259,6 +271,10 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
       'the records that failed to delete',
+      failedRecords,
+    );
+    applicationContext.notifyHoneybadger(
+      'failed to delete these records from elasticsearch',
       failedRecords,
     );
     throw new Error('failed to delete records');
@@ -326,18 +342,55 @@ exports.processStreamRecordsInteractor = async ({
   };
 
   try {
-    await processRemoveEntries({ applicationContext, removeRecords });
+    await processRemoveEntries({
+      applicationContext,
+      removeRecords,
+    }).catch(err =>
+      applicationContext.notifyHoneybadger(err, {
+        message:
+          'processStreamRecordsInteractor failed to processRemoveEntries',
+      }),
+    );
 
     await Promise.all([
-      processCaseEntries({ applicationContext, caseEntityRecords, utils }),
-      processDocketEntries({ applicationContext, docketEntryRecords, utils }),
-      processOtherEntries({ applicationContext, otherRecords }),
+      processCaseEntries({
+        applicationContext,
+        caseEntityRecords,
+        utils,
+      }).catch(err =>
+        applicationContext.notifyHoneybadger(err, {
+          message:
+            'processStreamRecordsInteractor failed to processCaseEntries',
+        }),
+      ),
+      processDocketEntries({
+        applicationContext,
+        docketEntryRecords,
+        utils,
+      }).catch(err =>
+        applicationContext.notifyHoneybadger(err, {
+          message:
+            'processStreamRecordsInteractor failed to processDocketEntries',
+        }),
+      ),
+      processOtherEntries({ applicationContext, otherRecords }).catch(err =>
+        applicationContext.notifyHoneybadger(err, {
+          message:
+            'processStreamRecordsInteractor failed to processOtherEntries',
+        }),
+      ),
     ]);
   } catch (err) {
     applicationContext.logger.info(
       'processStreamRecordsInteractor failed to process the records',
       err,
     );
+    applicationContext.notifyHoneybadger(err);
     throw err;
   }
 };
+
+exports.processCaseEntries = processCaseEntries;
+exports.processDocketEntries = processDocketEntries;
+exports.processOtherEntries = processOtherEntries;
+exports.processRemoveEntries = processRemoveEntries;
