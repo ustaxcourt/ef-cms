@@ -1,4 +1,6 @@
+console.log('top genericHandler');
 const createApplicationContext = require('./applicationContext');
+console.log('after require applicationContext');
 const { getUserFromAuthHeader } = require('./middleware/apiGatewayHelper');
 const { handle } = require('./middleware/apiGatewayHelper');
 

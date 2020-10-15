@@ -517,6 +517,9 @@ jobs:
           name: Setup ES Instance Count
           command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup ES Instance Type
+          command: echo "export ES_INSTANCE_TYPE='$(./get-es-instance-type.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
@@ -534,6 +537,7 @@ jobs:
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" \
              -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" \
+             -e "ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}" \
              -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" \
              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
