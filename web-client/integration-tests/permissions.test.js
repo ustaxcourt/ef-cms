@@ -75,9 +75,6 @@ const internalFieldsBlocked = () => {
     test.getState('caseDetail.docketEntries.0.judgeUserId'),
   ).toBeUndefined();
   expect(test.getState('caseDetail.docketEntries.0.pending')).toBeUndefined();
-  expect(
-    test.getState('caseDetail.docketEntries.0.processingStatus'),
-  ).toBeUndefined();
   expect(test.getState('caseDetail.docketEntries.0.qcAt')).toBeUndefined();
   expect(
     test.getState('caseDetail.docketEntries.0.qcByUserId'),
