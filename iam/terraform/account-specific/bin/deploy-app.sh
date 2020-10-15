@@ -1,5 +1,20 @@
 #!/bin/bash
 
+if [ -z "$ZONE_NAME" ]; then
+  echo "Please export the ZONE_NAME variable in your shell"
+  exit 1
+fi
+
+if [ -z "$ES_LOGS_INSTANCE_COUNT" ]; then
+  echo "Please export the ES_LOGS_INSTANCE_COUNT variable in your shell"
+  exit 1
+fi
+
+if [ -z "$COGNITO_SUFFIX" ]; then
+  echo "Please export the EFCMS_DOMAIN variable in your shell"
+  exit 1
+fi
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-account.tfstate"
 LOCK_TABLE=efcms-terraform-lock
