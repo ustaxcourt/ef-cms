@@ -40,6 +40,8 @@ exports.getIndexNameForRecord = record => {
     index = 'efcms-message';
   } else if (isRecordOfType(record, 'UserCase')) {
     index = 'efcms-user-case';
+  } else if (isRecordOfType(record, 'CaseDeadline')) {
+    index = 'efcms-case-deadline';
   }
 
   return index;

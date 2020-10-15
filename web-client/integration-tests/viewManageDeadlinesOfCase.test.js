@@ -27,12 +27,13 @@ describe('View and manage the deadlines of a case', () => {
     petitionsClerkViewsCaseWithNoDeadlines(test);
   });
 
-  describe('Create a case deadline', () => {
+  describe('Create 2 case deadlines', () => {
     loginAs(test, 'petitionsclerk@example.com');
+    petitionsClerkCreatesACaseDeadline(test);
     petitionsClerkCreatesACaseDeadline(test);
   });
 
-  describe('View a case deadline list on case', () => {
+  describe('View case deadline list on case', () => {
     loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkViewCaseDeadline(test);
   });
@@ -47,8 +48,9 @@ describe('View and manage the deadlines of a case', () => {
     petitionsClerkEditsCaseDeadline(test);
   });
 
-  describe('Delete a case deadline on case', () => {
+  describe('Delete case deadlines on case', () => {
     loginAs(test, 'petitionsclerk@example.com');
+    petitionsClerkDeletesCaseDeadline(test);
     petitionsClerkDeletesCaseDeadline(test);
   });
 

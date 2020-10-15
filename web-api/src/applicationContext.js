@@ -368,7 +368,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
   getCaseDeadlinesByDateRange,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDateRange');
+} = require('../../shared/src/persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange');
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
