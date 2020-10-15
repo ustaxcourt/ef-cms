@@ -1,4 +1,5 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+import { refreshElasticsearchIndex } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
@@ -66,5 +67,7 @@ In a day or two`,
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('createCaseDeadlineSequence');
+
+    await refreshElasticsearchIndex();
   });
 };
