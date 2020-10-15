@@ -14,7 +14,9 @@ export const sortByDateAndDocketNumber = applicationContext => (a, b) => {
 export const caseDeadlineReportHelper = (get, applicationContext) => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
-  let caseDeadlines = get(state.allCaseDeadlines) || [];
+  let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
+  const totalCount = get(state.caseDeadlineReport.totalCount) || 0;
+  const showLoadMoreButton = caseDeadlines.length < totalCount;
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
   const judges = (get(state.judges) || [])
@@ -42,50 +44,33 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
         .formatDateString(filterEndDate, 'MMMM D, YYYY');
   }
 
-  const filterByDate = date => {
-    if (
-      filterStartDate &&
-      (!filterEndDate || filterStartDate === filterEndDate)
-    ) {
-      return date.isSame(filterStartDate, 'day');
-    } else if (
-      filterStartDate &&
-      filterEndDate &&
-      filterStartDate !== filterEndDate
-    ) {
-      return date.isBetween(filterStartDate, filterEndDate, 'day', 'day');
-    }
-  };
-
   const judgeFilter = get(state.screenMetadata.caseDeadlinesFilter.judge);
 
   caseDeadlines = caseDeadlines
-    .sort(sortByDateAndDocketNumber(applicationContext))
+    .sort(sortByDateAndDocketNumber(applicationContext)) // TODO 6683 move this sorting into ES call
     .map(d => ({
       ...d,
       associatedJudgeFormatted: applicationContext
         .getUtilities()
         .formatJudgeName(d.associatedJudge),
       caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
-      deadlineDateReal: applicationContext
-        .getUtilities()
-        .prepareDateFromString(d.deadlineDate),
       formattedDeadline: applicationContext
         .getUtilities()
         .formatDateString(d.deadlineDate, 'MMDDYY'),
-    }))
-    .filter(d => filterByDate(d.deadlineDateReal));
+    }));
 
   if (judgeFilter) {
+    // TODO 6683 move this filtering into ES call
     caseDeadlines = caseDeadlines.filter(
       i => i.associatedJudgeFormatted === judgeFilter,
     );
   }
 
   return {
-    caseDeadlineCount: caseDeadlines.length,
     caseDeadlines,
     formattedFilterDateHeader,
     judges,
+    showLoadMoreButton,
+    totalCount,
   };
 };

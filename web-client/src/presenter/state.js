@@ -199,6 +199,7 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
+  caseDeadlineReport: {},
   caseDetail: {},
   closedCases: [],
   cognitoLoginUrl: null,
