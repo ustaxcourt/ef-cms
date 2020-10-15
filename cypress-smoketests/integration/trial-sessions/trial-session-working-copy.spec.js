@@ -6,7 +6,6 @@ const {
   createTrialSession,
   filterWorkingCopyByStatus,
   goToTrialSession,
-  goToTrialSessionWorkingCopy,
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
 } = require('../../support/pages/trial-sessions');
@@ -27,14 +26,21 @@ const {
   submitPetition,
 } = require('../../support/pages/create-electronic-petition');
 const {
+  confirmUser,
+  getRestApi,
+  getUserToken,
+  login,
+} = require('../../support/pages/login');
+const {
   goToCaseOverview,
   manuallyAddCaseToNewTrialSession,
 } = require('../../support/pages/case-detail');
-const { getUserToken, login } = require('../../support/pages/login');
 
 faker.seed(faker.random.number());
 
 let token = null;
+let adminToken = null;
+
 const testData = {
   docketNumbers: [],
   judgeName: 'Cohen',
@@ -107,6 +113,8 @@ describe('Petitioner', () => {
   });
 });
 
+// eslint-disable-next-line no-unused-vars
+let judgeUserId;
 describe('Petitions Clerk', () => {
   before(async () => {
     const results = await getUserToken(
@@ -153,11 +161,15 @@ describe('Petitions Clerk', () => {
 
 describe.skip('Judge', () => {
   before(async () => {
-    const result = await getUserToken(
-      'jcohen@example.com',
+    const results = await getUserToken(
+      'judge.smoke@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
-    token = result.AuthenticationResult.IdToken;
+    token = results.AuthenticationResult.IdToken;
+  });
+
+  after(async () => {
+    // await disableUser({ userId: judgeUserId });
   });
 
   it('should be able to login', () => {
@@ -165,10 +177,7 @@ describe.skip('Judge', () => {
   });
 
   it('views trial session working copy', () => {
-    goToTrialSessionWorkingCopy({
-      ...testData,
-      trialSessionId: testData.trialSessionIds[0],
-    });
+    checkShowAllFilterOnWorkingCopy(testData.trialSessionIds[0]);
   });
 
   it('edits trial session working copy case trial status', () => {
@@ -194,8 +203,30 @@ describe.skip('Judge', () => {
 // the 'correct' judge user is not being associated with the newly created trial session.
 describe.skip('Judge Chambers', () => {
   before(async () => {
+    const chambersToCreate = {
+      email: 'smokeysChambers1@example.com',
+      name: 'Smokey Chambers',
+      password: DEFAULT_ACCOUNT_PASS,
+      role: 'chambers',
+      section: 'smokeysChambers',
+    };
+
+    const restApi = await getRestApi();
+
+    cy.request({
+      body: chambersToCreate,
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      url: `${restApi}/users`,
+    });
+
+    await confirmUser({ email: 'smokeysChambers1@example.com' });
+
     const result = await getUserToken(
-      'cohensChambers1@example.com',
+      'smokeysChambers1@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
@@ -207,10 +238,6 @@ describe.skip('Judge Chambers', () => {
 
   it('views trial session working copy', () => {
     checkShowAllFilterOnWorkingCopy(testData.trialSessionIds[0]);
-    goToTrialSessionWorkingCopy({
-      ...testData,
-      trialSessionId: testData.trialSessionIds[0],
-    });
   });
 
   it('edits trial session working copy case trial status', () => {
