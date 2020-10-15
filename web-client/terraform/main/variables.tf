@@ -12,12 +12,12 @@ variable "dns_domain" {
 }
 
 variable "cloudfront_default_ttl" {
-  type = string
+  type    = string
   default = "86400"
 }
 
 variable "cloudfront_max_ttl" {
-  type = string
+  type    = string
   default = "31536000"
 }
 
@@ -35,9 +35,14 @@ variable "dynamsoft_product_keys" {
 
 variable "is_dynamsoft_enabled" {
   default = "1"
-  type = string
+  type    = string
 }
 
 variable "zone_name" {
   type = string
+}
+
+variable "statuspage_dns_record" {
+  type = string
+  default = ""
 }

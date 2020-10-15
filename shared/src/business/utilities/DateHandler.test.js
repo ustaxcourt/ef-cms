@@ -248,7 +248,7 @@ describe('DateHandler', () => {
       expect(result).toBe('2019-03-01 11:40 pm');
     });
 
-    it('creates a formatted EST time using DateHandler internal format "TIME_TZ" ', () => {
+    it('creates a formatted EST time using DateHandler internal format "TIME_TZ"', () => {
       const dateRetrievedFromStorage = '2019-03-02T01:40:46.415Z';
       const result = DateHandler.formatDateString(
         dateRetrievedFromStorage,

@@ -100,11 +100,19 @@ exports.updateDocketEntryMetaInteractor = async ({
     caseEntity.updateDocketEntry(docketEntryEntity);
 
     if (shouldGenerateCoversheet) {
+      await applicationContext.getPersistenceGateway().updateDocketEntry({
+        applicationContext,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        docketNumber,
+        document: docketEntryEntity.validate(),
+      });
+
       // servedAt or filingDate has changed, generate a new coversheet
       await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
+        filingDateUpdated,
       });
     }
   }

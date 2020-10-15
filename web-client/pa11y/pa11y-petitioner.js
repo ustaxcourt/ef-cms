@@ -317,7 +317,7 @@ module.exports = [
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
       'wait for element .select-react-element__menu to be visible',
-      'click #react-select-2-option-48', //Motion for Leave to File Out of Time
+      'click #react-select-2-option-49', //Motion for Leave to File Out of Time
       'wait for element #react-select-3-input to be visible',
       'click #react-select-3-input',
       'wait for element .select-react-element__menu to be visible',

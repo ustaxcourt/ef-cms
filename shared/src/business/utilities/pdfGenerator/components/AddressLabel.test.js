@@ -30,14 +30,20 @@ describe('AddressLabel', () => {
         address2="address two"
         address3="address three"
         city="Some City"
+        inCareOf="Care"
         name="Test Person"
         postalCode="89890"
+        secondaryName="Secondary"
         state="ZZ"
+        title="The Title"
       />,
     );
 
     expect(wrapper.text()).toContain('address two');
     expect(wrapper.text()).toContain('address three');
     expect(wrapper.text()).not.toContain('USA');
+    expect(wrapper.text()).toContain('Secondary');
+    expect(wrapper.text()).toContain('The Title');
+    expect(wrapper.text()).toContain('Care');
   });
 });

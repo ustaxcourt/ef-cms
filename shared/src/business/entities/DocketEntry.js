@@ -102,6 +102,7 @@ DocketEntry.prototype.init = function init(
   this.isPaper = rawDocketEntry.isPaper;
   this.isSealed = rawDocketEntry.isSealed;
   this.isStricken = rawDocketEntry.isStricken || false;
+  this.judgeUserId = rawDocketEntry.judgeUserId;
   this.lodged = rawDocketEntry.lodged;
   this.mailingDate = rawDocketEntry.mailingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;

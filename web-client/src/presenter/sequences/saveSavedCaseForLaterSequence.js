@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
 import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
@@ -20,6 +21,7 @@ import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   startShowValidationAction,
+  filterEmptyStatisticsAction,
   getCaseDetailFormWithComputedDatesAction,
   validateCaseDetailAction,
   {

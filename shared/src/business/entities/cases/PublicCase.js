@@ -3,6 +3,7 @@ const {
   COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
@@ -102,7 +103,7 @@ joiValidationDecorator(
 const isPrivateDocument = function (document) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-  const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isStipDecision = document.eventCode === STIPULATED_DECISION_EVENT_CODE;
   const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
   const isDocumentOnDocketRecord = document.isOnDocketRecord;
@@ -111,7 +112,7 @@ const isPrivateDocument = function (document) {
   );
 
   const isPublicDocumentType =
-    (isStipDecision || isOrder || isCourtIssuedDocument) && !isTranscript;
+    (isOrder || isCourtIssuedDocument) && !isTranscript && !isStipDecision;
 
   return (
     (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType

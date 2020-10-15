@@ -13,6 +13,7 @@ describe('publicCaseDetailHelper', () => {
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     INITIAL_DOCUMENT_TYPES,
+    STIPULATED_DECISION_EVENT_CODE,
     TRANSCRIPT_EVENT_CODE,
   } = applicationContextPublic.getConstants();
 
@@ -278,6 +279,20 @@ describe('publicCaseDetailHelper', () => {
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2019-12-24T21:49:28.192Z',
       },
+      {
+        createdAt: '2019-12-24T20:49:28.192Z',
+        description: 'eighth record',
+        docketEntryId: 'd1eb1db6-25fd-4683-931b-a2f4bc366788',
+        documentType: 'Stipulated Decision',
+        eventCode: STIPULATED_DECISION_EVENT_CODE,
+        filingDate: '2019-12-24T20:49:28.192Z',
+        index: 8,
+        isOnDocketRecord: true,
+        isStricken: false,
+        numberOfPages: 0,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: '2019-12-24T21:49:28.192Z',
+      },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
@@ -397,6 +412,22 @@ describe('publicCaseDetailHelper', () => {
         showNotServed: false,
         showServed: true,
         signatory: undefined,
+      },
+      {
+        createdAtFormatted: '12/24/19',
+        description: 'eighth record',
+        descriptionDisplay: 'eighth record',
+        docketEntryId: 'd1eb1db6-25fd-4683-931b-a2f4bc366788',
+        eventCode: STIPULATED_DECISION_EVENT_CODE,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 8,
+        isStricken: false,
+        servedAtFormatted: '12/24/19',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: false,
+        showServed: true,
       },
       {
         createdAtFormatted: undefined,
