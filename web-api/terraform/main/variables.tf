@@ -27,6 +27,11 @@ variable "es_instance_count" {
   default = "1"
 }
 
+variable "es_instance_type" {
+  type    = string
+  default = "t2.small.elasticsearch"
+}
+
 variable "honeybadger_key" {
   type    = string
   default = "default_key"
