@@ -13,27 +13,27 @@
 BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'experimental3' ]] ; then
-  echo "3"
+  echo "m5.large.elasticsearch"
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo "3"
+  echo "t2.medium.elasticsearch"
 elif [[ $BRANCH == 'test' ]] ; then
-  echo "3"
+  echo "t2.medium.elasticsearch"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo "3"
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo "3"
+  echo "m5.large.elasticsearch"
 else
   exit 1;
 fi

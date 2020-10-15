@@ -13,6 +13,11 @@ const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
+  console.log(`going to index ${caseEntityRecords.length} caseEntityRecords`);
+  console.time(
+    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
+  );
+
   const indexDocketEntry = async (fullCase, docketEntry) => {
     if (docketEntry.documentContentsId) {
       const buffer = await utils.getDocument({
@@ -80,12 +85,24 @@ const processCaseEntries = async ({
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
+  console.timeEnd(
+    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
+  );
+
+  console.time(
+    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
+  );
+
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
     applicationContext,
     records: flattenDeep(indexRecords),
   });
+
+  console.timeEnd(
+    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
+  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -107,6 +124,12 @@ const processDocketEntries = async ({
   utils,
 }) => {
   if (!docketEntryRecords.length) return;
+
+  console.log(`going to index ${docketEntryRecords.length} docketEntryRecords`);
+
+  console.time(
+    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
+  );
 
   const newDocketEntryRecords = await Promise.all(
     docketEntryRecords.map(async record => {
@@ -149,6 +172,13 @@ const processDocketEntries = async ({
       };
     }),
   );
+  console.timeEnd(
+    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
+  );
+
+  console.time(
+    `going to index ${docketEntryRecords.length} docketEntryRecords`,
+  );
 
   const {
     failedRecords,
@@ -156,6 +186,10 @@ const processDocketEntries = async ({
     applicationContext,
     records: newDocketEntryRecords,
   });
+
+  console.timeEnd(
+    `going to index ${docketEntryRecords.length} docketEntryRecords`,
+  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -169,12 +203,17 @@ const processDocketEntries = async ({
 const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   if (!otherRecords.length) return;
 
+  console.log(`going to index ${otherRecords.length} otherRecords`);
+  console.time(`going to index ${otherRecords.length} otherRecords`);
+
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
     applicationContext,
     records: otherRecords,
   });
+
+  console.timeEnd(`going to index ${otherRecords.length} otherRecords`);
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -188,12 +227,18 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
 const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (!removeRecords.length) return;
 
+  console.log(`going to index ${removeRecords.length} removeRecords`);
+
+  console.time(`going to index ${removeRecords.length} removeRecords`);
+
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
     applicationContext,
     records: removeRecords,
   });
+
+  console.timeEnd(`going to index ${removeRecords.length} removeRecords`);
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
