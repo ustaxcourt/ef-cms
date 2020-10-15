@@ -11,7 +11,7 @@ if [ -z "$ES_LOGS_INSTANCE_COUNT" ]; then
 fi
 
 if [ -z "$COGNITO_SUFFIX" ]; then
-  echo "Please export the EFCMS_DOMAIN variable in your shell"
+  echo "Please export the COGNITO_SUFFIX variable in your shell"
   exit 1
 fi
 
