@@ -75,27 +75,35 @@ exports.migrateCaseInteractor = async ({
   applicationContext,
   caseMetadata,
 }) => {
+  applicationContext.logger.info('migrate case interactor start', caseMetadata);
+
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MIGRATE_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+  applicationContext.logger.info('fetching user');
 
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  applicationContext.logger.info('received user', user);
+
   if (caseMetadata && caseMetadata.docketNumber) {
     const docketNumber = Case.formatDocketNumber(caseMetadata.docketNumber);
 
+    applicationContext.logger.info('fetching case to delete');
     const caseToDelete = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
         docketNumber,
       });
+    applicationContext.logger.info('received case to delete', caseToDelete);
 
     if (caseToDelete) {
+      applicationContext.logger.info('deleting case');
       await Promise.all([
         applicationContext
           .getPersistenceGateway()
@@ -118,6 +126,8 @@ exports.migrateCaseInteractor = async ({
     ...caseToAdd.privatePractitioners,
     ...caseToAdd.irsPractitioners,
   ]) {
+    applicationContext.logger.info('fetch practitioner');
+
     const practitioner = await applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber({
@@ -132,6 +142,8 @@ exports.migrateCaseInteractor = async ({
       casePractitioner.userId = practitioner.userId;
 
       const userCaseEntity = new UserCase(caseToAdd);
+
+      applicationContext.logger.info('associate user with case');
 
       await applicationContext.getPersistenceGateway().associateUserWithCase({
         applicationContext,
@@ -152,6 +164,8 @@ exports.migrateCaseInteractor = async ({
         trialSessionId: caseToAdd.trialSessionId,
       });
 
+    applicationContext.logger.info('get trial session', trialSessionData);
+
     if (!trialSessionData) {
       throw new Error(
         `Trial Session not found with id ${caseToAdd.trialSessionId}`,
@@ -163,6 +177,7 @@ exports.migrateCaseInteractor = async ({
     });
 
     trialSessionEntity.addCaseToCalendar(caseToAdd);
+    applicationContext.logger.info('update trial session');
 
     await applicationContext.getPersistenceGateway().updateTrialSession({
       applicationContext,
@@ -182,6 +197,7 @@ exports.migrateCaseInteractor = async ({
         !!caseToAdd[contactType].hasEAccess &&
         caseToAdd.status !== CASE_STATUS_TYPES.closed;
       if (shouldCreateUserAccount) {
+        applicationContext.logger.info('create user account');
         caseToAdd = await createUserAccount({
           applicationContext,
           caseEntity: caseToAdd,
@@ -196,12 +212,14 @@ exports.migrateCaseInteractor = async ({
 
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 
+  applicationContext.logger.info('creating case');
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
     caseToCreate: caseValidatedRaw,
   });
 
   for (const correspondenceEntity of caseToAdd.correspondence) {
+    applicationContext.logger.info('updateCaseCorrespondence');
     await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence: correspondenceEntity.validate().toRawObject(),
@@ -212,6 +230,7 @@ exports.migrateCaseInteractor = async ({
   // when part of a consolidated case, run the update use case
   // which will link the cases together in DynamoDB
   if (caseToAdd.leadDocketNumber) {
+    applicationContext.logger.info('update case again');
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseValidatedRaw,
