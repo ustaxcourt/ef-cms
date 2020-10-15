@@ -946,7 +946,7 @@ const CASE_SEARCH_MIN_YEAR = 1986;
 const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
 const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
-const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
+const DEADLINE_REPORT_PAGE_SIZE = 2; // number of results returned for each page for the case deadline report
 
 // TODO: event codes need to be reorganized
 const ALL_EVENT_CODES = flatten([
