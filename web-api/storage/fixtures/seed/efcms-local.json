@@ -800,7 +800,8 @@
     "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "description": "This is a test deadline",
     "pk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "docketNumber": "106-19"
+    "docketNumber": "106-19",
+    "entityName": "CaseDeadline"
   },
   {
     "associatedJudge": "Chief Judge",
