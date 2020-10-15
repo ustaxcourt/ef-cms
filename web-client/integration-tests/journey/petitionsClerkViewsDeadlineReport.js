@@ -1,3 +1,7 @@
+import { caseDeadlineReportHelper } from '../../src/presenter/computeds/caseDeadlineReportHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
 export const petitionsClerkViewsDeadlineReport = test => {
   return it('Petitions clerk views deadline report', async () => {
     await test.runSequence('gotoCaseDeadlineReportSequence');
@@ -13,24 +17,35 @@ export const petitionsClerkViewsDeadlineReport = test => {
 
     await test.runSequence('updateDateRangeForDeadlinesSequence');
 
-    const allDeadlines = test.getState('allCaseDeadlines');
+    let deadlines = test.getState('caseDeadlineReport.caseDeadlines');
 
-    const deadlinesForThisCase = allDeadlines.filter(
+    let deadlinesForThisCase = deadlines.filter(
       d => d.docketNumber === test.docketNumber,
     );
 
-    expect(deadlinesForThisCase.length).toEqual(2); //should be 1 when paging is all working
+    expect(deadlinesForThisCase.length).toEqual(1);
 
-    expect(test.getState('allCaseDeadlines')[0].deadlineDate).toBe(
+    expect(deadlinesForThisCase[0].deadlineDate).toBe(
       '2025-08-12T04:00:00.000Z',
     );
 
-    // show more button should show
+    const helper = runCompute(
+      withAppContextDecorator(caseDeadlineReportHelper),
+      {
+        state: test.getState(),
+      },
+    );
 
-    // click the show more button
+    expect(helper.showLoadMoreButton).toBeTruthy();
 
-    // length should now be 2
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
 
-    // show more button should go away?
+    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+
+    deadlinesForThisCase = deadlines.filter(
+      d => d.docketNumber === test.docketNumber,
+    );
+
+    expect(deadlinesForThisCase.length).toEqual(2);
   });
 };
