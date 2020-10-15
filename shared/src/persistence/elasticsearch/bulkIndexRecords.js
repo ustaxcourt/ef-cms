@@ -11,7 +11,6 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
       const index = getIndexNameForRecord(doc);
 
       if (index) {
-        console.log('index', index);
         return [
           { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
           doc,
