@@ -9,12 +9,18 @@ const test = setupTest();
 const publicFieldsVisible = () => {
   expect(test.getState('caseDetail.docketNumber')).toBeDefined();
   expect(test.getState('caseDetail.caseCaption')).toBeDefined();
-  expect(test.getState('caseDetail.caseType')).toBeDefined();
   expect(test.getState('caseDetail.docketEntries.0')).toBeDefined();
 };
 
 const associatedFieldsVisible = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toBeDefined();
+  expect(test.getState('caseDetail.contactPrimary')).toMatchObject({
+    address1: expect.anything(),
+    city: expect.anything(),
+    name: expect.anything(),
+    phone: expect.anything(),
+    state: expect.anything(),
+  });
+  // expect(test.getState('caseDetail.userId')).toBeDefined();
 };
 
 const associatedFieldsBlocked = () => {
