@@ -13,8 +13,10 @@ const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  console.log(`going to index ${caseEntityRecords.length} caseEntityRecords`);
-  console.time(
+  applicationContext.logger.info(
+    `going to index ${caseEntityRecords.length} caseEntityRecords`,
+  );
+  applicationContext.logger.time(
     `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
@@ -85,11 +87,11 @@ const processCaseEntries = async ({
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
-  console.timeEnd(
+  applicationContext.logger.timeEnd(
     `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
-  console.time(
+  applicationContext.logger.time(
     `going to index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
@@ -100,7 +102,7 @@ const processCaseEntries = async ({
     records: flattenDeep(indexRecords),
   });
 
-  console.timeEnd(
+  applicationContext.logger.timeEnd(
     `going to index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
@@ -125,9 +127,11 @@ const processDocketEntries = async ({
 }) => {
   if (!docketEntryRecords.length) return;
 
-  console.log(`going to index ${docketEntryRecords.length} docketEntryRecords`);
+  applicationContext.logger.info(
+    `going to index ${docketEntryRecords.length} docketEntryRecords`,
+  );
 
-  console.time(
+  applicationContext.logger.time(
     `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
   );
 
@@ -172,11 +176,11 @@ const processDocketEntries = async ({
       };
     }),
   );
-  console.timeEnd(
+  applicationContext.logger.timeEnd(
     `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
   );
 
-  console.time(
+  applicationContext.logger.time(
     `going to index ${docketEntryRecords.length} docketEntryRecords`,
   );
 
@@ -187,7 +191,7 @@ const processDocketEntries = async ({
     records: newDocketEntryRecords,
   });
 
-  console.timeEnd(
+  applicationContext.logger.timeEnd(
     `going to index ${docketEntryRecords.length} docketEntryRecords`,
   );
 
@@ -203,8 +207,12 @@ const processDocketEntries = async ({
 const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   if (!otherRecords.length) return;
 
-  console.log(`going to index ${otherRecords.length} otherRecords`);
-  console.time(`going to index ${otherRecords.length} otherRecords`);
+  applicationContext.logger.info(
+    `going to index ${otherRecords.length} otherRecords`,
+  );
+  applicationContext.logger.time(
+    `going to index ${otherRecords.length} otherRecords`,
+  );
 
   const {
     failedRecords,
@@ -213,7 +221,9 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
     records: otherRecords,
   });
 
-  console.timeEnd(`going to index ${otherRecords.length} otherRecords`);
+  applicationContext.logger.timeEnd(
+    `going to index ${otherRecords.length} otherRecords`,
+  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -227,9 +237,13 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
 const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (!removeRecords.length) return;
 
-  console.log(`going to index ${removeRecords.length} removeRecords`);
+  applicationContext.logger.info(
+    `going to index ${removeRecords.length} removeRecords`,
+  );
 
-  console.time(`going to index ${removeRecords.length} removeRecords`);
+  applicationContext.logger.time(
+    `going to index ${removeRecords.length} removeRecords`,
+  );
 
   const {
     failedRecords,
@@ -238,7 +252,9 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     records: removeRecords,
   });
 
-  console.timeEnd(`going to index ${removeRecords.length} removeRecords`);
+  applicationContext.logger.timeEnd(
+    `going to index ${removeRecords.length} removeRecords`,
+  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
