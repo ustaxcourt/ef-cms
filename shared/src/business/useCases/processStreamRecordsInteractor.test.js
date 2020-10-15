@@ -1,6 +1,8 @@
 const {
+  partitionRecords,
   processCaseEntries,
   processDocketEntries,
+  processOtherEntries,
   processRemoveEntries,
 } = require('./processStreamRecordsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -14,6 +16,102 @@ describe('processStreamRecordsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
+  });
+
+  describe('partitionRecords', () => {
+    it('separates records by type', () => {
+      const removeRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'case|123-45',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'Case',
+            },
+          },
+        },
+        eventName: 'REMOVE',
+      };
+
+      const caseRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'case|123-45',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'Case',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
+      const docketEntryRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'docket-entry|123',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'DocketEntry',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
+      const otherRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'other-record|123',
+            },
+            sk: {
+              S: 'other-record|123',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'OtherRecord',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
+      const records = [
+        { ...removeRecord },
+        { ...caseRecord },
+        { ...docketEntryRecord },
+        { ...otherRecord },
+      ];
+
+      const result = partitionRecords(records);
+
+      expect(result).toMatchObject({
+        caseEntityRecords: [caseRecord],
+        docketEntryRecords: [docketEntryRecord],
+        otherRecords: [otherRecord],
+        removeRecords: [removeRecord],
+      });
+    });
   });
 
   describe('processRemoveEntries', () => {
@@ -363,7 +461,66 @@ describe('processStreamRecordsInteractor', () => {
     });
   });
 
-  describe('processOtherEntries', () => {});
+  describe('processOtherEntries', () => {
+    it('does nothing when no other records are found', async () => {
+      await processOtherEntries({
+        applicationContext,
+        otherRecords: [],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('attempts to bulk import the records passed in', async () => {
+      const otherEntryData = {
+        docketEntryId: '123',
+        entityName: 'OtherEntry',
+        pk: 'other-entry|123',
+        sk: 'other-entry|123',
+      };
+
+      const otherEntryDataMarshalled = {
+        docketEntryId: { S: '123' },
+        entityName: { S: 'OtherEntry' },
+        pk: { S: 'other-entry|123' },
+        sk: { S: 'other-entry|123' },
+      };
+
+      await processOtherEntries({
+        applicationContext,
+        otherRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: otherEntryData.pk },
+                sk: { S: otherEntryData.sk },
+              },
+              NewImage: otherEntryDataMarshalled,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: {
+              pk: { S: otherEntryData.pk },
+              sk: { S: otherEntryData.sk },
+            },
+            NewImage: otherEntryDataMarshalled,
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+  });
 
   describe('processRemoveEntries', () => {
     it('does nothing when no other records are found', async () => {
