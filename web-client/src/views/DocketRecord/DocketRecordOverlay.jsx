@@ -111,6 +111,7 @@ export const DocketRecordOverlay = connect(
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: entry.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
+                    isMobile: true,
                   });
                 }}
               >
