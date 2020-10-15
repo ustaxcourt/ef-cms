@@ -12,12 +12,13 @@ export const getCaseDeadlinesAction = async ({ applicationContext, get }) => {
   const startDate = get(state.screenMetadata.filterStartDate);
   const endDate = get(state.screenMetadata.filterEndDate);
 
-  const caseDeadlines = await applicationContext
-    .getUseCases()
-    .getCaseDeadlinesInteractor({
-      applicationContext,
-      endDate,
-      startDate,
-    });
-  return { caseDeadlines };
+  const {
+    deadlines,
+    totalCount,
+  } = await applicationContext.getUseCases().getCaseDeadlinesInteractor({
+    applicationContext,
+    endDate,
+    startDate,
+  });
+  return { caseDeadlines: deadlines, totalCount };
 };

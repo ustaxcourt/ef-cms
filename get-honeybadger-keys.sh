@@ -16,6 +16,8 @@ if [[ $BRANCH == 'develop' ]] ; then
   echo "${CIRCLE_HONEYBADGER_API_KEY_DEV}"
 elif [[ $BRANCH == 'experimental1' ]] ; then
   echo ""
+elif [[ $BRANCH == 'experimental3' ]] ; then
+  echo "${CIRCLE_HONEYBADGER_API_KEY_EXP3}"
 elif [[ $BRANCH == 'master' ]] ; then
   echo ""
 elif [[ $BRANCH == 'prod' ]] ; then
