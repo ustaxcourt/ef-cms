@@ -178,7 +178,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     }
   }
 
-  // caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
+  caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
 
   return caseDetailRaw;
 };
