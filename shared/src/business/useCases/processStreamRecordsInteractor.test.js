@@ -1,5 +1,6 @@
 const {
   processCaseEntries,
+  processDocketEntries,
   processRemoveEntries,
 } = require('./processStreamRecordsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -67,7 +68,7 @@ describe('processStreamRecordsInteractor', () => {
     const mockGetCase = jest.fn();
     const mockGetDocument = jest.fn();
 
-    it('do nothing when no other records are found', async () => {
+    it('does nothing when no other records are found', async () => {
       await processCaseEntries({
         applicationContext,
         caseEntityRecords: [],
@@ -173,7 +174,7 @@ describe('processStreamRecordsInteractor', () => {
         ...caseData,
       });
 
-      mockGetDocument.mockReturnValue({ ...docketEntryData });
+      mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
 
       const utils = {
         getCase: mockGetCase,
@@ -224,15 +225,151 @@ describe('processStreamRecordsInteractor', () => {
     });
   });
 
-  describe('processDocketEntries', () => {});
+  describe('processDocketEntries', () => {
+    const mockGetCase = jest.fn();
+    const mockGetDocument = jest.fn();
+
+    const docketEntryData = {
+      docketEntryId: '123',
+      entityName: 'DocketEntry',
+      pk: 'docket-entry|123',
+      sk: 'docket-entry|123',
+    };
+
+    const docketEntryDataMarshalled = {
+      docketEntryId: { S: '123' },
+      entityName: { S: 'DocketEntry' },
+      pk: { S: 'docket-entry|123' },
+      sk: { S: 'docket-entry|123' },
+    };
+
+    const caseData = {
+      docketEntries: [docketEntryData],
+      docketNumber: '123-45',
+      entityName: 'Case',
+      pk: 'case|123-45',
+      sk: 'case|123-45',
+    };
+
+    const caseDataMarshalled = {
+      docketEntries: {
+        L: [{ M: docketEntryDataMarshalled }],
+      },
+      docketNumber: { S: '123-45' },
+      entityName: { S: 'Case' },
+      pk: { S: 'case|123-45' },
+      sk: { S: 'case|123-45' },
+    };
+
+    mockGetCase.mockReturnValue({
+      ...caseData,
+    });
+
+    mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
+
+    const utils = {
+      getCase: mockGetCase,
+      getDocument: mockGetDocument,
+    };
+
+    it('does nothing when no other records are found', async () => {
+      await processDocketEntries({
+        applicationContext,
+        docketEntryRecords: [],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('attempts to bulk index the records passed in', async () => {
+      await processDocketEntries({
+        applicationContext,
+        docketEntryRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: docketEntryData.pk },
+                sk: { S: docketEntryData.sk },
+              },
+              NewImage: docketEntryDataMarshalled,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetCase).toHaveBeenCalled();
+      expect(mockGetDocument).not.toHaveBeenCalled();
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: {
+              pk: { S: docketEntryData.pk },
+              sk: { S: docketEntryData.sk },
+            },
+            NewImage: { ...caseDataMarshalled, ...docketEntryDataMarshalled },
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+
+    it('fetches the document from persistence if the entry has a documentContentsId', async () => {
+      docketEntryData.documentContentsId = '123';
+      docketEntryDataMarshalled.documentContentsId = { S: '123' };
+
+      await processDocketEntries({
+        applicationContext,
+        docketEntryRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: docketEntryData.pk },
+                sk: { S: docketEntryData.sk },
+              },
+              NewImage: docketEntryDataMarshalled,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetCase).toHaveBeenCalled();
+      expect(mockGetDocument).toHaveBeenCalled();
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: {
+              pk: { S: docketEntryData.pk },
+              sk: { S: docketEntryData.sk },
+            },
+            NewImage: { ...caseDataMarshalled, ...docketEntryDataMarshalled },
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+  });
 
   describe('processOtherEntries', () => {});
 
   describe('processRemoveEntries', () => {
-    it('do nothing when no other records are found', async () => {
+    it('does nothing when no other records are found', async () => {
       await processRemoveEntries({
         applicationContext,
-        otherRecords: [],
+        removeRecords: [],
       });
 
       expect(
@@ -262,9 +399,17 @@ describe('processStreamRecordsInteractor', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
           .calls[0][0].records,
-      ).toEqual('a');
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
+            NewImage: null,
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
     });
   });
 });
