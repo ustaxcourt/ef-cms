@@ -1,6 +1,34 @@
 const AWS = require('aws-sdk');
 const { flattenDeep, get, memoize, partition } = require('lodash');
 
+const partitionRecords = records => {
+  const [removeRecords, insertModifyRecords] = partition(
+    records,
+    record => record.eventName === 'REMOVE',
+  );
+
+  const [docketEntryRecords, nonDocketEntryRecords] = partition(
+    insertModifyRecords,
+    record =>
+      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
+      'DocketEntry',
+  );
+
+  const [caseEntityRecords, otherRecords] = partition(
+    nonDocketEntryRecords,
+    record =>
+      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
+      'Case',
+  );
+
+  return {
+    caseEntityRecords,
+    docketEntryRecords,
+    otherRecords,
+    removeRecords,
+  };
+};
+
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
  *
@@ -280,6 +308,7 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     throw new Error('failed to delete records');
   }
 };
+
 /**
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -317,24 +346,12 @@ exports.processStreamRecordsInteractor = async ({
     );
   });
 
-  const [removeRecords, insertModifyRecords] = partition(
-    recordsToProcess,
-    record => record.eventName === 'REMOVE',
-  );
-
-  const [docketEntryRecords, nonDocketEntryRecords] = partition(
-    insertModifyRecords,
-    record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'DocketEntry',
-  );
-
-  const [caseEntityRecords, otherRecords] = partition(
-    nonDocketEntryRecords,
-    record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'Case',
-  );
+  const {
+    caseEntityRecords,
+    docketEntryRecords,
+    otherRecords,
+    removeRecords,
+  } = partitionRecords(recordsToProcess);
 
   const utils = {
     getCase,
@@ -390,6 +407,7 @@ exports.processStreamRecordsInteractor = async ({
   }
 };
 
+exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
 exports.processDocketEntries = processDocketEntries;
 exports.processOtherEntries = processOtherEntries;
