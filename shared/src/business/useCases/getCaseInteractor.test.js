@@ -254,17 +254,7 @@ describe('getCaseInteractor', () => {
       });
 
       expect(result.contactPrimary.city).toBeUndefined();
-      // expect(result.contactPrimary.sealedAndUnavailable).toBe(true);
       expect(result.contactSecondary.city).toBeUndefined();
-      // expect(result.contactSecondary.sealedAndUnavailable).toBe(true);
-      // result.otherFilers.forEach(filer => {
-      //   expect(filer.city).toBeUndefined();
-      //   expect(filer.sealedAndUnavailable).toBe(true);
-      // });
-      // result.otherPetitioners.forEach(filer => {
-      //   expect(filer.city).toBeUndefined();
-      //   expect(filer.sealedAndUnavailable).toBe(true);
-      // });
     });
   });
 
