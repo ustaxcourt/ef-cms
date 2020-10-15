@@ -150,9 +150,6 @@ exports.get = params => {
     .promise()
     .then(res => {
       return removeAWSGlobalFields(res.Item);
-    })
-    .catch(() => {
-      return undefined;
     });
 };
 
