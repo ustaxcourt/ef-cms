@@ -109,7 +109,7 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('Creates a valid active judge user', () => {
+  it('Creates a valid legacy judge user', () => {
     const user = new User({
       judgeTitle: 'Legacy Chief Judge',
       name: 'Saul Goodman',
