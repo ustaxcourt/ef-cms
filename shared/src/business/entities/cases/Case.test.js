@@ -71,6 +71,22 @@ describe('Case entity', () => {
     ]);
   });
 
+  it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+    ); //petitioner user
+
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+      },
+      { applicationContext },
+    );
+
+    expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
+  });
+
   describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
