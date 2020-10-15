@@ -67,7 +67,7 @@ Error: Error creating IAM Role migration_role_<ENV>: EntityAlreadyExists: Role w
    1: resource "aws_iam_role" "migration_role" {
 ```
 
-AWS IAM console and rerun `npm run deploy:environment-specific <ENV>`.
+Delete the role in the AWS IAM console and rerun `npm run deploy:environment-specific <ENV>`.
 
 #### Failing smoke tests
 
@@ -76,11 +76,3 @@ When this is run for the first time on a new environment, the smoke tests may fa
 #### 403 on websockets endpoint
 
 If the websockets endpoint returns a 403 Unauthorized error (can be seen during trial session smoke tests), redeploy the websocket APIs for the environment in the AWS console under API Gateway (both east and west).
-
-#### Certificates
-
-```Error: Error creating API Gateway Domain Name: BadRequestException: The provided certificate does not exist.
-
-  on ../api/api-public.tf line 106, in resource "aws_api_gateway_domain_name" "api_public_custom":
- 106: resource "aws_api_gateway_domain_name" "api_public_custom" {
-```
