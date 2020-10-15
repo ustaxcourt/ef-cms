@@ -13,7 +13,7 @@ const caseDetailEditHelper = withAppContextDecorator(
 );
 
 describe('case detail edit computed', () => {
-  it('sets partyTypes from constants ', () => {
+  it('sets partyTypes from constants', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {

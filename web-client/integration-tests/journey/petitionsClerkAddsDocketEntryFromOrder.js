@@ -26,6 +26,12 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       docketNumber: test.docketNumber,
     });
 
+    const judges = test.getState('judges');
+    expect(judges.length).toBeGreaterThan(0);
+
+    const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
+    expect(legacyJudge).toBeFalsy();
+
     expect(test.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );

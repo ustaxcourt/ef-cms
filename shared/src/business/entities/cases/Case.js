@@ -207,6 +207,7 @@ Case.prototype.init = function init(
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
+  this.judgeUserId = rawCase.judgeUserId;
   this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
@@ -259,6 +260,17 @@ Case.prototype.init = function init(
       this.docketEntries.some(
         docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
       );
+
+    if (
+      filtered &&
+      applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
+      (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
+        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+    ) {
+      this.docketEntries = this.docketEntries.filter(
+        d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      );
+    }
   } else {
     this.docketEntries = [];
   }
@@ -467,6 +479,9 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
+  judgeUserId: JoiValidationConstants.UUID.optional().description(
+    'Unique ID for the associated judge.',
+  ),
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
     'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
@@ -1124,20 +1139,20 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
+  if (foundDocketEntry) {
+    Object.assign(foundDocketEntry, updatedDocketEntry);
 
-  if (updatedDocketEntry.isOnDocketRecord) {
-    const updateIndex = shouldGenerateDocketRecordIndex({
-      caseDetail: this,
-      docketEntry: foundDocketEntry,
-    });
+    if (foundDocketEntry.isOnDocketRecord) {
+      const updateIndex = shouldGenerateDocketRecordIndex({
+        caseDetail: this,
+        docketEntry: foundDocketEntry,
+      });
 
-    if (updateIndex) {
-      updatedDocketEntry.index = this.generateNextDocketRecordIndex();
+      if (updateIndex) {
+        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+      }
     }
   }
-
-  if (foundDocketEntry) Object.assign(foundDocketEntry, updatedDocketEntry);
 
   return this;
 };
@@ -1296,6 +1311,10 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
+  const isPrimaryContact = caseRaw.contactPrimary.contactId === user.userId;
+  const isSecondaryContact =
+    caseRaw.contactSecondary &&
+    caseRaw.contactSecondary.contactId === user.userId;
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
@@ -1309,6 +1328,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   return (
     isIrsPractitioner ||
     isPrivatePractitioner ||
+    isPrimaryContact ||
+    isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
 };

@@ -156,11 +156,17 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
+  createJudgeUserInteractor,
+} = require('../../shared/src/business/useCases/judges/createJudgeUserInteractor');
+const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
+const {
+  createMigratedPetitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser');
 const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
@@ -611,6 +617,9 @@ const {
   getUploadPolicyInteractor,
 } = require('../../shared/src/business/useCases/getUploadPolicyInteractor');
 const {
+  getUserByEmail,
+} = require('../../shared/src/persistence/dynamo/users/getUserByEmail');
+const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
@@ -742,6 +751,9 @@ const {
 const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
+const {
+  removePdfFromDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
 const {
   removeSignatureFromDocumentInteractor,
 } = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
@@ -1014,8 +1026,10 @@ const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
     ? `app.${process.env.EFCMS_DOMAIN}`
     : 'localhost:1234',
+  currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
@@ -1140,6 +1154,7 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createElasticsearchReindexRecord,
     createMessage,
+    createMigratedPetitionerUser,
     createPractitionerUser,
     createSectionInboxRecord,
     createTrialSession,
@@ -1239,6 +1254,7 @@ const gatewayMethods = {
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
+  getUserByEmail,
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
@@ -1280,6 +1296,9 @@ module.exports = appContextUser => {
                 Username: uuidv4(),
               },
             }),
+          }),
+          adminDisableUser: () => ({
+            promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
             promise: () => ({
@@ -1347,7 +1366,7 @@ module.exports = appContextUser => {
                           sk: getUniqueId(),
                           template,
                         },
-                        TableName: `efcms-${environment.stage}`,
+                        TableName: process.env.DYNAMODB_TABLE_NAME,
                       })
                       .promise();
                   }),
@@ -1505,6 +1524,7 @@ module.exports = appContextUser => {
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
+        createJudgeUserInteractor,
         createMessageInteractor,
         createPetitionerAccountInteractor,
         createPractitionerUserInteractor,
@@ -1592,6 +1612,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         reprocessFailedRecordsInteractor,

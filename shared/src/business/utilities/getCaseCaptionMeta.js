@@ -8,11 +8,9 @@ const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
  * @returns {object} case caption parts
  */
 
-const getCaseCaptionMeta = caseDetail => {
-  const { caseCaption } = caseDetail;
-
-  const caseTitle = Case.getCaseTitle(caseDetail.caseCaption);
-  const caseCaptionExtension = caseDetail.caseCaption
+const getCaseCaptionMeta = ({ caseCaption }) => {
+  const caseTitle = Case.getCaseTitle(caseCaption);
+  const caseCaptionExtension = caseCaption
     .replace(caseTitle, '')
     .replace(', ', '');
 

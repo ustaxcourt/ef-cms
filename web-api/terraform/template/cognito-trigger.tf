@@ -29,7 +29,6 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       TEMP_DOCUMENTS_BUCKET_NAME     = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
       DYNAMODB_ENDPOINT              = "dynamodb.us-east-1.amazonaws.com"
       MASTER_DYNAMODB_ENDPOINT       = "dynamodb.us-east-1.amazonaws.com"
-      ELASTICSEARCH_ENDPOINT         = aws_elasticsearch_domain.efcms-search.endpoint
       MASTER_REGION                  = "us-east-1"
       STAGE                          = var.environment
       NODE_ENV                       = "production"
@@ -40,6 +39,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       CLAMAV_DEF_DIR                 = "/opt/var/lib/clamav"
       CIRCLE_HONEYBADGER_API_KEY     = var.honeybadger_key
       IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
+      DYNAMODB_TABLE_NAME            = var.destination_table
     }
   }
 }
