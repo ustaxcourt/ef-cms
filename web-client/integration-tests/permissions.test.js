@@ -20,7 +20,6 @@ const associatedFieldsVisible = () => {
     phone: expect.anything(),
     state: expect.anything(),
   });
-  // expect(test.getState('caseDetail.userId')).toBeDefined();
 };
 
 const associatedFieldsBlocked = () => {
