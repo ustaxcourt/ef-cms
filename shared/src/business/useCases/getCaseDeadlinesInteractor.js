@@ -19,6 +19,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 exports.getCaseDeadlinesInteractor = async ({
   applicationContext,
   endDate,
+  from,
   startDate,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -27,16 +28,20 @@ exports.getCaseDeadlinesInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const allCaseDeadlines = await applicationContext
+  const {
+    foundDeadlines,
+    totalCount,
+  } = await applicationContext
     .getPersistenceGateway()
     .getCaseDeadlinesByDateRange({
       applicationContext,
       endDate,
+      from,
       startDate,
     });
 
   const validatedCaseDeadlines = CaseDeadline.validateRawCollection(
-    allCaseDeadlines,
+    foundDeadlines,
     {
       applicationContext,
     },
@@ -76,5 +81,5 @@ exports.getCaseDeadlinesInteractor = async ({
     ]),
   }));
 
-  return afterCaseMapping;
+  return { deadlines: afterCaseMapping, totalCount };
 };
