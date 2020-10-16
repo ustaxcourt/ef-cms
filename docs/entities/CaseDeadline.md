@@ -75,5 +75,10 @@
             limit: 1
       allow: 
         - "CaseDeadline"
+    sortableDocketNumber: 
+      type: "number"
+      flags: 
+        presence: "required"
+        description: "A sortable representation of the docket number of the case containing the Case Deadline."
 
  ```

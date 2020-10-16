@@ -16,6 +16,7 @@ describe('CaseDeadline', () => {
         deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
         description: VALIDATION_ERROR_MESSAGES.description[1],
         docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
+        sortableDocketNumber: VALIDATION_ERROR_MESSAGES.sortableDocketNumber,
       });
     });
 
@@ -29,6 +30,18 @@ describe('CaseDeadline', () => {
         { applicationContext },
       );
       expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should generate a sortableDocketNumber from the docketNumber passed in', () => {
+      const caseDeadline = new CaseDeadline(
+        {
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
+        },
+        { applicationContext },
+      );
+      expect(caseDeadline.sortableDocketNumber).toEqual(19000123);
     });
 
     it('should have error messages for invalid fields', () => {
