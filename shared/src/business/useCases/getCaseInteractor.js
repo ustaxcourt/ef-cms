@@ -9,6 +9,7 @@ const {
 const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
+const { User } = require('../entities/User');
 
 const getDocumentContentsForDocuments = async ({
   applicationContext,
@@ -46,6 +47,68 @@ const getDocumentContentsForDocuments = async ({
   return docketEntries;
 };
 
+const getCaseAndDocumentContents = async ({
+  applicationContext,
+  caseRecord,
+}) => {
+  const caseDetailRaw = new Case(caseRecord, {
+    applicationContext,
+  })
+    .validate()
+    .toRawObject();
+
+  caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
+    applicationContext,
+    docketEntries: caseDetailRaw.docketEntries,
+  });
+
+  return caseDetailRaw;
+};
+
+const getSealedCase = async ({
+  applicationContext,
+  caseRecord,
+  isAssociatedWithCase,
+}) => {
+  const currentUser = applicationContext.getCurrentUser();
+  const isAuthorizedToViewSealedCase = isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+    caseRecord.userId,
+  );
+
+  if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
+    return await getCaseAndDocumentContents({
+      applicationContext,
+      caseRecord,
+    });
+  } else {
+    caseRecord = caseSealedFormatter(caseRecord);
+    return new PublicCase(caseRecord, {
+      applicationContext,
+    })
+      .validate()
+      .toRawObject();
+  }
+};
+
+const getCaseForExternalUser = async ({
+  applicationContext,
+  caseRecord,
+  isAssociatedWithCase,
+  isAuthorizedToGetCase,
+}) => {
+  if (isAuthorizedToGetCase && isAssociatedWithCase) {
+    return await getCaseAndDocumentContents({ applicationContext, caseRecord });
+  } else {
+    return new PublicCase(caseRecord, {
+      applicationContext,
+    })
+      .validate()
+      .toRawObject();
+  }
+};
+
 /**
  * getCaseInteractor
  *
@@ -55,7 +118,7 @@ const getDocumentContentsForDocuments = async ({
  * @returns {object} the case data
  */
 exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
-  let caseRecord = await applicationContext
+  const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -68,69 +131,49 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     throw error;
   }
 
-  let caseDetailRaw;
+  const currentUser = applicationContext.getCurrentUser();
+  const isAuthorizedToGetCase = isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.GET_CASE,
+    caseRecord.userId,
+  );
+  const isAssociatedWithCase = isAssociatedUser({
+    caseRaw: caseRecord,
+    user: currentUser,
+  });
 
-  if (
-    !isAuthorized(
-      applicationContext.getCurrentUser(),
-      ROLE_PERMISSIONS.GET_CASE,
-      caseRecord.userId,
-    ) &&
-    !isAssociatedUser({
-      caseRaw: caseRecord,
-      user: applicationContext.getCurrentUser(),
-    })
-  ) {
+  if (!isAuthorizedToGetCase && !isAssociatedWithCase) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  let caseDetailRaw;
   if (caseRecord.sealedDate) {
-    let isAuthorizedUser =
-      isAuthorized(
-        applicationContext.getCurrentUser(),
-        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-        caseRecord.userId,
-      ) ||
-      isAssociatedUser({
-        caseRaw: caseRecord,
-        user: applicationContext.getCurrentUser(),
-      });
-    if (isAuthorizedUser) {
-      caseDetailRaw = new Case(caseRecord, {
-        applicationContext,
-      })
-        .validate()
-        .toRawObject();
+    caseDetailRaw = await getSealedCase({
+      applicationContext,
+      caseRecord,
+      isAssociatedWithCase,
+    });
+  } else {
+    const isInternalUser = User.isInternalUser(
+      applicationContext.getCurrentUser().role,
+    );
 
-      caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
+    if (isInternalUser) {
+      caseDetailRaw = await getCaseAndDocumentContents({
         applicationContext,
-        docketEntries: caseDetailRaw.docketEntries,
+        caseRecord,
       });
     } else {
-      caseRecord = caseSealedFormatter(caseRecord);
-      caseDetailRaw = new PublicCase(caseRecord, {
+      caseDetailRaw = await getCaseForExternalUser({
         applicationContext,
-      })
-        .validate()
-        .toRawObject();
+        caseRecord,
+        isAssociatedWithCase,
+        isAuthorizedToGetCase,
+      });
     }
-  } else {
-    caseDetailRaw = new Case(caseRecord, {
-      applicationContext,
-    })
-      .validate()
-      .toRawObject();
-
-    caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
-      applicationContext,
-      docketEntries: caseDetailRaw.docketEntries,
-    });
   }
 
-  caseDetailRaw = caseContactAddressSealedFormatter(
-    caseDetailRaw,
-    applicationContext.getCurrentUser(),
-  );
+  caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
 
   return caseDetailRaw;
 };
