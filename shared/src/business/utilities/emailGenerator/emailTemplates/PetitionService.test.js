@@ -9,6 +9,7 @@ describe('PetitionService', () => {
   const caseDetail = {
     caseTitle: 'Test Case Title',
     docketNumber: '123-45',
+    docketNumberWithSuffix: '123-45S',
     trialLocation: 'Birmingham, AL',
   };
 
@@ -229,6 +230,7 @@ describe('PetitionService', () => {
     const irs = wrapper.find('#computer-readable');
 
     expect(irs.text()).toContain(caseDetail.docketNumber);
+    expect(irs.text()).not.toContain(caseDetail.docketNumberWithSuffix);
     expect(irs.text()).toContain(docketEntryNumber);
     expect(irs.text()).toContain(documentDetail.docketEntryId);
     expect(irs.text()).toContain(documentDetail.eventCode);

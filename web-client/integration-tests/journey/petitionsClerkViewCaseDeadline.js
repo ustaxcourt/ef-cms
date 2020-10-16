@@ -16,6 +16,6 @@ export const petitionsClerkViewCaseDeadline = test => {
     const helper = runCompute(caseDetailHelper, {
       state: test.getState(),
     });
-    expect(helper.caseDeadlines.length).toEqual(1);
+    expect(helper.caseDeadlines.length).toEqual(2);
   });
 };

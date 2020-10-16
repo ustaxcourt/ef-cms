@@ -13,12 +13,24 @@ export const petitionsClerkViewsDeadlineReport = test => {
 
     await test.runSequence('updateDateRangeForDeadlinesSequence');
 
-    expect(test.getState('allCaseDeadlines').length).toBeGreaterThan(0);
+    const allDeadlines = test.getState('allCaseDeadlines');
 
-    if (test.caseDeadline) {
-      expect(test.getState('allCaseDeadlines')[0].deadlineDate).toBe(
-        '2025-08-12T04:00:00.000Z',
-      );
-    }
+    const deadlinesForThisCase = allDeadlines.filter(
+      d => d.docketNumber === test.docketNumber,
+    );
+
+    expect(deadlinesForThisCase.length).toEqual(2); //should be 1 when paging is all working
+
+    expect(test.getState('allCaseDeadlines')[0].deadlineDate).toBe(
+      '2025-08-12T04:00:00.000Z',
+    );
+
+    // show more button should show
+
+    // click the show more button
+
+    // length should now be 2
+
+    // show more button should go away?
   });
 };
