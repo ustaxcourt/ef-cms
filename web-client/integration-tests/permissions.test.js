@@ -151,7 +151,7 @@ describe('Case permissions test', () => {
   });
 
   loginAs(test, 'irsSuperuser@example.com');
-  it('IRS Super User views case detail when the case has not been served', async () => {
+  it('IRS Super User views case detail when the case has NOT been served', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -214,5 +214,18 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsVisible();
     stinBlocked();
+  });
+
+  loginAs(test, 'irsSuperuser@example.com');
+  it('IRS Super User views case detail when the case has been served', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsVisible();
+    internalFieldsVisible();
+    stinVisible();
   });
 });
