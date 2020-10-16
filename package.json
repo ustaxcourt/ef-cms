@@ -21,6 +21,7 @@
     "aws-sdk": "^2.771.0",
     "aws-serverless-express": "^3.3.8",
     "axios": "^0.20.0",
+    "axios-retry": "^3.1.9",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^26.5.2",
     "babel-plugin-cerebral": "^1.0.1",

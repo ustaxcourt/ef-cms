@@ -13,6 +13,7 @@ export const CaseDeadlines = connect(
   {
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
+    loadMoreCaseDeadlinesSequence: sequences.loadMoreCaseDeadlinesSequence,
     screenMetadata: state.screenMetadata,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
@@ -23,6 +24,7 @@ export const CaseDeadlines = connect(
   function CaseDeadlines({
     caseDeadlineReportHelper,
     judgeFilter,
+    loadMoreCaseDeadlinesSequence,
     screenMetadata,
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
@@ -77,7 +79,7 @@ export const CaseDeadlines = connect(
                 </div>
                 <div className="grid-col-6 text-right margin-top-1">
                   <span className="text-semibold">
-                    Count: {caseDeadlineReportHelper.caseDeadlineCount}
+                    Count: {caseDeadlineReportHelper.totalCount}
                   </span>
                 </div>
               </div>
@@ -95,7 +97,7 @@ export const CaseDeadlines = connect(
                       className="select-left"
                       id="judgeFilter"
                       name="judge"
-                      placeHolder="- Judge -"
+                      placeholder="- Judge -"
                     >
                       <option value="">-Judge-</option>
                       {caseDeadlineReportHelper.judges.map((judge, idx) => (
@@ -139,6 +141,17 @@ export const CaseDeadlines = connect(
               )}
               {caseDeadlineReportHelper.caseDeadlines.length === 0 && (
                 <p>There are no deadlines for the selected date(s).</p>
+              )}
+              {caseDeadlineReportHelper.showLoadMoreButton && (
+                <Button
+                  secondary
+                  className="margin-bottom-20"
+                  onClick={() => {
+                    loadMoreCaseDeadlinesSequence();
+                  }}
+                >
+                  Load More
+                </Button>
               )}
             </div>
           </div>
