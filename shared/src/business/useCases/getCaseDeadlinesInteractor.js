@@ -20,6 +20,7 @@ exports.getCaseDeadlinesInteractor = async ({
   applicationContext,
   endDate,
   from,
+  judge,
   pageSize,
   startDate,
 }) => {
@@ -38,6 +39,7 @@ exports.getCaseDeadlinesInteractor = async ({
       applicationContext,
       endDate,
       from,
+      judge,
       pageSize,
       startDate,
     });
