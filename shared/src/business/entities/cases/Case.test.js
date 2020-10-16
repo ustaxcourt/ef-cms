@@ -71,20 +71,39 @@ describe('Case entity', () => {
     ]);
   });
 
-  it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-    ); //petitioner user
+  describe('init', () => {
+    it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
-    const myCase = new Case(
-      {
-        ...MOCK_CASE,
-        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-      },
-      { applicationContext },
-    );
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+        { applicationContext },
+      );
 
-    expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
+      expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
+    });
+
+    it('should set the appropriate fields on a case when the current user is an irsSuperuser', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'],
+      );
+
+      const myCase = new Case(
+        { ...MOCK_CASE, userId: undefined },
+        { applicationContext },
+      );
+
+      expect(myCase).toMatchObject({
+        archivedCorrespondences: [],
+        archivedDocketEntries: [],
+      });
+      expect(myCase.userId).toBeUndefined();
+    });
   });
 
   describe('archivedDocketEntries', () => {

@@ -158,6 +158,8 @@ Case.prototype.init = function init(
     this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
   } else if (applicationContext.getCurrentUser().userId === rawCase.userId) {
     this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
+  } else if (applicationContext.getCurrentUser().role === ROLES.irsSuperuser) {
+    this.assignFieldsForInternalUsers({ applicationContext, rawCase });
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
