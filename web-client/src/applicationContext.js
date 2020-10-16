@@ -497,8 +497,8 @@ const applicationContext = {
     (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
   getCurrentUser,
   getCurrentUserPermissions: () => {
-    const user = getCurrentUser();
-    return getUserPermissions(user);
+    const currentUser = getCurrentUser();
+    return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
   getError: e => {

@@ -55,8 +55,10 @@ exports.removeConsolidatedCasesInteractor = async ({
   ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases);
 
-    for (let caseToUpdate of newConsolidatedCases) {
-      const caseEntity = new Case(caseToUpdate, { applicationContext });
+    for (let newConsolidatedCaseToUpdate of newConsolidatedCases) {
+      const caseEntity = new Case(newConsolidatedCaseToUpdate, {
+        applicationContext,
+      });
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(

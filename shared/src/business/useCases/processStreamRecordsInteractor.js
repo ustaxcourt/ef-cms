@@ -319,20 +319,21 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  const getCase = memoize(({ applicationContext, docketNumber }) =>
-    applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-      applicationContext,
+  const getCase = memoize(({ applicationContext: appContext, docketNumber }) =>
+    appContext.getPersistenceGateway().getCaseByDocketNumber({
+      applicationContext: appContext,
       docketNumber,
     }),
   );
 
-  const getDocument = memoize(({ applicationContext, documentContentsId }) =>
-    applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
-      key: documentContentsId,
-      protocol: 'S3',
-      useTempBucket: false,
-    }),
+  const getDocument = memoize(
+    ({ applicationContext: appContext, documentContentsId }) =>
+      appContext.getPersistenceGateway().getDocument({
+        applicationContext: appContext,
+        key: documentContentsId,
+        protocol: 'S3',
+        useTempBucket: false,
+      }),
   );
 
   recordsToProcess = recordsToProcess.filter(record => {
