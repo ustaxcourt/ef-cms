@@ -7,8 +7,14 @@ exports.getCaseDeadlinesByDateRange = async ({
   applicationContext,
   endDate,
   from = 0,
+  pageSize,
   startDate,
 }) => {
+  const size =
+    pageSize && pageSize <= DEADLINE_REPORT_PAGE_SIZE
+      ? pageSize
+      : DEADLINE_REPORT_PAGE_SIZE;
+
   const query = {
     body: {
       from,
@@ -34,7 +40,8 @@ exports.getCaseDeadlinesByDateRange = async ({
           ],
         },
       },
-      size: DEADLINE_REPORT_PAGE_SIZE,
+      size,
+      sort: [{ 'deadlineDate.S': { order: 'asc' } }],
     },
     index: 'efcms-case-deadline',
   };

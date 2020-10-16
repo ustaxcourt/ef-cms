@@ -21,6 +21,7 @@ exports.getCaseDeadlinesInteractor = ({
   const queryString = querystring.stringify({
     endDate,
     from,
+    pageSize: DEADLINE_REPORT_PAGE_SIZE,
     startDate,
   });
 

@@ -20,6 +20,7 @@ exports.getCaseDeadlinesInteractor = async ({
   applicationContext,
   endDate,
   from,
+  pageSize,
   startDate,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -37,6 +38,7 @@ exports.getCaseDeadlinesInteractor = async ({
       applicationContext,
       endDate,
       from,
+      pageSize,
       startDate,
     });
 

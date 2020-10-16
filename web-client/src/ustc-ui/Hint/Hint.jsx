@@ -25,7 +25,7 @@ export const Hint = connect(function Hint(props) {
         )}
         {exclamation && (
           <FontAwesomeIcon
-            className="fa-icon-gold"
+            className="fa-icon-blue-vivid"
             icon={['fas', 'exclamation-circle']}
             size="lg"
           />
