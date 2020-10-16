@@ -23,8 +23,8 @@ export const petitionsClerkViewsDeadlineReport = (test, overrides = {}) => {
     }
 
     await test.runSequence('selectDateRangeFromCalendarSequence', {
-      endDate: new Date(startDate),
-      startDate: new Date(endDate),
+      endDate: new Date(endDate),
+      startDate: new Date(startDate),
     });
     test.setState('screenMetadata.filterStartDateState', startDate);
     test.setState('screenMetadata.filterEndDateState', endDate);
