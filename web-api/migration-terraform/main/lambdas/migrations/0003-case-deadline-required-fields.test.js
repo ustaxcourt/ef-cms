@@ -1,3 +1,6 @@
+const {
+  CHIEF_JUDGE,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 const { migrateItems } = require('./0003-case-deadline-required-fields');
 
 describe('migrateItems', () => {
@@ -13,11 +16,17 @@ describe('migrateItems', () => {
     sk: `case-deadline|${CASE_DEADLINE_ID}`,
   };
 
+  const mockCase = {
+    associatedJudge: 'Judge Buch',
+    pk: 'case|123-20',
+    sk: 'case|123-20',
+  };
+
   beforeEach(() => {
     documentClient = {
       get: () => ({
         promise: async () => ({
-          Item: mockCaseDeadline,
+          Item: mockCase,
         }),
       }),
     };
@@ -54,15 +63,47 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should return modified case deadline records with sortableDocketNumber set', async () => {
-    const items = [mockCaseDeadline];
+  it('should return modified case deadline record with associatedJudge and sortableDocketNumber set', async () => {
+    const items = [{ ...mockCaseDeadline }];
 
     const results = await migrateItems(items, documentClient);
 
     expect(results).toMatchObject([
       {
         ...mockCaseDeadline,
+        associatedJudge: 'Judge Buch',
         sortableDocketNumber: 20000123,
+      },
+    ]);
+  });
+
+  it('should return modified case deadline record with associatedJudge defaulted to CHIEF_JUDGE if one is not set on the case', async () => {
+    const items = [{ ...mockCaseDeadline }];
+    documentClient = {
+      get: () => ({
+        promise: async () => ({
+          Item: {},
+        }),
+      }),
+    };
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).toMatchObject([
+      {
+        associatedJudge: CHIEF_JUDGE,
+      },
+    ]);
+  });
+
+  it('should not overwrite associatedJudge if one is already set on the deadline', async () => {
+    const items = [{ ...mockCaseDeadline, associatedJudge: 'Judge Ashford' }];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).toMatchObject([
+      {
+        associatedJudge: 'Judge Ashford',
       },
     ]);
   });

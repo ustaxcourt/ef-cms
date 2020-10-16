@@ -12,6 +12,7 @@ const { User } = require('../entities/User');
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
     {
+      associatedJudge: 'Judge Buch',
       caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
       createdAt: '2019-01-01T21:40:46.415Z',
       deadlineDate: '2019-03-01T21:40:46.415Z',
@@ -19,6 +20,7 @@ describe('getCaseDeadlinesInteractor', () => {
       docketNumber: '101-19',
     },
     {
+      associatedJudge: 'Judge Carluzzo',
       caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
       createdAt: '2019-02-01T21:40:46.415Z',
       deadlineDate: '2019-04-01T21:40:46.415Z',
@@ -26,9 +28,10 @@ describe('getCaseDeadlinesInteractor', () => {
       docketNumber: '102-19',
     },
   ];
+
   const mockCases = [
     {
-      associatedJudge: 'Judge Buch',
+      associatedJudge: 'Judge A',
       caseCaption: 'A caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -47,7 +50,7 @@ describe('getCaseDeadlinesInteractor', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
-      associatedJudge: 'Judge Buch',
+      associatedJudge: 'Judge A',
       caseCaption: 'Another caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -67,7 +70,16 @@ describe('getCaseDeadlinesInteractor', () => {
     },
   ];
 
-  beforeAll(() => {
+  const mockPetitionsClerk = new User({
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
+
+  const START_DATE = '2019-08-25T05:00:00.000Z';
+  const END_DATE = '2020-08-25T05:00:00.000Z';
+
+  beforeEach(() => {
     applicationContext.environment.stage = 'local';
     applicationContext
       .getPersistenceGateway()
@@ -78,6 +90,7 @@ describe('getCaseDeadlinesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByDocketNumbers.mockReturnValue(mockCases);
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
@@ -91,13 +104,6 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('gets all the case deadlines and combines them with case data', async () => {
-    const mockPetitionsClerk = new User({
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
-
     const result = await getCaseDeadlinesInteractor({
       applicationContext,
     });
@@ -117,7 +123,7 @@ describe('getCaseDeadlinesInteractor', () => {
           sortableDocketNumber: 19000101,
         },
         {
-          associatedJudge: 'Judge Buch',
+          associatedJudge: 'Judge Carluzzo',
           caseCaption: 'Another caption, Petitioner',
           caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
           createdAt: '2019-02-01T21:40:46.415Z',
@@ -130,6 +136,28 @@ describe('getCaseDeadlinesInteractor', () => {
         },
       ],
       totalCount: 2,
+    });
+  });
+
+  it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
+    await getCaseDeadlinesInteractor({
+      applicationContext,
+      endDate: END_DATE,
+      from: 20,
+      judge: 'Buch',
+      pageSize: 50,
+      startDate: START_DATE,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseDeadlinesByDateRange
+        .mock.calls[0][0],
+    ).toMatchObject({
+      endDate: END_DATE,
+      from: 20,
+      judge: 'Buch',
+      pageSize: 50,
+      startDate: START_DATE,
     });
   });
 });
