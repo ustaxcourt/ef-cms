@@ -225,7 +225,6 @@ describe('Case permissions test', () => {
 
     publicFieldsVisible();
     associatedFieldsVisible();
-    internalFieldsVisible();
     stinVisible();
   });
 });

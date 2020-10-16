@@ -87,23 +87,6 @@ describe('Case entity', () => {
 
       expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
     });
-
-    it('should set the appropriate fields on a case when the current user is an irsSuperuser', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'],
-      );
-
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: undefined },
-        { applicationContext },
-      );
-
-      expect(myCase).toMatchObject({
-        archivedCorrespondences: [],
-        archivedDocketEntries: [],
-      });
-      expect(myCase.userId).toBeUndefined();
-    });
   });
 
   describe('archivedDocketEntries', () => {
