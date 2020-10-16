@@ -1122,24 +1122,15 @@ describe('formatted work queue computed', () => {
       expect(result.showUnassignedIcon).toBeFalsy();
     });
 
-    it('should return selected as true if workItemId is found in selectedWorkItems', () => {
+    it('should return selected as true if `isSelected` attribute passed in as true', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         workItemId: '123',
       };
 
-      const selectedWorkItems = [
-        {
-          workItemId: '234',
-        },
-        {
-          workItemId: '345',
-        },
-      ];
-
       let result = formatWorkItem({
         applicationContext,
-        selectedWorkItems,
+        isSelected: undefined,
         workItem,
       });
       expect(result.selected).toEqual(false);
@@ -1148,7 +1139,7 @@ describe('formatted work queue computed', () => {
 
       result = formatWorkItem({
         applicationContext,
-        selectedWorkItems,
+        isSelected: true,
         workItem,
       });
       expect(result.selected).toEqual(true);
