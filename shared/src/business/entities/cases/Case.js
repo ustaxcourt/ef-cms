@@ -311,6 +311,13 @@ Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
 }) {
+  if (
+    applicationContext.getCurrentUser().role === ROLES.petitioner &&
+    applicationContext.getCurrentUser().userId === rawCase.userId
+  ) {
+    rawCase.contactPrimary.contactId = rawCase.userId;
+  }
+
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {

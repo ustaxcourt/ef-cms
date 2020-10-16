@@ -31,7 +31,7 @@ describe('Respondent requests access to a case', () => {
   respondentSearchesForNonexistentCase(test);
   respondentViewsDashboard(test);
   respondentSearchesForCase(test);
-  respondentViewsCaseDetail(test);
+  respondentViewsCaseDetail(test, false);
   respondentFilesFirstIRSDocumentOnCase(test, fakeFile);
   respondentViewsDashboard(test);
   respondentViewsCaseDetailOfAssociatedCase(test);
@@ -39,7 +39,7 @@ describe('Respondent requests access to a case', () => {
 
   loginAs(test, 'irsPractitioner1@example.com');
   respondentSearchesForCase(test);
-  respondentViewsCaseDetailOfUnassociatedCase(test);
+  respondentViewsCaseDetailOfUnassociatedCase(test, false);
   respondentRequestsAccessToCase(test, fakeFile);
   respondent1ViewsCaseDetailOfAssociatedCase(test);
   respondentFilesDocumentForAssociatedCase(test, fakeFile);
