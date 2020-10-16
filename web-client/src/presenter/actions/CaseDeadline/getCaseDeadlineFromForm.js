@@ -19,11 +19,12 @@ export const getCaseDeadlineFromForm = ({ applicationContext, get, props }) => {
       .createISODateString(props.computedDate);
   }
 
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const { associatedJudge, docketNumber } = get(state.caseDetail);
 
   const caseDeadline = omit(
     {
       ...get(state.form),
+      associatedJudge,
       deadlineDate,
       docketNumber,
     },
