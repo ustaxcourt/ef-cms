@@ -9,7 +9,10 @@ describe('getCaseDeadlinesAction', () => {
   it('gets all case deadlines', async () => {
     applicationContext
       .getUseCases()
-      .getCaseDeadlinesInteractor.mockReturnValue('hello world');
+      .getCaseDeadlinesInteractor.mockReturnValue({
+        deadlines: [{ description: 'hello world' }],
+        totalCount: 1,
+      });
 
     const START_DATE = '2020-01-01T05:00:00.000Z';
     const END_DATE = '2020-02-01T05:00:00.000Z';
@@ -32,6 +35,9 @@ describe('getCaseDeadlinesAction', () => {
       endDate: END_DATE,
       startDate: START_DATE,
     });
-    expect(result.output.caseDeadlines).toEqual('hello world');
+    expect(result.output).toEqual({
+      caseDeadlines: [{ description: 'hello world' }],
+      totalCount: 1,
+    });
   });
 });
