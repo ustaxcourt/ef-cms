@@ -2539,7 +2539,8 @@
     "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
     "description": "Final status report due to Judge Ashford",
     "pk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "docketNumber": "109-19"
+    "docketNumber": "109-19",
+    "entityName": "CaseDeadline"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -5666,7 +5667,8 @@
     "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "description": "Final status report due to Judge Ashford",
     "pk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "docketNumber": "104-19"
+    "docketNumber": "104-19",
+    "entityName": "CaseDeadline"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
@@ -6540,7 +6542,8 @@
     "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "description": "Pre-trial memorandum due",
     "pk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "docketNumber": "104-19"
+    "docketNumber": "104-19",
+    "entityName": "CaseDeadline"
   },
   {
     "caseOrder": [],
@@ -9382,7 +9385,8 @@
     "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "description": "Filing fee due",
     "pk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "docketNumber": "107-19"
+    "docketNumber": "107-19",
+    "entityName": "CaseDeadline"
   },
   {
     "associatedJudge": "Chief Judge",

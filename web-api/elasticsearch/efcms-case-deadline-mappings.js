@@ -15,5 +15,13 @@ module.exports = {
     'entityName.S': {
       type: 'text',
     },
+    'sortableDocketNumber.N': {
+      fields: {
+        keyword: {
+          type: 'keyword',
+        },
+      },
+      type: 'text',
+    },
   },
 };
