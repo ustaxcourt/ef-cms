@@ -28,6 +28,7 @@ describe('getCaseDeadlinesInteractor', () => {
       docketNumber: '102-19',
     },
   ];
+
   const mockCases = [
     {
       associatedJudge: 'Judge A',
@@ -69,7 +70,16 @@ describe('getCaseDeadlinesInteractor', () => {
     },
   ];
 
-  beforeAll(() => {
+  const mockPetitionsClerk = new User({
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
+
+  const START_DATE = '2019-08-25T05:00:00.000Z';
+  const END_DATE = '2020-08-25T05:00:00.000Z';
+
+  beforeEach(() => {
     applicationContext.environment.stage = 'local';
     applicationContext
       .getPersistenceGateway()
@@ -80,6 +90,7 @@ describe('getCaseDeadlinesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByDocketNumbers.mockReturnValue(mockCases);
+    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
@@ -93,13 +104,6 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('gets all the case deadlines and combines them with case data', async () => {
-    const mockPetitionsClerk = new User({
-      name: 'Test Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
-
     const result = await getCaseDeadlinesInteractor({
       applicationContext,
     });
@@ -132,6 +136,28 @@ describe('getCaseDeadlinesInteractor', () => {
         },
       ],
       totalCount: 2,
+    });
+  });
+
+  it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
+    await getCaseDeadlinesInteractor({
+      applicationContext,
+      endDate: END_DATE,
+      from: 20,
+      judge: 'Buch',
+      pageSize: 50,
+      startDate: START_DATE,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseDeadlinesByDateRange
+        .mock.calls[0][0],
+    ).toMatchObject({
+      endDate: END_DATE,
+      from: 20,
+      judge: 'Buch',
+      pageSize: 50,
+      startDate: START_DATE,
     });
   });
 });

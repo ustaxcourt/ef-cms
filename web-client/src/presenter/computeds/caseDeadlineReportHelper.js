@@ -5,7 +5,12 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
 
   let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
   const totalCount = get(state.caseDeadlineReport.totalCount) || 0;
+  const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
   const showLoadMoreButton = caseDeadlines.length < totalCount;
+
+  const showJudgeSelect = caseDeadlines.length > 0 || judgeFilter;
+  const showNoDeadlines = caseDeadlines.length === 0;
+
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
   const judges = (get(state.judges) || [])
@@ -33,8 +38,6 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
         .formatDateString(filterEndDate, 'MMMM D, YYYY');
   }
 
-  const judgeFilter = get(state.screenMetadata.caseDeadlinesFilter.judge);
-
   caseDeadlines = caseDeadlines.map(d => ({
     ...d,
     associatedJudgeFormatted: applicationContext
@@ -46,18 +49,13 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
       .formatDateString(d.deadlineDate, 'MMDDYY'),
   }));
 
-  if (judgeFilter) {
-    // TODO 6683 move this filtering into ES call
-    caseDeadlines = caseDeadlines.filter(
-      i => i.associatedJudgeFormatted === judgeFilter,
-    );
-  }
-
   return {
     caseDeadlines,
     formattedFilterDateHeader,
     judges,
+    showJudgeSelect,
     showLoadMoreButton,
+    showNoDeadlines,
     totalCount,
   };
 };
