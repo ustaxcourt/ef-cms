@@ -386,7 +386,7 @@ describe('getCaseInteractor', () => {
       expect(result.contactPrimary.phone).toBeDefined();
     });
 
-    it('should return a PublicCase entity when the current user is an external user who is NOT associated with the case and is NOT an irsSuperuser', async () => {
+    it('should return a PublicCase entity when the current user is an external user who is NOT associated with the case', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         name: 'Tasha Yar',
         role: ROLES.privatePractitioner,
@@ -400,22 +400,6 @@ describe('getCaseInteractor', () => {
 
       expect(result.contactPrimary.address1).toBeUndefined();
       expect(result.contactPrimary.phone).toBeUndefined();
-    });
-
-    it('should return a Case entity when the current user is an irsSuperuser', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        name: 'Tasha Yar',
-        role: ROLES.irsSuperuser,
-        userId: '6368a5f5-419b-49af-b5d9-619810bd6d2f',
-      });
-
-      const result = await getCaseInteractor({
-        applicationContext,
-        docketNumber: '101-18',
-      });
-
-      expect(result.contactPrimary.address1).toBeDefined();
-      expect(result.contactPrimary.phone).toBeDefined();
     });
 
     it('should return a Case entity when the current user is associated with the case', async () => {

@@ -151,16 +151,16 @@ describe('Case permissions test', () => {
   });
 
   loginAs(test, 'irsSuperuser@example.com');
-  it('IRS Super User views case detail', async () => {
+  it('IRS Super User views case detail when the case has not been served', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
     publicFieldsVisible();
-    associatedFieldsVisible();
+    associatedFieldsBlocked();
     internalFieldsBlocked();
-    stinVisible();
+    stinBlocked();
   });
 
   loginAs(test, 'privatePractitioner@example.com');
