@@ -2,6 +2,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 const SectionWorkQueueTable = connect(
@@ -42,11 +43,10 @@ const SectionWorkQueueTable = connect(
             {showAssignedToColumn && <th>Assigned To</th>}
           </tr>
         </thead>
-        {formattedWorkQueue.map((formattedWorkItem, idx) => (
+        {formattedWorkQueue.map(formattedWorkItem => (
           <SectionWorkQueueTable.Row
             hideFiledByColumn={hideFiledByColumn}
             hideIconColumn={hideIconColumn}
-            idx={idx}
             item={formattedWorkItem}
             key={formattedWorkItem.workItemId}
             selectWorkItemSequence={selectWorkItemSequence}
@@ -58,12 +58,6 @@ const SectionWorkQueueTable = connect(
     );
   },
 );
-
-const tableRowIsEqual = (firstRow, secondRow) => {
-  const isSameRow = firstRow.idx == secondRow.idx;
-  const selectionUnchanged = firstRow.item.selected == secondRow.item.selected;
-  return isSameRow && selectionUnchanged;
-};
 
 SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
@@ -148,7 +142,7 @@ SectionWorkQueueTable.Row = React.memo(
       </tbody>
     );
   },
-  tableRowIsEqual,
+  workQueueItemsAreEqual,
 );
 
 SectionWorkQueueTable.Actions = connect(

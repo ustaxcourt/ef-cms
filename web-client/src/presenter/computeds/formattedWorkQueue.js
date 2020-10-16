@@ -9,6 +9,10 @@ const isDateToday = (date, applicationContext) => {
   return now === then;
 };
 
+export const workQueueItemsAreEqual = (first, second) => {
+  return JSON.stringify(first.item) === JSON.stringify(second.item);
+};
+
 export const formatDateIfToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
@@ -83,7 +87,7 @@ export const formatWorkItem = ({
     result.showUnassignedIcon = true;
   }
 
-  result.selected = Boolean(isSelected);
+  result.selected = !!isSelected;
 
   result.receivedAt = isDateToday(
     result.docketEntry.receivedAt,

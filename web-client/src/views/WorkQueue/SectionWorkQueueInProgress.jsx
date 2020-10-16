@@ -2,13 +2,8 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
-
-const tableRowIsEqual = (firstRow, secondRow) => {
-  const isSameRow = firstRow.idx == secondRow.idx;
-  const selectionUnchanged = firstRow.item.selected == secondRow.item.selected;
-  return isSameRow && selectionUnchanged;
-};
 
 const SectionWorkQueueInProgressRow = React.memo(
   function SectionWorkQueueInProgressRowComponent({
@@ -73,7 +68,7 @@ const SectionWorkQueueInProgressRow = React.memo(
       </tbody>
     );
   },
-  tableRowIsEqual,
+  workQueueItemsAreEqual,
 );
 
 export const SectionWorkQueueInProgress = connect(
