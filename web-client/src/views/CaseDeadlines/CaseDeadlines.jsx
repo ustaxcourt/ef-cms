@@ -67,6 +67,7 @@ export const CaseDeadlines = connect(
                   }}
                 />
                 <Button
+                  id="update-date-range-deadlines-button"
                   onClick={() => {
                     updateDateRangeForDeadlinesSequence();
                   }}
@@ -153,6 +154,7 @@ export const CaseDeadlines = connect(
                 <Button
                   secondary
                   className="margin-bottom-20"
+                  id="load-more-deadlines-button"
                   onClick={() => {
                     loadMoreCaseDeadlinesSequence();
                   }}
