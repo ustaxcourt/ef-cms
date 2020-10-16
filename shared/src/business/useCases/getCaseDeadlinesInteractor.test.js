@@ -12,6 +12,7 @@ const { User } = require('../entities/User');
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
     {
+      associatedJudge: 'Judge Buch',
       caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
       createdAt: '2019-01-01T21:40:46.415Z',
       deadlineDate: '2019-03-01T21:40:46.415Z',
@@ -19,6 +20,7 @@ describe('getCaseDeadlinesInteractor', () => {
       docketNumber: '101-19',
     },
     {
+      associatedJudge: 'Judge Carluzzo',
       caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
       createdAt: '2019-02-01T21:40:46.415Z',
       deadlineDate: '2019-04-01T21:40:46.415Z',
@@ -28,7 +30,7 @@ describe('getCaseDeadlinesInteractor', () => {
   ];
   const mockCases = [
     {
-      associatedJudge: 'Judge Buch',
+      associatedJudge: 'Judge A',
       caseCaption: 'A caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -47,7 +49,7 @@ describe('getCaseDeadlinesInteractor', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
-      associatedJudge: 'Judge Buch',
+      associatedJudge: 'Judge A',
       caseCaption: 'Another caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
@@ -117,7 +119,7 @@ describe('getCaseDeadlinesInteractor', () => {
           sortableDocketNumber: 19000101,
         },
         {
-          associatedJudge: 'Judge Buch',
+          associatedJudge: 'Judge Carluzzo',
           caseCaption: 'Another caption, Petitioner',
           caseDeadlineId: 'c63d6904-5314-4372-8259-9f8f65824bb7',
           createdAt: '2019-02-01T21:40:46.415Z',
