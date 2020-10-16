@@ -24,6 +24,10 @@ exports.getIndexNameForRecord = record => {
         return true;
       }
 
+      if (type == 'DocketEntry' && entityName === 'CaseDocketEntryMapping') {
+        return true;
+      }
+
       if (entityName === type) {
         return true;
       }
