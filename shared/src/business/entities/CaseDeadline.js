@@ -24,6 +24,7 @@ CaseDeadline.prototype.init = function init(rawProps, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
+  this.associatedJudge = rawProps.associatedJudge;
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.createdAt = rawProps.createdAt || createISODateString();
@@ -38,6 +39,7 @@ CaseDeadline.prototype.init = function init(rawProps, { applicationContext }) {
 CaseDeadline.validationName = 'CaseDeadline';
 
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
+  associatedJudge: 'Associated judge is required',
   deadlineDate: 'Enter a valid deadline date',
   description: [
     {
@@ -51,6 +53,9 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseDeadline.schema = joi.object().keys({
+  associatedJudge: JoiValidationConstants.STRING.max(50)
+    .required()
+    .description('Judge assigned to the case containing this Case Deadline.'),
   caseDeadlineId: JoiValidationConstants.UUID.required().description(
     'Unique Case Deadline ID only used by the system.',
   ),
