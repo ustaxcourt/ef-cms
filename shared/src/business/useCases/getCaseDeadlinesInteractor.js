@@ -20,6 +20,7 @@ exports.getCaseDeadlinesInteractor = async ({
   applicationContext,
   endDate,
   from,
+  judge,
   pageSize,
   startDate,
 }) => {
@@ -38,6 +39,7 @@ exports.getCaseDeadlinesInteractor = async ({
       applicationContext,
       endDate,
       from,
+      judge,
       pageSize,
       startDate,
     });
@@ -76,7 +78,6 @@ exports.getCaseDeadlinesInteractor = async ({
   const afterCaseMapping = validatedCaseDeadlines.map(deadline => ({
     ...deadline,
     ...pick(caseMap[deadline.docketNumber], [
-      'associatedJudge',
       'caseCaption',
       'docketNumber',
       'docketNumberSuffix',

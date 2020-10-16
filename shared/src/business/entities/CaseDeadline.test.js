@@ -13,6 +13,7 @@ describe('CaseDeadline', () => {
     it('should have error messages for missing fields', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
+        associatedJudge: VALIDATION_ERROR_MESSAGES.associatedJudge,
         deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
         description: VALIDATION_ERROR_MESSAGES.description[1],
         docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
@@ -23,6 +24,7 @@ describe('CaseDeadline', () => {
     it('should be valid when all fields are present', () => {
       const caseDeadline = new CaseDeadline(
         {
+          associatedJudge: 'Judge Buch',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
@@ -35,6 +37,7 @@ describe('CaseDeadline', () => {
     it('should generate a sortableDocketNumber from the docketNumber passed in', () => {
       const caseDeadline = new CaseDeadline(
         {
+          associatedJudge: 'Judge Buch',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
@@ -47,6 +50,7 @@ describe('CaseDeadline', () => {
     it('should have error messages for invalid fields', () => {
       const caseDeadline = new CaseDeadline(
         {
+          associatedJudge: 'Judge Buch',
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: `I got the horses in the back
 Horse tack is attached
