@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const getCaseDeadlinesAction = async ({ applicationContext, get }) => {
   const startDate = get(state.screenMetadata.filterStartDate);
   const endDate = get(state.screenMetadata.filterEndDate);
+  const page = get(state.caseDeadlineReport.page) || 1;
 
   const {
     deadlines,
@@ -18,6 +19,7 @@ export const getCaseDeadlinesAction = async ({ applicationContext, get }) => {
   } = await applicationContext.getUseCases().getCaseDeadlinesInteractor({
     applicationContext,
     endDate,
+    page,
     startDate,
   });
   return { caseDeadlines: deadlines, totalCount };

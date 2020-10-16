@@ -1,36 +1,66 @@
-export const petitionsClerkViewsDeadlineReport = test => {
+import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDeadlineReportHelper = withAppContextDecorator(
+  caseDeadlineReportHelperComputed,
+);
+
+export const petitionsClerkViewsDeadlineReport = (test, overrides = {}) => {
   return it('Petitions clerk views deadline report', async () => {
     await test.runSequence('gotoCaseDeadlineReportSequence');
     expect(test.getState('currentPage')).toEqual('CaseDeadlines');
     expect(test.getState('judges').length).toBeGreaterThan(0);
 
+    let startDate, endDate;
+    if (!overrides.day || !overrides.month || !overrides.year) {
+      startDate = '01/01/2025';
+      endDate = '12/01/2025';
+    } else {
+      const computedDate = `${overrides.month}/${overrides.day}/${overrides.year}`;
+      startDate = computedDate;
+      endDate = computedDate;
+    }
+
     await test.runSequence('selectDateRangeFromCalendarSequence', {
-      endDate: new Date('12/01/2025'),
-      startDate: new Date('01/01/2025'),
+      endDate: new Date(endDate),
+      startDate: new Date(startDate),
     });
-    test.setState('screenMetadata.filterStartDateState', '01/01/2025');
-    test.setState('screenMetadata.filterEndDateState', '12/01/2025');
+    test.setState('screenMetadata.filterStartDateState', startDate);
+    test.setState('screenMetadata.filterEndDateState', endDate);
 
     await test.runSequence('updateDateRangeForDeadlinesSequence');
 
-    const allDeadlines = test.getState('allCaseDeadlines');
+    let deadlines = test.getState('caseDeadlineReport.caseDeadlines');
 
-    const deadlinesForThisCase = allDeadlines.filter(
+    let deadlinesForThisCase = deadlines.filter(
       d => d.docketNumber === test.docketNumber,
     );
 
-    expect(deadlinesForThisCase.length).toEqual(2); //should be 1 when paging is all working
+    expect(deadlinesForThisCase.length).toEqual(1);
 
-    expect(test.getState('allCaseDeadlines')[0].deadlineDate).toBe(
-      '2025-08-12T04:00:00.000Z',
+    expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
+
+    let helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper.showLoadMoreButton).toBeTruthy();
+
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
+
+    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+
+    deadlinesForThisCase = deadlines.filter(
+      d => d.docketNumber === test.docketNumber,
     );
 
-    // show more button should show
+    expect(deadlinesForThisCase.length).toEqual(2);
 
-    // click the show more button
+    helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
 
-    // length should now be 2
-
-    // show more button should go away?
+    expect(helper.showLoadMoreButton).toBeFalsy();
   });
 };
