@@ -10,10 +10,14 @@
  * 404: returned by wrapping NotFoundError
  * 500: returned by wrapping any Error which doesn't specify a statusCode.
  */
+const V1_API_ERROR_STATUS_CODES = [401, 403, 404, 500];
+
 class v1ApiError extends Error {
   constructor(error) {
     super();
-    this.statusCode = error.statusCode || 500;
+    this.statusCode = V1_API_ERROR_STATUS_CODES.includes(error.statusCode)
+      ? error.statusCode
+      : 500;
     this.message = {
       message: error.message || 'An unexpected error occurred',
       toString: function () {

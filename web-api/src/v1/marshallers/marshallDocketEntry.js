@@ -1,5 +1,10 @@
-// The returned object is specified by the v1 API and should not change
-// without changing the API version.
+/**
+ * The returned object is specified by the v1 API and any changes to these properties
+ * beyond additions must be accompanied by a version increase.
+ *
+ * @param {object} docketEntryObject the most up-to-date representation of a docketEntry
+ * @returns {object} the v1 representation of a docketEntry
+ */
 exports.marshallDocketEntry = docketEntryObject => {
   return {
     docketEntryId: docketEntryObject.docketEntryId,
