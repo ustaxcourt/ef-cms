@@ -37,7 +37,6 @@ const partitionRecords = records => {
 const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
-  utils,
 }) => {
   if (!caseEntityRecords.length) return;
 
@@ -48,69 +47,92 @@ const processCaseEntries = async ({
     `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
-  const indexDocketEntry = async (fullCase, docketEntry) => {
-    if (docketEntry.documentContentsId) {
-      const buffer = await utils.getDocument({
-        applicationContext,
-        documentContentsId: docketEntry.documentContentsId,
-      });
-      const { documentContents } = JSON.parse(buffer.toString());
-      docketEntry.documentContents = documentContents;
-    }
+  // const indexDocketEntry = async (fullCase, docketEntry) => {
+  //   if (docketEntry.documentContentsId) {
+  //     const buffer = await utils.getDocument({
+  //       applicationContext,
+  //       documentContentsId: docketEntry.documentContentsId,
+  //     });
+  //     const { documentContents } = JSON.parse(buffer.toString());
+  //     docketEntry.documentContents = documentContents;
+  //   }
 
-    const docketEntryWithCase = {
-      ...AWS.DynamoDB.Converter.marshall(fullCase),
-      ...AWS.DynamoDB.Converter.marshall(docketEntry),
-    };
+  //   const docketEntryWithCase = {
+  //     ...AWS.DynamoDB.Converter.marshall(fullCase),
+  //     ...AWS.DynamoDB.Converter.marshall(docketEntry),
+  //   };
 
-    return {
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: docketEntry.pk,
-          },
-          sk: {
-            S: docketEntry.sk,
-          },
-        },
-        NewImage: docketEntryWithCase,
-      },
-      eventName: 'MODIFY',
-    };
-  };
+  //   return {
+  //     dynamodb: {
+  //       Keys: {
+  //         pk: {
+  //           S: docketEntry.pk,
+  //         },
+  //         sk: {
+  //           S: docketEntry.sk,
+  //         },
+  //       },
+  //       NewImage: docketEntryWithCase,
+  //     },
+  //     eventName: 'MODIFY',
+  //   };
+  // };
 
   const indexCaseEntry = async caseRecord => {
-    const caseEntry = AWS.DynamoDB.Converter.unmarshall(
-      caseRecord.dynamodb.NewImage,
-    );
+    // const caseEntry = AWS.DynamoDB.Converter.unmarshall(
+    //   caseRecord.dynamodb.NewImage,
+    // );
 
-    const fullCase = await utils.getCase({
-      applicationContext,
-      docketNumber: caseEntry.docketNumber,
-    });
+    // const fullCase = await utils.getCase({
+    //   applicationContext,
+    //   docketNumber: caseEntry.docketNumber,
+    // });
 
-    const { docketEntries } = fullCase;
+    //const { docketEntries } = fullCase;
 
-    const docketEntryRecords = await Promise.all(
-      docketEntries.map(entry => indexDocketEntry(fullCase, entry)),
-    );
+    // const docketEntryRecords = await Promise.all(
+    //   docketEntries.map(entry => indexDocketEntry(fullCase, entry)),
+    // );
 
-    docketEntryRecords.push({
+    const caseNewImage = caseRecord.dynamodb.NewImage;
+
+    const caseRecords = [];
+
+    caseRecords.push({
       dynamodb: {
         Keys: {
           pk: {
-            S: fullCase.pk,
+            S: caseNewImage.pk.S,
           },
           sk: {
-            S: fullCase.sk,
+            S: `${caseNewImage.sk.S}|mapping`, // TODO: modify this to make it unique?
           },
         },
-        NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
+        NewImage: {
+          ...caseNewImage,
+          case_relations: { name: 'case' },
+          entityName: 'CaseDocketEntryMapping',
+        }, // Create a mapping record on the docket-entry index for parent-child relationships
       },
       eventName: 'MODIFY',
     });
 
-    return docketEntryRecords;
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: caseNewImage.pk.S,
+          },
+          sk: {
+            S: caseNewImage.sk.S,
+          },
+        },
+        NewImage: caseNewImage,
+      },
+      eventName: 'MODIFY',
+    });
+
+    return caseRecords;
   };
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
@@ -169,16 +191,18 @@ const processDocketEntries = async ({
 
   const newDocketEntryRecords = await Promise.all(
     docketEntryRecords.map(async record => {
+      // TODO: May need to remove the `case_relations` object and re-add later
       const fullDocketEntry = AWS.DynamoDB.Converter.unmarshall(
         record.dynamodb.NewImage,
       );
 
-      const fullCase = await utils.getCase({
-        applicationContext,
-        docketNumber: fullDocketEntry.docketNumber,
-      });
+      // const fullCase = await utils.getCase({
+      //   applicationContext,
+      //   docketNumber: fullDocketEntry.docketNumber,
+      // });
 
       if (fullDocketEntry.documentContentsId) {
+        // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         const buffer = await utils.getDocument({
           applicationContext,
           documentContentsId: fullDocketEntry.documentContentsId,
@@ -187,10 +211,12 @@ const processDocketEntries = async ({
         fullDocketEntry.documentContents = documentContents;
       }
 
-      const docketEntryWithCase = {
-        ...AWS.DynamoDB.Converter.marshall(fullCase),
-        ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
-      };
+      // const docketEntryWithCase = {
+      //   ...AWS.DynamoDB.Converter.marshall(fullCase),
+      //   ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
+      // };
+
+      const caseDocketEntryMappingRecordId = `case|${fullDocketEntry.docketNumber}_case|${fullDocketEntry.docketNumber}|mapping`;
 
       return {
         dynamodb: {
@@ -202,7 +228,13 @@ const processDocketEntries = async ({
               S: fullDocketEntry.sk,
             },
           },
-          NewImage: docketEntryWithCase,
+          NewImage: {
+            ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
+            case_relations: {
+              name: 'document',
+              parent: caseDocketEntryMappingRecordId,
+            },
+          },
         },
         eventName: 'MODIFY',
       };
