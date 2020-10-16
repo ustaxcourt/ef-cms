@@ -4,6 +4,7 @@ import {
   formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
+  workQueueItemsAreEqual,
 } from './formattedWorkQueue';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -1310,6 +1311,21 @@ describe('formatted work queue computed', () => {
       const result = formatDateIfToday(date, applicationContext);
 
       expect(result).toContain('01/01/19');
+    });
+  });
+
+  describe('workQueueItemsAreEqual', () => {
+    it('returns true if both objects "item" properties stringify to the same result', () => {
+      const first = { item: { has: 'a first name', my: 'bologna' } };
+      const second = { ...first };
+      expect(workQueueItemsAreEqual(first, second)).toBe(true);
+    });
+    it('returns false if "item" properties differ', () => {
+      const first = { item: { has: 'a first', my: 'bologna', name: 'oscar' } };
+      const second = {
+        item: { has: 'a second', my: 'bologna', name: 'mayer' },
+      };
+      expect(workQueueItemsAreEqual(first, second)).toBe(false);
     });
   });
 });
