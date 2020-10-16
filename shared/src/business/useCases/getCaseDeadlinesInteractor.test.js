@@ -114,6 +114,7 @@ describe('getCaseDeadlinesInteractor', () => {
           docketNumber: '101-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
           entityName: 'CaseDeadline',
+          sortableDocketNumber: 19000101,
         },
         {
           associatedJudge: 'Judge Buch',
@@ -125,6 +126,7 @@ describe('getCaseDeadlinesInteractor', () => {
           docketNumber: '102-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
           entityName: 'CaseDeadline',
+          sortableDocketNumber: 19000102,
         },
       ],
       totalCount: 2,

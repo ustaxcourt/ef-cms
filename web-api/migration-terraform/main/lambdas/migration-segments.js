@@ -5,6 +5,9 @@ const {
 const {
   migrateItems: migration0002,
 } = require('./migrations/0002-case-deadline-catalog');
+const {
+  migrateItems: migration0003,
+} = require('./migrations/0003-case-deadline-required-fields');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -27,6 +30,7 @@ const reprocessItems = async items => {
 
   items = migration0001(items);
   items = await migration0002(items, documentClient);
+  items = migration0003(items);
 
   for (let item of items) {
     const results = await documentClient
@@ -51,6 +55,7 @@ const processItems = async ({ documentClient, items }) => {
   for (let c of chunks) {
     c = migration0001(c);
     c = await migration0002(c, documentClient);
+    c = migration0003(c);
 
     const results = await documentClient
       .batchWrite({
