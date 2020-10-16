@@ -55,39 +55,6 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.formattedFilterDateHeader).toEqual('August 21, 2019');
   });
 
-  it('should sort by date and docket number', () => {
-    let result = runCompute(caseDeadlineReportHelper, {
-      state: {
-        caseDeadlineReport: { caseDeadlines },
-        screenMetadata: {
-          filterEndDate: '2019-08-23T04:00:00.000Z',
-          filterStartDate: '2019-08-21T04:00:00.000Z',
-        },
-      },
-    });
-    expect(result.caseDeadlines).toMatchObject([
-      {
-        deadlineDate: '2019-08-21T04:00:00.000Z',
-        docketNumber: '101-19',
-      },
-      {
-        deadlineDate: '2019-08-21T04:00:00.000Z',
-        docketNumber: '102-19',
-      },
-      {
-        deadlineDate: '2019-08-22T04:00:00.000Z',
-        docketNumber: '101-19',
-      },
-      {
-        deadlineDate: '2019-08-24T04:00:00.000Z',
-        docketNumber: '103-19',
-      },
-    ]);
-    expect(result.formattedFilterDateHeader).toEqual(
-      'August 21, 2019 – August 23, 2019',
-    );
-  });
-
   it('should filter deadlines by judge when a judge is selected', () => {
     const filteredCaseDeadlines = runCompute(caseDeadlineReportHelper, {
       state: {
