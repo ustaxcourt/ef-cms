@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCaseDeadlineReportAction } from '../actions/CaseDeadline/clearCaseDeadlineReportAction';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
@@ -24,6 +25,7 @@ export const updateDateRangeForDeadlinesSequence = showProgressSequenceDecorator
         clearAlertsAction,
         updateDateRangeForDeadlinesAction,
         stopShowValidationAction,
+        clearCaseDeadlineReportAction,
         getCaseDeadlinesAction,
         setCaseDeadlinesAction,
       ],

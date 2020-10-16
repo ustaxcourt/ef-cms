@@ -154,6 +154,7 @@ import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterS
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
+import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
@@ -593,6 +594,7 @@ export const presenter = {
     loadDefaultDocketViewerDocumentToDisplaySequence,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     loadDefaultViewerCorrespondenceSequence,
+    loadMoreCaseDeadlinesSequence,
     loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
