@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -29,6 +30,9 @@ CaseDeadline.prototype.init = function init(rawProps, { applicationContext }) {
   this.deadlineDate = rawProps.deadlineDate;
   this.description = rawProps.description;
   this.docketNumber = rawProps.docketNumber;
+  if (this.docketNumber) {
+    this.sortableDocketNumber = Case.getSortableDocketNumber(this.docketNumber);
+  }
 };
 
 CaseDeadline.validationName = 'CaseDeadline';
@@ -43,6 +47,7 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
     'Enter a description of this deadline',
   ],
   docketNumber: 'You must have a docket number.',
+  sortableDocketNumber: 'Sortable docket number is required',
 };
 
 CaseDeadline.schema = joi.object().keys({
@@ -63,6 +68,12 @@ CaseDeadline.schema = joi.object().keys({
     'Docket number of the case containing the Case Deadline.',
   ),
   entityName: JoiValidationConstants.STRING.valid('CaseDeadline').required(),
+  sortableDocketNumber: joi
+    .number()
+    .required()
+    .description(
+      'A sortable representation of the docket number of the case containing the Case Deadline.',
+    ),
 });
 
 joiValidationDecorator(

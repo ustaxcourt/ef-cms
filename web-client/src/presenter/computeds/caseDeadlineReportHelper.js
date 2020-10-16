@@ -1,16 +1,5 @@
 import { state } from 'cerebral';
 
-export const sortByDateAndDocketNumber = applicationContext => (a, b) => {
-  const firstDate = a.deadlineDate;
-  const secondDate = b.deadlineDate;
-
-  if (firstDate === secondDate) {
-    return applicationContext.getUtilities().compareCasesByDocketNumber(a, b);
-  } else {
-    return firstDate.localeCompare(secondDate, 'en');
-  }
-};
-
 export const caseDeadlineReportHelper = (get, applicationContext) => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
@@ -46,18 +35,16 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
 
   const judgeFilter = get(state.screenMetadata.caseDeadlinesFilter.judge);
 
-  caseDeadlines = caseDeadlines
-    .sort(sortByDateAndDocketNumber(applicationContext)) // TODO 6683 move this sorting into ES call
-    .map(d => ({
-      ...d,
-      associatedJudgeFormatted: applicationContext
-        .getUtilities()
-        .formatJudgeName(d.associatedJudge),
-      caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
-      formattedDeadline: applicationContext
-        .getUtilities()
-        .formatDateString(d.deadlineDate, 'MMDDYY'),
-    }));
+  caseDeadlines = caseDeadlines.map(d => ({
+    ...d,
+    associatedJudgeFormatted: applicationContext
+      .getUtilities()
+      .formatJudgeName(d.associatedJudge),
+    caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
+    formattedDeadline: applicationContext
+      .getUtilities()
+      .formatDateString(d.deadlineDate, 'MMDDYY'),
+  }));
 
   if (judgeFilter) {
     // TODO 6683 move this filtering into ES call
