@@ -365,6 +365,7 @@ module.exports = {
           'ustc',
           'uuid',
           'uuidv4',
+          'validators',
           'vasquezs',
           'viewport',
           'washington',
