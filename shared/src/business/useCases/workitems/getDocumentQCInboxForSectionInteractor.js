@@ -6,7 +6,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { range } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -41,12 +40,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
       section: sectionToShow,
     });
 
-  const workItemsCollection = range(0, 600).map(() => ({
-    ...workItems[0],
-    workItemId: applicationContext.getUniqueId(),
-  }));
-
-  return WorkItem.validateRawCollection(workItemsCollection, {
+  return WorkItem.validateRawCollection(workItems, {
     applicationContext,
   });
 };
