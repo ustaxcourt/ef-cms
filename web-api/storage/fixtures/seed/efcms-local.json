@@ -794,6 +794,7 @@
     "status": "Closed"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:49:10.949Z",
     "deadlineDate": "2019-08-23T04:00:00.000Z",
     "entityName": "CaseDeadline",
@@ -2539,6 +2540,7 @@
     "email": "pughsChambers@example.com"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "entityName": "CaseDeadline",
@@ -5706,6 +5708,7 @@
     "pk": "case-by-docket-number|102-19"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "entityName": "CaseDeadline",
@@ -6754,6 +6757,7 @@
     "pk": "case-by-docket-number|109-19"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:46:01.052Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "entityName": "CaseDeadline",
@@ -9657,6 +9661,7 @@
     "pk": "case|102-20"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:51:32.434Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "entityName": "CaseDeadline",
