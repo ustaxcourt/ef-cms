@@ -6,6 +6,7 @@ describe('DocumentService', () => {
   const caseDetail = {
     caseTitle: 'Test Case Title',
     docketNumber: '123-45',
+    docketNumberWithSuffix: '123-45L',
   };
   const docketEntryNumber = 1;
   const documentDetail = {
@@ -82,5 +83,8 @@ describe('DocumentService', () => {
     const documentInfo = wrapper.find('#computer-readable');
 
     expect(documentInfo.text()).toContain('docketNumber');
+    expect(documentInfo.text()).not.toContain(
+      caseDetail.docketNumberWithSuffix,
+    );
   });
 });

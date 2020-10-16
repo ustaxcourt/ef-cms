@@ -75,6 +75,7 @@ describe('bulkIndexRecords', () => {
       applicationContext,
       records: records,
     });
+
     expect(result.failedRecords).toEqual([newImageRecord]);
   });
 });

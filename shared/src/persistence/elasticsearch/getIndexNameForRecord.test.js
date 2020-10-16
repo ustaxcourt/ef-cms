@@ -109,6 +109,18 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-user-case');
   });
 
+  it('returns efcms-case-deadline for CaseDeadline records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseDeadline',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-case-deadline');
+  });
+
   it('returns efcms-case for unmarshalled Case record', () => {
     const record = {
       entityName: 'Case',

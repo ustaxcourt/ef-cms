@@ -37,7 +37,7 @@ export const PetitionService = ({
 
       <div id="case-information">
         <div>Case Information:</div>
-        <div>Docket Number: {caseDetail.docketNumber}</div>
+        <div>Docket Number: {caseDetail.docketNumberWithSuffix}</div>
         <div>Case Title: {caseDetail.caseTitle}</div>
         <div>Requested Place of Trial: {caseDetail.trialLocation}</div>
       </div>
