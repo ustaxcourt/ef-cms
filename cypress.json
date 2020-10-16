@@ -8,5 +8,6 @@
   "requestTimeout": 12000,
   "viewportWidth": 1200,
   "viewportHeight": 900,
+  "retries": 3,
   "testFiles": "*.spec.js"
 }
