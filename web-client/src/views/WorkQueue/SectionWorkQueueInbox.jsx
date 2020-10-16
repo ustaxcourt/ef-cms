@@ -1,29 +1,26 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
-import { range } from 'lodash';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const SectionWorkQueueTable = connect(
   {
+    formattedWorkQueue: state.formattedWorkQueue,
     hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
     hideIconColumn: state.workQueueHelper.hideIconColumn,
+    selectWorkItemSequence: sequences.selectWorkItemSequence,
     showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
     showSelectColumn: state.workQueueHelper.showSelectColumn,
-    workQueueLength: state.formattedWorkQueue.length,
   },
   function SectionWorkQueueTableComponent({
+    formattedWorkQueue,
     hideFiledByColumn,
     hideIconColumn,
+    selectWorkItemSequence,
     showAssignedToColumn,
     showSelectColumn,
-    workQueueLength,
   }) {
-    console.log(' > table rerender with all the rows!');
-    const rowIndexes = range(0, workQueueLength).map(
-      i => `SectionWorkQueueTable-${i}`,
-    );
     return (
       <table
         aria-describedby="tab-work-queue"
@@ -45,23 +42,30 @@ const SectionWorkQueueTable = connect(
             {showAssignedToColumn && <th>Assigned To</th>}
           </tr>
         </thead>
-        {rowIndexes.map((key, idx) => (
-          <SectionWorkQueueTable.Row idx={idx} key={key} />
+        {formattedWorkQueue.map((formattedWorkItem, idx) => (
+          <SectionWorkQueueTable.Row
+            hideFiledByColumn={hideFiledByColumn}
+            hideIconColumn={hideIconColumn}
+            idx={idx}
+            item={formattedWorkItem}
+            key={formattedWorkItem.workItemId}
+            selectWorkItemSequence={selectWorkItemSequence}
+            showAssignedToColumn={showAssignedToColumn}
+            showSelectColumn={showSelectColumn}
+          />
         ))}
       </table>
     );
   },
 );
 
-SectionWorkQueueTable.Row = connect(
-  {
-    hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
-    hideIconColumn: state.workQueueHelper.hideIconColumn,
-    item: state.formattedWorkQueue[props.idx],
-    selectWorkItemSequence: sequences.selectWorkItemSequence,
-    showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
-    showSelectColumn: state.workQueueHelper.showSelectColumn,
-  },
+const tableRowIsEqual = (firstRow, secondRow) => {
+  const isSameRow = firstRow.idx == secondRow.idx;
+  const selectionUnchanged = firstRow.item.selected == secondRow.item.selected;
+  return isSameRow && selectionUnchanged;
+};
+
+SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
     hideFiledByColumn,
     hideIconColumn,
@@ -144,6 +148,7 @@ SectionWorkQueueTable.Row = connect(
       </tbody>
     );
   },
+  tableRowIsEqual,
 );
 
 SectionWorkQueueTable.Actions = connect(
@@ -159,7 +164,6 @@ SectionWorkQueueTable.Actions = connect(
     selectedWorkItemsLength,
     users,
   }) {
-    console.log('render actions');
     return (
       <div className="action-section">
         <span className="assign-work-item-count">
@@ -198,7 +202,6 @@ export const SectionWorkQueueInbox = connect(
     showSendToBar: state.workQueueHelper.showSendToBar,
   },
   function SectionWorkQueueInbox({ formattedWorkQueueLength, showSendToBar }) {
-    console.log('render all of it');
     return (
       <React.Fragment>
         {showSendToBar && <SectionWorkQueueTable.Actions />}
