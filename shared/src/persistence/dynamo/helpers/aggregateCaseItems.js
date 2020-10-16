@@ -16,6 +16,10 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     .filter(item => item.sk.startsWith('case|'))
     .pop();
 
+  if (!theCase) {
+    return null;
+  }
+
   const documents = caseAndCaseItems.filter(
     item => item.sk.startsWith('docket-entry|') && !item.archived,
   );

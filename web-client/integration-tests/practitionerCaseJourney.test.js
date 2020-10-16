@@ -49,7 +49,7 @@ describe('Practitioner requests access to case', () => {
   practitionerSearchesForNonexistentCase(test);
   practitionerViewsDashboardBeforeAddingCase(test);
   practitionerSearchesForCase(test);
-  practitionerViewsCaseDetail(test);
+  practitionerViewsCaseDetail(test, false);
   practitionerRequestsAccessToCase(test, fakeFile);
   practitionerViewsDashboard(test);
   practitionerViewsCaseDetailOfOwnedCase(test);
@@ -77,7 +77,7 @@ describe('Practitioner requests access to case', () => {
 
   loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForCase(test);
-  practitionerViewsCaseDetail(test);
+  practitionerViewsCaseDetail(test, false);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(test);
 });
