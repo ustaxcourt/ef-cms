@@ -40,7 +40,7 @@ export const CorrespondenceHeader = connect(
                   link
                   aria-hidden="true"
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
-                  icon="envelope-open"
+                  icon="mail-bulk"
                 >
                   Add Correspondence File
                 </Button>
