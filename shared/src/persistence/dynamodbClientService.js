@@ -159,20 +159,33 @@ exports.get = params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-exports.query = params => {
-  return params.applicationContext
-    .getDocumentClient()
-    .query({
-      TableName: getTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...params,
-    })
-    .promise()
-    .then(result => {
-      result.Items.forEach(removeAWSGlobalFields);
-      return result.Items;
-    });
+exports.query = async params => {
+  let hasMoreResults = true;
+  let lastKey = null;
+  let allResults = [];
+  while (hasMoreResults) {
+    hasMoreResults = false;
+
+    const subsetResults = await params.applicationContext
+      .getDocumentClient()
+      .query({
+        TableName: getTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...params,
+        ExclusiveStartKey: lastKey,
+      })
+      .promise();
+
+    hasMoreResults = !!subsetResults.LastEvaluatedKey;
+    lastKey = subsetResults.LastEvaluatedKey;
+
+    subsetResults.Items.forEach(removeAWSGlobalFields);
+
+    allResults = [...allResults, ...subsetResults.Items];
+  }
+
+  return allResults;
 };
 
 /**
