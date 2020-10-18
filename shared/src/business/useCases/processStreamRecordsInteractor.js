@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { flattenDeep, get, memoize, partition } = require('lodash');
+const { flattenDeep, get, partition } = require('lodash');
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -48,7 +48,7 @@ const processCaseEntries = async ({
     `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
-  const indexDocketEntry = async (fullCase, docketEntry) => {
+  const indexDocketEntry = async (marshalledCase, docketEntry) => {
     if (docketEntry.documentContentsId) {
       const buffer = await utils.getDocument({
         applicationContext,
@@ -59,8 +59,25 @@ const processCaseEntries = async ({
     }
 
     const docketEntryWithCase = {
-      ...AWS.DynamoDB.Converter.marshall(fullCase),
+      isSealed: marshalledCase.isSealed,
       ...AWS.DynamoDB.Converter.marshall(docketEntry),
+      caseCaption: marshalledCase.caseCaption,
+      contactPrimary: marshalledCase.contactPrimary,
+      contactSecondary: marshalledCase.contactSecondary,
+      irsPractitioners: {
+        L: marshalledCase.irsPractitioners.L.map(p => ({
+          M: {
+            userId: p.M.userId,
+          },
+        })),
+      },
+      privatePractitioners: {
+        L: marshalledCase.privatePractitioners.L.map(p => ({
+          M: {
+            userId: p.M.userId,
+          },
+        })),
+      },
     };
 
     return {
@@ -90,9 +107,10 @@ const processCaseEntries = async ({
     });
 
     const { docketEntries } = fullCase;
+    const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
 
     const docketEntryRecords = await Promise.all(
-      docketEntries.map(entry => indexDocketEntry(fullCase, entry)),
+      docketEntries.map(entry => indexDocketEntry(marshalledCase, entry)),
     );
 
     docketEntryRecords.push({
@@ -105,7 +123,7 @@ const processCaseEntries = async ({
             S: fullCase.sk,
           },
         },
-        NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
+        NewImage: marshalledCase,
       },
       eventName: 'MODIFY',
     });
@@ -187,9 +205,27 @@ const processDocketEntries = async ({
         fullDocketEntry.documentContents = documentContents;
       }
 
+      const marshalledCase = AWS.DynamoDB.Converter.marshall({
+        ...fullCase,
+        docketEntries: undefined,
+      });
+
       const docketEntryWithCase = {
-        ...AWS.DynamoDB.Converter.marshall(fullCase),
+        isSealed: marshalledCase.isSealed,
         ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
+        caseCaption: marshalledCase.caseCaption,
+        contactPrimary: marshalledCase.contactPrimary,
+        contactSecondary: marshalledCase.contactSecondary,
+        irsPractitioners: marshalledCase.irsPractitioners.map(p => ({
+          M: {
+            userId: p.M.userId,
+          },
+        })),
+        privatePractitioners: marshalledCase.privatePractitioners.map(p => ({
+          M: {
+            userId: p.M.userId,
+          },
+        })),
       };
 
       return {
@@ -319,21 +355,19 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  const getCase = memoize(({ applicationContext, docketNumber }) =>
+  const getCase = ({ applicationContext, docketNumber }) =>
     applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
       docketNumber,
-    }),
-  );
+    });
 
-  const getDocument = memoize(({ applicationContext, documentContentsId }) =>
+  const getDocument = ({ applicationContext, documentContentsId }) =>
     applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key: documentContentsId,
       protocol: 'S3',
       useTempBucket: false,
-    }),
-  );
+    });
 
   recordsToProcess = recordsToProcess.filter(record => {
     // to prevent global tables writing extra data
@@ -362,40 +396,48 @@ exports.processStreamRecordsInteractor = async ({
     await processRemoveEntries({
       applicationContext,
       removeRecords,
-    }).catch(err =>
+    }).catch(err => {
+      applicationContext.logger.error(err);
+      applicationContext.logger.info("failed to processRemoveEntries',");
       applicationContext.notifyHoneybadger(err, {
-        message:
-          'processStreamRecordsInteractor failed to processRemoveEntries',
-      }),
-    );
+        message: 'failed to processRemoveEntries',
+      });
+      throw err;
+    });
 
     await Promise.all([
       processCaseEntries({
         applicationContext,
         caseEntityRecords,
         utils,
-      }).catch(err =>
+      }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processCaseEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processCaseEntries',
-        }),
-      ),
+          message: 'failed to processCaseEntries',
+        });
+        throw err;
+      }),
       processDocketEntries({
         applicationContext,
         docketEntryRecords,
         utils,
-      }).catch(err =>
+      }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processDocketEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processDocketEntries',
-        }),
-      ),
-      processOtherEntries({ applicationContext, otherRecords }).catch(err =>
+          message: 'failed to processDocketEntries',
+        });
+        throw err;
+      }),
+      processOtherEntries({ applicationContext, otherRecords }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processOtherEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processOtherEntries',
-        }),
-      ),
+          message: 'failed to processOtherEntries',
+        });
+        throw err;
+      }),
     ]);
   } catch (err) {
     applicationContext.logger.info(
