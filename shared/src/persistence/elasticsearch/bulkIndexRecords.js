@@ -32,16 +32,15 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
 
       if (body.length) {
         const logId = applicationContext.getUniqueId();
-        console.time(
-          `${logId} bulk index ${body.length} with size ${sizeof(body)}`,
-        );
+        const timeString = `${logId} bulk index ${
+          body.length
+        } with size ${sizeof(body)}`;
+        console.time(timeString);
         const response = await searchClient.bulk({
           body,
           refresh: false,
         });
-        console.timeEnd(
-          `${logId} bulk index ${body.length} with size ${sizeof(body)}`,
-        );
+        console.timeEnd(timeString);
         if (response.errors) {
           response.items.forEach((action, i) => {
             const operation = Object.keys(action)[0];
