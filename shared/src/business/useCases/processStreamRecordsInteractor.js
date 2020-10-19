@@ -1,6 +1,33 @@
 const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
 
+const whitelistCase = marshalledCase => {
+  return {
+    caseCaption: marshalledCase.caseCaption,
+    contactPrimary: marshalledCase.contactPrimary,
+    contactSecondary: marshalledCase.contactSecondary,
+    docketNumber: marshalledCase.docketNumber,
+    docketNumberSuffix: marshalledCase.docketNumberSuffix,
+    docketNumberWithSuffix: marshalledCase.docketNumberWithSuffix,
+    irsPractitioners: {
+      L: marshalledCase.irsPractitioners.L.map(p => ({
+        M: {
+          userId: p.M.userId,
+        },
+      })),
+    },
+    isSealed: marshalledCase.isSealed,
+    privatePractitioners: {
+      L: marshalledCase.privatePractitioners.L.map(p => ({
+        M: {
+          userId: p.M.userId,
+        },
+      })),
+    },
+    sealedDate: marshalledCase.sealedDate,
+  };
+};
+
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
     records,
@@ -55,25 +82,8 @@ const processCaseEntries = async ({
     }
 
     const docketEntryWithCase = {
-      isSealed: marshalledCase.isSealed,
+      ...whitelistCase(marshalledCase),
       ...AWS.DynamoDB.Converter.marshall(docketEntry),
-      caseCaption: marshalledCase.caseCaption,
-      contactPrimary: marshalledCase.contactPrimary,
-      contactSecondary: marshalledCase.contactSecondary,
-      irsPractitioners: {
-        L: marshalledCase.irsPractitioners.L.map(p => ({
-          M: {
-            userId: p.M.userId,
-          },
-        })),
-      },
-      privatePractitioners: {
-        L: marshalledCase.privatePractitioners.L.map(p => ({
-          M: {
-            userId: p.M.userId,
-          },
-        })),
-      },
     };
 
     return {
@@ -105,11 +115,7 @@ const processCaseEntries = async ({
     const { docketEntries } = fullCase;
     const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
 
-    const docketEntryRecords = await Promise.all(
-      docketEntries.map(entry => indexDocketEntry(marshalledCase, entry)),
-    );
-
-    docketEntryRecords.push({
+    const esCaseEntry = {
       dynamodb: {
         Keys: {
           pk: {
@@ -122,9 +128,13 @@ const processCaseEntries = async ({
         NewImage: marshalledCase,
       },
       eventName: 'MODIFY',
-    });
+    };
 
-    return docketEntryRecords;
+    const docketEntryRecords = await Promise.all(
+      docketEntries.map(entry => indexDocketEntry(marshalledCase, entry)),
+    );
+
+    return [esCaseEntry, ...docketEntryRecords];
   };
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
@@ -203,25 +213,11 @@ const processDocketEntries = async ({
 
       const marshalledCase = AWS.DynamoDB.Converter.marshall({
         ...fullCase,
-        docketEntries: undefined,
       });
 
       const docketEntryWithCase = {
-        isSealed: marshalledCase.isSealed,
+        ...whitelistCase(marshalledCase),
         ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
-        caseCaption: marshalledCase.caseCaption,
-        contactPrimary: marshalledCase.contactPrimary,
-        contactSecondary: marshalledCase.contactSecondary,
-        irsPractitioners: marshalledCase.irsPractitioners.map(p => ({
-          M: {
-            userId: p.M.userId,
-          },
-        })),
-        privatePractitioners: marshalledCase.privatePractitioners.map(p => ({
-          M: {
-            userId: p.M.userId,
-          },
-        })),
       };
 
       return {
@@ -352,7 +348,7 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   const getCase = ({ applicationContext, docketNumber }) =>
-    applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+    applicationContext.getPersistenceGateway().getFullCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });
