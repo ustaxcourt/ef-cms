@@ -1,14 +1,22 @@
+const faker = require('faker');
+
 exports.fillInCreateCaseFromPaperForm = testData => {
-  const petitionerName = 'Wile e Coyote';
+  const petitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
   cy.get('#party-type').select('Petitioner');
   cy.get('#name').type(petitionerName);
   if (testData) {
     testData.testPetitionerName = petitionerName;
   }
-  cy.get('input[name="contactPrimary.address1"]').type('123 Roadrunner Lane');
-  cy.get('input[name="contactPrimary.city"]').type('Nowhere');
-  cy.get('select[name="contactPrimary.state"]').select('WA');
-  cy.get('input[name="contactPrimary.postalCode"]').type('00000');
+  cy.get('input[name="contactPrimary.address1"]').type(
+    faker.address.streetAddress(),
+  );
+  cy.get('input[name="contactPrimary.city"]').type(faker.address.city());
+  cy.get('select[name="contactPrimary.state"]').select(
+    faker.address.stateAbbr(),
+  );
+  cy.get('input[name="contactPrimary.postalCode"]').type(
+    faker.address.zipCode(),
+  );
 
   cy.get('#tab-case-info').click();
 
