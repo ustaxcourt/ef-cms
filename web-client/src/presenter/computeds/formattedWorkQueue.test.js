@@ -4,6 +4,7 @@ import {
   formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
+  workQueueItemsAreEqual,
 } from './formattedWorkQueue';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -1122,24 +1123,15 @@ describe('formatted work queue computed', () => {
       expect(result.showUnassignedIcon).toBeFalsy();
     });
 
-    it('should return selected as true if workItemId is found in selectedWorkItems', () => {
+    it('should return selected as true if `isSelected` attribute passed in as true', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         workItemId: '123',
       };
 
-      const selectedWorkItems = [
-        {
-          workItemId: '234',
-        },
-        {
-          workItemId: '345',
-        },
-      ];
-
       let result = formatWorkItem({
         applicationContext,
-        selectedWorkItems,
+        isSelected: undefined,
         workItem,
       });
       expect(result.selected).toEqual(false);
@@ -1148,7 +1140,7 @@ describe('formatted work queue computed', () => {
 
       result = formatWorkItem({
         applicationContext,
-        selectedWorkItems,
+        isSelected: true,
         workItem,
       });
       expect(result.selected).toEqual(true);
@@ -1319,6 +1311,21 @@ describe('formatted work queue computed', () => {
       const result = formatDateIfToday(date, applicationContext);
 
       expect(result).toContain('01/01/19');
+    });
+  });
+
+  describe('workQueueItemsAreEqual', () => {
+    it('returns true if both objects "item" properties stringify to the same result', () => {
+      const first = { item: { has: 'a first name', my: 'bologna' } };
+      const second = { ...first };
+      expect(workQueueItemsAreEqual(first, second)).toBe(true);
+    });
+    it('returns false if "item" properties differ', () => {
+      const first = { item: { has: 'a first', my: 'bologna', name: 'oscar' } };
+      const second = {
+        item: { has: 'a second', my: 'bologna', name: 'mayer' },
+      };
+      expect(workQueueItemsAreEqual(first, second)).toBe(false);
     });
   });
 });
