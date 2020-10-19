@@ -49,9 +49,9 @@ describe('formatCase', () => {
   });
 
   it('should return an empty object if caseDetail is empty', () => {
-    const applicationContext = {};
+    const mockApplicationContext = {};
     const caseDetail = {};
-    const result = formatCase(applicationContext, caseDetail);
+    const result = formatCase(mockApplicationContext, caseDetail);
 
     expect(result).toMatchObject({});
   });
