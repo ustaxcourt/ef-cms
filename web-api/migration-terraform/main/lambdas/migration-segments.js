@@ -1,11 +1,5 @@
 const AWS = require('aws-sdk');
 const {
-  migrateItems: migration0001,
-} = require('./migrations/0001-eligible-for-trial-case-id');
-const {
-  migrateItems: migration0002,
-} = require('./migrations/0002-case-deadline-catalog');
-const {
   migrateItems: migration0003,
 } = require('./migrations/0003-case-deadline-required-fields');
 const { chunk, isEmpty } = require('lodash');
@@ -26,8 +20,6 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
-  items = migration0001(items);
-  items = await migration0002(items, documentClient);
   items = await migration0003(items, documentClient);
   return items;
 };

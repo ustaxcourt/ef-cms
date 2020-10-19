@@ -38,8 +38,8 @@ describe('documentGenerators', () => {
   );
 
   const writePdfFile = (name, data) => {
-    const path = `${testOutputPath}/${name}.pdf`;
-    fs.writeFileSync(path, data);
+    const pdfPath = `${testOutputPath}/${name}.pdf`;
+    fs.writeFileSync(pdfPath, data);
   };
 
   beforeAll(() => {

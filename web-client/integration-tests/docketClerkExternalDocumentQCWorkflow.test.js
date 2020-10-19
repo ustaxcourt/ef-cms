@@ -76,7 +76,7 @@ describe('Create a work item', () => {
       test,
     );
 
-    const decisionWorkItem = documentQCSectionInbox.find(
+    decisionWorkItem = documentQCSectionInbox.find(
       workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(decisionWorkItem).toMatchObject({

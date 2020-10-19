@@ -1681,9 +1681,9 @@ module.exports = appContextUser => {
     notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();
 
-      const notifyAsync = message => {
+      const notifyAsync = messageForNotification => {
         return new Promise(resolve => {
-          honeybadger.notify(message, null, null, resolve);
+          honeybadger.notify(messageForNotification, null, null, resolve);
         });
       };
 

@@ -83,8 +83,8 @@ export const ReceiptOfFiling = ({
         </tbody>
         <tbody className="receipt-supporting-docs">
           {hasSupportingDocuments &&
-            supportingDocuments.map((document, idx) => {
-              return <DocumentRow document={document} key={idx} />;
+            supportingDocuments.map((supportingDocument, idx) => {
+              return <DocumentRow document={supportingDocument} key={idx} />;
             })}
         </tbody>
 
@@ -94,9 +94,16 @@ export const ReceiptOfFiling = ({
 
         <tbody className="receipt-secondary-supporting-documents">
           {hasSecondarySupportingDocuments &&
-            secondarySupportingDocuments.map((document, idx) => {
-              return <DocumentRow document={document} key={idx} />;
-            })}
+            secondarySupportingDocuments.map(
+              (secondarySupportingDocument, idx) => {
+                return (
+                  <DocumentRow
+                    document={secondarySupportingDocument}
+                    key={idx}
+                  />
+                );
+              },
+            )}
         </tbody>
       </table>
     </>
