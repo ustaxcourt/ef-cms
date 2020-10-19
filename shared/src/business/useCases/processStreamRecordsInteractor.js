@@ -347,15 +347,18 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  const getCase = ({ applicationContext, docketNumber }) =>
-    applicationContext.getPersistenceGateway().getFullCaseByDocketNumber({
-      applicationContext,
+  const getCase = ({ applicationContext: appContext, docketNumber }) =>
+    appContext.getPersistenceGateway().getFullCaseByDocketNumber({
+      applicationContext: appContext,
       docketNumber,
     });
 
-  const getDocument = ({ applicationContext, documentContentsId }) =>
-    applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
+  const getDocument = ({
+    applicationContext: appContext,
+    documentContentsId,
+  }) =>
+    appContext.getPersistenceGateway().getDocument({
+      applicationContext: appContext,
       key: documentContentsId,
       protocol: 'S3',
       useTempBucket: false,

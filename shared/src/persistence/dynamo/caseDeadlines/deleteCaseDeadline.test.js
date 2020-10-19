@@ -42,14 +42,6 @@ describe('deleteCaseDeadline', () => {
         sk: `case-deadline|${CASE_DEADLINE_ID}`,
       },
     });
-    expect(
-      applicationContext.getDocumentClient().delete.mock.calls[2][0],
-    ).toMatchObject({
-      Key: {
-        pk: mockCaseDeadline.deadlineDate,
-        sk: `case-deadline-catalog|${CASE_DEADLINE_ID}`,
-      },
-    });
   });
 
   it('does not call delete function if original case deadline is not found', async () => {

@@ -44,8 +44,8 @@ export const EligibleCases = connect(
               )}
             </tr>
           </thead>
-          {formattedEligibleCases.map((item, idx) => (
-            <tbody key={idx}>
+          {formattedEligibleCases.map(item => (
+            <tbody key={item.docketNumber}>
               <tr className="eligible-cases-row">
                 <td>
                   <CaseLink formattedCase={item} />
@@ -62,8 +62,8 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.caseCaption}</td>
                 <td>
-                  {item.privatePractitioners.map((practitioner, idx) => (
-                    <div key={idx}>{practitioner.name}</div>
+                  {item.privatePractitioners.map(practitioner => (
+                    <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
                 <td>{item.respondent}</td>

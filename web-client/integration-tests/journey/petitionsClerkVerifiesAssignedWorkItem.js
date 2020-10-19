@@ -14,7 +14,7 @@ export const petitionsClerkVerifiesAssignedWorkItem = (test, createdCases) => {
     expect(test.getState('currentPage')).toEqual('WorkQueue');
     const workItem = test
       .getState('workQueue')
-      .find(workItem => workItem.workItemId === workItemId);
+      .find(workItemInQueue => workItemInQueue.workItemId === workItemId);
     expect(workItem).toBeDefined();
   });
 };

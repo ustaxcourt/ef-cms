@@ -71,4 +71,22 @@ describe('getCaseDeadlinesByDateRange', () => {
       DEADLINE_REPORT_PAGE_SIZE,
     );
   });
+
+  it('adds judge query to search client call if judge is provided', async () => {
+    await getCaseDeadlinesByDateRange({
+      applicationContext,
+      endDate: END_DATE,
+      judge: 'Buch',
+      pageSize: 1,
+      startDate: START_DATE,
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[2],
+    ).toEqual({
+      match: {
+        'associatedJudge.S': { operator: 'and', query: 'Buch' },
+      },
+    });
+  });
 });

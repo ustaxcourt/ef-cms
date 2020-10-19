@@ -247,7 +247,7 @@ const formatCase = (applicationContext, caseDetail) => {
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending,
+      entry => entry.pending && entry.servedAt,
     );
   }
 
