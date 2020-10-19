@@ -2,7 +2,74 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
+
+const SectionWorkQueueInProgressRow = React.memo(
+  function SectionWorkQueueInProgressRowComponent({
+    hideFiledByColumn,
+    item,
+    selectWorkItemSequence,
+    showAssignedToColumn,
+    showSelectColumn,
+  }) {
+    return (
+      <tbody>
+        <tr>
+          {showSelectColumn && (
+            <>
+              <td aria-hidden="true" className="focus-toggle" />
+              <td className="message-select-control">
+                <input
+                  aria-label="Select work item"
+                  checked={item.selected}
+                  className="usa-checkbox__input"
+                  id={item.workItemId}
+                  type="checkbox"
+                  onChange={() => {
+                    selectWorkItemSequence({
+                      workItem: item,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label padding-top-05"
+                  htmlFor={item.workItemId}
+                  id={`label-${item.workItemId}`}
+                />
+              </td>
+            </>
+          )}
+          <td className="message-queue-row">
+            <CaseLink formattedCase={item} />
+          </td>
+          <td className="message-queue-row">
+            <span className="no-wrap">{item.received}</span>
+          </td>
+          <td className="message-queue-row message-queue-case-title">
+            {item.caseTitle}
+          </td>
+          <td className="message-queue-row message-queue-document">
+            <div className="message-document-title">
+              <a className="case-link" href={item.editLink}>
+                {item.docketEntry.documentTitle ||
+                  item.docketEntry.documentType}
+              </a>
+            </div>
+          </td>
+          {!hideFiledByColumn && (
+            <td className="message-queue-row">{item.docketEntry.filedBy}</td>
+          )}
+          <td className="message-queue-row">{item.caseStatus}</td>
+          {showAssignedToColumn && (
+            <td className="to message-queue-row">{item.assigneeName}</td>
+          )}
+        </tr>
+      </tbody>
+    );
+  },
+  workQueueItemsAreEqual,
+);
 
 export const SectionWorkQueueInProgress = connect(
   {
@@ -10,7 +77,7 @@ export const SectionWorkQueueInProgress = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
-    selectedWorkItems: state.selectedWorkItems,
+    selectedWorkItemsLength: state.selectedWorkItems.length,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
@@ -18,7 +85,7 @@ export const SectionWorkQueueInProgress = connect(
     assignSelectedWorkItemsSequence,
     formattedWorkQueue,
     selectAssigneeSequence,
-    selectedWorkItems,
+    selectedWorkItemsLength,
     selectWorkItemSequence,
     users,
     workQueueHelper,
@@ -29,7 +96,7 @@ export const SectionWorkQueueInProgress = connect(
           <div className="action-section">
             <span className="assign-work-item-count">
               <Icon aria-label="selected work items count" icon="check" />
-              {selectedWorkItems.length}
+              {selectedWorkItemsLength}
             </span>
             <select
               aria-label="select a assignee"
@@ -71,61 +138,15 @@ export const SectionWorkQueueInProgress = connect(
               {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
             </tr>
           </thead>
-          {formattedWorkQueue.map((item, idx) => (
-            <tbody key={idx}>
-              <tr>
-                {workQueueHelper.showSelectColumn && (
-                  <>
-                    <td aria-hidden="true" className="focus-toggle" />
-                    <td className="message-select-control">
-                      <input
-                        aria-label="Select work item"
-                        checked={item.selected}
-                        className="usa-checkbox__input"
-                        id={item.workItemId}
-                        type="checkbox"
-                        onChange={() => {
-                          selectWorkItemSequence({
-                            workItem: item,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label padding-top-05"
-                        htmlFor={item.workItemId}
-                        id={`label-${item.workItemId}`}
-                      />
-                    </td>
-                  </>
-                )}
-                <td className="message-queue-row">
-                  <CaseLink formattedCase={item} />
-                </td>
-                <td className="message-queue-row">
-                  <span className="no-wrap">{item.received}</span>
-                </td>
-                <td className="message-queue-row message-queue-case-title">
-                  {item.caseTitle}
-                </td>
-                <td className="message-queue-row message-queue-document">
-                  <div className="message-document-title">
-                    <a className="case-link" href={item.editLink}>
-                      {item.docketEntry.documentTitle ||
-                        item.docketEntry.documentType}
-                    </a>
-                  </div>
-                </td>
-                {!workQueueHelper.hideFiledByColumn && (
-                  <td className="message-queue-row">
-                    {item.docketEntry.filedBy}
-                  </td>
-                )}
-                <td className="message-queue-row">{item.caseStatus}</td>
-                {workQueueHelper.showAssignedToColumn && (
-                  <td className="to message-queue-row">{item.assigneeName}</td>
-                )}
-              </tr>
-            </tbody>
+          {formattedWorkQueue.map(item => (
+            <SectionWorkQueueInProgressRow
+              hideFiledByColumn={workQueueHelper.hideFiledByColumn}
+              item={item}
+              key={item.workItemId}
+              selectWorkItemSequence={selectWorkItemSequence}
+              showAssignedToColumn={workQueueHelper.showAssignedToColumn}
+              showSelectColumn={workQueueHelper.showSelectColumn}
+            />
           ))}
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}

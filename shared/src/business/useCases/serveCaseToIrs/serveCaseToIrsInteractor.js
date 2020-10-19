@@ -121,7 +121,7 @@ exports.serveCaseToIrsInteractor = async ({
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocketEntry) {
+    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
       initialDocketEntry.setAsServed([
         {
           name: 'IRS',

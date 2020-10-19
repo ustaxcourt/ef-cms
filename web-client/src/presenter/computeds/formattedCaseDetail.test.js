@@ -2010,6 +2010,89 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  describe('showServed', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    const mockDocketEntry = {
+      attachments: false,
+      certificateOfService: false,
+      createdAt: '2019-06-19T17:29:13.120Z',
+      description: 'Motion to Dismiss for Lack of Jurisdiction',
+      docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+      documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+      documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+      eventCode: 'M073',
+      filingDate: '2019-06-19T17:29:13.120Z',
+      isLegacy: true,
+      isOnDocketRecord: true,
+      isStatusServed: true,
+      isStricken: true,
+      numberOfPages: 24,
+      servedAt: '2019-06-19T17:29:13.120Z',
+      servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
+    };
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketEntries: [mockDocketEntry],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('is true when the entry has been served', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showServed).toEqual(true);
+    });
+
+    it('is false when the entry has not been served', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                servedAt: undefined,
+                servedParties: [],
+              },
+            ],
+          },
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showServed).toEqual(false);
+    });
+  });
+
   describe('formattedOpenCases', () => {
     it('should return formatted open cases', () => {
       const caseDetail = {

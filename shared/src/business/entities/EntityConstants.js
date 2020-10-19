@@ -267,7 +267,6 @@ const INITIAL_DOCUMENT_TYPES_MAP = {
   stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
 };
 
-// These docket entry types aren't defined anywhere else
 const MINUTE_ENTRIES_MAP = {
   captionOfCaseIsAmended: {
     description:
@@ -290,6 +289,11 @@ const MINUTE_ENTRIES_MAP = {
     description: 'Filing Fee Waived',
     documentType: 'Filing Fee Waived',
     eventCode: 'FEEW',
+  },
+  requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
   },
 };
 

@@ -8,7 +8,10 @@ export const petitionsClerkViewsWorkQueueAfterReassign = test => {
     });
     const workItem = test
       .getState('workQueue')
-      .find(workItem => workItem.workItemId === test.petitionWorkItemId);
+      .find(
+        workItemInQueue =>
+          workItemInQueue.workItemId === test.petitionWorkItemId,
+      );
     expect(workItem).toBeDefined();
   });
 };
