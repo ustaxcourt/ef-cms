@@ -21,6 +21,7 @@ describe('fetchPendingItems', () => {
         {
           docketEntryId: 'def',
           pending: true,
+          servedAt: '2019-08-25T05:00:00.000Z',
         },
         {
           docketEntryId: 'lmnop',
@@ -33,6 +34,11 @@ describe('fetchPendingItems', () => {
       docketEntries: [
         {
           docketEntryId: 'abc',
+          pending: true,
+          servedAt: '2019-08-25T05:00:00.000Z',
+        },
+        {
+          docketEntryId: 'defg',
           pending: true,
         },
         {
