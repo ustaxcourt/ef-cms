@@ -13,8 +13,8 @@ export const BindedTextarea = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  function BindedTextarea(props) {
-    const { bind, className, onChange, simpleSetter, value } = props;
+  function BindedTextarea(componentProps) {
+    const { bind, className, onChange, simpleSetter, value } = componentProps;
 
     let textValue, setText;
 
@@ -35,7 +35,7 @@ export const BindedTextarea = connect(
       'simpleSetter',
     ];
     const textAreaProps = {
-      ...props,
+      ...componentProps,
       className: classNames('usa-textarea', className),
       onChange: e => setText(e.target.value),
       value: textValue || '',
