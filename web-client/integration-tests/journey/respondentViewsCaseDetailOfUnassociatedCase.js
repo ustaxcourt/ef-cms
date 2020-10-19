@@ -5,6 +5,5 @@ export const respondentViewsCaseDetailOfUnassociatedCase = test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('caseDetail.irsPractitioners.length')).toEqual(1);
   });
 };
