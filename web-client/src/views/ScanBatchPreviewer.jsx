@@ -415,8 +415,8 @@ export const ScanBatchPreviewer = connect(
       );
     };
 
-    const renderTabs = documentTabs => {
-      if (documentTabs && documentTabs.length > 1) {
+    const renderTabs = documentTabsList => {
+      if (documentTabsList && documentTabsList.length > 1) {
         return (
           <Tabs
             bind="currentViewMetadata.documentSelectedForScan"
@@ -425,7 +425,7 @@ export const ScanBatchPreviewer = connect(
               selectDocumentForScanSequence();
             }}
           >
-            {documentTabs.map(documentTab => (
+            {documentTabsList.map(documentTab => (
               <Tab
                 icon={['fas', 'check-circle']}
                 iconColor="green"
