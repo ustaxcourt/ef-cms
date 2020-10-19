@@ -1,20 +1,27 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
-import { range } from 'lodash';
+import { sequences, state } from 'cerebral';
+import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 const SectionWorkQueueTable = connect(
   {
-    workQueueHelper: state.workQueueHelper,
-    workQueueLength: state.formattedWorkQueue.length,
+    formattedWorkQueue: state.formattedWorkQueue,
+    hideFiledByColumn: state.workQueueHelper.hideFiledByColumn,
+    hideIconColumn: state.workQueueHelper.hideIconColumn,
+    selectWorkItemSequence: sequences.selectWorkItemSequence,
+    showAssignedToColumn: state.workQueueHelper.showAssignedToColumn,
+    showSelectColumn: state.workQueueHelper.showSelectColumn,
   },
   function SectionWorkQueueTableComponent({
-    workQueueHelper,
-    workQueueLength,
+    formattedWorkQueue,
+    hideFiledByColumn,
+    hideIconColumn,
+    selectWorkItemSequence,
+    showAssignedToColumn,
+    showSelectColumn,
   }) {
-    const rowIndexes = range(0, workQueueLength);
     return (
       <table
         aria-describedby="tab-work-queue"
@@ -23,42 +30,48 @@ const SectionWorkQueueTable = connect(
       >
         <thead>
           <tr>
-            {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
+            {showSelectColumn && <th colSpan="2">&nbsp;</th>}
             <th aria-label="Docket Number">Docket No.</th>
             <th>Filed</th>
             <th>Case Title</th>
-            {!workQueueHelper.hideIconColumn && (
+            {!hideIconColumn && (
               <th aria-label="Status Icon" className="padding-right-0" />
             )}
             <th>Document</th>
-            {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+            {!hideFiledByColumn && <th>Filed By</th>}
             <th>Case Status</th>
-            {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
+            {showAssignedToColumn && <th>Assigned To</th>}
           </tr>
         </thead>
-        {rowIndexes.map(idx => (
-          <SectionWorkQueueTable.Row idx={idx} key={idx} />
+        {formattedWorkQueue.map(formattedWorkItem => (
+          <SectionWorkQueueTable.Row
+            hideFiledByColumn={hideFiledByColumn}
+            hideIconColumn={hideIconColumn}
+            item={formattedWorkItem}
+            key={formattedWorkItem.workItemId}
+            selectWorkItemSequence={selectWorkItemSequence}
+            showAssignedToColumn={showAssignedToColumn}
+            showSelectColumn={showSelectColumn}
+          />
         ))}
       </table>
     );
   },
 );
 
-SectionWorkQueueTable.Row = connect(
-  {
-    item: state.formattedWorkQueue[props.idx],
-    selectWorkItemSequence: sequences.selectWorkItemSequence,
-    workQueueHelper: state.workQueueHelper,
-  },
+SectionWorkQueueTable.Row = React.memo(
   function SectionWorkQueueTableRowComponent({
+    hideFiledByColumn,
+    hideIconColumn,
     item,
     selectWorkItemSequence,
-    workQueueHelper,
+    showAssignedToColumn,
+    showSelectColumn,
   }) {
     return (
       <tbody>
         <tr>
-          {workQueueHelper.showSelectColumn && (
+          {showSelectColumn && (
             <>
               <td aria-hidden="true" className="focus-toggle" />
               <td className="message-select-control">
@@ -91,7 +104,7 @@ SectionWorkQueueTable.Row = connect(
           <td className="message-queue-row message-queue-case-title">
             {item.caseTitle}
           </td>
-          {!workQueueHelper.hideIconColumn && (
+          {!hideIconColumn && (
             <td className="message-queue-row has-icon padding-right-0">
               {item.showUnassignedIcon && (
                 <Icon
@@ -118,17 +131,18 @@ SectionWorkQueueTable.Row = connect(
               </a>
             </div>
           </td>
-          {!workQueueHelper.hideFiledByColumn && (
+          {!hideFiledByColumn && (
             <td className="message-queue-row">{item.docketEntry.filedBy}</td>
           )}
           <td className="message-queue-row">{item.caseStatus}</td>
-          {workQueueHelper.showAssignedToColumn && (
+          {showAssignedToColumn && (
             <td className="to message-queue-row">{item.assigneeName}</td>
           )}
         </tr>
       </tbody>
     );
   },
+  workQueueItemsAreEqual,
 );
 
 SectionWorkQueueTable.Actions = connect(
