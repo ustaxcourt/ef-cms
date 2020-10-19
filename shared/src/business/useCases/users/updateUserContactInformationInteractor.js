@@ -142,8 +142,6 @@ exports.updateUserContactInformationInteractor = async ({
       userId,
     });
   } catch (error) {
-    const { userId } = applicationContext.getCurrentUser();
-
     applicationContext.logger.info('Error', error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
@@ -151,7 +149,7 @@ exports.updateUserContactInformationInteractor = async ({
         action: 'user_contact_update_error',
         error: error.toString(),
       },
-      userId,
+      userId: authenticatedUser.userId,
     });
     await applicationContext.notifyHoneybadger(error);
   }

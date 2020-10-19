@@ -134,14 +134,12 @@ const PetitionerInformation = connect(
                   </h3>
                   <div>
                     <address aria-labelledby="secondary-label">
-                      {formattedCaseDetail.contactSecondary.name && (
-                        <AddressDisplay
-                          contact={formattedCaseDetail.contactSecondary}
-                          showSealAddressLink={
-                            caseInformationHelper.showSealAddressLink
-                          }
-                        />
-                      )}
+                      <AddressDisplay
+                        contact={formattedCaseDetail.contactSecondary}
+                        showSealAddressLink={
+                          caseInformationHelper.showSealAddressLink
+                        }
+                      />
                     </address>
                     {caseDetailHelper.showEditContacts &&
                       formattedCaseDetail.contactSecondary.isAddressSealed && (
@@ -308,8 +306,8 @@ const PetitionerInformation = connect(
                       </p>
                     )}
 
-                  {practitioner.representingFormatted.map((item, index) => (
-                    <p key={index}>
+                  {practitioner.representingFormatted.map((item, repIndex) => (
+                    <p key={`representing-${repIndex}`}>
                       <span>{item.name}</span>
                       {item.secondaryName && (
                         <span>

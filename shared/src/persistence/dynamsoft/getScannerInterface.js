@@ -125,12 +125,13 @@ exports.getScannerInterface = () => {
         const response = { error: null, scannedBuffer: null };
         for (let index = 0; index < count; index++) {
           promises.push(
-            new Promise((resolve, reject) => {
+            // eslint-disable-next-line promise/param-names
+            new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
                 window['EnumDWT_ImageType'].IT_JPG,
-                resolve,
-                reject,
+                resolveImage,
+                rejectImage,
               );
             }),
           );
