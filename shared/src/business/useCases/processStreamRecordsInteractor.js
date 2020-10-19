@@ -36,12 +36,16 @@ const partitionRecords = records => {
 
   const [docketEntryRecords, nonDocketEntryRecords] = partition(
     insertModifyRecords,
-    record => record.dynamodb.NewImage.entityName.S === 'DocketEntry',
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'DocketEntry',
   );
 
   const [caseEntityRecords, otherRecords] = partition(
     nonDocketEntryRecords,
-    record => record.dynamodb.NewImage.entityName.S === 'Case',
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Case',
   );
 
   return {
