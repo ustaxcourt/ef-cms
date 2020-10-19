@@ -207,7 +207,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       !formattedResult.isUnservable &&
       entry.isNotServedDocument &&
       !entry.isMinuteEntry;
-    formattedResult.showServed = entry.isStatusServed;
+    formattedResult.showServed = entry.isStatusServed && !entry.isMinuteEntry;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
       .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
