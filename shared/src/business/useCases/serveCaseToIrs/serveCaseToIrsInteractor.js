@@ -121,7 +121,7 @@ exports.serveCaseToIrsInteractor = async ({
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocketEntry) {
+    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
       initialDocketEntry.setAsServed([
         {
           name: 'IRS',
@@ -142,20 +142,15 @@ exports.serveCaseToIrsInteractor = async ({
             docketEntryEntity: initialDocketEntry,
           });
       } else {
-        if (
-          initialDocketEntry.documentType !==
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType
-        ) {
-          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-            applicationContext,
-            caseEntity,
-            docketEntryEntity: initialDocketEntry,
-            servedParties: {
-              //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-              electronic: [],
-            },
-          });
-        }
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity,
+          docketEntryEntity: initialDocketEntry,
+          servedParties: {
+            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
+            electronic: [],
+          },
+        });
       }
     }
   }

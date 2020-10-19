@@ -2029,7 +2029,6 @@ describe('formattedCaseDetail', () => {
       eventCode: 'M073',
       filingDate: '2019-06-19T17:29:13.120Z',
       isLegacy: true,
-      isMinuteEntry: false,
       isOnDocketRecord: true,
       isStatusServed: true,
       isStricken: true,
@@ -2058,7 +2057,7 @@ describe('formattedCaseDetail', () => {
       };
     });
 
-    it('is true when the entry has been served and is not a minute entry', () => {
+    it('is true when the entry has been served', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -2071,7 +2070,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedDocketEntries[0].showServed).toEqual(true);
     });
 
-    it('is false when the entry is not a minute entry and has not been served', () => {
+    it('is false when the entry has not been served', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -2080,30 +2079,8 @@ describe('formattedCaseDetail', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
-                isMinuteEntry: false,
                 servedAt: undefined,
                 servedParties: [],
-              },
-            ],
-          },
-          permissions: {},
-          validationErrors: {},
-        },
-      });
-
-      expect(result.formattedDocketEntries[0].showServed).toEqual(false);
-    });
-
-    it('is false when the entry is a minute entry and has been served', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            ...caseDetail,
-            docketEntries: [
-              {
-                ...mockDocketEntry,
-                isMinuteEntry: true,
               },
             ],
           },
