@@ -1,4 +1,8 @@
 import { CHIEF_JUDGE } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  FORMATS,
+  prepareDateFromString,
+} from '../../../shared/src/business/utilities/DateHandler';
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -17,8 +21,8 @@ export const petitionsClerkViewsDeadlineReport = (test, options = {}) => {
     const computedEndDate = `02/${options.day}/${options.year}`;
 
     await test.runSequence('selectDateRangeFromCalendarSequence', {
-      endDate: new Date(computedEndDate),
-      startDate: new Date(computedStartDate),
+      endDate: prepareDateFromString(computedEndDate, FORMATS.MMDDYYYY),
+      startDate: prepareDateFromString(computedStartDate, FORMATS.MMDDYYYY),
     });
     test.setState('screenMetadata.filterStartDateState', computedStartDate);
     test.setState('screenMetadata.filterEndDateState', computedEndDate);
