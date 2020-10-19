@@ -57,6 +57,9 @@ exports.advancedDocumentSearch = async ({
   if (caseTitleOrPetitioner) {
     queryParams.push({
       has_parent: {
+        inner_hits: {
+          name: 'case-mappings',
+        },
         parent_type: 'case',
         query: { match: { 'caseCaption.S': caseTitleOrPetitioner } },
       },
