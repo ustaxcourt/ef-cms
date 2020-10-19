@@ -12,6 +12,7 @@ import classNames from 'classnames';
 let FontAwesomeIcon;
 
 if (process.env.NODE_ENV === 'test') {
+  // eslint-disable-next-line no-shadow
   FontAwesomeIcon = function FontAwesomeIcon() {
     return <i className="fa" />;
   };
@@ -61,7 +62,14 @@ export function TabsComponent({
   setTab = decorateWithPostCallback(setTab, onSelect);
 
   const renderTab = child => {
-    const { icon, iconColor, id, showIcon, tabName, title } = child.props;
+    const {
+      icon,
+      iconColor,
+      id: tabId,
+      showIcon,
+      tabName,
+      title,
+    } = child.props;
 
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
@@ -80,7 +88,7 @@ export function TabsComponent({
         <button
           aria-controls={tabContentId}
           aria-selected={isActiveTab}
-          id={id}
+          id={tabId}
           role="tab"
           type="button"
           onClick={() => setTab(tabName)}
@@ -95,7 +103,7 @@ export function TabsComponent({
   };
 
   const renderTabContent = child => {
-    const { children, tabName } = child.props;
+    const { children: tabChildren, tabName } = child.props;
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
@@ -109,8 +117,8 @@ export function TabsComponent({
       contentProps = {};
     }
 
-    if (tabName && isActiveTab && children) {
-      return <div {...contentProps}>{children}</div>;
+    if (tabName && isActiveTab && tabChildren) {
+      return <div {...contentProps}>{tabChildren}</div>;
     }
 
     return null;

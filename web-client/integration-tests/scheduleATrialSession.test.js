@@ -41,13 +41,13 @@ describe('Schedule A Trial Session', () => {
 
   const createdDocketNumbers = [];
 
-  const makeCaseReadyForTrial = (test, id, caseOverrides) => {
-    loginAs(test, 'petitioner@example.com');
+  const makeCaseReadyForTrial = (testSession, id, caseOverrides) => {
+    loginAs(testSession, 'petitioner@example.com');
     it(`Create case ${id}`, async () => {
-      const caseDetail = await uploadPetition(test, caseOverrides);
+      const caseDetail = await uploadPetition(testSession, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
       createdDocketNumbers.push(caseDetail.docketNumber);
-      test.docketNumber = caseDetail.docketNumber;
+      testSession.docketNumber = caseDetail.docketNumber;
     });
 
     loginAs(test, 'petitionsclerk@example.com');

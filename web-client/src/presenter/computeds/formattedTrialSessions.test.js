@@ -198,9 +198,9 @@ describe('formattedTrialSessions', () => {
         applicationContext,
       );
 
-      const getSessionCount = trialTerms => {
+      const getSessionCount = trialTermsList => {
         let count = 0;
-        trialTerms.forEach(term => (count += term.sessions.length));
+        trialTermsList.forEach(term => (count += term.sessions.length));
         return count;
       };
 
