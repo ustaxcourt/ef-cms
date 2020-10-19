@@ -27,9 +27,10 @@ describe('formatted work queue computed', () => {
   } = applicationContext.getConstants();
 
   const petitionsClerkUser = {
+    name: 'Test PetitionsClerk',
     role: USER_ROLES.petitionsClerk,
     section: PETITIONS_SECTION,
-    userId: 'abc',
+    userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
   };
 
   const docketClerkUser = {
@@ -87,7 +88,7 @@ describe('formatted work queue computed', () => {
     });
   });
 
-  const workItem = {
+  const workItemMock = {
     assigneeId: 'abc',
     assigneeName: null,
     caseStatus: STATUS_TYPES.generalDocket,
@@ -107,7 +108,7 @@ describe('formatted work queue computed', () => {
     workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
   };
   const qcWorkItem = {
-    ...workItem,
+    ...workItemMock,
     section: DOCKET_SECTION,
   };
 
@@ -188,13 +189,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should not show a workItem in user messages outbox if it is completed', () => {
-    workItem.completedAt = '2019-06-17T15:27:55.801Z';
+    workItemMock.completedAt = '2019-06-17T15:27:55.801Z';
 
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
-        workQueue: [workItem],
+        workQueue: [workItemMock],
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
@@ -356,12 +357,6 @@ describe('formatted work queue computed', () => {
   });
 
   it('filters items based on in progress cases for a petitionsclerk', () => {
-    const petitionsClerkUser = {
-      name: 'Test PetitionsClerk',
-      role: USER_ROLES.petitionsClerk,
-      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
-    };
-
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(petitionsClerkUser),
