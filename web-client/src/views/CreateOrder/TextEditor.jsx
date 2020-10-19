@@ -25,7 +25,6 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
-  const inlineStylesFontSizes = {};
   const quillEscapeRef = useRef(null);
 
   const onKeyboard = event => {

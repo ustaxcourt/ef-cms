@@ -40,17 +40,17 @@ export const StateDrivenFileInput = connect(
           }}
           type="file"
           onChange={e => {
-            const { name } = e.target;
+            const { name: inputName } = e.target;
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
               const file = e.target.files[0];
               cloneFile(file)
                 .then(clonedFile => {
                   updateFormValueSequence({
-                    key: name,
+                    key: inputName,
                     value: clonedFile,
                   });
                   updateFormValueSequence({
-                    key: `${name}Size`,
+                    key: `${inputName}Size`,
                     value: clonedFile.size,
                   });
                   return validationSequence();
