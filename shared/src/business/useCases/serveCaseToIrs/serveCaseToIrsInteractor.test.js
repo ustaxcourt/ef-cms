@@ -354,6 +354,68 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeDefined();
   });
 
+  it('should send the IRS superuser email service for all initial filings expect RQT', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APW',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryEntity,
+    ).toMatchObject({
+      documentTitle: 'Application for Waiver of Filing Fee',
+      documentType: 'Application for Waiver of Filing Fee',
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryEntity,
+    ).not.toMatchObject({
+      documentTitle: 'Request for Place of Trial Flavortown, AR',
+      documentType: 'Request for Place of Trial',
+    });
+  });
+
   it('should make 2 calls to updateCase, once before adding a coversheet and number of pages, and once after', async () => {
     const mockNumberOfPages = 10;
     mockCase = {
