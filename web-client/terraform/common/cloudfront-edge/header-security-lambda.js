@@ -43,7 +43,7 @@ exports.handler = (event, context, callback) => {
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
-    "object-src 'none'",
+    `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
     `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} resource://pdf.js`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
     `img-src ${applicationUrl} ${subdomainsUrl} data:`,

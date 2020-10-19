@@ -21,6 +21,8 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+npm run build:assets
+
 pushd ../main/lambdas
 npx parcel build migration-segments.js migration.js --target node --bundle-node-modules --no-minify --no-cache --no-source-maps
 popd

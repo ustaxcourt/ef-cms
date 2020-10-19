@@ -10,9 +10,22 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCase } = require('./updateCase');
 jest.mock('../messages/updateMessage');
 const { updateMessage } = require('../messages/updateMessage');
+jest.mock('../caseDeadlines/getCaseDeadlinesByDocketNumber');
+const {
+  getCaseDeadlinesByDocketNumber,
+} = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
+jest.mock('../caseDeadlines/createCaseDeadline');
+const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 
 describe('updateCase', () => {
   const mockCorrespondenceId = applicationContext.getUniqueId();
+  const mockCaseDeadline = {
+    associatedJudge: 'Judge Carluzzo',
+    caseDeadlineId: 'a37f712d-bb9c-4885-8d35-7b67b908a5aa',
+    deadlineDate: '2019-03-01T21:42:29.073Z',
+    description: 'hello world',
+    docketNumber: '101-18',
+  };
 
   let caseQueryMockData;
   let caseMappingsQueryMockData;
@@ -69,6 +82,8 @@ describe('updateCase', () => {
       sk: 'case|101-18',
       status: 'General Docket - Not at Issue',
     };
+
+    getCaseDeadlinesByDocketNumber.mockReturnValue([mockCaseDeadline]);
   });
 
   /**
@@ -234,6 +249,23 @@ describe('updateCase', () => {
       caseTitle: 'Johnny Joe Jacobson',
       docketNumberSuffix: 'W',
       sk: '123',
+    });
+  });
+
+  it('updates associated judge on case deadlines', async () => {
+    await updateCase({
+      applicationContext,
+      caseToUpdate: {
+        associatedJudge: 'Judge Buch',
+        docketNumberSuffix: null,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    });
+
+    expect(createCaseDeadline).toHaveBeenCalled();
+    expect(createCaseDeadline.mock.calls[0][0].caseDeadline).toMatchObject({
+      ...mockCaseDeadline,
+      associatedJudge: 'Judge Buch',
     });
   });
 

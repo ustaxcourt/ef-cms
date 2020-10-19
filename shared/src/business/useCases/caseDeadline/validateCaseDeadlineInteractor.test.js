@@ -20,6 +20,7 @@ describe('validateCaseDeadlineInteractor', () => {
 
   it('returns null when there are no errors', () => {
     const mockCaseDeadline = {
+      associatedJudge: 'Buch',
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       deadlineDate: '2019-03-01T21:42:29.073Z',
       description: 'hello world',

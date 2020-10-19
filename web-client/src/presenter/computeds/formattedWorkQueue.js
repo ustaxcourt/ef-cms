@@ -1,4 +1,4 @@
-import { capitalize, cloneDeep, orderBy } from 'lodash';
+import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
 const isDateToday = (date, applicationContext) => {
@@ -7,6 +7,10 @@ const isDateToday = (date, applicationContext) => {
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
   return now === then;
+};
+
+export const workQueueItemsAreEqual = (first, second) => {
+  return JSON.stringify(first.item) === JSON.stringify(second.item);
 };
 
 export const formatDateIfToday = (date, applicationContext) => {
@@ -41,7 +45,7 @@ export const formatDateIfToday = (date, applicationContext) => {
 export const formatWorkItem = ({
   applicationContext,
   workItem = {},
-  selectedWorkItems = [],
+  isSelected,
 }) => {
   const {
     COURT_ISSUED_DOCUMENT_TYPES,
@@ -83,9 +87,7 @@ export const formatWorkItem = ({
     result.showUnassignedIcon = true;
   }
 
-  result.selected = !!selectedWorkItems.find(
-    selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
-  );
+  result.selected = !!isSelected;
 
   result.receivedAt = isDateToday(
     result.docketEntry.receivedAt,
@@ -233,12 +235,38 @@ export const filterWorkItems = ({
   return composedFilter;
 };
 
+const memoizedFormatItemWithLink = memoize(
+  ({
+    applicationContext,
+    isSelected,
+    permissions,
+    workItem,
+    workQueueToDisplay,
+  }) => {
+    const result = formatWorkItem({
+      applicationContext,
+      isSelected,
+      workItem,
+    });
+    const editLink = getWorkItemDocumentLink({
+      applicationContext,
+      permissions,
+      workItem,
+      workQueueToDisplay,
+    });
+    return { ...result, editLink };
+  },
+  ({ isSelected, workItem, workQueueToDisplay }) =>
+    JSON.stringify({ ...workItem, isSelected, workQueueToDisplay }),
+);
+
 export const formattedWorkQueue = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
+  const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
 
   const judgeUser = get(state.judgeUser);
 
@@ -251,19 +279,14 @@ export const formattedWorkQueue = (get, applicationContext) => {
         workQueueToDisplay,
       }),
     )
-    .map(item => {
-      const result = formatWorkItem({
+    .map(workItem => {
+      return memoizedFormatItemWithLink({
         applicationContext,
-        selectedWorkItems,
-        workItem: item,
-      });
-      const editLink = getWorkItemDocumentLink({
-        applicationContext,
+        isSelected: selectedWorkItemIds.includes(workItem.workItemId),
         permissions,
-        workItem: item,
+        workItem,
         workQueueToDisplay,
       });
-      return { ...result, editLink };
     });
 
   const sortFields = {

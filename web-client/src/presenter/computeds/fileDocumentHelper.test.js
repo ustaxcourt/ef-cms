@@ -25,17 +25,6 @@ describe('fileDocumentHelper', () => {
     state.form = {};
   });
 
-  it('returns empty object when caseDetail is empty', () => {
-    let testState = {
-      caseDetail: {},
-    };
-
-    const result = runCompute(fileDocumentHelper, {
-      state: testState,
-    });
-    expect(result).toMatchObject({});
-  });
-
   it('returns correct values when documentType is undefined', () => {
     let testState = { ...state, form: { documentType: undefined } };
 

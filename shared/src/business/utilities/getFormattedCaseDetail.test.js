@@ -49,9 +49,9 @@ describe('formatCase', () => {
   });
 
   it('should return an empty object if caseDetail is empty', () => {
-    const applicationContext = {};
+    const mockApplicationContext = {};
     const caseDetail = {};
-    const result = formatCase(applicationContext, caseDetail);
+    const result = formatCase(mockApplicationContext, caseDetail);
 
     expect(result).toMatchObject({});
   });
@@ -233,7 +233,7 @@ describe('formatCase', () => {
     expect(result.formattedDocketEntries[0].createdAtFormatted).toBeUndefined();
   });
 
-  it('should return docket entries with pending documents for pendingItemsDocketEntries', () => {
+  it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
     const documents = [
       {
         createdAt: getDateISO(),
@@ -243,13 +243,23 @@ describe('formatCase', () => {
         index: '1',
         isOnDocketRecord: true,
         pending: true,
+        servedAt: '2019-08-25T05:00:00.000Z',
+      },
+      {
+        createdAt: getDateISO(),
+        docketEntryId: 'dabe913f-5310-48df-b63d-44cfccb83326',
+        documentType: 'Administrative Record',
+        filingDate: getDateISO(),
+        index: '2',
+        isOnDocketRecord: true,
+        pending: true,
       },
       {
         createdAt: getDateISO(),
         docketEntryId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
         documentType: 'Administrative Record',
         filingDate: getDateISO(),
-        index: '2',
+        index: '3',
         isOnDocketRecord: true,
       },
     ];

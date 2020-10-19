@@ -38,13 +38,6 @@ exports.deleteCaseDeadline = async ({
           sk: `case-deadline|${caseDeadlineId}`,
         },
       }),
-      client.delete({
-        applicationContext,
-        key: {
-          pk: originalCaseDeadline.deadlineDate,
-          sk: `case-deadline-catalog|${caseDeadlineId}`,
-        },
-      }),
     ]);
   }
 };
