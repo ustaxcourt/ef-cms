@@ -47,53 +47,7 @@ const processCaseEntries = async ({
     `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
   );
 
-  // const indexDocketEntry = async (fullCase, docketEntry) => {
-  //   if (docketEntry.documentContentsId) {
-  //     const buffer = await utils.getDocument({
-  //       applicationContext,
-  //       documentContentsId: docketEntry.documentContentsId,
-  //     });
-  //     const { documentContents } = JSON.parse(buffer.toString());
-  //     docketEntry.documentContents = documentContents;
-  //   }
-
-  //   const docketEntryWithCase = {
-  //     ...AWS.DynamoDB.Converter.marshall(fullCase),
-  //     ...AWS.DynamoDB.Converter.marshall(docketEntry),
-  //   };
-
-  //   return {
-  //     dynamodb: {
-  //       Keys: {
-  //         pk: {
-  //           S: docketEntry.pk,
-  //         },
-  //         sk: {
-  //           S: docketEntry.sk,
-  //         },
-  //       },
-  //       NewImage: docketEntryWithCase,
-  //     },
-  //     eventName: 'MODIFY',
-  //   };
-  // };
-
   const indexCaseEntry = async caseRecord => {
-    // const caseEntry = AWS.DynamoDB.Converter.unmarshall(
-    //   caseRecord.dynamodb.NewImage,
-    // );
-
-    // const fullCase = await utils.getCase({
-    //   applicationContext,
-    //   docketNumber: caseEntry.docketNumber,
-    // });
-
-    //const { docketEntries } = fullCase;
-
-    // const docketEntryRecords = await Promise.all(
-    //   docketEntries.map(entry => indexDocketEntry(fullCase, entry)),
-    // );
-
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords = [];
 
@@ -195,11 +149,6 @@ const processDocketEntries = async ({
         record.dynamodb.NewImage,
       );
 
-      // const fullCase = await utils.getCase({
-      //   applicationContext,
-      //   docketNumber: fullDocketEntry.docketNumber,
-      // });
-
       if (fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         const buffer = await utils.getDocument({
@@ -209,11 +158,6 @@ const processDocketEntries = async ({
         const { documentContents } = JSON.parse(buffer.toString());
         fullDocketEntry.documentContents = documentContents;
       }
-
-      // const docketEntryWithCase = {
-      //   ...AWS.DynamoDB.Converter.marshall(fullCase),
-      //   ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
-      // };
 
       const caseDocketEntryMappingRecordId = `${fullDocketEntry.pk}_${fullDocketEntry.pk}|mapping`;
 
