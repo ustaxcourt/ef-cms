@@ -329,10 +329,13 @@ DocketEntry.prototype.setNumberOfPages = function (numberOfPages) {
  * @param {string} obj.name user name
  * @param {string} obj.userId user id
  */
-DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
+DocketEntry.prototype.strikeEntry = function ({
+  name: strickenByName,
+  userId,
+}) {
   if (this.isOnDocketRecord) {
     this.isStricken = true;
-    this.strickenBy = name;
+    this.strickenBy = strickenByName;
     this.strickenByUserId = userId;
     this.strickenAt = createISODateString();
   } else {

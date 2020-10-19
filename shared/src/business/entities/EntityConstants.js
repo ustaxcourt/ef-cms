@@ -699,11 +699,11 @@ const LEGACY_TRIAL_CITIES = [
 ];
 
 const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
-  location => `${location.city}, ${location.state}`,
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
 const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
-  location => `${location.city}, ${location.state}`,
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
 const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
