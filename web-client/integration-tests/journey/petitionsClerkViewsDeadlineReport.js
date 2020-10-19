@@ -1,36 +1,117 @@
-export const petitionsClerkViewsDeadlineReport = test => {
+import { CHIEF_JUDGE } from '../../../shared/src/business/entities/EntityConstants';
+import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDeadlineReportHelper = withAppContextDecorator(
+  caseDeadlineReportHelperComputed,
+);
+
+export const petitionsClerkViewsDeadlineReport = (test, options = {}) => {
   return it('Petitions clerk views deadline report', async () => {
     await test.runSequence('gotoCaseDeadlineReportSequence');
     expect(test.getState('currentPage')).toEqual('CaseDeadlines');
     expect(test.getState('judges').length).toBeGreaterThan(0);
 
+    const computedStartDate = `01/${options.day}/${options.year}`;
+    const computedEndDate = `02/${options.day}/${options.year}`;
+
     await test.runSequence('selectDateRangeFromCalendarSequence', {
-      endDate: new Date('12/01/2025'),
-      startDate: new Date('01/01/2025'),
+      endDate: new Date(computedEndDate),
+      startDate: new Date(computedStartDate),
     });
-    test.setState('screenMetadata.filterStartDateState', '01/01/2025');
-    test.setState('screenMetadata.filterEndDateState', '12/01/2025');
+    test.setState('screenMetadata.filterStartDateState', computedStartDate);
+    test.setState('screenMetadata.filterEndDateState', computedEndDate);
 
     await test.runSequence('updateDateRangeForDeadlinesSequence');
 
-    const allDeadlines = test.getState('allCaseDeadlines');
+    let deadlines = test.getState('caseDeadlineReport.caseDeadlines');
 
-    const deadlinesForThisCase = allDeadlines.filter(
-      d => d.docketNumber === test.docketNumber,
-    );
+    expect(deadlines.length).toEqual(1); // the page size is overridden for integration tests to 1
 
-    expect(deadlinesForThisCase.length).toEqual(2); //should be 1 when paging is all working
+    let helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
 
-    expect(test.getState('allCaseDeadlines')[0].deadlineDate).toBe(
-      '2025-08-12T04:00:00.000Z',
-    );
+    expect(helper.showLoadMoreButton).toBeTruthy();
 
-    // show more button should show
+    // 6 deadlines total, so click load more 5 times and then the load more button should be hidden
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
 
-    // click the show more button
+    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
 
-    // length should now be 2
+    expect(deadlines.length).toEqual(6);
 
-    // show more button should go away?
+    // verify sorting by date and docket number
+    expect(deadlines).toMatchObject([
+      {
+        associatedJudge: 'Buch',
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[0],
+      },
+      {
+        associatedJudge: CHIEF_JUDGE,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[1],
+      },
+      {
+        associatedJudge: CHIEF_JUDGE,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[2],
+      },
+      {
+        associatedJudge: 'Buch',
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[0],
+      },
+      {
+        associatedJudge: CHIEF_JUDGE,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[1],
+      },
+      {
+        associatedJudge: CHIEF_JUDGE,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[2],
+      },
+    ]);
+
+    helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper.showLoadMoreButton).toBeFalsy();
+
+    await test.runSequence('filterCaseDeadlinesByJudgeSequence', {
+      judge: 'Buch',
+    });
+
+    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+
+    expect(deadlines.length).toEqual(1);
+    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    helper = runCompute(caseDeadlineReportHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper.showLoadMoreButton).toBeFalsy();
+
+    // verify filtering by judge
+    expect(deadlines).toMatchObject([
+      {
+        associatedJudge: 'Buch',
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[0],
+      },
+      {
+        associatedJudge: 'Buch',
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
+        docketNumber: test.createdDocketNumbers[0],
+      },
+    ]);
   });
 };

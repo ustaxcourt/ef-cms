@@ -1,3 +1,4 @@
+import { clearCaseDeadlineReportAction } from '../actions/CaseDeadline/clearCaseDeadlineReportAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
@@ -22,6 +23,7 @@ const gotoCaseDeadlineReport = [
     fetchUserNotificationsSequence,
     getSetJudgesSequence,
     [
+      clearCaseDeadlineReportAction,
       setDefaultCaseDeadlinesReportDatesAction,
       getCaseDeadlinesAction,
       setCaseDeadlinesAction,

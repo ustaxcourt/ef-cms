@@ -13,6 +13,7 @@ const { get } = require('../requests');
 exports.getCaseDeadlinesInteractor = ({
   applicationContext,
   endDate,
+  judge,
   page = 1,
   startDate,
 }) => {
@@ -21,6 +22,8 @@ exports.getCaseDeadlinesInteractor = ({
   const queryString = querystring.stringify({
     endDate,
     from,
+    judge,
+    pageSize: DEADLINE_REPORT_PAGE_SIZE,
     startDate,
   });
 
