@@ -9,16 +9,12 @@ const partitionRecords = records => {
 
   const [docketEntryRecords, nonDocketEntryRecords] = partition(
     insertModifyRecords,
-    record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'DocketEntry',
+    record => record.dynamodb.NewImage.entityName.S === 'DocketEntry',
   );
 
   const [caseEntityRecords, otherRecords] = partition(
     nonDocketEntryRecords,
-    record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'Case',
+    record => record.dynamodb.NewImage.entityName.S === 'Case',
   );
 
   return {
