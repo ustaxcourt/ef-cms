@@ -37,7 +37,7 @@ describe('PublicDocketEntry', () => {
   describe('isOnDocketRecord', () => {
     describe('minute entries', () => {
       it('creates minute entry', () => {
-        const document = new PublicDocketEntry({
+        const docketEntry = new PublicDocketEntry({
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
@@ -46,7 +46,7 @@ describe('PublicDocketEntry', () => {
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         });
 
-        expect(document.isValid()).toBe(true);
+        expect(docketEntry.isValid()).toBe(true);
       });
     });
 

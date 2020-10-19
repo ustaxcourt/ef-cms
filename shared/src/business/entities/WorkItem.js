@@ -86,8 +86,8 @@ WorkItem.prototype.assignToUser = function ({
   return this;
 };
 
-WorkItem.prototype.setStatus = function (status) {
-  this.caseStatus = status;
+WorkItem.prototype.setStatus = function (caseStatus) {
+  this.caseStatus = caseStatus;
 };
 
 /**

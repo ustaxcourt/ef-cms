@@ -111,7 +111,7 @@ module.exports = {
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
-    'no-shadow': ['warn', { builtinGlobals: false }], // TODO: builtinGlobals: true
+    'no-shadow': ['warn', { builtinGlobals: true }],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-var': 'error',
     'no-warning-comments': [
