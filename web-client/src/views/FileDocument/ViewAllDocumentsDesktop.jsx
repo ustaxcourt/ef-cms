@@ -47,11 +47,11 @@ export const ViewAllDocumentsDesktop = connect(
                     <AccordionItem key={`item-${index}`} title={title}>
                       <div className="all-columns-view">
                         {viewAllDocumentsHelper.categoryMap[title].map(
-                          (document, index) => (
+                          (document, docIndex) => (
                             <Button
                               link
                               className="text-left"
-                              key={`${title}-document-${index}`}
+                              key={`${title}-document-${docIndex}`}
                               onClick={() => {
                                 updateFileDocumentWizardFormValueSequence({
                                   key: 'category',

@@ -37,12 +37,12 @@ describe('verify old served work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
 
-    const applicationContext = applicationContextFactory({
+    const appContext = applicationContextFactory({
       role: ROLES.petitionsClerk,
       section: PETITIONS_SECTION,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    applicationContext.environment.dynamoDbTableName = 'efcms-local';
+    appContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = new Date();
     const CREATED_7_DAYS_AGO = new Date();
@@ -51,9 +51,9 @@ describe('verify old served work items do not show up in the outbox', () => {
     CREATED_7_DAYS_AGO.setDate(new Date().getDate() - 7);
     CREATED_6_DAYS_AGO.setDate(new Date().getDate() - 6);
 
-    workItemId6 = applicationContext.getUniqueId();
-    workItemId7 = applicationContext.getUniqueId();
-    workItemId8 = applicationContext.getUniqueId();
+    workItemId6 = appContext.getUniqueId();
+    workItemId7 = appContext.getUniqueId();
+    workItemId8 = appContext.getUniqueId();
 
     workItem8Days = {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -92,18 +92,18 @@ describe('verify old served work items do not show up in the outbox', () => {
       workItemId: `${workItemId6}`,
     };
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
+    await appContext.getPersistenceGateway().putWorkItemInOutbox({
+      applicationContext: appContext,
       workItem: workItem8Days,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
+    await appContext.getPersistenceGateway().putWorkItemInOutbox({
+      applicationContext: appContext,
       workItem: workItem7Days,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
+    await appContext.getPersistenceGateway().putWorkItemInOutbox({
+      applicationContext: appContext,
       workItem: workItem6Days,
     });
   });
