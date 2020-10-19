@@ -95,7 +95,6 @@ const processCaseEntries = async ({
     // );
 
     const caseNewImage = caseRecord.dynamodb.NewImage;
-
     const caseRecords = [];
 
     caseRecords.push({
@@ -111,7 +110,7 @@ const processCaseEntries = async ({
         NewImage: {
           ...caseNewImage,
           case_relations: { name: 'case' },
-          entityName: 'CaseDocketEntryMapping',
+          entityName: { S: 'CaseDocketEntryMapping' },
         }, // Create a mapping record on the docket-entry index for parent-child relationships
       },
       eventName: 'MODIFY',
@@ -216,7 +215,7 @@ const processDocketEntries = async ({
       //   ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
       // };
 
-      const caseDocketEntryMappingRecordId = `case|${fullDocketEntry.docketNumber}_case|${fullDocketEntry.docketNumber}|mapping`;
+      const caseDocketEntryMappingRecordId = `${fullDocketEntry.pk}_${fullDocketEntry.pk}|mapping`;
 
       return {
         dynamodb: {

@@ -15,25 +15,32 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
 
   await Promise.all(
     chunkOfRecords.map(async recordChunk => {
-      let routing;
-
       const body = recordChunk
         .map(record => ({
           ...record.dynamodb.NewImage,
         }))
         .flatMap(doc => {
           const index = getIndexNameForRecord(doc);
-
-          if (doc.dynamodb.NewImage.entityName.S === 'DocketEntry') {
-            const docketNumber = doc.dynamodb.NewImage.docketNumber.S;
-            routing = `case|${docketNumber}_case|${docketNumber}|mapping`;
-          } else {
-            routing = null;
-          }
+          let id = `${doc.pk.S}_${doc.sk.S}`;
+          let routing = null;
 
           if (index) {
+            if (doc.entityName.S === 'DocketEntry') {
+              routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
+            }
+
+            if (doc.entityName.S === 'CaseDocketEntryMapping') {
+              id += '|mapping';
+            }
+
             return [
-              { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
+              {
+                index: {
+                  _id: id,
+                  _index: index,
+                  routing,
+                },
+              },
               doc,
             ];
           }
@@ -44,7 +51,6 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
         const response = await searchClient.bulk({
           body,
           refresh: false,
-          routing,
         });
 
         if (response.errors) {
