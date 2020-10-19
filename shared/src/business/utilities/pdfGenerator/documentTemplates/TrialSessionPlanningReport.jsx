@@ -9,7 +9,7 @@ const getTermHeaders = (termData, idx) => {
 const parseTermData = data =>
   data && data.map((datum, idx) => <div key={`datum-${idx}`}>{datum}</div>);
 
-const getLocationData = parentIndex =>
+const getLocationDataFactory = parentIndex =>
   function getLocationData(termData, idx) {
     const hasData = Array.isArray(termData) && termData.length > 0;
 
@@ -53,7 +53,7 @@ export const TrialSessionPlanningReport = ({
                   <td>{location.smallCaseCount}</td>
                   <td>{location.regularCaseCount}</td>
                   {location.previousTermsData &&
-                    location.previousTermsData.map(getLocationData(idx))}
+                    location.previousTermsData.map(getLocationDataFactory(idx))}
                 </tr>
               );
             })}

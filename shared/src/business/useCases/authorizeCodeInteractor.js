@@ -19,9 +19,9 @@ exports.authorizeCodeInteractor = async ({ applicationContext, code }) => {
     redirect_uri: applicationContext.getCognitoRedirectUrl(),
   });
 
-  const response = await applicationContext
+  const postResponse = await applicationContext
     .getHttpClient()
-    .post(`${applicationContext.getCognitoTokenUrl()}`, data, {
+    .post(applicationContext.getCognitoTokenUrl(), data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
@@ -29,7 +29,7 @@ exports.authorizeCodeInteractor = async ({ applicationContext, code }) => {
     .then(response => response.data);
 
   return {
-    refreshToken: response.refresh_token,
-    token: response.id_token,
+    refreshToken: postResponse.refresh_token,
+    token: postResponse.id_token,
   };
 };

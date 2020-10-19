@@ -4005,18 +4005,6 @@
     "updatedAt": "2020-08-10T17:16:49.188Z"
   },
   {
-    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline-catalog|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "2019-08-22T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline-catalog|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "2019-08-22T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
-  },
-  {
     "sk": "0402cea0-727e-4155-8357-5df4fe30196c",
     "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 21207</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Summary Opinion Chief Judge Fieri</div><div>Docket Entry No.: <!-- -->4</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:26 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->4</div><div>docketEntryId: <!-- -->659d001a-4d91-41f4-acd8-8417a1d2be49</div><div>eventCode: <!-- -->SOP</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
@@ -6940,11 +6928,6 @@
     "email": "irsPractitioner3@example.com"
   },
   {
-    "caseDeadlineId": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "case-deadline-catalog"
-  },
-  {
     "sk": "case|110-19",
     "pk": "case-by-docket-number|110-19"
   },
@@ -7468,12 +7451,6 @@
     "docketNumber": "122-20",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-25T19:27:00.207Z"
-  },
-  {
-    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sk": "case-deadline-catalog|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "2019-08-23T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
@@ -9371,12 +9348,6 @@
   {
     "sk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
     "pk": "case|124-20"
-  },
-  {
-    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline-catalog|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "2019-08-25T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
   },
   {
     "associatedJudge": "Chief Judge",

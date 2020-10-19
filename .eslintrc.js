@@ -111,6 +111,7 @@ module.exports = {
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
+    'no-shadow': ['warn', { builtinGlobals: false }], // TODO: builtinGlobals: true
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-var': 'error',
     'no-warning-comments': [
@@ -365,6 +366,7 @@ module.exports = {
           'ustc',
           'uuid',
           'uuidv4',
+          'validators',
           'vasquezs',
           'viewport',
           'washington',
