@@ -142,15 +142,20 @@ exports.serveCaseToIrsInteractor = async ({
             docketEntryEntity: initialDocketEntry,
           });
       } else {
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryEntity: initialDocketEntry,
-          servedParties: {
-            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-            electronic: [],
-          },
-        });
+        if (
+          initialDocketEntry.documentType !==
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType
+        ) {
+          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+            applicationContext,
+            caseEntity,
+            docketEntryEntity: initialDocketEntry,
+            servedParties: {
+              //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
+              electronic: [],
+            },
+          });
+        }
       }
     }
   }
