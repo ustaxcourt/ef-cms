@@ -9,6 +9,7 @@ const { User } = require('../../entities/User');
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
   const mockCaseDeadline = {
+    associatedJudge: 'Buch',
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '123-20',
