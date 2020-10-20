@@ -26,11 +26,11 @@ const formatRecord = record => {
   returnData.suffix = record.suffix;
 
   returnData.admissionsDate = createISODateString(
-    record.unformattedAdmissionsDate,
+    record.admissionsDate,
     'MM-DD-YYYY',
   );
 
-  returnData.birthYear = parseInt(record.birthYear) || undefined;
+  returnData.birthYear = parseInt(record.birthYear) || 1950;
 
   if (record.IRS_EMPLOYEE === 'Y') {
     returnData.employer = 'IRS';
@@ -46,7 +46,7 @@ const formatRecord = record => {
   returnData.barNumber = record.barNumber;
   returnData.email = record.email;
   returnData.firmName = record.firmName;
-  returnData.originalBarState = record.originalBarState;
+  returnData.originalBarState = record.originalBarState || 'N/A';
   returnData.practitionerType = record.practitionerType;
 
   returnData.contact = {
@@ -149,10 +149,11 @@ const formatRecord = record => {
   stream.on('end', async () => {
     for (let row of output) {
       const record = formatRecord(row);
+      const apiUrl = services[`gateway_api_${process.env.DEPLOYING_COLOR}`];
 
       try {
         const result = await axios.post(
-          `${services['gateway_api']}/practitioners`,
+          `${apiUrl}/practitioners`,
           { user: record },
           {
             headers: {
@@ -168,7 +169,13 @@ const formatRecord = record => {
         }
       } catch (err) {
         console.log(`ERROR ${record.barNumber}`);
-        console.log(err);
+        if (err.response) {
+          console.log(record);
+          console.log(err.response.data);
+          console.log(err.response.status);
+        } else {
+          console.log(err);
+        }
       }
     }
   });
