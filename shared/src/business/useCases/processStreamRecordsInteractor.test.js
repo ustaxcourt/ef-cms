@@ -741,14 +741,15 @@ describe('processStreamRecordsInteractor', () => {
       ],
     });
 
-    expect(applicationContext.logger.info).toBeCalledTimes(3);
+    expect(applicationContext.logger.info).toBeCalledTimes(2);
+    expect(applicationContext.logger.error).toBeCalledTimes(1);
     expect(applicationContext.logger.info.mock.calls[0][0]).toBe(
       `processStreamRecordsInteractor job ${mockJobId} started at time:`,
     );
-    expect(applicationContext.logger.info.mock.calls[1][0]).toBe(
+    expect(applicationContext.logger.error.mock.calls[0][0]).toBe(
       `processStreamRecordsInteractor job ${mockJobId} bulkDeleteRecords error:`,
     );
-    expect(applicationContext.logger.info.mock.calls[2][0]).toBe(
+    expect(applicationContext.logger.info.mock.calls[1][0]).toBe(
       `processStreamRecordsInteractor job ${mockJobId} completed at time:`,
     );
     expect(applicationContext.notifyHoneybadger).toBeCalledTimes(1);
@@ -803,14 +804,15 @@ describe('processStreamRecordsInteractor', () => {
         },
       ],
     });
-    expect(applicationContext.logger.info).toBeCalledTimes(3);
+    expect(applicationContext.logger.info).toBeCalledTimes(2);
+    expect(applicationContext.logger.error).toBeCalledTimes(1);
     expect(applicationContext.logger.info.mock.calls[0][0]).toBe(
       `processStreamRecordsInteractor job ${mockJobId} started at time:`,
     );
-    expect(applicationContext.logger.info.mock.calls[1][0]).toBe(
+    expect(applicationContext.logger.error.mock.calls[0][0]).toBe(
       `processStreamRecordsInteractor job ${mockJobId} deleteRecord error for record 2_2:`,
     );
-    expect(applicationContext.logger.info.mock.calls[2][0]).toBe(
+    expect(applicationContext.logger.info.mock.calls[1][0]).toBe(
       `processStreamRecordsInteractor job ${mockJobId} completed at time:`,
     );
     expect(applicationContext.notifyHoneybadger).toBeCalledTimes(1);
