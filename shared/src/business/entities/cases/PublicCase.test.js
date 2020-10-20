@@ -1,5 +1,6 @@
 const {
   DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -17,6 +18,8 @@ describe('PublicCase', () => {
           docketEntries: [{}],
           docketNumber: '101-20',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          irsPractitioners: [{ name: 'Bob' }],
+          partyType: PARTY_TYPES.petitioner,
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         {},
@@ -63,6 +66,8 @@ describe('PublicCase', () => {
         docketEntries: [],
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
       {},
@@ -82,7 +87,9 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
+      hasIrsPractitioner: false,
       isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
       receivedAt: 'testing',
     });
   });
@@ -97,6 +104,8 @@ describe('PublicCase', () => {
         docketEntries: null,
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
       {},
@@ -110,7 +119,9 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
+      hasIrsPractitioner: false,
       isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
       receivedAt: 'testing',
     });
   });
@@ -135,6 +146,8 @@ describe('PublicCase', () => {
         ],
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
       {},
@@ -167,7 +180,9 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
+      hasIrsPractitioner: false,
       isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
       receivedAt: 'testing',
     });
   });
