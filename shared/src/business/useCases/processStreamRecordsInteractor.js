@@ -125,7 +125,7 @@ exports.processStreamRecordsInteractor = async ({
       });
 
       const catchDeleteRecordError = failedRecord => async e => {
-        applicationContext.logger.info(
+        applicationContext.logger.error(
           `processStreamRecordsInteractor job ${processJobId} deleteRecord error for record ${failedRecord['_id']}:`,
           e,
         );
@@ -147,7 +147,7 @@ exports.processStreamRecordsInteractor = async ({
       const deletionRequests = failedRecords.map(processRecordDeletion);
       await Promise.allSettled(deletionRequests);
     } catch (e) {
-      applicationContext.logger.info(
+      applicationContext.logger.error(
         `processStreamRecordsInteractor job ${processJobId} bulkDeleteRecords error:`,
         e,
       );
@@ -179,7 +179,7 @@ exports.processStreamRecordsInteractor = async ({
               recordSk: failedRecord.sk.S,
             });
 
-          applicationContext.logger.info(
+          applicationContext.logger.error(
             `processStreamRecordsInteractor job ${processJobId} indexRecord error during bulkIndexRecords:`,
             e,
           );
@@ -221,7 +221,7 @@ exports.processStreamRecordsInteractor = async ({
             recordSk: record.dynamodb.Keys.sk.S,
           });
 
-        applicationContext.logger.info(
+        applicationContext.logger.error(
           `processStreamRecordsInteractor job ${processJobId} indexRecord error during record reprocessing:`,
           e,
         );
