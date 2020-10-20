@@ -38,6 +38,8 @@ exports.casePublicSearch = async ({
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',
+    'irsPractitioners',
+    'partyType',
     'receivedAt',
     'sealedDate',
   ];

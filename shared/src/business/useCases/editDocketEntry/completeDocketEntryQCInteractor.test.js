@@ -61,6 +61,8 @@ describe('completeDocketEntryQCInteractor', () => {
           filedBy: 'Test Petitioner',
           index: 42,
           isOnDocketRecord: true,
+          servedAt: '2019-08-25T05:00:00.000Z',
+          servedParties: [{ name: 'Bernard Lowe' }],
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItem,
         },
