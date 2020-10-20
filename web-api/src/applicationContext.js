@@ -482,6 +482,9 @@ const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
 const {
+  getFullCaseByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/cases/getFullCaseByDocketNumber');
+const {
   getHealthCheckInteractor,
 } = require('../../shared/src/business/useCases/health/getHealthCheckInteractor');
 const {
@@ -1141,6 +1144,7 @@ const gatewayMethods = {
     createUser,
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
+    getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
@@ -1681,9 +1685,9 @@ module.exports = appContextUser => {
     notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();
 
-      const notifyAsync = message => {
+      const notifyAsync = messageForNotification => {
         return new Promise(resolve => {
-          honeybadger.notify(message, null, null, resolve);
+          honeybadger.notify(messageForNotification, null, null, resolve);
         });
       };
 

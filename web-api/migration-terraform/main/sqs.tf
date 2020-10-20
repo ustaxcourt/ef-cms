@@ -1,6 +1,6 @@
 resource "aws_sqs_queue" "migration_segments_queue" {
   name                       = "migration_segments_queue_${var.environment}"
-  visibility_timeout_seconds = "1000"
+  visibility_timeout_seconds = "70"
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.migration_segments_dl_queue.arn
