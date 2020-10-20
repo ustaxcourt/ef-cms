@@ -32,9 +32,9 @@ const formatRecord = record => {
 
   returnData.birthYear = parseInt(record.birthYear) || undefined;
 
-  if (record.isIrsEmployee === 'Y') {
+  if (record.IRS_EMPLOYEE === 'Y') {
     returnData.employer = 'IRS';
-  } else if (record.isDojEmployee === 'Y') {
+  } else if (record.DOJ_EMPLOYEE === 'Y') {
     returnData.employer = 'DOJ';
   } else {
     returnData.employer = 'Private';
@@ -99,6 +99,8 @@ const formatRecord = record => {
     'contact/phone',
     'contact/postalCode',
     'contact/state',
+    'IRS_EMPLOYEE',
+    'DOJ_EMPLOYEE',
   ];
 
   const csvOptions = getCsvOptions(csvColumns);
