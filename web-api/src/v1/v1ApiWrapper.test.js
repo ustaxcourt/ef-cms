@@ -1,8 +1,8 @@
 const { v1ApiWrapper } = require('./v1ApiWrapper');
 
 describe('v1ApiWrapper', () => {
-  const throwWithStatus = statusCode => () => {
-    const err = new Error('Test error');
+  const throwWithStatus = (statusCode, message = 'Test error') => () => {
+    const err = new Error(message);
     err.statusCode = statusCode;
     throw err;
   };
@@ -47,9 +47,9 @@ describe('v1ApiWrapper', () => {
 
   // Workaround until https://github.com/ustaxcourt/ef-cms/pull/462 is resolved
   // (API returning 400 instead of 404 on unknown cases)
-  test('400 errors are converted to 404s', async () => {
-    await expect(() => v1ApiWrapper(throwWithStatus(400))).rejects.toThrow(
-      expect.objectContaining({ statusCode: 404 }),
-    );
+  test('Case validation errors are converted to 404s', async () => {
+    await expect(() =>
+      v1ApiWrapper(throwWithStatus(400, 'The Case entity was invalid')),
+    ).rejects.toThrow(expect.objectContaining({ statusCode: 404 }));
   });
 });

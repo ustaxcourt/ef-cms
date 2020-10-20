@@ -34,7 +34,7 @@ exports.v1ApiWrapper = async handler => {
   } catch (e) {
     // Workaround until https://github.com/ustaxcourt/ef-cms/pull/462 is resolved
     // (API returning 400 instead of 404 on unknown cases)
-    if (e.statusCode === 400) {
+    if (e.message.includes('The Case entity was invalid')) {
       e.statusCode = 404;
       e.message = 'Case not found';
     }
