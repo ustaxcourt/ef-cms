@@ -1,3 +1,4 @@
+import { state } from 'cerebral';
 /**
  * gets the first attachment document from the most recent message to set as the default viewerDocumentToDisplay
  *
@@ -6,8 +7,15 @@
  * @returns {object} object containing viewerDocumentToDisplay
  */
 export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
+  get,
   props,
 }) => {
+  const viewerDocumentToDisplayFromState = get(state.viewerDocumentToDisplay);
+
+  if (viewerDocumentToDisplayFromState) {
+    return { viewerDocumentToDisplay: viewerDocumentToDisplayFromState };
+  }
+
   const { documentId, mostRecentMessage } = props;
   const { attachments } = mostRecentMessage;
   let viewerDocumentToDisplay = null;
