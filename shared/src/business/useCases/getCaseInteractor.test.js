@@ -313,7 +313,9 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
+        hasIrsPractitioner: false,
         isSealed: true,
+        partyType: undefined,
         receivedAt: undefined,
       });
     });
@@ -400,22 +402,6 @@ describe('getCaseInteractor', () => {
 
       expect(result.contactPrimary.address1).toBeUndefined();
       expect(result.contactPrimary.phone).toBeUndefined();
-    });
-
-    it('should return a Case entity with private fields filtered out when the current user is an IRS practitioner user who is NOT associated with the case', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        name: 'Tasha Yar',
-        role: ROLES.irsPractitioner,
-        userId: irsPractitionerId,
-      });
-
-      const result = await getCaseInteractor({
-        applicationContext,
-        docketNumber: '101-18',
-      });
-
-      expect(result.contactPrimary.address1).toBeDefined();
-      expect(result.contactPrimary.phone).toBeDefined();
     });
 
     it('should return a Case entity when the current user is associated with the case', async () => {
