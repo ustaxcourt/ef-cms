@@ -58,11 +58,11 @@ const processCaseEntries = async ({
             S: caseNewImage.pk.S,
           },
           sk: {
-            S: `${caseNewImage.sk.S}|mapping`, // TODO: modify this to make it unique?
+            S: `${caseNewImage.sk.S}`,
           },
         },
         NewImage: {
-          ...caseNewImage,
+          ...caseNewImage, // TODO: We don't need docketEntries array - remove for better perf (consider for actual case index as well)
           case_relations: { name: 'case' },
           entityName: { S: 'CaseDocketEntryMapping' },
         }, // Create a mapping record on the docket-entry index for parent-child relationships

@@ -219,12 +219,21 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
-
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
           .calls[0][0].records,
       ).toEqual([
+        {
+          dynamodb: {
+            Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
+            NewImage: {
+              ...caseDataMarshalled,
+              case_relations: { name: 'case' },
+              entityName: { S: 'CaseDocketEntryMapping' },
+            },
+          },
+          eventName: 'MODIFY',
+        },
         {
           dynamodb: {
             Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
@@ -239,14 +248,14 @@ describe('processStreamRecordsInteractor', () => {
       const docketEntryData = {
         docketEntryId: '123',
         entityName: 'DocketEntry',
-        pk: 'docket-entry|123',
+        pk: 'case|123',
         sk: 'docket-entry|123',
       };
 
       const docketEntryDataMarshalled = {
         docketEntryId: { S: '123' },
         entityName: { S: 'DocketEntry' },
-        pk: { S: 'docket-entry|123' },
+        pk: { S: 'case|123' },
         sk: { S: 'docket-entry|123' },
       };
 
@@ -296,19 +305,18 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
-
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
           .calls[0][0].records,
       ).toEqual([
         {
           dynamodb: {
-            Keys: {
-              pk: { S: docketEntryData.pk },
-              sk: { S: docketEntryData.sk },
+            Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
+            NewImage: {
+              ...caseDataMarshalled,
+              case_relations: { name: 'case' },
+              entityName: { S: 'CaseDocketEntryMapping' },
             },
-            NewImage: { ...caseDataMarshalled, ...docketEntryDataMarshalled },
           },
           eventName: 'MODIFY',
         },
@@ -330,14 +338,14 @@ describe('processStreamRecordsInteractor', () => {
     const docketEntryData = {
       docketEntryId: '123',
       entityName: 'DocketEntry',
-      pk: 'docket-entry|123',
+      pk: 'case|123',
       sk: 'docket-entry|123',
     };
 
     const docketEntryDataMarshalled = {
       docketEntryId: { S: '123' },
       entityName: { S: 'DocketEntry' },
-      pk: { S: 'docket-entry|123' },
+      pk: { S: 'case|123' },
       sk: { S: 'docket-entry|123' },
     };
 
@@ -347,16 +355,6 @@ describe('processStreamRecordsInteractor', () => {
       entityName: 'Case',
       pk: 'case|123-45',
       sk: 'case|123-45',
-    };
-
-    const caseDataMarshalled = {
-      docketEntries: {
-        L: [{ M: docketEntryDataMarshalled }],
-      },
-      docketNumber: { S: '123-45' },
-      entityName: { S: 'Case' },
-      pk: { S: 'case|123-45' },
-      sk: { S: 'case|123-45' },
     };
 
     mockGetCase.mockReturnValue({
@@ -399,7 +397,6 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
       expect(mockGetDocument).not.toHaveBeenCalled();
 
       expect(
@@ -412,7 +409,13 @@ describe('processStreamRecordsInteractor', () => {
               pk: { S: docketEntryData.pk },
               sk: { S: docketEntryData.sk },
             },
-            NewImage: { ...caseDataMarshalled, ...docketEntryDataMarshalled },
+            NewImage: {
+              ...docketEntryDataMarshalled,
+              case_relations: {
+                name: 'document',
+                parent: 'case|123_case|123|mapping',
+              },
+            },
           },
           eventName: 'MODIFY',
         },
@@ -440,7 +443,6 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
       expect(mockGetDocument).toHaveBeenCalled();
 
       expect(
@@ -453,7 +455,13 @@ describe('processStreamRecordsInteractor', () => {
               pk: { S: docketEntryData.pk },
               sk: { S: docketEntryData.sk },
             },
-            NewImage: { ...caseDataMarshalled, ...docketEntryDataMarshalled },
+            NewImage: {
+              ...docketEntryDataMarshalled,
+              case_relations: {
+                name: 'document',
+                parent: 'case|123_case|123|mapping',
+              },
+            },
           },
           eventName: 'MODIFY',
         },
