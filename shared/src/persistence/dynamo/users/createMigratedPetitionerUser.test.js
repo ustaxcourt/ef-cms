@@ -46,6 +46,7 @@ describe('createMigratedPetitionerUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
+      MessageAction: 'SUPPRESS',
       UserAttributes: [
         {
           Name: 'email_verified',
