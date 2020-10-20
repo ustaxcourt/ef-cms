@@ -31,7 +31,7 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
 
     await test.runSequence('selectDateRangeFromCalendarSequence', {
       endDate: prepareDateFromString(endDate, FORMATS.MMDDYYYY),
-      startDate: new Date(startDate),
+      startDate: prepareDateFromString(startDate, FORMATS.MMDDYYYY),
     });
     test.setState('screenMetadata.filterStartDateState', startDate);
     test.setState('screenMetadata.filterEndDateState', endDate);
