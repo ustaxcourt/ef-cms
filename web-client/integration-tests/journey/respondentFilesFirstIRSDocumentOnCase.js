@@ -1,4 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
+);
 
 export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -7,6 +14,12 @@ export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
+
+    const helper = runCompute(caseDetailHeaderHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper.showFileFirstDocumentButton).toBeTruthy();
 
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
