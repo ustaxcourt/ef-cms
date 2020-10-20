@@ -1,5 +1,8 @@
 module.exports = {
   properties: {
+    'associatedJudge.S': {
+      type: 'text',
+    },
     'caseDeadlineId.S': {
       type: 'text',
     },
@@ -13,6 +16,14 @@ module.exports = {
       type: 'text',
     },
     'entityName.S': {
+      type: 'text',
+    },
+    'sortableDocketNumber.N': {
+      fields: {
+        keyword: {
+          type: 'keyword',
+        },
+      },
       type: 'text',
     },
   },

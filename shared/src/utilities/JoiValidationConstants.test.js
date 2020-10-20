@@ -5,6 +5,16 @@ const {
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 describe('JoiValidationConstants', () => {
+  describe('current year validation', () => {
+    it('validates a recent year', () => {
+      const { error } = JoiValidationConstants.YEAR_MAX_CURRENT.validate(2018);
+      expect(error).toBeFalsy();
+    });
+    it('rejects an invalid year', () => {
+      const { error } = JoiValidationConstants.YEAR_MAX_CURRENT.validate(42);
+      expect(error).toBeTruthy();
+    });
+  });
   describe('postal code validation', () => {
     it('validates 5-digit zipcodes', () => {
       const { error } = JoiValidationConstants.US_POSTAL_CODE.validate('12345');

@@ -1,9 +1,26 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
+);
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
 export const respondentRequestsAccessToCase = (test, fakeFile) => {
   return it('Respondent requests access to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const helper = runCompute(caseDetailHeaderHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper.showFileFirstDocumentButton).toBeFalsy();
+
     await test.runSequence('gotoRequestAccessSequence', {
       docketNumber: test.docketNumber,
     });

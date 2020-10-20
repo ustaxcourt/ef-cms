@@ -131,13 +131,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     sentByUserId: user.userId,
   });
 
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
-    });
-
   const saveItems = [
     applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
