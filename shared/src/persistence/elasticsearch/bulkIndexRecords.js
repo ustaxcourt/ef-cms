@@ -1,4 +1,3 @@
-const sizeof = require('object-sizeof');
 const { chunk } = require('lodash');
 const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
@@ -9,8 +8,6 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
   let chunkOfRecords = chunk(records, process.env.ES_CHUNK_SIZE || CHUNK_SIZE);
 
   const failedRecords = [];
-
-  applicationContext.logger.time('bulkIndexRecords');
 
   await Promise.all(
     chunkOfRecords.map(async recordChunk => {
@@ -31,16 +28,10 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
         .filter(item => item);
 
       if (body.length) {
-        const logId = applicationContext.getUniqueId();
-        const timeString = `${logId} bulk index ${
-          body.length
-        } with size ${sizeof(body)}`;
-        console.time(timeString);
         const response = await searchClient.bulk({
           body,
           refresh: false,
         });
-        console.timeEnd(timeString);
         if (response.errors) {
           response.items.forEach((action, i) => {
             const operation = Object.keys(action)[0];
@@ -53,7 +44,6 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
       }
     }),
   );
-  applicationContext.logger.timeEnd('bulkIndexRecords');
 
   return { failedRecords };
 };
