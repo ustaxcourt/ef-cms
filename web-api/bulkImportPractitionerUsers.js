@@ -4,6 +4,7 @@ const fs = require('fs');
 const parse = require('csv-parse');
 const {
   COUNTRY_TYPES,
+  DEFAULT_PRACTITIONER_BIRTH_YEAR,
 } = require('../shared/src/business/entities/EntityConstants');
 const {
   createISODateString,
@@ -30,11 +31,12 @@ const formatRecord = record => {
     'MM-DD-YYYY',
   );
 
-  returnData.birthYear = parseInt(record.birthYear) || 1950;
+  returnData.birthYear =
+    parseInt(record.birthYear) || DEFAULT_PRACTITIONER_BIRTH_YEAR;
 
-  if (record.IRS_EMPLOYEE === 'Y') {
+  if (record.isIrsEmployee === 'Y') {
     returnData.employer = 'IRS';
-  } else if (record.DOJ_EMPLOYEE === 'Y') {
+  } else if (record.isDojEmployee === 'Y') {
     returnData.employer = 'DOJ';
   } else {
     returnData.employer = 'Private';
@@ -99,8 +101,8 @@ const formatRecord = record => {
     'contact/phone',
     'contact/postalCode',
     'contact/state',
-    'IRS_EMPLOYEE',
-    'DOJ_EMPLOYEE',
+    'isIrsEmployee',
+    'isDojEmployee',
   ];
 
   const csvOptions = getCsvOptions(csvColumns);
