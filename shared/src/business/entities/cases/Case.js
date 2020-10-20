@@ -822,7 +822,9 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(docketEntry => docketEntry.pending);
+  return this.docketEntries.some(
+    docketEntry => docketEntry.pending && docketEntry.servedAt,
+  );
 };
 
 /**
