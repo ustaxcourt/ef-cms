@@ -61,20 +61,30 @@ exports.advancedDocumentSearch = async ({
           name: 'case-mappings',
         },
         parent_type: 'case',
-        query: { match: { 'caseCaption.S': caseTitleOrPetitioner } },
+        query: {
+          simple_query_string: {
+            fields: [
+              'caseCaption.S',
+              'contactPrimary.M.name.S',
+              'contactSecondary.M.name.S',
+            ],
+            query: caseTitleOrPetitioner,
+          },
+        },
+      },
+    });
+  } else {
+    // We need to still look up the parent to associate the case data
+    queryParams.push({
+      has_parent: {
+        inner_hits: {
+          name: 'case-mappings',
+        },
+        parent_type: 'case',
+        query: { match_all: {} },
       },
     });
   }
-
-  // TODO: ^ This search should include all params below
-  // simple_query_string: {
-  //   fields: [
-  //     'caseCaption.S',
-  //     'contactPrimary.M.name.S',
-  //     'contactSecondary.M.name.S',
-  //   ],
-  //   query: caseTitleOrPetitioner,
-  // },
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
