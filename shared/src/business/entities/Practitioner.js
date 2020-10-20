@@ -108,13 +108,9 @@ const practitionerValidation = {
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
     ),
-  birthYear: joi
-    .number()
-    .integer()
-    .min(1900)
-    .max(new Date().getFullYear())
-    .required()
-    .description('The year the practitioner was born.'),
+  birthYear: JoiValidationConstants.YEAR_MAX_CURRENT.required().description(
+    'The year the practitioner was born.',
+  ),
   employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
     .required()
     .description('The employer designation for the practitioner.'),
