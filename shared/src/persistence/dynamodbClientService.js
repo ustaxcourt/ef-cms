@@ -176,6 +176,41 @@ exports.query = params => {
 };
 
 /**
+ * GET for aws-sdk dynamodb client
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
+ */
+exports.queryFull = async params => {
+  let hasMoreResults = true;
+  let lastKey = null;
+  let allResults = [];
+  while (hasMoreResults) {
+    hasMoreResults = false;
+
+    const subsetResults = await params.applicationContext
+      .getDocumentClient()
+      .query({
+        TableName: getTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...params,
+        ExclusiveStartKey: lastKey,
+      })
+      .promise();
+
+    hasMoreResults = !!subsetResults.LastEvaluatedKey;
+    lastKey = subsetResults.LastEvaluatedKey;
+
+    subsetResults.Items.forEach(removeAWSGlobalFields);
+
+    allResults = [...allResults, ...subsetResults.Items];
+  }
+
+  return allResults;
+};
+
+/**
  * BATCH GET for aws-sdk dynamodb client
  *
  * @param {object} providers the providers object
