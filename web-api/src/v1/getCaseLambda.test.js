@@ -3,11 +3,19 @@ const { getCaseLambda } = require('./getCaseLambda');
 const { MOCK_CASE } = require('../../../shared/src/test/mockCase');
 const { MOCK_USERS } = require('../../../shared/src/test/mockUsers');
 
+const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE, {
+  noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
+  pk: 'case|123-20',
+  sk: 'case|23',
+});
+
 const REQUEST_EVENT = {
   body: {},
   headers: {},
   path: '',
-  pathParameters: {},
+  pathParameters: {
+    docketNumber: '123-30',
+  },
   queryStringParameters: {},
 };
 
@@ -37,10 +45,48 @@ describe('getCaseLambda', () => {
 
   // the 401 case is handled by API Gateway, and as such isn’t tested here.
 
-  // BUG: Returns 404 before a 403.
-  it.skip('returns 403 when the user is not authorized', async () => {
+  // Currently returns a 500 instead of a 404; bug https://github.com/flexion/ef-cms/issues/6853
+  it.skip('returns 404 when the user is not authorized and the case is not found', async () => {
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentAppContext(user);
+
+    // Case is retrieved before determining authorization
+    applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      query: jest.fn().mockReturnValue({
+        promise: jest.fn().mockReturnValue(
+          Promise.resolve({
+            Items: [], // no items with docket number is found
+          }),
+        ),
+      }),
+    });
+
+    const response = await getCaseLambda(REQUEST_EVENT, {
+      applicationContext,
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.headers['Content-Type']).toBe('application/json');
+    expect(JSON.parse(response.body)).toHaveProperty(
+      'message',
+      expect.any(String),
+    );
+  });
+
+  it('returns 403 when the user is not authorized and the case is found', async () => {
+    const user = { role: 'roleWithNoPermissions' };
+    const applicationContext = createSilentAppContext(user);
+
+    // Case is retrieved before determining authorization
+    applicationContext.getDocumentClient = jest.fn().mockReturnValue({
+      query: jest.fn().mockReturnValue({
+        promise: jest.fn().mockReturnValue(
+          Promise.resolve({
+            Items: [mockDynamoCaseRecord],
+          }),
+        ),
+      }),
+    });
 
     const response = await getCaseLambda(REQUEST_EVENT, {
       applicationContext,
@@ -48,17 +94,15 @@ describe('getCaseLambda', () => {
 
     expect(response.statusCode).toBe(403);
     expect(response.headers['Content-Type']).toBe('application/json');
-    expect(JSON.parse(response.body)).toHaveProperty('message', 'Unauthorized');
+    expect(JSON.parse(response.body)).toHaveProperty(
+      'message',
+      expect.any(String),
+    );
   });
 
   it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
-    const request = Object.assign({}, REQUEST_EVENT, {
-      pathParameters: {
-        docketNumber: '1234-19',
-      },
-    });
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
@@ -70,7 +114,7 @@ describe('getCaseLambda', () => {
       }),
     });
 
-    const response = await getCaseLambda(request, {
+    const response = await getCaseLambda(REQUEST_EVENT, {
       applicationContext,
     });
 
@@ -85,11 +129,6 @@ describe('getCaseLambda', () => {
   it('returns 500 on an unexpected error', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
-    const request = Object.assign({}, REQUEST_EVENT, {
-      pathParameters: {
-        docketNumber: '123-30',
-      },
-    });
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
@@ -99,7 +138,7 @@ describe('getCaseLambda', () => {
       }),
     });
 
-    const response = await getCaseLambda(request, {
+    const response = await getCaseLambda(REQUEST_EVENT, {
       applicationContext,
     });
 
@@ -114,28 +153,18 @@ describe('getCaseLambda', () => {
   it('returns the case in v1 format', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
-    const request = Object.assign({}, REQUEST_EVENT, {
-      pathParameters: {
-        docketNumber: '123-30',
-      },
-    });
-    const mock = Object.assign({}, MOCK_CASE, {
-      noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
-      pk: 'case|123-20',
-      sk: 'case|23',
-    });
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
         promise: jest.fn().mockReturnValue(
           Promise.resolve({
-            Items: [mock],
+            Items: [mockDynamoCaseRecord],
           }),
         ),
       }),
     });
 
-    const response = await getCaseLambda(request, {
+    const response = await getCaseLambda(REQUEST_EVENT, {
       applicationContext,
     });
 

@@ -51,6 +51,7 @@ describe('getDocumentDownloadUrlLambda', () => {
     expect(JSON.parse(response.body)).toHaveProperty('message', 'Unauthorized');
   });
 
+  // currently returns 200; bug https://github.com/flexion/ef-cms/issues/6854
   it.skip('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
@@ -71,6 +72,16 @@ describe('getDocumentDownloadUrlLambda', () => {
       }),
     });
 
+    applicationContext.getPersistenceGateway().getDownloadPolicyUrl = jest
+      .fn()
+      .mockImplementation(({ key, useTempBucket }) => {
+        return {
+          url: `https://example.com/download-policy-url/${
+            useTempBucket ? 'temp-' : ''
+          }bucket/item/${key}`,
+        };
+      });
+
     const response = await getDocumentDownloadUrlLambda(request, {
       applicationContext,
     });
@@ -83,6 +94,7 @@ describe('getDocumentDownloadUrlLambda', () => {
     );
   });
 
+  // currently returns 200; bug https://github.com/flexion/ef-cms/issues/6854
   it.skip('returns 404 when the entity GUID isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
@@ -117,6 +129,16 @@ describe('getDocumentDownloadUrlLambda', () => {
         ),
       }),
     });
+
+    applicationContext.getPersistenceGateway().getDownloadPolicyUrl = jest
+      .fn()
+      .mockImplementation(({ key, useTempBucket }) => {
+        return {
+          url: `https://example.com/download-policy-url/${
+            useTempBucket ? 'temp-' : ''
+          }bucket/item/${key}`,
+        };
+      });
 
     const response = await getDocumentDownloadUrlLambda(request, {
       applicationContext,
