@@ -8,16 +8,20 @@ const { v1ApiWrapper } = require('./v1ApiWrapper');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getCaseLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return v1ApiWrapper(async () => {
-      const caseObject = await applicationContext
-        .getUseCases()
-        .getCaseInteractor({
-          applicationContext,
-          docketNumber: event.pathParameters.docketNumber,
-        });
+exports.getCaseLambda = (event, options = {}) =>
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return v1ApiWrapper(async () => {
+        const caseObject = await applicationContext
+          .getUseCases()
+          .getCaseInteractor({
+            applicationContext,
+            docketNumber: event.pathParameters.docketNumber,
+          });
 
-      return marshallCase(caseObject);
-    });
-  });
+        return marshallCase(caseObject);
+      });
+    },
+    options,
+  );
