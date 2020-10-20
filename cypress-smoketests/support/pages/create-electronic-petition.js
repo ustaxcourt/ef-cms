@@ -1,3 +1,5 @@
+const faker = require('faker');
+
 exports.hasIrsNotice = {
   NO: 1,
   YES: 0,
@@ -83,20 +85,28 @@ exports.completeWizardStep3 = (filingType, petitionerName) => {
       .scrollIntoView()
       .check({ force: true });
 
-    cy.get('input#secondaryName').type('Annalise');
-    cy.get('input#secondaryInCareOf').type('Sam');
+    cy.get('input#secondaryName').type(
+      `${faker.name.firstName()} ${faker.name.lastName()}`,
+    );
+    cy.get('input#secondaryInCareOf').type(
+      `${faker.name.firstName()} ${faker.name.lastName()}`,
+    );
   }
 
   cy.get('input#name').scrollIntoView().type(petitionerName);
   cy.get('input[name="contactPrimary.address1"]')
     .scrollIntoView()
-    .type('111 South West St.');
-  cy.get('input[name="contactPrimary.city"]').scrollIntoView().type('Orlando');
-  cy.get('select[name="contactPrimary.state"]').scrollIntoView().select('AL');
+    .type(faker.address.streetAddress());
+  cy.get('input[name="contactPrimary.city"]')
+    .scrollIntoView()
+    .type(faker.address.city());
+  cy.get('select[name="contactPrimary.state"]')
+    .scrollIntoView()
+    .select(faker.address.stateAbbr());
   cy.get('input[name="contactPrimary.postalCode"]')
     .scrollIntoView()
-    .type('12345');
-  cy.get('input#phone').scrollIntoView().type('1111111111');
+    .type(faker.address.zipCode());
+  cy.get('input#phone').scrollIntoView().type(faker.phone.phoneNumber());
 };
 
 exports.completeWizardStep4 = () => {

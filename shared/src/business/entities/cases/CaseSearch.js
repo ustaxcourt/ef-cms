@@ -51,17 +51,14 @@ CaseSearch.schema = joi.object().keys({
     ...Object.keys(US_STATES),
     ...US_STATES_OTHER,
   ).optional(),
-  yearFiledMax: joi
-    .number()
-    .integer()
-    .min(joi.ref('yearFiledMin'))
-    .max(new Date().getFullYear())
-    .when('yearFiledMin', {
-      is: joi.number(),
-      otherwise: joi.number().min(1900),
-      then: joi.number().min(joi.ref('yearFiledMin')),
-    }),
-  yearFiledMin: joi.number().integer().min(1900).max(new Date().getFullYear()),
+  yearFiledMax: JoiValidationConstants.YEAR_MAX_CURRENT.min(
+    joi.ref('yearFiledMin'),
+  ).when('yearFiledMin', {
+    is: joi.number(),
+    otherwise: joi.number().min(1900),
+    then: joi.number().min(joi.ref('yearFiledMin')),
+  }),
+  yearFiledMin: JoiValidationConstants.YEAR_MAX_CURRENT,
 });
 
 joiValidationDecorator(

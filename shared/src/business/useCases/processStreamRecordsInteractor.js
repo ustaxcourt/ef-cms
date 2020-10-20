@@ -1,5 +1,32 @@
 const AWS = require('aws-sdk');
-const { flattenDeep, get, memoize, partition } = require('lodash');
+const { flattenDeep, get, partition } = require('lodash');
+
+const whitelistCase = marshalledCase => {
+  return {
+    caseCaption: marshalledCase.caseCaption,
+    contactPrimary: marshalledCase.contactPrimary,
+    contactSecondary: marshalledCase.contactSecondary,
+    docketNumber: marshalledCase.docketNumber,
+    docketNumberSuffix: marshalledCase.docketNumberSuffix,
+    docketNumberWithSuffix: marshalledCase.docketNumberWithSuffix,
+    irsPractitioners: {
+      L: marshalledCase.irsPractitioners.L.map(p => ({
+        M: {
+          userId: p.M.userId,
+        },
+      })),
+    },
+    isSealed: marshalledCase.isSealed,
+    privatePractitioners: {
+      L: marshalledCase.privatePractitioners.L.map(p => ({
+        M: {
+          userId: p.M.userId,
+        },
+      })),
+    },
+    sealedDate: marshalledCase.sealedDate,
+  };
+};
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -10,15 +37,15 @@ const partitionRecords = records => {
   const [docketEntryRecords, nonDocketEntryRecords] = partition(
     insertModifyRecords,
     record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'DocketEntry',
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'DocketEntry',
   );
 
   const [caseEntityRecords, otherRecords] = partition(
     nonDocketEntryRecords,
     record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'Case',
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Case',
   );
 
   return {
@@ -44,22 +71,26 @@ const processCaseEntries = async ({
   applicationContext.logger.info(
     `going to index ${caseEntityRecords.length} caseEntityRecords`,
   );
-  applicationContext.logger.time(
-    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
-  const indexDocketEntry = async (fullCase, docketEntry) => {
+  const indexDocketEntry = async (marshalledCase, docketEntry) => {
     if (docketEntry.documentContentsId) {
-      const buffer = await utils.getDocument({
-        applicationContext,
-        documentContentsId: docketEntry.documentContentsId,
-      });
-      const { documentContents } = JSON.parse(buffer.toString());
-      docketEntry.documentContents = documentContents;
+      try {
+        const buffer = await utils.getDocument({
+          applicationContext,
+          documentContentsId: docketEntry.documentContentsId,
+        });
+        const { documentContents } = JSON.parse(buffer.toString());
+        docketEntry.documentContents = documentContents;
+      } catch (err) {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info(
+          `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
+        );
+      }
     }
 
     const docketEntryWithCase = {
-      ...AWS.DynamoDB.Converter.marshall(fullCase),
+      ...whitelistCase(marshalledCase),
       ...AWS.DynamoDB.Converter.marshall(docketEntry),
     };
 
@@ -90,12 +121,9 @@ const processCaseEntries = async ({
     });
 
     const { docketEntries } = fullCase;
+    const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
 
-    const docketEntryRecords = await Promise.all(
-      docketEntries.map(entry => indexDocketEntry(fullCase, entry)),
-    );
-
-    docketEntryRecords.push({
+    const esCaseEntry = {
       dynamodb: {
         Keys: {
           pk: {
@@ -105,23 +133,19 @@ const processCaseEntries = async ({
             S: fullCase.sk,
           },
         },
-        NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
+        NewImage: marshalledCase,
       },
       eventName: 'MODIFY',
-    });
+    };
 
-    return docketEntryRecords;
+    const docketEntryRecords = await Promise.all(
+      docketEntries.map(entry => indexDocketEntry(marshalledCase, entry)),
+    );
+
+    return [esCaseEntry, ...docketEntryRecords];
   };
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
-
-  applicationContext.logger.timeEnd(
-    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
-
-  applicationContext.logger.time(
-    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   const {
     failedRecords,
@@ -129,10 +153,6 @@ const processCaseEntries = async ({
     applicationContext,
     records: flattenDeep(indexRecords),
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -163,10 +183,6 @@ const processDocketEntries = async ({
     `going to index ${docketEntryRecords.length} docketEntryRecords`,
   );
 
-  applicationContext.logger.time(
-    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
-  );
-
   const newDocketEntryRecords = await Promise.all(
     docketEntryRecords.map(async record => {
       const fullDocketEntry = AWS.DynamoDB.Converter.unmarshall(
@@ -179,16 +195,27 @@ const processDocketEntries = async ({
       });
 
       if (fullDocketEntry.documentContentsId) {
-        const buffer = await utils.getDocument({
-          applicationContext,
-          documentContentsId: fullDocketEntry.documentContentsId,
-        });
-        const { documentContents } = JSON.parse(buffer.toString());
-        fullDocketEntry.documentContents = documentContents;
+        try {
+          const buffer = await utils.getDocument({
+            applicationContext,
+            documentContentsId: fullDocketEntry.documentContentsId,
+          });
+          const { documentContents } = JSON.parse(buffer.toString());
+          fullDocketEntry.documentContents = documentContents;
+        } catch (err) {
+          applicationContext.logger.error(err);
+          applicationContext.logger.info(
+            `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
+          );
+        }
       }
 
+      const marshalledCase = AWS.DynamoDB.Converter.marshall({
+        ...fullCase,
+      });
+
       const docketEntryWithCase = {
-        ...AWS.DynamoDB.Converter.marshall(fullCase),
+        ...whitelistCase(marshalledCase),
         ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
       };
 
@@ -208,13 +235,6 @@ const processDocketEntries = async ({
       };
     }),
   );
-  applicationContext.logger.timeEnd(
-    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
-  );
-
-  applicationContext.logger.time(
-    `going to index ${docketEntryRecords.length} docketEntryRecords`,
-  );
 
   const {
     failedRecords,
@@ -222,10 +242,6 @@ const processDocketEntries = async ({
     applicationContext,
     records: newDocketEntryRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${docketEntryRecords.length} docketEntryRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -246,9 +262,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   applicationContext.logger.info(
     `going to index ${otherRecords.length} otherRecords`,
   );
-  applicationContext.logger.time(
-    `going to index ${otherRecords.length} otherRecords`,
-  );
 
   const {
     failedRecords,
@@ -256,10 +269,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
     applicationContext,
     records: otherRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${otherRecords.length} otherRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -281,20 +290,12 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     `going to index ${removeRecords.length} removeRecords`,
   );
 
-  applicationContext.logger.time(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
-
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
     applicationContext,
     records: removeRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -319,22 +320,22 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  const getCase = memoize(({ applicationContext: appContext, docketNumber }) =>
-    appContext.getPersistenceGateway().getCaseByDocketNumber({
+  const getCase = ({ applicationContext: appContext, docketNumber }) =>
+    appContext.getPersistenceGateway().getFullCaseByDocketNumber({
       applicationContext: appContext,
       docketNumber,
-    }),
-  );
+    });
 
-  const getDocument = memoize(
-    ({ applicationContext: appContext, documentContentsId }) =>
-      appContext.getPersistenceGateway().getDocument({
-        applicationContext: appContext,
-        key: documentContentsId,
-        protocol: 'S3',
-        useTempBucket: false,
-      }),
-  );
+  const getDocument = ({
+    applicationContext: appContext,
+    documentContentsId,
+  }) =>
+    appContext.getPersistenceGateway().getDocument({
+      applicationContext: appContext,
+      key: documentContentsId,
+      protocol: 'S3',
+      useTempBucket: false,
+    });
 
   recordsToProcess = recordsToProcess.filter(record => {
     // to prevent global tables writing extra data
@@ -363,40 +364,48 @@ exports.processStreamRecordsInteractor = async ({
     await processRemoveEntries({
       applicationContext,
       removeRecords,
-    }).catch(err =>
+    }).catch(err => {
+      applicationContext.logger.error(err);
+      applicationContext.logger.info("failed to processRemoveEntries',");
       applicationContext.notifyHoneybadger(err, {
-        message:
-          'processStreamRecordsInteractor failed to processRemoveEntries',
-      }),
-    );
+        message: 'failed to processRemoveEntries',
+      });
+      throw err;
+    });
 
     await Promise.all([
       processCaseEntries({
         applicationContext,
         caseEntityRecords,
         utils,
-      }).catch(err =>
+      }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processCaseEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processCaseEntries',
-        }),
-      ),
+          message: 'failed to processCaseEntries',
+        });
+        throw err;
+      }),
       processDocketEntries({
         applicationContext,
         docketEntryRecords,
         utils,
-      }).catch(err =>
+      }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processDocketEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processDocketEntries',
-        }),
-      ),
-      processOtherEntries({ applicationContext, otherRecords }).catch(err =>
+          message: 'failed to processDocketEntries',
+        });
+        throw err;
+      }),
+      processOtherEntries({ applicationContext, otherRecords }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processOtherEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processOtherEntries',
-        }),
-      ),
+          message: 'failed to processOtherEntries',
+        });
+        throw err;
+      }),
     ]);
   } catch (err) {
     applicationContext.logger.info(
