@@ -1,15 +1,11 @@
-const { getIndexNameForRecord } = require('./getIndexNameForRecord');
-
 const { chunk } = require('lodash');
+const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 exports.bulkIndexRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
   const CHUNK_SIZE = 50;
-  const chunkOfRecords = chunk(
-    records,
-    process.env.ES_CHUNK_SIZE || CHUNK_SIZE,
-  );
+  let chunkOfRecords = chunk(records, process.env.ES_CHUNK_SIZE || CHUNK_SIZE);
 
   const failedRecords = [];
 
@@ -36,7 +32,6 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
           body,
           refresh: false,
         });
-
         if (response.errors) {
           response.items.forEach((action, i) => {
             const operation = Object.keys(action)[0];
