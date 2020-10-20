@@ -313,7 +313,9 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
+        hasIrsPractitioner: false,
         isSealed: true,
+        partyType: undefined,
         receivedAt: undefined,
       });
     });
