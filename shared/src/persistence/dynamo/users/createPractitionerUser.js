@@ -114,6 +114,8 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
           Username: response.Username,
         })
         .promise();
+
+      userId = response.Username;
     }
   }
 
