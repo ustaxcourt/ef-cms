@@ -24,6 +24,9 @@ describe('getCaseDeadlinesAction', () => {
         presenter,
       },
       state: {
+        caseDeadlineReport: {
+          judgeFilter: 'Buch',
+        },
         screenMetadata: {
           filterEndDate: END_DATE,
           filterStartDate: START_DATE,
@@ -36,6 +39,7 @@ describe('getCaseDeadlinesAction', () => {
         .calls[0][0],
     ).toMatchObject({
       endDate: END_DATE,
+      judge: 'Buch',
       page: 1,
       startDate: START_DATE,
     });

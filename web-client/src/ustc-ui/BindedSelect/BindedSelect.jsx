@@ -13,8 +13,15 @@ export const BindedSelect = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  function BindedSelect(props) {
-    const { bind, children, className, onChange, simpleSetter, value } = props;
+  function BindedSelect(componentProps) {
+    const {
+      bind,
+      children,
+      className,
+      onChange,
+      simpleSetter,
+      value,
+    } = componentProps;
     let activeOption, setSelect;
 
     if (bind) {
@@ -34,7 +41,7 @@ export const BindedSelect = connect(
       'simpleSetter',
     ];
     const selectProps = {
-      ...props,
+      ...componentProps,
       className: classNames('usa-select', className),
       onChange: e => setSelect(e.target.value),
       value: activeOption || '',

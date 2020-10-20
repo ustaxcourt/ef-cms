@@ -3,6 +3,7 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
@@ -145,6 +146,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
           eventCode: 'O',
+          pending: true,
           serviceStamp: 'Served',
           signedAt: createISODateString(),
           signedByUserId: uuidv4(),
@@ -374,6 +376,30 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(result.pdfUrl).toBe(mockPdfUrl.url);
+  });
+
+  it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
+    await serveCourtIssuedDocumentInteractor({
+      applicationContext,
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      docketNumber: '102-20',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords,
+    ).toBeCalled();
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {

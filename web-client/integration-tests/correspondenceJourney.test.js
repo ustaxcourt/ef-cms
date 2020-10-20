@@ -1,9 +1,9 @@
 import { docketClerkAddsCorrespondence } from './journey/docketClerkAddsCorrespondence';
+import { docketClerkCreatesMessageWithCorrespondence } from './journey/docketClerkCreatesMessageWithCorrespondence';
 import { docketClerkDeletesCorrespondence } from './journey/docketClerkDeletesCorrespondence';
 import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorrespondence';
 import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
 import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
-import { docketClerkStartsNewMessageWithCorrespondence } from './journey/docketClerkStartsNewMessageWithCorrespondence';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Adds correspondence to a case', () => {
@@ -30,7 +30,7 @@ describe('Adds correspondence to a case', () => {
   docketClerkAddsCorrespondence(test, firstCorrespondenceTitle);
   docketClerkAddsCorrespondence(test, secondCorrespondenceTitle);
   docketClerkNavigatesToEditCorrespondence(test, firstCorrespondenceTitle);
-  docketClerkStartsNewMessageWithCorrespondence(test);
+  docketClerkCreatesMessageWithCorrespondence(test);
   docketClerkEditsCorrespondence(test, fakeFile);
   docketClerkDeletesCorrespondence(test);
 });

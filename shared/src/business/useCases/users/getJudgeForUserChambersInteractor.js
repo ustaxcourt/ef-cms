@@ -34,7 +34,9 @@ exports.getJudgeForUserChambersInteractor = async ({
         section: chambersSection,
       });
 
-    judgeUser = sectionUsers.find(user => user.role === ROLES.judge);
+    judgeUser = sectionUsers.find(
+      sectionUser => sectionUser.role === ROLES.judge,
+    );
   }
 
   return judgeUser;

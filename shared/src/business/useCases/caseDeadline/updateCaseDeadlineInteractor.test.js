@@ -11,6 +11,7 @@ describe('updateCaseDeadlineInteractor', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
 
   const mockCaseDeadline = {
+    associatedJudge: 'Buch',
     caseDeadlineId: CASE_DEADLINE_ID,
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
