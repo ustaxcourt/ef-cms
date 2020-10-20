@@ -9,7 +9,6 @@ const {
 const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
-const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const getDocumentContentsForDocuments = async ({
@@ -98,12 +97,8 @@ const getCaseForExternalUser = async ({
   caseRecord,
   isAssociatedWithCase,
   isAuthorizedToGetCase,
-  userRole,
 }) => {
-  if (
-    (isAuthorizedToGetCase && isAssociatedWithCase) ||
-    userRole === ROLES.irsPractitioner
-  ) {
+  if (isAuthorizedToGetCase && isAssociatedWithCase) {
     return await getCaseAndDocumentContents({ applicationContext, caseRecord });
   } else {
     return new PublicCase(caseRecord, {
@@ -173,7 +168,6 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
         caseRecord,
         isAssociatedWithCase,
         isAuthorizedToGetCase,
-        userRole,
       });
     }
   }
