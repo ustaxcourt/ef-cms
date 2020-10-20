@@ -57,9 +57,14 @@ const formatRecord = record => {
     city: record['contact/city'],
     countryType: COUNTRY_TYPES.DOMESTIC,
     phone: record['contact/phone'],
-    postalCode: record['contact/postalCode'],
+    postalCode: record['contact/postalCode'] || '00000',
     state: record['contact/state'],
   };
+
+  if (!returnData.contact.address1 && returnData.contact.address2) {
+    returnData.contact.address1 = returnData.contact.address2;
+    delete returnData.contact.address2;
+  }
 
   return returnData;
 };
