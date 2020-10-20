@@ -1,11 +1,43 @@
 const {
   COUNTRY_TYPES,
+  DEFAULT_PRACTITIONER_BIRTH_YEAR,
 } = require('../shared/src/business/entities/EntityConstants');
 const { formatRecord } = require('./bulkImportPractitionerUsers');
 
 describe('formatRecord', () => {
+  it('formats a record for a practitioner with default values for certain fields when no value is supplied', () => {
+    const defaultEmployer = 'Private';
+    const defaultBarState = 'N/A';
+
+    const initialRecord = {
+      admissionsDate: '11-30-2000',
+      admissionsStatus: 'Active',
+      birthYear: undefined,
+      firstName: 'Bob',
+      lastName: 'Builder',
+      middleName: 'the',
+      originalBarState: undefined,
+      suffix: 'yeswecan',
+    };
+
+    const formattedRecord = formatRecord(initialRecord);
+
+    expect(formattedRecord).toMatchObject({
+      admissionsDate: '2000-11-30T05:00:00.000Z',
+      admissionsStatus: 'Active',
+      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
+      employer: defaultEmployer,
+      firstName: 'Bob',
+      lastName: 'Builder',
+      middleName: 'the',
+      originalBarState: defaultBarState,
+      suffix: 'yeswecan',
+    });
+  });
+
   it('formats a record for an admitted IRS employee', () => {
     const initialRecord = {
+      admissionsDate: '11-30-2000',
       admissionsStatus: 'Active',
       birthYear: '1999',
       firstName: 'Bob',
@@ -13,7 +45,6 @@ describe('formatRecord', () => {
       lastName: 'Builder',
       middleName: 'the',
       suffix: 'yeswecan',
-      unformattedAdmissionsDate: '11-30-2000',
     };
 
     const formattedRecord = formatRecord(initialRecord);
@@ -32,6 +63,7 @@ describe('formatRecord', () => {
 
   it('formats a record for a non-admitted DOJ employee', () => {
     const initialRecord = {
+      admissionsDate: '11-30-2000',
       admissionsStatus: 'Inactive',
       birthYear: '1999',
       firstName: 'Mike',
@@ -40,7 +72,6 @@ describe('formatRecord', () => {
       lastName: 'Wazowski',
       middleName: '',
       suffix: '',
-      unformattedAdmissionsDate: '11-30-2000',
     };
 
     const formattedRecord = formatRecord(initialRecord);
@@ -57,6 +88,7 @@ describe('formatRecord', () => {
 
   it('formats a record for an admitted private practitioner', () => {
     const initialRecord = {
+      admissionsDate: '11-30-2000',
       admissionsStatus: 'Active',
       birthYear: 'what',
       firstName: 'Rachael',
@@ -65,7 +97,6 @@ describe('formatRecord', () => {
       lastName: 'Ray',
       middleName: '',
       suffix: '',
-      unformattedAdmissionsDate: '11-30-2000',
     };
 
     const formattedRecord = formatRecord(initialRecord);
@@ -73,7 +104,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30T05:00:00.000Z',
       admissionsStatus: 'Active',
-      birthYear: undefined,
+      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
       employer: 'Private',
       firstName: 'Rachael',
       lastName: 'Ray',
@@ -82,6 +113,7 @@ describe('formatRecord', () => {
 
   it('formats a record with a nested contact', () => {
     const initialRecord = {
+      admissionsDate: '11-30-2000',
       admissionsStatus: 'Active',
       birthYear: '',
       'contact/address1': 'knows how to party',
@@ -95,7 +127,6 @@ describe('formatRecord', () => {
       lastName: 'Ray',
       middleName: 'R',
       suffix: 'Esquire',
-      unformattedAdmissionsDate: '11-30-2000',
     };
 
     const formattedRecord = formatRecord(initialRecord);
@@ -103,7 +134,7 @@ describe('formatRecord', () => {
     expect(formattedRecord).toMatchObject({
       admissionsDate: '2000-11-30T05:00:00.000Z',
       admissionsStatus: 'Active',
-      birthYear: undefined,
+      birthYear: DEFAULT_PRACTITIONER_BIRTH_YEAR,
       contact: {
         address1: 'knows how to party',
         city: 'the city of Compton',
