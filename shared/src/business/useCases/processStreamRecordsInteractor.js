@@ -71,18 +71,22 @@ const processCaseEntries = async ({
   applicationContext.logger.info(
     `going to index ${caseEntityRecords.length} caseEntityRecords`,
   );
-  applicationContext.logger.time(
-    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   const indexDocketEntry = async (marshalledCase, docketEntry) => {
     if (docketEntry.documentContentsId) {
-      const buffer = await utils.getDocument({
-        applicationContext,
-        documentContentsId: docketEntry.documentContentsId,
-      });
-      const { documentContents } = JSON.parse(buffer.toString());
-      docketEntry.documentContents = documentContents;
+      try {
+        const buffer = await utils.getDocument({
+          applicationContext,
+          documentContentsId: docketEntry.documentContentsId,
+        });
+        const { documentContents } = JSON.parse(buffer.toString());
+        docketEntry.documentContents = documentContents;
+      } catch (err) {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info(
+          `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
+        );
+      }
     }
 
     const docketEntryWithCase = {
@@ -143,24 +147,12 @@ const processCaseEntries = async ({
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
-  applicationContext.logger.timeEnd(
-    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
-
-  applicationContext.logger.time(
-    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
-
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
     applicationContext,
     records: flattenDeep(indexRecords),
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -191,10 +183,6 @@ const processDocketEntries = async ({
     `going to index ${docketEntryRecords.length} docketEntryRecords`,
   );
 
-  applicationContext.logger.time(
-    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
-  );
-
   const newDocketEntryRecords = await Promise.all(
     docketEntryRecords.map(async record => {
       const fullDocketEntry = AWS.DynamoDB.Converter.unmarshall(
@@ -207,12 +195,19 @@ const processDocketEntries = async ({
       });
 
       if (fullDocketEntry.documentContentsId) {
-        const buffer = await utils.getDocument({
-          applicationContext,
-          documentContentsId: fullDocketEntry.documentContentsId,
-        });
-        const { documentContents } = JSON.parse(buffer.toString());
-        fullDocketEntry.documentContents = documentContents;
+        try {
+          const buffer = await utils.getDocument({
+            applicationContext,
+            documentContentsId: fullDocketEntry.documentContentsId,
+          });
+          const { documentContents } = JSON.parse(buffer.toString());
+          fullDocketEntry.documentContents = documentContents;
+        } catch (err) {
+          applicationContext.logger.error(err);
+          applicationContext.logger.info(
+            `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
+          );
+        }
       }
 
       const marshalledCase = AWS.DynamoDB.Converter.marshall({
@@ -240,13 +235,6 @@ const processDocketEntries = async ({
       };
     }),
   );
-  applicationContext.logger.timeEnd(
-    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
-  );
-
-  applicationContext.logger.time(
-    `going to index ${docketEntryRecords.length} docketEntryRecords`,
-  );
 
   const {
     failedRecords,
@@ -254,10 +242,6 @@ const processDocketEntries = async ({
     applicationContext,
     records: newDocketEntryRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${docketEntryRecords.length} docketEntryRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -278,9 +262,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   applicationContext.logger.info(
     `going to index ${otherRecords.length} otherRecords`,
   );
-  applicationContext.logger.time(
-    `going to index ${otherRecords.length} otherRecords`,
-  );
 
   const {
     failedRecords,
@@ -288,10 +269,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
     applicationContext,
     records: otherRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${otherRecords.length} otherRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -313,20 +290,12 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     `going to index ${removeRecords.length} removeRecords`,
   );
 
-  applicationContext.logger.time(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
-
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
     applicationContext,
     records: removeRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
