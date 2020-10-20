@@ -13,7 +13,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets the viewerDocumentToDisplay from state when state.viewerDocumentToDisplay is defined', async () => {
+  it('sets state.viewerDocumentToDisplay when props.viewerDocumentToDisplay is defined', async () => {
     const result = await runAction(
       setMessageDetailViewerDocumentToDisplayAction,
       {
@@ -21,18 +21,17 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
-          mostRecentMessage: { attachments: [{ documentId: '1234' }] },
-          viewerDocumentToDisplay: { documentId: '1234' },
+          mostRecentMessage: { attachments: [{ documentId: '999000999' }] },
+          viewerDocumentToDisplay: { documentId: '999000999' },
         },
         state: {
           caseDetail: {
             archivedCorrespondences: [],
             archivedDocketEntries: [],
             correspondence: [],
-            docketEntries: [{ docketEntryId: '1234' }],
+            docketEntries: [{ docketEntryId: '999000999' }],
             docketNumber: '123-45',
           },
-          viewerDocumentToDisplay: { documentId: '999000999' },
         },
       },
     );
