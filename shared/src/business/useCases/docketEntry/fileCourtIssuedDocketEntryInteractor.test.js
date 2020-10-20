@@ -2,7 +2,6 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  AUTOMATIC_BLOCKED_REASONS,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_SECTION,
@@ -25,10 +24,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       section: DOCKET_SECTION,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
     caseRecord = {
       caseCaption: 'Caption',
@@ -111,6 +106,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       role: ROLES.petitioner,
       userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -178,7 +177,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call updateCase and set the case as automatic blocked if the document is a tracked document', async () => {
+  it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -201,62 +200,16 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    const {
+      caseToUpdate,
+    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
+      d => d.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+    );
+    expect(docketEntryInCaseToUpdate).toMatchObject({
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      pending: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
-  });
-
-  it('should call updateCase and set the case as automatic blocked with deadlines if the document is a tracked document and the case has deadlines', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        {
-          deadlineDate: 'sometime',
-        },
-      ]);
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
-      documentMeta: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to Show Cause',
-        documentType: 'Order to Show Cause',
-        eventCode: 'OSC',
-        generatedDocumentTitle: 'Generated Order Document Title',
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
-    });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
   });
 
   it('should set secondaryDate on the created document if the eventCode is TRAN', async () => {
