@@ -5,6 +5,7 @@ const parse = require('csv-parse');
 const {
   COUNTRY_TYPES,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
+  ROLES,
 } = require('../shared/src/business/entities/EntityConstants');
 const {
   createISODateString,
@@ -36,10 +37,13 @@ const formatRecord = record => {
 
   if (record.isIrsEmployee === 'Y') {
     returnData.employer = 'IRS';
+    returnData.role = ROLES.irsPractitioner;
   } else if (record.isDojEmployee === 'Y') {
     returnData.employer = 'DOJ';
+    returnData.role = ROLES.irsPractitioner;
   } else {
     returnData.employer = 'Private';
+    returnData.role = ROLES.privatePractitioner;
   }
 
   returnData.additionalPhone = record.additionalPhone;
@@ -80,19 +84,13 @@ const formatRecord = record => {
   });
 
   const csvColumns = [
-    'role',
     'admissionsDate',
     'admissionsStatus',
     'birthYear',
-    'employer',
     'practitionerType',
-    'name',
     'firstName',
     'lastName',
     'suffix',
-    'section',
-    'userId',
-    'entityName',
     'email',
     'firmName',
     'alternateEmail',
