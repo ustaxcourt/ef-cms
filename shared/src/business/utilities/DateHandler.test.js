@@ -372,4 +372,48 @@ describe('DateHandler', () => {
       );
     });
   });
+
+  describe('getMonthDayYearObj', () => {
+    beforeAll(() => {
+      expect.extend({
+        toBeWithinRange(received, floor, ceiling) {
+          const pass = +received >= floor && +received <= ceiling;
+          if (pass) {
+            return {
+              message: () =>
+                `expected ${received} not to be within range ${floor} - ${ceiling}`,
+              pass: true,
+            };
+          } else {
+            return {
+              message: () =>
+                `expected ${received} to be within range ${floor} - ${ceiling}`,
+              pass: false,
+            };
+          }
+        },
+      });
+    });
+    it('takes a moment object as a parameter  to create an object with keys month, day, and year with numeric values', () => {
+      const momentInstance = DateHandler.prepareDateFromString(
+        '2001-02-03',
+        DateHandler.FORMATS.YYYYMMDD,
+      );
+      const result = DateHandler.getMonthDayYearObj(momentInstance);
+      expect(result).toEqual({
+        day: '3',
+        month: '2',
+        year: '2001',
+      });
+    });
+    it('creates a moment object representing today/now and returns an object with keys month, day, and year', () => {
+      const momentInstance = DateHandler.prepareDateFromString();
+      const result = DateHandler.getMonthDayYearObj(momentInstance);
+      expect(result).toEqual({
+        day: expect.toBeWithinRange(1, 31),
+        month: expect.toBeWithinRange(1, 12),
+        year: expect.toBeWithinRange(1900, 2500),
+      });
+    });
+  });
 });
