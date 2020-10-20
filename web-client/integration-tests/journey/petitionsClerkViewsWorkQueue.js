@@ -13,9 +13,9 @@ export const petitionsClerkViewsWorkQueue = test => {
     const workItem = test
       .getState('workQueue')
       .find(
-        workItem =>
-          workItem.docketNumber === test.docketNumber &&
-          workItem.docketEntry.documentType === 'Petition',
+        workItemInQueue =>
+          workItemInQueue.docketNumber === test.docketNumber &&
+          workItemInQueue.docketEntry.documentType === 'Petition',
       );
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);

@@ -81,6 +81,7 @@ import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCou
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileDocketEntrySequence } from './sequences/fileDocketEntrySequence';
+import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { forwardMessageSequence } from './sequences/forwardMessageSequence';
 import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
@@ -521,6 +522,7 @@ export const presenter = {
     fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
     fileDocketEntrySequence,
+    filterCaseDeadlinesByJudgeSequence,
     formCancelToggleCancelSequence,
     forwardMessageSequence,
     generateCaseCaptionSequence,

@@ -176,15 +176,10 @@ export const ContactSecondary = connect(
             >
               <label className="usa-label" htmlFor="secondaryPhone">
                 Phone number
-                {contactsHelper.contactSecondary.phoneNumberLabelHint && (
-                  <>
-                    {' '}
-                    <span className="usa-hint">
-                      ({contactsHelper.contactSecondary.phoneNumberLabelHint})
-                    </span>
-                  </>
-                )}
               </label>
+              <span className="usa-hint">
+                If you do not have a current phone number, enter N/A.
+              </span>
               <input
                 autoCapitalize="none"
                 className="usa-input max-width-200"

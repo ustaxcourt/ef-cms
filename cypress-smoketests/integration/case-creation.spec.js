@@ -1,3 +1,4 @@
+const faker = require('faker');
 const {
   closeScannerSetupDialog,
   goToCreateCase,
@@ -59,7 +60,10 @@ describe('Petitioner', () => {
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
-      completeWizardStep3(filingTypes.INDIVIDUAL, 'Petitioner');
+      completeWizardStep3(
+        filingTypes.INDIVIDUAL,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+      );
       goToWizardStep4();
       completeWizardStep4();
       goToWizardStep5();
@@ -98,7 +102,7 @@ describe('Private practitioner', () => {
       goToWizardStep3();
       completeWizardStep3(
         filingTypes.PETITIONER_AND_SPOUSE,
-        'Private practitioner',
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
       );
       goToWizardStep4();
       completeWizardStep4();

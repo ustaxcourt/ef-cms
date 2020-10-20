@@ -64,6 +64,7 @@ import {
   deconstructDate,
   formatDateString,
   formatNow,
+  getMonthDayYearObj,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
@@ -497,8 +498,8 @@ const applicationContext = {
     (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
   getCurrentUser,
   getCurrentUserPermissions: () => {
-    const user = getCurrentUser();
-    return getUserPermissions(user);
+    const currentUser = getCurrentUser();
+    return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
   getError: e => {
@@ -580,6 +581,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
+      getMonthDayYearObj,
       getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,

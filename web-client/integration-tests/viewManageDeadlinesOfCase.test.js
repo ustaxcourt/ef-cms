@@ -4,7 +4,7 @@ import { petitionsClerkDeletesCaseDeadline } from './journey/petitionsClerkDelet
 import { petitionsClerkEditsCaseDeadline } from './journey/petitionsClerkEditsCaseDeadline';
 import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCaseDeadline';
 import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
-import { petitionsClerkViewsDeadlineReport } from './journey/petitionsClerkViewsDeadlineReport';
+import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
 const test = setupTest();
 
@@ -50,7 +50,7 @@ describe('View and manage the deadlines of a case', () => {
 
   describe('View the deadlines report', () => {
     loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewsDeadlineReport(test, overrides);
+    petitionsClerkViewsDeadlineReportForSingleCase(test, overrides);
   });
 
   describe('Edit a case deadline on case', () => {

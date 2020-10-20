@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { flattenDeep, get, memoize, partition } = require('lodash');
+const { flattenDeep, get, partition } = require('lodash');
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -10,15 +10,15 @@ const partitionRecords = records => {
   const [docketEntryRecords, nonDocketEntryRecords] = partition(
     insertModifyRecords,
     record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'DocketEntry',
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'DocketEntry',
   );
 
   const [caseEntityRecords, otherRecords] = partition(
     nonDocketEntryRecords,
     record =>
-      AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage).entityName ===
-      'Case',
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Case',
   );
 
   return {
@@ -43,13 +43,13 @@ const processCaseEntries = async ({
   applicationContext.logger.info(
     `going to index ${caseEntityRecords.length} caseEntityRecords`,
   );
-  applicationContext.logger.time(
-    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords = [];
+
+    // we don't need to store the docket entry list onto the case
+    delete caseNewImage.docketEntries;
 
     caseRecords.push({
       dynamodb: {
@@ -90,24 +90,12 @@ const processCaseEntries = async ({
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
-  applicationContext.logger.timeEnd(
-    `going to create index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
-
-  applicationContext.logger.time(
-    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
-
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
     applicationContext,
     records: flattenDeep(indexRecords),
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index records ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -138,10 +126,6 @@ const processDocketEntries = async ({
     `going to index ${docketEntryRecords.length} docketEntryRecords`,
   );
 
-  applicationContext.logger.time(
-    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
-  );
-
   const newDocketEntryRecords = await Promise.all(
     docketEntryRecords.map(async record => {
       // TODO: May need to remove the `case_relations` object and re-add later
@@ -151,12 +135,19 @@ const processDocketEntries = async ({
 
       if (fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
-        const buffer = await utils.getDocument({
-          applicationContext,
-          documentContentsId: fullDocketEntry.documentContentsId,
-        });
-        const { documentContents } = JSON.parse(buffer.toString());
-        fullDocketEntry.documentContents = documentContents;
+        try {
+          const buffer = await utils.getDocument({
+            applicationContext,
+            documentContentsId: fullDocketEntry.documentContentsId,
+          });
+          const { documentContents } = JSON.parse(buffer.toString());
+          fullDocketEntry.documentContents = documentContents;
+        } catch (err) {
+          applicationContext.logger.error(err);
+          applicationContext.logger.error(
+            `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
+          );
+        }
       }
 
       const caseDocketEntryMappingRecordId = `${fullDocketEntry.pk}_${fullDocketEntry.pk}|mapping`;
@@ -183,13 +174,6 @@ const processDocketEntries = async ({
       };
     }),
   );
-  applicationContext.logger.timeEnd(
-    `going to create index records ${docketEntryRecords.length} docketEntryRecords`,
-  );
-
-  applicationContext.logger.time(
-    `going to index ${docketEntryRecords.length} docketEntryRecords`,
-  );
 
   const {
     failedRecords,
@@ -197,10 +181,6 @@ const processDocketEntries = async ({
     applicationContext,
     records: newDocketEntryRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${docketEntryRecords.length} docketEntryRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -221,9 +201,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   applicationContext.logger.info(
     `going to index ${otherRecords.length} otherRecords`,
   );
-  applicationContext.logger.time(
-    `going to index ${otherRecords.length} otherRecords`,
-  );
 
   const {
     failedRecords,
@@ -231,10 +208,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
     applicationContext,
     records: otherRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${otherRecords.length} otherRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -256,20 +229,12 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     `going to index ${removeRecords.length} removeRecords`,
   );
 
-  applicationContext.logger.time(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
-
   const {
     failedRecords,
   } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
     applicationContext,
     records: removeRecords,
   });
-
-  applicationContext.logger.timeEnd(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
 
   if (failedRecords.length > 0) {
     applicationContext.logger.info(
@@ -294,21 +259,22 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext,
   recordsToProcess,
 }) => {
-  const getCase = memoize(({ applicationContext, docketNumber }) =>
-    applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-      applicationContext,
+  const getCase = ({ applicationContext: appContext, docketNumber }) =>
+    appContext.getPersistenceGateway().getFullCaseByDocketNumber({
+      applicationContext: appContext,
       docketNumber,
-    }),
-  );
+    });
 
-  const getDocument = memoize(({ applicationContext, documentContentsId }) =>
-    applicationContext.getPersistenceGateway().getDocument({
-      applicationContext,
+  const getDocument = ({
+    applicationContext: appContext,
+    documentContentsId,
+  }) =>
+    appContext.getPersistenceGateway().getDocument({
+      applicationContext: appContext,
       key: documentContentsId,
       protocol: 'S3',
       useTempBucket: false,
-    }),
-  );
+    });
 
   recordsToProcess = recordsToProcess.filter(record => {
     // to prevent global tables writing extra data
@@ -337,40 +303,48 @@ exports.processStreamRecordsInteractor = async ({
     await processRemoveEntries({
       applicationContext,
       removeRecords,
-    }).catch(err =>
+    }).catch(err => {
+      applicationContext.logger.error(err);
+      applicationContext.logger.info("failed to processRemoveEntries',");
       applicationContext.notifyHoneybadger(err, {
-        message:
-          'processStreamRecordsInteractor failed to processRemoveEntries',
-      }),
-    );
+        message: 'failed to processRemoveEntries',
+      });
+      throw err;
+    });
 
     await Promise.all([
       processCaseEntries({
         applicationContext,
         caseEntityRecords,
         utils,
-      }).catch(err =>
+      }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processCaseEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processCaseEntries',
-        }),
-      ),
+          message: 'failed to processCaseEntries',
+        });
+        throw err;
+      }),
       processDocketEntries({
         applicationContext,
         docketEntryRecords,
         utils,
-      }).catch(err =>
+      }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processDocketEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processDocketEntries',
-        }),
-      ),
-      processOtherEntries({ applicationContext, otherRecords }).catch(err =>
+          message: 'failed to processDocketEntries',
+        });
+        throw err;
+      }),
+      processOtherEntries({ applicationContext, otherRecords }).catch(err => {
+        applicationContext.logger.error(err);
+        applicationContext.logger.info("failed to processOtherEntries',");
         applicationContext.notifyHoneybadger(err, {
-          message:
-            'processStreamRecordsInteractor failed to processOtherEntries',
-        }),
-      ),
+          message: 'failed to processOtherEntries',
+        });
+        throw err;
+      }),
     ]);
   } catch (err) {
     applicationContext.logger.info(

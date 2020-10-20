@@ -232,6 +232,7 @@ const caseWithEAccess = {
 };
 
 const legacyDeadline = {
+  associatedJudge: 'Buch',
   caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
   createdAt: '2020-01-01T01:02:15.185-04:00',
   deadlineDate: '2020-01-24T00:00:00.000-05:00',
