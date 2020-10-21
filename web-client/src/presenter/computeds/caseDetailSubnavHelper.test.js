@@ -94,7 +94,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it('should show primaryTab as selected if it is not caseInformation', () => {
     const user = {
-      role: ROLES.irsPractitioner,
+      role: ROLES.petitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {
@@ -113,7 +113,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it("should show caseInformationTab's value as selected if primaryTab is caseInformation", () => {
     const user = {
-      role: ROLES.irsPractitioner,
+      role: ROLES.petitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {
