@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
+import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -535,6 +536,25 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       index: 4,
       showNotServed: false,
       showServed: true,
+    });
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkAddsTrackedDocketEntry(test, fakeFile);
+  it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
+
+    const entry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.eventCode === 'APPL',
+    );
+
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'APPL',
+      index: 5,
+      pending: true,
     });
   });
 });
