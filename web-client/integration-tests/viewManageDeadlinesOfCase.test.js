@@ -4,11 +4,21 @@ import { petitionsClerkDeletesCaseDeadline } from './journey/petitionsClerkDelet
 import { petitionsClerkEditsCaseDeadline } from './journey/petitionsClerkEditsCaseDeadline';
 import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCaseDeadline';
 import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
-import { petitionsClerkViewsDeadlineReport } from './journey/petitionsClerkViewsDeadlineReport';
+import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
 const test = setupTest();
 
 describe('View and manage the deadlines of a case', () => {
+  const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;
+  const randomMonth = `0${Math.floor(Math.random() * 9) + 1}`;
+  const randomYear = `200${Math.floor(Math.random() * 9) + 1}`;
+
+  const overrides = {
+    day: randomDay,
+    month: randomMonth,
+    year: randomYear,
+  };
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -27,19 +37,20 @@ describe('View and manage the deadlines of a case', () => {
     petitionsClerkViewsCaseWithNoDeadlines(test);
   });
 
-  describe('Create a case deadline', () => {
+  describe('Create 2 case deadlines', () => {
     loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkCreatesACaseDeadline(test);
+    petitionsClerkCreatesACaseDeadline(test, overrides);
+    petitionsClerkCreatesACaseDeadline(test, overrides);
   });
 
-  describe('View a case deadline list on case', () => {
+  describe('View case deadline list on case', () => {
     loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkViewCaseDeadline(test);
   });
 
   describe('View the deadlines report', () => {
     loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewsDeadlineReport(test);
+    petitionsClerkViewsDeadlineReportForSingleCase(test, overrides);
   });
 
   describe('Edit a case deadline on case', () => {
@@ -47,8 +58,9 @@ describe('View and manage the deadlines of a case', () => {
     petitionsClerkEditsCaseDeadline(test);
   });
 
-  describe('Delete a case deadline on case', () => {
+  describe('Delete case deadlines on case', () => {
     loginAs(test, 'petitionsclerk@example.com');
+    petitionsClerkDeletesCaseDeadline(test);
     petitionsClerkDeletesCaseDeadline(test);
   });
 

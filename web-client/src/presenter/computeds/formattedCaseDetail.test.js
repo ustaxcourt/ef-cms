@@ -1102,89 +1102,6 @@ describe('formattedCaseDetail', () => {
           name: 'Bob',
         },
         correspondence: [],
-        docketEntries: [
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-            eventCode: 'M073',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            index: 1,
-            isOnDocketRecord: true,
-            workItem: {},
-          },
-          {
-            description: 'Filing Fee Paid',
-            eventCode: 'FEE',
-            filingDate: '2019-06-20T17:29:13.120Z',
-            index: 2,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'System Generated',
-            docketEntryId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-            documentTitle: 'System Generated',
-            documentType: 'Notice of Trial',
-            eventCode: 'NTD',
-            filingDate: '2019-06-21T17:29:13.120Z',
-            isOnDocketRecord: true,
-            servedAt: '2019-06-19T17:29:13.120Z',
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Court Issued - Not Served',
-            docketEntryId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-            documentTitle: 'Court Issued - Not Served',
-            documentType: 'Order',
-            eventCode: 'O',
-            filingDate: '2019-06-22T17:29:13.120Z',
-            isCourtIssuedDocument: true,
-            isOnDocketRecord: true,
-            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Court Issued - Served',
-            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-            documentTitle: 'Court Issued - Served',
-            documentType: 'Order',
-            eventCode: 'O',
-            filingDate: '2019-06-23T17:29:13.120Z',
-            isCourtIssuedDocument: true,
-            isOnDocketRecord: true,
-            servedAt: '2019-06-19T17:29:13.120Z',
-            status: 'served',
-            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Court Issued - Unservable',
-            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
-            documentTitle: 'U.S.C.A',
-            documentType: 'U.S.C.A.',
-            eventCode: 'USCA',
-            filingDate: '2019-06-24T17:29:13.120Z',
-            isCourtIssuedDocument: true,
-            isOnDocketRecord: true,
-            servedAt: '2019-06-19T17:29:13.120Z',
-            status: 'served',
-            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-          },
-        ],
       };
     });
 
@@ -1192,7 +1109,25 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'Motion to Dismiss for Lack of Jurisdiction',
+                docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+                documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+                documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+                eventCode: 'M073',
+                filingDate: '2019-06-19T17:29:13.120Z',
+                index: 1,
+                isOnDocketRecord: true,
+                workItem: {},
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
@@ -1205,15 +1140,75 @@ describe('formattedCaseDetail', () => {
       ).toBeFalsy();
     });
 
-    it('should not show the edit button if the user does not have permission', () => {
-      caseDetail.docketEntries[0].workItem = {
-        completedAt: '2019-06-19T17:29:13.120Z',
-      };
-
+    it('should show the edit button if the docket entry document has been QCed as part of the petition QC', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                createdAt: '2020-10-21T13:46:55.621Z',
+                docketEntryId: '3d9c3e7e-f12e-40ef-8076-7dd31d5adbf0',
+                documentTitle: 'Ownership Disclosure Statement',
+                documentType: 'Ownership Disclosure Statement',
+                entityName: 'DocketEntry',
+                eventCode: 'DISC',
+                filedBy: 'Petr. Benedict Byers',
+                filingDate: '2020-10-21T13:46:55.618Z',
+                index: 3,
+                isDraft: false,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+                pending: false,
+                receivedAt: '2020-10-21T13:46:55.621Z',
+                servedAt: '2020-10-21T13:47:20.482Z',
+                servedParties: [
+                  {
+                    name: 'IRS',
+                    role: 'irsSuperuser',
+                  },
+                ],
+              },
+            ],
+          },
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toBeTruthy();
+    });
+
+    it('should not show the edit button if the user does not have permission', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'Motion to Dismiss for Lack of Jurisdiction',
+                docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+                documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+                documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+                eventCode: 'M073',
+                filingDate: '2019-06-19T17:29:13.120Z',
+                index: 1,
+                isOnDocketRecord: true,
+                workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: false,
           },
@@ -1223,18 +1218,32 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[0].showEditDocketRecordEntry,
-      ).toEqual(false);
+      ).toBeFalsy();
     });
 
     it('should show the edit button if the docket entry document is QCed and the user has permission', () => {
-      caseDetail.docketEntries[0].workItem = {
-        completedAt: '2019-06-19T17:29:13.120Z',
-      };
-
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'Motion to Dismiss for Lack of Jurisdiction',
+                docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+                documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+                documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+                eventCode: 'M073',
+                filingDate: '2019-06-19T17:29:13.120Z',
+                index: 1,
+                isOnDocketRecord: true,
+                workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
@@ -1244,14 +1253,27 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[0].showEditDocketRecordEntry,
-      ).toEqual(true);
+      ).toBeTruthy();
     });
 
     it('should show the edit button if the docket entry has no document and the user has permission', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                description: 'Filing Fee Paid',
+                docketEntryId: 'd8e4c0ba-db97-4294-bb22-9ffdd584e8f4',
+                eventCode: 'FEE',
+                filingDate: '2019-06-20T17:29:13.120Z',
+                index: 2,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
@@ -1260,23 +1282,41 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[1].showEditDocketRecordEntry,
-      ).toEqual(true);
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toBeTruthy();
     });
 
     it('should show the edit button if the docket entry has a system generated document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'System Generated',
+                docketEntryId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+                documentTitle: 'System Generated',
+                documentType: 'Notice of Trial',
+                eventCode: 'NTD',
+                filingDate: '2019-06-21T17:29:13.120Z',
+                isOnDocketRecord: true,
+                servedAt: '2019-06-19T17:29:13.120Z',
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
           validationErrors: {},
         },
       });
+
       expect(
-        result.formattedDocketEntries[4].showEditDocketRecordEntry,
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
       ).toBeTruthy();
     });
 
@@ -1284,7 +1324,25 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'Court Issued - Not Served',
+                docketEntryId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+                documentTitle: 'Court Issued - Not Served',
+                documentType: 'Order',
+                eventCode: 'O',
+                filingDate: '2019-06-22T17:29:13.120Z',
+                isCourtIssuedDocument: true,
+                isOnDocketRecord: true,
+                workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
@@ -1293,15 +1351,35 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[5].showEditDocketRecordEntry,
-      ).toEqual(false);
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toBeFalsy();
     });
 
     it('should show the edit button if the docket entry has a served court issued document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'Court Issued - Served',
+                docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+                documentTitle: 'Court Issued - Served',
+                documentType: 'Order',
+                eventCode: 'O',
+                filingDate: '2019-06-23T17:29:13.120Z',
+                isCourtIssuedDocument: true,
+                isOnDocketRecord: true,
+                servedAt: '2019-06-19T17:29:13.120Z',
+                status: 'served',
+                workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
@@ -1310,15 +1388,35 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[2].showEditDocketRecordEntry,
-      ).toEqual(true);
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toBeTruthy();
     });
 
-    it('should should the edit button if the document is an unservable court issued document', () => {
+    it('should show the edit button if the document is an unservable court issued document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                attachments: false,
+                certificateOfService: false,
+                createdAt: '2019-06-19T17:29:13.120Z',
+                description: 'Court Issued - Unservable',
+                docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+                documentTitle: 'U.S.C.A',
+                documentType: 'U.S.C.A.',
+                eventCode: 'USCA',
+                filingDate: '2019-06-24T17:29:13.120Z',
+                isCourtIssuedDocument: true,
+                isOnDocketRecord: true,
+                servedAt: '2019-06-19T17:29:13.120Z',
+                status: 'served',
+                workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+              },
+            ],
+          },
           permissions: {
             EDIT_DOCKET_ENTRY: true,
           },
@@ -1327,8 +1425,8 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(
-        result.formattedDocketEntries[3].showEditDocketRecordEntry,
-      ).toEqual(true);
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toBeTruthy();
     });
   });
 
@@ -2010,6 +2108,89 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  describe('showServed', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    const mockDocketEntry = {
+      attachments: false,
+      certificateOfService: false,
+      createdAt: '2019-06-19T17:29:13.120Z',
+      description: 'Motion to Dismiss for Lack of Jurisdiction',
+      docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+      documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+      documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+      eventCode: 'M073',
+      filingDate: '2019-06-19T17:29:13.120Z',
+      isLegacy: true,
+      isOnDocketRecord: true,
+      isStatusServed: true,
+      isStricken: true,
+      numberOfPages: 24,
+      servedAt: '2019-06-19T17:29:13.120Z',
+      servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
+    };
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketEntries: [mockDocketEntry],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('is true when the entry has been served', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showServed).toEqual(true);
+    });
+
+    it('is false when the entry has not been served', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...caseDetail,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                servedAt: undefined,
+                servedParties: [],
+              },
+            ],
+          },
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showServed).toEqual(false);
+    });
+  });
+
   describe('formattedOpenCases', () => {
     it('should return formatted open cases', () => {
       const caseDetail = {
@@ -2269,6 +2450,37 @@ describe('formattedCaseDetail', () => {
               workItemId: '5f4eb5ac-099d-4e14-8b26-dfbf1828f0d7',
             },
           },
+          {
+            attachments: false,
+            certificateOfService: false,
+            certificateOfServiceDate: null,
+            createdAt: '2020-09-18T17:38:32.417Z',
+            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
+            docketNumber: '169-20',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            draftOrderState: null,
+            entityName: 'DocketEntry',
+            eventCode: 'A',
+            filedBy: 'Resp.',
+            filingDate: '2020-09-18T17:38:32.418Z',
+            hasSupportingDocuments: false,
+            index: 4,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 2,
+            partyIrsPractitioner: true,
+            pending: true,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:32.418Z',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         ],
         docketNumber: '169-20',
         docketNumberSuffix: 'L',
@@ -2342,8 +2554,14 @@ describe('formattedCaseDetail', () => {
         {
           isOnDocketRecord: true,
         },
+        {
+          isOnDocketRecord: true,
+        },
       ]);
 
+      expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toEqual(
+        1,
+      );
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         {
           isOnDocketRecord: true,

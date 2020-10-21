@@ -1,6 +1,9 @@
 const client = require('../../dynamodbClientService');
 const diff = require('diff-arrays-of-objects');
 const {
+  getCaseDeadlinesByDocketNumber,
+} = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
+const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
 const {
@@ -19,9 +22,11 @@ const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
 const { Case } = require('../../../business/entities/cases/Case');
+const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit } = require('lodash');
+const { updateMessage } = require('../messages/updateMessage');
 
 /**
  * updateCase
@@ -251,6 +256,61 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         );
       }
     }
+  }
+
+  if (
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix
+  ) {
+    const messageMappings = await client.query({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${caseToUpdate.docketNumber}`,
+        ':prefix': 'message',
+      },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      applicationContext,
+    });
+
+    messageMappings.forEach(message => {
+      if (oldCase.status !== caseToUpdate.status) {
+        message.caseStatus = caseToUpdate.status;
+      }
+      if (oldCase.caseCaption !== caseToUpdate.caseCaption) {
+        message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
+      }
+      if (oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix) {
+        message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
+      }
+      requests.push(
+        updateMessage({
+          applicationContext,
+          message,
+        }),
+      );
+    });
+  }
+
+  if (oldCase.associatedJudge !== caseToUpdate.associatedJudge) {
+    const deadlines = await getCaseDeadlinesByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+    deadlines.forEach(deadline => {
+      deadline.associatedJudge = caseToUpdate.associatedJudge;
+
+      requests.push(
+        createCaseDeadline({
+          applicationContext,
+          caseDeadline: deadline,
+        }),
+      );
+    });
   }
 
   // update user-case mappings

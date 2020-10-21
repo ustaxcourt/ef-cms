@@ -1,5 +1,4 @@
 import { BigHeader } from '../BigHeader';
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from './DateRangePickerComponent';
@@ -11,8 +10,12 @@ import React from 'react';
 
 export const CaseDeadlines = connect(
   {
+    caseDeadlineReport: state.caseDeadlineReport,
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
+    filterCaseDeadlinesByJudgeSequence:
+      sequences.filterCaseDeadlinesByJudgeSequence,
     judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
+    loadMoreCaseDeadlinesSequence: sequences.loadMoreCaseDeadlinesSequence,
     screenMetadata: state.screenMetadata,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
@@ -21,8 +24,10 @@ export const CaseDeadlines = connect(
     validationErrors: state.validationErrors,
   },
   function CaseDeadlines({
+    caseDeadlineReport,
     caseDeadlineReportHelper,
-    judgeFilter,
+    filterCaseDeadlinesByJudgeSequence,
+    loadMoreCaseDeadlinesSequence,
     screenMetadata,
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
@@ -62,6 +67,7 @@ export const CaseDeadlines = connect(
                   }}
                 />
                 <Button
+                  id="update-date-range-deadlines-button"
                   onClick={() => {
                     updateDateRangeForDeadlinesSequence();
                   }}
@@ -77,25 +83,29 @@ export const CaseDeadlines = connect(
                 </div>
                 <div className="grid-col-6 text-right margin-top-1">
                   <span className="text-semibold">
-                    Count: {caseDeadlineReportHelper.caseDeadlineCount}
+                    Count: {caseDeadlineReportHelper.totalCount}
                   </span>
                 </div>
               </div>
-              {(caseDeadlineReportHelper.caseDeadlines.length > 0 ||
-                judgeFilter) && (
+              {caseDeadlineReportHelper.showJudgeSelect && (
                 <div className="grid-row grid-gap padding-bottom-1">
                   <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
                     <h3 id="filterHeading">Filter by</h3>
                   </div>
                   <div className="grid-col-3">
-                    <BindedSelect
+                    <select
                       aria-describedby="case-deadlines-tab filterHeading"
                       aria-label="judge"
-                      bind="screenMetadata.caseDeadlinesFilter.judge"
-                      className="select-left"
+                      className="usa-select select-left"
                       id="judgeFilter"
                       name="judge"
-                      placeHolder="- Judge -"
+                      placeholder="- Judge -"
+                      value={caseDeadlineReport.judgeFilter}
+                      onChange={e =>
+                        filterCaseDeadlinesByJudgeSequence({
+                          judge: e.target.value,
+                        })
+                      }
                     >
                       <option value="">-Judge-</option>
                       {caseDeadlineReportHelper.judges.map((judge, idx) => (
@@ -103,7 +113,7 @@ export const CaseDeadlines = connect(
                           {judge}
                         </option>
                       ))}
-                    </BindedSelect>
+                    </select>
                   </div>
                 </div>
               )}
@@ -137,8 +147,20 @@ export const CaseDeadlines = connect(
                   </tbody>
                 </table>
               )}
-              {caseDeadlineReportHelper.caseDeadlines.length === 0 && (
+              {caseDeadlineReportHelper.showNoDeadlines && (
                 <p>There are no deadlines for the selected date(s).</p>
+              )}
+              {caseDeadlineReportHelper.showLoadMoreButton && (
+                <Button
+                  secondary
+                  className="margin-bottom-20"
+                  id="load-more-deadlines-button"
+                  onClick={() => {
+                    loadMoreCaseDeadlinesSequence();
+                  }}
+                >
+                  Load More
+                </Button>
               )}
             </div>
           </div>

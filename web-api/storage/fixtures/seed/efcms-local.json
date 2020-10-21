@@ -32,7 +32,7 @@
     "createdAt": "2020-04-29T15:50:41.686Z",
     "contactPrimary": {
       "isAddressSealed": false,
-      "contactId": "dc442188-4bcc-41ac-9768-890d0d2611df",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "city": "New York",
       "address1": "20 West Nobel Court",
       "postalCode": "24778",
@@ -530,7 +530,8 @@
       "name": "Bill Burr",
       "state": "PA",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2020-01-02T16:05:45.978Z",
     "noticeOfAttachments": false,
@@ -794,10 +795,13 @@
     "status": "Closed"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:49:10.949Z",
     "deadlineDate": "2019-08-23T04:00:00.000Z",
+    "entityName": "CaseDeadline",
     "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "sortableDocketNumber": 19000106,
     "description": "This is a test deadline",
     "pk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "docketNumber": "106-19"
@@ -826,7 +830,8 @@
       "name": "Sean Connery",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -1492,6 +1497,11 @@
     "pk": "catalog"
   },
   {
+    "sk": "case|126-20",
+    "docketNumber": "126-20",
+    "pk": "catalog"
+  },
+  {
     "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
     "pk": "irsPractitioner|LJ9999"
   },
@@ -1520,7 +1530,7 @@
     "contactPrimary": {
       "isAddressSealed": false,
       "address3": "Architecto assumenda",
-      "contactId": "3b07849f-e96b-449e-98a2-4fde3fdb27c2",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address2": "Suscipit animi solu",
       "city": "Aspernatur nostrum s",
       "address1": "68 Fabien Freeway",
@@ -1709,7 +1719,8 @@
       "name": "Reuben Blair",
       "state": "DC",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -2362,7 +2373,8 @@
       "name": "Letti Toretto",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
@@ -2532,10 +2544,13 @@
     "email": "pughsChambers@example.com"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
+    "entityName": "CaseDeadline",
     "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
     "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
+    "sortableDocketNumber": 19000109,
     "description": "Final status report due to Judge Ashford",
     "pk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
     "docketNumber": "109-19"
@@ -3129,7 +3144,7 @@
       "address2": "104 West 120th Street ",
       "city": "Ut similique id erro",
       "phone": "+1 (241) 924-9153",
-      "contactId": "fdc6fccb-9767-42d6-86e7-ebe12e795b0c",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "907 West Rocky Cowley Parkway",
       "postalCode": "26371",
       "name": "Garrett Carpenter",
@@ -3990,18 +4005,6 @@
     "updatedAt": "2020-08-10T17:16:49.188Z"
   },
   {
-    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline-catalog|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "2019-08-22T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline-catalog|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "2019-08-22T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
-  },
-  {
     "sk": "0402cea0-727e-4155-8357-5df4fe30196c",
     "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 21207</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Summary Opinion Chief Judge Fieri</div><div>Docket Entry No.: <!-- -->4</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:26 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->4</div><div>docketEntryId: <!-- -->659d001a-4d91-41f4-acd8-8417a1d2be49</div><div>eventCode: <!-- -->SOP</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
@@ -4321,11 +4324,6 @@
     "email": "inactivePractitioner@example.com"
   },
   {
-    "caseDeadlineId": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
-    "pk": "case-deadline|catalog"
-  },
-  {
     "sk": "user|817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "pk": "section|ashfordsChambers"
   },
@@ -4488,6 +4486,49 @@
     "pk": "section|petitions",
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "7150dc91-bdb6-472f-8f36-71138f80e478",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-16T15:19:38.087Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
+    "docketNumberWithSuffix": "126-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-16T15:19:38.084Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-16T15:19:38.086Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-10-16T15:19:38.086Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "1023bbb8-f66a-49e3-80b3-c42759b50075",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "section|petitions",
+    "docketNumber": "126-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-16T15:19:38.087Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -5659,13 +5700,188 @@
     "pk": "case-by-docket-number|102-19"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
+    "entityName": "CaseDeadline",
     "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sortableDocketNumber": 19000104,
     "description": "Final status report due to Judge Ashford",
     "pk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
     "docketNumber": "104-19"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-10-16T15:19:38.086Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "8d6d7ebb-6863-41c8-acc4-b014935efafb",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2020-10-16T15:19:38.084Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|126-20",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "126-20W",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000126,
+    "archivedDocketEntries": [],
+    "noticeOfTrialDate": "2020-10-16T15:19:38.086Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|126-20",
+    "docketNumber": "126-20",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-10-16T15:19:38.084Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "7150dc91-bdb6-472f-8f36-71138f80e478",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-10-16T15:19:38.087Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "126-20W",
+      "docketEntry": {
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-10-16T15:19:38.084Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "isFileAttached": true,
+        "receivedAt": "2020-10-16T15:19:38.086Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "createdAt": "2020-10-16T15:19:38.086Z",
+        "processingStatus": "pending",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "1023bbb8-f66a-49e3-80b3-c42759b50075",
+        "partySecondary": false,
+        "documentTitle": "Petition",
+        "privatePractitioners": []
+      },
+      "docketNumber": "126-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-10-16T15:19:38.087Z"
+    },
+    "receivedAt": "2020-10-16T15:19:38.086Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-10-16T15:19:38.086Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "1023bbb8-f66a-49e3-80b3-c42759b50075",
+    "sk": "docket-entry|1023bbb8-f66a-49e3-80b3-c42759b50075",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|126-20"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-10-16T15:19:38.084Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "isFileAttached": true,
+    "receivedAt": "2020-10-16T15:19:38.088Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": false,
+    "eventCode": "STIN",
+    "createdAt": "2020-10-16T15:19:38.088Z",
+    "processingStatus": "complete",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "8439ca33-ac7a-4ae6-a228-7581e2114341",
+    "sk": "docket-entry|8439ca33-ac7a-4ae6-a228-7581e2114341",
+    "partySecondary": false,
+    "pk": "case|126-20",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-10-16T15:19:38.084Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2020-10-16T15:19:38.088Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2020-10-16T15:19:38.088Z",
+    "processingStatus": "complete",
+    "entityName": "DocketEntry",
+    "docketEntryId": "d03e12eb-3fef-414c-8019-1f2b29a02bcb",
+    "sk": "docket-entry|d03e12eb-3fef-414c-8019-1f2b29a02bcb",
+    "pk": "case|126-20",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+  },
+  {
+    "sk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
+    "pk": "case|126-20"
   },
   {
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
@@ -5721,7 +5937,8 @@
       "name": "Guy Fieri",
       "state": "AR",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2019-12-11T15:25:09.284Z",
     "noticeOfAttachments": false,
@@ -6172,7 +6389,8 @@
       "name": "Tatum Craig",
       "state": "NM",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
@@ -6533,10 +6751,13 @@
     "pk": "case-by-docket-number|109-19"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:46:01.052Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
+    "entityName": "CaseDeadline",
     "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sortableDocketNumber": 19000104,
     "description": "Pre-trial memorandum due",
     "pk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "docketNumber": "104-19"
@@ -7002,6 +7223,17 @@
     "status": "New"
   },
   {
+    "createdAt": "2020-10-16T15:19:38.084Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|126-20",
+    "sk": "case|126-20",
+    "docketNumberWithSuffix": "126-20W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "126-20",
+    "status": "New"
+  },
+  {
     "role": "petitioner",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
@@ -7219,12 +7451,6 @@
     "docketNumber": "122-20",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-25T19:27:00.207Z"
-  },
-  {
-    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sk": "case-deadline-catalog|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "2019-08-23T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
@@ -7771,7 +7997,8 @@
       "phone": "+1 (537) 235-6147",
       "name": "Brett Osborne",
       "state": "AK",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -8014,6 +8241,49 @@
     "email": "privatePractitioner@example.com"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "7150dc91-bdb6-472f-8f36-71138f80e478",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-16T15:19:38.087Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
+    "docketNumberWithSuffix": "126-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-16T15:19:38.084Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-16T15:19:38.086Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-10-16T15:19:38.086Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "1023bbb8-f66a-49e3-80b3-c42759b50075",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
+    "docketNumber": "126-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-16T15:19:38.087Z"
+  },
+  {
     "sk": "user|23dd8806-c0c7-4265-81f0-5f264ef78248",
     "pk": "section|clerkofcourt"
   },
@@ -8083,7 +8353,7 @@
   },
   {
     "sk": "docketNumberCounter-2020",
-    "id": 25,
+    "id": 26,
     "pk": "docketNumberCounter-2020"
   },
   {
@@ -8211,7 +8481,8 @@
       "name": "Bart Simpson",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9079,12 +9350,6 @@
     "pk": "case|124-20"
   },
   {
-    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline-catalog|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "2019-08-25T04:00:00.000Z",
-    "gsi1pk": "case-deadline-catalog"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -9194,7 +9459,8 @@
       "name": "Eve Brewer",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9375,10 +9641,13 @@
     "pk": "case|102-20"
   },
   {
+    "associatedJudge": "Chief Judge",
     "createdAt": "2019-08-22T12:51:32.434Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
+    "entityName": "CaseDeadline",
     "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sortableDocketNumber": 19000107,
     "description": "Filing fee due",
     "pk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "docketNumber": "107-19"
@@ -9712,7 +9981,8 @@
       "name": "Brett Osborne",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "preferredTrialCity": "Birmingham, Alabama",
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -10056,7 +10326,8 @@
       "name": "Brian Earl Spilner",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2019-12-11T15:25:55.006Z",
     "noticeOfAttachments": false,
@@ -10542,7 +10813,6 @@
     "contactPrimary": {
       "isAddressSealed": false,
       "address3": "Architecto assumenda",
-      "contactId": "4c3c60ac-7628-459b-bc11-1d43a26405b3",
       "address2": "Suscipit animi solu",
       "city": "Aspernatur nostrum s",
       "address1": "68 Fabien Freeway",
@@ -10552,7 +10822,8 @@
       "phone": "+1 (537) 235-6147",
       "name": "Brett Osborne",
       "state": "AK",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2020-10-13T20:23:17.556Z",
     "noticeOfAttachments": false,
@@ -10766,7 +11037,8 @@
       "name": "Denise Gould",
       "state": "MS",
       "countryType": "domestic",
-      "email": "petitioner@example.com"
+      "email": "petitioner@example.com",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "createdAt": "2019-07-12T17:09:41.026Z",
     "noticeOfAttachments": false,

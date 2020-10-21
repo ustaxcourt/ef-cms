@@ -6,19 +6,58 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = applicationContext;
 
 describe('getCaseDeadlinesAction', () => {
-  it('gets all case deadlines', async () => {
+  const START_DATE = '2020-01-01T05:00:00.000Z';
+  const END_DATE = '2020-02-01T05:00:00.000Z';
+
+  beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getCaseDeadlinesInteractor.mockReturnValue('hello world');
+      .getCaseDeadlinesInteractor.mockReturnValue({
+        deadlines: [{ description: 'hello world' }],
+        totalCount: 1,
+      });
+  });
 
-    const START_DATE = '2020-01-01T05:00:00.000Z';
-    const END_DATE = '2020-02-01T05:00:00.000Z';
-
+  it('gets all case deadlines with a default page of 1 if a page is not set', async () => {
     const result = await runAction(getCaseDeadlinesAction, {
       modules: {
         presenter,
       },
       state: {
+        caseDeadlineReport: {
+          judgeFilter: 'Buch',
+        },
+        screenMetadata: {
+          filterEndDate: END_DATE,
+          filterStartDate: START_DATE,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getCaseDeadlinesInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      endDate: END_DATE,
+      judge: 'Buch',
+      page: 1,
+      startDate: START_DATE,
+    });
+    expect(result.output).toEqual({
+      caseDeadlines: [{ description: 'hello world' }],
+      totalCount: 1,
+    });
+  });
+
+  it('gets all case deadlines with a page from state.caseDeadlineReport.page', async () => {
+    await runAction(getCaseDeadlinesAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDeadlineReport: {
+          page: 3,
+        },
         screenMetadata: {
           filterEndDate: END_DATE,
           filterStartDate: START_DATE,
@@ -29,9 +68,7 @@ describe('getCaseDeadlinesAction', () => {
       applicationContext.getUseCases().getCaseDeadlinesInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      endDate: END_DATE,
-      startDate: START_DATE,
+      page: 3,
     });
-    expect(result.output.caseDeadlines).toEqual('hello world');
   });
 });

@@ -251,7 +251,7 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   }
 
   this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending,
+    docketEntry => docketEntry.pending && docketEntry.servedAt,
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -311,6 +311,13 @@ Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
 }) {
+  if (
+    applicationContext.getCurrentUser().role === ROLES.petitioner &&
+    applicationContext.getCurrentUser().userId === rawCase.userId
+  ) {
+    rawCase.contactPrimary.contactId = rawCase.userId;
+  }
+
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -815,7 +822,9 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(docketEntry => docketEntry.pending);
+  return this.docketEntries.some(
+    docketEntry => docketEntry.pending && docketEntry.servedAt,
+  );
 };
 
 /**
@@ -1262,7 +1271,7 @@ Case.prototype.checkForReadyForTrial = function () {
 };
 
 /**
- * generates a sortable docket number in ${year}${index} format
+ * returns a sortable docket number using this.docketNumber in ${year}${index} format
  *
  * @returns {string} the sortable docket number
  */
@@ -1270,8 +1279,18 @@ Case.prototype.generateSortableDocketNumber = function () {
   if (!this.docketNumber) {
     return;
   }
+  return Case.getSortableDocketNumber(this.docketNumber);
+};
+
+/**
+ * returns a sortable docket number in ${year}${index} format
+ *
+ * @param {string} docketNumber the docket number to use
+ * @returns {string} the sortable docket number
+ */
+Case.getSortableDocketNumber = function (docketNumber) {
   // Note: This does not yet take into account pre-2000's years
-  const docketNumberSplit = this.docketNumber.split('-');
+  const docketNumberSplit = docketNumber.split('-');
   docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
   return parseInt(`${docketNumberSplit[1]}${docketNumberSplit[0]}`);
 };

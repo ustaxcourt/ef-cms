@@ -49,7 +49,7 @@ module.exports = {
       },
       'mapping.total_fields.limit': '1000',
       number_of_replicas: 1,
-      number_of_shards: 10,
+      number_of_shards: 1,
     },
   },
 };
