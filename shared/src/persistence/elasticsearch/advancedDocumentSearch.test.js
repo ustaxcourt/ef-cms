@@ -3,6 +3,29 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { advancedDocumentSearch } = require('./advancedDocumentSearch');
 
+const getSource = judge => ({
+  includes: [
+    'caseCaption',
+    'contactPrimary',
+    'contactSecondary',
+    'docketEntryId',
+    'docketNumber',
+    'docketNumberSuffix',
+    'docketNumberWithSuffix',
+    'documentContents',
+    'documentTitle',
+    'documentType',
+    'eventCode',
+    'filingDate',
+    'irsPractitioners',
+    'isSealed',
+    'numberOfPages',
+    'privatePractitioners',
+    'sealedDate',
+    judge,
+  ],
+});
+
 describe('advancedDocumentSearch', () => {
   let searchStub;
   const orderEventCodes = ['O', 'OOD'];
@@ -67,7 +90,7 @@ describe('advancedDocumentSearch', () => {
     },
   });
 
-  const getCaseMappingQueryParams = caseTitleOrPetitioner => {
+  const getCaseMappingQueryParams = (caseTitleOrPetitioner, judge) => {
     let query = {
       match_all: {},
     };
@@ -88,6 +111,7 @@ describe('advancedDocumentSearch', () => {
     return {
       has_parent: {
         inner_hits: {
+          _source: getSource(judge),
           name: 'case-mappings',
         },
         parent_type: 'case',
@@ -153,7 +177,7 @@ describe('advancedDocumentSearch', () => {
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
-      getCaseMappingQueryParams(), // match all parents
+      getCaseMappingQueryParams(null, 'signedJudgeName'), // match all parents
       {
         bool: {
           should: {
@@ -197,7 +221,7 @@ describe('advancedDocumentSearch', () => {
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...opinionQueryParams,
-      getCaseMappingQueryParams(), // match all parents
+      getCaseMappingQueryParams(null, 'judge'), // match all parents
       {
         bool: {
           should: {
@@ -306,7 +330,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(), // match all parents
+        getCaseMappingQueryParams(null, 'judge'), // match all parents
         {
           bool: {
             should: {
@@ -328,7 +352,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(), // match all parents
+        getCaseMappingQueryParams(null, 'signedJudgeName'), // match all parents
         {
           bool: {
             should: {
@@ -351,7 +375,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(), // match all parents
+        getCaseMappingQueryParams(null, 'judge'), // match all parents
         {
           bool: {
             should: {
