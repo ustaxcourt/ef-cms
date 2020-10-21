@@ -75,8 +75,14 @@
               - "S"
               - "SL"
               - "W"
+          hasIrsPractitioner: 
+            type: "boolean"
           isSealed: 
             type: "boolean"
+          partyType: 
+            type: "any"
+            flags: 
+              presence: "forbidden"
           receivedAt: 
             type: "any"
             flags: 
@@ -1226,8 +1232,42 @@
           name: "min"
           args: 
             limit: 1
+    hasIrsPractitioner: 
+      type: "boolean"
+      flags: 
+        presence: "required"
     isSealed: 
       type: "boolean"
+    partyType: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+        description: "Party type of the case petitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Conservator"
+        - "Corporation"
+        - "Custodian"
+        - "Donor"
+        - "Estate with an executor/personal representative/fiduciary/etc."
+        - "Estate without an executor/personal representative/fiduciary/etc."
+        - "Guardian"
+        - "Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)"
+        - "Next friend for a minor (without a guardian, conservator, or other like fiduciary)"
+        - "Partnership (as the Tax Matters Partner)"
+        - "Partnership (as a partnership representative under the BBA regime)"
+        - "Partnership (as a partner other than Tax Matters Partner)"
+        - "Petitioner"
+        - "Petitioner & deceased spouse"
+        - "Petitioner & spouse"
+        - "Surviving spouse"
+        - "Transferee"
+        - "Trust"
     receivedAt: 
       type: "date"
       flags: 

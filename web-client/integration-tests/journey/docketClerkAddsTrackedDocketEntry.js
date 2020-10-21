@@ -1,19 +1,9 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
+export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
+  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
-  test,
-  fakeFile,
-) => {
-  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
-
-  return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
+  return it('Docketclerk adds tracked paper filing', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -22,11 +12,20 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('updateScreenMetadataSequence', {
-      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      value: false,
+    await test.runSequence('fileDocketEntrySequence', {
+      docketNumber: test.docketNumber,
     });
 
+    expect(test.getState('validationErrors')).toMatchObject({
+      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      primaryDocumentFile:
+        'Scan or upload a document to serve, or click Save for Later to serve at a later time',
+    });
+
+    // primary document
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
@@ -39,35 +38,47 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       key: 'dateReceivedYear',
       value: 2018,
     });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'partyPrimary',
       value: true,
     });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'A',
+      value: 'APPL',
     });
+
+    expect(test.getState('form.documentType')).toEqual('Application');
+
+    await test.runSequence('fileDocketEntrySequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({
+      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+    });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'pending',
-      value: true,
+      key: 'freeText',
+      value: 'Application for Flavortown',
     });
 
     await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isSavingForLater: true,
     });
 
-    test.docketEntryId = test
-      .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === 'A').docketEntryId;
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
@@ -76,12 +87,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('form')).toEqual({});
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(
-      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-    ).toEqual([]);
+    expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
+    expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
   });
 };
