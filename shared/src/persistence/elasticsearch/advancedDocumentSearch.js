@@ -113,10 +113,6 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (docketNumber) {
-    queryParams.push();
-  }
-
   if (startDate) {
     queryParams.push({
       range: {
