@@ -54,43 +54,39 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (caseTitleOrPetitioner) {
-    queryParams.push({
-      has_parent: {
-        inner_hits: {
-          _source: {
-            includes: sourceFields,
-          },
-          name: 'case-mappings',
+  const parentQueryParams = {
+    has_parent: {
+      inner_hits: {
+        _source: {
+          includes: sourceFields,
         },
-        parent_type: 'case',
-        query: {
-          simple_query_string: {
-            fields: [
-              'caseCaption.S',
-              'contactPrimary.M.name.S',
-              'contactSecondary.M.name.S',
-            ],
-            query: caseTitleOrPetitioner,
-          },
-        },
+        name: 'case-mappings',
       },
-    });
-  } else {
-    // We need to still look up the parent to associate the case data
-    queryParams.push({
-      has_parent: {
-        inner_hits: {
-          _source: {
-            includes: sourceFields,
-          },
-          name: 'case-mappings',
-        },
-        parent_type: 'case',
-        query: { match_all: {} },
+      parent_type: 'case',
+      query: { match_all: {} },
+    },
+  };
+
+  if (docketNumber) {
+    parentQueryParams.has_parent.query = {
+      match: {
+        'docketNumber.S': { operator: 'and', query: docketNumber },
       },
-    });
+    };
+  } else if (caseTitleOrPetitioner) {
+    parentQueryParams.has_parent.query = {
+      simple_query_string: {
+        fields: [
+          'caseCaption.S',
+          'contactPrimary.M.name.S',
+          'contactSecondary.M.name.S',
+        ],
+        query: caseTitleOrPetitioner,
+      },
+    };
   }
+
+  queryParams.push(parentQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
@@ -118,11 +114,7 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (docketNumber) {
-    queryParams.push({
-      match: {
-        'docketNumber.S': { operator: 'and', query: docketNumber },
-      },
-    });
+    queryParams.push();
   }
 
   if (startDate) {
