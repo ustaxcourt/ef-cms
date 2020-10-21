@@ -103,9 +103,7 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
 
   const qcWorkItem = formattedEntry.workItem;
 
-  formattedEntry.qcWorkItemsCompleted = !!(
-    qcWorkItem && qcWorkItem.completedAt
-  );
+  formattedEntry.qcWorkItemsCompleted = !qcWorkItem || !!qcWorkItem.completedAt;
 
   formattedEntry.isUnservable =
     UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
