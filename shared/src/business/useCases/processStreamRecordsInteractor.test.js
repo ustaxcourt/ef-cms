@@ -220,6 +220,8 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
+      expect(mockGetCase).toHaveBeenCalled();
+
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
           .calls[0][0].records,
@@ -228,9 +230,11 @@ describe('processStreamRecordsInteractor', () => {
           dynamodb: {
             Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
             NewImage: {
-              ...caseDataMarshalled,
               case_relations: { name: 'case' },
+              docketNumber: { S: '123-45' },
               entityName: { S: 'CaseDocketEntryMapping' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'case|123-45' },
             },
           },
           eventName: 'MODIFY',

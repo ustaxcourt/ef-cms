@@ -37,6 +37,7 @@ const partitionRecords = records => {
 const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
+  utils,
 }) => {
   if (!caseEntityRecords.length) return;
 
@@ -48,8 +49,16 @@ const processCaseEntries = async ({
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords = [];
 
+    // We fetch this to get practitioners arrays (possible performance improvement here)
+    const fullCase = await utils.getCase({
+      applicationContext,
+      docketNumber: caseNewImage.docketNumber.S,
+    });
+
+    const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
+
     // we don't need to store the docket entry list onto the case
-    delete caseNewImage.docketEntries;
+    delete marshalledCase.docketEntries;
 
     caseRecords.push({
       dynamodb: {
@@ -62,7 +71,7 @@ const processCaseEntries = async ({
           },
         },
         NewImage: {
-          ...caseNewImage, // TODO: We don't need docketEntries array - remove for better perf (consider for actual case index as well)
+          ...marshalledCase,
           case_relations: { name: 'case' },
           entityName: { S: 'CaseDocketEntryMapping' },
         }, // Create a mapping record on the docket-entry index for parent-child relationships
