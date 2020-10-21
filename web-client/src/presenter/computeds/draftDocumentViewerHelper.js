@@ -35,6 +35,12 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     };
   }
 
+  // apply draft order state to this document for purposes
+  // of deciding numerous exported 'show*' properties
+  Object.assign(
+    formattedDocumentToDisplay,
+    formattedDocumentToDisplay.draftOrderState,
+  );
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     formattedDocumentToDisplay.eventCode,
   );
