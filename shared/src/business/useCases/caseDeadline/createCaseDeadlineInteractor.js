@@ -24,15 +24,6 @@ exports.createCaseDeadlineInteractor = async ({
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
-  const newCaseDeadline = new CaseDeadline(caseDeadline, {
-    applicationContext,
-  });
-
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: newCaseDeadline.validate().toRawObject(),
-  });
-
   const caseDetail = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -40,6 +31,18 @@ exports.createCaseDeadlineInteractor = async ({
       docketNumber: caseDeadline.docketNumber,
     });
   let caseEntity = new Case(caseDetail, { applicationContext });
+
+  const newCaseDeadline = new CaseDeadline(
+    { ...caseDeadline, associatedJudge: caseEntity.associatedJudge },
+    {
+      applicationContext,
+    },
+  );
+
+  await applicationContext.getPersistenceGateway().createCaseDeadline({
+    applicationContext,
+    caseDeadline: newCaseDeadline.validate().toRawObject(),
+  });
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()

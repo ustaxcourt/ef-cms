@@ -9,19 +9,28 @@ const test = setupTest();
 const publicFieldsVisible = () => {
   expect(test.getState('caseDetail.docketNumber')).toBeDefined();
   expect(test.getState('caseDetail.caseCaption')).toBeDefined();
-  expect(test.getState('caseDetail.caseType')).toBeDefined();
   expect(test.getState('caseDetail.docketEntries.0')).toBeDefined();
 };
 
 const associatedFieldsVisible = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toBeDefined();
+  expect(test.getState('caseDetail.contactPrimary')).toMatchObject({
+    address1: expect.anything(),
+    city: expect.anything(),
+    name: expect.anything(),
+    phone: expect.anything(),
+    state: expect.anything(),
+  });
 };
 
-// const associatedFieldsBlocked = () => {
-//   expect(test.getState('caseDetail.contactPrimary')).toBeUndefined();
-//   expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-//   expect(test.getState('caseDetail.userId')).toBeUndefined();
-// };
+const associatedFieldsBlocked = () => {
+  expect(test.getState('caseDetail.contactPrimary')).toEqual({
+    name: expect.anything(),
+    state: expect.anything(),
+  });
+  expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
+  expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
+  expect(test.getState('caseDetail.userId')).toBeUndefined();
+};
 
 const internalFieldsVisible = () => {
   expect(test.getState('caseDetail.archivedCorrespondences')).toBeDefined();
@@ -75,9 +84,6 @@ const internalFieldsBlocked = () => {
     test.getState('caseDetail.docketEntries.0.judgeUserId'),
   ).toBeUndefined();
   expect(test.getState('caseDetail.docketEntries.0.pending')).toBeUndefined();
-  expect(
-    test.getState('caseDetail.docketEntries.0.processingStatus'),
-  ).toBeUndefined();
   expect(test.getState('caseDetail.docketEntries.0.qcAt')).toBeUndefined();
   expect(
     test.getState('caseDetail.docketEntries.0.qcByUserId'),
@@ -138,23 +144,19 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsBlocked();
     stinBlocked();
-
-    expect(
-      some(test.getState('caseDetail.docketEntries'), { eventCode: 'STIN' }),
-    ).toBe(false);
   });
 
   loginAs(test, 'irsSuperuser@example.com');
-  it('IRS Super User views case detail', async () => {
+  it('IRS Super User views case detail when the case has NOT been served', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
     publicFieldsVisible();
-    associatedFieldsVisible();
+    associatedFieldsBlocked();
     internalFieldsBlocked();
-    stinVisible();
+    stinBlocked();
   });
 
   loginAs(test, 'privatePractitioner@example.com');
@@ -165,7 +167,20 @@ describe('Case permissions test', () => {
     });
 
     publicFieldsVisible();
-    // associatedFieldsBlocked();
+    associatedFieldsBlocked();
+    internalFieldsBlocked();
+    stinBlocked();
+  });
+
+  loginAs(test, 'petitioner2@example.com');
+  it('Unassociated petitioner views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsBlocked();
     internalFieldsBlocked();
     stinBlocked();
   });
@@ -208,5 +223,18 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsVisible();
     stinBlocked();
+  });
+
+  loginAs(test, 'irsSuperuser@example.com');
+  it('IRS Super User views case detail when the case has been served', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsVisible();
+    internalFieldsBlocked();
+    stinVisible();
   });
 });

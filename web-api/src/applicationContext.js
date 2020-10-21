@@ -156,9 +156,6 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
-  createJudgeUserInteractor,
-} = require('../../shared/src/business/useCases/judges/createJudgeUserInteractor');
-const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -371,7 +368,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
   getCaseDeadlinesByDateRange,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDateRange');
+} = require('../../shared/src/persistence/elasticsearch/caseDeadlines/getCaseDeadlinesByDateRange');
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
@@ -484,6 +481,9 @@ const {
 const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
+const {
+  getFullCaseByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/cases/getFullCaseByDocketNumber');
 const {
   getHealthCheckInteractor,
 } = require('../../shared/src/business/useCases/health/getHealthCheckInteractor');
@@ -1144,6 +1144,7 @@ const gatewayMethods = {
     createUser,
     createUserInboxRecord,
     fetchPendingItems: fetchPendingItemsPersistence,
+    getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
@@ -1501,7 +1502,6 @@ module.exports = appContextUser => {
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
-        createJudgeUserInteractor,
         createMessageInteractor,
         createPetitionerAccountInteractor,
         createPractitionerUserInteractor,
@@ -1685,9 +1685,9 @@ module.exports = appContextUser => {
     notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();
 
-      const notifyAsync = message => {
+      const notifyAsync = messageForNotification => {
         return new Promise(resolve => {
-          honeybadger.notify(message, null, null, resolve);
+          honeybadger.notify(messageForNotification, null, null, resolve);
         });
       };
 
