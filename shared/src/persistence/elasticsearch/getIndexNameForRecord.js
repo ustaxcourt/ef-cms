@@ -21,6 +21,10 @@ const isRecordOfType = (record, type) => {
       return true;
     }
 
+    if (type == 'DocketEntry' && entityName === 'CaseDocketEntryMapping') {
+      return true;
+    }
+
     if (entityName === type) {
       return true;
     }

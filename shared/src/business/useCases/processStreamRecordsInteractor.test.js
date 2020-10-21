@@ -229,156 +229,20 @@ describe('processStreamRecordsInteractor', () => {
         {
           dynamodb: {
             Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
-            NewImage: caseDataMarshalled,
+            NewImage: {
+              case_relations: { name: 'case' },
+              docketNumber: { S: '123-45' },
+              entityName: { S: 'CaseDocketEntryMapping' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'case|123-45' },
+            },
           },
           eventName: 'MODIFY',
         },
-      ]);
-    });
-
-    it('indexes all docket entries for each case', async () => {
-      const docketEntryData = {
-        docketEntryId: '123',
-        entityName: 'DocketEntry',
-        pk: 'docket-entry|123',
-        sk: 'docket-entry|123',
-      };
-
-      const docketEntryDataMarshalled = {
-        docketEntryId: { S: '123' },
-        entityName: { S: 'DocketEntry' },
-        pk: { S: 'docket-entry|123' },
-        sk: { S: 'docket-entry|123' },
-      };
-
-      const caseData = {
-        caseCaption: 'hello world',
-        contactPrimary: {
-          name: 'bob',
-        },
-        contactSecondary: null,
-        docketEntries: [docketEntryData],
-        docketNumber: '123-45',
-        entityName: 'Case',
-        irsPractitioners: [
-          {
-            userId: 'abc-123',
-          },
-        ],
-        isSealed: null,
-        pk: 'case|123-45',
-        privatePractitioners: [
-          {
-            userId: 'abc-123',
-          },
-        ],
-        sealedDate: null,
-        sk: 'case|123-45',
-      };
-
-      const caseDataMarshalled = {
-        caseCaption: { S: 'hello world' },
-        contactPrimary: {
-          M: {
-            name: {
-              S: 'bob',
-            },
-          },
-        },
-        contactSecondary: {
-          NULL: true,
-        },
-        docketEntries: {
-          L: [{ M: docketEntryDataMarshalled }],
-        },
-        docketNumber: { S: '123-45' },
-        entityName: { S: 'Case' },
-        irsPractitioners: {
-          L: [
-            {
-              M: {
-                userId: {
-                  S: 'abc-123',
-                },
-              },
-            },
-          ],
-        },
-        isSealed: {
-          NULL: true,
-        },
-        pk: { S: 'case|123-45' },
-        privatePractitioners: {
-          L: [
-            {
-              M: {
-                userId: {
-                  S: 'abc-123',
-                },
-              },
-            },
-          ],
-        },
-        sealedDate: {
-          NULL: true,
-        },
-        sk: { S: 'case|123-45' },
-      };
-
-      mockGetCase.mockReturnValue({
-        ...caseData,
-      });
-
-      mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
-
-      const utils = {
-        getCase: mockGetCase,
-        getDocument: mockGetDocument,
-      };
-
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: { S: caseData.pk },
-                sk: { S: caseData.sk },
-              },
-              NewImage: caseDataMarshalled,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-        utils,
-      });
-
-      expect(mockGetCase).toHaveBeenCalled();
-
-      const docketEntryCase = { ...caseDataMarshalled };
-      delete docketEntryCase.docketEntries;
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
         {
           dynamodb: {
             Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
             NewImage: caseDataMarshalled,
-          },
-          eventName: 'MODIFY',
-        },
-        {
-          dynamodb: {
-            Keys: {
-              pk: { S: docketEntryData.pk },
-              sk: { S: docketEntryData.sk },
-            },
-            NewImage: {
-              ...docketEntryCase,
-              ...docketEntryDataMarshalled,
-            },
           },
           eventName: 'MODIFY',
         },
@@ -393,14 +257,14 @@ describe('processStreamRecordsInteractor', () => {
     const docketEntryData = {
       docketEntryId: '123',
       entityName: 'DocketEntry',
-      pk: 'docket-entry|123',
+      pk: 'case|123',
       sk: 'docket-entry|123',
     };
 
     const docketEntryDataMarshalled = {
       docketEntryId: { S: '123' },
       entityName: { S: 'DocketEntry' },
-      pk: { S: 'docket-entry|123' },
+      pk: { S: 'case|123' },
       sk: { S: 'docket-entry|123' },
     };
 
@@ -526,7 +390,6 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
       expect(mockGetDocument).not.toHaveBeenCalled();
 
       const docketEntryCase = { ...caseDataMarshalled };
@@ -542,7 +405,13 @@ describe('processStreamRecordsInteractor', () => {
               pk: { S: docketEntryData.pk },
               sk: { S: docketEntryData.sk },
             },
-            NewImage: { ...docketEntryCase, ...docketEntryDataMarshalled },
+            NewImage: {
+              ...docketEntryDataMarshalled,
+              case_relations: {
+                name: 'document',
+                parent: 'case|123_case|123|mapping',
+              },
+            },
           },
           eventName: 'MODIFY',
         },
@@ -570,7 +439,6 @@ describe('processStreamRecordsInteractor', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
       expect(mockGetDocument).toHaveBeenCalled();
 
       const docketEntryCase = {
@@ -588,7 +456,13 @@ describe('processStreamRecordsInteractor', () => {
               pk: { S: docketEntryData.pk },
               sk: { S: docketEntryData.sk },
             },
-            NewImage: { ...docketEntryCase, ...docketEntryDataMarshalled },
+            NewImage: {
+              ...docketEntryDataMarshalled,
+              case_relations: {
+                name: 'document',
+                parent: 'case|123_case|123|mapping',
+              },
+            },
           },
           eventName: 'MODIFY',
         },
