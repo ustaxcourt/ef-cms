@@ -13,8 +13,8 @@ Running the script will generate a log file, `bulk-import-log.txt`. Users that w
 
 Notes:
 1. If there is no postalCode available 
-    a. For DOMESTIC country types, postalCode should defaults to '00000' when there is no value supplied
-    b. For INTERNTIONAL country types, postalCode should be set to the country name and defaults to 'N/A' when there is no value supplied
+    a. For DOMESTIC country types, postalCode should default to '00000' when there is no value supplied
+    b. For INTERNATIONAL country types, postalCode should be set to the country name and defaults to 'N/A' when there is no value supplied
 2. If there is no value supplied for `birthYear`, it defaults to 1950 (this happens programmatically)
 3. If there is no value supplied for `originalBarState`, it defaults to 'N/A' (this happens programmatically)
 4. If the `admissionStatus` is not 'Active', the practitioner's role is set to `inactivePractitioner`
