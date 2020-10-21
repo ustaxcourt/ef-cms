@@ -2352,6 +2352,37 @@ describe('formattedCaseDetail', () => {
               workItemId: '5f4eb5ac-099d-4e14-8b26-dfbf1828f0d7',
             },
           },
+          {
+            attachments: false,
+            certificateOfService: false,
+            certificateOfServiceDate: null,
+            createdAt: '2020-09-18T17:38:32.417Z',
+            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
+            docketNumber: '169-20',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            draftOrderState: null,
+            entityName: 'DocketEntry',
+            eventCode: 'A',
+            filedBy: 'Resp.',
+            filingDate: '2020-09-18T17:38:32.418Z',
+            hasSupportingDocuments: false,
+            index: 4,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 2,
+            partyIrsPractitioner: true,
+            pending: true,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:32.418Z',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         ],
         docketNumber: '169-20',
         docketNumberSuffix: 'L',
@@ -2425,8 +2456,14 @@ describe('formattedCaseDetail', () => {
         {
           isOnDocketRecord: true,
         },
+        {
+          isOnDocketRecord: true,
+        },
       ]);
 
+      expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toEqual(
+        1,
+      );
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         {
           isOnDocketRecord: true,
