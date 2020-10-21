@@ -73,6 +73,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     documentTitle: documentMetadata.documentTitle,
     documentType: documentMetadata.documentType,
     draftOrderState: documentMetadata.draftOrderState,
+    eventCode: documentMetadata.eventCode,
     freeText: documentMetadata.freeText,
   };
 
