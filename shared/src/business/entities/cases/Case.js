@@ -251,7 +251,7 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   }
 
   this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending,
+    docketEntry => docketEntry.pending && docketEntry.servedAt,
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
