@@ -52,10 +52,15 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
 exports.createPractitionerUser = async ({ applicationContext, user }) => {
   let userId = applicationContext.getUniqueId();
+  const practitionerRoleTypes = [
+    ROLES.privatePractitioner,
+    ROLES.irsPractitioner,
+    ROLES.inactivePractitioner,
+  ];
 
-  if (![ROLES.privatePractitioner, ROLES.irsPractitioner].includes(user.role)) {
+  if (!practitionerRoleTypes.includes(user.role)) {
     throw new Error(
-      'Practitioner users must have either private or IRS practitioner role',
+      'Practitioner users must have either private IRS practitioner role, or be an inactive practitioner',
     );
   }
 
@@ -114,6 +119,8 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
           Username: response.Username,
         })
         .promise();
+
+      userId = response.Username;
     }
   }
 

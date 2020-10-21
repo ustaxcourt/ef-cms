@@ -11,6 +11,8 @@ const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 const CURRENT_YEAR = +formatNow('YYYY');
 
+const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
+
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -1045,6 +1047,7 @@ module.exports = deepFreeze({
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   CURRENT_YEAR,
   DEADLINE_REPORT_PAGE_SIZE,
+  DEFAULT_PRACTITIONER_BIRTH_YEAR,
   DEFAULT_PROCEDURE_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,

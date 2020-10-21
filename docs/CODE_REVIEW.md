@@ -113,6 +113,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 	- [ ] methodically review all new tests for correctness, quality of naming
 - [ ] determine what code isn’t tested, review that rigorously
 - [ ] review documentation to ensure that it matches changes
+	- [ ] user-visible changes (including API users like the IRS) are documented in CHANGELOG.md (which is linked from US Tax Court website).
 - [ ] provide comments on the pull request on GitHub, as necessary
 	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
 	- [ ] for comments that are more general, attach the comment to a random line in `README.md` (as opposed to commenting on the pull request itself), to be able to use GitHub's ability to thread discussions on those comments
