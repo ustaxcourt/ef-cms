@@ -56,11 +56,6 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'exhibits',
-      value: false,
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'attachments',
       value: false,
     });

@@ -54,7 +54,7 @@ describe('run trial session planning report', () => {
       .getPersistenceGateway()
       .getTrialSessions.mockReturnValue([
         {
-          judge: { name: 'Judge Armen' },
+          judge: { name: 'Judge Colvin' },
           sessionType: 'Regular',
           startDate: '2020-05-01T21:40:46.415Z',
           term: 'spring',
@@ -83,7 +83,7 @@ describe('run trial session planning report', () => {
     it('returns previous terms and the trial locations and case counts', async () => {
       let mockTrialSessions = [
         {
-          judge: { name: 'Judge Armen' },
+          judge: { name: 'Judge Colvin' },
           sessionType: 'Regular',
           startDate: '2019-05-01T21:40:46.415Z',
           term: 'spring',
@@ -158,7 +158,7 @@ describe('run trial session planning report', () => {
       expect(results.trialLocationData.length).toEqual(TRIAL_CITIES.ALL.length);
       expect(results.trialLocationData[0]).toMatchObject({
         allCaseCount: 4,
-        previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],
+        previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Colvin'], []],
         regularCaseCount: 2,
         smallCaseCount: 2,
         stateAbbreviation: 'AL',

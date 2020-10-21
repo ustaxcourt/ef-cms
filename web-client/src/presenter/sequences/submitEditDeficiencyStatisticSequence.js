@@ -1,5 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
@@ -30,7 +30,7 @@ export const submitEditDeficiencyStatisticSequence = [
             setSaveAlertsForNavigationAction,
             setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
-            navigateToCaseDetailCaseInformationAction,
+            navigateToCaseDetailCaseInformationActionFactory(),
           ],
         },
       ]),

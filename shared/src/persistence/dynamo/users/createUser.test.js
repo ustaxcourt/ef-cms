@@ -105,7 +105,6 @@ describe('createUser', () => {
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
       MessageAction: 'SUPPRESS',
-      TemporaryPassword: expect.anything(),
       UserAttributes: [
         {
           Name: 'email_verified',

@@ -11,7 +11,6 @@ export const SectionWorkQueueInProgress = connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItems: state.selectedWorkItems,
-    setFocusedWorkItemSequence: sequences.setFocusedWorkItemSequence,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
@@ -21,7 +20,6 @@ export const SectionWorkQueueInProgress = connect(
     selectAssigneeSequence,
     selectedWorkItems,
     selectWorkItemSequence,
-    setFocusedWorkItemSequence,
     users,
     workQueueHelper,
   }) {
@@ -74,39 +72,22 @@ export const SectionWorkQueueInProgress = connect(
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => (
-            <tbody
-              key={idx}
-              onClick={() =>
-                setFocusedWorkItemSequence({
-                  queueType: 'workQueue',
-                  uiKey: item.uiKey,
-                })
-              }
-            >
+            <tbody key={idx}>
               <tr>
                 {workQueueHelper.showSelectColumn && (
                   <>
                     <td aria-hidden="true" className="focus-toggle" />
-                    <td
-                      className="message-select-control"
-                      onClick={e => {
-                        selectWorkItemSequence({
-                          workItem: item,
-                        });
-                        e.stopPropagation();
-                      }}
-                    >
+                    <td className="message-select-control">
                       <input
                         aria-label="Select work item"
                         checked={item.selected}
                         className="usa-checkbox__input"
                         id={item.workItemId}
                         type="checkbox"
-                        onChange={e => {
+                        onChange={() => {
                           selectWorkItemSequence({
                             workItem: item,
                           });
-                          e.stopPropagation();
                         }}
                       />
                       <label
@@ -128,13 +109,7 @@ export const SectionWorkQueueInProgress = connect(
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
-                    <a
-                      className="case-link"
-                      href={item.editLink}
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
-                    >
+                    <a className="case-link" href={item.editLink}>
                       {item.docketEntry.documentTitle ||
                         item.docketEntry.documentType}
                     </a>

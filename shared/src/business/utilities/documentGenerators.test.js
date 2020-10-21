@@ -106,7 +106,7 @@ describe('documentGenerators', () => {
         data: {
           formattedCases: [
             {
-              associatedJudge: 'Judge Armen',
+              associatedJudge: 'Judge Colvin',
               caseTitle: 'rick james b',
               docketNumber: '101-20',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,

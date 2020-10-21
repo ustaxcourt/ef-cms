@@ -156,9 +156,6 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
-  createJudgeUserInteractor,
-} = require('../../shared/src/business/useCases/judges/createJudgeUserInteractor');
-const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -352,12 +349,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCaseDeadlines,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
-const {
-  getAllCaseDeadlinesInteractor,
-} = require('../../shared/src/business/useCases/getAllCaseDeadlinesInteractor');
-const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -376,11 +367,17 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getCaseDeadlinesByDateRange,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDateRange');
+const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
+const {
+  getCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/getCaseDeadlinesInteractor');
 const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
@@ -400,20 +397,11 @@ const {
   getCasesByLeadDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
 const {
-  getCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
-const {
-  getCasesByUserInteractor,
-} = require('../../shared/src/business/useCases/getCasesByUserInteractor');
-const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getClosedCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
 const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
@@ -536,9 +524,6 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getOpenCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
-const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
@@ -637,9 +622,6 @@ const {
 const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
-const {
-  getUserCases,
-} = require('../../shared/src/persistence/dynamo/cases/getUserCases');
 const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
@@ -880,9 +862,6 @@ const {
 const {
   updateCaseCorrespondence,
 } = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
-const {
-  updateCaseDeadline,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
 const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
@@ -1178,7 +1157,6 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
     updateCase,
-    updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
@@ -1212,18 +1190,16 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCaseDeadlines,
   getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
+  getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
-  getCasesByUser,
   getClientId,
-  getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1242,7 +1218,6 @@ const gatewayMethods = {
   getInternalUsers,
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
-  getOpenCasesByUser,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1258,7 +1233,6 @@ const gatewayMethods = {
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
-  getUserCases,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersBySearchKey,
@@ -1524,7 +1498,6 @@ module.exports = appContextUser => {
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
-        createJudgeUserInteractor,
         createMessageInteractor,
         createPetitionerAccountInteractor,
         createPractitionerUserInteractor,
@@ -1554,14 +1527,13 @@ module.exports = appContextUser => {
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
-        getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
+        getCaseDeadlinesInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getCasesByUserInteractor,
         getClosedCasesInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,

@@ -1,8 +1,17 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  reactTemplateGenerator,
+} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
+jest.mock(
+  '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
+  () => ({
+    reactTemplateGenerator: jest.fn(),
+  }),
+);
 
 describe('sendServedPartiesEmails', () => {
   beforeAll(() => {
@@ -20,6 +29,7 @@ describe('sendServedPartiesEmails', () => {
           { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
         ],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.generalDocket,
       },
       docketEntryEntity: {
@@ -58,6 +68,7 @@ describe('sendServedPartiesEmails', () => {
           { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
         ],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.new,
       },
       docketEntryEntity: {
@@ -92,6 +103,7 @@ describe('sendServedPartiesEmails', () => {
           { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
         ],
         docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.generalDocket,
       },
       docketEntryEntity: {
@@ -112,5 +124,33 @@ describe('sendServedPartiesEmails', () => {
       applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
         .calls[0][0].destinations,
     ).toMatchObject([{ email: 'irsSuperuser@example.com' }]);
+  });
+
+  it('should concatenate the docketNumber and docketNumberSuffix if a docketNumberSuffix is present', async () => {
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity: {
+        caseCaption: 'A Caption',
+        docketEntries: [
+          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+        ],
+        docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      docketEntryEntity: {
+        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+        documentTitle: 'The Document',
+        index: 1,
+        servedAt: '2019-03-01T21:40:46.415Z',
+      },
+      servedParties: {
+        electronic: [],
+      },
+    });
+
+    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    expect(caseDetail.docketNumber).toEqual('123-20');
+    expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
   });
 });

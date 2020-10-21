@@ -1,4 +1,4 @@
-import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
@@ -29,7 +29,7 @@ export const updatePetitionerInformationFormSequence = [
       setPaperServicePartiesAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
-      navigateToCaseDetailCaseInformationAction,
+      navigateToCaseDetailCaseInformationActionFactory('petitioner'),
     ]),
   },
 ];

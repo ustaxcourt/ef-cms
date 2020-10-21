@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { presenter } from '../presenter-mock';
 import { selectWorkItemSequence } from '../sequences/selectWorkItemSequence';
 
-describe('setFocusedWorkItemSequence', () => {
+describe('selectWorkItemSequence', () => {
   let test;
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
