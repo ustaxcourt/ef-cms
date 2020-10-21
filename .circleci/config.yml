@@ -832,6 +832,7 @@ jobs:
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID >> $BASH_ENV"
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
