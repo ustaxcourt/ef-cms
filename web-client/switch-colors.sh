@@ -1,5 +1,14 @@
 #!/bin/bash
 
+MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)
+
+# turn off the old stream if we are not doing a migration so we do not
+# have 2 streams processing the same stuff
+if [[ "${MIGRATE_FLAG}" == "false" ]]; then
+  UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:515554424717:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
+  aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --no-enabled
+fi
+
 node ./web-client/switch-public-ui-colors.js
 node ./web-client/switch-ui-colors.js
 
