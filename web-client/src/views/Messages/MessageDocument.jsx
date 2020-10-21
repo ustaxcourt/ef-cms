@@ -84,8 +84,8 @@ export const MessageDocument = connect(
                   icon="edit"
                   onClick={() =>
                     openConfirmEditModalSequence({
+                      docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
                       docketNumber: caseDetail.docketNumber,
-                      documentIdToEdit: viewerDocumentToDisplay.documentId,
                       parentMessageId,
                       redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     })
@@ -146,7 +146,7 @@ export const MessageDocument = connect(
                   iconColor="white"
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
-                      documentId: viewerDocumentToDisplay.documentId,
+                      docketEntryId: viewerDocumentToDisplay.documentId,
                       redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
@@ -162,7 +162,7 @@ export const MessageDocument = connect(
                   iconColor="white"
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
-                      documentId: viewerDocumentToDisplay.documentId,
+                      docketEntryId: viewerDocumentToDisplay.documentId,
                       redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     });
                   }}
@@ -198,8 +198,8 @@ export const MessageDocument = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
+                    docketEntryId: viewerDocumentToDisplay.documentId,
                     docketNumber: caseDetail.docketNumber,
-                    documentId: viewerDocumentToDisplay.documentId,
                   })
                 }
               >

@@ -71,9 +71,6 @@ export const IndividualWorkQueueInbox = connect(
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
                         href={item.editLink}
-                        onClick={e => {
-                          e.stopPropagation();
-                        }}
                       >
                         {item.docketEntry.documentTitle ||
                           item.docketEntry.documentType}

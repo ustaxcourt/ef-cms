@@ -18,7 +18,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     applicationContext.getUseCaseHelpers().fetchPendingItems.mockReturnValue([
       {
-        associatedJudge: 'Judge Armen',
+        associatedJudge: 'Judge Colvin',
         caseCaption: 'Test Caption, Petitioner',
         docketNumber: '123-45',
         documentTitle: 'Test Document Title',
@@ -64,7 +64,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     try {
       await generatePrintablePendingReportInteractor({
         applicationContext,
-        judge: 'Armen',
+        judge: 'Colvin',
       });
     } catch (err) {
       error = err;
@@ -96,8 +96,8 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     expect(pendingItems).toMatchObject([
       {
-        associatedJudge: 'Judge Armen',
-        associatedJudgeFormatted: 'Armen',
+        associatedJudge: 'Judge Colvin',
+        associatedJudgeFormatted: 'Colvin',
         caseTitle: 'Test Caption',
         docketNumberWithSuffix: '123-45',
         formattedFiledDate: '01/01/20',
@@ -127,14 +127,14 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should generate a subtitle with the judge name if a judge filter is applied', async () => {
     await generatePrintablePendingReportInteractor({
       applicationContext,
-      judge: 'Armen',
+      judge: 'Colvin',
     });
 
     const {
       subtitle,
     } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
 
-    expect(subtitle).toEqual('Judge Armen');
+    expect(subtitle).toEqual('Judge Colvin');
   });
 
   it('should get case information from persistence and generate a subtitle with the docket number if a docketNumber is present', async () => {

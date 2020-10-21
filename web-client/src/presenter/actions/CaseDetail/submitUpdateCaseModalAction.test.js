@@ -97,7 +97,7 @@ describe('submitUpdateCaseModalAction', () => {
       state: {
         caseDetail: caseMock,
         modal: {
-          associatedJudge: 'Judge Armen',
+          associatedJudge: 'Judge Colvin',
           caseStatus: STATUS_TYPES.generalDocket,
         },
       },

@@ -321,7 +321,33 @@ describe('formatCase', () => {
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
-  it('should apply additional information', () => {
+  it('should append additional information to the hyperlinked descriptionDisplay when addToCoversheet is true', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries: [
+        {
+          addToCoversheet: true,
+          additionalInfo: 'additional information',
+          createdAt: getDateISO(),
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'desc',
+          documentType: 'Petition',
+          index: '1',
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+        },
+      ],
+    });
+
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
+      'desc additional information',
+    );
+    expect(
+      result.formattedDocketEntries[0].additionalInfoDisplay,
+    ).toBeUndefined();
+  });
+
+  it('should not append additional information to the hyperlinked descriptionDisplay when addToCoversheet is undefined', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       docketEntries: [
@@ -338,8 +364,9 @@ describe('formatCase', () => {
       ],
     });
 
-    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
-      'desc additional information',
+    expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual('desc');
+    expect(result.formattedDocketEntries[0].additionalInfoDisplay).toEqual(
+      'additional information',
     );
   });
 
@@ -743,18 +770,17 @@ describe('formatDocketEntry', () => {
 });
 
 describe('getFilingsAndProceedings', () => {
-  it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
+  it('returns a value based on document properties (attachments, C/S,  objections, and lodged)', () => {
     const result = getFilingsAndProceedings({
       attachments: true,
       certificateOfService: true,
       certificateOfServiceDateFormatted: '11/12/1999',
-      exhibits: true,
       lodged: true,
       objections: OBJECTIONS_OPTIONS_MAP.YES,
     });
 
     expect(result).toEqual(
-      '(C/S 11/12/1999) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)',
+      '(C/S 11/12/1999) (Attachment(s)) (Objection) (Lodged)',
     );
   });
 
@@ -762,7 +788,6 @@ describe('getFilingsAndProceedings', () => {
     const result = getFilingsAndProceedings({
       attachments: false,
       certificateOfService: false,
-      exhibits: false,
       lodged: false,
       objections: OBJECTIONS_OPTIONS_MAP.NO,
     });

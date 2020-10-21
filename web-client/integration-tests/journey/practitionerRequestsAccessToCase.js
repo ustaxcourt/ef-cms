@@ -21,15 +21,15 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Entry of Appearance',
+      value: 'Limited Entry of Appearance',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Entry of Appearance for [Petitioner Names]',
+      value: 'Limited Entry of Appearance for [Petitioner Names]',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
-      value: 'EA',
+      value: 'LEA',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'scenario',
@@ -110,7 +110,7 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
+      'Limited Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
     expect(test.getState('validationErrors')).toEqual({});
 

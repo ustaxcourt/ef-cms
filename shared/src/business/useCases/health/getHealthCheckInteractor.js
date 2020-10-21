@@ -92,14 +92,15 @@ const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
 
 const getS3BucketStatus = async ({ applicationContext }) => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
+  const currentColor = process.env.CURRENT_COLOR;
   const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`;
   const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionWest}`;
   const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionEast}`;
   const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionWest}`;
-  const appS3Bucket = `app.${efcmsDomain}`;
-  const publicS3Bucket = `${efcmsDomain}`;
-  const publicFailoverS3Bucket = `failover.${efcmsDomain}`;
-  const appFailoverS3Bucket = `app-failover.${efcmsDomain}`;
+  const appS3Bucket = `app-${currentColor}.${efcmsDomain}`;
+  const publicS3Bucket = `${currentColor}.${efcmsDomain}`;
+  const publicFailoverS3Bucket = `failover-${currentColor}.${efcmsDomain}`;
+  const appFailoverS3Bucket = `app-failover-${currentColor}.${efcmsDomain}`;
 
   const s3Buckets = {
     app: appS3Bucket,
