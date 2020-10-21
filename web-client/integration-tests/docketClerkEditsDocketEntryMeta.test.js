@@ -4,14 +4,17 @@ import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkCheck
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkEditsDocketEntryMeta } from './journey/docketClerkEditsDocketEntryMeta';
 import { docketClerkEditsDocketEntryMetaCourtIssued } from './journey/docketClerkEditsDocketEntryMetaCourtIssued';
+import { docketClerkEditsDocketEntryMetaMinuteEntry } from './journey/docketClerkEditsDocketEntryMetaMinuteEntry';
 import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
 import { docketClerkNavigatesToEditDocketEntryMetaCourtIssued } from './journey/docketClerkNavigatesToEditDocketEntryMetaCourtIssued';
+import { docketClerkNavigatesToEditDocketEntryMetaMinuteEntry } from './journey/docketClerkNavigatesToEditDocketEntryMetaMinuteEntry';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates } from './journey/docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates';
 import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
 import { docketClerkVerifiesDocketEntryMetaUpdatesInEditForm } from './journey/docketClerkVerifiesDocketEntryMetaUpdatesInEditForm';
+import { docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry } from './journey/docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
@@ -37,6 +40,12 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkChecksDocketEntryEditLink(test);
   docketClerkQCsDocketEntry(test);
   docketClerkChecksDocketEntryEditLink(test, { value: true });
+
+  // edit docket entry meta for a minute entry
+  docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(test);
+  docketClerkEditsDocketEntryMetaMinuteEntry(test);
+  docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry(test);
+  docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(test);
 
   docketClerkNavigatesToEditDocketEntryMeta(test, 3);
   docketClerkEditsDocketEntryMeta(test);

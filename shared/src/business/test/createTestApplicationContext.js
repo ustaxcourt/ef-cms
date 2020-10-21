@@ -203,12 +203,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+    createEndOfDayISO: jest
+      .fn()
+      .mockImplementation(DateHandler.createEndOfDayISO),
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
     createISODateStringFromObject: jest
       .fn()
       .mockImplementation(DateHandler.createISODateStringFromObject),
+    createStartOfDayISO: jest
+      .fn()
+      .mockImplementation(DateHandler.createStartOfDayISO),
     dateStringsCompared: jest
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
@@ -349,10 +355,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
-    getAllCaseDeadlines: jest.fn(),
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
+    getCaseDeadlinesByDateRange: jest.fn(),
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),

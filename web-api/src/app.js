@@ -125,14 +125,14 @@ const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
 const {
-  getAllCaseDeadlinesLambda,
-} = require('./caseDeadline/getAllCaseDeadlinesLambda');
-const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
+const {
+  getCaseDeadlinesLambda,
+} = require('./caseDeadline/getCaseDeadlinesLambda');
 const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
@@ -341,14 +341,12 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
-const { createJudgeUserLambda } = require('./judges/createJudgeUserLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
-const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
@@ -424,7 +422,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
-  app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
+  app.get(
+    '/case-deadlines/:startDate/:endDate',
+    lambdaWrapper(getCaseDeadlinesLambda),
+  );
 }
 /**
  * case-documents
@@ -778,13 +779,6 @@ app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
 }
 
 /**
- * judges
- */
-{
-  app.post('/judges', lambdaWrapper(createJudgeUserLambda));
-}
-
-/**
  * reports
  */
 {
@@ -889,7 +883,6 @@ app.get(
  * users
  */
 app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
-app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
 app.put(
   '/users/:userId/case/:docketNumber',
   lambdaWrapper(privatePractitionerCaseAssociationLambda),

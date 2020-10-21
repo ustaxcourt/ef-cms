@@ -35,13 +35,14 @@ import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
-import { clearDraftDocumentViewerDocketEntryIdSequence } from './sequences/clearDraftDocumentViewerDocketEntryIdSequence';
+import { clearDocumentViewerDataSequence } from './sequences/clearDocumentViewerDataSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
@@ -94,10 +95,10 @@ import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequen
 import { gotoAddOtherStatisticsSequence } from './sequences/gotoAddOtherStatisticsSequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequence';
-import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
+import { gotoCaseDeadlineReportSequence } from './sequences/gotoCaseDeadlineReportSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
@@ -269,7 +270,6 @@ import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequ
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
-import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
@@ -474,13 +474,14 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearAdvancedSearchFormSequence,
     clearAlertSequence,
-    clearDraftDocumentViewerDocketEntryIdSequence,
+    clearDocumentViewerDataSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
     clearOpenClosedCasesCurrentPageSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
+    clearViewerDocumentToDisplaySequence,
     closeModalAndNavigateBackSequence,
     closeModalAndNavigateSequence,
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
@@ -533,10 +534,10 @@ export const presenter = {
     gotoAddOtherStatisticsSequence,
     gotoAddTrialSessionSequence,
     gotoAdvancedSearchSequence,
-    gotoAllCaseDeadlinesSequence,
     gotoBeforeStartCaseSequence,
     gotoBeforeYouFileDocumentSequence,
     gotoBlockedCasesReportSequence,
+    gotoCaseDeadlineReportSequence,
     gotoCaseDetailSequence,
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
@@ -707,7 +708,6 @@ export const presenter = {
     setDocumentForPreviewSequence,
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
-    setFocusedWorkItemSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setMessageDetailViewerDocumentToDisplaySequence,

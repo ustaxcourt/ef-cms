@@ -207,26 +207,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Proposed Trial Exhibits",
-      "documentType": "Proposed Trial Exhibits",
-      "category": "Miscellaneous",
-      "eventCode": "PTE",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Notice of Completion",
-      "documentType": "Notice of Completion",
-      "category": "Notice",
-      "eventCode": "NOC",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Revised Computation",
       "documentType": "Revised Computation",
       "category": "Decision",
@@ -259,7 +239,7 @@
       "ordinalField": "What iteration is this filing?"
     },
     {
-      "documentTitle": "Amended Certificate of Service of [Document Name]",
+      "documentTitle": "Amended Certificate of Service of [Document Name] [Date]",
       "documentType": "Amended Certificate of Service",
       "category": "Miscellaneous",
       "eventCode": "AMDC",
@@ -333,6 +313,16 @@
       "documentType": "Partial Administrative Record",
       "category": "Miscellaneous",
       "eventCode": "PARD",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Proposed Trial Exhibits",
+      "documentType": "Proposed Trial Exhibits",
+      "category": "Miscellaneous",
+      "eventCode": "PTE",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -1709,6 +1699,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Notice of Completion",
+      "documentType": "Notice of Completion",
+      "category": "Notice",
+      "eventCode": "NOC",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Notice of Concession",
       "documentType": "Notice of Concession",
       "category": "Notice",
@@ -1913,6 +1913,16 @@
       "documentType": "Notice of Unavailability",
       "category": "Notice",
       "eventCode": "NOU",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Withdrawal as Counsel",
+      "documentType": "Notice of Withdrawal as Counsel",
+      "category": "Notice",
+      "eventCode": "NOTW",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
