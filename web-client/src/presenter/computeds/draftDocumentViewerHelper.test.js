@@ -625,34 +625,6 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showDocumentNotSignedAlert).toEqual(false);
   });
 
-  it('should return showDocumentNotSignedAlert true if document is not signed and the draftOrderState event code does not require a signature', () => {
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              draftOrderState: {
-                eventCode: 'O', // Requires a signature
-              },
-              eventCode: 'MISC', // Does not require a signature
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
-          eventCode: 'MISC', // Does not require a signature
-        },
-      },
-    });
-
-    expect(result.showDocumentNotSignedAlert).toEqual(true);
-  });
-
   it('should return showDocumentNotSignedAlert true if document is not signed but the event code requires a signature', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
