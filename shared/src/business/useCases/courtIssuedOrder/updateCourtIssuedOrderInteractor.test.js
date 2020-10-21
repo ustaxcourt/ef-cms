@@ -39,6 +39,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        isDraft: true,
         userId: mockUserId,
       },
       {
@@ -129,9 +130,9 @@ describe('updateCourtIssuedOrderInteractor', () => {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentType: 'Order to Show Cause',
-        draftOrderState: {},
-        eventCode: 'OSC',
+        documentType: 'Notice',
+        draftOrderState: { eventCode: 'OSC' },
+        eventCode: 'NOT',
       },
     });
 
@@ -142,6 +143,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[0].eventCode,
+    ).toEqual('OSC');
   });
 
   it('stores documentContents in S3 if present', async () => {
