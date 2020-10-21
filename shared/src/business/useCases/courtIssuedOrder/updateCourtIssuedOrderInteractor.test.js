@@ -129,6 +129,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order to Show Cause Title',
         documentType: 'Order to Show Cause',
         draftOrderState: {},
         eventCode: 'OSC',
@@ -142,6 +143,20 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.objectContaining({
+              documentType: 'Order to Show Cause',
+              freeText: 'Order to Show Cause Title',
+            }),
+          ]),
+        }),
+      }),
+    );
   });
 
   it('stores documentContents in S3 if present', async () => {
