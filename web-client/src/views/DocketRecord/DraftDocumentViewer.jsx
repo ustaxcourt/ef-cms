@@ -36,36 +36,34 @@ export const DraftDocumentViewer = connect(
                 <div className="grid-col-9">Document</div>
               </div>
               {formattedCaseDetail.formattedDraftDocuments.map(
-                (draftDocument, index) => {
-                  return (
-                    <Button
-                      className={classNames(
-                        'usa-button--unstyled attachment-viewer-button',
-                        viewerDraftDocumentIdToDisplay ===
-                          draftDocument.docketEntryId && 'active',
-                      )}
-                      isActive={
-                        viewerDraftDocumentIdToDisplay ===
-                        draftDocument.docketEntryId
-                      }
-                      key={index}
-                      onClick={() => {
-                        setViewerDraftDocumentToDisplaySequence({
-                          viewerDraftDocumentToDisplay: draftDocument,
-                        });
-                      }}
-                    >
-                      <div className="grid-row margin-left-205">
-                        <div className="grid-col-3">
-                          {draftDocument.createdAtFormatted}
-                        </div>
-                        <div className="grid-col-9">
-                          {draftDocument.descriptionDisplay}
-                        </div>
+                draftDocument => (
+                  <Button
+                    className={classNames(
+                      'usa-button--unstyled attachment-viewer-button',
+                      viewerDraftDocumentIdToDisplay ===
+                        draftDocument.docketEntryId && 'active',
+                    )}
+                    isActive={
+                      viewerDraftDocumentIdToDisplay ===
+                      draftDocument.docketEntryId
+                    }
+                    key={draftDocument.docketEntryId}
+                    onClick={() => {
+                      setViewerDraftDocumentToDisplaySequence({
+                        viewerDraftDocumentToDisplay: draftDocument,
+                      });
+                    }}
+                  >
+                    <div className="grid-row margin-left-205">
+                      <div className="grid-col-3">
+                        {draftDocument.createdAtFormatted}
                       </div>
-                    </Button>
-                  );
-                },
+                      <div className="grid-col-9">
+                        {draftDocument.descriptionDisplay}
+                      </div>
+                    </div>
+                  </Button>
+                ),
               )}
             </div>
           </div>

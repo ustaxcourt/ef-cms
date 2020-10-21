@@ -39,6 +39,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        isDraft: true,
         userId: mockUserId,
       },
       {
@@ -130,9 +131,12 @@ describe('updateCourtIssuedOrderInteractor', () => {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to Show Cause Title',
-        documentType: 'Order to Show Cause',
-        draftOrderState: {},
-        eventCode: 'OSC',
+        documentType: 'Notice',
+        draftOrderState: {
+          documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
+        },
+        eventCode: 'NOT',
       },
     });
 
@@ -151,6 +155,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
           docketEntries: expect.arrayContaining([
             expect.objectContaining({
               documentType: 'Order to Show Cause',
+              eventCode: 'OSC',
               freeText: 'Order to Show Cause Title',
             }),
           ]),

@@ -37,7 +37,7 @@ export const DocumentViewer = connect(
                 <div className="grid-col-2"></div>
               </div>
               {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
-                (entry, idx) => {
+                entry => {
                   // TODO: should live in a computed
                   if (entry.isFileAttached) {
                     return (
@@ -47,7 +47,7 @@ export const DocumentViewer = connect(
                           viewDocumentId === entry.docketEntryId && 'active',
                         )}
                         isActive={viewDocumentId === entry.docketEntryId}
-                        key={idx}
+                        key={entry.docketEntryId}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
                             viewerDocumentToDisplay: entry,
