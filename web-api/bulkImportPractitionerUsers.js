@@ -59,15 +59,20 @@ const formatRecord = record => {
     address1: record['contact/address1'],
     address2: record['contact/address2'],
     city: record['contact/city'],
-    countryType: COUNTRY_TYPES.DOMESTIC,
+    countryType: record['contact/countryType'],
     phone: record['contact/phone'],
-    postalCode: record['contact/postalCode'] || '00000',
     state: record['contact/state'],
   };
 
   if (!returnData.contact.address1 && returnData.contact.address2) {
     returnData.contact.address1 = returnData.contact.address2;
     delete returnData.contact.address2;
+  }
+
+  if (returnData.contact.countryType === COUNTRY_TYPES.DOMESTIC) {
+    returnData.contact.postalCode = record['contact/postalCode'] || '00000';
+  } else if (returnData.contact.countryType === COUNTRY_TYPES.INTERNATIONAL) {
+    returnData.contact.postalCode = record['contact/postalCode'] || 'N/A';
   }
 
   return returnData;
@@ -90,6 +95,7 @@ const formatRecord = record => {
     'practitionerType',
     'firstName',
     'lastName',
+    'middleName',
     'suffix',
     'email',
     'firmName',
