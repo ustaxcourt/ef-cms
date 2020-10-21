@@ -7,8 +7,6 @@ const check = (value, message) => {
   }
 };
 
-console.log('switching the public uis');
-
 const {
   CURRENT_COLOR,
   DEPLOYING_COLOR,
