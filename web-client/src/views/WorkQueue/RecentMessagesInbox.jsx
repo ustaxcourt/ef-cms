@@ -37,10 +37,10 @@ export const RecentMessagesInbox = connect(
             return (
               <tbody key={idx}>
                 <tr>
-                  <td>{item.createdAtFormatted}</td>
                   <td className="message-queue-row small">
                     {item.docketNumberWithSuffix}
                   </td>
+                  <td>{item.createdAtFormatted}</td>
                   <td className="message-unread-column">
                     {!item.isRead && (
                       <Icon

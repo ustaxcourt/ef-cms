@@ -1,12 +1,51 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
+);
+const requestAccessHelper = withAppContextDecorator(
+  requestAccessHelperComputed,
+);
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
+
 export const practitionerRequestsAccessToCase = (test, fakeFile) => {
   return it('Practitioner requests access to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: test.getState(),
+    });
+
+    expect(headerHelper.showRequestAccessToCaseButton).toBeTruthy();
+
     await test.runSequence('gotoRequestAccessSequence', {
       docketNumber: test.docketNumber,
     });
+
+    const requestHelper = runCompute(requestAccessHelper, {
+      state: test.getState(),
+    });
+
+    expect(requestHelper.showSecondaryParty).toBeTruthy();
+
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(caseDetailFormatted.contactSecondary.name).toEqual(
+      'Jimothy Schultz',
+    );
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 

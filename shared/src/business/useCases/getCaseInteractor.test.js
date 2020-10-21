@@ -42,32 +42,6 @@ describe('getCaseInteractor', () => {
     ).toBe(1);
   });
 
-  it('should throw an error when the current user is unauthorized to get cases', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'someone',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {},
-          createdAt: new Date().toISOString(),
-          docketEntries,
-          docketNumber: '101-00',
-          preferredTrialCity: 'Washington, District of Columbia',
-          procedureType: 'Regular',
-        }),
-      );
-
-    await expect(
-      getCaseInteractor({
-        applicationContext,
-        docketNumber: '00101-00',
-      }),
-    ).rejects.toThrow('Unauthorized');
-  });
-
   it('throws an error when the entity returned from persistence is invalid', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -313,7 +287,9 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
+        hasIrsPractitioner: false,
         isSealed: true,
+        partyType: undefined,
         receivedAt: undefined,
       });
     });
@@ -400,22 +376,6 @@ describe('getCaseInteractor', () => {
 
       expect(result.contactPrimary.address1).toBeUndefined();
       expect(result.contactPrimary.phone).toBeUndefined();
-    });
-
-    it('should return a Case entity with private fields filtered out when the current user is an IRS practitioner user who is NOT associated with the case', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        name: 'Tasha Yar',
-        role: ROLES.irsPractitioner,
-        userId: irsPractitionerId,
-      });
-
-      const result = await getCaseInteractor({
-        applicationContext,
-        docketNumber: '101-18',
-      });
-
-      expect(result.contactPrimary.address1).toBeDefined();
-      expect(result.contactPrimary.phone).toBeDefined();
     });
 
     it('should return a Case entity when the current user is associated with the case', async () => {
