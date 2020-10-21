@@ -1,10 +1,13 @@
 const {
+  DOCUMENT_RELATIONSHIPS,
+  ORDER_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -46,6 +49,16 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   if (!currentDocument) {
     throw new NotFoundError('Document not found');
+  }
+
+  const orderTypeEventCodes = Object.values(ORDER_TYPES).map(d => d.eventCode);
+
+  if (orderTypeEventCodes.includes(documentMetadata.eventCode)) {
+    documentMetadata.freeText = documentMetadata.documentTitle;
+    if (documentMetadata.draftOrderState) {
+      documentMetadata.draftOrderState.freeText =
+        documentMetadata.documentTitle;
+    }
   }
 
   if (documentMetadata.documentContents) {
