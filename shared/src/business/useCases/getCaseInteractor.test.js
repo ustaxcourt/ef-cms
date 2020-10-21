@@ -42,32 +42,6 @@ describe('getCaseInteractor', () => {
     ).toBe(1);
   });
 
-  it('should throw an error when the current user is unauthorized to get cases', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'someone',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {},
-          createdAt: new Date().toISOString(),
-          docketEntries,
-          docketNumber: '101-00',
-          preferredTrialCity: 'Washington, District of Columbia',
-          procedureType: 'Regular',
-        }),
-      );
-
-    await expect(
-      getCaseInteractor({
-        applicationContext,
-        docketNumber: '00101-00',
-      }),
-    ).rejects.toThrow('Unauthorized');
-  });
-
   it('throws an error when the entity returned from persistence is invalid', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
