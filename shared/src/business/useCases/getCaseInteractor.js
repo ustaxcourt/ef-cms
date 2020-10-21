@@ -7,7 +7,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case, isAssociatedUser } = require('../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
 
@@ -141,10 +141,6 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     caseRaw: caseRecord,
     user: currentUser,
   });
-
-  if (!isAuthorizedToGetCase && !isAssociatedWithCase) {
-    throw new UnauthorizedError('Unauthorized');
-  }
 
   let caseDetailRaw;
   if (caseRecord.sealedDate) {
