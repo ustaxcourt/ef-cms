@@ -42,7 +42,7 @@ exports.search = async ({ applicationContext, searchParameters }) => {
       if (foundCase) {
         return {
           ...sourceUnmarshalled,
-          caseCaption: foundCase.caseCaption.S,
+          ...AWS.DynamoDB.Converter.unmarshall(foundCase),
         };
       } else {
         return sourceUnmarshalled;

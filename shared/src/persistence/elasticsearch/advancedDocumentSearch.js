@@ -58,6 +58,9 @@ exports.advancedDocumentSearch = async ({
     queryParams.push({
       has_parent: {
         inner_hits: {
+          _source: {
+            includes: sourceFields,
+          },
           name: 'case-mappings',
         },
         parent_type: 'case',
@@ -78,6 +81,9 @@ exports.advancedDocumentSearch = async ({
     queryParams.push({
       has_parent: {
         inner_hits: {
+          _source: {
+            includes: sourceFields,
+          },
           name: 'case-mappings',
         },
         parent_type: 'case',
