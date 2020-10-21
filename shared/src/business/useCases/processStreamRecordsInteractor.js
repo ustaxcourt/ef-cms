@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
+const { omit } = require('lodash');
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -57,9 +58,6 @@ const processCaseEntries = async ({
 
     const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
 
-    // we don't need to store the docket entry list onto the case
-    delete marshalledCase.docketEntries;
-
     caseRecords.push({
       dynamodb: {
         Keys: {
@@ -71,7 +69,7 @@ const processCaseEntries = async ({
           },
         },
         NewImage: {
-          ...marshalledCase,
+          ...omit(marshalledCase, 'docketEntries'), // we don't need to store the docket entry list onto the case docket entry mapping
           case_relations: { name: 'case' },
           entityName: { S: 'CaseDocketEntryMapping' },
         }, // Create a mapping record on the docket-entry index for parent-child relationships

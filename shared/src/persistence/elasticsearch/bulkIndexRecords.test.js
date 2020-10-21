@@ -128,7 +128,7 @@ describe('bulkIndexRecords', () => {
     });
   });
 
-  it('sets an alterd _id if the item is a CaseDocketEntryMapping', async () => {
+  it('sets an altered _id if the item is a CaseDocketEntryMapping', async () => {
     applicationContext.getSearchClient.mockReturnValue({
       bulk: jest.fn().mockReturnValue({
         errors: false,
