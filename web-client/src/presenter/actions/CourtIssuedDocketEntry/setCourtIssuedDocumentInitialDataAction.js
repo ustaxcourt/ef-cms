@@ -18,15 +18,15 @@ export const setCourtIssuedDocumentInitialDataAction = ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const document = (caseDetail.docketEntries || []).find(
+  const docketEntry = (caseDetail.docketEntries || []).find(
     item => item.docketEntryId === props.docketEntryId,
   );
 
-  if (document) {
+  if (docketEntry) {
     const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
 
     const selectedDocumentTypeValues = COURT_ISSUED_EVENT_CODES.find(
-      option => option.eventCode === document.eventCode,
+      option => option.eventCode === docketEntry.eventCode,
     );
 
     if (selectedDocumentTypeValues) {
@@ -34,8 +34,8 @@ export const setCourtIssuedDocumentInitialDataAction = ({
       store.set(state.form.attachments, false);
     }
 
-    if (document.freeText) {
-      store.set(state.form.freeText, document.freeText);
+    if (docketEntry.freeText) {
+      store.set(state.form.freeText, docketEntry.freeText);
     }
   }
 };
