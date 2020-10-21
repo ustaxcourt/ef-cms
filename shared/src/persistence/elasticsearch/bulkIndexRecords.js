@@ -17,10 +17,26 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
         }))
         .flatMap(doc => {
           const index = getIndexNameForRecord(doc);
+          let id = `${doc.pk.S}_${doc.sk.S}`;
+          let routing = null;
 
           if (index) {
+            if (doc.entityName.S === 'DocketEntry') {
+              routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
+            }
+
+            if (doc.entityName.S === 'CaseDocketEntryMapping') {
+              id += '|mapping';
+            }
+
             return [
-              { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
+              {
+                index: {
+                  _id: id,
+                  _index: index,
+                  routing,
+                },
+              },
               doc,
             ];
           }

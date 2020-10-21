@@ -1,5 +1,11 @@
 module.exports = {
   properties: {
+    case_relations: {
+      relations: {
+        case: 'document',
+      },
+      type: 'join',
+    },
     'caseCaption.S': {
       type: 'text',
     },
