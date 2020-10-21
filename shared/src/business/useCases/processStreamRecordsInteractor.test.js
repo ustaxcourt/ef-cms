@@ -242,7 +242,12 @@ describe('processStreamRecordsInteractor', () => {
         {
           dynamodb: {
             Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
-            NewImage: caseDataMarshalled,
+            NewImage: {
+              docketNumber: { S: '123-45' },
+              entityName: { S: 'Case' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'case|123-45' },
+            },
           },
           eventName: 'MODIFY',
         },

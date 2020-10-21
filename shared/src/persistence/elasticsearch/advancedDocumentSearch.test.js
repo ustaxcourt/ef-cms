@@ -90,7 +90,11 @@ describe('advancedDocumentSearch', () => {
     },
   });
 
-  const getCaseMappingQueryParams = (caseTitleOrPetitioner, judge) => {
+  const getCaseMappingQueryParams = (
+    caseTitleOrPetitioner,
+    judge,
+    docketNumber,
+  ) => {
     let query = {
       match_all: {},
     };
@@ -104,6 +108,14 @@ describe('advancedDocumentSearch', () => {
             'contactSecondary.M.name.S',
           ],
           query: caseTitleOrPetitioner,
+        },
+      };
+    }
+
+    if (docketNumber) {
+      query = {
+        match: {
+          'docketNumber.S': { operator: 'and', query: docketNumber },
         },
       };
     }
@@ -239,19 +251,12 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       docketNumber: '101-20',
       documentEventCodes: orderEventCodes,
+      judgeType: 'signedJudgeName',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
-      getCaseMappingQueryParams(), // match all parents
-      {
-        match: {
-          'docketNumber.S': {
-            operator: 'and',
-            query: '101-20',
-          },
-        },
-      },
+      getCaseMappingQueryParams(null, 'signedJudgeName', '101-20'), // match all parents
     ]);
   });
 

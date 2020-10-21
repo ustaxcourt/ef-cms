@@ -89,7 +89,7 @@ const processCaseEntries = async ({
             S: caseNewImage.sk.S,
           },
         },
-        NewImage: caseNewImage,
+        NewImage: marshalledCase,
       },
       eventName: 'MODIFY',
     });
