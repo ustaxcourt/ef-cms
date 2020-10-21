@@ -1,3 +1,7 @@
+const faker = require('faker');
+
+faker.seed(faker.random.number());
+
 exports.gotoAdvancedSearch = () => {
   cy.get('a.advanced').click();
 };
@@ -72,7 +76,7 @@ exports.signOpinion = () => {
   cy.get('.sign-pdf-interface').click();
   cy.get('#save-signature-button').click();
 };
-exports.addDocketEntryAndServeOpinion = () => {
+exports.addDocketEntryAndServeOpinion = testData => {
   cy.get(
     '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:last-child > div > div.grid-col-9',
   ).click();
@@ -83,8 +87,11 @@ exports.addDocketEntryAndServeOpinion = () => {
     .find('div')
     .contains('Memorandum Opinion')
     .click();
-  cy.get('#judge').select('Chief Judge Foley');
-  cy.get('#free-text').type('Opinion for a smoke test');
+  cy.get('#judge').select('Foley');
+
+  testData.documentDescription = faker.company.catchPhrase();
+  cy.get('#free-text').type(testData.documentDescription);
+
   cy.get('#serve-to-parties-btn').click();
   cy.get('button').contains('Yes, Serve').click();
   cy.get('#print-paper-service-done-button').click();

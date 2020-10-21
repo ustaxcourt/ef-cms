@@ -139,6 +139,7 @@ Case.validationName = 'Case';
  * @constructor
  */
 function Case() {}
+
 Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
@@ -146,54 +147,70 @@ Case.prototype.init = function init(
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+
   this.entityName = 'Case';
 
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
-    this.automaticBlocked = rawCase.automaticBlocked;
-    this.automaticBlockedDate = rawCase.automaticBlockedDate;
-    this.automaticBlockedReason = rawCase.automaticBlockedReason;
-    this.blocked = rawCase.blocked;
-    this.blockedDate = rawCase.blockedDate;
-    this.blockedReason = rawCase.blockedReason;
-    this.caseNote = rawCase.caseNote;
-    this.damages = rawCase.damages;
-    this.highPriority = rawCase.highPriority;
-    this.highPriorityReason = rawCase.highPriorityReason;
-    this.litigationCosts = rawCase.litigationCosts;
-    this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-    this.status = rawCase.status || CASE_STATUS_TYPES.new;
-    this.userId = rawCase.userId;
-
-    if (Array.isArray(rawCase.statistics)) {
-      this.statistics = rawCase.statistics.map(
-        statistic => new Statistic(statistic, { applicationContext }),
-      );
-    } else {
-      this.statistics = [];
-    }
-
-    if (Array.isArray(rawCase.archivedDocketEntries)) {
-      this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
-        docketEntry => new DocketEntry(docketEntry, { applicationContext }),
-      );
-    } else {
-      this.archivedDocketEntries = [];
-    }
-
-    if (Array.isArray(rawCase.archivedCorrespondences)) {
-      this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
-        correspondence =>
-          new Correspondence(correspondence, { applicationContext }),
-      );
-    } else {
-      this.archivedCorrespondences = [];
-    }
+    this.assignFieldsForInternalUsers({ applicationContext, rawCase });
+    this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
+  } else if (applicationContext.getCurrentUser().userId === rawCase.userId) {
+    this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
   }
 
+  this.assignDocketEntries({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
+  this.assignPractitioners({ applicationContext, filtered, rawCase });
+  this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+};
+
+Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
+  applicationContext,
+  rawCase,
+}) {
+  this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
+  this.automaticBlocked = rawCase.automaticBlocked;
+  this.automaticBlockedDate = rawCase.automaticBlockedDate;
+  this.automaticBlockedReason = rawCase.automaticBlockedReason;
+  this.blocked = rawCase.blocked;
+  this.blockedDate = rawCase.blockedDate;
+  this.blockedReason = rawCase.blockedReason;
+  this.caseNote = rawCase.caseNote;
+  this.damages = rawCase.damages;
+  this.highPriority = rawCase.highPriority;
+  this.highPriorityReason = rawCase.highPriorityReason;
+  this.judgeUserId = rawCase.judgeUserId;
+  this.litigationCosts = rawCase.litigationCosts;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+  this.status = rawCase.status || CASE_STATUS_TYPES.new;
+
+  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+  this.orderDesignatingPlaceOfTrial =
+    rawCase.orderDesignatingPlaceOfTrial || false;
+  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
+  this.orderForAmendedPetitionAndFilingFee =
+    rawCase.orderForAmendedPetitionAndFilingFee || false;
+  this.orderForFilingFee = rawCase.orderForFilingFee || false;
+  this.orderForOds = rawCase.orderForOds || false;
+  this.orderForRatification = rawCase.orderForRatification || false;
+  this.orderToShowCause = rawCase.orderToShowCause || false;
+
+  this.assignArchivedDocketEntries({ applicationContext, rawCase });
+  this.assignStatistics({ applicationContext, rawCase });
+  this.assignCorrespondences({ applicationContext, rawCase });
+};
+
+Case.prototype.assignFieldsForInternalUsersAndOwners = function assignFieldsForAllUsers({
+  rawCase,
+}) {
+  this.userId = rawCase.userId;
+};
+
+Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
+  rawCase,
+}) {
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
@@ -206,8 +223,6 @@ Case.prototype.init = function init(
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
-  this.isSealed = !!rawCase.sealedDate;
-  this.judgeUserId = rawCase.judgeUserId;
   this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
@@ -228,10 +243,6 @@ Case.prototype.init = function init(
   this.trialTime = rawCase.trialTime;
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
-  if (applicationContext.getCurrentUser().userId === rawCase.userId) {
-    this.userId = rawCase.userId;
-  }
-
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
@@ -239,24 +250,31 @@ Case.prototype.init = function init(
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  if (Array.isArray(rawCase.correspondence)) {
-    this.correspondence = rawCase.correspondence
-      .map(
-        correspondence =>
-          new Correspondence(correspondence, { applicationContext }),
-      )
-      .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
-  } else {
-    this.correspondence = [];
-  }
+  this.hasPendingItems = this.docketEntries.some(
+    docketEntry => docketEntry.pending,
+  );
 
+  this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
+
+  this.docketNumberWithSuffix =
+    this.docketNumber + (this.docketNumberSuffix || '');
+};
+
+Case.prototype.assignDocketEntries = function assignDocketEntries({
+  applicationContext,
+  filtered,
+  rawCase,
+}) {
   if (Array.isArray(rawCase.docketEntries)) {
     this.docketEntries = rawCase.docketEntries
-      .map(docketEntry => new DocketEntry(docketEntry, { applicationContext }))
+      .map(
+        docketEntry =>
+          new DocketEntry(docketEntry, { applicationContext, filtered }),
+      )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     this.isSealed =
-      this.isSealed ||
+      !!rawCase.sealedDate ||
       this.docketEntries.some(
         docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
       );
@@ -274,42 +292,25 @@ Case.prototype.init = function init(
   } else {
     this.docketEntries = [];
   }
+};
 
-  this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending,
-  );
-
-  if (Array.isArray(rawCase.privatePractitioners)) {
-    this.privatePractitioners = rawCase.privatePractitioners.map(
-      practitioner => new PrivatePractitioner(practitioner),
+Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntries({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.archivedDocketEntries)) {
+    this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
+      docketEntry => new DocketEntry(docketEntry, { applicationContext }),
     );
   } else {
-    this.privatePractitioners = [];
+    this.archivedDocketEntries = [];
   }
+};
 
-  if (Array.isArray(rawCase.irsPractitioners)) {
-    this.irsPractitioners = rawCase.irsPractitioners.map(
-      practitioner => new IrsPractitioner(practitioner),
-    );
-  } else {
-    this.irsPractitioners = [];
-  }
-
-  this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
-  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
-  this.orderDesignatingPlaceOfTrial =
-    rawCase.orderDesignatingPlaceOfTrial || false;
-  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
-  this.orderForAmendedPetitionAndFilingFee =
-    rawCase.orderForAmendedPetitionAndFilingFee || false;
-  this.orderForFilingFee = rawCase.orderForFilingFee || false;
-  this.orderForOds = rawCase.orderForOds || false;
-  this.orderForRatification = rawCase.orderForRatification || false;
-  this.orderToShowCause = rawCase.orderToShowCause || false;
-
-  this.docketNumberWithSuffix =
-    this.docketNumber + (this.docketNumberSuffix || '');
-
+Case.prototype.assignContacts = function assignContacts({
+  applicationContext,
+  rawCase,
+}) {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -327,6 +328,62 @@ Case.prototype.init = function init(
 
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
+};
+
+Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
+  if (Array.isArray(rawCase.privatePractitioners)) {
+    this.privatePractitioners = rawCase.privatePractitioners.map(
+      practitioner => new PrivatePractitioner(practitioner),
+    );
+  } else {
+    this.privatePractitioners = [];
+  }
+
+  if (Array.isArray(rawCase.irsPractitioners)) {
+    this.irsPractitioners = rawCase.irsPractitioners.map(
+      practitioner => new IrsPractitioner(practitioner),
+    );
+  } else {
+    this.irsPractitioners = [];
+  }
+};
+
+Case.prototype.assignStatistics = function assignStatistics({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.statistics)) {
+    this.statistics = rawCase.statistics.map(
+      statistic => new Statistic(statistic, { applicationContext }),
+    );
+  } else {
+    this.statistics = [];
+  }
+};
+
+Case.prototype.assignCorrespondences = function assignCorrespondences({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.correspondence)) {
+    this.correspondence = rawCase.correspondence
+      .map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      )
+      .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
+  } else {
+    this.correspondence = [];
+  }
+
+  if (Array.isArray(rawCase.archivedCorrespondences)) {
+    this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
+      correspondence =>
+        new Correspondence(correspondence, { applicationContext }),
+    );
+  } else {
+    this.archivedCorrespondences = [];
+  }
 };
 
 Case.VALIDATION_RULES = {
@@ -561,7 +618,7 @@ Case.VALIDATION_RULES = {
     {
       is: PAYMENT_STATUS.PAID,
       otherwise: joi.optional().allow(null),
-      then: joi.required(),
+      then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
@@ -581,7 +638,7 @@ Case.VALIDATION_RULES = {
     {
       is: PAYMENT_STATUS.WAIVED,
       otherwise: joi.allow(null).optional(),
-      then: joi.required(),
+      then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
   preferredTrialCity: joi
@@ -1563,7 +1620,7 @@ Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
     reason.push('Case procedure is not the same');
   }
 
-  if (this.trialLocation !== caseEntity.trialLocation) {
+  if (this.preferredTrialCity !== caseEntity.preferredTrialCity) {
     canConsolidate = false;
     reason.push('Place of trial is not the same');
   }

@@ -1,5 +1,6 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 // docketclerk
+import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
@@ -36,7 +37,21 @@ describe('Case Consolidation Journey', () => {
 
   loginAs(test, 'petitioner@example.com');
 
+  it('login as a petitioner and create a case that cannot be consolidated with the lead case', async () => {
+    //not passing in overrides to preferredTrialCity to ensure case cannot be consolidated
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumberDifferentPlaceOfTrial = caseDetail.docketNumber;
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(test);
+  docketClerkOpensCaseConsolidateModal(test);
+  docketClerkSearchesForCaseToConsolidateWith(test);
+  docketClerkConsolidatesCaseThatCannotBeConsolidated(test);
+
   it('login as a petitioner and create the case to consolidate with', async () => {
+    test.docketNumberDifferentPlaceOfTrial = null;
     const caseDetail = await uploadPetition(test, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;

@@ -11,7 +11,7 @@
     "term": "Fall",
     "pk": "trial-session|c5bee7c0-bd98-4504-890b-b00eb398e547",
     "judge": {
-      "name": "Judge Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-09-25T05:00:00.000Z",
@@ -215,8 +215,8 @@
     "entityName": "DocketEntry",
     "docketEntryId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
     "sk": "docket-entry|130a3790-7e82-4f5c-8158-17f5d9d560e7",
-    "judge": "Judge Armen",
-    "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+    "judge": "Colvin",
+    "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
     "relationship": "primaryDocument",
     "index": 4,
     "isFileAttached": true,
@@ -225,7 +225,7 @@
     "processingStatus": "complete",
     "freeText": "Some very strong opinions about sunglasses",
     "signedAt": "2020-05-13T14:50:04.930Z",
-    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
+    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Colvin Some very strong opinions about sunglasses\",\"judge\":\"Judge Colvin\",\"freeText\":\"Some very strong opinions about sunglasses\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
     "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-05-13T14:50:46.374Z",
     "pk": "case|105-20",
@@ -417,7 +417,7 @@
     "pk": "case-by-docket-number|112-19"
   },
   {
-    "associatedJudge": "Judge Armen",
+    "associatedJudge": "Colvin",
     "procedureType": "Small",
     "contactSecondary": {},
     "isPaper": false,
@@ -685,7 +685,7 @@
     "term": "Fall",
     "pk": "trial-session|c7220f03-e46e-4d5e-8e1d-a640e64df552",
     "judge": {
-      "name": "Judge Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": true,
@@ -694,6 +694,49 @@
     "trialSessionId": "c7220f03-e46e-4d5e-8e1d-a640e64df552",
     "isCalendared": false,
     "status": "Closed"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-13T20:23:17.559Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "docketNumberWithSuffix": "125-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-13T20:23:17.556Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-13T20:23:17.558Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "processingStatus": "pending",
+      "createdAt": "2020-10-13T20:23:17.558Z",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "docketNumber": "125-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-13T20:23:17.559Z"
   },
   {
     "sk": "case|103-20",
@@ -741,7 +784,7 @@
     "term": "Fall",
     "pk": "trial-session|b4bee7c0-bd98-4504-890b-b00eb398e547",
     "judge": {
-      "name": "Judge Buch",
+      "name": "Buch",
       "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-09-25T05:00:00.000Z",
@@ -937,7 +980,7 @@
     "gsi1pk": "eligible-for-trial-case-catalog|107-19"
   },
   {
-    "associatedJudge": "Legacy Judge Fieri",
+    "associatedJudge": "Fieri",
     "caseStatus": "General Docket - Not at Issue",
     "caseIsInProgress": true,
     "gsi1pk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
@@ -1276,7 +1319,7 @@
     "term": "Fall",
     "pk": "trial-session-9c943468-bc2e-4631-84e3-b084cf5b1faa",
     "judge": {
-      "name": "Judge Cohen",
+      "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2020-12-02T05:00:00.000Z",
@@ -1290,11 +1333,12 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -1302,7 +1346,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneeName": "Judge Armen",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketNumberWithSuffix": "103-19S",
@@ -1326,7 +1369,7 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad01-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Ashford",
+    "name": "Ashford",
     "section": "ashfordsChambers",
     "pk": "user|dabbad01-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
@@ -1441,6 +1484,11 @@
   {
     "sk": "case|124-20",
     "docketNumber": "124-20",
+    "pk": "catalog"
+  },
+  {
+    "sk": "case|125-20",
+    "docketNumber": "125-20",
     "pk": "catalog"
   },
   {
@@ -1637,7 +1685,7 @@
     "pk": "case|122-20"
   },
   {
-    "associatedJudge": "Judge Armen",
+    "associatedJudge": "Colvin",
     "isSealed": false,
     "procedureType": "Regular",
     "contactSecondary": {},
@@ -1742,7 +1790,7 @@
     "pending": false,
     "isDraft": false,
     "workItem": {
-      "associatedJudge": "Judge Armen",
+      "associatedJudge": "Colvin",
       "caseStatus": "General Docket - Not at Issue",
       "caseTitle": "Reuben Blair",
       "section": "docket",
@@ -2051,6 +2099,7 @@
   },
   {
     "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -2063,14 +2112,13 @@
       "documentType": "Answer"
     },
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneeName": "Judge Armen",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "103-19",
@@ -2280,7 +2328,7 @@
     "term": "Winter",
     "pk": "trial-session|159c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
-      "name": "Judge Ashford",
+      "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": false,
@@ -2465,7 +2513,7 @@
     "term": "Fall",
     "pk": "trial-session|6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
     "judge": {
-      "name": "Judge Carluzzo",
+      "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2020-12-02T05:00:00.000Z",
@@ -2691,9 +2739,9 @@
           "freeText": "Some very strong opinions about sunglasses",
           "signedAt": "2020-05-13T14:50:04.930Z",
           "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
-          "judge": "Judge Armen",
+          "judge": "Colvin",
           "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+          "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
           "relationship": "primaryDocument",
           "docketNumber": "105-20"
         },
@@ -2717,8 +2765,8 @@
       "numberOfPages": 1,
       "scenario": "Type B",
       "entityName": "Document",
-      "judge": "Judge Armen",
-      "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+      "judge": "Colvin",
+      "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
       "relationship": "primaryDocument",
       "isFileAttached": true,
       "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -2750,7 +2798,7 @@
     "updatedAt": "2020-05-13T14:50:45.763Z"
   },
   {
-    "associatedJudge": "Legacy Judge Fieri",
+    "associatedJudge": "Fieri",
     "caseStatus": "General Docket - Not at Issue",
     "gsi1pk": "work-item|4c7de46a-b371-4f76-80b0-c9e69d3d6215",
     "section": "docket",
@@ -2796,7 +2844,7 @@
       "pending": false,
       "isDraft": false,
       "workItem": {
-        "associatedJudge": "Legacy Judge Fieri",
+        "associatedJudge": "Fieri",
         "inProgress": true,
         "caseStatus": "General Docket - Not at Issue",
         "caseTitle": "Stacy Russold, Natalya Chaouche, Tax Matters Partner",
@@ -2823,7 +2871,7 @@
           "isDraft": false,
           "receivedAt": "2020-09-30T20:25:22.035Z",
           "isOnDocketRecord": true,
-          "signedJudgeName": "Legacy Judge Fieri",
+          "signedJudgeName": "Fieri",
           "createdAt": "2020-09-30T20:25:25.087Z",
           "numberOfPages": 1,
           "scenario": "Type A",
@@ -2855,7 +2903,7 @@
       },
       "receivedAt": "2020-09-30T20:25:22.035Z",
       "isOnDocketRecord": true,
-      "signedJudgeName": "Legacy Judge Fieri",
+      "signedJudgeName": "Fieri",
       "createdAt": "2020-09-30T20:25:25.087Z",
       "numberOfPages": 1,
       "scenario": "Type A",
@@ -2927,7 +2975,7 @@
       "pending": false,
       "isDraft": false,
       "workItem": {
-        "associatedJudge": "Legacy Judge Fieri",
+        "associatedJudge": "Fieri",
         "inProgress": true,
         "caseStatus": "General Docket - Not at Issue",
         "caseTitle": "Stacy Russold, Natalya Chaouche, Tax Matters Partner",
@@ -2958,7 +3006,7 @@
           "scenario": "Type B",
           "entityName": "DocketEntry",
           "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-          "judge": "Legacy Judge Fieri",
+          "judge": "Fieri",
           "documentTitle": "Summary Opinion Chief Judge Fieri",
           "relationship": "primaryDocument",
           "draftOrderState": {
@@ -2990,7 +3038,7 @@
       "scenario": "Type B",
       "entityName": "DocketEntry",
       "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-      "judge": "Legacy Judge Fieri",
+      "judge": "Fieri",
       "documentTitle": "Summary Opinion Chief Judge Fieri",
       "relationship": "primaryDocument",
       "draftOrderState": null,
@@ -3009,7 +3057,7 @@
     "completedBy": "Test Docketclerk1"
   },
   {
-    "associatedJudge": "Judge Armen",
+    "associatedJudge": "Colvin",
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
@@ -3320,6 +3368,7 @@
   },
   {
     "docketNumberSuffix": null,
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -3331,14 +3380,13 @@
       "documentType": "Proposed Stipulated Decision"
     },
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneeName": "Judge Armen",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "section-outbox|docket",
     "docketNumber": "106-19",
@@ -3399,9 +3447,9 @@
           "freeText": "Some very strong opinions about sunglasses",
           "signedAt": "2020-05-13T14:50:04.930Z",
           "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
-          "judge": "Judge Armen",
+          "judge": "Colvin",
           "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+          "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
           "relationship": "primaryDocument",
           "docketNumber": "105-20"
         },
@@ -3425,8 +3473,8 @@
       "numberOfPages": 1,
       "scenario": "Type B",
       "entityName": "Document",
-      "judge": "Judge Armen",
-      "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
+      "judge": "Colvin",
+      "documentTitle": "T.C. Opinion Judge Colvin Some very strong opinions about sunglasses",
       "relationship": "primaryDocument",
       "isFileAttached": true,
       "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -3458,7 +3506,7 @@
     "updatedAt": "2020-05-13T14:50:45.763Z"
   },
   {
-    "associatedJudge": "Legacy Judge Fieri",
+    "associatedJudge": "Fieri",
     "caseStatus": "General Docket - Not at Issue",
     "gsi1pk": "work-item|4c7de46a-b371-4f76-80b0-c9e69d3d6215",
     "section": "docket",
@@ -3504,7 +3552,7 @@
       "pending": false,
       "isDraft": false,
       "workItem": {
-        "associatedJudge": "Legacy Judge Fieri",
+        "associatedJudge": "Fieri",
         "inProgress": true,
         "caseStatus": "General Docket - Not at Issue",
         "caseTitle": "Stacy Russold, Natalya Chaouche, Tax Matters Partner",
@@ -3531,7 +3579,7 @@
           "isDraft": false,
           "receivedAt": "2020-09-30T20:25:22.035Z",
           "isOnDocketRecord": true,
-          "signedJudgeName": "Legacy Judge Fieri",
+          "signedJudgeName": "Fieri",
           "createdAt": "2020-09-30T20:25:25.087Z",
           "numberOfPages": 1,
           "scenario": "Type A",
@@ -3666,7 +3714,7 @@
           "scenario": "Type B",
           "entityName": "DocketEntry",
           "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-          "judge": "Chief Judge Foley",
+          "judge": "Foley",
           "documentTitle": "Summary Opinion Chief Judge Fieri",
           "relationship": "primaryDocument",
           "draftOrderState": {
@@ -3698,7 +3746,7 @@
       "scenario": "Type B",
       "entityName": "DocketEntry",
       "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-      "judge": "Chief Judge Foley",
+      "judge": "Foley",
       "documentTitle": "Summary Opinion Chief Judge Fieri",
       "relationship": "primaryDocument",
       "draftOrderState": null,
@@ -3787,7 +3835,7 @@
     "term": "Fall",
     "pk": "trial-session|0d943468-bc2e-4631-84e3-b084cf5b1fbb",
     "judge": {
-      "name": "Judge Cohen",
+      "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-12-02T05:00:00.000Z",
@@ -3940,6 +3988,18 @@
     "docketNumber": "121-20",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-08-10T17:16:49.188Z"
+  },
+  {
+    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline-catalog|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "2019-08-22T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
+  },
+  {
+    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "sk": "case-deadline-catalog|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
+    "pk": "2019-08-22T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "0402cea0-727e-4155-8357-5df4fe30196c",
@@ -4570,6 +4630,49 @@
   {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
+    "gsi1pk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-10-13T20:23:17.559Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "docketNumberWithSuffix": "125-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-10-13T20:23:17.556Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-10-13T20:23:17.558Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "processingStatus": "pending",
+      "createdAt": "2020-10-13T20:23:17.558Z",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "section|petitions",
+    "docketNumber": "125-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-10-13T20:23:17.559Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
     "gsi1pk": "work-item|b99d6fab-d009-4f22-8bdf-e42157cecfe9",
     "caseIsInProgress": true,
     "caseTitle": "Idola Flowers, Donor",
@@ -4751,7 +4854,7 @@
     "term": "Fall",
     "pk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
-      "name": "Judge Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": true,
@@ -4966,7 +5069,7 @@
     "term": "Winter",
     "pk": "trial-session|539c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
-      "name": "Judge Ashford",
+      "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": false,
@@ -5068,7 +5171,7 @@
     "term": "Fall",
     "pk": "trial-session|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
     "judge": {
-      "name": "Judge Armen",
+      "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2020-11-25T05:00:00.000Z",
@@ -5237,7 +5340,7 @@
     "receivedAt": "2019-10-07T14:29:30.288Z",
     "isOnDocketRecord": false,
     "createdAt": "2019-10-07T14:29:30.288Z",
-    "signedJudgeName": "Judge Buch",
+    "signedJudgeName": "Ronald L. Buch",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Test Docketclerk",
@@ -5314,6 +5417,7 @@
   },
   {
     "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -5326,14 +5430,13 @@
       "documentType": "Answer"
     },
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "assigneeName": "Judge Armen",
     "sk": "2019-08-08T14:33:24.183Z",
     "pk": "section-outbox|petitions",
     "docketNumber": "103-19",
@@ -5493,7 +5596,7 @@
     "updatedAt": "2020-04-29T15:50:41.699Z"
   },
   {
-    "associatedJudge": "Legacy Judge Fieri",
+    "associatedJudge": "Fieri",
     "caseStatus": "General Docket - Not at Issue",
     "caseIsInProgress": true,
     "gsi1pk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
@@ -6038,7 +6141,7 @@
     "judgeFullName": "Maurice B. Foley",
     "role": "judge",
     "sk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
-    "name": "Chief Judge Foley",
+    "name": "Foley",
     "section": "foleysChambers",
     "pk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
     "userId": "659789b4-acc5-40b7-9318-3354e7eb8604",
@@ -6419,7 +6522,7 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad02-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Buch",
+    "name": "Buch",
     "section": "buchsChambers",
     "pk": "user|dabbad02-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
@@ -6450,7 +6553,7 @@
     "term": "Winter",
     "pk": "trial-session|459c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
-      "name": "Judge Ashford",
+      "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": false,
@@ -6472,7 +6575,7 @@
     "term": "Fall",
     "pk": "trial-session|208a959f-9526-4db5-b262-e58c476a4604",
     "judge": {
-      "name": "Judge Carluzzo",
+      "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": true,
@@ -6604,26 +6707,6 @@
     "email": "irsPractitioner3@example.com"
   },
   {
-    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "sk": "case-deadline|08855730-3047-4ca6-a9e7-16ff64c9dcaa",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "case-deadline-catalog"
-  },
-  {
-    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "sk": "case-deadline|ff22fe63-4117-42ee-a66c-8cfd2062a057",
-    "pk": "case-deadline-catalog"
-  },
-  {
     "sk": "case|110-19",
     "pk": "case-by-docket-number|110-19"
   },
@@ -6631,11 +6714,11 @@
     "role": "chambers",
     "entityName": "User",
     "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "name": "Test Armen's Chambers",
-    "section": "armensChambers",
+    "name": "Test Colvin's Chambers",
+    "section": "colvinsChambers",
     "pk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
     "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "email": "armensChambers@example.com"
+    "email": "colvinsChambers@example.com"
   },
   {
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -6727,11 +6810,6 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "101-19",
     "status": "New"
-  },
-  {
-    "pk": "user-email|petitioner@example.com",
-    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -6913,6 +6991,17 @@
     "status": "New"
   },
   {
+    "createdAt": "2020-10-13T20:23:17.556Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|125-20",
+    "sk": "case|125-20",
+    "docketNumberWithSuffix": "125-20W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "125-20",
+    "status": "New"
+  },
+  {
     "role": "petitioner",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
@@ -6934,7 +7023,7 @@
     "pk": "case-by-docket-number|104-19"
   },
   {
-    "associatedJudge": "Legacy Judge Fieri",
+    "associatedJudge": "Fieri",
     "caseStatus": "New",
     "caseIsInProgress": true,
     "section": "petitions",
@@ -7015,7 +7104,7 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad04-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Cohen",
+    "name": "Cohen",
     "section": "cohensChambers",
     "pk": "user|dabbad04-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
@@ -7063,7 +7152,7 @@
     "term": "Fall",
     "pk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "judge": {
-      "name": "Judge Cohen",
+      "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-12-02T05:00:00.000Z",
@@ -7130,6 +7219,12 @@
     "docketNumber": "122-20",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2020-09-25T19:27:00.207Z"
+  },
+  {
+    "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "sk": "case-deadline-catalog|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
+    "pk": "2019-08-23T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
   },
   {
     "sk": "user|f0a1e52a-876f-4c03-853c-f66e407e5a1e",
@@ -7411,7 +7506,7 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad0a-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Urda",
+    "name": "Urda",
     "section": "urdasChambers",
     "pk": "user|dabbad0a-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
@@ -7923,77 +8018,6 @@
     "pk": "section|clerkofcourt"
   },
   {
-    "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
-    "pk": "section|armensChambers"
-  },
-  {
-    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
-    "pk": "section|armensChambers"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "docketNumberSuffix": null,
-    "caseStatus": "New",
-    "caseIsInProgress": false,
-    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "caseTitle": "Denise Gould",
-    "section": "armensChambers",
-    "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Docketclerk",
-    "sentBySection": "docket",
-    "createdAt": "2019-08-08T14:23:51.565Z",
-    "highPriority": false,
-    "assigneeName": "Judge Armen",
-    "entityName": "WorkItem",
-    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "docketEntry": {
-      "createdAt": "2019-07-12T17:11:26.955Z",
-      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
-      "documentTitle": "Proposed Stipulated Decision",
-      "numberOfPages": 1,
-      "documentType": "Proposed Stipulated Decision",
-      "docketEntryId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
-    },
-    "pk": "section|armensChambers",
-    "docketNumber": "106-19",
-    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T14:23:51.565Z"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "docketNumberSuffix": "S",
-    "caseStatus": "New",
-    "caseIsInProgress": false,
-    "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "caseTitle": "Samson Workman",
-    "section": "armensChambers",
-    "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "createdAt": "2019-08-08T14:33:24.183Z",
-    "highPriority": false,
-    "assigneeName": "Judge Armen",
-    "entityName": "WorkItem",
-    "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "docketEntry": {
-      "createdAt": "2019-03-01T22:54:05.993Z",
-      "numberOfPages": 1,
-      "filingDate": "2019-03-01T22:54:05.993Z",
-      "documentType": "Answer",
-      "docketEntryId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
-      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
-      "documentTitle": "Answer by Test Respondent"
-    },
-    "pk": "section|armensChambers",
-    "docketNumber": "103-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T14:33:24.183Z"
-  },
-  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Birmingham, Alabama",
@@ -8005,7 +8029,7 @@
     "term": "Fall",
     "pk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
     "judge": {
-      "name": "Judge Buch",
+      "name": "Buch",
       "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-11-02T05:00:00.000Z",
@@ -8059,7 +8083,7 @@
   },
   {
     "sk": "docketNumberCounter-2020",
-    "id": 24,
+    "id": 25,
     "pk": "docketNumberCounter-2020"
   },
   {
@@ -8068,7 +8092,7 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad06-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Pugh",
+    "name": "Pugh",
     "section": "pughsChambers",
     "pk": "user|dabbad06-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
@@ -8081,25 +8105,31 @@
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
   },
   {
-    "judgeTitle": "Special Trial Judge",
-    "judgeFullName": "Robert N. Armen, Jr.",
+    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "user-email|petitioner@example.com"
+  },
+  {
+    "judgeTitle": "Judge",
+    "judgeFullName": "John O. Colvin",
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Armen",
-    "section": "armensChambers",
+    "name": "Colvin",
+    "section": "colvinsChambers",
     "pk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeArmen@example.com"
+    "email": "judgeColvin@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": null,
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -8107,7 +8137,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneeName": "Judge Armen",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketEntry": {
@@ -8126,11 +8155,12 @@
   {
     "associatedJudge": "Chief Judge",
     "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "caseTitle": "Samson Workman",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -8138,7 +8168,6 @@
     "sentBySection": "petitions",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "highPriority": false,
-    "assigneeName": "Judge Armen",
     "entityName": "WorkItem",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "docketEntry": {
@@ -8326,7 +8355,7 @@
     "pk": "case-by-docket-number|105-20"
   },
   {
-    "associatedJudge": "Legacy Judge Fieri",
+    "associatedJudge": "Fieri",
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
@@ -8426,7 +8455,7 @@
         "pending": false,
         "isDraft": false,
         "workItem": {
-          "associatedJudge": "Legacy Judge Fieri",
+          "associatedJudge": "Fieri",
           "completedAt": "2020-09-30T20:24:15.441Z",
           "caseStatus": "New",
           "completedMessage": "Served to IRS",
@@ -8507,7 +8536,7 @@
         "pending": false,
         "isDraft": false,
         "workItem": {
-          "associatedJudge": "Legacy Judge Fieri",
+          "associatedJudge": "Fieri",
           "completedAt": "2020-09-30T20:25:32.962Z",
           "caseStatus": "General Docket - Not at Issue",
           "completedMessage": "completed",
@@ -8551,7 +8580,7 @@
             "isDraft": false,
             "receivedAt": "2020-09-30T20:25:22.035Z",
             "isOnDocketRecord": true,
-            "signedJudgeName": "Legacy Judge Fieri",
+            "signedJudgeName": "Fieri",
             "createdAt": "2020-09-30T20:25:25.087Z",
             "numberOfPages": 1,
             "scenario": "Type A",
@@ -8579,7 +8608,7 @@
         },
         "receivedAt": "2020-09-30T20:25:22.035Z",
         "isOnDocketRecord": true,
-        "signedJudgeName": "Legacy Judge Fieri",
+        "signedJudgeName": "Fieri",
         "createdAt": "2020-09-30T20:25:25.087Z",
         "numberOfPages": 1,
         "scenario": "Type A",
@@ -8616,7 +8645,7 @@
         "pending": false,
         "isDraft": false,
         "workItem": {
-          "associatedJudge": "Legacy Judge Fieri",
+          "associatedJudge": "Fieri",
           "completedAt": "2020-09-30T20:26:08.983Z",
           "caseStatus": "General Docket - Not at Issue",
           "completedMessage": "completed",
@@ -8664,7 +8693,7 @@
             "scenario": "Type B",
             "entityName": "DocketEntry",
             "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-            "judge": "Legacy Judge Fieri",
+            "judge": "Fieri",
             "documentTitle": "Summary Opinion Chief Judge Fieri",
             "relationship": "primaryDocument",
             "draftOrderState": null,
@@ -8689,7 +8718,7 @@
         "scenario": "Type B",
         "entityName": "DocketEntry",
         "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-        "judge": "Legacy Judge Fieri",
+        "judge": "Fieri",
         "documentTitle": "Summary Opinion Chief Judge Fieri",
         "relationship": "primaryDocument",
         "draftOrderState": null,
@@ -8761,7 +8790,7 @@
     "pending": false,
     "isDraft": false,
     "workItem": {
-      "associatedJudge": "Legacy Judge Fieri",
+      "associatedJudge": "Fieri",
       "completedAt": "2020-09-30T20:26:08.983Z",
       "caseStatus": "General Docket - Not at Issue",
       "completedMessage": "completed",
@@ -8809,7 +8838,7 @@
         "scenario": "Type B",
         "entityName": "DocketEntry",
         "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-        "judge": "Legacy Judge Fieri",
+        "judge": "Fieri",
         "documentTitle": "Summary Opinion Chief Judge Fieri",
         "relationship": "primaryDocument",
         "draftOrderState": null,
@@ -8835,7 +8864,7 @@
     "entityName": "DocketEntry",
     "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
     "sk": "docket-entry|659d001a-4d91-41f4-acd8-8417a1d2be49",
-    "judge": "Legacy Judge Fieri",
+    "judge": "Fieri",
     "documentTitle": "Summary Opinion Chief Judge Fieri",
     "relationship": "primaryDocument",
     "draftOrderState": null,
@@ -8866,7 +8895,7 @@
     "pending": false,
     "isDraft": false,
     "workItem": {
-      "associatedJudge": "Legacy Judge Fieri",
+      "associatedJudge": "Fieri",
       "completedAt": "2020-09-30T20:25:32.962Z",
       "caseStatus": "General Docket - Not at Issue",
       "completedMessage": "completed",
@@ -8910,7 +8939,7 @@
         "isDraft": false,
         "receivedAt": "2020-09-30T20:25:22.035Z",
         "isOnDocketRecord": true,
-        "signedJudgeName": "Legacy Judge Fieri",
+        "signedJudgeName": "Fieri",
         "createdAt": "2020-09-30T20:25:25.087Z",
         "numberOfPages": 1,
         "scenario": "Type A",
@@ -8938,7 +8967,7 @@
     },
     "receivedAt": "2020-09-30T20:25:22.035Z",
     "isOnDocketRecord": true,
-    "signedJudgeName": "Legacy Judge Fieri",
+    "signedJudgeName": "Fieri",
     "createdAt": "2020-09-30T20:25:25.087Z",
     "numberOfPages": 1,
     "scenario": "Type A",
@@ -8978,7 +9007,7 @@
     "pending": false,
     "isDraft": false,
     "workItem": {
-      "associatedJudge": "Legacy Judge Fieri",
+      "associatedJudge": "Fieri",
       "completedAt": "2020-09-30T20:24:15.441Z",
       "caseStatus": "New",
       "completedMessage": "Served to IRS",
@@ -9050,6 +9079,12 @@
     "pk": "case|124-20"
   },
   {
+    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline-catalog|ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "2019-08-25T04:00:00.000Z",
+    "gsi1pk": "case-deadline-catalog"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -9092,7 +9127,7 @@
     "term": "Fall",
     "pk": "trial-session|f3b04943-8ea8-422b-8990-dec3ca644c83",
     "judge": {
-      "name": "Judge Buch",
+      "name": "Buch",
       "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2020-11-25T05:00:00.000Z",
@@ -9112,7 +9147,7 @@
     "term": "Winter",
     "pk": "trial-session|359c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
-      "name": "Judge Ashford",
+      "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": false,
@@ -9350,11 +9385,12 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -9362,7 +9398,6 @@
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "highPriority": false,
-    "assigneeName": "Judge Armen",
     "entityName": "WorkItem",
     "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "docketNumberWithSuffix": "106-19",
@@ -9402,7 +9437,7 @@
     "term": "Fall",
     "pk": "trial-session|a3bee7c0-bd98-4504-890b-b00eb398e547",
     "judge": {
-      "name": "Judge Carluzzo",
+      "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
     },
     "swingSession": true,
@@ -9511,6 +9546,7 @@
   },
   {
     "docketNumberSuffix": null,
+    "assigneename": "Colvin",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -9522,14 +9558,13 @@
       "documentType": "Proposed Stipulated Decision"
     },
     "caseTitle": "Denise Gould",
-    "section": "armensChambers",
+    "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "createdAt": "2019-08-08T14:23:51.565Z",
-    "assigneeName": "Judge Armen",
     "sk": "2019-08-08T14:23:51.565Z",
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "106-19",
@@ -9614,7 +9649,7 @@
     "role": "legacyJudge",
     "entityName": "User",
     "sk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
-    "name": "Legacy Judge Fieri",
+    "name": "Fieri",
     "section": "legacyJudgesChambers",
     "pk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "userId": "dadbad42-18d0-43ec-bafb-654e83405416",
@@ -9636,7 +9671,7 @@
     "term": "Fall",
     "pk": "trial-session|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
     "judge": {
-      "name": "Judge Cohen",
+      "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2020-12-02T05:00:00.000Z",
@@ -9847,7 +9882,7 @@
     "term": "Fall",
     "pk": "trial-session|7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
     "judge": {
-      "name": "Judge Carluzzo",
+      "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-12-02T05:00:00.000Z",
@@ -10206,7 +10241,7 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad03-18d0-43ec-bafb-654e83405416",
-    "name": "Special Trial Judge Carluzzo",
+    "name": "Carluzzo",
     "section": "carluzzosChambers",
     "pk": "user|dabbad03-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
@@ -10493,6 +10528,178 @@
     "pk": "irsPractitioner|Stuart Morrison"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-10-13T20:23:17.557Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "4c3c60ac-7628-459b-bc11-1d43a26405b3",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2020-10-13T20:23:17.556Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|125-20",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "125-20W",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000125,
+    "archivedDocketEntries": [],
+    "noticeOfTrialDate": "2020-10-13T20:23:17.557Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|125-20",
+    "docketNumber": "125-20",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-10-13T20:23:17.556Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "b7e11e69-a529-4a97-977f-e5fd286838f2",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-10-13T20:23:17.559Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "125-20W",
+      "docketEntry": {
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-10-13T20:23:17.556Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "isFileAttached": true,
+        "receivedAt": "2020-10-13T20:23:17.558Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "processingStatus": "pending",
+        "createdAt": "2020-10-13T20:23:17.558Z",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+        "partySecondary": false,
+        "documentTitle": "Petition",
+        "privatePractitioners": []
+      },
+      "docketNumber": "125-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-10-13T20:23:17.559Z"
+    },
+    "receivedAt": "2020-10-13T20:23:17.558Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-10-13T20:23:17.558Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "39f9757c-6818-4b5c-8486-fd4fb61873a1",
+    "sk": "docket-entry|39f9757c-6818-4b5c-8486-fd4fb61873a1",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|125-20"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-10-13T20:23:17.556Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2020-10-13T20:23:17.560Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "processingStatus": "complete",
+    "createdAt": "2020-10-13T20:23:17.559Z",
+    "entityName": "DocketEntry",
+    "docketEntryId": "907e9f21-fa58-474d-a2bf-22d06aa0b582",
+    "sk": "docket-entry|907e9f21-fa58-474d-a2bf-22d06aa0b582",
+    "pk": "case|125-20",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-10-13T20:23:17.556Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "isFileAttached": true,
+    "receivedAt": "2020-10-13T20:23:17.560Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": false,
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "createdAt": "2020-10-13T20:23:17.560Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
+    "sk": "docket-entry|c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
+    "partySecondary": false,
+    "pk": "case|125-20",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": []
+  },
+  {
+    "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
+    "pk": "case|125-20"
+  },
+  {
     "role": "admissionsclerk",
     "entityName": "User",
     "sk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
@@ -10763,11 +10970,82 @@
     "role": "judge",
     "entityName": "User",
     "sk": "user|dabbad05-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Gustafson",
+    "name": "Gustafson",
     "section": "gustafsonsChambers",
     "pk": "user|dabbad05-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
     "email": "judgeGustafson@example.com"
+  },
+  {
+    "sk": "user|9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
+    "pk": "section|colvinsChambers"
+  },
+  {
+    "sk": "user|dabbad00-18d0-43ec-bafb-654e83405416",
+    "pk": "section|colvinsChambers"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "docketNumberSuffix": null,
+    "assigneename": "Colvin",
+    "caseStatus": "New",
+    "caseIsInProgress": false,
+    "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "caseTitle": "Denise Gould",
+    "section": "colvinsChambers",
+    "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Docketclerk",
+    "sentBySection": "docket",
+    "createdAt": "2019-08-08T14:23:51.565Z",
+    "highPriority": false,
+    "entityName": "WorkItem",
+    "sk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
+    "docketEntry": {
+      "createdAt": "2019-07-12T17:11:26.955Z",
+      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+      "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
+      "documentType": "Proposed Stipulated Decision",
+      "docketEntryId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
+    },
+    "pk": "section|colvinsChambers",
+    "docketNumber": "106-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-08T14:23:51.565Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "docketNumberSuffix": "S",
+    "assigneename": "Colvin",
+    "caseStatus": "New",
+    "caseIsInProgress": false,
+    "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
+    "caseTitle": "Samson Workman",
+    "section": "colvinsChambers",
+    "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
+    "isInitializeCase": false,
+    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "createdAt": "2019-08-08T14:33:24.183Z",
+    "highPriority": false,
+    "entityName": "WorkItem",
+    "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
+    "docketEntry": {
+      "createdAt": "2019-03-01T22:54:05.993Z",
+      "numberOfPages": 1,
+      "filingDate": "2019-03-01T22:54:05.993Z",
+      "documentType": "Answer",
+      "docketEntryId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+      "documentTitle": "Answer by Test Respondent"
+    },
+    "pk": "section|colvinsChambers",
+    "docketNumber": "103-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2019-08-08T14:33:24.183Z"
   },
   {
     "role": "floater",

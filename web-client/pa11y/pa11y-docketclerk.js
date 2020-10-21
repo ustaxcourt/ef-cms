@@ -121,7 +121,7 @@ module.exports = [
   {
     actions: [
       'wait for #judge to be visible',
-      'set field #judge to Judge Armen',
+      'set field #judge to Colvin',
       'check field #judge',
       'set field #free-text to Anything',
       'wait for #serve-to-parties-btn to be visible',

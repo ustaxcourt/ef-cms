@@ -7,11 +7,11 @@ describe('setSignatureNameForPdfSigningAction', () => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   let user = {
-    section: 'armenChambers',
+    section: 'colvinChambers',
   };
 
   let judgeUser = {
-    name: 'Judge Armen',
+    name: 'Judge Colvin',
   };
 
   beforeAll(() => {
@@ -43,34 +43,28 @@ describe('setSignatureNameForPdfSigningAction', () => {
   });
 
   it('sets the chamber judge for chamber users', async () => {
-    judgeUser.judgeFullName = 'Robert N. Armen, Jr.';
-    judgeUser.judgeTitle = 'Special Trial Judge';
-    user.section = 'armenChambers';
+    judgeUser.judgeFullName = 'John O. Colvin';
+    judgeUser.judgeTitle = 'Judge';
+    user.section = 'colvinChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
       },
     });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual(
-      'Robert N. Armen, Jr.',
-    );
-    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
-      'Special Trial Judge',
-    );
+    expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
+    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual('Judge');
   });
 
   it('sets special trial for special trial judge', async () => {
-    judgeUser.judgeFullName = 'Robert N. Armen, Jr.';
+    judgeUser.judgeFullName = 'John O. Colvin';
     judgeUser.judgeTitle = 'Special Trial Judge';
-    user.section = 'armenChambers';
+    user.section = 'colvinChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
       },
     });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual(
-      'Robert N. Armen, Jr.',
-    );
+    expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
     expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
       'Special Trial Judge',
     );

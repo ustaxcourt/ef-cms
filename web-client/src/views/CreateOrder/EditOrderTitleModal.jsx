@@ -11,6 +11,7 @@ export const EditOrderTitleModal = connect(
     confirmSequence: sequences.submitEditOrderTitleModalSequence,
     modal: state.modal,
     orderTypesHelper: state.orderTypesHelper,
+    parentMessageId: state.parentMessageId,
     updateModalValue: sequences.updateCreateOrderModalFormValueSequence,
     validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
@@ -20,6 +21,7 @@ export const EditOrderTitleModal = connect(
     confirmSequence,
     modal,
     orderTypesHelper,
+    parentMessageId,
     updateModalValue,
     validateSequence,
     validationErrors,
@@ -31,7 +33,9 @@ export const EditOrderTitleModal = connect(
         cancelSequence={cancelSequence}
         className=""
         confirmLabel="Continue"
-        confirmSequence={confirmSequence}
+        confirmSequence={() => {
+          confirmSequence({ parentMessageId });
+        }}
         title="Edit Order Title"
       >
         <div className="ustc-create-order-modal">

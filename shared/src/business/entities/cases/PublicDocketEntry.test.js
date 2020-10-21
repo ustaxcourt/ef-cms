@@ -22,7 +22,6 @@ describe('PublicDocketEntry', () => {
     expect(entity.toRawObject()).toEqual({
       additionalInfo: 'something',
       additionalInfo2: 'something else',
-      createdAt: 'testing',
       docketEntryId: 'testing',
       docketNumber: '123-20',
       documentType: 'testing',
