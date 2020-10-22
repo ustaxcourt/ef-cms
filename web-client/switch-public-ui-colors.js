@@ -7,10 +7,17 @@ const check = (value, message) => {
   }
 };
 
-const { CURRENT_COLOR, DEPLOYING_COLOR, ENV, ZONE_NAME } = process.env;
+const {
+  CURRENT_COLOR,
+  DEPLOYING_COLOR,
+  EFCMS_DOMAIN,
+  ENV,
+  ZONE_NAME,
+} = process.env;
 
 check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
 check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
+check(EFCMS_DOMAIN, 'You must have EFCMS_DOMAIN set in your environment');
 check(ZONE_NAME, 'You must have ZONE_NAME set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 
@@ -24,13 +31,13 @@ const run = async () => {
 
   const currentColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias => alias === `${CURRENT_COLOR}.${ENV}.${ZONE_NAME}`,
+      alias => alias === `${CURRENT_COLOR}.${EFCMS_DOMAIN}`,
     ),
   );
 
   const deployingColorDistribution = distributions.find(distribution =>
     distribution.Aliases.Items.find(
-      alias => alias === `${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}`,
+      alias => alias === `${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
     ),
   );
 
@@ -47,14 +54,14 @@ const run = async () => {
     .promise();
 
   currentColorConfig.DistributionConfig.Aliases.Items = [
-    `${CURRENT_COLOR}.${ENV}.${ZONE_NAME}`,
+    `${CURRENT_COLOR}.${EFCMS_DOMAIN}`,
   ];
   currentColorConfig.DistributionConfig.Aliases.Quantity = 1;
 
   deployingColorConfig.DistributionConfig.Aliases.Quantity = 2;
   deployingColorConfig.DistributionConfig.Aliases.Items = [
-    `${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}`,
-    `${ENV}.${ZONE_NAME}`,
+    `${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+    `${EFCMS_DOMAIN}`,
   ];
 
   await cloudfront
@@ -91,12 +98,12 @@ const run = async () => {
                 EvaluateTargetHealth: false,
                 HostedZoneId: 'Z2FDTNDATAQYW2', // this magic number is the zone for all cloud front distributions on AWS
               },
-              Name: `${ENV}.${ZONE_NAME}`,
+              Name: `${EFCMS_DOMAIN}`,
               Type: 'A',
             },
           },
         ],
-        Comment: `The UI for ${ENV}.${ZONE_NAME}`,
+        Comment: `The UI for ${EFCMS_DOMAIN}`,
       },
       HostedZoneId: zoneId,
     })
