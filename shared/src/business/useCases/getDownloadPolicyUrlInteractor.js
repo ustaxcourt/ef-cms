@@ -53,11 +53,11 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
   const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
-  if (isInternalUser) {
-    const docketEntryEntity = caseEntity.getDocketEntryById({
-      docketEntryId: key,
-    });
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId: key,
+  });
 
+  if (isInternalUser) {
     const selectedIsStin =
       docketEntryEntity &&
       docketEntryEntity.documentType ===
@@ -86,6 +86,15 @@ exports.getDownloadPolicyUrlInteractor = async ({
         'Unauthorized to view case documents at this time',
       );
     }
+
+    if (!docketEntryEntity) {
+      throw new NotFoundError(`Docket entry ${key} was not found.`);
+    }
+    if (!docketEntryEntity.isFileAttached) {
+      throw new NotFoundError(
+        `Docket entry ${key} does not have an attached file.`,
+      );
+    }
   } else {
     const userAssociatedWithCase = await applicationContext
       .getPersistenceGateway()
@@ -103,10 +112,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
-      const docketEntryEntity = caseEntity.getDocketEntryById({
-        docketEntryId: key,
-      });
-
       if (!docketEntryEntity) {
         throw new NotFoundError(`Docket entry ${key} was not found.`);
       }

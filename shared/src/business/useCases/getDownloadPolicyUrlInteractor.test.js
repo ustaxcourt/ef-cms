@@ -479,7 +479,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
     mockCase.docketEntries = [
       {
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
         documentType: 'Petition',
+        isFileAttached: true,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     ];
@@ -490,10 +492,65 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const url = await getDownloadPolicyUrlInteractor({
       applicationContext,
       docketNumber: mockCase.docketNumber,
-      key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
     });
 
     expect(url).toEqual('localhost');
+  });
+
+  it('throw an error if the user role is irsSuperuser and the petition document on the case is served but the requested document does not have a file attached', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsSuperuser,
+      userId: 'irsSuperuser',
+    });
+    mockCase.docketEntries = [
+      {
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Petition',
+        isFileAttached: false,
+        servedAt: '2019-03-01T21:40:46.415Z',
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+      }),
+    ).rejects.toThrow(
+      'Docket entry 60814ae9-cd39-454a-9dc7-f5595a39988f does not have an attached file.',
+    );
+  });
+
+  it('throws a not found error if the user role is irsSuperuser and the petition document on the case is served but the document requested is not on the case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsSuperuser,
+      userId: 'irsSuperuser',
+    });
+    mockCase.docketEntries = [
+      {
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Petition',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow(
+      'Docket entry def81f4d-1e47-423a-8caf-6d2fdc3d3859 was not found.',
+    );
   });
 
   it('should return the url when the user is a petitionsClerk, the case has not been served and is attempting to view the stin document', async () => {
