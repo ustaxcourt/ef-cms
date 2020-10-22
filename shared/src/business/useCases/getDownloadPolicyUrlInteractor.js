@@ -70,20 +70,20 @@ exports.getDownloadPolicyUrlInteractor = async ({
         petitionDocketEntry.servedAt
       ) {
         throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time',
+          'Unauthorized to view case documents at this time.',
         );
       }
     } else {
       if (selectedIsStin) {
         throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time',
+          'Unauthorized to view case documents at this time.',
         );
       }
     }
   } else if (isIrsSuperuser) {
     if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
       throw new UnauthorizedError(
-        'Unauthorized to view case documents at this time',
+        'Unauthorized to view case documents until the petition has been served.',
       );
     }
 
@@ -131,26 +131,26 @@ exports.getDownloadPolicyUrlInteractor = async ({
 
       if (!documentIsAvailable) {
         throw new UnauthorizedError(
-          'Unauthorized to view document at this time',
+          'Unauthorized to view document at this time.',
         );
       }
 
       if (docketEntryEntity.isCourtIssued()) {
         if (!docketEntryEntity.servedAt) {
           throw new UnauthorizedError(
-            'Unauthorized to view document at this time',
+            'Unauthorized to view document at this time.',
           );
         } else if (
           docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
           !userAssociatedWithCase
         ) {
           throw new UnauthorizedError(
-            'Unauthorized to view document at this time',
+            'Unauthorized to view document at this time.',
           );
         }
       } else if (selectedIsStin) {
         throw new UnauthorizedError(
-          'Unauthorized to view document at this time',
+          'Unauthorized to view document at this time.',
         );
       } else {
         if (!userAssociatedWithCase) {

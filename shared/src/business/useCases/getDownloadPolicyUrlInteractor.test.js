@@ -469,7 +469,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
-    ).rejects.toThrow('Unauthorized to view case documents at this time');
+    ).rejects.toThrow(
+      'Unauthorized to view case documents until the petition has been served.',
+    );
   });
 
   it('returns the url if the user role is irsSuperuser and the petition document on the case is served', async () => {
