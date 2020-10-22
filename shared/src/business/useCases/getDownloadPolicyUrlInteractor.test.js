@@ -179,7 +179,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
   it('throws a not found error for a case that is not found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
       userId: 'petitioner',

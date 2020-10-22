@@ -35,7 +35,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
   it('should throw an error for a case that is not found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
 
     await expect(
       getPublicDownloadPolicyUrlInteractor({
