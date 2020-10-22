@@ -29,7 +29,7 @@ elif [[ $BRANCH == 'test' ]] ; then
 elif [[ $BRANCH == 'migration' ]] ; then
   echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "t2.large.elasticsearch"
 elif [[ $BRANCH == 'dawson' ]] ; then
   echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'prod' ]] ; then
