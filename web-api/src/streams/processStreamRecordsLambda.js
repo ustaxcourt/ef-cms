@@ -1,4 +1,4 @@
-const { genericHandler } = require('../genericHandler');
+const createApplicationContext = require('../applicationContext');
 
 /**
  * used for processing stream records from persistence
@@ -6,21 +6,12 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.processStreamRecordsLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const recordsToProcess = event.Records;
-
-      return await applicationContext
-        .getUseCases()
-        .processStreamRecordsInteractor({
-          applicationContext,
-          recordsToProcess,
-        });
-    },
-    {
-      logUser: false,
-      user: {},
-    },
-  );
+exports.processStreamRecordsLambda = async event => {
+  const applicationContext = createApplicationContext({});
+  applicationContext.logger.info('received a stream event of', event);
+  const recordsToProcess = event.Records;
+  return await applicationContext.getUseCases().processStreamRecordsInteractor({
+    applicationContext,
+    recordsToProcess,
+  });
+};
