@@ -11,7 +11,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
 /**
@@ -45,13 +45,61 @@ exports.getDownloadPolicyUrlInteractor = async ({
       docketNumber,
     });
 
+  if (!caseData) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
   const caseEntity = new Case(caseData, { applicationContext });
 
   const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
-  if (!isInternalUser && !isIrsSuperuser) {
+  if (isInternalUser) {
+    const docketEntryEntity = caseEntity.getDocketEntryById({
+      docketEntryId: key,
+    });
+
+    const selectedIsStin =
+      docketEntryEntity &&
+      docketEntryEntity.documentType ===
+        INITIAL_DOCUMENT_TYPES.stin.documentType;
+
+    if (isPetitionsClerk) {
+      if (
+        selectedIsStin &&
+        petitionDocketEntry &&
+        petitionDocketEntry.servedAt
+      ) {
+        throw new UnauthorizedError(
+          'Unauthorized to view case documents at this time',
+        );
+      }
+    } else {
+      if (selectedIsStin) {
+        throw new UnauthorizedError(
+          'Unauthorized to view case documents at this time',
+        );
+      }
+    }
+  } else if (isIrsSuperuser) {
+    if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
+      throw new UnauthorizedError(
+        'Unauthorized to view case documents at this time',
+      );
+    }
+  } else {
+    const userAssociatedWithCase = await applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser({
+        applicationContext,
+        docketNumber: caseEntity.docketNumber,
+        userId: user.userId,
+      });
+
     if (key.includes('.pdf')) {
-      if (caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key) {
+      if (
+        caseEntity.getCaseConfirmationGeneratedPdfFileName() !== key ||
+        !userAssociatedWithCase
+      ) {
         throw new UnauthorizedError('Unauthorized');
       }
     } else {
@@ -59,16 +107,21 @@ exports.getDownloadPolicyUrlInteractor = async ({
         docketEntryId: key,
       });
 
-      const selectedDocketEntry = caseData.docketEntries.find(
-        document => document.docketEntryId === key,
-      );
+      if (!docketEntryEntity) {
+        throw new NotFoundError(`Docket entry ${key} was not found.`);
+      }
+      if (!docketEntryEntity.isFileAttached) {
+        throw new NotFoundError(
+          `Docket entry ${key} does not have an attached file.`,
+        );
+      }
 
       const documentIsAvailable = documentMeetsAgeRequirements(
-        selectedDocketEntry,
+        docketEntryEntity,
       );
 
       const selectedIsStin =
-        selectedDocketEntry.documentType ===
+        docketEntryEntity.documentType ===
         INITIAL_DOCUMENT_TYPES.stin.documentType;
 
       if (!documentIsAvailable) {
@@ -76,14 +129,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
           'Unauthorized to view document at this time',
         );
       }
-
-      const userAssociatedWithCase = await applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser({
-          applicationContext,
-          docketNumber: caseEntity.docketNumber,
-          userId: user.userId,
-        });
 
       if (docketEntryEntity.isCourtIssued()) {
         if (!docketEntryEntity.servedAt) {
@@ -106,39 +151,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
         if (!userAssociatedWithCase) {
           throw new UnauthorizedError('Unauthorized');
         }
-      }
-    }
-  } else if (isIrsSuperuser) {
-    if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
-      throw new UnauthorizedError(
-        'Unauthorized to view case documents at this time',
-      );
-    }
-  } else if (isInternalUser) {
-    const selectedDocketEntry = caseData.docketEntries.find(
-      document => document.docketEntryId === key,
-    );
-
-    const selectedIsStin =
-      selectedDocketEntry &&
-      selectedDocketEntry.documentType ===
-        INITIAL_DOCUMENT_TYPES.stin.documentType;
-
-    if (isPetitionsClerk) {
-      if (
-        selectedIsStin &&
-        petitionDocketEntry &&
-        petitionDocketEntry.servedAt
-      ) {
-        throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time',
-        );
-      }
-    } else {
-      if (selectedIsStin) {
-        throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time',
-        );
       }
     }
   }
