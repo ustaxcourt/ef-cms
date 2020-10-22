@@ -45,7 +45,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
       docketNumber,
     });
 
-  if (!caseData) {
+  if (!caseData.docketNumber && !caseData.entityName) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
