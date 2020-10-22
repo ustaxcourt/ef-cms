@@ -37,6 +37,18 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-docket-entry');
   });
 
+  it('returns efcms-docket-entry for CaseDocketEntryMapping records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseDocketEntryMapping',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-docket-entry');
+  });
+
   it('returns efcms-user for User records', () => {
     const record = {
       entityName: {

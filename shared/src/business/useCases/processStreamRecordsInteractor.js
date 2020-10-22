@@ -1,32 +1,6 @@
 const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
-
-const whitelistCase = marshalledCase => {
-  return {
-    caseCaption: marshalledCase.caseCaption,
-    contactPrimary: marshalledCase.contactPrimary,
-    contactSecondary: marshalledCase.contactSecondary,
-    docketNumber: marshalledCase.docketNumber,
-    docketNumberSuffix: marshalledCase.docketNumberSuffix,
-    docketNumberWithSuffix: marshalledCase.docketNumberWithSuffix,
-    irsPractitioners: {
-      L: marshalledCase.irsPractitioners.L.map(p => ({
-        M: {
-          userId: p.M.userId,
-        },
-      })),
-    },
-    isSealed: marshalledCase.isSealed,
-    privatePractitioners: {
-      L: marshalledCase.privatePractitioners.L.map(p => ({
-        M: {
-          userId: p.M.userId,
-        },
-      })),
-    },
-    sealedDate: marshalledCase.sealedDate,
-  };
-};
+const { omit } = require('lodash');
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -72,77 +46,53 @@ const processCaseEntries = async ({
     `going to index ${caseEntityRecords.length} caseEntityRecords`,
   );
 
-  const indexDocketEntry = async (marshalledCase, docketEntry) => {
-    if (docketEntry.documentContentsId) {
-      try {
-        const buffer = await utils.getDocument({
-          applicationContext,
-          documentContentsId: docketEntry.documentContentsId,
-        });
-        const { documentContents } = JSON.parse(buffer.toString());
-        docketEntry.documentContents = documentContents;
-      } catch (err) {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info(
-          `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
-        );
-      }
-    }
-
-    const docketEntryWithCase = {
-      ...whitelistCase(marshalledCase),
-      ...AWS.DynamoDB.Converter.marshall(docketEntry),
-    };
-
-    return {
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: docketEntry.pk,
-          },
-          sk: {
-            S: docketEntry.sk,
-          },
-        },
-        NewImage: docketEntryWithCase,
-      },
-      eventName: 'MODIFY',
-    };
-  };
-
   const indexCaseEntry = async caseRecord => {
-    const caseEntry = AWS.DynamoDB.Converter.unmarshall(
-      caseRecord.dynamodb.NewImage,
-    );
+    const caseNewImage = caseRecord.dynamodb.NewImage;
+    const caseRecords = [];
 
+    // We fetch this to get practitioners arrays (possible performance improvement here)
     const fullCase = await utils.getCase({
       applicationContext,
-      docketNumber: caseEntry.docketNumber,
+      docketNumber: caseNewImage.docketNumber.S,
     });
 
-    const { docketEntries } = fullCase;
     const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
 
-    const esCaseEntry = {
+    caseRecords.push({
       dynamodb: {
         Keys: {
           pk: {
-            S: fullCase.pk,
+            S: caseNewImage.pk.S,
           },
           sk: {
-            S: fullCase.sk,
+            S: `${caseNewImage.sk.S}`,
+          },
+        },
+        NewImage: {
+          ...omit(marshalledCase, 'docketEntries'), // we don't need to store the docket entry list onto the case docket entry mapping
+          case_relations: { name: 'case' },
+          entityName: { S: 'CaseDocketEntryMapping' },
+        }, // Create a mapping record on the docket-entry index for parent-child relationships
+      },
+      eventName: 'MODIFY',
+    });
+
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: caseNewImage.pk.S,
+          },
+          sk: {
+            S: caseNewImage.sk.S,
           },
         },
         NewImage: marshalledCase,
       },
       eventName: 'MODIFY',
-    };
+    });
 
-    const docketEntryRecords = await Promise.all(
-      docketEntries.map(entry => indexDocketEntry(marshalledCase, entry)),
-    );
-
-    return [esCaseEntry, ...docketEntryRecords];
+    return caseRecords;
   };
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
@@ -185,16 +135,13 @@ const processDocketEntries = async ({
 
   const newDocketEntryRecords = await Promise.all(
     docketEntryRecords.map(async record => {
+      // TODO: May need to remove the `case_relations` object and re-add later
       const fullDocketEntry = AWS.DynamoDB.Converter.unmarshall(
         record.dynamodb.NewImage,
       );
 
-      const fullCase = await utils.getCase({
-        applicationContext,
-        docketNumber: fullDocketEntry.docketNumber,
-      });
-
       if (fullDocketEntry.documentContentsId) {
+        // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         try {
           const buffer = await utils.getDocument({
             applicationContext,
@@ -204,20 +151,13 @@ const processDocketEntries = async ({
           fullDocketEntry.documentContents = documentContents;
         } catch (err) {
           applicationContext.logger.error(err);
-          applicationContext.logger.info(
+          applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
           );
         }
       }
 
-      const marshalledCase = AWS.DynamoDB.Converter.marshall({
-        ...fullCase,
-      });
-
-      const docketEntryWithCase = {
-        ...whitelistCase(marshalledCase),
-        ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
-      };
+      const caseDocketEntryMappingRecordId = `${fullDocketEntry.pk}_${fullDocketEntry.pk}|mapping`;
 
       return {
         dynamodb: {
@@ -229,7 +169,13 @@ const processDocketEntries = async ({
               S: fullDocketEntry.sk,
             },
           },
-          NewImage: docketEntryWithCase,
+          NewImage: {
+            ...AWS.DynamoDB.Converter.marshall(fullDocketEntry),
+            case_relations: {
+              name: 'document',
+              parent: caseDocketEntryMappingRecordId,
+            },
+          },
         },
         eventName: 'MODIFY',
       };
