@@ -6,7 +6,6 @@ describe('processStreamRecordsLambda', () => {
     try {
       await processStreamRecordsLambda({});
     } catch (err) {
-      console.log('error', err);
       error = err;
     }
     expect(error).toBeDefined();
