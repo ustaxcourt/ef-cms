@@ -58,6 +58,7 @@ export const CaseDetail = connect(
                       aria-label="additional case info"
                       className="usa-select"
                       id="mobile-document-detail-tab-selector"
+                      value={caseDetailSubnavHelper.selectedCaseInformationTab}
                       onChange={e => {
                         setCaseDetailPageTabSequence({
                           isSecondary: [
