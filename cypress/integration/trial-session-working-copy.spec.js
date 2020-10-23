@@ -2,7 +2,6 @@ const faker = require('faker');
 const {
   addCaseNote,
   changeCaseTrialStatus,
-  checkShowAllFilterOnWorkingCopy,
   createTrialSession,
   filterWorkingCopyByStatus,
   goToTrialSession,
@@ -138,7 +137,12 @@ describe('Judge', () => {
   });
 
   it('views trial session working copy', () => {
-    checkShowAllFilterOnWorkingCopy(testData.trialSessionIds[0]);
+    cy.goToRoute(`/trial-session-working-copy/${testData.trialSessionIds[0]}`);
+  });
+
+  it('clicks show all', () => {
+    cy.get('label[for="filters.showAll"]').click();
+    cy.get('label[for="filters.showAll"]').click();
   });
 
   it('edits trial session working copy case trial status', () => {
@@ -164,7 +168,11 @@ describe('Judge Chambers', () => {
   });
 
   it('views trial session working copy', () => {
-    checkShowAllFilterOnWorkingCopy(testData.trialSessionIds[0]);
+    cy.goToRoute(`/trial-session-working-copy/${testData.trialSessionIds[0]}`);
+  });
+
+  it('clicks show all', () => {
+    cy.get('label[for="filters.showAll"]').click();
   });
 
   it('edits trial session working copy case trial status', () => {
