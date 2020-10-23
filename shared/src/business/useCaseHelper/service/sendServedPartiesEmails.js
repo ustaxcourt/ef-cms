@@ -10,6 +10,10 @@ exports.sendServedPartiesEmails = async ({
   docketEntryEntity,
   servedParties,
 }) => {
+  if (docketEntryEntity.index === undefined) {
+    throw new Error('Cannot serve a docket entry without an index.');
+  }
+
   const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
 
   const {

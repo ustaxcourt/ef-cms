@@ -206,20 +206,23 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
-    // Serve notice
-    const servedParties = await serveNoticesForCase({
-      caseEntity,
-      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
-      noticeDocumentPdfData: noticeOfTrialIssuedFile,
-      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
-      standingPretrialPdfData: standingPretrialFile,
-    });
+    const servedParties = aggregatePartiesForService(caseEntity);
 
     noticeOfTrialDocketEntry.setAsServed(servedParties.all);
     standingPretrialDocketEntry.setAsServed(servedParties.all);
 
     caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
     caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
+
+    // Serve notice
+    await serveNoticesForCase({
+      caseEntity,
+      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
+      noticeDocumentPdfData: noticeOfTrialIssuedFile,
+      servedParties,
+      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
+      standingPretrialPdfData: standingPretrialFile,
+    });
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -246,11 +249,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     caseEntity,
     noticeDocketEntryEntity,
     noticeDocumentPdfData,
+    servedParties,
     standingPretrialDocketEntryEntity,
     standingPretrialPdfData,
   }) => {
-    const servedParties = aggregatePartiesForService(caseEntity);
-
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
@@ -298,8 +300,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           servedParties,
         });
     }
-
-    return servedParties;
   };
 
   for (let calendaredCase of calendaredCases) {
