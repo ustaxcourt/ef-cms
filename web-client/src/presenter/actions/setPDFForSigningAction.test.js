@@ -131,4 +131,32 @@ describe('setPDFForSigningAction', () => {
 
     expect(removeCoverMock).not.toHaveBeenCalled();
   });
+
+  it('calls loadPDFForSigningInteractor with expected params', async () => {
+    const docketEntryId = '123';
+    await runAction(setPDFForSigningAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: { docketNumber: '123-20' },
+        docketEntryId,
+      },
+      state: {
+        pdfForSigning: {
+          docketEntryId: null,
+          pdfjsObj: null,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().loadPDFForSigningInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      docketEntryId,
+      docketNumber: '123-20',
+      removeCover: false,
+    });
+  });
 });
