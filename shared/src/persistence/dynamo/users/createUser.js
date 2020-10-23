@@ -84,7 +84,7 @@ exports.createUser = async ({
       .getCognito()
       .adminCreateUser({
         MessageAction: 'SUPPRESS',
-        TemporaryPassword: password || process.env.DEFAULT_ACCOUNT_PASS,
+        TemporaryPassword: password,
         UserAttributes: [
           {
             Name: 'email_verified',

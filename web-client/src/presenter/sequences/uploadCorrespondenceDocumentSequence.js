@@ -7,6 +7,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
+import { setCorrespondenceIdToDisplayAction } from '../actions/CorrespondenceDocument/setCorrespondenceIdToDisplayAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -36,6 +37,7 @@ export const uploadCorrespondenceDocumentSequence = [
         success: [
           setDocumentTitleFromFormAction,
           submitCorrespondenceAction,
+          setCorrespondenceIdToDisplayAction,
           setCaseAction,
           getUploadCorrespondenceDocumentAlertSuccessAction,
           setAlertSuccessAction,

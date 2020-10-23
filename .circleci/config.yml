@@ -251,7 +251,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -373,7 +373,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -437,7 +437,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium+
+    resource_class: large
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -798,6 +798,8 @@ jobs:
       - run:
           name: 'Pa11y Smoke Tests'
           command: npm run test:pa11y:smoketests
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
 
   switch-colors:
     docker:
@@ -834,7 +836,7 @@ build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run hourly below
+        - develop # run the related develop workflow below
         - prod # run with context workflow below
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults

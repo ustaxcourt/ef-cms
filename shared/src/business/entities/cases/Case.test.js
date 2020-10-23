@@ -627,7 +627,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
     });
 
@@ -635,7 +635,7 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case from an already existing case json when the docketNumber has leading zeroes', () => {
@@ -645,7 +645,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.docketNumber).toBe('101-20');
     });
 
@@ -774,7 +774,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with an invalid trial time', () => {
@@ -842,7 +842,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with blocked set to true and a blockedReason and blockedDate', () => {
@@ -857,7 +857,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with a trial time', () => {
@@ -870,7 +870,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with automaticBlocked set to true and a valid automaticBlockedReason and automaticBlockedDate', () => {
@@ -885,7 +885,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with automaticBlocked set to true and an invalid automaticBlockedReason and automaticBlockedDate', () => {
@@ -927,7 +927,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with closed status and no closed date', () => {
@@ -957,7 +957,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates a valid case with sealedDate set to a valid date', () => {
@@ -970,7 +970,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     describe('with different payment statuses', () => {
@@ -1003,6 +1003,41 @@ describe('Case entity', () => {
         expect(myCase.getFormattedValidationErrors()).toMatchObject({
           petitionPaymentWaivedDate: expect.anything(),
         });
+      });
+    });
+
+    it('fails validation if a petition fee payment date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentDate: '2050-10-01T21:40:46.415Z',
+          petitionPaymentMethod: 'Magic Beans',
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentDate: expect.anything(),
+      });
+    });
+
+    it('fails validation if a petition fee waived date is in the future', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2050-10-01T21:40:46.415Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitionPaymentWaivedDate: expect.anything(),
       });
     });
   });
@@ -2796,9 +2831,9 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
 
-      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Armen');
+      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Colvin');
 
-      expect(caseToUpdate.associatedJudge).toEqual('Judge Armen');
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Colvin');
       expect(caseToUpdate.trialDate).toBeFalsy();
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
@@ -3172,8 +3207,8 @@ describe('Case entity', () => {
         expect(result.reason).toEqual(['Case procedure is not the same']);
       });
 
-      it('should fail when case trial locations are not the same', () => {
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+      it('should fail when case requested place of trials are not the same', () => {
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3227,7 +3262,7 @@ describe('Case entity', () => {
 
       it('should return all reasons for the failure if the case status is eligible', () => {
         pendingCaseEntity.procedureType = 'small';
-        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.preferredTrialCity = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({
@@ -3960,13 +3995,13 @@ describe('Case entity', () => {
         expect(myCase).toMatchObject({
           judgeUserId: mockJudgeUserId,
         });
-        expect(myCase.isValid()).toBeTruthy();
+        expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
 
       it('does not fail validation without a judgeUserId', () => {
         const myCase = new Case(MOCK_CASE, { applicationContext });
         expect(myCase.judgeUserId).toBeUndefined();
-        expect(myCase.isValid()).toBeTruthy();
+        expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
     });
   });

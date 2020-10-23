@@ -149,8 +149,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
     return (
       userPermissions.EDIT_DOCKET_ENTRY &&
-      (entry.isMinuteEntry || entry.qcWorkItemsCompleted) &&
-      !hasSystemGeneratedDocument &&
+      (hasSystemGeneratedDocument ||
+        entry.isMinuteEntry ||
+        entry.qcWorkItemsCompleted) &&
       (!hasCourtIssuedDocument ||
         hasServedCourtIssuedDocument ||
         hasUnservableCourtIssuedDocument)
@@ -193,7 +194,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
     if (entry.documentTitle) {
       formattedResult.descriptionDisplay = entry.documentTitle;
-      if (entry.additionalInfo) {
+      if (entry.additionalInfo && entry.addToCoversheet) {
         formattedResult.descriptionDisplay += ` ${entry.additionalInfo}`;
       }
     }

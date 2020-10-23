@@ -38,7 +38,7 @@ describe('getTodaysOpinionsInteractor', () => {
       docketEntryId: '6945cdff-fd12-422b-bf2c-63b792b7f618',
       docketNumber: '103-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-      documentTitle: 'Memorandum Opinion Judge Armen',
+      documentTitle: 'Memorandum Opinion Judge Colvin',
       filingDate: '2020-05-12T18:42:10.471Z',
       irsPractitioners: [],
       isSealed: false,

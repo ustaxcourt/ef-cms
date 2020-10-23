@@ -79,6 +79,7 @@ export const EditPetitionerInformation = connect(
                 <Contacts
                   bind="form"
                   contactsHelper="startCaseInternalContactsHelper"
+                  phoneNumberOptional={false}
                   showPrimaryContact={
                     editPetitionerInformationHelper.showPrimaryContact
                   }

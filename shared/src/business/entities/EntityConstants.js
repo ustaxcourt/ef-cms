@@ -345,6 +345,11 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     eventCode: 'EA',
   },
   {
+    documentType: 'Limited Entry of Appearance',
+    documentTitle: 'Limited Entry of Appearance',
+    eventCode: 'LEA',
+  },
+  {
     documentType: 'Substitution of Counsel',
     documentTitle: 'Substitution of Counsel',
     eventCode: 'SOC',
@@ -731,10 +736,6 @@ const PETITIONS_SECTION = 'petitions';
 const TRIAL_CLERKS_SECTION = 'trialClerks';
 
 const JUDGES_CHAMBERS = {
-  ARMENS_CHAMBERS_SECTION: {
-    label: 'Armen’s Chambers',
-    section: 'armensChambers',
-  },
   ASHFORDS_CHAMBERS_SECTION: {
     label: 'Ashford’s Chambers',
     section: 'ashfordsChambers',
@@ -759,10 +760,6 @@ const JUDGES_CHAMBERS = {
     label: 'Copeland’s Chambers',
     section: 'copelandsChambers',
   },
-  DREDDS_CHAMBERS_SECTION: {
-    label: 'Dredds’s Chambers',
-    section: 'dreddsChambers',
-  },
   FOLEYS_CHAMBERS_SECTION: {
     label: 'Foley’s Chambers',
     section: 'foleysChambers',
@@ -771,13 +768,13 @@ const JUDGES_CHAMBERS = {
     label: 'Gale’s Chambers',
     section: 'galesChambers',
   },
-  GERBERS_CHAMBERS_SECTION: {
-    label: 'Gerber’s Chambers',
-    section: 'gerbersChambers',
-  },
   GOEKES_CHAMBERS_SECTION: {
     label: 'Goeke’s Chambers',
     section: 'goekesChambers',
+  },
+  GREAVES_CHAMBESR_SECTION: {
+    label: 'Greaves’ Chambers',
+    section: 'greavesChambers',
   },
   GUSTAFSONS_CHAMBERS_SECTION: {
     label: 'Gustafson’s Chambers',
@@ -795,10 +792,6 @@ const JUDGES_CHAMBERS = {
     label: 'Holmes’ Chambers',
     section: 'holmesChambers',
   },
-  JACOBS_CHAMBERS_SECTION: {
-    label: 'Jacobs’ Chambers',
-    section: 'jacobsChambers',
-  },
   JONES_CHAMBERS_SECTION: {
     label: 'Jones’ Chambers',
     section: 'jonesChambers',
@@ -814,6 +807,10 @@ const JUDGES_CHAMBERS = {
   LEYDENS_CHAMBERS_SECTION: {
     label: 'Leyden’s Chambers',
     section: 'leydensChambers',
+  },
+  MARSHALLS_CHAMBERS_SECTION: {
+    label: 'Marshall’s Chambers',
+    section: 'marshallsChambers',
   },
   MARVELS_CHAMBERS_SECTION: {
     label: 'Marvel’s Chambers',
@@ -859,17 +856,13 @@ const JUDGES_CHAMBERS = {
     label: 'Vasquez’s Chambers',
     section: 'vasquezsChambers',
   },
+  WEILERS_CHAMBERS_SECTION: {
+    label: 'Weiler’s Chambers',
+    section: 'weilersChambers',
+  },
   WELLS_CHAMBERS_SECTION: {
     label: 'Wells’ Chambers',
     section: 'wellsChambers',
-  },
-  GREAVES_CHAMBERS_SECTION: {
-    label: 'Greaves’ Chambers',
-    section: 'greavesChambers',
-  },
-  MARSHALLS_CHAMBERS_SECTION: {
-    label: 'Marshall’s Chambers',
-    section: 'marshallsChambers',
   },
 };
 
