@@ -16,7 +16,7 @@ describe('lambdaWrapper', () => {
     JSON.parse = jest.fn();
   });
 
-  it('seets res.headers', async () => {
+  it('sets res.headers', async () => {
     await lambdaWrapper(() => {
       return {
         body: 'hello world',
