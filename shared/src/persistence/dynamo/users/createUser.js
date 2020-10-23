@@ -136,10 +136,13 @@ exports.createUser = async ({
   }
 
   if (disableCognitoUser) {
-    await applicationContext.getCognito().adminDisableUser({
-      UserPoolId: userPoolId,
-      Username: userId,
-    });
+    await applicationContext
+      .getCognito()
+      .adminDisableUser({
+        UserPoolId: userPoolId,
+        Username: userId,
+      })
+      .promise();
   }
 
   return await exports.createUserRecords({

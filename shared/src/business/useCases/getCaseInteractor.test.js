@@ -28,7 +28,17 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(null));
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          archivedCorrespondences: [],
+          archivedDocketEntries: [],
+          associatedJudge: [],
+          correspondence: [],
+          docketEntries: [],
+          irsPractitioners: [],
+          privatePractitioners: [],
+        }),
+      );
 
     await expect(
       getCaseInteractor({
