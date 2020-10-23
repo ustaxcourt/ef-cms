@@ -504,8 +504,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     logger: {
       error: jest.fn(),
       info: jest.fn(),
-      time: () => jest.fn().mockReturnValue(null),
-      timeEnd: () => jest.fn().mockReturnValue(null),
     },
     notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
