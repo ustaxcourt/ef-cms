@@ -7,7 +7,16 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
     .isInternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
+  const primaryTab = get(state.currentViewMetadata.caseDetail.primaryTab);
+  const caseInformationTab = get(
+    state.currentViewMetadata.caseDetail.caseInformationTab,
+  );
+
+  const selectedCaseInformationTab =
+    primaryTab === 'caseInformation' ? caseInformationTab : primaryTab;
+
   return {
+    selectedCaseInformationTab,
     showCaseInformationTab:
       isInternalUser || (!isInternalUser && userAssociatedWithCase),
     showCorrespondenceTab: isInternalUser,

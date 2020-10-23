@@ -7,7 +7,7 @@ const {
   getCancelModalTitle,
 } = require('../support/pages/form-cancel-modal-dialog');
 
-describe('Edit a trial session ', () => {
+describe('Edit a trial session', () => {
   it('should display a modal to confirm discarding changes when cancel is clicked', () => {
     navigateToTrialSessionDetail(
       'petitionsclerk',
