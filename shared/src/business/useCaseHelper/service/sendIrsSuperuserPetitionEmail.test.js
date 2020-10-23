@@ -42,6 +42,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketEntryId: '35479520-e2d6-4357-b72f-5b46f16a708a',
         documentType: 'The Document',
         eventCode: 'P',
+        index: 0,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     });
@@ -85,6 +86,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketEntryId: 'test-document-id',
         documentType: 'The Document',
         eventCode: 'P',
+        index: 1,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     });
@@ -123,6 +125,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketEntryId: 'test-document-id',
         documentType: 'The Document',
         eventCode: 'P',
+        index: 1,
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     });
@@ -156,6 +159,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       },
       docketEntryEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
+        index: 1,
       },
     });
 
@@ -182,6 +186,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       },
       docketEntryEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
+        index: 1,
       },
     });
 
@@ -208,6 +213,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       },
       docketEntryEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
+        index: 1,
       },
     });
 
@@ -216,5 +222,27 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     expect(caseDetail).toMatchObject({
       trialLocation: 'No requested place of trial',
     });
+  });
+
+  it('should throw an error if the docket entry does not have an index', async () => {
+    await expect(
+      sendIrsSuperuserPetitionEmail({
+        applicationContext,
+        caseEntity: {
+          caseCaption: 'A Caption',
+          contactPrimary: {
+            name: 'Joe Exotic',
+          },
+          docketEntries: [],
+          docketNumber: '123-20',
+          docketNumberWithSuffix: '123-20L',
+          preferredTrialCity: '',
+          privatePractitioners: [],
+        },
+        docketEntryEntity: {
+          filingDate: '2019-03-05T21:40:46.415Z',
+        },
+      }),
+    ).rejects.toThrow('Cannot serve a docket entry without an index.');
   });
 });

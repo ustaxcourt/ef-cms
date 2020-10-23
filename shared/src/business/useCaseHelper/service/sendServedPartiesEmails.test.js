@@ -153,4 +153,29 @@ describe('sendServedPartiesEmails', () => {
     expect(caseDetail.docketNumber).toEqual('123-20');
     expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
   });
+
+  it('should throw an error if the docket entry does not have an index', async () => {
+    await expect(
+      sendServedPartiesEmails({
+        applicationContext,
+        caseEntity: {
+          caseCaption: 'A Caption',
+          docketEntries: [
+            { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+          ],
+          docketNumber: '123-20',
+          docketNumberWithSuffix: '123-20L',
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        docketEntryEntity: {
+          docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+          documentTitle: 'The Document',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+        servedParties: {
+          electronic: [],
+        },
+      }),
+    ).rejects.toThrow('Cannot serve a docket entry without an index.');
+  });
 });

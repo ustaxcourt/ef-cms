@@ -110,13 +110,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     paperServicePdfUrl = url;
   }
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryEntity: currentDocketEntry,
-    servedParties,
-  });
-
   const workItemToUpdate = currentDocketEntry.workItem;
 
   if (workItemToUpdate) {
@@ -148,6 +141,13 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   }
 
   caseEntity.updateDocketEntry(currentDocketEntry);
+
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryEntity: currentDocketEntry,
+    servedParties,
+  });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
