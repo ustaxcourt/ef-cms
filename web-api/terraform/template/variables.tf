@@ -61,3 +61,7 @@ variable "green_elasticsearch_domain" {
 variable "destination_table" {
   type = string
 }
+
+variable "disable_emails" {
+  type = bool
+}
