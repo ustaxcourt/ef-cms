@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the elasticsearch instance count defined in each environment
+# Returns the elasticsearch disable emails variable for each environment
 
 # Usage
-#   ./get-keys.sh develop
+#   ./get-disable-emails.sh develop
 
 # Arguments
 #   - $1 - the branch to check
@@ -13,27 +13,27 @@
 BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_DEV}"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_EXP1}"
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_EXP2}"
 elif [[ $BRANCH == 'experimental3' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_EXP3}"
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_IRS}"
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo "t2.medium.elasticsearch"
+  echo "${DISABLE_EMAILS_STG}"
 elif [[ $BRANCH == 'test' ]] ; then
-  echo "t2.medium.elasticsearch"
+  echo "${DISABLE_EMAILS_TEST}"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_MIG}"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo "m5.large.elasticsearch"
+  echo "${DISABLE_EMAILS_MASTER}"
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "${DISABLE_EMAILS_DAWSON}"
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo "m5.large.elasticsearch"
+  echo "${DISABLE_EMAILS_PROD}"
 else
   exit 1;
 fi
