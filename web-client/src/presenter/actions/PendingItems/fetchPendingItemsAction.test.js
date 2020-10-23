@@ -16,7 +16,7 @@ describe('fetchPendingItemsAction', () => {
         presenter,
       },
       props: {
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
       },
     });
 

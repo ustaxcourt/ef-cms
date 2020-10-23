@@ -40,5 +40,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
       section: sectionToShow,
     });
 
-  return WorkItem.validateRawCollection(workItems, { applicationContext });
+  return WorkItem.validateRawCollection(workItems, {
+    applicationContext,
+  });
 };

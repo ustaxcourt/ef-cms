@@ -20,7 +20,7 @@ describe('CourtIssuedDocumentTypeF', () => {
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
         scenario: 'Type F',
         trialLocation: 'Seattle, Washington',
       });
@@ -34,12 +34,12 @@ describe('CourtIssuedDocumentTypeF', () => {
         attachments: false,
         documentTitle: 'Further Trial before [Judge] at [Place]',
         documentType: 'FTRL - Further Trial before ...',
-        judge: 'Judge Armen',
+        judge: 'Judge Colvin',
         scenario: 'Type F',
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Further Trial before Judge Armen at Seattle, Washington',
+        'Further Trial before Judge Colvin at Seattle, Washington',
       );
     });
   });

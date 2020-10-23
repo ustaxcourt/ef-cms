@@ -2,13 +2,14 @@ import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
 } from '../../../shared/src/business/entities/EntityConstants';
+import { refreshElasticsearchIndex } from '../helpers';
 
 export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
   return it('Docket clerk updates case status to General Docket - At Issue (Ready for Trial)', async () => {
     test.setState('caseDetail', {});
 
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+      docketNumber: test.docketNumberDifferentPlaceOfTrial || test.docketNumber,
     });
 
     const currentStatus = test.getState('caseDetail.status');
@@ -46,5 +47,7 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     );
     expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
     expect(test.getState('modal')).toEqual({});
+
+    await refreshElasticsearchIndex();
   });
 };
