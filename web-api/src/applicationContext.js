@@ -1328,7 +1328,7 @@ module.exports = appContextUser => {
     },
     getDynamoClient,
     getEmailClient: () => {
-      if (process.env.CI) {
+      if (process.env.CI || process.env.DISABLE_EMAILS) {
         return {
           sendBulkTemplatedEmail: params => {
             return {
