@@ -1,7 +1,7 @@
 const { Case } = require('../../entities/cases/Case');
 const { isPrivateDocument } = require('../../entities/cases/PublicCase');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getPublicDownloadPolicyUrlInteractor
@@ -24,11 +24,24 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
       docketNumber,
     });
 
+  if (!caseToCheck.docketNumber && !caseToCheck.entityName) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
   const caseEntity = new Case(caseToCheck, { applicationContext });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId: key,
   });
+
+  if (!docketEntryEntity) {
+    throw new NotFoundError(`Docket entry ${key} was not found.`);
+  }
+  if (!docketEntryEntity.isFileAttached) {
+    throw new NotFoundError(
+      `Docket entry ${key} does not have an attached file.`,
+    );
+  }
 
   const isPrivate = isPrivateDocument(
     docketEntryEntity,

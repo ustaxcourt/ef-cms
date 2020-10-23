@@ -175,4 +175,24 @@ describe('getCaseByDocketNumber', () => {
       privatePractitioners: [],
     });
   });
+
+  it('should return default object if nothing is returned from the client query request', async () => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: async () => Promise.resolve({ Items: [] }),
+    });
+
+    const result = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '99999-99',
+    });
+
+    expect(result).toEqual({
+      archivedCorrespondences: [],
+      archivedDocketEntries: [],
+      correspondence: [],
+      docketEntries: [],
+      irsPractitioners: [],
+      privatePractitioners: [],
+    });
+  });
 });
