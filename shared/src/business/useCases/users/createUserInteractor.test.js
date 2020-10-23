@@ -12,12 +12,13 @@ describe('create user', () => {
     const mockUser = {
       name: 'Test PetitionsClerk',
       role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk1@example.com',
+      userId: '615b7d39-8fae-4c2f-893c-3c829598bc71',
     };
+
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Admin',
       role: ROLES.admin,
-      userId: 'admin',
+      userId: 'ad3b7d39-8fae-4c2f-893c-3c829598bc71',
     });
     applicationContext
       .getPersistenceGateway()
@@ -27,7 +28,7 @@ describe('create user', () => {
       barNumber: '',
       name: 'Jesse Pinkman',
       role: ROLES.petitionsClerk,
-      userId: 'petitionsclerk1@example.com',
+      userId: '245b7d39-8fae-4c2f-893c-3c829598bc71',
     };
     const user = await createUserInteractor({
       applicationContext,
@@ -40,17 +41,17 @@ describe('create user', () => {
     const mockUser = {
       name: 'Test Petitioner',
       role: ROLES.petitioner,
-      userId: 'petitioner1@example.com',
+      userId: '245b7d39-8fae-4c2f-893c-3c829598bc71',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Admin',
       role: ROLES.petitioner,
-      userId: 'admin',
+      userId: 'ad2b7d39-8fae-4c2f-893c-3c829598bc71',
     });
     applicationContext
       .getPersistenceGateway()
       .createUser.mockReturnValue(mockUser);
-    const userToCreate = { userId: 'petitioner1@example.com' };
+    const userToCreate = { userId: '145b7d39-8fae-4c2f-893c-3c829598bc71' };
 
     await expect(
       createUserInteractor({
@@ -64,7 +65,7 @@ describe('create user', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Admin',
       role: ROLES.admin,
-      userId: 'admin',
+      userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
     });
     applicationContext.getPersistenceGateway().createUser.mockReturnValue({
       barNumber: 'CS20001',
@@ -168,7 +169,7 @@ describe('create user', () => {
     const mockUser = {
       name: 'Test Legacy Judge',
       role: ROLES.legacyJudge,
-      userId: 'legacyJudge1@example.com',
+      userId: '845b7d39-8fae-4c2f-893c-3c829598bc71',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Admin',
