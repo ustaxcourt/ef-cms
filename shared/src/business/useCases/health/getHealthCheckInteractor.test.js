@@ -33,6 +33,9 @@ describe('getHealthCheckInteractor', () => {
             }),
           };
         },
+        logger: {
+          error: () => {},
+        },
       },
     });
 
