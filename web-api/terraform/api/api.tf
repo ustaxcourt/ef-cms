@@ -34,9 +34,8 @@ resource "aws_api_gateway_gateway_response" "timeout" {
   response_type = "INTEGRATION_TIMEOUT"
 
   response_parameters = {
-    "gatewayresponse.header.Access-Control-Allow-Origin"  = true
-    "gatewayresponse.header.Access-Control-Allow-Headers" = true
-    "gatewayresponse.header.Access-Control-Allow-Methods" = true
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
 }
 
