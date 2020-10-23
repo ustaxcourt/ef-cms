@@ -203,6 +203,7 @@ describe('creation form', () => {
   });
 
   it('case list table reflects newly-added record', () => {
+    cy.goToRoute('/file-a-petition/step-1');
     cy.goToRoute('/');
     cy.get('table').find('tr').should('contain.text', createdDocketNumber);
   });
