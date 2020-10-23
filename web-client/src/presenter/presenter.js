@@ -438,9 +438,9 @@ export const presenter = {
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
+    [UnauthorizedRequestError, setCurrentPageErrorSequence], // 403
     [NotFoundError, notFoundErrorSequence], //404
-    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
+    [UnidentifiedUserError, setCurrentPageErrorSequence], //401
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},

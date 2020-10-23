@@ -32,6 +32,12 @@ resource "aws_api_gateway_gateway_response" "timeout" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   status_code   = "504"
   response_type = "INTEGRATION_TIMEOUT"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = true
+    "gatewayresponse.header.Access-Control-Allow-Headers" = true
+    "gatewayresponse.header.Access-Control-Allow-Methods" = true
+  }
 }
 
 resource "aws_api_gateway_resource" "api_resource" {
