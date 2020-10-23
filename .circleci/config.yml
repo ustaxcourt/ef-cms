@@ -523,6 +523,9 @@ jobs:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup Disable Emails
+          command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
