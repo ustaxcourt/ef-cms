@@ -6,7 +6,7 @@ const {
   viewDocumentQCSectionInbox,
 } = require('../support/pages/dashboard');
 
-describe('Assign a work item ', () => {
+describe('Assign a work item', () => {
   it('views the section inbox', () => {
     navigateToDashboard('petitionsclerk');
     viewDocumentQCSectionInbox();
