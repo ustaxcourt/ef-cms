@@ -203,6 +203,8 @@ describe('creation form', () => {
   });
 
   it('case list table reflects newly-added record', () => {
+    // the first goToRoute is here so that if this fails, the second goToRoute will
+    // actually retry the API calls because it's not staying on the same page
     cy.goToRoute('/file-a-petition/step-1');
     cy.goToRoute('/');
     cy.get('table').find('tr').should('contain.text', createdDocketNumber);
