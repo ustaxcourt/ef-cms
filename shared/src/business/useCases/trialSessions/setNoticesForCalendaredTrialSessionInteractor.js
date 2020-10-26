@@ -241,9 +241,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    * @param {object} deconstructed.caseEntity the case entity
    * @param {object} deconstructed.noticeDocketEntryEntity the notice document entity
    * @param {Uint8Array} deconstructed.noticeDocumentPdfData the pdf data of the notice doc
+   * @param {object} deconstructed.servedParties the parties to serve
    * @param {object} deconstructed.standingPretrialDocketEntryEntity the standing pretrial document entity
    * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data of the standing pretrial doc
-   * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticesForCase = async ({
     caseEntity,
