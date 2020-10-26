@@ -6,11 +6,35 @@ describe('lambdaWrapper', () => {
   beforeEach(() => {
     req = { body: 'blank' };
     res = {
+      headers: {},
       json: jest.fn(),
       redirect: jest.fn(),
       send: jest.fn(),
+      set: jest.fn(),
       status: jest.fn(),
     };
+    JSON.parse = jest.fn();
+  });
+
+  it('sets res.headers', async () => {
+    await lambdaWrapper(() => {
+      return {
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      };
+    })(req, res);
+
+    expect(res.set).toHaveBeenCalledWith({
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control':
+        'max-age=0, private, no-cache, no-store, must-revalidate',
+      'Content-Type': 'application/json',
+      Pragma: 'no-cache',
+      Vary: 'Authorization',
+      'X-Content-Type-Options': 'nosniff',
+    });
   });
 
   it('sends response.body if header is application/pdf', async () => {
@@ -23,6 +47,8 @@ describe('lambdaWrapper', () => {
       };
     })(req, res);
     expect(res.send).toHaveBeenCalled();
+    expect(res.set.mock.calls[1][0]).toBe('Content-Type');
+    expect(res.set.mock.calls[1][1]).toBe('application/pdf');
   });
 
   it('sends response.body if header is application/text', async () => {
@@ -37,7 +63,7 @@ describe('lambdaWrapper', () => {
     expect(res.send).toHaveBeenCalled();
   });
 
-  it('calls res.json if header is application/json', async () => {
+  it('calls res.send with a JSON parsed body when header is application/json', async () => {
     await lambdaWrapper(() => {
       return {
         body: '{}',
@@ -46,19 +72,8 @@ describe('lambdaWrapper', () => {
         },
       };
     })(req, res);
-    expect(res.json).toHaveBeenCalled();
-  });
-
-  it('calls res.json if header is application/json', async () => {
-    await lambdaWrapper(() => {
-      return {
-        body: null,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-    })(req, res);
-    expect(res.json).toHaveBeenCalled();
+    expect(JSON.parse).toHaveBeenCalled();
+    expect(res.send).toHaveBeenCalled();
   });
 
   it('calls res.redirect if header Location is set', async () => {
