@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+import { without } from 'lodash';
 
 describe('caseInventoryReportHelper', () => {
   const {
@@ -29,14 +30,16 @@ describe('caseInventoryReportHelper', () => {
     userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
   });
 
-  it('should return all case statuses', () => {
+  it('should return all case statuses except Closed', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         screenMetadata: {},
       },
     });
 
-    expect(result.caseStatuses).toEqual(Object.values(STATUS_TYPES));
+    expect(result.caseStatuses).toEqual(
+      without(Object.values(STATUS_TYPES), 'Closed'),
+    );
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
