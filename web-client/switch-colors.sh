@@ -1,5 +1,11 @@
 #!/bin/bash
 
+[ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
+[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
+[ -z "${CURRENT_COLOR}" ] && echo "You must have CURRENT_COLOR set in your environment" && exit 1
+
 node ./web-client/switch-public-ui-colors.js
 node ./web-client/switch-ui-colors.js
 
