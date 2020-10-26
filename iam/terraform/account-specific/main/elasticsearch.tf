@@ -25,7 +25,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 
   ebs_options{
     ebs_enabled = true
-    volume_size = 10
+    volume_size = 30
   }
 
   snapshot_options {
