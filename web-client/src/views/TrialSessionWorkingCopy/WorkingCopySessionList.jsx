@@ -133,7 +133,7 @@ export const WorkingCopySessionList = connect(
                   </td>
                   <td className="minw-30">
                     <BindedSelect
-                      ariaLabel="trial status"
+                      aria-label="trial status"
                       bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
                       id={`trialSessionWorkingCopy-${item.docketNumber}`}
                       onChange={value => {

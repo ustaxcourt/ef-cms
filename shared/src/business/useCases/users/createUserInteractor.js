@@ -49,6 +49,7 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
 
   await applicationContext.getPersistenceGateway().createUser({
     applicationContext,
+    disableCognitoUser: user.role === ROLES.legacyJudge,
     password: user.password,
     user: userEntity.validate().toRawObject(),
   });

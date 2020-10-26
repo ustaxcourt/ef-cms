@@ -288,9 +288,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.trialDate')).toEqual(
         '2025-12-12T05:00:00.000Z',
       );
-      expect(test.getState('caseDetail.associatedJudge')).toEqual(
-        'Judge Cohen',
-      );
+      expect(test.getState('caseDetail.associatedJudge')).toEqual('Cohen');
 
       //Case #2 - not assigned
       await test.runSequence('gotoCaseDetailSequence', {

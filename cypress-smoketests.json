@@ -13,5 +13,6 @@
   "requestTimeout": 20000,
   "viewportWidth": 1200,
   "viewportHeight": 900,
-  "retries": 3
+  "retries": 3,
+  "chromeWebSecurity": false
 }

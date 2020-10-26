@@ -1,5 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -16,7 +16,7 @@ export const submitEditOtherStatisticsSequence = [
         setSaveAlertsForNavigationAction,
         setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
-        navigateToCaseDetailCaseInformationAction,
+        navigateToCaseDetailCaseInformationActionFactory(),
       ],
     },
   ]),

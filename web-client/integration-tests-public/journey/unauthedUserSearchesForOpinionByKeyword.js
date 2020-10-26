@@ -19,7 +19,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
-        opinionType: 'Summary Opinion',
+        opinionType: 'Memorandum Opinion',
         startDate: '2001-01-01',
       },
     });
@@ -44,7 +44,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
         expect.objectContaining({
           docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
           documentTitle:
-            'T.C. Opinion Judge Armen Some very strong opinions about sunglasses',
+            'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
         }),
       ]),
     );

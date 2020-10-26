@@ -5,8 +5,6 @@ const { saveUserConnection } = require('./saveUserConnection');
 
 describe('saveUserConnection', () => {
   beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
-
     applicationContext.getDocumentClient().put.mockReturnValue({
       promise: async () => Promise.resolve(null),
     });
@@ -20,7 +18,9 @@ describe('saveUserConnection', () => {
       userId: 'a66ac519-fd1a-44ac-8226-b4a53d348677',
     });
 
-    expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
       Item: {
         connectionId: 'abc',
         endpoint: {},
@@ -29,7 +29,6 @@ describe('saveUserConnection', () => {
         sk: 'connection|abc',
         ttl: expect.anything(),
       },
-      TableName: 'efcms-dev',
       applicationContext: expect.anything(),
     });
   });

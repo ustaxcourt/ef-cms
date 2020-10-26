@@ -88,6 +88,7 @@ const TrialInformation = ({
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
+  trialSessionJudge,
 }) => (
   <React.Fragment>
     {caseDetail.showPrioritized && (
@@ -148,7 +149,13 @@ const TrialInformation = ({
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
             <p>
-              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+              <a
+                href={
+                  caseDetail.userIsAssignedToSession
+                    ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                    : `/trial-session-detail/${caseDetail.trialSessionId}`
+                }
+              >
                 {caseDetail.formattedTrialCity}
               </a>
             </p>
@@ -300,7 +307,13 @@ const TrialInformation = ({
           <div className="grid-col-4">
             <p className="label">Place of trial</p>
             <p>
-              <a href={`/trial-session-detail/${caseDetail.trialSessionId}`}>
+              <a
+                href={
+                  caseDetail.userIsAssignedToSession
+                    ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                    : `/trial-session-detail/${caseDetail.trialSessionId}`
+                }
+              >
                 {caseDetail.formattedTrialCity}
               </a>
             </p>
@@ -311,7 +324,7 @@ const TrialInformation = ({
           </div>
           <div className="grid-col-4">
             <p className="label">Trial judge</p>
-            <p>{caseDetail.formattedAssociatedJudge}</p>
+            <p>{trialSessionJudge.name}</p>
           </div>
         </div>
         <Button
@@ -350,6 +363,7 @@ export const CaseInformationInternal = connect(
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
+    trialSessionJudge: state.trialSessionJudge,
   },
 
   function CaseInformationInternal({
@@ -367,6 +381,7 @@ export const CaseInformationInternal = connect(
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
+    trialSessionJudge,
   }) {
     return (
       <div className="internal-information">
@@ -452,6 +467,7 @@ export const CaseInformationInternal = connect(
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
                     }
+                    trialSessionJudge={trialSessionJudge}
                   />
                 </div>
               </div>

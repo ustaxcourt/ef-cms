@@ -22,7 +22,7 @@ export const setDefaultCaseDetailTabAction = ({ get, props, store }) => {
     );
     store.set(
       state.currentViewMetadata.caseDetail.caseInformationTab,
-      'overview',
+      props.caseInformationTab || 'overview',
     );
     store.set(
       state.currentViewMetadata.caseDetail.docketRecordTab,

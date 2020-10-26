@@ -1,0 +1,251 @@
+openapi: 3.0.0
+servers:
+  - url: https://api.dawson.ustaxcourt.gov/v1
+    description: Production server (v1)
+  - url: https://api.irs.ef-cms.ustaxcourt.gov/v1
+    description: IRS test server (v1)
+info:
+  description: This API enables access to the data found in Dawson, and is currently limited access. Contact Dawson support for feature requests.
+  version: "1"
+  title: Dawson API
+  contact:
+    name: Dawson support
+    email: dawson.support@ustaxcourt.gov
+tags:
+  - name: irs
+    description: Endpoints provided for IRS access.
+security:
+  - bearerAuth: []
+paths:
+  /cases/{docketNumber}:
+    get:
+      summary: fetches a case
+      operationId: fetchCase
+      tags:
+        - irs
+      description: |
+        By passing in a docket number, you can retrieve details about that case
+      parameters:
+        - in: path
+          name: docketNumber
+          description: The case's docket number.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: case object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /cases/{docketNumber}/entries/{docketEntryId}/document-download-url:
+    get:
+      summary: fetches a temporary file download url
+      operationId: fetchCaseDocketEntryDownloadUrl
+      tags:
+        - irs
+      description: |
+        By passing in a docket number and a docket entry ID, you can retrieve a signed, temporary URL to retrieve the attached document.
+      parameters:
+        - in: path
+          name: docketNumber
+          description: The case's docket number.
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: docketEntryId
+          description: The ID for the docket entry on the case.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: document download url
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocketEntryDownloadUrl'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: credentials were not provided or are invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ForbiddenError:
+      description: your credentials cannot access this resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: the server encountered an error when processing your request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Case:
+      type: object
+      properties:
+        caseCaption:
+          type: string
+          example: Private practitioner & Annalise, Deceased, Private practitioner, Surviving Spouse, Petitioners
+        caseType:
+          type: string
+          example: Deficiency
+        contactPrimary:
+          $ref: '#/components/schemas/Contact'
+        contactSecondary:
+          $ref: '#/components/schemas/Contact'
+        docketNumber:
+          type: string
+          example: '384-20'
+        docketNumberSuffix:
+          type: string
+        docketEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocketEntry'
+        filingType:
+          type: string
+          example: Petitioner and spouse
+        leadDocketNumber:
+          type: string
+          example: '383-20'
+        noticeOfTrialDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        partyType:
+          type: string
+          example: Petitioner & deceased spouse
+        practitioners:
+          type: array
+          items:
+            $ref: '#/components/schemas/Practitioner'
+        preferredTrialCity:
+          type: string
+          example: Mobile, Alabama
+        respondents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Practitioner'
+        sortableDocketNumber:
+          type: integer
+          example: 20000384
+        status:
+          type: string
+          example: New
+        trialLocation:
+          type: string
+    Contact:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        address3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+    DocketEntry:
+      type: object
+      properties:
+        docketEntryId:
+          type: string
+          format: guidv4
+          example: 2621672d-cf3f-4ddd-ba50-92513b2fba76
+        isFileAttached:
+          type: boolean
+          example: true
+        index:
+          type: integer
+          example: 1
+        eventCode:
+          type: string
+          example: P
+        eventCodeDescription:
+          type: string
+          example: Petition
+        filedBy:
+          type: string
+          example: Petrs. Private practitioner & Annalise
+        filingDate:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+        servedAt:
+          type: string
+          format: date-time
+          example: '2016-08-29T09:12:33.001Z'
+    Practitioner:
+      type: object
+      properties:
+        barNumber:
+          type: string
+          example: PT1234
+        contact:
+          $ref: '#/components/schemas/Contact'
+        email:
+          type: string
+          example: privatePractitioner1@example.com
+        name:
+          type: string
+          example: Test private practitioner1
+        serviceIndicator:
+          type: string
+          example: Electronic
+    DocketEntryDownloadUrl:
+      type: object
+      properties:
+        url:
+          type: string
+          format: url
+          example: 'https://app.dawson.ustaxcourt.gov/documents/4a6e9284-88aa-4954-9aa9-8e0e0fdd764e?AWSAccessKeyId=EXAMPLE&Expires=1601661807&Signature=EXAMPLE&x-amz-security-token=EXAMPLE'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string

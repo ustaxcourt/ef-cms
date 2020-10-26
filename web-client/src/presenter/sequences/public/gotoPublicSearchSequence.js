@@ -2,15 +2,15 @@ import { clearSearchResultsAction } from '../../actions/AdvancedSearch/clearSear
 import { defaultAdvancedSearchFormAction } from '../../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
 import { getOpinionTypesAction } from '../../actions/getOpinionTypesAction';
 import { getPublicJudgesAction } from '../../actions/Public/getPublicJudgesAction';
+import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../../actions/setOpinionTypesAction';
-import { setUsersByKeyAction } from '../../actions/setUsersByKeyAction';
 
 export const gotoPublicSearchSequence = [
   clearSearchResultsAction,
   defaultAdvancedSearchFormAction,
   getPublicJudgesAction,
-  setUsersByKeyAction('judges'),
+  setAllAndCurrentJudgesAction,
   getOpinionTypesAction,
   setOpinionTypesAction,
   setCurrentPageAction('PublicSearch'),

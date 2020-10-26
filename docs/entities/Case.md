@@ -352,6 +352,7 @@
                 - "Hearing Exhibits"
                 - "Hearing before"
                 - "Letter"
+                - "Limited Entry of Appearance"
                 - "Memorandum"
                 - "Memorandum Opinion"
                 - "Memorandum in Support"
@@ -364,6 +365,7 @@
                 - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                 - "Motion for Continuance"
                 - "Motion for Default and Dismissal"
+                - "Motion for Document Subpoena Hearing"
                 - "Motion for Entry of Decision"
                 - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                 - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -443,7 +445,7 @@
                 - "Motion to Dismiss for Lack of Jurisdiction"
                 - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                 - "Motion to Dismiss for Lack of Prosecution"
-                - "Motion to Dismiss on Grounds of Mootness"
+                - "Motion to Dismiss on Ground of Mootness"
                 - "Motion to Disqualify Counsel"
                 - "Motion to Enforce Subpoena"
                 - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -501,6 +503,7 @@
                 - "Notice of Change of Counsel for Non-Party"
                 - "Notice of Change of Telephone Number"
                 - "Notice of Clarification of Tax Matters Partner"
+                - "Notice of Completion"
                 - "Notice of Concession"
                 - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                 - "Notice of Death of Counsel"
@@ -527,6 +530,7 @@
                 - "Notice of Termination Assessment"
                 - "Notice of Trial"
                 - "Notice of Unavailability"
+                - "Notice of Withdrawal as Counsel"
                 - "Objection"
                 - "Objection [anything]"
                 - "Opposition"
@@ -576,11 +580,12 @@
                 - "Prehearing Memorandum"
                 - "Pretrial Memorandum"
                 - "Proposed Stipulated Decision"
+                - "Proposed Trial Exhibits"
                 - "Ratification"
                 - "Ratification of Petition"
                 - "Record on Appeal"
                 - "Redacted"
-                - "Redacted Petition Filed"
+                - "Redacted Petition"
                 - "Reference List of Redacted Information"
                 - "Reply"
                 - "Report"
@@ -737,6 +742,7 @@
                 - "FTRL"
                 - "HE"
                 - "HEAR"
+                - "LEA"
                 - "LTR"
                 - "M000"
                 - "M001"
@@ -872,6 +878,7 @@
                 - "M134"
                 - "M135"
                 - "M136"
+                - "M137"
                 - "M218"
                 - "MEMO"
                 - "MINC"
@@ -898,12 +905,14 @@
                 - "NNOB"
                 - "NOA"
                 - "NOB"
+                - "NOC"
                 - "NODC"
                 - "NOEI"
                 - "NOEP"
                 - "NOI"
                 - "NOST"
                 - "NOT"
+                - "NOTW"
                 - "NOU"
                 - "NPB"
                 - "NPJR"
@@ -962,6 +971,7 @@
                 - "PHM"
                 - "PMT"
                 - "PSDE"
+                - "PTE"
                 - "PTFR"
                 - "PTRL"
                 - "RAT"
@@ -1007,6 +1017,7 @@
                 - "SPD"
                 - "SPML"
                 - "SPMT"
+                - "SPOS"
                 - "SPTN"
                 - "SPTO"
                 - "SRMB"
@@ -1091,12 +1102,14 @@
                       - "Exhibit(s)"
                       - "Memorandum"
                       - "Partial Administrative Record"
+                      - "Proposed Trial Exhibits"
                       - "Ratification"
                       - "Redacted"
                       - "Report"
                       - "Status Report"
                       - "Motion for Continuance"
                       - "Motion for Extension of Time"
+                      - "Motion for Document Subpoena Hearing"
                       - "Motion to Dismiss for Lack of Jurisdiction"
                       - "Motion to Dismiss for Lack of Prosecution"
                       - "Motion for Summary Judgment"
@@ -1176,7 +1189,7 @@
                       - "Motion to Dismiss for Failure to Properly Prosecute"
                       - "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted"
                       - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
-                      - "Motion to Dismiss on Grounds of Mootness"
+                      - "Motion to Dismiss on Ground of Mootness"
                       - "Motion to Disqualify Counsel"
                       - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
                       - "Motion to Enforce Subpoena"
@@ -1226,6 +1239,7 @@
                       - "Notice of Change of Address and Telephone Number"
                       - "Notice of Change of Telephone Number"
                       - "Notice of Clarification of Tax Matters Partner"
+                      - "Notice of Completion"
                       - "Notice of Concession"
                       - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                       - "Notice of Death of Counsel"
@@ -1247,7 +1261,8 @@
                       - "Notice of Telephone Number"
                       - "Notice of Termination Assessment"
                       - "Notice of Unavailability"
-                      - "Redacted Petition Filed"
+                      - "Notice of Withdrawal as Counsel"
+                      - "Redacted Petition"
                       - "Prehearing Memorandum"
                       - "Pretrial Memorandum"
                       - "Reply"
@@ -1280,7 +1295,6 @@
                       - "Simultaneous Sur-Reply Memorandum Brief"
                       - "Ownership Disclosure Statement"
                       - "Statement"
-                      - "Statement of Redacted Information"
                       - "Statement under Rule 212"
                       - "Statement under Rule 50(c)"
                       - "Settlement Stipulation"
@@ -1301,6 +1315,7 @@
                       - "Memorandum in Support"
                       - "Unsworn Declaration under Penalty of Perjury in Support"
                       - "Entry of Appearance"
+                      - "Limited Entry of Appearance"
                       - "Substitution of Counsel"
                       - "Application"
                       - "Application for Examination Pursuant to Rule 73"
@@ -1331,6 +1346,7 @@
                       - "Objection [anything]"
                       - "Opposition [anything]"
                       - "Response [anything]"
+                      - "Statement of Redacted Information"
                       - "Supplement To [anything]"
                       - "Supplemental [anything]"
                   then: 
@@ -1612,6 +1628,22 @@
                     type: "any"
                     flags: 
                       presence: "optional"
+            judgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "Unique ID for the associated judge."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
             lodged: 
               type: "boolean"
               flags: 
@@ -1805,6 +1837,7 @@
                     - "Hearing Exhibits"
                     - "Hearing before"
                     - "Letter"
+                    - "Limited Entry of Appearance"
                     - "Memorandum"
                     - "Memorandum Opinion"
                     - "Memorandum in Support"
@@ -1817,6 +1850,7 @@
                     - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                     - "Motion for Continuance"
                     - "Motion for Default and Dismissal"
+                    - "Motion for Document Subpoena Hearing"
                     - "Motion for Entry of Decision"
                     - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                     - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -1896,7 +1930,7 @@
                     - "Motion to Dismiss for Lack of Jurisdiction"
                     - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                     - "Motion to Dismiss for Lack of Prosecution"
-                    - "Motion to Dismiss on Grounds of Mootness"
+                    - "Motion to Dismiss on Ground of Mootness"
                     - "Motion to Disqualify Counsel"
                     - "Motion to Enforce Subpoena"
                     - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -1954,6 +1988,7 @@
                     - "Notice of Change of Counsel for Non-Party"
                     - "Notice of Change of Telephone Number"
                     - "Notice of Clarification of Tax Matters Partner"
+                    - "Notice of Completion"
                     - "Notice of Concession"
                     - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                     - "Notice of Death of Counsel"
@@ -1980,6 +2015,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -2029,11 +2065,12 @@
                     - "Prehearing Memorandum"
                     - "Pretrial Memorandum"
                     - "Proposed Stipulated Decision"
+                    - "Proposed Trial Exhibits"
                     - "Ratification"
                     - "Ratification of Petition"
                     - "Record on Appeal"
                     - "Redacted"
-                    - "Redacted Petition Filed"
+                    - "Redacted Petition"
                     - "Reference List of Redacted Information"
                     - "Reply"
                     - "Report"
@@ -2315,6 +2352,7 @@
                     - "Hearing Exhibits"
                     - "Hearing before"
                     - "Letter"
+                    - "Limited Entry of Appearance"
                     - "Memorandum"
                     - "Memorandum Opinion"
                     - "Memorandum in Support"
@@ -2327,6 +2365,7 @@
                     - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                     - "Motion for Continuance"
                     - "Motion for Default and Dismissal"
+                    - "Motion for Document Subpoena Hearing"
                     - "Motion for Entry of Decision"
                     - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                     - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -2406,7 +2445,7 @@
                     - "Motion to Dismiss for Lack of Jurisdiction"
                     - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                     - "Motion to Dismiss for Lack of Prosecution"
-                    - "Motion to Dismiss on Grounds of Mootness"
+                    - "Motion to Dismiss on Ground of Mootness"
                     - "Motion to Disqualify Counsel"
                     - "Motion to Enforce Subpoena"
                     - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -2464,6 +2503,7 @@
                     - "Notice of Change of Counsel for Non-Party"
                     - "Notice of Change of Telephone Number"
                     - "Notice of Clarification of Tax Matters Partner"
+                    - "Notice of Completion"
                     - "Notice of Concession"
                     - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                     - "Notice of Death of Counsel"
@@ -2490,6 +2530,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -2539,11 +2580,12 @@
                     - "Prehearing Memorandum"
                     - "Pretrial Memorandum"
                     - "Proposed Stipulated Decision"
+                    - "Proposed Trial Exhibits"
                     - "Ratification"
                     - "Ratification of Petition"
                     - "Record on Appeal"
                     - "Redacted"
-                    - "Redacted Petition Filed"
+                    - "Redacted Petition"
                     - "Reference List of Redacted Information"
                     - "Reply"
                     - "Report"
@@ -2663,6 +2705,7 @@
                     - "FTRL"
                     - "HE"
                     - "HEAR"
+                    - "LEA"
                     - "LTR"
                     - "M000"
                     - "M001"
@@ -2798,6 +2841,7 @@
                     - "M134"
                     - "M135"
                     - "M136"
+                    - "M137"
                     - "M218"
                     - "MEMO"
                     - "MINC"
@@ -2824,12 +2868,14 @@
                     - "NNOB"
                     - "NOA"
                     - "NOB"
+                    - "NOC"
                     - "NODC"
                     - "NOEI"
                     - "NOEP"
                     - "NOI"
                     - "NOST"
                     - "NOT"
+                    - "NOTW"
                     - "NOU"
                     - "NPB"
                     - "NPJR"
@@ -2888,6 +2934,7 @@
                     - "PHM"
                     - "PMT"
                     - "PSDE"
+                    - "PTE"
                     - "PTFR"
                     - "PTRL"
                     - "RAT"
@@ -2933,6 +2980,7 @@
                     - "SPD"
                     - "SPML"
                     - "SPMT"
+                    - "SPOS"
                     - "SPTN"
                     - "SPTO"
                     - "SRMB"
@@ -3069,6 +3117,7 @@
                         - "irsPractitioner"
                         - "irsSuperuser"
                         - "judge"
+                        - "legacyJudge"
                         - "petitioner"
                         - "petitionsclerk"
                         - "privatePractitioner"
@@ -3154,6 +3203,7 @@
                           allow: 
                             - "O"
                             - "OAJ"
+                            - "SPOS"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -3255,6 +3305,7 @@
                           allow: 
                             - "O"
                             - "OAJ"
+                            - "SPOS"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -3355,6 +3406,24 @@
                               - "uuidv4"
                     allow: 
                       - null
+            signedJudgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "The user id of the judge who signed the document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
+              allow: 
+                - null
             strickenAt: 
               type: "date"
               flags: 
@@ -4031,6 +4100,7 @@
                 - "Hearing Exhibits"
                 - "Hearing before"
                 - "Letter"
+                - "Limited Entry of Appearance"
                 - "Memorandum"
                 - "Memorandum Opinion"
                 - "Memorandum in Support"
@@ -4043,6 +4113,7 @@
                 - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                 - "Motion for Continuance"
                 - "Motion for Default and Dismissal"
+                - "Motion for Document Subpoena Hearing"
                 - "Motion for Entry of Decision"
                 - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                 - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -4122,7 +4193,7 @@
                 - "Motion to Dismiss for Lack of Jurisdiction"
                 - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                 - "Motion to Dismiss for Lack of Prosecution"
-                - "Motion to Dismiss on Grounds of Mootness"
+                - "Motion to Dismiss on Ground of Mootness"
                 - "Motion to Disqualify Counsel"
                 - "Motion to Enforce Subpoena"
                 - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -4180,6 +4251,7 @@
                 - "Notice of Change of Counsel for Non-Party"
                 - "Notice of Change of Telephone Number"
                 - "Notice of Clarification of Tax Matters Partner"
+                - "Notice of Completion"
                 - "Notice of Concession"
                 - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                 - "Notice of Death of Counsel"
@@ -4206,6 +4278,7 @@
                 - "Notice of Termination Assessment"
                 - "Notice of Trial"
                 - "Notice of Unavailability"
+                - "Notice of Withdrawal as Counsel"
                 - "Objection"
                 - "Objection [anything]"
                 - "Opposition"
@@ -4255,11 +4328,12 @@
                 - "Prehearing Memorandum"
                 - "Pretrial Memorandum"
                 - "Proposed Stipulated Decision"
+                - "Proposed Trial Exhibits"
                 - "Ratification"
                 - "Ratification of Petition"
                 - "Record on Appeal"
                 - "Redacted"
-                - "Redacted Petition Filed"
+                - "Redacted Petition"
                 - "Reference List of Redacted Information"
                 - "Reply"
                 - "Report"
@@ -4416,6 +4490,7 @@
                 - "FTRL"
                 - "HE"
                 - "HEAR"
+                - "LEA"
                 - "LTR"
                 - "M000"
                 - "M001"
@@ -4551,6 +4626,7 @@
                 - "M134"
                 - "M135"
                 - "M136"
+                - "M137"
                 - "M218"
                 - "MEMO"
                 - "MINC"
@@ -4577,12 +4653,14 @@
                 - "NNOB"
                 - "NOA"
                 - "NOB"
+                - "NOC"
                 - "NODC"
                 - "NOEI"
                 - "NOEP"
                 - "NOI"
                 - "NOST"
                 - "NOT"
+                - "NOTW"
                 - "NOU"
                 - "NPB"
                 - "NPJR"
@@ -4641,6 +4719,7 @@
                 - "PHM"
                 - "PMT"
                 - "PSDE"
+                - "PTE"
                 - "PTFR"
                 - "PTRL"
                 - "RAT"
@@ -4686,6 +4765,7 @@
                 - "SPD"
                 - "SPML"
                 - "SPMT"
+                - "SPOS"
                 - "SPTN"
                 - "SPTO"
                 - "SRMB"
@@ -4770,12 +4850,14 @@
                       - "Exhibit(s)"
                       - "Memorandum"
                       - "Partial Administrative Record"
+                      - "Proposed Trial Exhibits"
                       - "Ratification"
                       - "Redacted"
                       - "Report"
                       - "Status Report"
                       - "Motion for Continuance"
                       - "Motion for Extension of Time"
+                      - "Motion for Document Subpoena Hearing"
                       - "Motion to Dismiss for Lack of Jurisdiction"
                       - "Motion to Dismiss for Lack of Prosecution"
                       - "Motion for Summary Judgment"
@@ -4855,7 +4937,7 @@
                       - "Motion to Dismiss for Failure to Properly Prosecute"
                       - "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted"
                       - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
-                      - "Motion to Dismiss on Grounds of Mootness"
+                      - "Motion to Dismiss on Ground of Mootness"
                       - "Motion to Disqualify Counsel"
                       - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
                       - "Motion to Enforce Subpoena"
@@ -4905,6 +4987,7 @@
                       - "Notice of Change of Address and Telephone Number"
                       - "Notice of Change of Telephone Number"
                       - "Notice of Clarification of Tax Matters Partner"
+                      - "Notice of Completion"
                       - "Notice of Concession"
                       - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                       - "Notice of Death of Counsel"
@@ -4926,7 +5009,8 @@
                       - "Notice of Telephone Number"
                       - "Notice of Termination Assessment"
                       - "Notice of Unavailability"
-                      - "Redacted Petition Filed"
+                      - "Notice of Withdrawal as Counsel"
+                      - "Redacted Petition"
                       - "Prehearing Memorandum"
                       - "Pretrial Memorandum"
                       - "Reply"
@@ -4959,7 +5043,6 @@
                       - "Simultaneous Sur-Reply Memorandum Brief"
                       - "Ownership Disclosure Statement"
                       - "Statement"
-                      - "Statement of Redacted Information"
                       - "Statement under Rule 212"
                       - "Statement under Rule 50(c)"
                       - "Settlement Stipulation"
@@ -4980,6 +5063,7 @@
                       - "Memorandum in Support"
                       - "Unsworn Declaration under Penalty of Perjury in Support"
                       - "Entry of Appearance"
+                      - "Limited Entry of Appearance"
                       - "Substitution of Counsel"
                       - "Application"
                       - "Application for Examination Pursuant to Rule 73"
@@ -5010,6 +5094,7 @@
                       - "Objection [anything]"
                       - "Opposition [anything]"
                       - "Response [anything]"
+                      - "Statement of Redacted Information"
                       - "Supplement To [anything]"
                       - "Supplemental [anything]"
                   then: 
@@ -5291,6 +5376,22 @@
                     type: "any"
                     flags: 
                       presence: "optional"
+            judgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "Unique ID for the associated judge."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
             lodged: 
               type: "boolean"
               flags: 
@@ -5484,6 +5585,7 @@
                     - "Hearing Exhibits"
                     - "Hearing before"
                     - "Letter"
+                    - "Limited Entry of Appearance"
                     - "Memorandum"
                     - "Memorandum Opinion"
                     - "Memorandum in Support"
@@ -5496,6 +5598,7 @@
                     - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                     - "Motion for Continuance"
                     - "Motion for Default and Dismissal"
+                    - "Motion for Document Subpoena Hearing"
                     - "Motion for Entry of Decision"
                     - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                     - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -5575,7 +5678,7 @@
                     - "Motion to Dismiss for Lack of Jurisdiction"
                     - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                     - "Motion to Dismiss for Lack of Prosecution"
-                    - "Motion to Dismiss on Grounds of Mootness"
+                    - "Motion to Dismiss on Ground of Mootness"
                     - "Motion to Disqualify Counsel"
                     - "Motion to Enforce Subpoena"
                     - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -5633,6 +5736,7 @@
                     - "Notice of Change of Counsel for Non-Party"
                     - "Notice of Change of Telephone Number"
                     - "Notice of Clarification of Tax Matters Partner"
+                    - "Notice of Completion"
                     - "Notice of Concession"
                     - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                     - "Notice of Death of Counsel"
@@ -5659,6 +5763,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -5708,11 +5813,12 @@
                     - "Prehearing Memorandum"
                     - "Pretrial Memorandum"
                     - "Proposed Stipulated Decision"
+                    - "Proposed Trial Exhibits"
                     - "Ratification"
                     - "Ratification of Petition"
                     - "Record on Appeal"
                     - "Redacted"
-                    - "Redacted Petition Filed"
+                    - "Redacted Petition"
                     - "Reference List of Redacted Information"
                     - "Reply"
                     - "Report"
@@ -5994,6 +6100,7 @@
                     - "Hearing Exhibits"
                     - "Hearing before"
                     - "Letter"
+                    - "Limited Entry of Appearance"
                     - "Memorandum"
                     - "Memorandum Opinion"
                     - "Memorandum in Support"
@@ -6006,6 +6113,7 @@
                     - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                     - "Motion for Continuance"
                     - "Motion for Default and Dismissal"
+                    - "Motion for Document Subpoena Hearing"
                     - "Motion for Entry of Decision"
                     - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                     - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -6085,7 +6193,7 @@
                     - "Motion to Dismiss for Lack of Jurisdiction"
                     - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                     - "Motion to Dismiss for Lack of Prosecution"
-                    - "Motion to Dismiss on Grounds of Mootness"
+                    - "Motion to Dismiss on Ground of Mootness"
                     - "Motion to Disqualify Counsel"
                     - "Motion to Enforce Subpoena"
                     - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -6143,6 +6251,7 @@
                     - "Notice of Change of Counsel for Non-Party"
                     - "Notice of Change of Telephone Number"
                     - "Notice of Clarification of Tax Matters Partner"
+                    - "Notice of Completion"
                     - "Notice of Concession"
                     - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                     - "Notice of Death of Counsel"
@@ -6169,6 +6278,7 @@
                     - "Notice of Termination Assessment"
                     - "Notice of Trial"
                     - "Notice of Unavailability"
+                    - "Notice of Withdrawal as Counsel"
                     - "Objection"
                     - "Objection [anything]"
                     - "Opposition"
@@ -6218,11 +6328,12 @@
                     - "Prehearing Memorandum"
                     - "Pretrial Memorandum"
                     - "Proposed Stipulated Decision"
+                    - "Proposed Trial Exhibits"
                     - "Ratification"
                     - "Ratification of Petition"
                     - "Record on Appeal"
                     - "Redacted"
-                    - "Redacted Petition Filed"
+                    - "Redacted Petition"
                     - "Reference List of Redacted Information"
                     - "Reply"
                     - "Report"
@@ -6342,6 +6453,7 @@
                     - "FTRL"
                     - "HE"
                     - "HEAR"
+                    - "LEA"
                     - "LTR"
                     - "M000"
                     - "M001"
@@ -6477,6 +6589,7 @@
                     - "M134"
                     - "M135"
                     - "M136"
+                    - "M137"
                     - "M218"
                     - "MEMO"
                     - "MINC"
@@ -6503,12 +6616,14 @@
                     - "NNOB"
                     - "NOA"
                     - "NOB"
+                    - "NOC"
                     - "NODC"
                     - "NOEI"
                     - "NOEP"
                     - "NOI"
                     - "NOST"
                     - "NOT"
+                    - "NOTW"
                     - "NOU"
                     - "NPB"
                     - "NPJR"
@@ -6567,6 +6682,7 @@
                     - "PHM"
                     - "PMT"
                     - "PSDE"
+                    - "PTE"
                     - "PTFR"
                     - "PTRL"
                     - "RAT"
@@ -6612,6 +6728,7 @@
                     - "SPD"
                     - "SPML"
                     - "SPMT"
+                    - "SPOS"
                     - "SPTN"
                     - "SPTO"
                     - "SRMB"
@@ -6748,6 +6865,7 @@
                         - "irsPractitioner"
                         - "irsSuperuser"
                         - "judge"
+                        - "legacyJudge"
                         - "petitioner"
                         - "petitionsclerk"
                         - "privatePractitioner"
@@ -6833,6 +6951,7 @@
                           allow: 
                             - "O"
                             - "OAJ"
+                            - "SPOS"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -6934,6 +7053,7 @@
                           allow: 
                             - "O"
                             - "OAJ"
+                            - "SPOS"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -7034,6 +7154,24 @@
                               - "uuidv4"
                     allow: 
                       - null
+            signedJudgeUserId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "The user id of the judge who signed the document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
+              allow: 
+                - null
             strickenAt: 
               type: "date"
               flags: 
@@ -7680,6 +7818,22 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    judgeUserId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "Unique ID for the associated judge."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     leadDocketNumber: 
       type: "string"
       flags: 
@@ -7994,7 +8148,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -8323,7 +8477,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -8565,7 +8719,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -8894,7 +9048,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -9154,7 +9308,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -9483,7 +9637,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -9725,7 +9879,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -10054,7 +10208,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -10314,7 +10468,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -10643,7 +10797,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -10885,7 +11039,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -11214,7 +11368,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -11474,7 +11628,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -11803,7 +11957,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -12045,7 +12199,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -12374,7 +12528,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -12634,7 +12788,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -12963,7 +13117,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -13205,7 +13359,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -13534,7 +13688,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -13794,7 +13948,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -14123,7 +14277,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -14365,7 +14519,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -14694,7 +14848,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -14954,7 +15108,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -15283,7 +15437,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -15525,7 +15679,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -15854,7 +16008,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -16114,7 +16268,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -16443,7 +16597,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -16685,7 +16839,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -17014,7 +17168,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -17274,7 +17428,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -17603,7 +17757,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -17845,7 +17999,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -18174,7 +18328,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -18434,7 +18588,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -18763,7 +18917,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -19005,7 +19159,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -19334,7 +19488,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -19594,7 +19748,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -19923,7 +20077,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -20165,7 +20319,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -20494,7 +20648,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -20754,7 +20908,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -21083,7 +21237,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -21325,7 +21479,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -21654,7 +21808,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -21914,7 +22068,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -22243,7 +22397,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -22485,7 +22639,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -22814,7 +22968,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -23074,7 +23228,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -23403,7 +23557,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -23645,7 +23799,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -23974,7 +24128,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -24234,7 +24388,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -24563,7 +24717,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -24805,7 +24959,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -25134,7 +25288,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -25394,7 +25548,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -25723,7 +25877,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -25965,7 +26119,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -26294,7 +26448,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -26554,7 +26708,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -26883,7 +27037,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -27125,7 +27279,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -27454,7 +27608,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -27714,7 +27868,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -28043,7 +28197,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -28285,7 +28439,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -28614,7 +28768,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -28882,7 +29036,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -29196,7 +29350,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -29423,7 +29577,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -29737,7 +29891,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -29982,7 +30136,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -30296,7 +30450,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -30523,7 +30677,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -30837,7 +30991,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -31082,7 +31236,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -31396,7 +31550,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -31623,7 +31777,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -31937,7 +32091,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -32182,7 +32336,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -32496,7 +32650,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -32723,7 +32877,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -33037,7 +33191,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -33282,7 +33436,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -33596,7 +33750,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -33823,7 +33977,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -34137,7 +34291,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -34382,7 +34536,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -34696,7 +34850,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -34923,7 +35077,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -35237,7 +35391,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -35482,7 +35636,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -35796,7 +35950,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -36023,7 +36177,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -36337,7 +36491,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -36582,7 +36736,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -36896,7 +37050,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -37123,7 +37277,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -37437,7 +37591,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -37682,7 +37836,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -37996,7 +38150,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -38223,7 +38377,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -38537,7 +38691,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -38782,7 +38936,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -39096,7 +39250,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -39323,7 +39477,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -39637,7 +39791,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -39882,7 +40036,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -40196,7 +40350,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -40423,7 +40577,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -40737,7 +40891,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -40982,7 +41136,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -41296,7 +41450,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -41523,7 +41677,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -41837,7 +41991,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -42082,7 +42236,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -42396,7 +42550,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -42623,7 +42777,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -42937,7 +43091,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -43182,7 +43336,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -43496,7 +43650,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -43723,7 +43877,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -44037,7 +44191,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -44282,7 +44436,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -44596,7 +44750,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -44823,7 +44977,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -45137,7 +45291,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -45382,7 +45536,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -45696,7 +45850,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -45923,7 +46077,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -46237,7 +46391,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -46482,7 +46636,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -46796,7 +46950,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -47023,7 +47177,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -47337,7 +47491,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -47582,7 +47736,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -47896,7 +48050,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -48123,7 +48277,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -48437,7 +48591,7 @@
                           type: "boolean"
                           flags: 
                             presence: "optional"
-                            description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                            description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                         email: 
                           type: "string"
                           rules: 
@@ -48715,7 +48869,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -49029,7 +49183,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -49256,7 +49410,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -49570,7 +49724,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -49815,7 +49969,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -50129,7 +50283,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -50356,7 +50510,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -50670,7 +50824,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -50915,7 +51069,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -51229,7 +51383,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -51456,7 +51610,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -51770,7 +51924,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -52015,7 +52169,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -52329,7 +52483,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -52556,7 +52710,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -52870,7 +53024,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -53115,7 +53269,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -53429,7 +53583,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -53656,7 +53810,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -53970,7 +54124,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -54215,7 +54369,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -54529,7 +54683,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -54756,7 +54910,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -55070,7 +55224,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -55315,7 +55469,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -55629,7 +55783,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -55856,7 +56010,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -56170,7 +56324,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -56415,7 +56569,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -56729,7 +56883,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -56956,7 +57110,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -57270,7 +57424,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -57515,7 +57669,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -57829,7 +57983,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -58056,7 +58210,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -58370,7 +58524,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -58615,7 +58769,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -58929,7 +59083,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -59156,7 +59310,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -59470,7 +59624,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -59715,7 +59869,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -60029,7 +60183,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -60256,7 +60410,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -60570,7 +60724,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -60815,7 +60969,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -61129,7 +61283,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -61356,7 +61510,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -61670,7 +61824,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -61915,7 +62069,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -62229,7 +62383,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -62456,7 +62610,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -62770,7 +62924,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -63015,7 +63169,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -63329,7 +63483,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -63556,7 +63710,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -63870,7 +64024,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -64115,7 +64269,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -64429,7 +64583,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -64656,7 +64810,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -64970,7 +65124,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -65215,7 +65369,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -65529,7 +65683,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -65756,7 +65910,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -66070,7 +66224,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -66315,7 +66469,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -66629,7 +66783,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -66856,7 +67010,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -67170,7 +67324,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -67415,7 +67569,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -67729,7 +67883,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -67956,7 +68110,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -68270,7 +68424,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -68524,7 +68678,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -68840,7 +68994,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -69069,7 +69223,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -69385,7 +69539,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -69630,7 +69784,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -69944,7 +70098,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -70171,7 +70325,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -70485,7 +70639,7 @@
                       type: "boolean"
                       flags: 
                         presence: "optional"
-                        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+                        description: "Flag that indicates if the contact has credentials to both the legacy and new system."
                     email: 
                       type: "string"
                       rules: 
@@ -70574,9 +70728,17 @@
                 override: true
               - "Paid"
           then: 
-            type: "any"
+            type: "date"
             flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
               presence: "required"
+            rules: 
+              - 
+                name: "max"
+                args: 
+                  date: "now"
           otherwise: 
             type: "any"
             flags: 
@@ -70642,9 +70804,17 @@
                 override: true
               - "Waived"
           then: 
-            type: "any"
+            type: "date"
             flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
               presence: "required"
+            rules: 
+              - 
+                name: "max"
+                args: 
+                  date: "now"
           otherwise: 
             type: "any"
             flags: 

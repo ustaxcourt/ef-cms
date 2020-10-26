@@ -2,37 +2,33 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  JUDGES_CHAMBERS_WITH_LEGACY,
   PETITIONS_SECTION,
   ROLES,
 } = require('../../../business/entities/EntityConstants');
 const { createUser, createUserRecords } = require('./createUser');
 
-const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-const petitionsClerkUser = {
-  name: 'Test Petitionsclerk',
-  role: ROLES.petitionsClerk,
-  section: PETITIONS_SECTION,
-};
-
-const privatePractitionerUser = {
-  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithoutBarNumber = {
-  barNumber: '',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
 describe('createUser', () => {
-  beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
+  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+  const petitionsClerkUser = {
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    section: PETITIONS_SECTION,
+  };
+  const privatePractitionerUser = {
+    barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithoutBarNumber = {
+    barNumber: '',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
 
+  beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: async () =>
         Promise.resolve({
@@ -63,13 +59,73 @@ describe('createUser', () => {
       section: PETITIONS_SECTION,
     };
 
-    await createUser({ applicationContext, user: petitionsclerkUser });
+    await createUser({
+      applicationContext,
+      user: petitionsclerkUser,
+    });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
     expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
+  });
+
+  it('should create a user and cognito record, but disable the cognito user', async () => {
+    const petitionsclerkUser = {
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({
+      applicationContext,
+      disableCognitoUser: true,
+      user: petitionsclerkUser,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminDisableUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+
+  it('should call adminCreateUser with the correct UserAttributes', async () => {
+    const petitionsclerkUser = {
+      email: 'test@example.com',
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+    };
+
+    await createUser({ applicationContext, user: petitionsclerkUser });
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith({
+      MessageAction: 'SUPPRESS',
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: 'test@example.com',
+        },
+        {
+          Name: 'custom:role',
+          Value: 'petitionsclerk',
+        },
+        {
+          Name: 'name',
+          Value: 'Test Petitionsclerk',
+        },
+      ],
+      UserPoolId: undefined,
+      Username: 'test@example.com',
+    });
   });
 
   it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
@@ -102,7 +158,6 @@ describe('createUser', () => {
         pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -112,7 +167,6 @@ describe('createUser', () => {
         sk: `user|${userId}`,
         ...privatePractitionerUser,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -121,7 +175,6 @@ describe('createUser', () => {
         pk: 'privatePractitioner|Test Private Practitioner',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[3][0],
@@ -130,7 +183,6 @@ describe('createUser', () => {
         pk: 'privatePractitioner|PT1234',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
   });
 
@@ -152,7 +204,6 @@ describe('createUser', () => {
           pk: 'section|petitions',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -162,7 +213,6 @@ describe('createUser', () => {
           sk: `user|${userId}`,
           ...petitionsClerkUser,
         },
-        TableName: 'efcms-dev',
       });
     });
 
@@ -188,7 +238,6 @@ describe('createUser', () => {
           pk: 'section|adamsChambers',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -197,7 +246,6 @@ describe('createUser', () => {
           pk: 'section|judge',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -207,7 +255,49 @@ describe('createUser', () => {
           sk: `user|${userId}`,
           ...judgeUser,
         },
-        TableName: 'efcms-dev',
+      });
+    });
+
+    it('attempts to persist a legacy judge user with a section mapping record for the chambers and the judge', async () => {
+      const judgeUser = {
+        name: 'Legacy Judge Ginsburg',
+        role: ROLES.legacyJudge,
+        section:
+          JUDGES_CHAMBERS_WITH_LEGACY.LEGACY_JUDGES_CHAMBERS_SECTION.section,
+      };
+
+      await createUserRecords({
+        applicationContext,
+        user: judgeUser,
+        userId,
+      });
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        3,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          pk: `section|${JUDGES_CHAMBERS_WITH_LEGACY.LEGACY_JUDGES_CHAMBERS_SECTION.section}`,
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[1][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'section|judge',
+          sk: `user|${userId}`,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
+        Item: {
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
+          ...judgeUser,
+        },
       });
     });
 
@@ -225,7 +315,6 @@ describe('createUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -235,7 +324,6 @@ describe('createUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUser,
         },
-        TableName: 'efcms-dev',
       });
     });
 
@@ -256,7 +344,6 @@ describe('createUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -266,7 +353,6 @@ describe('createUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUser,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -275,7 +361,6 @@ describe('createUser', () => {
           pk: 'privatePractitioner|Test Private Practitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[3][0],
@@ -284,7 +369,6 @@ describe('createUser', () => {
           pk: 'privatePractitioner|PT1234',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
     });
 
@@ -305,7 +389,6 @@ describe('createUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -315,7 +398,6 @@ describe('createUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUserWithoutBarNumber,
         },
-        TableName: 'efcms-dev',
       });
     });
 
@@ -342,7 +424,6 @@ describe('createUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUserWithoutSection,
         },
-        TableName: 'efcms-dev',
       });
     });
   });

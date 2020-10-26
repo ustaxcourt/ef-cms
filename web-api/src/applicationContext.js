@@ -162,6 +162,9 @@ const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
 const {
+  createMigratedPetitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser');
+const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
@@ -346,12 +349,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCaseDeadlines,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
-const {
-  getAllCaseDeadlinesInteractor,
-} = require('../../shared/src/business/useCases/getAllCaseDeadlinesInteractor');
-const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -370,11 +367,17 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getCaseDeadlinesByDateRange,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDateRange');
+const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
+const {
+  getCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/getCaseDeadlinesInteractor');
 const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
@@ -394,20 +397,11 @@ const {
   getCasesByLeadDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
 const {
-  getCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
-const {
-  getCasesByUserInteractor,
-} = require('../../shared/src/business/useCases/getCasesByUserInteractor');
-const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getClosedCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
 const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
@@ -530,9 +524,6 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getOpenCasesByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
-const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
@@ -611,6 +602,9 @@ const {
   getUploadPolicyInteractor,
 } = require('../../shared/src/business/useCases/getUploadPolicyInteractor');
 const {
+  getUserByEmail,
+} = require('../../shared/src/persistence/dynamo/users/getUserByEmail');
+const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
 const {
@@ -628,9 +622,6 @@ const {
 const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
-const {
-  getUserCases,
-} = require('../../shared/src/persistence/dynamo/cases/getUserCases');
 const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
@@ -742,6 +733,9 @@ const {
 const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
+const {
+  removePdfFromDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
 const {
   removeSignatureFromDocumentInteractor,
 } = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
@@ -868,9 +862,6 @@ const {
 const {
   updateCaseCorrespondence,
 } = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
-const {
-  updateCaseDeadline,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
 const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
@@ -1014,8 +1005,10 @@ const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
     ? `app.${process.env.EFCMS_DOMAIN}`
     : 'localhost:1234',
+  currentColor: process.env.CURRENT_COLOR || 'green',
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
@@ -1027,8 +1020,6 @@ const environment = {
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
-
-let user;
 
 const initHoneybadger = () => {
   if (process.env.NODE_ENV === 'production') {
@@ -1042,13 +1033,6 @@ const initHoneybadger = () => {
       return Honeybadger;
     }
   }
-};
-
-const getCurrentUser = () => {
-  return user;
-};
-const setCurrentUser = newUser => {
-  user = new User(newUser);
 };
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
@@ -1140,6 +1124,7 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createElasticsearchReindexRecord,
     createMessage,
+    createMigratedPetitionerUser,
     createPractitionerUser,
     createSectionInboxRecord,
     createTrialSession,
@@ -1163,7 +1148,6 @@ const gatewayMethods = {
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
     updateCase,
-    updateCaseDeadline,
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
@@ -1197,18 +1181,16 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCaseDeadlines,
   getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
+  getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
-  getCasesByUser,
   getClientId,
-  getClosedCasesByUser,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1227,7 +1209,6 @@ const gatewayMethods = {
   getInternalUsers,
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
-  getOpenCasesByUser,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1239,10 +1220,10 @@ const gatewayMethods = {
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
+  getUserByEmail,
   getUserById,
   getUserCaseNote,
   getUserCaseNoteForCases,
-  getUserCases,
   getUserInboxMessages,
   getUserOutboxMessages,
   getUsersBySearchKey,
@@ -1259,7 +1240,15 @@ const gatewayMethods = {
 };
 
 module.exports = appContextUser => {
-  if (appContextUser) setCurrentUser(appContextUser);
+  let user;
+
+  if (appContextUser) {
+    user = new User(appContextUser);
+  }
+
+  const getCurrentUser = () => {
+    return user;
+  };
 
   return {
     barNumberGenerator,
@@ -1280,6 +1269,9 @@ module.exports = appContextUser => {
                 Username: uuidv4(),
               },
             }),
+          }),
+          adminDisableUser: () => ({
+            promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
             promise: () => ({
@@ -1347,7 +1339,7 @@ module.exports = appContextUser => {
                           sk: getUniqueId(),
                           template,
                         },
-                        TableName: `efcms-${environment.stage}`,
+                        TableName: process.env.DYNAMODB_TABLE_NAME,
                       })
                       .promise();
                   }),
@@ -1534,14 +1526,13 @@ module.exports = appContextUser => {
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
-        getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
+        getCaseDeadlinesInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getCasesByUserInteractor,
         getClosedCasesInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
@@ -1592,6 +1583,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         reprocessFailedRecordsInteractor,

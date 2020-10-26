@@ -61,22 +61,6 @@ exports.addDocketEntryForPaymentStatus = ({
   }
 };
 
-exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
-  const stinDocument = caseEntity.docketEntries.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
-  );
-
-  if (stinDocument) {
-    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
-      applicationContext,
-      key: stinDocument.docketEntryId,
-    });
-
-    return stinDocument.docketEntryId;
-  }
-};
-
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
@@ -181,15 +165,6 @@ exports.serveCaseToIrsInteractor = async ({
     .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
-
-  //This functionality will probably change soon
-  //  deletedStinDocketEntryId = await exports.deleteStinIfAvailable({
-  //   applicationContext,
-  //   caseEntity,
-  // });
-  // caseEntity.docketEntries = caseEntity.docketEntries.filter(
-  //   item => item.docketEntryId !== deletedStinDocketEntryId,
-  // );
 
   const petitionDocument = caseEntity.docketEntries.find(
     document =>
