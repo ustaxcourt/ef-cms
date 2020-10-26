@@ -173,7 +173,7 @@ exports.generateChangeOfAddress = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity: changeOfAddressDocketEntry,
+          docketEntryId: changeOfAddressDocketEntry.docketEntryId,
           servedParties,
         });
 

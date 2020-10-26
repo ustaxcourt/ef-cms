@@ -361,7 +361,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         sk: `case|${caseToUpdate.docketNumber}`,
         ...setLeadCase,
         ...omit(caseToUpdate, [
-          'documents',
+          'docketEntries',
           'irsPractitioners',
           'privatePractitioners',
         ]),
