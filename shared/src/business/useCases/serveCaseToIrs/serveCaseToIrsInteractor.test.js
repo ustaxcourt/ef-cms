@@ -389,7 +389,7 @@ describe('serveCaseToIrsInteractor', () => {
         },
         {
           createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: '1ccd40c6-a949-43ce-936e-7c92d36aaa40',
           docketNumber: '101-18',
           documentTitle: 'Application for Waiver of Filing Fee',
           documentType: 'Application for Waiver of Filing Fee',
@@ -422,18 +422,8 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0].docketEntryEntity,
-    ).toMatchObject({
-      documentTitle: 'Application for Waiver of Filing Fee',
-      documentType: 'Application for Waiver of Filing Fee',
-    });
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0].docketEntryEntity,
-    ).not.toMatchObject({
-      documentTitle: 'Request for Place of Trial Flavortown, AR',
-      documentType: 'Request for Place of Trial',
-    });
+        .calls[0][0].docketEntryId,
+    ).toEqual('1ccd40c6-a949-43ce-936e-7c92d36aaa40');
   });
 
   it('should make 2 calls to updateCase, once before adding a coversheet and number of pages, and once after', async () => {

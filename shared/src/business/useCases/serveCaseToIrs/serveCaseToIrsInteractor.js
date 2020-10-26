@@ -145,7 +145,7 @@ exports.serveCaseToIrsInteractor = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity: initialDocketEntry,
+          docketEntryId: initialDocketEntry.docketEntryId,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],

@@ -1197,7 +1197,7 @@ Case.prototype.generateNextDocketRecordIndex = function () {
 /**
  *
  * @param {DocketEntry} updatedDocketEntry the docket entry to update on the case
- * @returns {Case} the updated case entity
+ * @returns {DocketEntry} the updated DocketEntry entity
  */
 Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
   const foundDocketEntry = this.docketEntries.find(
@@ -1220,7 +1220,7 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
     }
   }
 
-  return this;
+  return foundDocketEntry;
 };
 
 /**

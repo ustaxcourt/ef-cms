@@ -155,7 +155,7 @@ exports.fileDocketEntryInteractor = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity,
+          docketEntryId: docketEntryEntity.docketEntryId,
           servedParties,
         });
       }
