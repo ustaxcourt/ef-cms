@@ -206,20 +206,23 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
-    // Serve notice
-    const servedParties = await serveNoticesForCase({
-      caseEntity,
-      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
-      noticeDocumentPdfData: noticeOfTrialIssuedFile,
-      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
-      standingPretrialPdfData: standingPretrialFile,
-    });
+    const servedParties = aggregatePartiesForService(caseEntity);
 
     noticeOfTrialDocketEntry.setAsServed(servedParties.all);
     standingPretrialDocketEntry.setAsServed(servedParties.all);
 
     caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
     caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
+
+    // Serve notice
+    await serveNoticesForCase({
+      caseEntity,
+      noticeDocketEntryEntity: noticeOfTrialDocketEntry,
+      noticeDocumentPdfData: noticeOfTrialIssuedFile,
+      servedParties,
+      standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
+      standingPretrialPdfData: standingPretrialFile,
+    });
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -238,30 +241,29 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    * @param {object} deconstructed.caseEntity the case entity
    * @param {object} deconstructed.noticeDocketEntryEntity the notice document entity
    * @param {Uint8Array} deconstructed.noticeDocumentPdfData the pdf data of the notice doc
+   * @param {object} deconstructed.servedParties the parties to serve
    * @param {object} deconstructed.standingPretrialDocketEntryEntity the standing pretrial document entity
    * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data of the standing pretrial doc
-   * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticesForCase = async ({
     caseEntity,
     noticeDocketEntryEntity,
     noticeDocumentPdfData,
+    servedParties,
     standingPretrialDocketEntryEntity,
     standingPretrialPdfData,
   }) => {
-    const servedParties = aggregatePartiesForService(caseEntity);
-
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      docketEntryEntity: noticeDocketEntryEntity,
+      docketEntryId: noticeDocketEntryEntity.docketEntryId,
       servedParties,
     });
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      docketEntryEntity: standingPretrialDocketEntryEntity,
+      docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
       servedParties,
     });
 
@@ -298,8 +300,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           servedParties,
         });
     }
-
-    return servedParties;
   };
 
   for (let calendaredCase of calendaredCases) {
