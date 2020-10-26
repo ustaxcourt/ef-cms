@@ -114,6 +114,10 @@ exports.serveCaseToIrsInteractor = async ({
 
   caseEntity.markAsSentToIRS();
 
+  if (caseEntity.isPaper) {
+    addDocketEntries({ caseEntity });
+  }
+
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
@@ -139,7 +143,7 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            docketEntryEntity: initialDocketEntry,
+            docketEntryId: initialDocketEntry.docketEntryId,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -283,8 +287,6 @@ exports.serveCaseToIrsInteractor = async ({
   let urlToReturn;
 
   if (caseEntityToUpdate.isPaper) {
-    addDocketEntries({ caseEntity: caseEntityToUpdate });
-
     ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
