@@ -27,7 +27,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   email_configuration { # Use SES to send email
-    source_arn = aws_ses_email_identity.ses_sender
+    source_arn = aws_ses_email_identity.ses_sender.arn
     email_sending_account = "DEVELOPER"
     reply_to_email_address = "noreply@${var.dns_domain}"
     from_email_address = "U.S. Tax Court <noreply@${var.dns_domain}>" 
