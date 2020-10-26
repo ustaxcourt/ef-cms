@@ -39,7 +39,7 @@ const testData = {
   trialSessionIds: [],
 };
 
-describe.skip('Petitioner', () => {
+describe('Petitioner', () => {
   describe('should be able to create the first case', () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
@@ -98,7 +98,7 @@ describe.skip('Petitioner', () => {
 
 // eslint-disable-next-line no-unused-vars
 let judgeUserId;
-describe.skip('Petitions Clerk', () => {
+describe('Petitions Clerk', () => {
   describe('should create and set a trial session', () => {
     beforeEach(() => {
       cy.server();
@@ -131,7 +131,7 @@ describe.skip('Petitions Clerk', () => {
   });
 });
 
-describe.skip('Judge', () => {
+describe('Judge', () => {
   it('should be able to login', () => {
     cy.login('judgeCohen');
   });
@@ -162,7 +162,7 @@ describe.skip('Judge', () => {
   });
 });
 
-describe.skip('Judge Chambers', () => {
+describe('Judge Chambers', () => {
   it('should be able to login', () => {
     cy.login('cohensChambers');
   });
