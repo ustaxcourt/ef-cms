@@ -1,35 +1,37 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from './caseDeadlineReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseDeadlineReportHelper = withAppContextDecorator(
-  caseDeadlineReportHelperComputed,
-);
-
-const caseDeadlines = [
-  {
-    associatedJudge: 'Hale',
-    deadlineDate: '2019-08-22T04:00:00.000Z',
-    docketNumber: '101-19',
-  },
-  {
-    associatedJudge: 'Brandeis',
-    deadlineDate: '2019-08-24T04:00:00.000Z',
-    docketNumber: '103-19',
-  },
-  {
-    associatedJudge: 'Rummy',
-    deadlineDate: '2019-08-21T04:00:00.000Z',
-    docketNumber: '101-19',
-  },
-  {
-    associatedJudge: 'Renjie',
-    deadlineDate: '2019-08-21T04:00:00.000Z',
-    docketNumber: '102-19',
-  },
-];
-
 describe('caseDeadlineReportHelper', () => {
+  const caseDeadlineReportHelper = withAppContextDecorator(
+    caseDeadlineReportHelperComputed,
+    { ...applicationContext },
+  );
+
+  const caseDeadlines = [
+    {
+      associatedJudge: 'Special Trial Judge Hale',
+      deadlineDate: '2019-08-22T04:00:00.000Z',
+      docketNumber: '101-19',
+    },
+    {
+      associatedJudge: 'In Training Judge Brandeis',
+      deadlineDate: '2019-08-24T04:00:00.000Z',
+      docketNumber: '103-19',
+    },
+    {
+      associatedJudge: 'Jury and Judge Rummy',
+      deadlineDate: '2019-08-21T04:00:00.000Z',
+      docketNumber: '101-19',
+    },
+    {
+      associatedJudge: 'Not A Judge Barney',
+      deadlineDate: '2019-08-21T04:00:00.000Z',
+      docketNumber: '102-19',
+    },
+  ];
+
   it('should run without state', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
@@ -67,6 +69,29 @@ describe('caseDeadlineReportHelper', () => {
       },
     });
     expect(result.judges).toEqual(['Buch', 'Carluzzo', 'Chief Judge', 'Dredd']);
+  });
+
+  it('should format the associated judge name to remove title so only the last name is returned', () => {
+    const result = runCompute(caseDeadlineReportHelper, {
+      state: {
+        caseDeadlineReport: { caseDeadlines },
+        judges: [{ name: 'Carluzzo' }, { name: 'Buch' }, { name: 'Dredd' }],
+        screenMetadata: {
+          filterEndDate: '2019-08-21T12:59:59.000Z',
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getJudgeLastName,
+    ).toHaveBeenCalled();
+    expect(result.caseDeadlines[0].associatedJudgeFormatted).toEqual('Hale');
+    expect(result.caseDeadlines[1].associatedJudgeFormatted).toEqual(
+      'Brandeis',
+    );
+    expect(result.caseDeadlines[2].associatedJudgeFormatted).toEqual('Rummy');
+    expect(result.caseDeadlines[3].associatedJudgeFormatted).toEqual('Barney');
   });
 
   describe('showLoadMoreButton', () => {
