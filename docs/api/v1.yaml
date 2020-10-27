@@ -41,8 +41,12 @@ paths:
                 $ref: '#/components/schemas/Case'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
   /cases/{docketNumber}/entries/{docketEntryId}/document-download-url:
     get:
       summary: fetches a temporary file download url
@@ -73,9 +77,12 @@ paths:
                 $ref: '#/components/schemas/DocketEntryDownloadUrl'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
-
+        '500':
+          $ref: '#/components/responses/ServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -84,13 +91,25 @@ components:
       bearerFormat: JWT
   responses:
     UnauthorizedError:
-      description: unauthorized
+      description: credentials were not provided or are invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ForbiddenError:
+      description: your credentials cannot access this resource
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
     NotFoundError:
       description: not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: the server encountered an error when processing your request
       content:
         application/json:
           schema:

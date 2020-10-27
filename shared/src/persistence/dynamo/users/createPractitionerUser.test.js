@@ -238,7 +238,7 @@ describe('createPractitionerUser', () => {
     await expect(
       createPractitionerUser({ applicationContext, user: otherUser }),
     ).rejects.toThrow(
-      'Practitioner users must have either private IRS practitioner role, or be an inactive practitioner',
+      `Role must be ${ROLES.privatePractitioner}, ${ROLES.irsPractitioner}, or ${ROLES.inactivePractitioner}`,
     );
   });
 
