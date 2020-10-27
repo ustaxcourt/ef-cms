@@ -13,6 +13,34 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
+  it('sets state.viewerDocumentToDisplay when props.viewerDocumentToDisplay is defined', async () => {
+    const result = await runAction(
+      setMessageDetailViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          mostRecentMessage: { attachments: [{ documentId: '999000999' }] },
+          viewerDocumentToDisplay: { documentId: '999000999' },
+        },
+        state: {
+          caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [{ docketEntryId: '999000999' }],
+            docketNumber: '123-45',
+          },
+        },
+      },
+    );
+
+    expect(result.state.viewerDocumentToDisplay).toEqual({
+      documentId: '999000999',
+    });
+  });
+
   it('sets the viewerDocumentToDisplay from props on state and sets the iframeSrc url from the return from the use case', async () => {
     const result = await runAction(
       setMessageDetailViewerDocumentToDisplayAction,

@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  calculateISODate,
   createEndOfDayISO,
   createStartOfDayISO,
 } = require('../../utilities/DateHandler');
@@ -63,8 +64,10 @@ DocumentSearch.prototype.init = function init(rawProps = {}) {
       month,
       year,
     });
-    this.tomorrow = new Date();
-    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
+    this.tomorrow = calculateISODate({
+      howMuch: +1,
+      units: 'days',
+    });
   }
 
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {

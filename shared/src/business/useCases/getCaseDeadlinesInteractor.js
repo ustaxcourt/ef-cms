@@ -14,11 +14,17 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endDate the end date
  * @param {string} providers.startDate the start date
+ * @param {string} providers.from the index to start from
+ * @param {string} providers.judge the judge
+ * @param {number} providers.pageSize the page size
  * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
  */
 exports.getCaseDeadlinesInteractor = async ({
   applicationContext,
   endDate,
+  from,
+  judge,
+  pageSize,
   startDate,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -27,16 +33,22 @@ exports.getCaseDeadlinesInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const allCaseDeadlines = await applicationContext
+  const {
+    foundDeadlines,
+    totalCount,
+  } = await applicationContext
     .getPersistenceGateway()
     .getCaseDeadlinesByDateRange({
       applicationContext,
       endDate,
+      from,
+      judge,
+      pageSize,
       startDate,
     });
 
   const validatedCaseDeadlines = CaseDeadline.validateRawCollection(
-    allCaseDeadlines,
+    foundDeadlines,
     {
       applicationContext,
     },
@@ -69,12 +81,11 @@ exports.getCaseDeadlinesInteractor = async ({
   const afterCaseMapping = validatedCaseDeadlines.map(deadline => ({
     ...deadline,
     ...pick(caseMap[deadline.docketNumber], [
-      'associatedJudge',
       'caseCaption',
       'docketNumber',
       'docketNumberSuffix',
     ]),
   }));
 
-  return afterCaseMapping;
+  return { deadlines: afterCaseMapping, totalCount };
 };

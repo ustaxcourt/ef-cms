@@ -3,9 +3,15 @@ const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy, without } = require('lodash');
+const { formatNow } = require('../utilities/DateHandler');
 
+// if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+
+const CURRENT_YEAR = +formatNow('YYYY');
+
+const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
@@ -267,7 +273,6 @@ const INITIAL_DOCUMENT_TYPES_MAP = {
   stinFile: INITIAL_DOCUMENT_TYPES.stin.documentType,
 };
 
-// These docket entry types aren't defined anywhere else
 const MINUTE_ENTRIES_MAP = {
   captionOfCaseIsAmended: {
     description:
@@ -290,6 +295,11 @@ const MINUTE_ENTRIES_MAP = {
     description: 'Filing Fee Waived',
     documentType: 'Filing Fee Waived',
     eventCode: 'FEEW',
+  },
+  requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
   },
 };
 
@@ -946,6 +956,7 @@ const CASE_SEARCH_MIN_YEAR = 1986;
 const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
 const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
+const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 
 // TODO: event codes need to be reorganized
 const ALL_EVENT_CODES = flatten([
@@ -1034,6 +1045,9 @@ module.exports = deepFreeze({
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  CURRENT_YEAR,
+  DEADLINE_REPORT_PAGE_SIZE,
+  DEFAULT_PRACTITIONER_BIRTH_YEAR,
   DEFAULT_PROCEDURE_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,

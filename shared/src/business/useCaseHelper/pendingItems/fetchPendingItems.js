@@ -54,7 +54,7 @@ exports.fetchPendingItems = async ({
     });
 
     foundCaseEntity.docketEntries.forEach(document => {
-      if (document.pending) {
+      if (document.pending && document.servedAt) {
         foundDocuments.push({
           ...omit(
             new DocketEntry(

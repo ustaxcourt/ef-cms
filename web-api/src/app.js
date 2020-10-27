@@ -426,10 +426,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
-  app.get(
-    '/case-deadlines/:startDate/:endDate',
-    lambdaWrapper(getCaseDeadlinesLambda),
-  );
+  app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
 }
 /**
  * case-documents
