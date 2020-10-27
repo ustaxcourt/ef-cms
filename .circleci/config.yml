@@ -884,7 +884,7 @@ workflows:
             - migrate
       - switch-colors:
           requires:
-            - smoketests
+            - migrate
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -958,7 +958,7 @@ workflows:
                 - experimental3
       - switch-colors:
           requires:
-            - smoketests
+            - migrate
           filters:
             branches:
               only:
