@@ -488,6 +488,10 @@ const initHoneybadger = async () => {
   }
 };
 
+const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
+  getConstants(),
+);
+
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
@@ -511,8 +515,7 @@ const applicationContext = {
       'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
     );
   },
-  getConstants: () =>
-    (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
+  getConstants: () => appConstants,
   getCurrentUser,
   getCurrentUserPermissions: () => {
     const currentUser = getCurrentUser();
