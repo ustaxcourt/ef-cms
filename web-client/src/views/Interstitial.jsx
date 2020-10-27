@@ -20,7 +20,7 @@ export const Interstitial = connect(
                     <h1 className="captioned" tabIndex="-1">
                       {alertHelper.responseCode &&
                         `Error  ${alertHelper.responseCode}`}
-                      {!alertHelper.responseCode && 'Unknown Error'}
+                      {!alertHelper.responseCode && 'Error'}
                     </h1>
                   </div>
                 </div>
