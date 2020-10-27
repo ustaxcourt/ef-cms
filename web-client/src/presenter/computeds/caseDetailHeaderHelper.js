@@ -14,10 +14,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
-  const caseHasRespondent =
-    !!caseDetail &&
-    !!caseDetail.irsPractitioners &&
-    !!caseDetail.irsPractitioners.length;
+  const caseHasRespondent = !!caseDetail.hasIrsPractitioner;
   const currentPage = get(state.currentPage);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
 

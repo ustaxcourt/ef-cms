@@ -2,6 +2,25 @@ import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultA
 import { runAction } from 'cerebral/test';
 
 describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
+  it('returns state.viewerDocumentToDisplay when it is defined', async () => {
+    const result = await runAction(
+      getDefaultAttachmentViewerDocumentToDisplayAction,
+      {
+        props: {
+          mostRecentMessage: {
+            attachments: [{ documentId: '1234' }, { documentId: '2345' }],
+          },
+        },
+        state: {
+          viewerDocumentToDisplay: { documentId: '9999' },
+        },
+      },
+    );
+    expect(result.output).toEqual({
+      viewerDocumentToDisplay: { documentId: '9999' },
+    });
+  });
+
   it('returns the first item in the attachments array as the viewerDocumentToDisplay', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,

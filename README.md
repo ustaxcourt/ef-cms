@@ -331,15 +331,15 @@ docketclerk1@example.com
 petitionsclerk@example.com
 petitionsclerk1@example.com
 trialclerk@example.com
-judgeArmen@example.com
+judge.armen@example.com
 colvinsChambers@example.com
-judgeAshford@example.com
+judge.ashford@example.com
 ashfordsChambers@example.com
-judgeBuch@example.com
+judge.buch@example.com
 buchsChambers@example.com
-judgeCarluzzo@example.com
+judge.carluzzo@example.com
 carluzzosChambers@example.com
-judgeCohen@example.com
+judge.cohen@example.com
 cohensChambers@example.com
 ```
 

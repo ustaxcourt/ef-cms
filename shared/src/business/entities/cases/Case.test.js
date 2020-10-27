@@ -71,6 +71,24 @@ describe('Case entity', () => {
     ]);
   });
 
+  describe('init', () => {
+    it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
+    });
+  });
+
   describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
@@ -2895,11 +2913,39 @@ describe('Case entity', () => {
       expect(caseToUpdate.hasPendingItems).toEqual(false);
       expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
     });
-    it('should show the case as having pending items if some docketEntries are pending', () => {
+
+    it('should not show the case as having pending items if some docketEntries are pending and not served', () => {
       const mockCase = {
         ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            pending: true,
+            servedAt: undefined,
+          },
+        ],
       };
-      mockCase.docketEntries[0].pending = true;
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
+    });
+
+    it('should show the case as having pending items if some docketEntries are pending and served', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            pending: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+            servedParties: [{ name: 'Bob' }],
+          },
+        ],
+      };
 
       const caseToUpdate = new Case(mockCase, {
         applicationContext,

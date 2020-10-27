@@ -1,10 +1,7 @@
 const AWS = require('aws-sdk');
 const {
-  migrateItems: migration0001,
-} = require('./migrations/0001-eligible-for-trial-case-id');
-const {
-  migrateItems: migration0002,
-} = require('./migrations/0002-case-deadline-catalog');
+  migrateItems: migration0003,
+} = require('./migrations/0003-case-deadline-required-fields');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -14,7 +11,7 @@ const dynamodb = new AWS.DynamoDB({
   retryDelayOptions: { base: 300 },
 });
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
   service: dynamodb,
@@ -22,11 +19,15 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-const reprocessItems = async items => {
+const migrateRecords = async ({ documentClient, items }) => {
+  items = await migration0003(items, documentClient);
+  return items;
+};
+
+const reprocessItems = async ({ documentClient, items }) => {
   const moreUnprocessedItems = [];
 
-  items = migration0001(items);
-  items = await migration0002(items, documentClient);
+  items = await migrateRecords({ documentClient, items });
 
   for (let item of items) {
     const results = await documentClient
@@ -49,8 +50,7 @@ const processItems = async ({ documentClient, items }) => {
   // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
-    c = migration0001(c);
-    c = await migration0002(c, documentClient);
+    c = await migrateRecords({ documentClient, items: c });
 
     const results = await documentClient
       .batchWrite({
@@ -67,7 +67,10 @@ const processItems = async ({ documentClient, items }) => {
       .promise();
 
     if (!isEmpty(results.UnprocessedItems)) {
-      await reprocessItems([results.UnprocessedItems]);
+      await reprocessItems({
+        documentClient,
+        items: [results.UnprocessedItems],
+      });
     }
   }
 };
@@ -80,7 +83,7 @@ const scanTableSegment = async (segment, totalSegments) => {
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    await documentClient
+    await dynamoDbDocumentClient
       .scan({
         ExclusiveStartKey: lastKey,
         Segment: segment,
@@ -92,7 +95,10 @@ const scanTableSegment = async (segment, totalSegments) => {
         console.log('got some results', results.Items.length);
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        await processItems({ documentClient, items: results.Items });
+        await processItems({
+          documentClient: dynamoDbDocumentClient,
+          items: results.Items,
+        });
       });
   }
 };

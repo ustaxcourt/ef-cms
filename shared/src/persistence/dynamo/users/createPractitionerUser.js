@@ -60,7 +60,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
 
   if (!practitionerRoleTypes.includes(user.role)) {
     throw new Error(
-      'Practitioner users must have either private or IRS practitioner role',
+      `Role must be ${ROLES.privatePractitioner}, ${ROLES.irsPractitioner}, or ${ROLES.inactivePractitioner}`,
     );
   }
 

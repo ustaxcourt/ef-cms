@@ -43,6 +43,7 @@ describe('migrateCaseDeadlineInteractor', () => {
     });
 
     caseDeadlineMetadata = {
+      associatedJudge: 'Buch',
       deadlineDate: '2019-03-01T21:42:29.073Z',
       description: 'One small step',
       docketNumber: '999-96',
@@ -97,6 +98,7 @@ describe('migrateCaseDeadlineInteractor', () => {
     const secondResult = await migrateCaseDeadlineInteractor({
       applicationContext,
       caseDeadlineMetadata: {
+        associatedJudge: 'Buch',
         caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
         createdAt: '2020-01-01T01:02:15.185-04:00',
         deadlineDate: '2020-01-24T00:00:00.000-05:00',

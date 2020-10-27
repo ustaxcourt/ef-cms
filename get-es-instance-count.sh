@@ -15,23 +15,23 @@ BRANCH=$1
 if [[ $BRANCH == 'develop' ]] ; then
   echo "3"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo "1"
+  echo "3"
 elif [[ $BRANCH == 'experimental2' ]] ; then
-  echo "1"
+  echo "3"
 elif [[ $BRANCH == 'experimental3' ]] ; then
-  echo "1"
+  echo "3"
 elif [[ $BRANCH == 'irs' ]] ; then
-  echo "1"
+  echo "3"
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo "1"
+  echo "3"
 elif [[ $BRANCH == 'test' ]] ; then
   echo "3"
 elif [[ $BRANCH == 'migration' ]] ; then
   echo "3"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo "2"
+  echo "3"
 elif [[ $BRANCH == 'dawson' ]] ; then
-  echo "1"
+  echo "3"
 elif [[ $BRANCH == 'prod' ]] ; then
   echo "3"
 else

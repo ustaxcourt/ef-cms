@@ -1,39 +1,65 @@
+const { chunk } = require('lodash');
 const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 exports.bulkIndexRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
-  const body = records
-    .map(record => ({
-      ...record.dynamodb.NewImage,
-    }))
-    .flatMap(doc => {
-      const index = getIndexNameForRecord(doc);
-
-      if (index) {
-        return [
-          { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
-          doc,
-        ];
-      }
-    })
-    .filter(item => item);
-
-  const response = await searchClient.bulk({
-    body,
-    refresh: true,
-  });
+  const CHUNK_SIZE = 50;
+  let chunkOfRecords = chunk(records, process.env.ES_CHUNK_SIZE || CHUNK_SIZE);
 
   const failedRecords = [];
-  if (response.errors) {
-    response.items.forEach((action, i) => {
-      const operation = Object.keys(action)[0];
-      if (action[operation].error) {
-        let record = body[i * 2 + 1];
-        failedRecords.push(record);
+
+  await Promise.all(
+    chunkOfRecords.map(async recordChunk => {
+      const body = recordChunk
+        .map(record => ({
+          ...record.dynamodb.NewImage,
+        }))
+        .flatMap(doc => {
+          const index = getIndexNameForRecord(doc);
+          let id = `${doc.pk.S}_${doc.sk.S}`;
+          let routing = null;
+
+          if (index) {
+            if (doc.entityName.S === 'DocketEntry') {
+              routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
+            }
+
+            if (doc.entityName.S === 'CaseDocketEntryMapping') {
+              id += '|mapping';
+            }
+
+            return [
+              {
+                index: {
+                  _id: id,
+                  _index: index,
+                  routing,
+                },
+              },
+              doc,
+            ];
+          }
+        })
+        .filter(item => item);
+
+      if (body.length) {
+        const response = await searchClient.bulk({
+          body,
+          refresh: false,
+        });
+        if (response.errors) {
+          response.items.forEach((action, i) => {
+            const operation = Object.keys(action)[0];
+            if (action[operation].error) {
+              let record = body[i * 2 + 1];
+              failedRecords.push(record);
+            }
+          });
+        }
       }
-    });
-  }
+    }),
+  );
 
   return { failedRecords };
 };
