@@ -155,7 +155,7 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: 5000,
+      size: applicationContext.getConstants().MAX_SEARCH_RESULTS,
     },
     index: 'efcms-docket-entry',
   };
