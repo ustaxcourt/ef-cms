@@ -14,13 +14,16 @@ resource "aws_route53_record" "ses_verification_record" {
 
 resource "aws_ses_domain_identity_verification" "example_verification" {
   domain = aws_ses_domain_identity.main.id
-
   depends_on = [aws_route53_record.ses_verification_record]
 }
 
 resource "aws_ses_domain_mail_from" "main" {
   domain           = aws_ses_domain_identity.main.domain
   mail_from_domain = "from.${aws_ses_domain_identity.main.domain}"
+}
+
+resource "aws_ses_email_identity" "ses_sender" {
+  email = "noreply@${var.dns_domain}"
 }
 
 #
