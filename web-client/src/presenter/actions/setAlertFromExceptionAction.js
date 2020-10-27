@@ -20,7 +20,7 @@ export const setAlertFromExceptionAction = ({ props, store }) => {
 
   store.set(state.alertError, {
     message: props.error.message,
-    responseCode,
+    responseCode: responseCode || 404,
     title: props.error.title,
   });
 };
