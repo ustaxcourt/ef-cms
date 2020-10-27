@@ -1299,6 +1299,7 @@ module.exports = appContextUser => {
         status => status !== CASE_STATUS_TYPES.closed,
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
+      PENDING_ITEMS_PAGE_SIZE: 100,
       SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,

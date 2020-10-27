@@ -29,11 +29,13 @@ exports.generatePrintablePendingReportInteractor = async ({
     judge = decodeURIComponent(judge);
   }
 
-  const pendingItems = await applicationContext
+  const {
+    foundDocuments,
+  } = await applicationContext
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, docketNumber, judge });
 
-  const formattedPendingItems = pendingItems.map(pendingItem => ({
+  const formattedPendingItems = foundDocuments.map(pendingItem => ({
     ...pendingItem,
     associatedJudgeFormatted: applicationContext
       .getUtilities()
