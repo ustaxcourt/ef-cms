@@ -11,12 +11,16 @@ export const setAlertFromExceptionAction = ({ props, store }) => {
   const hasError =
     props.error &&
     (props.error.title || props.error.message || props.error.messages);
+  const responseCode = props.error && props.error.responseCode;
+
   if (!hasError) {
     store.set(state.alertError, {});
     return;
   }
+
   store.set(state.alertError, {
     message: props.error.message,
+    responseCode,
     title: props.error.title,
   });
 };
