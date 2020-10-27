@@ -448,6 +448,17 @@
     "entityName": "User"
   },
   {
+    "role": "petitioner",
+    "name": "Test Petitioner 2",
+    "section": "petitioner",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
+    "email": "petitioner2@example.com",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
+    "phone": "517-563-1536",
+    "entityName": "User"
+  },
+  {
     "role": "admissionsclerk",
     "name": "Test Admissions Clerk",
     "section": "admissions",

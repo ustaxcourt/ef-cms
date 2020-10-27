@@ -1,10 +1,14 @@
 const {
+  DOCUMENT_RELATIONSHIPS,
+  ORDER_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
+const { get } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -48,6 +52,16 @@ exports.updateCourtIssuedOrderInteractor = async ({
     throw new NotFoundError('Document not found');
   }
 
+  const orderTypeEventCodes = Object.values(ORDER_TYPES).map(d => d.eventCode);
+
+  if (orderTypeEventCodes.includes(documentMetadata.eventCode)) {
+    documentMetadata.freeText = documentMetadata.documentTitle;
+    if (documentMetadata.draftOrderState) {
+      documentMetadata.draftOrderState.freeText =
+        documentMetadata.documentTitle;
+    }
+  }
+
   if (documentMetadata.documentContents) {
     const { documentContentsId } = currentDocument;
 
@@ -71,8 +85,13 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const editableFields = {
     documentTitle: documentMetadata.documentTitle,
-    documentType: documentMetadata.documentType,
+    documentType:
+      get(documentMetadata, 'draftOrderState.documentType') ||
+      documentMetadata.documentType,
     draftOrderState: documentMetadata.draftOrderState,
+    eventCode:
+      get(documentMetadata, 'draftOrderState.eventCode') ||
+      documentMetadata.eventCode,
     freeText: documentMetadata.freeText,
   };
 

@@ -23,6 +23,17 @@ describe('createMigratedPetitionerUser', () => {
         }),
     });
 
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: async () =>
+        Promise.resolve({
+          Username: '562d6260-aa9b-4010-af99-536d3872c752',
+        }),
+    });
+
+    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
+      promise: async () => Promise.resolve(),
+    });
+
     applicationContext.getDocumentClient().put.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
@@ -46,6 +57,7 @@ describe('createMigratedPetitionerUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
+      MessageAction: 'SUPPRESS',
       UserAttributes: [
         {
           Name: 'email_verified',

@@ -42,7 +42,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     ...d,
     associatedJudgeFormatted: applicationContext
       .getUtilities()
-      .formatJudgeName(d.associatedJudge),
+      .getJudgeLastName(d.associatedJudge),
     caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
     formattedDeadline: applicationContext
       .getUtilities()

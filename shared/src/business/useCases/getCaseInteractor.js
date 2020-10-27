@@ -7,7 +7,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case, isAssociatedUser } = require('../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
 
@@ -122,10 +122,10 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber,
+      docketNumber: Case.stripLeadingZeros(docketNumber),
     });
 
-  if (!caseRecord) {
+  if (!caseRecord.docketNumber && !caseRecord.entityName) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;
@@ -142,10 +142,6 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     user: currentUser,
   });
 
-  if (!isAuthorizedToGetCase && !isAssociatedWithCase) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
   let caseDetailRaw;
   if (caseRecord.sealedDate) {
     caseDetailRaw = await getSealedCase({
@@ -154,9 +150,8 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
       isAssociatedWithCase,
     });
   } else {
-    const isInternalUser = User.isInternalUser(
-      applicationContext.getCurrentUser().role,
-    );
+    const userRole = applicationContext.getCurrentUser().role;
+    const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
       caseDetailRaw = await getCaseAndDocumentContents({

@@ -283,7 +283,7 @@ describe('serveCaseToIrsInteractor', () => {
     expect(result).toBeDefined();
   });
 
-  it('should serve all initial document types when served and send the IRS superuser email service', async () => {
+  it('should serve all initial document types except RQT', async () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
@@ -295,6 +295,18 @@ describe('serveCaseToIrsInteractor', () => {
           documentTitle: 'Request for Place of Trial Flavortown, AR',
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          isMinuteEntry: true,
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Ownership Disclosure Statement',
+          documentType: 'Ownership Disclosure Statement',
+          eventCode: 'DISC',
           filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
@@ -330,18 +342,23 @@ describe('serveCaseToIrsInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const documentWithServedParties = applicationContext
+    const rqtMinuteEntry = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
         document =>
           document.documentType ===
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       );
+    const odsDocketEntry = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        document =>
+          document.documentType ===
+          INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+      );
     expect(result).toBeDefined();
-    expect(documentWithServedParties.servedParties).toBeDefined();
-    expect(
-      applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail,
-    ).toBeCalled();
+    expect(rqtMinuteEntry.servedParties).toBeUndefined();
+    expect(odsDocketEntry.servedParties).toBeDefined();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toBeCalled();
@@ -352,6 +369,61 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getPersistenceGateway().updateWorkItem.mock.calls[0][0]
         .workItemToUpdate.docketEntry.servedAt,
     ).toBeDefined();
+  });
+
+  it('should send the IRS superuser email service for all initial filings except RQT', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: '1ccd40c6-a949-43ce-936e-7c92d36aaa40',
+          docketNumber: '101-18',
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APW',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryId,
+    ).toEqual('1ccd40c6-a949-43ce-936e-7c92d36aaa40');
   });
 
   it('should make 2 calls to updateCase, once before adding a coversheet and number of pages, and once after', async () => {

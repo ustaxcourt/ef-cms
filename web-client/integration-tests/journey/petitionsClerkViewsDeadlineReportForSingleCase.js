@@ -1,3 +1,7 @@
+import {
+  FORMATS,
+  prepareDateFromString,
+} from '../../../shared/src/business/utilities/DateHandler';
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -26,8 +30,8 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
     }
 
     await test.runSequence('selectDateRangeFromCalendarSequence', {
-      endDate: new Date(endDate),
-      startDate: new Date(startDate),
+      endDate: prepareDateFromString(endDate, FORMATS.MMDDYYYY),
+      startDate: prepareDateFromString(startDate, FORMATS.MMDDYYYY),
     });
     test.setState('screenMetadata.filterStartDateState', startDate);
     test.setState('screenMetadata.filterEndDateState', endDate);

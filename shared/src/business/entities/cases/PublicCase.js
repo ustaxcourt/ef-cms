@@ -3,6 +3,7 @@ const {
   COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
+  PARTY_TYPES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -33,8 +34,11 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.docketNumberWithSuffix =
     rawCase.docketNumberWithSuffix ||
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
-  this.receivedAt = rawCase.receivedAt;
+  this.hasIrsPractitioner =
+    !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
   this.isSealed = !!rawCase.sealedDate; // if true only return docket number with suffix
+  this.partyType = rawCase.partyType;
+  this.receivedAt = rawCase.receivedAt;
 
   this.contactPrimary = rawCase.contactPrimary
     ? new PublicContact(rawCase.contactPrimary)
@@ -73,7 +77,11 @@ const publicCaseSchema = {
   docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
     'Auto-generated from docket number and the suffix.',
   ),
+  hasIrsPractitioner: joi.boolean().required(),
   isSealed: joi.boolean(),
+  partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
+    .required()
+    .description('Party type of the case petitioner.'),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
 };
 
@@ -87,7 +95,9 @@ const sealedCaseSchemaRestricted = {
   docketNumberSuffix: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCKET_NUMBER_SUFFIXES),
   ).optional(),
+  hasIrsPractitioner: joi.boolean(),
   isSealed: joi.boolean(),
+  partyType: joi.any().forbidden(),
   receivedAt: joi.any().forbidden(),
 };
 

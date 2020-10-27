@@ -4,16 +4,21 @@ const {
 const { cloneDeep } = require('lodash');
 const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { PARTY_TYPES } = require('../../entities/EntityConstants');
 
 const mockCase = {
   contactPrimary: MOCK_CASE.contactPrimary,
   docketNumber: '123-45',
+  irsPractitioners: [],
+  partyType: PARTY_TYPES.petitioner,
 };
 
 const mockCases = {
   '102-20': {
     contactPrimary: MOCK_CASE.contactPrimary,
     docketNumber: '102-20',
+    irsPractitioners: [],
+    partyType: PARTY_TYPES.petitioner,
     sealedDate: '2020-01-02T03:04:05.007Z',
   },
   '123-45': mockCase,

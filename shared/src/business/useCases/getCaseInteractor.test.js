@@ -28,7 +28,17 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(null));
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          archivedCorrespondences: [],
+          archivedDocketEntries: [],
+          associatedJudge: [],
+          correspondence: [],
+          docketEntries: [],
+          irsPractitioners: [],
+          privatePractitioners: [],
+        }),
+      );
 
     await expect(
       getCaseInteractor({
@@ -40,32 +50,6 @@ describe('getCaseInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls.length,
     ).toBe(1);
-  });
-
-  it('should throw an error when the current user is unauthorized to get cases', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'someone',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {},
-          createdAt: new Date().toISOString(),
-          docketEntries,
-          docketNumber: '101-00',
-          preferredTrialCity: 'Washington, District of Columbia',
-          procedureType: 'Regular',
-        }),
-      );
-
-    await expect(
-      getCaseInteractor({
-        applicationContext,
-        docketNumber: '00101-00',
-      }),
-    ).rejects.toThrow('Unauthorized');
   });
 
   it('throws an error when the entity returned from persistence is invalid', async () => {
@@ -313,7 +297,9 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
+        hasIrsPractitioner: false,
         isSealed: true,
+        partyType: undefined,
         receivedAt: undefined,
       });
     });

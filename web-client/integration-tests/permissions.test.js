@@ -144,10 +144,6 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsBlocked();
     stinBlocked();
-
-    expect(
-      some(test.getState('caseDetail.docketEntries'), { eventCode: 'STIN' }),
-    ).toBe(false);
   });
 
   loginAs(test, 'irsSuperuser@example.com');
@@ -173,6 +169,45 @@ describe('Case permissions test', () => {
     publicFieldsVisible();
     associatedFieldsBlocked();
     internalFieldsBlocked();
+    stinBlocked();
+  });
+
+  loginAs(test, 'irsPractitioner@example.com');
+  it('Unassociated IRS practitioner views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsBlocked();
+    internalFieldsBlocked();
+    stinBlocked();
+  });
+
+  loginAs(test, 'petitioner2@example.com');
+  it('Unassociated petitioner views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsBlocked();
+    internalFieldsBlocked();
+    stinBlocked();
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+  it('Docket Clerk views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsVisible();
+    internalFieldsVisible();
     stinBlocked();
   });
 
@@ -225,6 +260,7 @@ describe('Case permissions test', () => {
 
     publicFieldsVisible();
     associatedFieldsVisible();
+    internalFieldsBlocked();
     stinVisible();
   });
 });

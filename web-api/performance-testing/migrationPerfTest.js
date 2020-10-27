@@ -18,8 +18,8 @@ const cognito = new CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
-const ClientId = '6s19vi286kt2uo5vurfhs8pilj';
-const UserPoolId = 'us-east-1_YXunNYxRg';
+const ClientId = '3bo55ojh0hk00fiadpg5o9mckf';
+const UserPoolId = 'us-east-1_nqc5Vw7zE';
 const USERNAME = 'migrator@example.com';
 const PASSWORD = process.env.DEFAULT_ACCOUNT_PASS;
 const CHUNK_SIZE = 50;

@@ -91,4 +91,42 @@ describe('caseDetailSubnavHelper', () => {
     });
     expect(result.showCaseInformationTab).toBeFalsy();
   });
+
+  it('should show primaryTab as selected if it is not caseInformation', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailSubnavHelper, {
+      state: {
+        ...getBaseState(user),
+        currentViewMetadata: {
+          caseDetail: {
+            caseInformationTab: 'overview',
+            primaryTab: 'docketRecord',
+          },
+        },
+      },
+    });
+    expect(result.selectedCaseInformationTab).toBe('docketRecord');
+  });
+
+  it("should show caseInformationTab's value as selected if primaryTab is caseInformation", () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailSubnavHelper, {
+      state: {
+        ...getBaseState(user),
+        currentViewMetadata: {
+          caseDetail: {
+            caseInformationTab: 'petitioner',
+            primaryTab: 'caseInformation',
+          },
+        },
+      },
+    });
+    expect(result.selectedCaseInformationTab).toBe('petitioner');
+  });
 });

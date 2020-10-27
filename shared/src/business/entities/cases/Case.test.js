@@ -2913,11 +2913,39 @@ describe('Case entity', () => {
       expect(caseToUpdate.hasPendingItems).toEqual(false);
       expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
     });
-    it('should show the case as having pending items if some docketEntries are pending', () => {
+
+    it('should not show the case as having pending items if some docketEntries are pending and not served', () => {
       const mockCase = {
         ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            pending: true,
+            servedAt: undefined,
+          },
+        ],
       };
-      mockCase.docketEntries[0].pending = true;
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
+    });
+
+    it('should show the case as having pending items if some docketEntries are pending and served', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            pending: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+            servedParties: [{ name: 'Bob' }],
+          },
+        ],
+      };
 
       const caseToUpdate = new Case(mockCase, {
         applicationContext,
