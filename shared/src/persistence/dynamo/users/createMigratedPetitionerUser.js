@@ -36,6 +36,7 @@ exports.createMigratedPetitionerUser = async ({ applicationContext, user }) => {
     const response = await applicationContext
       .getCognito()
       .adminCreateUser({
+        MessageAction: 'SUPPRESS',
         UserAttributes: [
           {
             Name: 'email_verified',
@@ -65,6 +66,34 @@ exports.createMigratedPetitionerUser = async ({ applicationContext, user }) => {
       userId: response.User.Username,
     });
   } catch (err) {
+    // the user already exists in Cognito
     applicationContext.logger.error(err);
+    const response = await applicationContext
+      .getCognito()
+      .adminGetUser({
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: user.email,
+      })
+      .promise();
+
+    await applicationContext
+      .getCognito()
+      .adminUpdateUserAttributes({
+        UserAttributes: [
+          {
+            Name: 'custom:role',
+            Value: user.role,
+          },
+        ],
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: response.Username,
+      })
+      .promise();
+
+    return await createUserRecords({
+      applicationContext,
+      user,
+      userId: response.Username,
+    });
   }
 };

@@ -1024,8 +1024,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-let user;
-
 const initHoneybadger = () => {
   if (process.env.NODE_ENV === 'production') {
     const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
@@ -1038,13 +1036,6 @@ const initHoneybadger = () => {
       return Honeybadger;
     }
   }
-};
-
-const getCurrentUser = () => {
-  return user;
-};
-const setCurrentUser = newUser => {
-  user = new User(newUser);
 };
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
@@ -1253,7 +1244,15 @@ const gatewayMethods = {
 };
 
 module.exports = appContextUser => {
-  if (appContextUser) setCurrentUser(appContextUser);
+  let user;
+
+  if (appContextUser) {
+    user = new User(appContextUser);
+  }
+
+  const getCurrentUser = () => {
+    return user;
+  };
 
   return {
     barNumberGenerator,
