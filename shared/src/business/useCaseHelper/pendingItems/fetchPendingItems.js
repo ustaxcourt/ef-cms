@@ -15,18 +15,20 @@ exports.fetchPendingItems = async ({
   applicationContext,
   docketNumber,
   judge,
+  page,
 }) => {
   const source = [
     'associatedJudge',
-    'docketEntries',
     'caseCaption',
     'docketNumber',
     'docketNumberSuffix',
     'status',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
   ];
 
-  let foundCases;
-
+  // TODO: refactor, these are two major different paths
   if (docketNumber) {
     const caseResult = await applicationContext
       .getPersistenceGateway()
@@ -35,45 +37,54 @@ exports.fetchPendingItems = async ({
         docketNumber,
       });
     const caseEntity = new Case(caseResult, { applicationContext });
-    foundCases = [pick(caseEntity.validate().toRawObject(), source)];
+    let foundCases = [pick(caseEntity.validate().toRawObject(), source)];
+    let foundDocuments = [];
+
+    foundCases.forEach(foundCase => {
+      const foundCaseEntity = new Case(foundCase, {
+        applicationContext,
+      });
+
+      foundCaseEntity.docketEntries.forEach(document => {
+        if (document.pending && document.servedAt) {
+          foundDocuments.push({
+            ...omit(
+              new DocketEntry(
+                {
+                  ...document,
+                },
+                { applicationContext },
+              ).toRawObject(),
+              'entityName',
+            ),
+            associatedJudge: foundCaseEntity.associatedJudge,
+            caseCaption: foundCaseEntity.caseCaption,
+            docketNumber: foundCaseEntity.docketNumber,
+            docketNumberSuffix: foundCaseEntity.docketNumberSuffix,
+            status: foundCaseEntity.status,
+          });
+        }
+      });
+    });
+
+    return {
+      foundDocuments,
+      total: foundDocuments.length,
+    };
   } else {
-    foundCases = await applicationContext
+    const pendingItemResults = await applicationContext
       .getPersistenceGateway()
       .fetchPendingItems({
         applicationContext,
         judge,
+        page,
         source,
       });
+    const foundDocuments = pendingItemResults.results;
+    const documentsTotal = pendingItemResults.total;
+    return {
+      foundDocuments,
+      total: documentsTotal,
+    };
   }
-
-  const foundDocuments = [];
-
-  foundCases.forEach(foundCase => {
-    const foundCaseEntity = new Case(foundCase, {
-      applicationContext,
-    });
-
-    foundCaseEntity.docketEntries.forEach(document => {
-      if (document.pending && document.servedAt) {
-        foundDocuments.push({
-          ...omit(
-            new DocketEntry(
-              {
-                ...document,
-              },
-              { applicationContext },
-            ).toRawObject(),
-            'entityName',
-          ),
-          associatedJudge: foundCaseEntity.associatedJudge,
-          caseCaption: foundCaseEntity.caseCaption,
-          docketNumber: foundCaseEntity.docketNumber,
-          docketNumberSuffix: foundCaseEntity.docketNumberSuffix,
-          status: foundCaseEntity.status,
-        });
-      }
-    });
-  });
-
-  return foundDocuments;
 };
