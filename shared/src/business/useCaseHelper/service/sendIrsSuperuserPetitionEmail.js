@@ -6,8 +6,14 @@ const { Case } = require('../../entities/cases/Case');
 exports.sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
   caseEntity,
-  docketEntryEntity,
+  docketEntryId,
 }) => {
+  const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
+
+  if (docketEntryEntity.index === undefined) {
+    throw new Error('Cannot serve a docket entry without an index.');
+  }
+
   const {
     caseCaption,
     contactPrimary,
@@ -19,13 +25,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     privatePractitioners,
   } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
 
-  const {
-    docketEntryId,
-    documentType,
-    eventCode,
-    filingDate,
-    servedAt,
-  } = docketEntryEntity;
+  const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
     const representingFormatted = [];

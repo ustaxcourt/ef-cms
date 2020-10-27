@@ -18,5 +18,6 @@ data "null_data_source" "locals" {
     CIRCLE_HONEYBADGER_API_KEY     = var.honeybadger_key
     IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
     COGNITO_SUFFIX                 = var.cognito_suffix
+    DISABLE_EMAILS                 = var.disable_emails
   }
 }

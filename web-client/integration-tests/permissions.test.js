@@ -172,6 +172,19 @@ describe('Case permissions test', () => {
     stinBlocked();
   });
 
+  loginAs(test, 'irsPractitioner@example.com');
+  it('Unassociated IRS practitioner views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsBlocked();
+    internalFieldsBlocked();
+    stinBlocked();
+  });
+
   loginAs(test, 'petitioner2@example.com');
   it('Unassociated petitioner views case detail', async () => {
     test.setState('caseDetail', {});
@@ -182,6 +195,19 @@ describe('Case permissions test', () => {
     publicFieldsVisible();
     associatedFieldsBlocked();
     internalFieldsBlocked();
+    stinBlocked();
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+  it('Docket Clerk views case detail', async () => {
+    test.setState('caseDetail', {});
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    publicFieldsVisible();
+    associatedFieldsVisible();
+    internalFieldsVisible();
     stinBlocked();
   });
 

@@ -8,6 +8,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { get } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -84,8 +85,13 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   const editableFields = {
     documentTitle: documentMetadata.documentTitle,
-    documentType: documentMetadata.documentType,
+    documentType:
+      get(documentMetadata, 'draftOrderState.documentType') ||
+      documentMetadata.documentType,
     draftOrderState: documentMetadata.draftOrderState,
+    eventCode:
+      get(documentMetadata, 'draftOrderState.eventCode') ||
+      documentMetadata.eventCode,
     freeText: documentMetadata.freeText,
   };
 

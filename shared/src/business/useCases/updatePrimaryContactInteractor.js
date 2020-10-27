@@ -121,13 +121,6 @@ exports.updatePrimaryContactInteractor = async ({
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryEntity: changeOfAddressDocketEntry,
-      servedParties,
-    });
-
     const workItem = new WorkItem(
       {
         assigneeId: null,
@@ -166,6 +159,13 @@ exports.updatePrimaryContactInteractor = async ({
       });
 
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+      servedParties,
+    });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
