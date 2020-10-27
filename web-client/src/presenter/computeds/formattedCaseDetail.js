@@ -254,7 +254,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending,
+    d => d.pending && d.servedAt,
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(

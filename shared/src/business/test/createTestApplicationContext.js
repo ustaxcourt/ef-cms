@@ -70,6 +70,7 @@ const {
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
+  getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formattedTrialSessionDetails,
@@ -254,6 +255,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getMonthDayYearObj: jest
+      .fn()
+      .mockImplementation(DateHandler.getMonthDayYearObj),
     getPetitionDocketEntryFromDocketEntries: jest
       .fn()
       .mockImplementation(getPetitionDocketEntryFromDocketEntries),
@@ -469,6 +474,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
+    getLogger: jest.fn().mockReturnValue({
+      error: jest.fn(),
+    }),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),

@@ -1,15 +1,11 @@
-const { getIndexNameForRecord } = require('./getIndexNameForRecord');
-
 const { chunk } = require('lodash');
+const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 exports.bulkIndexRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
   const CHUNK_SIZE = 50;
-  const chunkOfRecords = chunk(
-    records,
-    process.env.ES_CHUNK_SIZE || CHUNK_SIZE,
-  );
+  let chunkOfRecords = chunk(records, process.env.ES_CHUNK_SIZE || CHUNK_SIZE);
 
   const failedRecords = [];
 
@@ -21,10 +17,26 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
         }))
         .flatMap(doc => {
           const index = getIndexNameForRecord(doc);
+          let id = `${doc.pk.S}_${doc.sk.S}`;
+          let routing = null;
 
           if (index) {
+            if (doc.entityName.S === 'DocketEntry') {
+              routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
+            }
+
+            if (doc.entityName.S === 'CaseDocketEntryMapping') {
+              id += '|mapping';
+            }
+
             return [
-              { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
+              {
+                index: {
+                  _id: id,
+                  _index: index,
+                  routing,
+                },
+              },
               doc,
             ];
           }
@@ -36,7 +48,6 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
           body,
           refresh: false,
         });
-
         if (response.errors) {
           response.items.forEach((action, i) => {
             const operation = Object.keys(action)[0];
