@@ -68,7 +68,18 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     await refreshElasticsearchIndex();
 
+    console.log('caseDetail.docketNumber', caseDetail.docketNumber);
+    console.log('caseDetail.docketNumber', caseDetail.docketNumber);
+    console.log('caseDetail.docketNumber', caseDetail.docketNumber);
+    console.log('caseDetail.docketNumber', caseDetail.docketNumber);
+    console.log('caseDetail.docketNumber', caseDetail.docketNumber);
+
     await test.runSequence('gotoPendingReportSequence');
+
+    await test.runSequence('fetchPendingItemsSequence', {
+      judge: 'Chief Judge',
+    });
+
     const currentPendingItemsCount = (test.getState('pendingItems') || [])
       .length;
 
@@ -99,8 +110,14 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     await refreshElasticsearchIndex();
 
     await test.runSequence('gotoPendingReportSequence');
-    const currentPendingItemsCount = (test.getState('pendingItems') || [])
-      .length;
+
+    await test.runSequence('fetchPendingItemsSequence', {
+      judge: 'Chief Judge',
+    });
+
+    const currentPendingItemsCount = (
+      test.getState('pendingReports.pendingItems') || []
+    ).length;
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
 
