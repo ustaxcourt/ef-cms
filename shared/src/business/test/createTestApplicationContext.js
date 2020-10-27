@@ -254,6 +254,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getMonthDayYearObj: jest
+      .fn()
+      .mockImplementation(DateHandler.getMonthDayYearObj),
     getPetitionDocketEntryFromDocketEntries: jest
       .fn()
       .mockImplementation(getPetitionDocketEntryFromDocketEntries),

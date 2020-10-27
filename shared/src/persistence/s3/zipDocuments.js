@@ -31,7 +31,7 @@ exports.zipDocuments = ({
 
     const s3Client = applicationContext.getStorageClient();
 
-    const uploadFromStream = s3Client => {
+    const uploadFromStream = s3ClientForUpload => {
       if (onUploadStart) onUploadStart();
 
       const pass = new stream.PassThrough();
@@ -41,7 +41,7 @@ exports.zipDocuments = ({
         Bucket: destinationBucket,
         Key: zipName,
       };
-      s3Client.upload(params, () => resolve());
+      s3ClientForUpload.upload(params, () => resolve());
 
       pass.on('error', reject);
 

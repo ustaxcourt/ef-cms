@@ -3,6 +3,20 @@
 ---
   type: "object"
   keys: 
+    associatedJudge: 
+      type: "string"
+      flags: 
+        presence: "required"
+        description: "Judge assigned to the case containing this Case Deadline."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 50
     caseDeadlineId: 
       type: "string"
       flags: 
@@ -75,5 +89,10 @@
             limit: 1
       allow: 
         - "CaseDeadline"
+    sortableDocketNumber: 
+      type: "number"
+      flags: 
+        presence: "required"
+        description: "A sortable representation of the docket number of the case containing the Case Deadline."
 
  ```
