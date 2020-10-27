@@ -524,6 +524,24 @@ const applicationContext = {
   },
   getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
+  getLogger: () => ({
+    error: value => {
+      // eslint-disable-next-line no-console
+      console.error(value);
+    },
+    info: (key, value) => {
+      // eslint-disable-next-line no-console
+      console.info(key, JSON.stringify(value));
+    },
+    time: key => {
+      // eslint-disable-next-line no-console
+      console.time(key);
+    },
+    timeEnd: key => {
+      // eslint-disable-next-line no-console
+      console.timeEnd(key);
+    },
+  }),
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
