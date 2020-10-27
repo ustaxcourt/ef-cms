@@ -26,7 +26,7 @@ export const setAlertFromExceptionAction = async ({
 
   store.set(state.alertError, {
     message: props.error.message,
-    responseCode: responseCode || 404,
+    responseCode: responseCode,
     title: props.error.title,
   });
 };
