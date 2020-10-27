@@ -11,7 +11,7 @@ export const setAlertFromExceptionAction = ({ props, store }) => {
   const hasError =
     props.error &&
     (props.error.title || props.error.message || props.error.messages);
-  const responseCode = props.error && props.error.responseCode;
+  const responseCode = props.error?.originalError?.response?.status;
 
   if (!hasError) {
     store.set(state.alertError, {});
