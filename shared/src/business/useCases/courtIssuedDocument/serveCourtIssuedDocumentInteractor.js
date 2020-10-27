@@ -80,7 +80,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const courtIssuedDocument = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -162,6 +162,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   caseEntity.updateDocketEntry(updatedDocketEntryEntity);
 
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
 
@@ -210,7 +217,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    docketEntryEntity: courtIssuedDocument,
+    docketEntryId: courtIssuedDocument.docketEntryId,
     servedParties,
   });
 

@@ -467,6 +467,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   const constantsOverrides = {
     CASE_SEARCH_PAGE_SIZE: 1,
+    DEADLINE_REPORT_PAGE_SIZE: 1,
   };
   const originalConstants = applicationContext.getConstants();
   presenter.providers.applicationContext.getConstants = () => {

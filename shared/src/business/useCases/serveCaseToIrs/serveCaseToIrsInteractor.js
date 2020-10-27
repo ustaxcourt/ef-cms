@@ -114,6 +114,10 @@ exports.serveCaseToIrsInteractor = async ({
 
   caseEntity.markAsSentToIRS();
 
+  if (caseEntity.isPaper) {
+    addDocketEntries({ caseEntity });
+  }
+
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
@@ -121,7 +125,7 @@ exports.serveCaseToIrsInteractor = async ({
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocketEntry) {
+    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
       initialDocketEntry.setAsServed([
         {
           name: 'IRS',
@@ -139,13 +143,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            docketEntryEntity: initialDocketEntry,
+            docketEntryId: initialDocketEntry.docketEntryId,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity: initialDocketEntry,
+          docketEntryId: initialDocketEntry.docketEntryId,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
@@ -283,8 +287,6 @@ exports.serveCaseToIrsInteractor = async ({
   let urlToReturn;
 
   if (caseEntityToUpdate.isPaper) {
-    addDocketEntries({ caseEntity: caseEntityToUpdate });
-
     ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({

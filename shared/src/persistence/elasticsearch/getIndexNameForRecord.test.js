@@ -37,6 +37,18 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-docket-entry');
   });
 
+  it('returns efcms-docket-entry for CaseDocketEntryMapping records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseDocketEntryMapping',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-docket-entry');
+  });
+
   it('returns efcms-user for User records', () => {
     const record = {
       entityName: {
@@ -107,6 +119,18 @@ describe('getIndexNameForRecord', () => {
     const result = getIndexNameForRecord(record);
 
     expect(result).toEqual('efcms-user-case');
+  });
+
+  it('returns efcms-case-deadline for CaseDeadline records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseDeadline',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-case-deadline');
   });
 
   it('returns efcms-case for unmarshalled Case record', () => {

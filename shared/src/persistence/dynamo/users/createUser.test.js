@@ -47,6 +47,10 @@ describe('createUser', () => {
       promise: async () => Promise.resolve(),
     });
 
+    applicationContext.getCognito().adminDisableUser.mockReturnValue({
+      promise: async () => Promise.resolve(),
+    });
+
     applicationContext.getDocumentClient().put.mockReturnValue({
       promise: () => Promise.resolve(null),
     });

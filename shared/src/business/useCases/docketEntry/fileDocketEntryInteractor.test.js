@@ -107,6 +107,7 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -127,8 +128,8 @@ describe('fileDocketEntryInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0].docketEntryEntity,
-    ).toMatchObject({ index: 1 });
+        .calls[0][0].docketEntryId,
+    ).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
   });
 
   it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
@@ -207,6 +208,7 @@ describe('fileDocketEntryInteractor', () => {
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
         filedBy: 'Test Petitioner',
+        isFileAttached: true,
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -243,6 +245,7 @@ describe('fileDocketEntryInteractor', () => {
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
         filedBy: 'Test Petitioner',
+        isFileAttached: true,
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

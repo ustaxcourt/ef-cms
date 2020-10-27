@@ -1,6 +1,9 @@
 const client = require('../../dynamodbClientService');
 const diff = require('diff-arrays-of-objects');
 const {
+  getCaseDeadlinesByDocketNumber,
+} = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
+const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
 const {
@@ -19,6 +22,7 @@ const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
 const { Case } = require('../../../business/entities/cases/Case');
+const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit } = require('lodash');
@@ -272,7 +276,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       applicationContext,
     });
 
-    for (let message of messageMappings) {
+    messageMappings.forEach(message => {
       if (oldCase.status !== caseToUpdate.status) {
         message.caseStatus = caseToUpdate.status;
       }
@@ -282,11 +286,31 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       if (oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix) {
         message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
       }
-      updateMessage({
-        applicationContext,
-        message,
-      });
-    }
+      requests.push(
+        updateMessage({
+          applicationContext,
+          message,
+        }),
+      );
+    });
+  }
+
+  if (oldCase.associatedJudge !== caseToUpdate.associatedJudge) {
+    const deadlines = await getCaseDeadlinesByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+    deadlines.forEach(deadline => {
+      deadline.associatedJudge = caseToUpdate.associatedJudge;
+
+      requests.push(
+        createCaseDeadline({
+          applicationContext,
+          caseDeadline: deadline,
+        }),
+      );
+    });
   }
 
   // update user-case mappings
@@ -337,7 +361,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         sk: `case|${caseToUpdate.docketNumber}`,
         ...setLeadCase,
         ...omit(caseToUpdate, [
-          'documents',
+          'docketEntries',
           'irsPractitioners',
           'privatePractitioners',
         ]),
