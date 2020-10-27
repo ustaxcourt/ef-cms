@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.alertError
  * @param {object} providers.props the cerebral props object used for passing the props.error
  */
-export const setAlertFromExceptionAction = ({ props, store }) => {
+export const setAlertFromExceptionAction = async ({
+  applicationContext,
+  props,
+  store,
+}) => {
   const hasError =
     props.error &&
     (props.error.title || props.error.message || props.error.messages);
@@ -18,9 +22,11 @@ export const setAlertFromExceptionAction = ({ props, store }) => {
     return;
   }
 
+  await applicationContext.notifyHoneybadger(props.error);
+
   store.set(state.alertError, {
     message: props.error.message,
-    responseCode,
+    responseCode: responseCode,
     title: props.error.title,
   });
 };
