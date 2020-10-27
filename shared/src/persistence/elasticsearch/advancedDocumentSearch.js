@@ -1,3 +1,6 @@
+const {
+  MAX_SEARCH_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
@@ -155,7 +158,7 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: applicationContext.getConstants().MAX_SEARCH_RESULTS,
+      size: MAX_SEARCH_RESULTS,
     },
     index: 'efcms-docket-entry',
   };
