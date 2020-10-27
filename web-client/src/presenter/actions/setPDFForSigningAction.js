@@ -48,6 +48,7 @@ export const setPDFForSigningAction = async ({
   pdfObj = await applicationContext.getUseCases().loadPDFForSigningInteractor({
     applicationContext,
     docketEntryId,
+    docketNumber: caseDetail.docketNumber,
     removeCover,
   });
 

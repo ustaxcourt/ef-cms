@@ -523,6 +523,9 @@ jobs:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup Disable Emails
+          command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
@@ -541,6 +544,7 @@ jobs:
              -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" \
              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
+             -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
@@ -796,6 +800,7 @@ jobs:
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests

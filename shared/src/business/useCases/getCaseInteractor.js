@@ -122,10 +122,10 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber,
+      docketNumber: Case.stripLeadingZeros(docketNumber),
     });
 
-  if (!caseRecord) {
+  if (!caseRecord.docketNumber && !caseRecord.entityName) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;
