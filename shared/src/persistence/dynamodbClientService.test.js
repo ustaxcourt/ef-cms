@@ -10,6 +10,7 @@ const {
   get,
   put,
   query,
+  queryFull,
   updateConsistent,
 } = require('./dynamodbClientService');
 
@@ -93,6 +94,18 @@ describe('dynamodbClientService', function () {
       },
     });
 
+    applicationContext.getDocumentClient().queryFull.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Items: [
+            {
+              docketNumber: '123-20',
+            },
+          ],
+        });
+      },
+    });
+
     applicationContext.getDynamoClient = jest
       .fn()
       .mockImplementation(() => mockDynamoClient);
@@ -132,6 +145,13 @@ describe('dynamodbClientService', function () {
   describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });
+      expect(result).toEqual([MOCK_ITEM]);
+    });
+  });
+
+  describe('queryFull', () => {
+    it('should remove the global aws fields on the object returned', async () => {
+      const result = await queryFull({ applicationContext });
       expect(result).toEqual([MOCK_ITEM]);
     });
   });
