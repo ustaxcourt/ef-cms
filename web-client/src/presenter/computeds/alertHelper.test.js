@@ -50,4 +50,17 @@ describe('alertHelper', () => {
       showTitleOnly: false,
     });
   });
+
+  it('responseCode is defined', () => {
+    const result = runCompute(alertHelper, {
+      state: {
+        alertError: {
+          responseCode: 504,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      responseCode: 504,
+    });
+  });
 });
