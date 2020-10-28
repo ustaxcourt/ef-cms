@@ -152,7 +152,7 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
   statistic           = "Minimum"
   threshold           = "1"
   evaluation_periods  = "2"
-  period              = "30"
+  period              = "60"
 
   dimensions = {
     HealthCheckId = aws_route53_health_check.public_ui_health_check.id
@@ -180,7 +180,7 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
   statistic           = "Minimum"
   threshold           = "1"
   evaluation_periods  = "2"
-  period              = "30"
+  period              = "60"
 
   dimensions = {
     HealthCheckId = aws_route53_health_check.ui_health_check.id
