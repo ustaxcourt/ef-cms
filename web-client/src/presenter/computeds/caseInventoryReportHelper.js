@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import { without } from 'lodash';
 
 export const caseInventoryReportHelper = (get, applicationContext) => {
   const {
@@ -52,7 +53,7 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
   }
 
   return {
-    caseStatuses: Object.values(STATUS_TYPES),
+    caseStatuses: without(Object.values(STATUS_TYPES), 'Closed'),
     formattedReportData,
     judges,
     nextPageSize,
