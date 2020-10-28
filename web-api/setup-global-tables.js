@@ -77,7 +77,7 @@ async function createGlobalTable() {
   try {
     await processGlobalTables();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     process.exit(1);
   }
 })();

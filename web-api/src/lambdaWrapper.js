@@ -39,7 +39,7 @@ export const lambdaWrapper = lambda => {
     } else if (response.headers.Location) {
       res.redirect(response.headers.Location);
     } else {
-      console.log('ERROR: we do not support this return type');
+      console.error('ERROR: we do not support this return type');
     }
   };
 };

@@ -61,7 +61,7 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
             recordSk: record.recordSk,
           });
       } catch (e) {
-        applicationContext.logger.info('Error', e);
+        applicationContext.logger.error(e);
         await applicationContext.notifyHoneybadger(e);
       }
     }
