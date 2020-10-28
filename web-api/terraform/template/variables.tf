@@ -63,7 +63,8 @@ variable "destination_table" {
 }
 
 variable "disable_emails" {
-  type = bool
+  type    = bool
+  default = false
 }
 
 variable "es_volume_size" {
