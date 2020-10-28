@@ -28,8 +28,8 @@ resource "aws_api_gateway_rest_api" "gateway_for_api_public" {
   }
 }
 
-resource "aws_api_gateway_gateway_response" "large_payload" {
-  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+resource "aws_api_gateway_gateway_response" "large_payload_public" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
   status_code   = "413"
   response_type = "REQUEST_TOO_LARGE"
   
@@ -39,8 +39,8 @@ resource "aws_api_gateway_gateway_response" "large_payload" {
   }
 }  
 
-resource "aws_api_gateway_gateway_response" "timeout" {
-  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+resource "aws_api_gateway_gateway_response" "timeout_public" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
   status_code   = "504"
   response_type = "INTEGRATION_TIMEOUT"
 
