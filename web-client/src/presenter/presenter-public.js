@@ -1,3 +1,7 @@
+import { ActionError } from './errors/ActionError';
+import { InvalidRequestError } from './errors/InvalidRequestError';
+import { NotFoundError } from './errors/NotFoundError';
+import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
@@ -12,8 +16,8 @@ import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
+import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
-
 import { state } from './state-public';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
@@ -31,6 +35,13 @@ import { validateOpinionSearchSequence } from './sequences/validateOpinionSearch
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
 export const presenter = {
+  catch: [
+    // ORDER MATTERS! Based on inheritance, the first match will be used
+    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [NotFoundError, notFoundErrorSequence], //404
+    [ActionError, setCurrentPageErrorSequence], // generic error handler
+  ],
   providers: {},
   sequences: {
     advancedSearchTabChangeSequence,

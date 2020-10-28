@@ -13,3 +13,7 @@ variable "es_instance_count" {
 variable "es_instance_type" {
   type = string
 }
+
+variable "es_volume_size" {
+  type = number
+}
