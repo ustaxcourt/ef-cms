@@ -67,5 +67,5 @@ variable "disable_emails" {
 }
 
 variable "es_volume_size" {
-  type = string
+  type = number
 }
