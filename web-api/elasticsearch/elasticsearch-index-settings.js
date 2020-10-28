@@ -59,6 +59,15 @@
             },
             index,
           });
+        } else {
+          searchClientCache.indices.putSettings({
+            body: {
+              index: {
+                max_result_window: settings.index.max_result_window,
+              },
+            },
+            index,
+          });
         }
       } catch (e) {
         console.log(e);
