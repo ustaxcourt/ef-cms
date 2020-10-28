@@ -15,7 +15,7 @@ describe('Health check', () => {
       expect(response.body.dynamo.efcmsDeploy).to.be.true;
       expect(response.body.dynamsoft).to.be.true;
       expect(response.body.elasticsearch).to.be.true;
-      if (DISABLE_EMAILS) {
+      if (DISABLE_EMAILS === 'true') {
         expect(response.body.emailService).to.be.false;
       } else {
         expect(response.body.emailService).to.be.true;

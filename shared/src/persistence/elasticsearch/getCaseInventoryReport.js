@@ -45,6 +45,9 @@ exports.getCaseInventoryReport = async ({
             { match: { 'pk.S': 'case|' } },
             { match: { 'sk.S': 'case|' } },
           ],
+          must_not: {
+            match: { 'status.S': 'Closed' },
+          },
         },
       },
       size,
