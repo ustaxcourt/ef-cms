@@ -50,7 +50,7 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
           })
             .then(() => processNextChunk())
             .catch(err => {
-              console.log('error', err);
+              console.error('error', err);
             });
         },
       }),

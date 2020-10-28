@@ -311,8 +311,7 @@ exports.processStreamRecordsInteractor = async ({
       applicationContext,
       removeRecords,
     }).catch(err => {
-      applicationContext.logger.error(err);
-      applicationContext.logger.info("failed to processRemoveEntries',");
+      applicationContext.logger.error(err, 'failed to processRemoveEntries');
       applicationContext.notifyHoneybadger(err, {
         message: 'failed to processRemoveEntries',
       });
@@ -325,8 +324,7 @@ exports.processStreamRecordsInteractor = async ({
         caseEntityRecords,
         utils,
       }).catch(err => {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info("failed to processCaseEntries',");
+        applicationContext.logger.error(err, 'failed to processCaseEntries');
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processCaseEntries',
         });
@@ -337,16 +335,14 @@ exports.processStreamRecordsInteractor = async ({
         docketEntryRecords,
         utils,
       }).catch(err => {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info("failed to processDocketEntries',");
+        applicationContext.logger.error(err, 'failed to processDocketEntries');
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processDocketEntries',
         });
         throw err;
       }),
       processOtherEntries({ applicationContext, otherRecords }).catch(err => {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info("failed to processOtherEntries',");
+        applicationContext.logger.error(err, 'failed to processOtherEntries');
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processOtherEntries',
         });
@@ -354,9 +350,9 @@ exports.processStreamRecordsInteractor = async ({
       }),
     ]);
   } catch (err) {
-    applicationContext.logger.info(
-      'processStreamRecordsInteractor failed to process the records',
+    applicationContext.logger.error(
       err,
+      'processStreamRecordsInteractor failed to process the records',
     );
     applicationContext.notifyHoneybadger(err);
     throw err;
