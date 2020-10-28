@@ -105,6 +105,19 @@ resource "null_resource" "streams_east_object" {
   }
 }
 
+resource "aws_acm_certificate" "api_gateway_cert_east" {
+  domain_name       = "*.${var.dns_domain}"
+  validation_method = "DNS"
+
+  tags = {
+    Name          = "wildcard.${var.dns_domain}"
+    ProductDomain = "EFCMS API"
+    Environment   = var.environment
+    Description   = "Certificate for wildcard.${var.dns_domain}"
+    ManagedBy     = "terraform"
+  }
+}
+
 data "aws_s3_bucket_object" "api_public_blue_east_object" {
   depends_on = [null_resource.api_public_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -295,4 +308,15 @@ module "api-east-blue" {
   create_cron            = 1
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
+}
+
+
+resource "aws_api_gateway_domain_name" "api_custom_main_east" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_east]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_east.arn
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
