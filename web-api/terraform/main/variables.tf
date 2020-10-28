@@ -69,3 +69,7 @@ variable "destination_table" {
 variable "disable_emails" {
   type = bool
 }
+
+variable "es_volume_size" {
+  type = number
+}
