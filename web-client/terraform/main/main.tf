@@ -145,7 +145,7 @@ data "aws_sns_topic" "system_health_alarms" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
-  alarm_name          = "Public UI is accessible over HTTPS"
+  alarm_name          = "${var.dns_domain} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
@@ -173,7 +173,7 @@ resource "aws_route53_health_check" "public_ui_health_check" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
-  alarm_name          = "Authenticated UI is accessible over HTTPS"
+  alarm_name          = "app.${var.dns_domain} is accessible over HTTPS"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
