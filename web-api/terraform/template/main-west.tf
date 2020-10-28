@@ -70,6 +70,19 @@ resource "null_resource" "cron_west_object" {
   }
 }
 
+resource "aws_acm_certificate" "api_gateway_cert" {
+  domain_name       = "*.${var.dns_domain}"
+  validation_method = "DNS"
+
+  tags = {
+    Name          = "wildcard.${var.dns_domain}"
+    ProductDomain = "EFCMS API"
+    Environment   = var.environment
+    Description   = "Certificate for wildcard.${var.dns_domain}"
+    ManagedBy     = "terraform"
+  }
+}
+
 data "aws_s3_bucket_object" "api_public_blue_west_object" {
   depends_on = [null_resource.api_public_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
