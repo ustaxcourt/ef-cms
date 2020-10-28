@@ -70,9 +70,10 @@ resource "null_resource" "cron_west_object" {
   }
 }
 
-resource "aws_acm_certificate" "api_gateway_cert" {
+resource "aws_acm_certificate" "api_gateway_cert_west" {
   domain_name       = "*.${var.dns_domain}"
   validation_method = "DNS"
+  provider = aws.us-west-1
 
   tags = {
     Name          = "wildcard.${var.dns_domain}"
@@ -236,3 +237,16 @@ module "api-west-blue" {
   create_streams         = 0
   stream_arn             = ""
 }
+
+
+resource "aws_api_gateway_domain_name" "api_custom_main_west" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_west]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  provider = aws.us-west-1
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
