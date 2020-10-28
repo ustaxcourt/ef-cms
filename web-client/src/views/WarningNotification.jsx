@@ -85,13 +85,15 @@ export const WarningNotification = connect(
     dismissAlertSequence: sequences.dismissAlertSequence,
   },
   function WarningNotification({ alertWarning, dismissAlertSequence }) {
-    return (
-      alertWarning && (
+    if (alertWarning) {
+      return (
         <WarningNotificationComponent
           alertWarning={alertWarning}
           dismissAlertSequence={dismissAlertSequence}
         />
-      )
-    );
+      );
+    } else {
+      return null;
+    }
   },
 );
