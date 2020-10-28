@@ -40,3 +40,6 @@ rm verification-email.txt
 aws ses delete-receipt-rule --rule-set-name confirm_email_helper --rule-name confirm-email-rule
 aws ses set-active-receipt-rule-set
 aws ses delete-receipt-rule-set --rule-set-name confirm_email_helper
+
+# delete bucket
+aws s3 rm "s3://${BUCKET}" --recursive
