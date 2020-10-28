@@ -37,7 +37,7 @@ resource "aws_elasticsearch_domain" "efcms-search" {
 
   ebs_options {
     ebs_enabled = true
-    volume_size = 10
+    volume_size = var.es_volume_size
   }
 
   snapshot_options {
