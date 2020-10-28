@@ -27,7 +27,7 @@ elif [[ $BRANCH == 'staging' ]] ; then
 elif [[ $BRANCH == 'test' ]] ; then
   echo "100"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo "10"
+  echo "100"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "100"
 elif [[ $BRANCH == 'dawson' ]] ; then
