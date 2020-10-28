@@ -12,6 +12,8 @@
 [ -z "${AWS_ACCOUNT_ID}" ] && echo "You must have AWS_ACCOUNT_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 
+export AWS_DEFAULT_REGION=$REGION
+
 BUCKET="mail-verify.${EFCMS_DOMAIN}"
 
 # create bucket
