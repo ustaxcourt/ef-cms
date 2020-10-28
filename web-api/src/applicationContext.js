@@ -1329,8 +1329,20 @@ module.exports = appContextUser => {
     },
     getDynamoClient,
     getEmailClient: () => {
-      if (process.env.CI || process.env.DISABLE_EMAILS) {
+      if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
+          getSendStatistics: () => {
+            // mock this out so the health checks pass on smoketests
+            return {
+              promise: async () => ({
+                SendDataPoints: [
+                  {
+                    Rejects: 0,
+                  },
+                ],
+              }),
+            };
+          },
           sendBulkTemplatedEmail: params => {
             return {
               promise: () =>
