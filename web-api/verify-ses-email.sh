@@ -43,3 +43,4 @@ aws ses delete-receipt-rule-set --rule-set-name confirm_email_helper
 
 # delete bucket
 aws s3 rm "s3://${BUCKET}" --recursive
+aws s3 rb "s3://${BUCKET}"
