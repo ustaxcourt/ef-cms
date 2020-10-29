@@ -209,7 +209,9 @@ data "aws_dynamodb_table" "green_dynamo_table" {
     module.dynamo_table_1,
     module.dynamo_table_2,
     module.dynamo_table_3,
-    module.dynamo_table_4
+    module.dynamo_table_4,
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
   ]
   name = var.green_table_name
 }
@@ -220,7 +222,9 @@ data "aws_dynamodb_table" "blue_dynamo_table" {
     module.dynamo_table_1,
     module.dynamo_table_2,
     module.dynamo_table_3,
-    module.dynamo_table_4
+    module.dynamo_table_4,
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
   ]
   name = var.blue_table_name
 }
