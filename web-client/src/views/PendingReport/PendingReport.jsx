@@ -11,8 +11,9 @@ import React from 'react';
 export const PendingReport = connect(
   {
     formattedPendingItems: state.formattedPendingItems,
+    pendingReportListHelper: state.pendingReportListHelper,
   },
-  function PendingReport({ formattedPendingItems }) {
+  function PendingReport({ formattedPendingItems, pendingReportListHelper }) {
     return (
       <>
         <BigHeader text="Reports" />
@@ -22,15 +23,17 @@ export const PendingReport = connect(
 
           <Tabs bind="reportsTab.group" defaultActiveTab="pendingReport">
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-              <Button
-                link
-                aria-describedby="pending-report-tab"
-                className="margin-top-2"
-                href={formattedPendingItems.printUrl}
-                icon="print"
-              >
-                Printable Report
-              </Button>
+              {pendingReportListHelper.hasPendingItemsResults && (
+                <Button
+                  link
+                  aria-describedby="pending-report-tab"
+                  className="margin-top-2"
+                  href={formattedPendingItems.printUrl}
+                  icon="print"
+                >
+                  Printable Report
+                </Button>
+              )}
             </div>
 
             <Tab
