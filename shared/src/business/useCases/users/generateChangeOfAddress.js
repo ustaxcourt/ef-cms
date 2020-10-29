@@ -246,10 +246,6 @@ exports.generateChangeOfAddress = async ({
         updatedCases.push(updatedCaseRaw);
       }
     } catch (error) {
-      applicationContext.logger.error(
-        error,
-        'failed to generate change of address',
-      );
       applicationContext.notifyHoneybadger(error);
     }
 

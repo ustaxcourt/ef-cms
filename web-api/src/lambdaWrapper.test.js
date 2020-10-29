@@ -89,14 +89,14 @@ describe('lambdaWrapper', () => {
   });
 
   it('logs exception if unhandled response', async () => {
-    jest.spyOn(console, 'error');
+    jest.spyOn(console, 'log');
     await lambdaWrapper(() => {
       return {
         body: null,
         headers: {},
       };
     })(req, res);
-    expect(console.error).toHaveBeenCalledWith(
+    expect(console.log).toHaveBeenCalledWith(
       'ERROR: we do not support this return type',
     );
   });

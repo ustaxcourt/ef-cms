@@ -71,7 +71,7 @@ let sent = 0;
           );
         })
         .catch(err => {
-          console.error(err);
+          console.log(err);
         }),
     );
   }

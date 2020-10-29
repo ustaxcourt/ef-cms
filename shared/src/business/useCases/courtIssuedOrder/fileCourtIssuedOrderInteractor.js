@@ -77,7 +77,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
         documentMetadata.documentContents = contents;
       }
     } catch (e) {
-      applicationContext.logger.error(e, 'Failed to parse PDF');
+      applicationContext.logger.info('Failed to parse PDF', e);
       throw e;
     }
   }

@@ -35,7 +35,7 @@ const verify = (methodArn, token, keys, kid, iss, cb) => {
 
   jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
     if (err) {
-      console.error('Unauthorized user:', err.message);
+      console.log('Unauthorized user:', err.message);
       cb('Unauthorized');
     } else {
       cb(
@@ -76,13 +76,13 @@ exports.handler = (event, context, cb) => {
           verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
         })
         .catch(error => {
-          console.error('Request error:', error);
+          console.log('Request error:', error);
           // eslint-disable-next-line promise/no-callback-in-promise
           cb('Unauthorized');
         });
     }
   } else {
-    console.error('No authorizationToken found in the header.');
+    console.log('No authorizationToken found in the header.');
     cb('Unauthorized');
   }
 };
