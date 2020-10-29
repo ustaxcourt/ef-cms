@@ -50,6 +50,15 @@ If a new dynamo table and elasticsearch domain is necessary, duplicate the modul
 3. Destroy the migration infrastructure to turn off the live streams
 	`DESTINATION_TABLE=b SOURCE_TABLE=a STREAM_ARN=abc npm run destroy:migration -- <DEPLOYED_ENV>`
 
+## Deploying to Prod
+
+You will have to manually run `switch-colors.sh`. Before you run, set the following values:
+	ENV=prod
+	EFCMS_DOMAIN=dawson.flexion.us
+	ZONE_NAME=dawson.flexion.us
+
+Ensure you have DEPLOYING_COLOR and CURRENT_COLOR set to appropriate values in your local environment.
+
 ## Errors You May Encounter
 
 ### AWS-related

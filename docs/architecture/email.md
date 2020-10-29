@@ -44,3 +44,69 @@ Notes:
 2. EF-CMS uses Amazon SES Easy DKIM, [which uses a 1024-bit key](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-authentication-dkim-easy.html).
 3. Amazon SES does not support DNSSEC on its Easy DKIM signing domains.
 4. Encrypting emails with S/MIME would reduce the effectiveness of email notifications, as some recipients would not be able to decrypt the emails. No sensitive information is sent in email notifications.
+
+### Verifying SES Email
+
+At present this is a manual process as a human needs to click on the link in the email in order to verify ownership. We verify ownership so that we can use that verified email's ARN in [our Cognito configuration](../../web-api/terraform/template/cognito.tf). This lets us send more email than Cognito's very low quotas allow. 
+
+Here are the steps required to verify a new email:
+
+
+#### Automated
+
+1. Set the environment variables:
+  - `EFCMS_DOMAIN` e.g. `exp2.ustc-case-mgmt.flexion.us`
+  - `REGION` e.g. `us-east-1`
+  - `AWS_ACCESS_KEY_ID`
+  - `AWS_ACCOUNT_ID`
+  - `AWS_SECRET_ACCESS_KEY`
+2. Run the script:
+  - `cd web-api && ./verify-ses-email.sh`
+
+#### Manual
+1. Need to create an s3 bucket (e.g. `mail-verification.example.com`)
+2. Need to grant SES permission to write to it. Replace `BUCKET-NAME` and `AWSACCCOUNTID` in the following policy, and apply it to the newly created bucket:
+
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "AllowSESPuts",
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "ses.amazonaws.com"
+                },
+                "Action": "s3:PutObject",
+                "Resource": "arn:aws:s3:::BUCKET-NAME/*",
+                "Condition": {
+                    "StringEquals": {
+                        "aws:Referer": "AWSACCOUNTID"
+                    }
+                }
+            }
+        ]
+    }
+    ```
+
+3. In SES, create a rule set: (e.g., `confirm_email_helper`)
+4. Need to create a Rule in that has the following attributes: (Replace `BUCKET-NAME`)
+
+   ```json
+   {
+      "Name": "Confirm Email Rule",
+      "Enabled": true,
+      "Actions": [
+        {
+          "S3Action": {
+            "BucketName": "BUCKET-NAME"
+          }
+        }
+      ]
+    }
+    ```
+
+5. Need to make the Rule Set active
+6. Use SES to send a verification email to that account.
+7. Check the S3 bucket. It should have an item in there with a link to confirm the Email Address. Follow the link, and the email address should be verified.
+8. When complete, delete the S3 Bucket, SES Rule, and SES Rule Set. Future deploys should rely on the verified email.

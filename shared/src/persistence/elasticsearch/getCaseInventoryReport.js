@@ -45,10 +45,14 @@ exports.getCaseInventoryReport = async ({
             { match: { 'pk.S': 'case|' } },
             { match: { 'sk.S': 'case|' } },
           ],
+          must_not: {
+            match: { 'status.S': 'Closed' },
+          },
         },
       },
       size,
       sort: [{ 'sortableDocketNumber.N.keyword': { order: 'asc' } }],
+      track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
     index: 'efcms-case',
   };
