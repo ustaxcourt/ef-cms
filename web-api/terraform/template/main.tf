@@ -60,6 +60,58 @@ module "dynamo_table_4" {
   }
 }
 
+module "dynamo_table_alpha" {
+  source = "./dynamo-table"
+
+  environment = var.environment
+  table_name  = "efcms-${var.environment}-alpha"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
+module "dynamo_table_beta" {
+  source = "./dynamo-table"
+
+  environment = var.environment
+  table_name  = "efcms-${var.environment}-beta"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
+}
+
+module "elasticsearch_alpha" {
+  source = "./elasticsearch"
+
+  environment       = var.environment
+  domain_name       = "efcms-search-${var.environment}-alpha"
+  es_instance_count = var.es_instance_count
+  es_instance_type  = var.es_instance_type
+  es_volume_size    = var.es_volume_size
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
+
+module "elasticsearch_beta" {
+  source = "./elasticsearch"
+
+  environment       = var.environment
+  domain_name       = "efcms-search-${var.environment}-beta"
+  es_instance_count = var.es_instance_count
+  es_instance_type  = var.es_instance_type
+  es_volume_size    = var.es_volume_size
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
+
 module "elasticsearch_1" {
   source = "./elasticsearch"
 
@@ -67,6 +119,7 @@ module "elasticsearch_1" {
   domain_name       = "efcms-search-${var.environment}-1"
   es_instance_count = var.es_instance_count
   es_instance_type  = var.es_instance_type
+  es_volume_size    = var.es_volume_size
 
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -80,6 +133,7 @@ module "elasticsearch_2" {
   domain_name       = "efcms-search-${var.environment}-2"
   es_instance_count = var.es_instance_count
   es_instance_type  = var.es_instance_type
+  es_volume_size    = var.es_volume_size
 
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -93,6 +147,7 @@ module "elasticsearch_3" {
   domain_name       = "efcms-search-${var.environment}-3"
   es_instance_count = var.es_instance_count
   es_instance_type  = var.es_instance_type
+  es_volume_size    = var.es_volume_size
 
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -106,6 +161,7 @@ module "elasticsearch_4" {
   domain_name       = "efcms-search-${var.environment}-4"
   es_instance_count = var.es_instance_count
   es_instance_type  = var.es_instance_type
+  es_volume_size    = var.es_volume_size
 
   providers = {
     aws.us-east-1 = aws.us-east-1

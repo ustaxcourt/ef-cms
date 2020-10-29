@@ -8,12 +8,13 @@ const { get } = require('../requests');
  * @param {object} providers.judge the optional judge filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fetchPendingItemsInteractor = ({ applicationContext, judge }) => {
-  let queryString = '';
-
-  if (judge) {
-    queryString = '?judge=' + encodeURIComponent(judge);
-  }
+exports.fetchPendingItemsInteractor = ({
+  applicationContext,
+  judge,
+  page = 0,
+}) => {
+  let queryString = `?page=${page}`;
+  queryString += '&judge=' + encodeURIComponent(judge);
 
   return get({
     applicationContext,
