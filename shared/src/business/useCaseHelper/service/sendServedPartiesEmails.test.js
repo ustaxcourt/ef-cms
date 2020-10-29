@@ -2,9 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+} = require('../../entities/EntityConstants');
+const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
@@ -21,23 +25,28 @@ describe('sendServedPartiesEmails', () => {
   });
 
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case and include the irs superuser if the case status is not new', async () => {
-    await sendServedPartiesEmails({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         docketEntries: [
-          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentType: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      docketEntryEntity: {
-        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
-        documentType: 'The Document',
-        index: 1,
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [
           { email: '1@example.com', name: '1' },
@@ -60,23 +69,28 @@ describe('sendServedPartiesEmails', () => {
   });
 
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case and not include the irs superuser if the case status is new', async () => {
-    await sendServedPartiesEmails({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         docketEntries: [
-          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentTitle: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.new,
       },
-      docketEntryEntity: {
-        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
-        documentTitle: 'The Document',
-        index: 1,
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [
           { email: '1@example.com', name: '1' },
@@ -95,23 +109,28 @@ describe('sendServedPartiesEmails', () => {
   });
 
   it('should call sendBulkTemplatedEmail only for the irs superuser if there are no electronic service parties on the case and the case status is not new', async () => {
-    await sendServedPartiesEmails({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         docketEntries: [
-          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentTitle: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      docketEntryEntity: {
-        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
-        documentTitle: 'The Document',
-        index: 1,
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [],
       },
@@ -126,24 +145,30 @@ describe('sendServedPartiesEmails', () => {
     ).toMatchObject([{ email: 'irsSuperuser@example.com' }]);
   });
 
-  it('should concatenate the docketNumber and docketNumberSuffix if a docketNumberSuffix is present', async () => {
-    await sendServedPartiesEmails({
-      applicationContext,
-      caseEntity: {
+  it('should use docketNumberSuffix if a docketNumberSuffix is present', async () => {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
+        caseType: CASE_TYPES_MAP.cdp,
         docketEntries: [
-          { docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360', index: 1 },
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentTitle: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
         ],
         docketNumber: '123-20',
-        docketNumberWithSuffix: '123-20L',
+        procedureType: 'Regular',
         status: CASE_STATUS_TYPES.generalDocket,
       },
-      docketEntryEntity: {
-        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
-        documentTitle: 'The Document',
-        index: 1,
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
       servedParties: {
         electronic: [],
       },
@@ -152,5 +177,35 @@ describe('sendServedPartiesEmails', () => {
     const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
     expect(caseDetail.docketNumber).toEqual('123-20');
     expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
+  });
+
+  it('should throw an error if the docket entry does not have an index', async () => {
+    const caseEntity = new Case(
+      {
+        caseCaption: 'A Caption',
+        docketEntries: [
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentTitle: 'The Document',
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+        docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      { applicationContext },
+    );
+
+    await expect(
+      sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+        servedParties: {
+          electronic: [],
+        },
+      }),
+    ).rejects.toThrow('Cannot serve a docket entry without an index.');
   });
 });

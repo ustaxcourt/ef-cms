@@ -95,7 +95,10 @@ exports.advancedDocumentSearch = async ({
       bool: {
         should: {
           match: {
-            [judgeField]: judgeName,
+            [judgeField]: {
+              operator: 'and',
+              query: judgeName,
+            },
           },
         },
       },

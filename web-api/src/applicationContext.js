@@ -1300,7 +1300,7 @@ module.exports = appContextUser => {
       }
     },
     getConstants: () => ({
-      CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
+      CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => status !== CASE_STATUS_TYPES.closed,
       ),
@@ -1334,7 +1334,7 @@ module.exports = appContextUser => {
     },
     getDynamoClient,
     getEmailClient: () => {
-      if (process.env.CI) {
+      if (process.env.CI || process.env.DISABLE_EMAILS) {
         return {
           sendBulkTemplatedEmail: params => {
             return {

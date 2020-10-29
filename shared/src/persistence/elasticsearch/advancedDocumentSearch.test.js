@@ -194,7 +194,10 @@ describe('advancedDocumentSearch', () => {
         bool: {
           should: {
             match: {
-              'signedJudgeName.S': 'Guy Fieri',
+              'signedJudgeName.S': {
+                operator: 'and',
+                query: 'Guy Fieri',
+              },
             },
           },
         },
@@ -238,7 +241,10 @@ describe('advancedDocumentSearch', () => {
         bool: {
           should: {
             match: {
-              'judge.S': 'Guy Fieri',
+              'judge.S': {
+                operator: 'and',
+                query: 'Guy Fieri',
+              },
             },
           },
         },
@@ -340,7 +346,10 @@ describe('advancedDocumentSearch', () => {
           bool: {
             should: {
               match: {
-                'judge.S': 'Guy Fieri',
+                'judge.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
               },
             },
           },
@@ -362,7 +371,10 @@ describe('advancedDocumentSearch', () => {
           bool: {
             should: {
               match: {
-                'signedJudgeName.S': 'Guy Fieri',
+                'signedJudgeName.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
               },
             },
           },
@@ -385,7 +397,10 @@ describe('advancedDocumentSearch', () => {
           bool: {
             should: {
               match: {
-                'judge.S': 'Guy Fieri',
+                'judge.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
               },
             },
           },
