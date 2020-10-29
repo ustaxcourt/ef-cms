@@ -261,7 +261,9 @@ describe('formattedPendingItems', () => {
   it('returns the cases and judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
-        pendingItems: mockPendingItems,
+        pendingReports: {
+          pendingItems: mockPendingItems,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -299,7 +301,9 @@ describe('formattedPendingItems', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
-        pendingItems: mockPendingItems,
+        pendingReports: {
+          pendingItems: mockPendingItems,
+        },
         screenMetadata: { pendingItemsFilters: { judge: CHIEF_JUDGE } },
       },
     });
