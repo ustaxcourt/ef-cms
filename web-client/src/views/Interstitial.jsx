@@ -11,7 +11,6 @@ export const Interstitial = connect(
     isPublic: state.isPublic,
   },
   function Interstitial({ alertHelper, gotoPublicSearchSequence, isPublic }) {
-    console.log('alertHelper', alertHelper);
     return (
       <>
         {alertHelper.showErrorAlert && (
