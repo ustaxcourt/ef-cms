@@ -131,28 +131,39 @@ exports.updateSecondaryContactInteractor = async ({
       servedParties,
     });
 
-    const workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
-        caseIsInProgress: caseEntity.inProgress,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-        docketEntry: {
-          ...changeOfAddressDocketEntry.toRawObject(),
-          createdAt: changeOfAddressDocketEntry.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      },
-      { applicationContext },
+    const privatePractitionersRepresentingSecondaryContact = caseEntity.privatePractitioners.filter(
+      d => d.representingSecondary,
     );
 
-    changeOfAddressDocketEntry.setWorkItem(workItem);
+    if (privatePractitionersRepresentingSecondaryContact.length === 0) {
+      const workItem = new WorkItem(
+        {
+          assigneeId: null,
+          assigneeName: null,
+          associatedJudge: caseEntity.associatedJudge,
+          caseIsInProgress: caseEntity.inProgress,
+          caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+          docketEntry: {
+            ...changeOfAddressDocketEntry.toRawObject(),
+            createdAt: changeOfAddressDocketEntry.createdAt,
+          },
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+          section: DOCKET_SECTION,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+        },
+        { applicationContext },
+      );
+
+      changeOfAddressDocketEntry.setWorkItem(workItem);
+
+      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
+    }
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
@@ -174,11 +185,6 @@ exports.updateSecondaryContactInteractor = async ({
       applicationContext,
       document: changeOfAddressPdfWithCover,
       key: newDocketEntryId,
-    });
-
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
     });
   }
 
