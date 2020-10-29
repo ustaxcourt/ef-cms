@@ -183,6 +183,7 @@ exports.createCaseInteractor = async ({
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filingDate: caseToAdd.createdAt,
+      index: 0,
       isFileAttached: true,
       partyPrimary: true,
       partySecondary,

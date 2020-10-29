@@ -2,12 +2,17 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const {
   sendIrsSuperuserPetitionEmail,
 } = require('./sendIrsSuperuserPetitionEmail');
-const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
   () => ({
@@ -21,16 +26,18 @@ describe('sendIrsSuperuserPetitionEmail', () => {
   });
 
   it('should call sendBulkTemplatedEmail for the IRS superuser party', async () => {
-    await sendIrsSuperuserPetitionEmail({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         contactPrimary: {},
         contactSecondary: {},
         docketEntries: [
           {
-            docketEntryId: '35479520-e2d6-4357-b72f-5b46f16a708a',
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            documentType: 'The Document',
+            eventCode: 'P',
             index: 0,
+            servedAt: '2019-03-01T21:40:46.415Z',
           },
         ],
         docketNumber: '123-20',
@@ -38,12 +45,13 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [],
       },
-      docketEntryEntity: {
-        docketEntryId: '35479520-e2d6-4357-b72f-5b46f16a708a',
-        documentType: 'The Document',
-        eventCode: 'P',
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
     expect(reactTemplateGenerator).toHaveBeenCalled();
@@ -56,18 +64,26 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     ).toMatchObject([{ email: 'irs@example.com' }]);
   });
 
-  it('should concatenate the docketNumber and docketNumberSuffix if a docketNumberSuffix is present', async () => {
-    await sendIrsSuperuserPetitionEmail({
-      applicationContext,
-      caseEntity: {
+  it('should use docketNumberSuffix if a docketNumberSuffix is present', async () => {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
+        caseType: CASE_TYPES_MAP.cdp,
         contactPrimary: {
           name: 'Joe Exotic',
         },
         contactSecondary: {
           name: 'Carol Baskin',
         },
-        docketEntries: [],
+        docketEntries: [
+          {
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            documentType: 'The Document',
+            eventCode: 'P',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
         docketNumber: '123-20',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketNumberWithSuffix: '123-20S',
@@ -80,24 +96,25 @@ describe('sendIrsSuperuserPetitionEmail', () => {
             representingSecondary: true,
           },
         ],
+        procedureType: 'Regular',
       },
-      docketEntryEntity: {
-        docketEntryId: 'test-document-id',
-        documentType: 'The Document',
-        eventCode: 'P',
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
     const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
     expect(caseDetail.docketNumber).toEqual('123-20');
-    expect(caseDetail.docketNumberWithSuffix).toEqual('123-20S');
+    expect(caseDetail.docketNumberWithSuffix).toEqual('123-20L');
   });
 
   it('should add a `representing` field to practitioners with the names of parties they represent', async () => {
-    await sendIrsSuperuserPetitionEmail({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         contactPrimary: {
           name: 'Joe Exotic',
@@ -105,9 +122,18 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         contactSecondary: {
           name: 'Carol Baskin',
         },
-        docketEntries: [],
+        docketEntries: [
+          {
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            documentType: 'The Document',
+            eventCode: 'P',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -119,12 +145,13 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           },
         ],
       },
-      docketEntryEntity: {
-        docketEntryId: 'test-document-id',
-        documentType: 'The Document',
-        eventCode: 'P',
-        servedAt: '2019-03-01T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
     const { practitioners } = reactTemplateGenerator.mock.calls[0][0].data;
@@ -142,21 +169,30 @@ describe('sendIrsSuperuserPetitionEmail', () => {
   });
 
   it('should include a formatted document filingDate', async () => {
-    await sendIrsSuperuserPetitionEmail({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         contactPrimary: {
           name: 'Joe Exotic',
         },
-        docketEntries: [],
+        docketEntries: [
+          {
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            filingDate: '2019-03-05T21:40:46.415Z',
+            index: 1,
+          },
+        ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         privatePractitioners: [],
       },
-      docketEntryEntity: {
-        filingDate: '2019-03-05T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
     const { documentDetail } = reactTemplateGenerator.mock.calls[0][0].data;
@@ -167,22 +203,31 @@ describe('sendIrsSuperuserPetitionEmail', () => {
   });
 
   it('should include the trial location from the case', async () => {
-    await sendIrsSuperuserPetitionEmail({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         contactPrimary: {
           name: 'Joe Exotic',
         },
-        docketEntries: [],
+        docketEntries: [
+          {
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            filingDate: '2019-03-05T21:40:46.415Z',
+            index: 1,
+          },
+        ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
       },
-      docketEntryEntity: {
-        filingDate: '2019-03-05T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
     const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
@@ -193,22 +238,31 @@ describe('sendIrsSuperuserPetitionEmail', () => {
   });
 
   it('should default the trial location if not set on the case', async () => {
-    await sendIrsSuperuserPetitionEmail({
-      applicationContext,
-      caseEntity: {
+    const caseEntity = new Case(
+      {
         caseCaption: 'A Caption',
         contactPrimary: {
           name: 'Joe Exotic',
         },
-        docketEntries: [],
+        docketEntries: [
+          {
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            filingDate: '2019-03-05T21:40:46.415Z',
+            index: 1,
+          },
+        ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         preferredTrialCity: '',
         privatePractitioners: [],
       },
-      docketEntryEntity: {
-        filingDate: '2019-03-05T21:40:46.415Z',
-      },
+      { applicationContext },
+    );
+
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
     });
 
     const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
@@ -216,5 +270,35 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     expect(caseDetail).toMatchObject({
       trialLocation: 'No requested place of trial',
     });
+  });
+
+  it('should throw an error if the docket entry does not have an index', async () => {
+    const caseEntity = new Case(
+      {
+        caseCaption: 'A Caption',
+        contactPrimary: {
+          name: 'Joe Exotic',
+        },
+        docketEntries: [
+          {
+            docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+            filingDate: '2019-03-05T21:40:46.415Z',
+          },
+        ],
+        docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
+        preferredTrialCity: '',
+        privatePractitioners: [],
+      },
+      { applicationContext },
+    );
+
+    await expect(
+      sendIrsSuperuserPetitionEmail({
+        applicationContext,
+        caseEntity,
+        docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
+      }),
+    ).rejects.toThrow('Cannot serve a docket entry without an index.');
   });
 });

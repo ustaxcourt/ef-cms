@@ -28,6 +28,28 @@ resource "aws_api_gateway_rest_api" "gateway_for_api" {
   }
 }
 
+resource "aws_api_gateway_gateway_response" "large_payload" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  status_code   = "413"
+  response_type = "REQUEST_TOO_LARGE"
+  
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
+  }
+}  
+
+resource "aws_api_gateway_gateway_response" "timeout" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  status_code   = "504"
+  response_type = "INTEGRATION_TIMEOUT"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
+  }
+}
+
 resource "aws_api_gateway_resource" "api_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id

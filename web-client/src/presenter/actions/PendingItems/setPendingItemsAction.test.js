@@ -7,7 +7,12 @@ describe('setPendingItemsAction', () => {
       props: {
         pendingItems: ['DocketRecord'],
       },
+      state: {
+        pendingReports: {
+          pendingItems: [],
+        },
+      },
     });
-    expect(state.pendingItems).toEqual(['DocketRecord']);
+    expect(state.pendingReports.pendingItems).toEqual(['DocketRecord']);
   });
 });

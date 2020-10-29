@@ -87,17 +87,18 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
-- [ ] If desired, run `docker system prune` to remove any unused docker images from previous code review.
-- [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
 	- [ ] read the description of the commits that comprise the pull request
-- [ ] stand up the site locally, with `./docker-run.sh`
+- [ ] If changes were made in the UI (if not, skip):
+  - [ ] If desired, run `docker system prune` to remove any unused docker images from previous code review.
+  - [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
+  - [ ] stand up the site locally, with `./docker-run.sh`
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
-		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
-		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/)
-		- [ ] test in Mobile Safari and Mobile Chrome (or an emulator like Chrome DevTools), with the caveat that not all internal Court functionality will be necessary on these platforms
+	- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
+	- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/)
+	- [ ] test in Mobile Safari and Mobile Chrome (or an emulator like Chrome DevTools), with the caveat that not all internal Court functionality will be necessary on these platforms
 	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
 		- [ ] look at efficiency of page loads, asset sizes, HTTP connection management, etc.
 	- [ ] review for accessibility
@@ -116,5 +117,5 @@ We use this list when performing a code review to ensure that all tasks have bee
 	- [ ] user-visible changes (including API users like the IRS) are documented in CHANGELOG.md (which is linked from US Tax Court website).
 - [ ] provide comments on the pull request on GitHub, as necessary
 	- [ ] for comments that are specific to a particular line of code, comment on those specific lines
-	- [ ] for comments that are more general, attach the comment to a random line in `README.md` (as opposed to commenting on the pull request itself), to be able to use GitHub's ability to thread discussions on those comments
+
 - [ ] for each feature-level bug (i.e., it’s working as designed, but designed wrong), open a new issue and put it in the backlog
