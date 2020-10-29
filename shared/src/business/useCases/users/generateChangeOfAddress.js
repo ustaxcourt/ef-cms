@@ -152,9 +152,7 @@ exports.generateChangeOfAddress = async ({
           userId: user.userId,
         };
 
-        let isPractitioner = false;
         if (user.role === ROLES.privatePractitioner) {
-          isPractitioner = true;
           documentData.privatePractitioners = [
             {
               name,
@@ -162,7 +160,6 @@ exports.generateChangeOfAddress = async ({
             },
           ];
         } else if (user.role === ROLES.irsPractitioner) {
-          isPractitioner = true;
           documentData.partyIrsPractitioner = true;
         }
 
@@ -190,12 +187,10 @@ exports.generateChangeOfAddress = async ({
             userCase.contactSecondary.serviceIndicator ===
               SERVICE_INDICATOR_TYPES.SI_PAPER) ||
           user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
-        const shouldCreateWorkItemForQC =
-          (isPractitioner && paperServiceRequested) || !isPractitioner;
 
         let workItem = null;
 
-        if (shouldCreateWorkItemForQC) {
+        if (paperServiceRequested) {
           workItem = new WorkItem(
             {
               assigneeId: null,
