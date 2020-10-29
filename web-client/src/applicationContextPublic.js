@@ -5,6 +5,7 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
+  MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -83,6 +84,22 @@ const initHoneybadger = async () => {
     }
   }
 };
+const frozenConstants = deepFreeze({
+  ADVANCED_SEARCH_TABS,
+  CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
+  COUNTRY_TYPES: COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  INITIAL_DOCUMENT_TYPES,
+  MAX_SEARCH_RESULTS,
+  OBJECTIONS_OPTIONS_MAP,
+  STIPULATED_DECISION_EVENT_CODE,
+  TRANSCRIPT_EVENT_CODE,
+  US_STATES,
+  US_STATES_OTHER,
+  USER_ROLES: ROLES,
+});
 
 const applicationContextPublic = {
   getBaseUrl: () => {
@@ -90,22 +107,7 @@ const applicationContextPublic = {
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
-  getConstants: () =>
-    deepFreeze({
-      ADVANCED_SEARCH_TABS,
-      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
-      CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
-      COUNTRY_TYPES: COUNTRY_TYPES,
-      DOCKET_NUMBER_SUFFIXES,
-      DOCUMENT_PROCESSING_STATUS_OPTIONS,
-      INITIAL_DOCUMENT_TYPES,
-      OBJECTIONS_OPTIONS_MAP,
-      STIPULATED_DECISION_EVENT_CODE,
-      TRANSCRIPT_EVENT_CODE,
-      US_STATES,
-      US_STATES_OTHER,
-      USER_ROLES: ROLES,
-    }),
+  getConstants: () => frozenConstants,
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,
   getLogger: () => ({

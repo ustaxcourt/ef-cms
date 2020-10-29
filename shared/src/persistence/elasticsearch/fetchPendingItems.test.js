@@ -8,7 +8,7 @@ const { search } = require('./searchClient');
 describe('fetchPendingItems', () => {
   it('returns results a query without judge', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
-    const results = await fetchPendingItems({
+    const { results } = await fetchPendingItems({
       applicationContext,
     });
 
@@ -16,12 +16,12 @@ describe('fetchPendingItems', () => {
     expect(search).toHaveBeenCalledTimes(1);
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
-    expect(searchQuery.length).toBe(3);
+    expect(searchQuery.length).toBe(5);
   });
 
   it('returns results a query with a judge', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
-    const results = await fetchPendingItems({
+    const { results } = await fetchPendingItems({
       applicationContext,
       judge: 'Dredd',
     });
@@ -30,7 +30,7 @@ describe('fetchPendingItems', () => {
     expect(search).toHaveBeenCalledTimes(1);
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
-    expect(searchQuery[3]).toMatchObject({
+    expect(searchQuery[4].has_parent.query.bool.must[0]).toMatchObject({
       match_phrase: { 'associatedJudge.S': 'Dredd' },
     });
   });
