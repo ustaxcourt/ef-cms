@@ -165,6 +165,8 @@ exports.generateChangeOfAddress = async ({
           applicationContext,
         });
 
+        changeOfAddressDocketEntry.filedBy = undefined;
+
         const servedParties = aggregatePartiesForService(caseEntity);
         changeOfAddressDocketEntry.setAsServed(servedParties.all);
 

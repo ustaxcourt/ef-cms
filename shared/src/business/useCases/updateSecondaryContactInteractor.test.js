@@ -117,6 +117,7 @@ describe('updateSecondaryContactInteractor', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
+    expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
   });
 
   it('throws an error if the case was not found', async () => {
