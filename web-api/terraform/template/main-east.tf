@@ -180,6 +180,8 @@ data "aws_s3_bucket_object" "streams_green_east_object" {
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   depends_on = [
     aws_elasticsearch_domain.efcms-search,
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
     module.elasticsearch_1,
     module.elasticsearch_2,
     module.elasticsearch_3,
@@ -191,6 +193,8 @@ data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
 data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
   depends_on = [
     aws_elasticsearch_domain.efcms-search,
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
     module.elasticsearch_1,
     module.elasticsearch_2,
     module.elasticsearch_3,
