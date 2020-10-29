@@ -7,6 +7,12 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for setting pendingItems
  * @param {object} providers.props the pendingItems to set
  */
-export const setPendingItemsAction = ({ props, store }) => {
-  store.set(state.pendingItems, props.pendingItems);
+export const setPendingItemsAction = ({ get, props, store }) => {
+  const pendingItems = get(state.pendingReports.pendingItems);
+  store.set(state.pendingReports.pendingItems, [
+    ...pendingItems,
+    ...props.pendingItems,
+  ]);
+  store.set(state.pendingReports.hasPendingItemsResults, true);
+  store.set(state.pendingReports.pendingItemsTotal, props.total);
 };
