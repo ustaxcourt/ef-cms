@@ -36,10 +36,17 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     );
   }
 
+  const showMaxResultsMessage = !!(
+    searchResults &&
+    searchResults.length >= applicationContext.getConstants().MAX_SEARCH_RESULTS
+  );
+
   return {
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
+    maxResults: applicationContext.getConstants().MAX_SEARCH_RESULTS,
+    showMaxResultsMessage,
     showSealedIcon,
   };
 };
