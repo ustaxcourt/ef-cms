@@ -6,13 +6,6 @@ const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
 app.use(cors());
-app.use((req, res, next) => {
-  if (req.url.includes('search')) {
-    res.send(504);
-  }
-
-  return next();
-});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
