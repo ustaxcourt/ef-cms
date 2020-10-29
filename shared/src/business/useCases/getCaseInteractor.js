@@ -118,57 +118,57 @@ const getCaseForExternalUser = async ({
  * @returns {object} the case data
  */
 exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
-    });
+  // const caseRecord = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getCaseByDocketNumber({
+  //     applicationContext,
+  //     docketNumber: Case.stripLeadingZeros(docketNumber),
+  //   });
 
-  if (!caseRecord.docketNumber && !caseRecord.entityName) {
-    const error = new NotFoundError(`Case ${docketNumber} was not found.`);
-    error.skipLogging = true;
-    throw error;
-  }
+  // if (!caseRecord.docketNumber && !caseRecord.entityName) {
+  //   const error = new NotFoundError(`Case ${docketNumber} was not found.`);
+  //   error.skipLogging = true;
+  //   throw error;
+  // }
 
-  const currentUser = applicationContext.getCurrentUser();
-  const isAuthorizedToGetCase = isAuthorized(
-    currentUser,
-    ROLE_PERMISSIONS.GET_CASE,
-    caseRecord.userId,
-  );
-  const isAssociatedWithCase = isAssociatedUser({
-    caseRaw: caseRecord,
-    user: currentUser,
-  });
+  // const currentUser = applicationContext.getCurrentUser();
+  // const isAuthorizedToGetCase = isAuthorized(
+  //   currentUser,
+  //   ROLE_PERMISSIONS.GET_CASE,
+  //   caseRecord.userId,
+  // );
+  // const isAssociatedWithCase = isAssociatedUser({
+  //   caseRaw: caseRecord,
+  //   user: currentUser,
+  // });
 
-  let caseDetailRaw;
-  if (caseRecord.sealedDate) {
-    caseDetailRaw = await getSealedCase({
-      applicationContext,
-      caseRecord,
-      isAssociatedWithCase,
-    });
-  } else {
-    const userRole = applicationContext.getCurrentUser().role;
-    const isInternalUser = User.isInternalUser(userRole);
+  // let caseDetailRaw;
+  // if (caseRecord.sealedDate) {
+  //   caseDetailRaw = await getSealedCase({
+  //     applicationContext,
+  //     caseRecord,
+  //     isAssociatedWithCase,
+  //   });
+  // } else {
+  //   const userRole = applicationContext.getCurrentUser().role;
+  //   const isInternalUser = User.isInternalUser(userRole);
 
-    if (isInternalUser) {
-      caseDetailRaw = await getCaseAndDocumentContents({
-        applicationContext,
-        caseRecord,
-      });
-    } else {
-      caseDetailRaw = await getCaseForExternalUser({
-        applicationContext,
-        caseRecord,
-        isAssociatedWithCase,
-        isAuthorizedToGetCase,
-      });
-    }
-  }
+  //   if (isInternalUser) {
+  //     caseDetailRaw = await getCaseAndDocumentContents({
+  //       applicationContext,
+  //       caseRecord,
+  //     });
+  //   } else {
+  //     caseDetailRaw = await getCaseForExternalUser({
+  //       applicationContext,
+  //       caseRecord,
+  //       isAssociatedWithCase,
+  //       isAuthorizedToGetCase,
+  //     });
+  //   }
+  // }
 
-  caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
+  // caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
 
-  return caseDetailRaw;
+  return { hello: 'garbage' };
 };
