@@ -18,6 +18,9 @@ module.exports = {
     'inProgress.BOOL': {
       type: 'boolean',
     },
+    'indexedTimestamp.N': {
+      type: 'text',
+    },
     'isRead.BOOL': {
       type: 'boolean',
     },
