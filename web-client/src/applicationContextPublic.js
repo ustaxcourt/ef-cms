@@ -67,6 +67,23 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
+const initHoneybadger = async () => {
+  if (process.env.USTC_ENV === 'prod') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+
+    if (apiKey) {
+      const Honeybadger = await import('honeybadger-js'); // browser version
+
+      const config = {
+        apiKey,
+        environment: 'client',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+
 const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:5000';
@@ -91,6 +108,24 @@ const applicationContextPublic = {
     }),
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,
+  getLogger: () => ({
+    error: () => {
+      // eslint-disable-next-line no-console
+      // console.error(value);
+    },
+    info: (key, value) => {
+      // eslint-disable-next-line no-console
+      console.info(key, JSON.stringify(value));
+    },
+    time: key => {
+      // eslint-disable-next-line no-console
+      console.time(key);
+    },
+    timeEnd: key => {
+      // eslint-disable-next-line no-console
+      console.timeEnd(key);
+    },
+  }),
   getPublicSiteUrl,
   getUseCases: () => allUseCases,
   getUtilities: () => {
@@ -102,6 +137,30 @@ const applicationContextPublic = {
       getJudgeLastName,
       sortDocketEntries,
     };
+  },
+  initHoneybadger,
+  notifyHoneybadger: async (message, context) => {
+    const honeybadger = await initHoneybadger();
+
+    const notifyAsync = messageForNotification => {
+      return new Promise(resolve => {
+        honeybadger.notify(messageForNotification, null, null, resolve);
+      });
+    };
+
+    if (honeybadger) {
+      const errorContext = {
+        userId: 'public',
+      };
+
+      if (context) {
+        Object.assign(errorContext, context);
+      }
+
+      honeybadger.setContext(errorContext);
+
+      await notifyAsync(message);
+    }
   },
 };
 
