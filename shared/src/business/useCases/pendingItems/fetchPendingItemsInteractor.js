@@ -12,14 +12,22 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.judge the optional judge filter
  * @returns {Array} the pending items found
  */
-exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
+exports.fetchPendingItemsInteractor = async ({
+  applicationContext,
+  judge,
+  page,
+}) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (!judge) {
+    throw new Error('judge is required');
+  }
+
   return await applicationContext
     .getUseCaseHelpers()
-    .fetchPendingItems({ applicationContext, judge });
+    .fetchPendingItems({ applicationContext, judge, page });
 };
