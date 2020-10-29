@@ -87,10 +87,10 @@ const {
 } = require('../utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
