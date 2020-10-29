@@ -526,6 +526,9 @@ jobs:
           name: Setup Disable Emails
           command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup ES Volume Size
+          command: echo "export ES_VOLUME_SIZE='$(./get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
@@ -545,6 +548,7 @@ jobs:
              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
              -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
+             -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
@@ -933,9 +937,9 @@ workflows:
             branches:
               only:
                 - irs
+                - migration
                 - staging
                 - test
-                - migration
                 - master
                 - experimental1
                 - experimental2
@@ -947,7 +951,10 @@ workflows:
           filters:
             branches:
               only:
+                - irs
+                - migration
                 - staging
+                - test
                 - experimental1
                 - experimental2
                 - experimental3
@@ -957,6 +964,7 @@ workflows:
           filters:
             branches:
               only:
+                - irs
                 - staging
                 - experimental1
                 - experimental2
@@ -969,8 +977,6 @@ workflows:
               only:
                 - irs
                 - staging
-                - test
-                - migration
                 - master
                 - experimental1
                 - experimental2

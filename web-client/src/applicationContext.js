@@ -471,6 +471,27 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
+const initHoneybadger = async () => {
+  if (process.env.USTC_ENV === 'prod') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+
+    if (apiKey) {
+      const Honeybadger = await import('honeybadger-js'); // browser version
+
+      const config = {
+        apiKey,
+        environment: 'client',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+
+const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
+  getConstants(),
+);
+
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
@@ -494,8 +515,7 @@ const applicationContext = {
       'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
     );
   },
-  getConstants: () =>
-    (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
+  getConstants: () => appConstants,
   getCurrentUser,
   getCurrentUserPermissions: () => {
     const currentUser = getCurrentUser();
@@ -507,6 +527,24 @@ const applicationContext = {
   },
   getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
+  getLogger: () => ({
+    error: value => {
+      // eslint-disable-next-line no-console
+      console.error(value);
+    },
+    info: (key, value) => {
+      // eslint-disable-next-line no-console
+      console.info(key, JSON.stringify(value));
+    },
+    time: key => {
+      // eslint-disable-next-line no-console
+      console.time(key);
+    },
+    timeEnd: key => {
+      // eslint-disable-next-line no-console
+      console.timeEnd(key);
+    },
+  }),
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
@@ -596,20 +634,31 @@ const applicationContext = {
       sortDocketEntries,
     };
   },
-  initHoneybadger: async () => {
-    if (process.env.USTC_ENV === 'prod') {
-      const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+  initHoneybadger,
+  notifyHoneybadger: async (message, context) => {
+    const honeybadger = await initHoneybadger();
 
-      if (apiKey) {
-        const Honeybadger = await import('honeybadger-js'); // browser version
+    const notifyAsync = messageForNotification => {
+      return new Promise(resolve => {
+        honeybadger.notify(messageForNotification, null, null, resolve);
+      });
+    };
 
-        const config = {
-          apiKey,
-          environment: 'client',
-        };
-        Honeybadger.configure(config);
-        return Honeybadger;
+    if (honeybadger) {
+      const { role, userId } = getCurrentUser() || {};
+
+      const errorContext = {
+        role,
+        userId,
+      };
+
+      if (context) {
+        Object.assign(errorContext, context);
       }
+
+      honeybadger.setContext(errorContext);
+
+      await notifyAsync(message);
     }
   },
   setCurrentUser,
