@@ -60,6 +60,7 @@ describe('opinionPublicSearchInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: OPINION_EVENT_CODES,
+      omitSealed: true,
     });
   });
 

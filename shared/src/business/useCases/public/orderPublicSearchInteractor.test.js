@@ -30,21 +30,11 @@ describe('orderPublicSearchInteractor', () => {
           eventCode: 'ODD',
           signedJudgeName: 'Guy Fieri',
         },
-        {
-          caseCaption: 'Gal Fieri, Petitioner',
-          docketNumber: '104-19',
-          docketNumberSuffix: 'AAA',
-          documentContents: 'Baby Ruth is gross',
-          documentTitle: 'Order for Baby Ruth',
-          eventCode: 'ODD',
-          isSealed: true,
-          signedJudgeName: 'Gal Fieri',
-        },
       ]);
   });
 
   it('should only search for order document types', async () => {
-    await orderPublicSearchInteractor({
+    const result = await orderPublicSearchInteractor({
       applicationContext,
       keyword: 'fish',
       startDate: '2001-01-01',
@@ -55,16 +45,8 @@ describe('orderPublicSearchInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: ORDER_EVENT_CODES,
+      omitSealed: true,
     });
-  });
-
-  it('returns results with sealed cases filtered out', async () => {
-    const result = await orderPublicSearchInteractor({
-      applicationContext,
-      keyword: 'fish',
-      startDate: '2001-01-01',
-    });
-
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',

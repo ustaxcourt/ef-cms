@@ -62,6 +62,7 @@ describe('PublicDocketEntry', () => {
         isMinuteEntry: true,
         isOnDocketRecord: true,
         isStricken: false,
+        numberOfPages: null,
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       });
 

@@ -12,6 +12,7 @@ exports.advancedDocumentSearch = async ({
   judge,
   judgeType,
   keyword,
+  omitSealed,
   opinionType,
   startDate,
 }) => {
@@ -104,6 +105,14 @@ exports.advancedDocumentSearch = async ({
             },
           },
         },
+      },
+    });
+  }
+
+  if (omitSealed) {
+    queryParams.push({
+      bool: {
+        must_not: { term: { 'isSealed.BOOL': true } },
       },
     });
   }
