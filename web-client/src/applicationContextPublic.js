@@ -5,6 +5,7 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
+  MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -37,6 +38,7 @@ import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPu
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
+import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -49,46 +51,51 @@ const ADVANCED_SEARCH_TABS = {
   ORDER: 'order',
 };
 
+const allUseCases = {
+  casePublicSearchInteractor,
+  generatePublicDocketRecordPdfInteractor,
+  getCaseForPublicDocketSearchInteractor,
+  getCaseInteractor: getPublicCaseInteractor,
+  getDocumentDownloadUrlInteractor,
+  getHealthCheckInteractor,
+  getPublicJudgesInteractor,
+  getTodaysOpinionsInteractor,
+  opinionPublicSearchInteractor,
+  orderPublicSearchInteractor,
+  validateCaseAdvancedSearchInteractor,
+  validateOpinionAdvancedSearchInteractor,
+  validateOrderAdvancedSearchInteractor,
+};
+tryCatchDecorator(allUseCases);
+
+const frozenConstants = deepFreeze({
+  ADVANCED_SEARCH_TABS,
+  CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
+  COUNTRY_TYPES: COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  INITIAL_DOCUMENT_TYPES,
+  MAX_SEARCH_RESULTS,
+  OBJECTIONS_OPTIONS_MAP,
+  STIPULATED_DECISION_EVENT_CODE,
+  TRANSCRIPT_EVENT_CODE,
+  US_STATES,
+  US_STATES_OTHER,
+  USER_ROLES: ROLES,
+});
+
 const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
-  getConstants: () =>
-    deepFreeze({
-      ADVANCED_SEARCH_TABS,
-      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
-      CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
-      COUNTRY_TYPES: COUNTRY_TYPES,
-      DOCKET_NUMBER_SUFFIXES,
-      DOCUMENT_PROCESSING_STATUS_OPTIONS,
-      INITIAL_DOCUMENT_TYPES,
-      OBJECTIONS_OPTIONS_MAP,
-      STIPULATED_DECISION_EVENT_CODE,
-      TRANSCRIPT_EVENT_CODE,
-      US_STATES,
-      US_STATES_OTHER,
-      USER_ROLES: ROLES,
-    }),
+  getConstants: () => frozenConstants,
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,
   getPublicSiteUrl,
-  getUseCases: () => ({
-    casePublicSearchInteractor,
-    generatePublicDocketRecordPdfInteractor,
-    getCaseForPublicDocketSearchInteractor,
-    getCaseInteractor: getPublicCaseInteractor,
-    getDocumentDownloadUrlInteractor,
-    getHealthCheckInteractor,
-    getPublicJudgesInteractor,
-    getTodaysOpinionsInteractor,
-    opinionPublicSearchInteractor,
-    orderPublicSearchInteractor,
-    validateCaseAdvancedSearchInteractor,
-    validateOpinionAdvancedSearchInteractor,
-    validateOrderAdvancedSearchInteractor,
-  }),
+  getUseCases: () => allUseCases,
   getUtilities: () => {
     return {
       compareCasesByDocketNumber,

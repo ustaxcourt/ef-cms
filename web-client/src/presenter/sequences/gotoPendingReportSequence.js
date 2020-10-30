@@ -1,8 +1,8 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearPendingReportsAction } from '../actions/PendingItems/clearPendingReportsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { fetchPendingItemsSequence } from './pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -16,11 +16,8 @@ const gotoPendingReport = [
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
-  parallel([
-    fetchUserNotificationsSequence,
-    getSetJudgesSequence,
-    fetchPendingItemsSequence,
-  ]),
+  clearPendingReportsAction,
+  parallel([fetchUserNotificationsSequence, getSetJudgesSequence]),
   setCurrentPageAction('PendingReport'),
 ];
 

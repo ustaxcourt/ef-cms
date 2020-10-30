@@ -39,7 +39,7 @@ const testData = {
   trialSessionIds: [],
 };
 
-describe.skip('Petitioner', () => {
+describe('Petitioner', () => {
   describe('should be able to create the first case', () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');

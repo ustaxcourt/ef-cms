@@ -65,6 +65,7 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
@@ -159,6 +160,7 @@ const helpers = {
   paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
+  pendingReportListHelper,
   petitionQcHelper,
   practitionerDetailHelper,
   practitionerSearchFormHelper,
@@ -272,6 +274,7 @@ export const baseState = {
     signatureApplied: false,
     signatureData: null,
   },
+  pendingReports: {},
   permissions: null,
   practitionerDetail: {},
   previewPdfFile: null,
@@ -297,7 +300,9 @@ export const baseState = {
   sessionMetadata: {
     docketRecordSort: [],
   },
+
   showValidation: false,
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
