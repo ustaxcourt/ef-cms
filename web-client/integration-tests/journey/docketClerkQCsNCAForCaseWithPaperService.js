@@ -2,16 +2,19 @@ import { addDocketEntryHelper as addDocketEnryHelperComputed } from '../../src/p
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const addDocketEntryHelper = withAppContextDecorator(addDocketEntryHelper);
 
-export const docketClerkViewsQCItemForNCAForCaseWithPaperService = test => {
+export const docketClerkQCsNCAForCaseWithPaperService = test => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-  return it('Docket Clerk views  QC item for NCA for case with paper service', async () => {
+  return it('Docket Clerk QCs NCA for case with paper service', async () => {
+    await refreshElasticsearchIndex();
+
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

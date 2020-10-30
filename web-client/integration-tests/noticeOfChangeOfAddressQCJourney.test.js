@@ -1,7 +1,7 @@
 import { docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService } from './journey/docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService';
 import { docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner } from './journey/docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner';
 import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
-import { docketClerkViewsQCItemForNCAForCaseWithPaperService } from './journey/docketClerkViewsQCItemForNCAForCaseWithPaperService';
+import { docketClerkQCsNCAForCaseWithPaperService } from './journey/docketClerkQCsNCAForCaseWithPaperService';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
 import { petitionerNavigatesToEditPrimaryContact } from './journey/petitionerNavigatesToEditPrimaryContact';
@@ -47,5 +47,5 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
   practitionerUpdatesAddress(test);
 
   loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsQCItemForNCAForCaseWithPaperService(test);
+  docketClerkQCsNCAForCaseWithPaperService(test);
 });
