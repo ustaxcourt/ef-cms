@@ -21,10 +21,16 @@ exports.fetchPendingItemsByDocketNumber = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseResult, { applicationContext });
+  const {
+    associatedJudge,
+    caseCaption,
+    docketEntries,
+    docketNumberSuffix,
+    status,
+  } = new Case(caseResult, { applicationContext });
   let foundDocuments = [];
 
-  caseEntity.docketEntries.forEach(document => {
+  docketEntries.forEach(document => {
     if (document.pending && document.servedAt) {
       foundDocuments.push({
         ...omit(
@@ -36,11 +42,11 @@ exports.fetchPendingItemsByDocketNumber = async ({
           ).toRawObject(),
           'entityName',
         ),
-        associatedJudge: caseEntity.associatedJudge,
-        caseCaption: caseEntity.caseCaption,
-        docketNumber: caseEntity.docketNumber,
-        docketNumberSuffix: caseEntity.docketNumberSuffix,
-        status: caseEntity.status,
+        associatedJudge,
+        caseCaption,
+        docketNumber,
+        docketNumberSuffix,
+        status,
       });
     }
   });
