@@ -9,9 +9,9 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
   return it('docketclerk completes docket entry QC for the proposed stipulated decision and sends a message to the ADC', async () => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
-      queue: 'section',
+      queue: 'my',
     });
-    const workQueueFormatted = runCompute(formattedWorkQueue, {
+    let workQueueFormatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
 
@@ -21,10 +21,29 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
     test.proposedStipDecisionDocketEntryId =
       proposedStipulatedDecision.docketEntry.docketEntryId;
 
+    expect(proposedStipulatedDecision.isRead).toBeFalsy();
+
     await test.runSequence('gotoEditDocketEntrySequence', {
       docketEntryId: proposedStipulatedDecision.docketEntry.docketEntryId,
       docketNumber: test.docketNumber,
     });
+
+    await refreshElasticsearchIndex();
+
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'my',
+    });
+
+    workQueueFormatted = runCompute(formattedWorkQueue, {
+      state: test.getState(),
+    });
+
+    const readWorkItem = workQueueFormatted.find(
+      workItem => workItem.docketNumber === test.docketNumber,
+    );
+
+    expect(readWorkItem.isRead).toEqual(true);
 
     await test.runSequence('openCompleteAndSendMessageModalSequence');
     expect(test.getState('validationErrors')).toEqual({});
