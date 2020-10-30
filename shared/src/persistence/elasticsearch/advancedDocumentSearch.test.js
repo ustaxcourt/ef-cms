@@ -209,12 +209,18 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
+      omitSealed: true,
       opinionType: 'Summary Opinion',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
       getCaseMappingQueryParams(), // match all parents
+      {
+        bool: {
+          must_not: { term: { 'isSealed.BOOL': true } },
+        },
+      },
       {
         match: {
           'documentType.S': {

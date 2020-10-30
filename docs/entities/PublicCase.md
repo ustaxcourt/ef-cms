@@ -1140,6 +1140,8 @@
               rules: 
                 - 
                   name: "integer"
+              allow: 
+                - null
             processingStatus: 
               type: "string"
               flags: 

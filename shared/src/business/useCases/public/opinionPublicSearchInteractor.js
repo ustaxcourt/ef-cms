@@ -30,12 +30,14 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
+  // TODO: should these be pushed through a PublicDocument constructor for security?
   return await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
+      ...rawSearch,
       documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
-      ...rawSearch,
+      omitSealed: true,
     });
 };

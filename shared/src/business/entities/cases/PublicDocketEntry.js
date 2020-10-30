@@ -68,7 +68,7 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   isMinuteEntry: joi.boolean().optional(),
   isPaper: joi.boolean().optional(),
   isStricken: joi.boolean().optional(),
-  numberOfPages: joi.number().integer().optional(),
+  numberOfPages: joi.number().integer().optional().allow(null),
   processingStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
   ).optional(),
