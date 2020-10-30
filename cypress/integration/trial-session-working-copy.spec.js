@@ -98,7 +98,7 @@ describe('Petitioner', () => {
 
 // eslint-disable-next-line no-unused-vars
 let judgeUserId;
-describe('Petitions Clerk', () => {
+describe.skip('Petitions Clerk', () => {
   describe('should create and set a trial session', () => {
     beforeEach(() => {
       cy.server();
@@ -131,7 +131,7 @@ describe('Petitions Clerk', () => {
   });
 });
 
-describe('Judge', () => {
+describe.skip('Judge', () => {
   it('should be able to login', () => {
     cy.login('judgeCohen');
   });
@@ -162,7 +162,7 @@ describe('Judge', () => {
   });
 });
 
-describe('Judge Chambers', () => {
+describe.skip('Judge Chambers', () => {
   it('should be able to login', () => {
     cy.login('cohensChambers');
   });
