@@ -257,7 +257,7 @@ describe('DocketEntryFactory', () => {
     });
   });
 
-  describe.only('partyPrimary', () => {
+  describe('partyPrimary', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
       rawEntity.documentType = 'Notice of Change of Address';
