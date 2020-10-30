@@ -27,12 +27,12 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   email_configuration { # Use SES to send email
-    source_arn = aws_ses_email_identity.ses_sender.arn
-    email_sending_account = "DEVELOPER"
+    source_arn             = aws_ses_email_identity.ses_sender.arn
+    email_sending_account  = "DEVELOPER"
     reply_to_email_address = "noreply@${var.dns_domain}"
-    from_email_address = "U.S. Tax Court <noreply@${var.dns_domain}>" 
+    from_email_address     = "U.S. Tax Court <noreply@${var.dns_domain}>"
   }
-  
+
   schema {
     attribute_data_type = "String"
     name                = "email"
@@ -76,6 +76,10 @@ resource "aws_cognito_user_pool" "pool" {
     require_numbers                  = true
     require_symbols                  = true
     temporary_password_validity_days = 7
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -182,6 +186,10 @@ resource "aws_cognito_user_pool" "irs_pool" {
     require_numbers                  = true
     require_symbols                  = true
     temporary_password_validity_days = 7
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
