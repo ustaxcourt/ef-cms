@@ -51,6 +51,19 @@ At present this is a manual process as a human needs to click on the link in the
 
 Here are the steps required to verify a new email:
 
+
+#### Automated
+
+1. Set the environment variables:
+  - `EFCMS_DOMAIN` e.g. `exp2.ustc-case-mgmt.flexion.us`
+  - `REGION` e.g. `us-east-1`
+  - `AWS_ACCESS_KEY_ID`
+  - `AWS_ACCOUNT_ID`
+  - `AWS_SECRET_ACCESS_KEY`
+2. Run the script:
+  - `cd web-api && ./verify-ses-email.sh`
+
+#### Manual
 1. Need to create an s3 bucket (e.g. `mail-verification.example.com`)
 2. Need to grant SES permission to write to it. Replace `BUCKET-NAME` and `AWSACCCOUNTID` in the following policy, and apply it to the newly created bucket:
 

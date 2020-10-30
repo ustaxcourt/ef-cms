@@ -1,9 +1,11 @@
 const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
+const {
+  MAX_SEARCH_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
-
 /**
  * casePublicSearch
  *
@@ -56,7 +58,7 @@ exports.casePublicSearch = async ({
             must: [...exactMatchesQuery, ...commonQuery],
           },
         },
-        size: 5000,
+        size: MAX_SEARCH_RESULTS,
       },
       index: 'efcms-case',
     },
@@ -73,6 +75,7 @@ exports.casePublicSearch = async ({
               must: [...nonExactMatchesQuery, ...commonQuery],
             },
           },
+          size: MAX_SEARCH_RESULTS,
         },
         index: 'efcms-case',
       },
