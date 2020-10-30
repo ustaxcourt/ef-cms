@@ -119,6 +119,63 @@ describe('updateSecondaryContactInteractor', () => {
     expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
   });
 
+  it('creates a work item if the secondary contact is not represented by a privatePractitioner', async () => {
+    await updateSecondaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'secondary@example.com',
+        name: 'New Secondary',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).toBeCalled();
+  });
+
+  it('does not create a work item if the secondary contact is represented by a privatePractitioner', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        privatePractitioners: [
+          {
+            barNumber: '1111',
+            name: 'Bob Practitioner',
+            representingSecondary: true,
+            role: ROLES.privatePractitioner,
+            userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
+          },
+        ],
+      });
+
+    await updateSecondaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'secondary@example.com',
+        name: 'New Secondary',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toBeCalled();
+  });
+
   it('throws an error if the case was not found', async () => {
     mockCase = null;
 
