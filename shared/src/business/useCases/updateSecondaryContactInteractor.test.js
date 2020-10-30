@@ -117,6 +117,7 @@ describe('updateSecondaryContactInteractor', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
+    expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
   });
 
   it('creates a work item if the secondary contact is not represented by a privatePractitioner', async () => {

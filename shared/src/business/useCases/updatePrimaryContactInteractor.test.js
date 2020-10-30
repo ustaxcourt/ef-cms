@@ -105,6 +105,7 @@ describe('update primary contact on a case', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
+    expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
   });
 
   it('creates a work item if the primary contact is not represented by a privatePractitioner', async () => {
