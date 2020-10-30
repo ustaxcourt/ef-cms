@@ -42,7 +42,7 @@ module.exports = [
       'wait for #tab-opinion to be visible',
       'click element #tab-opinion',
       'wait for #opinion-search to be visible',
-      'set field #opinion-search to sunglasses',
+      'set field #opinion-search to fieri',
       'set field #startDate-date-start to 08/01/2001',
       'check field #startDate-date-start',
       'click element button#advanced-search-button',
