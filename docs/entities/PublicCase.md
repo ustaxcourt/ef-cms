@@ -303,7 +303,7 @@
         - 
           type: "object"
           keys: 
-            filedBy: 
+            additionalInfo: 
               type: "string"
               flags: 
                 presence: "optional"
@@ -316,12 +316,160 @@
                   name: "max"
                   args: 
                     limit: 500
+            additionalInfo2: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 500
+            createdAt: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
+                presence: "optional"
+                description: "When the Document was added to the system."
+            docketEntryId: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
+            docketNumber: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "Docket Number of the associated Case in XXXXX-YY format."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "pattern"
+                  args: 
+                    regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
+            documentTitle: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "The title of this document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 3000
+            documentType: 
+              type: "string"
+              flags: 
+                presence: "optional"
+                description: "The type of this document."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+            eventCode: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+            filedBy: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
               allow: 
                 - ""
                 - null
+            filingDate: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
+                presence: "optional"
+                description: "Date that this Document was filed."
+            index: 
+              type: "number"
+              flags: 
+                presence: "optional"
+                description: "Index of this item in the Docket Record list."
+              rules: 
+                - 
+                  name: "integer"
+            isMinuteEntry: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            isPaper: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            isSealed: 
+              type: "boolean"
+              flags: 
+                presence: "required"
+              invalid: 
+                - true
             isStricken: 
               type: "boolean"
               flags: 
+                presence: "optional"
+                description: "Indicates the item has been removed from the docket record."
+            numberOfPages: 
+              type: "number"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
+              allow: 
+                - null
+            processingStatus: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+            receivedAt: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
                 presence: "optional"
             servedAt: 
               type: "date"
@@ -341,17 +489,13 @@
                     name: 
                       type: "string"
                       flags: 
-                        presence: "required"
+                        presence: "optional"
                         description: "The name of a party from a contact, or \"IRS\""
                       rules: 
                         - 
                           name: "min"
                           args: 
                             limit: 1
-                        - 
-                          name: "max"
-                          args: 
-                            limit: 100
     docketNumber: 
       type: "string"
       flags: 

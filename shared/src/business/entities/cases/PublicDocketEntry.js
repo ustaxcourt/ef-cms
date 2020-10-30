@@ -9,7 +9,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { pick } = require('lodash');
 
 /**
  * PublicDocketEntry
@@ -32,55 +31,50 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.isMinuteEntry = rawDocketEntry.isMinuteEntry;
   this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord;
   this.isPaper = rawDocketEntry.isPaper;
+  this.isSealed = rawDocketEntry.isSealed || false;
   this.isStricken = rawDocketEntry.isStricken;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.processingStatus = rawDocketEntry.processingStatus;
   this.receivedAt = rawDocketEntry.receivedAt;
   this.servedAt = rawDocketEntry.servedAt;
   this.servedParties = rawDocketEntry.servedParties;
-
-  if (this.isOnDocketRecord) {
-    this.docketEntryId = rawDocketEntry.docketEntryId;
-    this.filedBy = rawDocketEntry.filedBy;
-    this.filingDate = rawDocketEntry.filingDate;
-    this.index = rawDocketEntry.index;
-    this.isStricken = rawDocketEntry.isStricken;
-    this.numberOfPages = rawDocketEntry.numberOfPages;
-  }
 };
 
 PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
-  ...pick(DOCKET_ENTRY_VALIDATION_RULE_KEYS, [
-    'additionalInfo',
-    'additionalInfo2',
-    'createdAt',
-    'docketEntryId',
-    'docketNumber',
-    'documentTitle',
-    'documentType',
-    'eventCode',
-    'filedBy',
-    'filingDate',
-    'index',
-    'isMinuteEntry',
-    'isPaper',
-    'isStricken',
-    'numberOfPages',
-    'processingStatus',
-    'receivedAt',
-    'servedAt',
-    'servedParties',
-  ]),
-  // below are made to be less strict with no conditionals
-  filedBy: JoiValidationConstants.STRING.max(500).optional().allow('', null),
-  isStricken: joi.boolean().optional(),
+  additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
+  additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
+  createdAt: JoiValidationConstants.ISO_DATE.optional().description(
+    'When the Document was added to the system.',
+  ),
+  docketEntryId: JoiValidationConstants.UUID.optional(),
+  docketNumber: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketNumber,
+  documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
+  documentType: JoiValidationConstants.STRING.optional().description(
+    'The type of this document.',
+  ),
+  eventCode: JoiValidationConstants.STRING.optional(),
+  filedBy: JoiValidationConstants.STRING.optional().allow('', null),
+  filingDate: JoiValidationConstants.ISO_DATE.optional().description(
+    'Date that this Document was filed.',
+  ),
+  index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
+  isMinuteEntry: joi.boolean().optional(),
+  isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
+  isSealed: joi.boolean().invalid(true).required(), // value of true is forbidden
+  isStricken: joi
+    .boolean()
+    .optional()
+    .description('Indicates the item has been removed from the docket record.'),
+  numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
+  processingStatus: JoiValidationConstants.STRING.optional(),
+  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   servedAt: JoiValidationConstants.ISO_DATE.optional(),
   servedParties: joi
     .array()
     .items({
-      name: JoiValidationConstants.STRING.max(100)
-        .required()
-        .description('The name of a party from a contact, or "IRS"'),
+      name: JoiValidationConstants.STRING.optional().description(
+        'The name of a party from a contact, or "IRS"',
+      ),
     })
     .optional(),
 });

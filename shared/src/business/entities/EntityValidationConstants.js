@@ -425,6 +425,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
 //   .optional();
 
 module.exports = {
+  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
   DOCKET_ENTRY_VALIDATION_RULES: joi
     .object()
     .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),
