@@ -16,7 +16,8 @@ export const setAlertFromExceptionAction = async ({
   const hasError =
     props.error &&
     (props.error.title || props.error.message || props.error.messages);
-  const responseCode = props.error?.originalError?.response?.status;
+  const responseCode =
+    props.error?.responseCode || props.error?.originalError?.response?.status;
 
   if (!hasError) {
     store.set(state.alertError, {});
@@ -28,7 +29,7 @@ export const setAlertFromExceptionAction = async ({
 
   store.set(state.alertError, {
     message: props.error.message,
-    responseCode: responseCode,
+    responseCode,
     title: props.error.title,
   });
 };
