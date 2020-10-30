@@ -14,7 +14,7 @@ describe('PrimaryHeader', () => {
     const wrapper = shallow(<PrimaryHeader />);
 
     const courtAddress = wrapper.find('.court-address');
-    expect(courtAddress.text()).toEqual('Washington, DC 21207');
+    expect(courtAddress.text()).toEqual('Washington, DC 20217');
   });
 
   it('only renders an h2 element if h2 prop is provided', () => {
