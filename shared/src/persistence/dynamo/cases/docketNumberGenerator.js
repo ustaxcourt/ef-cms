@@ -36,7 +36,7 @@ exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
   if (caseMetadata) {
     // be sure case with this docket number doesn't already exist -- if it does, stop!
     const message = 'docket number already exists!';
-    applicationContext.logger.info(message, docketNumber);
+    applicationContext.logger.error(message, docketNumber);
     applicationContext.notifyHoneybadger(message, docketNumber);
     throw new Error(message);
   }

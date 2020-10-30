@@ -7,7 +7,8 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 
 export const ErrorFactory = {
   getError: e => {
-    let responseCode = (e.response && e.response.status) || e.statusCode;
+    let responseCode =
+      (e.response && e.response.status) || e.status || e.statusCode;
 
     let newError = new ActionError(e);
     if (403 == responseCode) {
@@ -25,6 +26,7 @@ export const ErrorFactory = {
       newError = new UnidentifiedUserError(e);
     }
     newError.originalError = e;
+    newError.responseCode = responseCode;
     return newError;
   },
 };
