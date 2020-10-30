@@ -30,6 +30,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.filedBy = rawDocketEntry.filedBy;
   this.filingDate = rawDocketEntry.filingDate;
   this.index = rawDocketEntry.index;
+  this.isFileAttached = rawDocketEntry.isFileAttached;
   this.isMinuteEntry = rawDocketEntry.isMinuteEntry;
   this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord;
   this.isPaper = rawDocketEntry.isPaper;
@@ -65,6 +66,7 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(),
   // Required on DocketRecord so probably should be required here.
   index: joi.number().integer().optional(),
+  isFileAttached: joi.boolean().optional(),
   isMinuteEntry: joi.boolean().optional(),
   isPaper: joi.boolean().optional(),
   isStricken: joi.boolean().optional(),
