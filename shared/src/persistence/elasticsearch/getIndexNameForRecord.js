@@ -46,6 +46,8 @@ exports.getIndexNameForRecord = record => {
     index = 'efcms-user-case';
   } else if (isRecordOfType(record, 'CaseDeadline')) {
     index = 'efcms-case-deadline';
+  } else if (isRecordOfType(record, 'WorkItem')) {
+    index = 'efcms-work-item';
   }
 
   return index;
