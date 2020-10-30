@@ -17,9 +17,6 @@ export const docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService = test 
 
     const caseWithNoPaperService = test.getState('caseDetail');
 
-    expect(caseWithNoPaperService.serviceIndicator).not.toEqual(
-      SERVICE_INDICATOR_TYPES.SI_PAPER,
-    );
     expect(caseWithNoPaperService.contactPrimary.serviceIndicator).not.toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
