@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
-import { docketClerkViewsQCItemForNoticeOfChangeOfAddressForUnrepresentedPetitioner } from './journey/docketClerkViewsQCItemForNoticeOfChangeOfAddressForUnrepresentedPetitioner';
+import { docketClerkViewsQCItemForNCAForUnrepresentedPetitioner } from './journey/docketClerkViewsQCItemForNCAForUnrepresentedPetitioner';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
 import { petitionerEditsCasePrimaryContactAddressAndPhone } from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
@@ -74,7 +74,5 @@ describe('Modify Petitioner Contact Information', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsNoticeOfChangeOfAddress(test);
-  docketClerkViewsQCItemForNoticeOfChangeOfAddressForUnrepresentedPetitioner(
-    test,
-  );
+  docketClerkViewsQCItemForNCAForUnrepresentedPetitioner(test);
 });
