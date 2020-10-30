@@ -1,9 +1,7 @@
 const joi = require('joi');
 const {
-  ALL_DOCUMENT_TYPES,
-  ALL_EVENT_CODES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../EntityConstants');
+  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
+} = require('../EntityValidationConstants');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -11,6 +9,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { pick } = require('lodash');
 
 /**
  * PublicDocketEntry
@@ -51,32 +50,38 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
 };
 
 PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
-  additionalInfo: JoiValidationConstants.STRING.max(500).optional(),
-  additionalInfo2: JoiValidationConstants.STRING.max(500).optional(),
-  createdAt: JoiValidationConstants.ISO_DATE.optional(),
-  docketEntryId: JoiValidationConstants.UUID.optional(),
-  docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
-  documentTitle: JoiValidationConstants.STRING.max(500).optional(),
-  documentType: JoiValidationConstants.STRING.valid(
-    ...ALL_DOCUMENT_TYPES,
-  ).optional(),
-  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
-  filedBy: JoiValidationConstants.STRING.max(500).optional().allow(null),
-  filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(),
-  // Required on DocketRecord so probably should be required here.
-  index: joi.number().integer().optional(),
-  isMinuteEntry: joi.boolean().optional(),
-  isPaper: joi.boolean().optional(),
+  ...pick(DOCKET_ENTRY_VALIDATION_RULE_KEYS, [
+    'additionalInfo',
+    'additionalInfo2',
+    'createdAt',
+    'docketEntryId',
+    'docketNumber',
+    'documentTitle',
+    'documentType',
+    'eventCode',
+    'filedBy',
+    'filingDate',
+    'index',
+    'isMinuteEntry',
+    'isPaper',
+    'isStricken',
+    'numberOfPages',
+    'processingStatus',
+    'receivedAt',
+    'servedAt',
+    'servedParties',
+  ]),
+  // below are made to be less strict with no conditionals
+  filedBy: JoiValidationConstants.STRING.max(500).optional().allow('', null),
   isStricken: joi.boolean().optional(),
-  numberOfPages: joi.number().integer().optional().allow(null),
-  processingStatus: JoiValidationConstants.STRING.valid(
-    ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
-  ).optional(),
-  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   servedAt: JoiValidationConstants.ISO_DATE.optional(),
   servedParties: joi
     .array()
-    .items({ name: JoiValidationConstants.STRING.max(500).required() })
+    .items({
+      name: JoiValidationConstants.STRING.max(100)
+        .required()
+        .description('The name of a party from a contact, or "IRS"'),
+    })
     .optional(),
 });
 
