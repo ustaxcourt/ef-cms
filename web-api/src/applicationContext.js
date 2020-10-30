@@ -750,9 +750,6 @@ const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
 const {
-  reprocessFailedRecordsInteractor,
-} = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
-const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
@@ -1609,7 +1606,6 @@ module.exports = appContextUser => {
         removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
-        reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
