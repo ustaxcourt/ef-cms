@@ -182,7 +182,6 @@ exports.generateChangeOfAddress = async ({
         });
 
         const paperServiceRequested =
-          userCase.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER ||
           userCase.contactPrimary.serviceIndicator ===
             SERVICE_INDICATOR_TYPES.SI_PAPER ||
           (userCase.contactSecondary &&

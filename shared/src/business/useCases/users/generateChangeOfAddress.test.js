@@ -381,65 +381,6 @@ describe('generateChangeOfAddress', () => {
     ]);
   });
 
-  it("should create a work item for an associated practitioner's notice of change of address when paper service is requested on the case", async () => {
-    const mockPaperServiceCase = {
-      ...mockCaseWithPrivatePractitioner,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
-
-    const cases = await generateChangeOfAddress({
-      applicationContext,
-      contactInfo: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
-    });
-
-    const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
-      entry => entry.documentTitle.includes('Notice of Change'),
-    );
-
-    expect(
-      applicationContext.getDocumentGenerators().changeOfAddress,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
-    ).toHaveBeenCalled();
-    expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
-    expect(cases).toMatchObject([
-      expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
-    ]);
-  });
-
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by the practitioner", async () => {
     const mockPaperServiceCase = {
       ...mockCaseWithPrivatePractitioner,
