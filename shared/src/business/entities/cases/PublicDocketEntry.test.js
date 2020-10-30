@@ -34,6 +34,22 @@ describe('PublicDocketEntry', () => {
     });
   });
 
+  it('forbids validation of public docket entries which are sealed', () => {
+    const document = new PublicDocketEntry({
+      documentType: 'testing',
+      eventCode: 'testing',
+      filedBy: 'testing',
+      isPaper: true,
+      isSealed: true,
+      processingStatus: 'testing',
+      servedAt: '2019-03-01T21:40:46.415Z',
+    });
+
+    expect(document.getValidationErrors()).toMatchObject({
+      isSealed: expect.anything(),
+    });
+  });
+
   describe('isOnDocketRecord', () => {
     describe('minute entries', () => {
       it('creates minute entry', () => {
