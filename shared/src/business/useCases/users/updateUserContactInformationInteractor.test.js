@@ -134,6 +134,19 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should update the user with the new contact information and mark it as having an update in progress', async () => {
+    mockUser = {
+      ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
+      admissionsDate: new Date(),
+      admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
+      birthYear: '1902',
+      employer: EMPLOYER_OPTIONS[1],
+      entityName: irsPractitionerEntityName,
+      firstName: 'Test',
+      lastName: 'IRS Practitioner',
+      originalBarState: 'OR',
+      practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
+      role: ROLES.irsPractitioner,
+    };
     await updateUserContactInformationInteractor({
       applicationContext,
       contactInfo,
@@ -156,9 +169,9 @@ describe('updateUserContactInformationInteractor', () => {
         state: 'IL',
       },
       email: undefined,
-      entityName: 'IrsPractitioner',
+      entityName: practitionerEntityName,
       isUpdatingInformation: true,
-      name: 'IRS Practitioner',
+      name: 'Test IRS Practitioner',
       role: 'irsPractitioner',
       token: undefined,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',

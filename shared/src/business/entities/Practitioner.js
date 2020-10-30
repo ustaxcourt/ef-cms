@@ -4,6 +4,7 @@ const {
   EMPLOYER_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('./EntityConstants');
 const {
   JoiValidationConstants,
@@ -48,6 +49,8 @@ Practitioner.prototype.init = function init(rawUser) {
   this.practitionerType = rawUser.practitionerType;
   this.section = this.role;
   this.suffix = rawUser.suffix;
+  this.serviceIndicator =
+    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
@@ -148,6 +151,9 @@ const practitionerValidation = {
       ...[ROLES.irsPractitioner, ROLES.privatePractitioner],
     ).required(),
   }),
+  serviceIndicator: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVICE_INDICATOR_TYPES),
+  ).required(),
   suffix: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow('')
