@@ -1,5 +1,6 @@
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
+const { PublicDocketEntry } = require('../../entities/cases/PublicDocketEntry');
 
 /**
  * opinionPublicSearchInteractor
@@ -30,8 +31,7 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  // TODO: should these be pushed through a PublicDocument constructor for security?
-  return await applicationContext
+  const opinions = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -40,4 +40,8 @@ exports.opinionPublicSearchInteractor = async ({
       judgeType: 'judge',
       omitSealed: true,
     });
+
+  return PublicDocketEntry.validateRawCollection(opinions, {
+    applicationContext,
+  });
 };
