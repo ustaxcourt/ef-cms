@@ -26,8 +26,5 @@ exports.casePublicSearchInteractor = async ({
       yearFiledMin,
     });
 
-  const makeSafe = item =>
-    new PublicCase(item, { applicationContext }).validate().toRawObject();
-
-  return foundCases.map(makeSafe);
+  return PublicCase.validateRawCollection(foundCases, { applicationContext });
 };
