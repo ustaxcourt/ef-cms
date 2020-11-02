@@ -34,7 +34,7 @@ describe('update petitioner contact information on a case', () => {
     name: 'Test Practitioner',
     representingPrimary: true,
     role: ROLES.privatePractitioner,
-    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     userId: '898bbe4b-84ee-40a1-ad05-a1e2e8484c72',
   };
   beforeAll(() => {
@@ -585,6 +585,126 @@ describe('update petitioner contact information on a case', () => {
           phone: '1234567',
           postalCode: '12345',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          state: 'TN',
+          title: 'Executor',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
+
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      ).toHaveBeenCalled();
+      expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
+      expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
+        'for Test Secondary Petitioner',
+      );
+    });
+
+    it('should create a work item for the NCA when the primary contact is represented and a private practitioner on the case requests paper service', async () => {
+      mockCase = {
+        ...MOCK_CASE,
+        contactPrimary: MOCK_CASE.contactPrimary,
+        contactSecondary: {
+          address1: '789 Division St',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Secondary Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+        partyType: PARTY_TYPES.petitionerSpouse,
+        privatePractitioners: [
+          {
+            ...basePractitioner,
+            representingSecondary: true,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const result = await updatePetitionerInformationInteractor({
+        applicationContext,
+        contactPrimary: MOCK_CASE.contactPrimary,
+        contactSecondary: {
+          address1: '789 Division St APT 123', //changed address1
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Secondary Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'TN',
+          title: 'Executor',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
+
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      ).toHaveBeenCalled();
+      expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
+      expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
+        'for Test Secondary Petitioner',
+      );
+    });
+
+    it('should create a work item for the NCA when the secondary contact is represented and a IRS practitioner on the case requests paper service', async () => {
+      mockCase = {
+        ...MOCK_CASE,
+        contactPrimary: MOCK_CASE.contactPrimary,
+        contactSecondary: {
+          address1: '789 Division St',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Secondary Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+        irsPractitioners: [
+          {
+            barNumber: 'PT1234',
+            email: 'practitioner1@example.com',
+            name: 'Test IRS Practitioner',
+            representingPrimary: true,
+            role: ROLES.irsPractitioner,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            userId: '899bbe4b-84ee-40a1-ad05-a1e2e8484c72',
+          },
+        ],
+        partyType: PARTY_TYPES.petitionerSpouse,
+        privatePractitioners: [
+          {
+            ...basePractitioner,
+            representingSecondary: true,
+          },
+        ],
+      };
+
+      const result = await updatePetitionerInformationInteractor({
+        applicationContext,
+        contactPrimary: MOCK_CASE.contactPrimary,
+        contactSecondary: {
+          address1: '789 Division St APT 123', //changed address1
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Secondary Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'TN',
           title: 'Executor',
         },

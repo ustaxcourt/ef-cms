@@ -236,6 +236,21 @@ exports.updatePetitionerInformationInteractor = async ({
     { applicationContext },
   );
 
+  const partyWithPaperService =
+    caseEntity.contactPrimary.serviceIndicator ===
+      SERVICE_INDICATOR_TYPES.SI_PAPER ||
+    (caseEntity.contactSecondary &&
+      caseEntity.contactSecondary.serviceIndicator ===
+        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    (caseEntity.privatePractitioners &&
+      caseEntity.privatePractitioners.find(
+        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      )) ||
+    (caseEntity.irsPractitioners &&
+      caseEntity.irsPractitioners.find(
+        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      ));
+
   const servedParties = aggregatePartiesForService(caseEntity);
 
   let primaryChangeDocs;
@@ -258,8 +273,7 @@ exports.updatePetitionerInformationInteractor = async ({
     );
     if (
       privatePractitionersRepresentingPrimaryContact.length === 0 ||
-      caseEntity.contactPrimary.serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER
+      partyWithPaperService
     ) {
       await createWorkItemForChange({
         applicationContext,
@@ -286,8 +300,7 @@ exports.updatePetitionerInformationInteractor = async ({
     );
     if (
       privatePractitionersRepresentingSecondaryContact.length === 0 ||
-      caseEntity.contactSecondary.serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER
+      partyWithPaperService
     ) {
       await createWorkItemForChange({
         applicationContext,
