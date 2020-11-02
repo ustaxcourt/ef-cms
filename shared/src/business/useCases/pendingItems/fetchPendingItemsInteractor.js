@@ -10,6 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
+ * @param {number} providers.page the optional page number
  * @returns {Array} the pending items found
  */
 exports.fetchPendingItemsInteractor = async ({

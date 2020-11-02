@@ -96,11 +96,11 @@ describe('advancedDocumentSearch', () => {
     docketNumber,
   ) => {
     let query = {
-      match_all: {},
+      bool: { must_not: [] },
     };
 
     if (caseTitleOrPetitioner) {
-      query = {
+      query.bool.must = {
         simple_query_string: {
           fields: [
             'caseCaption.S',
@@ -113,7 +113,7 @@ describe('advancedDocumentSearch', () => {
     }
 
     if (docketNumber) {
-      query = {
+      query.bool.must = {
         match: {
           'docketNumber.S': { operator: 'and', query: docketNumber },
         },
@@ -209,10 +209,11 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
+      omitSealed: true,
       opinionType: 'Summary Opinion',
     });
 
-    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+    const expectation = [
       ...orderQueryParams,
       getCaseMappingQueryParams(), // match all parents
       {
@@ -223,7 +224,14 @@ describe('advancedDocumentSearch', () => {
           },
         },
       },
-    ]);
+    ];
+    expectation[4].has_parent.query.bool.must_not = [
+      { term: { 'isSealed.BOOL': true } },
+    ];
+
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
+      expectation,
+    );
   });
 
   it('does a search for a judge when the judgeType is  judge', async () => {
