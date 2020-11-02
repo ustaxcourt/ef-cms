@@ -7,6 +7,7 @@ const {
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -255,7 +256,11 @@ exports.updatePetitionerInformationInteractor = async ({
     const privatePractitionersRepresentingPrimaryContact = caseEntity.privatePractitioners.filter(
       d => d.representingPrimary,
     );
-    if (privatePractitionersRepresentingPrimaryContact.length === 0) {
+    if (
+      privatePractitionersRepresentingPrimaryContact.length === 0 ||
+      caseEntity.contactPrimary.serviceIndicator ===
+        SERVICE_INDICATOR_TYPES.SI_PAPER
+    ) {
       await createWorkItemForChange({
         applicationContext,
         caseEntity,
@@ -279,7 +284,11 @@ exports.updatePetitionerInformationInteractor = async ({
     const privatePractitionersRepresentingSecondaryContact = caseEntity.privatePractitioners.filter(
       d => d.representingSecondary,
     );
-    if (privatePractitionersRepresentingSecondaryContact.length === 0) {
+    if (
+      privatePractitionersRepresentingSecondaryContact.length === 0 ||
+      caseEntity.contactSecondary.serviceIndicator ===
+        SERVICE_INDICATOR_TYPES.SI_PAPER
+    ) {
       await createWorkItemForChange({
         applicationContext,
         caseEntity,
