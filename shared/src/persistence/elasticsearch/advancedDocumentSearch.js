@@ -12,6 +12,7 @@ exports.advancedDocumentSearch = async ({
   judge,
   judgeType,
   keyword,
+  omitSealed,
   opinionType,
   startDate,
 }) => {
@@ -47,6 +48,7 @@ exports.advancedDocumentSearch = async ({
       },
     },
   ];
+  const mustNot = [];
 
   if (keyword) {
     queryParams.push({
@@ -57,6 +59,11 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  if (omitSealed) {
+    mustNot.push({
+      term: { 'isSealed.BOOL': true },
+    });
+  }
   const parentQueryParams = {
     has_parent: {
       inner_hits: {
@@ -66,18 +73,16 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { match_all: {} },
+      query: { bool: { must_not: mustNot } },
     },
   };
 
   if (docketNumber) {
-    parentQueryParams.has_parent.query = {
-      match: {
-        'docketNumber.S': { operator: 'and', query: docketNumber },
-      },
+    parentQueryParams.has_parent.query.bool.must = {
+      match: { 'docketNumber.S': { operator: 'and', query: docketNumber } },
     };
   } else if (caseTitleOrPetitioner) {
-    parentQueryParams.has_parent.query = {
+    parentQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
         fields: [
           'caseCaption.S',
