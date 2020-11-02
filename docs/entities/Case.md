@@ -1666,6 +1666,9 @@
               type: "number"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
               allow: 
                 - null
             objections: 
@@ -5414,6 +5417,9 @@
               type: "number"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
               allow: 
                 - null
             objections: 
