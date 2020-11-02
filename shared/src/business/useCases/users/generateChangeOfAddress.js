@@ -29,7 +29,7 @@ exports.generateChangeOfAddress = async ({
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getDocketNumbersByUser({
+    .getCasesByUserId({
       applicationContext,
       userId: user.userId,
     });
@@ -47,19 +47,21 @@ exports.generateChangeOfAddress = async ({
 
   const updatedCases = [];
 
-  for (let docketNumber of docketNumbers) {
+  const cases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({
+      applicationContext,
+      docketNumbers: docketNumbers.map(({ docketNumber }) => ({
+        docketNumber,
+      })),
+    });
+
+  for (let userCase of cases) {
     try {
       let oldData;
       const newData = contactInfo;
 
       const name = updatedName ? updatedName : user.name;
-
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
 
       let caseEntity = new Case(userCase, { applicationContext });
       const privatePractitioner = caseEntity.privatePractitioners.find(
