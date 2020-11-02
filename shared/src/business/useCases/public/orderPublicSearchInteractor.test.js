@@ -13,7 +13,7 @@ describe('orderPublicSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
-          docketNumber: '102-19',
+          docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents:
             'Everyone knows that Reeses Outrageous bars are the best candy',
@@ -24,10 +24,10 @@ describe('orderPublicSearchInteractor', () => {
         {
           caseCaption: 'Samson Workman, Petitioner',
           docketNumber: '103-19',
-          docketNumberSuffix: 'AAB',
+          docketNumberSuffix: 'AAA',
+          documentContents: 'KitKats are inferior candies',
           documentTitle: 'Order for KitKats',
           eventCode: 'ODD',
-          favoriteIceCream: 'Rocky Road',
           signedJudgeName: 'Guy Fieri',
         },
       ]);
@@ -49,41 +49,24 @@ describe('orderPublicSearchInteractor', () => {
     });
     expect(result).toMatchObject([
       {
-        docketNumber: '102-19',
+        caseCaption: 'Samson Workman, Petitioner',
+        docketNumber: '103-19',
+        docketNumberSuffix: 'AAA',
+        documentContents:
+          'Everyone knows that Reeses Outrageous bars are the best candy',
         documentTitle: 'Order for More Candy',
         eventCode: 'ODD',
-        isSealed: false,
+        signedJudgeName: 'Guy Fieri',
       },
       {
+        caseCaption: 'Samson Workman, Petitioner',
         docketNumber: '103-19',
+        docketNumberSuffix: 'AAA',
+        documentContents: 'KitKats are inferior candies',
         documentTitle: 'Order for KitKats',
         eventCode: 'ODD',
-        isSealed: false,
+        signedJudgeName: 'Guy Fieri',
       },
     ]);
-  });
-
-  it('should throw an exception if a sealed order is returned', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValueOnce([
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentTitle: 'Order for KitKats',
-          eventCode: 'ODD',
-          isSealed: true, // should never come back from public document search
-          signedJudgeName: 'Guy Fieri',
-        },
-      ]);
-
-    await expect(
-      orderPublicSearchInteractor({
-        applicationContext,
-        keyword: 'KitKat',
-        startDate: '2001-01-01',
-      }),
-    ).rejects.toThrow("'isSealed' contains an invalid value");
   });
 });

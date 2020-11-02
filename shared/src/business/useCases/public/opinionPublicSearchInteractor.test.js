@@ -2,21 +2,43 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  OPINION_EVENT_CODES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   opinionPublicSearchInteractor,
 } = require('./opinionPublicSearchInteractor');
-const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 describe('opinionPublicSearchInteractor', () => {
   const mockOpinionSearchResult = [
     {
-      caseCaption: 'Samson Workman, Petitioner',
-      docketNumber: '102-19',
-      docketNumberSuffix: 'AAA',
-      documentContents:
-        'Everyone knows that Reeses Outrageous bars are the best candy',
-      documentTitle: 'Order for More Candy',
-      eventCode: 'ODD',
-      signedJudgeName: 'Guy Fieri',
+      caseCaption: 'Reuben Blair, Petitioner',
+      contactPrimary: {
+        address1: '66 East Clarendon Parkway',
+        address2: 'Ut culpa cum sint ',
+        address3: 'In laboris hic volup',
+        city: 'Omnis dignissimos at',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner',
+        name: 'Reuben Blair',
+        phone: '+1 (338) 996-7072',
+        postalCode: '92017',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        state: 'DC',
+      },
+      contactSecondary: {},
+      docketEntryId: '6945cdff-fd12-422b-bf2c-63b792b7f618',
+      docketNumber: '103-20',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+      documentTitle: 'Memorandum Opinion Judge Colvin',
+      filingDate: '2020-05-12T18:42:10.471Z',
+      irsPractitioners: [],
+      isSealed: false,
+      numberOfPages: 1,
+      privatePractitioners: [],
+      signedJudgeName: 'Maurice B. Foley',
     },
   ];
 
@@ -49,29 +71,6 @@ describe('opinionPublicSearchInteractor', () => {
       startDate: '2001-01-01',
     });
 
-    expect(result).toMatchObject([
-      {
-        docketNumber: '102-19',
-        documentTitle: 'Order for More Candy',
-        eventCode: 'ODD',
-        isSealed: false,
-      },
-    ]);
-  });
-
-  it('should throw an error if search returns a sealed document to the call by the public interactor', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValueOnce([
-        { ...mockOpinionSearchResult, isSealed: true },
-      ]);
-
-    await expect(
-      opinionPublicSearchInteractor({
-        applicationContext,
-        keyword: 'memorandum',
-        startDate: '2001-01-01',
-      }),
-    ).rejects.toThrow("'isSealed' contains an invalid value");
+    expect(result).toEqual(mockOpinionSearchResult);
   });
 });
