@@ -9,6 +9,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { ALL_EVENT_CODES } = require('../EntityConstants');
 
 /**
  * PublicDocketEntry
@@ -28,6 +29,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.filedBy = rawDocketEntry.filedBy;
   this.filingDate = rawDocketEntry.filingDate;
   this.index = rawDocketEntry.index;
+  this.isFileAttached = rawDocketEntry.isFileAttached;
   this.isMinuteEntry = rawDocketEntry.isMinuteEntry;
   this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord;
   this.isPaper = rawDocketEntry.isPaper;
@@ -52,12 +54,13 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   documentType: JoiValidationConstants.STRING.optional().description(
     'The type of this document.',
   ),
-  eventCode: JoiValidationConstants.STRING.optional(),
+  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
   filedBy: JoiValidationConstants.STRING.optional().allow('', null),
-  filingDate: JoiValidationConstants.ISO_DATE.optional().description(
-    'Date that this Document was filed.',
-  ),
+  filingDate: JoiValidationConstants.ISO_DATE.max('now')
+    .optional()
+    .description('Date that this Document was filed.'),
   index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
+  isFileAttached: joi.boolean().optional(),
   isMinuteEntry: joi.boolean().optional(),
   isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
   isSealed: joi.boolean().invalid(true).required(), // value of true is forbidden
