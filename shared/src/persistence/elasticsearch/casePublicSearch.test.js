@@ -15,7 +15,7 @@ describe('casePublicSearch', () => {
     });
     expect(search).toHaveBeenCalledTimes(1);
     const { searchParameters } = search.mock.calls[0][0];
-    expect(searchParameters.body.query.bool.must_not).toBeUndefined();
+    expect(searchParameters.body.query.bool.must_not).toBeDefined();
     expect(results).toMatchObject(['some', 'matches']);
   });
 
@@ -32,7 +32,6 @@ describe('casePublicSearch', () => {
 
     const results = await casePublicSearch({
       applicationContext,
-      omitSealed: true,
       searchTerms: 'search for this',
     });
     expect(search).toHaveBeenCalledTimes(2);
