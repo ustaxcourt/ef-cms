@@ -13,8 +13,9 @@ describe('casePublicSearch', () => {
       applicationContext,
       searchTerms: 'search for this',
     });
-
     expect(search).toHaveBeenCalledTimes(1);
+    const { searchParameters } = search.mock.calls[0][0];
+    expect(searchParameters.body.query.bool.must_not).toBeDefined();
     expect(results).toMatchObject(['some', 'matches']);
   });
 
@@ -34,6 +35,14 @@ describe('casePublicSearch', () => {
       searchTerms: 'search for this',
     });
     expect(search).toHaveBeenCalledTimes(2);
+    const { searchParameters: searchParameters1 } = search.mock.calls[0][0];
+    expect(searchParameters1.body.query.bool.must_not.exists.field).toBe(
+      'sealedDate',
+    );
+    const { searchParameters: searchParameters2 } = search.mock.calls[1][0];
+    expect(searchParameters2.body.query.bool.must_not.exists.field).toBe(
+      'sealedDate',
+    );
     expect(results).toMatchObject(['other', 'matches']);
   });
 });
