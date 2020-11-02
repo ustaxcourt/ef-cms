@@ -11,5 +11,23 @@ export const docketClerkDeletesCorrespondence = (test, correspondenceTitle) =>
 
     await test.runSequence('deleteCorrespondenceDocumentSequence');
 
-    expect(test.getState('caseDetail.correspondence')).toEqual([]);
+    const deletedCorrespondence = test
+      .getState('caseDetail.correspondence')
+      .find(
+        c =>
+          c.correspondenceId === test.correspondenceDocument.correspondenceId,
+      );
+    expect(deletedCorrespondence).toBeUndefined();
+
+    expect(test.getState('caseDetail.messages')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachments: expect.arrayContaining([
+            expect.objectContaining({
+              documentId: test.correspondenceDocument.correspondenceId,
+            }),
+          ]),
+        }),
+      ]),
+    );
   });

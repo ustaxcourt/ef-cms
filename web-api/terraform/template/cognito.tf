@@ -21,11 +21,18 @@ resource "aws_cognito_user_pool" "pool" {
     allow_admin_create_user_only = false
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
-      email_subject = "Update Your Email with the U.S. Tax Court"
-      email_message = "Welcome to the U.S. Tax Court case management system. You are now able to log in to view and manage your cases.<br /><br /><b>Your username: </b>{username}<br /></br /><b>Temporary password: </b>{####}<br /><br /><br />For added security, please log in to the <a href='https://app.${var.dns_domain}/'>U.S. Tax Court site</a> to change your password."
+      email_subject = "An account has been set up for you with the U.S. Tax Court"
+      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> {####}<br /><br /><b>This temporary password is valid for 7 days.</b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>"
     }
   }
 
+  email_configuration { # Use SES to send email
+    source_arn = aws_ses_email_identity.ses_sender.arn
+    email_sending_account = "DEVELOPER"
+    reply_to_email_address = "noreply@${var.dns_domain}"
+    from_email_address = "U.S. Tax Court <noreply@${var.dns_domain}>" 
+  }
+  
   schema {
     attribute_data_type = "String"
     name                = "email"
@@ -128,7 +135,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "U.S. Tax Court account creation"
-      email_message = "An account has been created for you on the <a href='https://ui-dev.ustc-case-mgmt.flexion.us/'>U.S. Tax Court site</a>. Your username is {username} and temporary password is {####}. Please log in and change your password."
+      email_message = "An account has been created for you on the <a href='https://app.${var.dns_domain}/'>U.S. Tax Court site</a>. Your username is {username} and temporary password is {####}. Please log in and change your password."
     }
   }
 

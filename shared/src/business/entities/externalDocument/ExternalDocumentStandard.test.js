@@ -26,7 +26,7 @@ describe('ExternalDocumentStandard', () => {
     });
 
     describe('Proposed Stipulated Decision', () => {
-      it('should be allowed to have "Proposed Stipulated Decision" ', () => {
+      it('should be allowed to have "Proposed Stipulated Decision"', () => {
         const extDoc = ExternalDocumentFactory.get({
           category: 'Decision',
           documentTitle: 'Proposed Stipulated Decision',
@@ -37,7 +37,7 @@ describe('ExternalDocumentStandard', () => {
       });
 
       describe('Consolidated Case filing to multiple cases', () => {
-        it('should not be allowed to have "Proposed Stipulated Decision" ', () => {
+        it('should not be allowed to have "Proposed Stipulated Decision"', () => {
           const extDoc = ExternalDocumentFactory.get({
             category: 'Decision',
             documentTitle: 'Proposed Stipulated Decision',

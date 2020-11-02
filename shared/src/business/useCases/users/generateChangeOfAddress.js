@@ -101,6 +101,7 @@ exports.generateChangeOfAddress = async ({
       const shouldUpdateCase =
         !closedMoreThan6Months ||
         caseEntity.status !== CASE_STATUS_TYPES.closed;
+      let docketEntryAdded = false;
 
       if (shouldGenerateNotice) {
         const documentType = applicationContext
@@ -165,13 +166,14 @@ exports.generateChangeOfAddress = async ({
         });
 
         const servedParties = aggregatePartiesForService(caseEntity);
-
         changeOfAddressDocketEntry.setAsServed(servedParties.all);
+
+        caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity: changeOfAddressDocketEntry,
+          docketEntryId: changeOfAddressDocketEntry.docketEntryId,
           servedParties,
         });
 
@@ -197,8 +199,6 @@ exports.generateChangeOfAddress = async ({
         );
 
         changeOfAddressDocketEntry.setWorkItem(workItem);
-
-        caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
@@ -227,9 +227,12 @@ exports.generateChangeOfAddress = async ({
             applicationContext,
             workItem: workItem.validate().toRawObject(),
           });
+
+        caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
+        docketEntryAdded = true;
       }
 
-      if (shouldUpdateCase) {
+      if (shouldUpdateCase || docketEntryAdded) {
         const updatedCase = await applicationContext
           .getPersistenceGateway()
           .updateCase({

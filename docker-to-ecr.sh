@@ -3,9 +3,7 @@
 set -e
 
 # get aws account id if it does not exist in env var
-AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-$(aws sts get-caller-identity --query "Account")}
-AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID%\"}"
-AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID#\"}"
+AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-$(aws sts get-caller-identity --query "Account" --output text)}
 
 IMAGE_TAG=$(git rev-parse --short HEAD)
 MANIFEST=$(aws ecr batch-get-image --repository-name ef-cms-us-east-1 --image-ids imageTag=latest --region us-east-1 --query 'images[].imageManifest' --output text)

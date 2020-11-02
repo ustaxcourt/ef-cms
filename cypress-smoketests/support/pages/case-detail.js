@@ -96,6 +96,9 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
   cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+};
+
+exports.clickSaveUploadedPdfButton = () => {
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('h1:contains("Drafts")').should('exist');
   cy.get('h3:contains("An Uploaded PDF")').should('exist');

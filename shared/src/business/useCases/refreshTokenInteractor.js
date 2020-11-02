@@ -18,9 +18,9 @@ exports.refreshTokenInteractor = async ({
     refresh_token: refreshToken,
   });
 
-  const response = await applicationContext
+  const postResponse = await applicationContext
     .getHttpClient()
-    .post(`${applicationContext.getCognitoTokenUrl()}`, data, {
+    .post(applicationContext.getCognitoTokenUrl(), data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
@@ -28,6 +28,6 @@ exports.refreshTokenInteractor = async ({
     .then(response => response.data);
 
   return {
-    token: response.id_token,
+    token: postResponse.id_token,
   };
 };

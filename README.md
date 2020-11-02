@@ -331,15 +331,15 @@ docketclerk1@example.com
 petitionsclerk@example.com
 petitionsclerk1@example.com
 trialclerk@example.com
-judgeArmen@example.com
-armensChambers@example.com
-judgeAshford@example.com
+judge.armen@example.com
+colvinsChambers@example.com
+judge.ashford@example.com
 ashfordsChambers@example.com
-judgeBuch@example.com
+judge.buch@example.com
 buchsChambers@example.com
-judgeCarluzzo@example.com
+judge.carluzzo@example.com
 carluzzosChambers@example.com
-judgeCohen@example.com
+judge.cohen@example.com
 cohensChambers@example.com
 ```
 
@@ -375,9 +375,7 @@ cohensChambers1@example.com – cohensChambers5@example.com
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
 
-The password for all accounts is:
-
-`Testing1234$`
+The password for all accounts is set as an environment variable: `DEFAULT_ACCOUNT_PASS`.
 
 ## Editor configuration
 

@@ -216,7 +216,23 @@ const legacyServedDocumentCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
+const caseWithEAccess = {
+  ...MOCK_CASE,
+  associatedJudge: CHIEF_JUDGE,
+  caseCaption: 'The Sixth Migrated Case',
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+    email: 'petitioner@example.com',
+    hasEAccess: true,
+  },
+  docketNumber: '192-15',
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: STATUS_TYPES.calendared,
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+};
+
 const legacyDeadline = {
+  associatedJudge: 'Buch',
   caseDeadlineId: 'ad1e1b24-f3c4-47b4-b10e-76d1d050b2ab',
   createdAt: '2020-01-01T01:02:15.185-04:00',
   deadlineDate: '2020-01-24T00:00:00.000-05:00',
@@ -254,6 +270,10 @@ describe('Case migration journey', () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       legacyServedDocumentCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      caseWithEAccess,
     );
     await axiosInstance.post(
       'http://localhost:4000/migrate/case-deadline',
@@ -296,12 +316,18 @@ describe('Case migration journey', () => {
     expect(test.getState('caseDetail.privatePractitioners.0.barNumber')).toBe(
       'PT1234',
     );
+    expect(test.getState('caseDetail.privatePractitioners.0.email')).toBe(
+      'privatePractitioner@example.com',
+    );
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing.0'),
     ).toBe('dd0ac156-aa2d-46e7-8b5a-902f1d16f199');
     // override contact data with what's already in the database
     expect(test.getState('caseDetail.irsPractitioners.0.contact.city')).toBe(
       'Chicago',
+    );
+    expect(test.getState('caseDetail.irsPractitioners.0.email')).toBe(
+      'irsPractitioner@example.com',
     );
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
@@ -313,7 +339,7 @@ describe('Case migration journey', () => {
       docketNumber: legacyServedDocumentCase.docketNumber,
     });
     const caseDocuments = test.getState('caseDetail.docketEntries');
-    expect(caseDocuments.length).toBe(5);
+    expect(caseDocuments.length).toBe(4);
 
     const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);
     expect(legacyServedDocument.servedAt).toBeUndefined();
@@ -451,5 +477,27 @@ describe('Case migration journey', () => {
       docketNumber: otherFilersCase.docketNumber,
     });
     expect(test.getState('caseDeadlines').length).toBe(1);
+  });
+
+  loginAs(test, 'petitioner@example.com');
+
+  it('user with e-access should see migrated e-access case on their dashboard', async () => {
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
+
+    const openCases = test.getState('openCases');
+
+    expect(
+      openCases.find(c => c.docketNumber === caseWithEAccess.docketNumber),
+    ).toBeDefined();
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: caseWithEAccess.docketNumber,
+    });
+
+    expect(test.getState('caseDetail.docketNumber')).toEqual(
+      caseWithEAccess.docketNumber,
+    );
   });
 });

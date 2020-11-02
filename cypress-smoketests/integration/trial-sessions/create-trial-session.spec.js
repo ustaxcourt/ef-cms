@@ -61,12 +61,13 @@ const testData = {
 };
 const firstDocketNumber = createDocketNumber();
 const secondDocketNumber = createDocketNumber();
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Petitions Clerk', () => {
   before(async () => {
     const result = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
   });
@@ -81,7 +82,7 @@ describe('Petitions Clerk', () => {
       migrateRestApi = await getRestApi();
       const results = await getUserToken(
         'migrator@example.com',
-        'Testing1234$',
+        DEFAULT_ACCOUNT_PASS,
       );
       migrateUserToken = results.AuthenticationResult.IdToken;
     });
@@ -94,6 +95,7 @@ describe('Petitions Clerk', () => {
             ...BASE_CASE.contactPrimary,
             ...createRandomContact(),
           },
+          docketEntries: [BASE_CASE.docketEntries[0]],
           docketNumber,
           docketNumberWithSuffix: docketNumber,
           preferredTrialCity: testData.preferredTrialCity,
@@ -130,7 +132,7 @@ describe('Petitions Clerk', () => {
   });
 
   describe('after a new trial session is created', () => {
-    it('it is possible to manually add, view, and remove first case from an UNSET trial session', () => {
+    it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
       goToCaseOverview(firstDocketNumber);
       manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();

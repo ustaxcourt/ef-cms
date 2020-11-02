@@ -1,35 +1,13 @@
-resource "aws_s3_bucket" "api_lambdas_bucket" {
-  bucket = "${var.dns_domain}.efcms.${var.environment}.${var.region}.lambdas"
-  acl    = "private"
-  region = var.region
-
-  tags = {
-    environment = var.environment
-  }
-}
-
-resource "aws_s3_bucket_object" "api_object" {
-  bucket = aws_s3_bucket.api_lambdas_bucket.id
-  key    = "${var.environment}_api.js.zip"
-  source = data.archive_file.zip_api.output_path
-  etag   = data.archive_file.zip_api.output_base64sha256
-}
-
-data "archive_file" "zip_api" {
-  type        = "zip"
-  output_path = "${path.module}/../template/lambdas/api.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/api.js"
-}
-
 resource "aws_lambda_function" "api_lambda" {
-  function_name    = "api_${var.environment}"
-  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api.handler"
-  s3_bucket        = aws_s3_bucket.api_lambdas_bucket.id
-  s3_key           = aws_s3_bucket_object.api_object.key
-  source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout          = "29"
-  memory_size      = "3008"
+  depends_on    = [var.api_object]
+  function_name = "api_${var.environment}_${var.current_color}"
+  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler       = "api.handler"
+  s3_bucket     = var.lambda_bucket_id
+  s3_key        = "api_${var.current_color}.js.zip"
+  source_code_hash = var.api_object_hash
+  timeout     = "29"
+  memory_size = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
@@ -43,10 +21,32 @@ resource "aws_lambda_function" "api_lambda" {
 }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api" {
-  name = "gateway_api_${var.environment}"
+  name = "gateway_api_${var.environment}_${var.current_color}"
 
   endpoint_configuration {
     types = ["REGIONAL"]
+  }
+}
+
+resource "aws_api_gateway_gateway_response" "large_payload" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  status_code   = "413"
+  response_type = "REQUEST_TOO_LARGE"
+  
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
+  }
+}  
+
+resource "aws_api_gateway_gateway_response" "timeout" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  status_code   = "504"
+  response_type = "INTEGRATION_TIMEOUT"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
 }
 
@@ -108,7 +108,7 @@ resource "aws_api_gateway_method" "api_method_options" {
 }
 
 resource "aws_api_gateway_authorizer" "custom_authorizer" {
-  name                   = "custom_authorizer_${var.environment}"
+  name                   = "custom_authorizer_${var.environment}_${var.current_color}"
   rest_api_id            = aws_api_gateway_rest_api.gateway_for_api.id
   authorizer_uri         = var.authorizer_uri
   authorizer_credentials = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
@@ -209,11 +209,11 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 }
 
 resource "aws_acm_certificate" "api_gateway_cert" {
-  domain_name       = "api.${var.dns_domain}"
+  domain_name       = "api-${var.current_color}.${var.dns_domain}"
   validation_method = "DNS"
 
   tags = {
-    Name          = "api.${var.dns_domain}"
+    Name          = "api-${var.current_color}.${var.dns_domain}"
     ProductDomain = "EFCMS API"
     Environment   = var.environment
     Description   = "Certificate for api.${var.dns_domain}"
@@ -239,8 +239,9 @@ resource "aws_route53_record" "api_route53_record" {
 }
 
 resource "aws_api_gateway_domain_name" "api_custom" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert.arn
-  domain_name              = "api.${var.dns_domain}"
+  domain_name              = "api-${var.current_color}.${var.dns_domain}"
   security_policy          = "TLS_1_2"
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -252,7 +253,7 @@ resource "aws_route53_record" "api_route53_regional_record" {
   name           = aws_api_gateway_domain_name.api_custom.domain_name
   type           = "A"
   zone_id        = var.zone_id
-  set_identifier = "api_${var.region}"
+  set_identifier = "api_${var.region}_${var.current_color}"
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom.regional_domain_name

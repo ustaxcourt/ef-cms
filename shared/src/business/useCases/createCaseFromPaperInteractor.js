@@ -92,6 +92,7 @@ exports.createCaseFromPaperInteractor = async ({
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
       applicationContext,
+      receivedAt: petitionMetadata.receivedAt,
     },
   );
 
@@ -228,6 +229,7 @@ exports.createCaseFromPaperInteractor = async ({
         documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
         filingDate: caseToAdd.receivedAt,
+        index: 0,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,

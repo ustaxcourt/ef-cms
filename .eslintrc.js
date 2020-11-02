@@ -73,9 +73,9 @@ module.exports = {
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
     'jest/expect-expect': 'warn',
+    'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
     'jest/no-identical-title': 'off', // todo: warn
-    'jest/no-test-callback': 'warn',
     'jsdoc/check-alignment': 'off', // todo: warn
     'jsdoc/check-param-names': 'off', // todo: warn
     'jsdoc/check-tag-names': 'off', // todo: warn
@@ -111,6 +111,7 @@ module.exports = {
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
+    'no-shadow': ['warn', { builtinGlobals: false }], // TODO: builtinGlobals: true
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-var': 'error',
     'no-warning-comments': [
@@ -365,6 +366,7 @@ module.exports = {
           'ustc',
           'uuid',
           'uuidv4',
+          'validators',
           'vasquezs',
           'viewport',
           'washington',

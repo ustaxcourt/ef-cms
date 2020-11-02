@@ -63,39 +63,41 @@ export const UpdateCaseModalDialog = connect(
         </div>
         {updateCaseModalHelper.showCalendaredAlert && (
           <Hint>
-            This case is Calendared for trial. Changing the case status will
-            remove this case from the current trial session.
+            This case is Calendared for trial. Remove the case from its trial
+            session to update the case status.
           </Hint>
         )}
-        <div className="margin-bottom-4">
-          <FormGroup errorText={validationErrors.caseStatus}>
-            <label className="usa-label" htmlFor="caseStatus">
-              Case status
-            </label>
-            <select
-              className="case-status usa-select"
-              id="caseStatus"
-              name="caseStatus"
-              value={modal.caseStatus}
-              onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validateUpdateCaseModalSequence();
-              }}
-            >
-              {updateCaseModalHelper.showNewStatusOption && (
-                <option value={newStatus}>{newStatus}</option>
-              )}
-              {updateCaseModalHelper.caseStatusOptions.map(status => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-          </FormGroup>
-        </div>
+        {updateCaseModalHelper.showCaseStatusDropdown && (
+          <div className="margin-bottom-4">
+            <FormGroup errorText={validationErrors.caseStatus}>
+              <label className="usa-label" htmlFor="caseStatus">
+                Case status
+              </label>
+              <select
+                className="case-status usa-select"
+                id="caseStatus"
+                name="caseStatus"
+                value={modal.caseStatus}
+                onChange={e => {
+                  updateModalValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateUpdateCaseModalSequence();
+                }}
+              >
+                {updateCaseModalHelper.showNewStatusOption && (
+                  <option value={newStatus}>{newStatus}</option>
+                )}
+                {updateCaseModalHelper.caseStatusOptions.map(status => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </FormGroup>
+          </div>
+        )}
         {updateCaseModalHelper.showAssociatedJudgeOptions && (
           <div className="margin-bottom-4">
             <FormGroup errorText={validationErrors.associatedJudge}>
@@ -117,7 +119,7 @@ export const UpdateCaseModalDialog = connect(
               >
                 <option value="">- Select -</option>
                 <option value="Chief Judge">Chief Judge</option>
-                {modal.judgeUsers.map(judgeUser => (
+                {modal.judges.map(judgeUser => (
                   <option key={judgeUser.userId} value={judgeUser.name}>
                     {judgeUser.name}
                   </option>

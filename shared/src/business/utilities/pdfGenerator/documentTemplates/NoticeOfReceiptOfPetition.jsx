@@ -28,9 +28,11 @@ export const NoticeOfReceiptOfPetition = ({
         served it on respondent on {servedDate}.
       </div>
 
-      <div className="margin-top-5 margin-bottom-20">
-        (X) Request for Place of Trial at {preferredTrialCity}.
-      </div>
+      {preferredTrialCity && (
+        <div className="margin-top-5 margin-bottom-20">
+          (X) Request for Place of Trial at {preferredTrialCity}.
+        </div>
+      )}
 
       <div className="info-box margin-bottom-0">
         <div className="info-box-header">
@@ -86,9 +88,12 @@ export const NoticeOfReceiptOfPetition = ({
           address3={address.address3}
           city={address.city}
           countryName={address.countryName}
+          inCareOf={address.inCareOf}
           name={address.name}
           postalCode={address.postalCode}
+          secondaryName={address.secondaryName}
           state={address.state}
+          title={address.title}
         />
       </div>
     </>

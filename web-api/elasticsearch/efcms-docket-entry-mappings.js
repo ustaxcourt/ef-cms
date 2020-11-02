@@ -1,5 +1,14 @@
 module.exports = {
   properties: {
+    'associatedJudge.S': {
+      type: 'text',
+    },
+    case_relations: {
+      relations: {
+        case: 'document',
+      },
+      type: 'join',
+    },
     'caseCaption.S': {
       type: 'text',
     },
@@ -56,11 +65,17 @@ module.exports = {
     'numberOfPages.N': {
       type: 'text',
     },
+    'pending.BOOL': {
+      type: 'boolean',
+    },
     'pk.S': {
       type: 'text',
     },
     'privatePractitioners.L.M.userId.S': {
       type: 'text',
+    },
+    'receivedAt.S': {
+      type: 'date',
     },
     'sealedDate.S': {
       type: 'date',

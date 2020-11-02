@@ -25,11 +25,15 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -37,8 +41,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
       applicationContext,
       docketNumber,
     });
-
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -47,8 +50,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   const servedParties = aggregatePartiesForService(caseEntity);
   currentDocketEntry.setAsServed(servedParties.all);
   currentDocketEntry.setAsProcessingStatusAsCompleted();
-
-  caseEntity.updateDocketEntry(currentDocketEntry);
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -72,7 +73,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   });
 
   let paperServicePdfUrl;
-
   if (servedParties.paper.length > 0) {
     const originalDoc = await PDFDocument.load(servedDocWithCover);
 
@@ -110,10 +110,42 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     paperServicePdfUrl = url;
   }
 
+  const workItemToUpdate = currentDocketEntry.workItem;
+
+  if (workItemToUpdate) {
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
+    });
+
+    workItemToUpdate.setAsCompleted({
+      message: 'completed',
+      user,
+    });
+
+    workItemToUpdate.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemForDocketClerkFilingExternalDocument({
+        applicationContext,
+        workItem: workItemToUpdate.validate().toRawObject(),
+      });
+  }
+
+  caseEntity.updateDocketEntry(currentDocketEntry);
+
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
-    docketEntryEntity: currentDocketEntry,
+    docketEntryId: currentDocketEntry.docketEntryId,
     servedParties,
   });
 

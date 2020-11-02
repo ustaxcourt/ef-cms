@@ -63,6 +63,9 @@ export const PractitionerContactForm = connect(
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
+              <span className="usa-hint">
+                If you do not have a current phone number, enter N/A.
+              </span>
               <input
                 autoCapitalize="none"
                 className="usa-input"

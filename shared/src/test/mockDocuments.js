@@ -23,6 +23,7 @@ exports.MOCK_DOCUMENTS = [
     documentTitle: 'Statement of Taxpayer Identification',
     documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
     eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    index: 3,
     isFileAttached: true,
     processingStatus: 'pending',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -35,8 +36,19 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Answer',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    index: 4,
     isFileAttached: true,
     processingStatus: 'pending',
+    servedAt: '2019-08-25T05:00:00.000Z',
+    servedParties: [
+      {
+        name: 'Bernard Lowe',
+      },
+      {
+        name: 'IRS',
+        role: 'irsSuperuser',
+      },
+    ],
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
   {
@@ -47,8 +59,19 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Proposed Stipulated Decision',
     eventCode: 'PSDE',
     filedBy: 'Test Petitioner',
+    index: 5,
     isFileAttached: true,
     processingStatus: 'pending',
+    servedAt: '2019-08-25T05:00:00.000Z',
+    servedParties: [
+      {
+        name: 'Bernard Lowe',
+      },
+      {
+        name: 'IRS',
+        role: 'irsSuperuser',
+      },
+    ],
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
 ];

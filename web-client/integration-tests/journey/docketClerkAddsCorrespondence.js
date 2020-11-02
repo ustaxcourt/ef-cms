@@ -12,16 +12,25 @@ export const docketClerkAddsCorrespondence = (test, correspondenceTitle) =>
       value: fakeFile,
     });
 
-    await test.runSequence('uploadCorrespondenceDocumentSequence');
+    await test.runSequence('uploadCorrespondenceDocumentSequence', {
+      tab: 'correspondence',
+    });
 
     expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('caseDetail.correspondence')).not.toBe([]);
     expect(test.getState('caseDetail.correspondence')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentTitle: 'My correspondence',
+          documentTitle: correspondenceTitle,
         }),
       ]),
     );
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    const displayedCorrespondenceId = test.getState('correspondenceId');
+    const mostRecentCorrespondence = test
+      .getState('caseDetail.correspondence')
+      .slice(-1)
+      .pop();
+    expect(displayedCorrespondenceId).toEqual(
+      mostRecentCorrespondence.correspondenceId,
+    );
   });
