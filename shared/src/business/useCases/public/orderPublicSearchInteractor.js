@@ -1,6 +1,5 @@
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { ORDER_EVENT_CODES } = require('../../entities/EntityConstants');
-const { PublicDocketEntry } = require('../../entities/cases/PublicDocketEntry');
 
 /**
  * orderPublicSearchInteractor
@@ -29,7 +28,8 @@ exports.orderPublicSearchInteractor = async ({
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const orders = await applicationContext
+  // use integration test to verify nothing sealed is returned
+  return await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -38,8 +38,4 @@ exports.orderPublicSearchInteractor = async ({
       judgeType: 'signedJudgeName',
       omitSealed: true,
     });
-
-  return PublicDocketEntry.validateRawCollection(orders, {
-    applicationContext,
-  });
 };
