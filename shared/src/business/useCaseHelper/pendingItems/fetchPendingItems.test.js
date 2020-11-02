@@ -21,6 +21,7 @@ describe('fetchPendingItems', () => {
           docketEntryId: 'abc',
         },
       ],
+      total: 2,
     };
 
     applicationContext
@@ -29,7 +30,7 @@ describe('fetchPendingItems', () => {
   });
 
   it('calls search function with correct params when provided a judge and returns records', async () => {
-    const { foundDocuments } = await fetchPendingItems({
+    const { foundDocuments, total } = await fetchPendingItems({
       applicationContext,
       judge: 'Judge Colvin',
     });
@@ -42,6 +43,7 @@ describe('fetchPendingItems', () => {
       { docketEntryId: 'def' },
       { docketEntryId: 'abc' },
     ]);
+    expect(total).toBe(2);
   });
 
   it('calls search function with correct params when not provided a judge and returns records', async () => {
@@ -62,12 +64,13 @@ describe('fetchPendingItems', () => {
   it('returns an empty array when no hits are returned from the search client', async () => {
     applicationContext
       .getPersistenceGateway()
-      .fetchPendingItems.mockReturnValue({ results: [] });
+      .fetchPendingItems.mockReturnValue({ results: [], total: 0 });
 
-    const { foundDocuments } = await fetchPendingItems({
+    const { foundDocuments, total } = await fetchPendingItems({
       applicationContext,
     });
 
+    expect(total).toEqual(0);
     expect(foundDocuments.length).toEqual(0);
     expect(foundDocuments).toMatchObject([]);
   });
