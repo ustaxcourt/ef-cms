@@ -1121,6 +1121,10 @@
               rules: 
                 - 
                   name: "integer"
+            isFileAttached: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
             isMinuteEntry: 
               type: "boolean"
               flags: 
