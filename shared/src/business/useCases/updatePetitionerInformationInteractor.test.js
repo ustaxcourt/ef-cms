@@ -291,4 +291,8 @@ describe('update petitioner contact information on a case', () => {
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
+
+  it('should NOT create a work item for the NCA when the primary contact is represented', () => {});
+
+  it('should create a');
 });
