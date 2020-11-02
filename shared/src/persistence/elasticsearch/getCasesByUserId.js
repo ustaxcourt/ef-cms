@@ -8,10 +8,12 @@ const {
 const { search } = require('./searchClient');
 
 /**
- * caseAdvancedSearchInteractor
+ * getCasesByUserId
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
- * @returns {object} the case data
+ * @param {object} providers the providers object containing applicationContext
+ * @param {string} providers.applicationContext application context
+ * @param {string} providers.userId user id
+ * @returns {array} array of docket numbers
  */
 exports.getCasesByUserId = async ({ applicationContext, userId }) => {
   const source = ['docketNumber'];
