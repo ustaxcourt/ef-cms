@@ -15,7 +15,6 @@ const { search } = require('./searchClient');
 exports.casePublicSearch = async ({
   applicationContext,
   countryType,
-  omitSealed,
   petitionerName,
   petitionerState,
   yearFiledMax,
@@ -49,17 +48,6 @@ exports.casePublicSearch = async ({
 
   let results;
 
-  let excludeSealedDate = {};
-  if (omitSealed) {
-    excludeSealedDate = {
-      must_not: {
-        exists: {
-          field: 'sealedDate',
-        },
-      },
-    };
-  }
-
   ({ results } = await search({
     applicationContext,
     searchParameters: {
@@ -68,7 +56,11 @@ exports.casePublicSearch = async ({
         query: {
           bool: {
             must: [...exactMatchesQuery, ...commonQuery],
-            ...excludeSealedDate,
+            must_not: {
+              exists: {
+                field: 'sealedDate',
+              },
+            },
           },
         },
         size: MAX_SEARCH_RESULTS,
@@ -86,7 +78,11 @@ exports.casePublicSearch = async ({
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],
-              ...excludeSealedDate,
+              must_not: {
+                exists: {
+                  field: 'sealedDate',
+                },
+              },
             },
           },
           size: MAX_SEARCH_RESULTS,

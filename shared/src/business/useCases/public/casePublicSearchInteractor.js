@@ -19,7 +19,6 @@ exports.casePublicSearchInteractor = async ({
     .casePublicSearch({
       applicationContext,
       countryType,
-      omitSealed: true,
       petitionerName,
       petitionerState,
       yearFiledMax,
