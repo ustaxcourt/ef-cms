@@ -28,16 +28,14 @@ exports.orderPublicSearchInteractor = async ({
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const results = await applicationContext
+  // use integration test to verify nothing sealed is returned
+  return await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
+      ...rawSearch,
       documentEventCodes: ORDER_EVENT_CODES,
       judgeType: 'signedJudgeName',
-      ...rawSearch,
+      omitSealed: true,
     });
-
-  const filteredResults = results.filter(item => !item.isSealed);
-
-  return filteredResults;
 };
