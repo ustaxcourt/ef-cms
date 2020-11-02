@@ -11,7 +11,7 @@ import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigat
 import { unauthedUserSearchesForSealedCaseByName } from './journey/unauthedUserSearchesForSealedCaseByName';
 import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unauthedUserSearchesForSealedCasesByDocketNumber';
 import { unauthedUserViewsCaseDetailForSealedCase } from './journey/unauthedUserViewsCaseDetailForSealedCase';
-import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
+import { unauthedUserViewsPrintableDocketRecordForSealedCase } from './journey/unauthedUserViewsPrintableDocketRecordForSealedCase';
 
 const test = setupTest();
 const testClient = setupTestClient();
@@ -56,13 +56,13 @@ describe('Docket clerk seals the case (should not be viewable to the public)', (
 describe('Unauthed user searches for a sealed case by docket number', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserViewsCaseDetailForSealedCase(test);
-  unauthedUserViewsPrintableDocketRecord(test);
+  unauthedUserViewsPrintableDocketRecordForSealedCase(test);
 });
 
 describe('Unauthed user searches for a sealed case by name', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesForSealedCaseByName(test);
-  unauthedUserViewsPrintableDocketRecord(test);
+  unauthedUserViewsPrintableDocketRecordForSealedCase(test);
 });
 
 describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
