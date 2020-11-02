@@ -14,9 +14,46 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
+const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
+
+const createChangeOfAddressWorkItem = async ({
+  applicationContext,
+  caseEntity,
+  changeOfAddressDocketEntry,
+  user,
+}) => {
+  const workItem = new WorkItem(
+    {
+      assigneeId: null,
+      assigneeName: null,
+      associatedJudge: caseEntity.associatedJudge,
+      caseIsInProgress: caseEntity.inProgress,
+      caseStatus: caseEntity.status,
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+      docketEntry: {
+        ...changeOfAddressDocketEntry.toRawObject(),
+        createdAt: changeOfAddressDocketEntry.createdAt,
+      },
+      docketNumber: caseEntity.docketNumber,
+      docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+      section: DOCKET_SECTION,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+    },
+    { applicationContext },
+  );
+
+  changeOfAddressDocketEntry.setWorkItem(workItem);
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+    applicationContext,
+    workItem: workItem.validate().toRawObject(),
+  });
+};
 
 /**
  * updatePetitionerInformationInteractor
@@ -180,6 +217,19 @@ exports.updatePetitionerInformationInteractor = async ({
       });
 
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
+    const privatePractitionersRepresentingPrimaryContact = caseEntity.privatePractitioners.filter(
+      d => d.representingPrimary,
+    );
+
+    if (privatePractitionersRepresentingPrimaryContact.length === 0) {
+      await createChangeOfAddressWorkItem({
+        applicationContext,
+        caseEntity,
+        changeOfAddressDocketEntry,
+        user,
+      });
+    }
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
