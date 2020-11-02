@@ -10,9 +10,26 @@ const { ROLES } = require('../../../business/entities/EntityConstants');
 const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
 const privatePractitionerUser = {
-  barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
+  barNumber: 'pt1234',
+  email: 'test@example.com',
   name: 'Test Private Practitioner',
   role: ROLES.privatePractitioner,
+  section: 'privatePractitioner',
+};
+
+const irsPractitionerUser = {
+  barNumber: 'pt1234',
+  email: 'test@example.com',
+  name: 'Test IRS Practitioner',
+  role: ROLES.irsPractitioner,
+  section: 'privatePractitioner',
+};
+
+const inactivePractitionerUser = {
+  barNumber: 'pt1234',
+  email: 'test@example.com',
+  name: 'Test Inactive Practitioner',
+  role: ROLES.inactivePractitioner,
   section: 'privatePractitioner',
 };
 
@@ -41,8 +58,6 @@ const otherUser = {
 
 describe('createPractitionerUser', () => {
   beforeAll(() => {
-    applicationContext.environment.stage = 'dev';
-
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: async () =>
         Promise.resolve({
@@ -80,7 +95,6 @@ describe('createPractitionerUser', () => {
         pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -90,7 +104,6 @@ describe('createPractitionerUser', () => {
         sk: `user|${userId}`,
         ...privatePractitionerUser,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -99,7 +112,6 @@ describe('createPractitionerUser', () => {
         pk: 'privatePractitioner|Test Private Practitioner',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[3][0],
@@ -108,7 +120,6 @@ describe('createPractitionerUser', () => {
         pk: 'privatePractitioner|PT1234',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
   });
 
@@ -126,7 +137,6 @@ describe('createPractitionerUser', () => {
         pk: 'section|privatePractitioner',
         sk: `user|${userId}`,
       },
-      TableName: 'efcms-dev',
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -136,7 +146,6 @@ describe('createPractitionerUser', () => {
         sk: `user|${userId}`,
         ...privatePractitionerUserWithoutBarNumber,
       },
-      TableName: 'efcms-dev',
     });
 
     await createPractitionerUser({
@@ -155,6 +164,31 @@ describe('createPractitionerUser', () => {
     await createPractitionerUser({
       applicationContext,
       user: privatePractitionerUserWithSection,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+
+  it('should call cognito adminCreateUser for an IRS practitioner user with email address', async () => {
+    await createPractitionerUser({
+      applicationContext,
+      user: irsPractitionerUser,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+  it('should call cognito adminCreateUser for an inactive practitioner user with email address', async () => {
+    await createPractitionerUser({
+      applicationContext,
+      user: inactivePractitionerUser,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
@@ -200,12 +234,44 @@ describe('createPractitionerUser', () => {
     ).toBeCalled();
   });
 
-  it('should throw an error when attempting to create a user that is not role private or IRS practitioner', async () => {
+  it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {
     await expect(
       createPractitionerUser({ applicationContext, user: otherUser }),
     ).rejects.toThrow(
-      'Practitioner users must have either private or IRS practitioner role',
+      `Role must be ${ROLES.privatePractitioner}, ${ROLES.irsPractitioner}, or ${ROLES.inactivePractitioner}`,
     );
+  });
+
+  it('should call adminCreateUser with the correct UserAttributes', async () => {
+    await createPractitionerUser({
+      applicationContext,
+      user: privatePractitionerUser,
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith({
+      UserAttributes: [
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'email',
+          Value: 'test@example.com',
+        },
+        {
+          Name: 'custom:role',
+          Value: 'privatePractitioner',
+        },
+        {
+          Name: 'name',
+          Value: 'Test Private Practitioner',
+        },
+      ],
+      UserPoolId: undefined,
+      Username: 'test@example.com',
+    });
   });
 
   describe('createUserRecords', () => {
@@ -226,7 +292,6 @@ describe('createPractitionerUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -236,7 +301,6 @@ describe('createPractitionerUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUser,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[2][0],
@@ -245,7 +309,6 @@ describe('createPractitionerUser', () => {
           pk: 'privatePractitioner|Test Private Practitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[3][0],
@@ -254,7 +317,6 @@ describe('createPractitionerUser', () => {
           pk: 'privatePractitioner|PT1234',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
     });
 
@@ -275,7 +337,6 @@ describe('createPractitionerUser', () => {
           pk: 'section|privatePractitioner',
           sk: `user|${userId}`,
         },
-        TableName: 'efcms-dev',
       });
       expect(
         applicationContext.getDocumentClient().put.mock.calls[1][0],
@@ -285,7 +346,6 @@ describe('createPractitionerUser', () => {
           sk: `user|${userId}`,
           ...privatePractitionerUserWithoutBarNumber,
         },
-        TableName: 'efcms-dev',
       });
     });
   });

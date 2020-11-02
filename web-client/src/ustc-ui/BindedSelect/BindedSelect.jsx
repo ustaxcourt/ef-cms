@@ -13,18 +13,15 @@ export const BindedSelect = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  function BindedSelect({
-    ariaDescribedBy,
-    ariaLabel,
-    bind,
-    children,
-    className,
-    id,
-    name,
-    onChange,
-    simpleSetter,
-    value,
-  }) {
+  function BindedSelect(componentProps) {
+    const {
+      bind,
+      children,
+      className,
+      onChange,
+      simpleSetter,
+      value,
+    } = componentProps;
     let activeOption, setSelect;
 
     if (bind) {
@@ -36,18 +33,21 @@ export const BindedSelect = connect(
 
     setSelect = decorateWithPostCallback(setSelect, onChange);
 
-    return (
-      <select
-        aria-describedby={ariaDescribedBy}
-        aria-label={ariaLabel || name}
-        className={classNames('usa-select', className)}
-        id={id}
-        name={name}
-        value={activeOption || ''}
-        onChange={e => setSelect(e.target.value)}
-      >
-        {children}
-      </select>
-    );
+    const prohibitedKeysOnSelect = [
+      'bind',
+      'children',
+      'get',
+      'reaction',
+      'simpleSetter',
+    ];
+    const selectProps = {
+      ...componentProps,
+      className: classNames('usa-select', className),
+      onChange: e => setSelect(e.target.value),
+      value: activeOption || '',
+    };
+    prohibitedKeysOnSelect.forEach(attr => delete selectProps[attr]);
+
+    return <select {...selectProps}>{children}</select>;
   },
 );

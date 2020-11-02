@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  createCaseDeadlineCatalogRecord,
-} = require('./createCaseDeadlineCatalogRecord');
 
 /**
  * createCaseDeadline
@@ -27,10 +24,5 @@ exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
       sk: `case-deadline|${caseDeadlineId}`,
     },
     applicationContext,
-  });
-
-  await createCaseDeadlineCatalogRecord({
-    applicationContext,
-    caseDeadlineId,
   });
 };

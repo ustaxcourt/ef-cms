@@ -1,3 +1,4 @@
+import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import {
   fakeFile,
   loginAs,
@@ -53,6 +54,32 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
+  docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(test);
+  it('docket clerk checks pending items count has not increased for a docket entry saved for later', async () => {
+    await viewCaseDetail({
+      docketNumber: caseDetail.docketNumber,
+      test,
+    });
+    const formatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
+
+    await refreshElasticsearchIndex();
+
+    await test.runSequence('gotoPendingReportSequence');
+
+    await test.runSequence('fetchPendingItemsSequence', {
+      judge: 'Chief Judge',
+    });
+
+    const currentPendingItemsCount = (test.getState('pendingItems') || [])
+      .length;
+
+    expect(currentPendingItemsCount).toEqual(pendingItemsCount);
+  });
+
   loginAs(test, 'irsPractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
@@ -63,7 +90,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   });
 
   loginAs(test, 'docketclerk@example.com');
-  it('login as a docket clerk, check pending items count has increased and view pending document', async () => {
+  it('docket clerk checks pending items count has increased and views pending document', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
@@ -77,8 +104,14 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     await refreshElasticsearchIndex();
 
     await test.runSequence('gotoPendingReportSequence');
-    const currentPendingItemsCount = (test.getState('pendingItems') || [])
-      .length;
+
+    await test.runSequence('fetchPendingItemsSequence', {
+      judge: 'Chief Judge',
+    });
+
+    const currentPendingItemsCount = (
+      test.getState('pendingReports.pendingItems') || []
+    ).length;
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
 

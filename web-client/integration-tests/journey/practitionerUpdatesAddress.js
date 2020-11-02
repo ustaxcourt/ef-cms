@@ -23,5 +23,10 @@ export const practitionerUpdatesAddress = test => {
     await test.runSequence('submitUpdateUserContactInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
+
+    await test.runSequence('userContactUpdateCompleteSequence');
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: 'Changes saved.',
+    });
   });
 };

@@ -3,6 +3,7 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  ROLES,
 } = require('../../../business/entities/EntityConstants');
 const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
 
@@ -48,6 +49,7 @@ describe('getCaseByDocketNumber', () => {
           Items: [
             {
               docketNumber: '123-20',
+              judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
               pk: 'case|123-20',
               sk: 'case|23',
               status: CASE_STATUS_TYPES.new,
@@ -86,6 +88,13 @@ describe('getCaseByDocketNumber', () => {
               pk: 'case|123-20',
               sk: 'correspondence|124',
             },
+            {
+              name: 'Judge Fieri',
+              pk: 'case|123-20',
+              role: ROLES.legacyJudge,
+              sk: 'user|ce92c582-186f-45a7-a5f5-e1cec03521ad',
+              userId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+            },
           ],
         }),
     });
@@ -112,6 +121,7 @@ describe('getCaseByDocketNumber', () => {
           sk: 'docket-entry|123',
         },
       ],
+      associatedJudge: 'Judge Fieri',
       correspondence: [
         {
           archived: false,
@@ -132,6 +142,7 @@ describe('getCaseByDocketNumber', () => {
       irsPractitioners: [
         { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
+      judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
       pk: 'case|123-20',
       privatePractitioners: [
         {
@@ -153,6 +164,26 @@ describe('getCaseByDocketNumber', () => {
     const result = await getCaseByDocketNumber({
       applicationContext,
       docketNumber: '123-20',
+    });
+
+    expect(result).toEqual({
+      archivedCorrespondences: [],
+      archivedDocketEntries: [],
+      correspondence: [],
+      docketEntries: [],
+      irsPractitioners: [],
+      privatePractitioners: [],
+    });
+  });
+
+  it('should return default object if nothing is returned from the client query request', async () => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: async () => Promise.resolve({ Items: [] }),
+    });
+
+    const result = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '99999-99',
     });
 
     expect(result).toEqual({

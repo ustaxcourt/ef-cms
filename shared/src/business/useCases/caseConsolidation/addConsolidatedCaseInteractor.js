@@ -81,8 +81,8 @@ exports.addConsolidatedCaseInteractor = async ({
   });
 
   const updateCasePromises = [];
-  casesToUpdate.forEach(caseToUpdate => {
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+  casesToUpdate.forEach(caseInCasesToUpdate => {
+    const caseEntity = new Case(caseInCasesToUpdate, { applicationContext });
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(

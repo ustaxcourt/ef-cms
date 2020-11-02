@@ -13,8 +13,10 @@ export const socketProvider = ({ socketRouter }) => {
   let socket;
 
   const stop = () => {
-    socket.close();
-    socket = null;
+    if (socket) {
+      socket.close();
+      socket = null;
+    }
   };
 
   const start = () => {

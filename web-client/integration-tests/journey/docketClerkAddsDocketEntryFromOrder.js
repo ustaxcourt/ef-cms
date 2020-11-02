@@ -64,7 +64,7 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
       addCourtIssuedDocketEntryHelperComputed.showServiceStamp,
     ).toBeTruthy();
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toBeFalsy();
+    expect(test.getState('form.freeText')).toEqual('Order');
     expect(test.getState('form.serviceStamp')).toBeFalsy();
 
     // eventCode: OCA

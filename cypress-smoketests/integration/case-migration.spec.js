@@ -13,7 +13,10 @@ describe('Case Migration', () => {
   let docketNumber;
 
   before(async () => {
-    const results = await getUserToken('migrator@example.com', 'Testing1234$');
+    const results = await getUserToken(
+      'migrator@example.com',
+      Cypress.env('DEFAULT_ACCOUNT_PASS'),
+    );
     token = results.AuthenticationResult.IdToken;
     restApi = await getRestApi();
   });

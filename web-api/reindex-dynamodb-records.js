@@ -3,16 +3,11 @@ const { chunk } = require('lodash');
 const args = process.argv.slice(2);
 
 if (args.length < 1) {
-  console.error('must provide an environment to reindex: [dev, stg, prod]');
+  console.error('must provide a table to reindex: [efcms-dev-1]');
   process.exit(1);
 }
 
-const sleep = time => {
-  return new Promise(resolve => {
-    setTimeout(resolve, time);
-  });
-};
-const env = args[0];
+const tableName = args[0];
 const CHUNK_SIZE = 25;
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
@@ -30,7 +25,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     await documentClient
       .scan({
         ExclusiveStartKey: lastKey,
-        TableName: `efcms-${env}`,
+        TableName: tableName,
       })
       .promise()
       .then(async results => {
@@ -45,7 +40,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
           await documentClient
             .batchWrite({
               RequestItems: {
-                [`efcms-${env}`]: c.map(item => ({
+                [tableName]: c.map(item => ({
                   PutRequest: {
                     Item: { ...item, indexedTimestamp: Date.now() },
                   },
@@ -53,8 +48,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
               },
             })
             .promise();
-
-          await sleep(1000);
         }
       });
   }

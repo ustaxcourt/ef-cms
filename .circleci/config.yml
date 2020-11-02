@@ -173,10 +173,23 @@ jobs:
       - run:
           name: Web Client - Integration Test
           command: |
-            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
+             S3_ENDPOINT=http://localhost:9000 \
+             SKIP_CACHE_INVALIDATION=true \
+             AWS_ACCESS_KEY_ID=noop \
+             AWS_SECRET_ACCESS_KEY=noop \
+             npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:4000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
-            CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
+            CI=true NO_SCANNER=true \
+             SKIP_VIRUS_SCAN=true \
+             AWS_ACCESS_KEY_ID=noop \
+             AWS_SECRET_ACCESS_KEY=noop \
+             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
+             S3_ENDPOINT=http://localhost:9000 \
+             npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -238,7 +251,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -360,7 +373,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -424,7 +437,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium+
+    resource_class: large
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -481,10 +494,16 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export CIRCLE_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export IRS_SUPERUSER_EMAIL=$(./get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -498,42 +517,133 @@ jobs:
           name: Setup ES Instance Count
           command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup ES Instance Type
+          command: echo "export ES_INSTANCE_TYPE='$(./get-es-instance-type.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup Disable Emails
+          command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: Setup ES Volume Size
+          command: echo "export ES_VOLUME_SIZE='$(./get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: |
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "CIRCLE_BRANCH=${CIRCLE_BRANCH}" \
+             -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" \
+             -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
+             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+             -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" \
+             -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" \
+             -e "ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}" \
+             -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" \
+             -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
+             -e "ZONE_NAME=${ZONE_NAME}" \
+             -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
+             -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
+             --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+          command: |
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+             -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" \
+             -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" \
+             -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" \
+             -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" \
+             -e "ZONE_NAME=${ZONE_NAME}" \
+             --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
           name: Setup Elasticsearch Index Settings
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "ZONE_NAME=${ZONE_NAME}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
+          command: |
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "ZONE_NAME=${ZONE_NAME}" \
+             --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
+          command: |
+            docker run \
+             -e "ENV=${ENV}" \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" \
+             -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
+             -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
+             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+             -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
       - run:
           name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
+          command: |
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
+             -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
+             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "ENV=${ENV}" \
+             -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
+             --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
       - run:
           name: 'Deploy - Web API - Global Tables'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
+          command: |
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
       - run:
           name: 'Deploy - Web API - Cognito Customize'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
+          command: |
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Cognito Create Users'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] ; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV}"
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" \
+               --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV}"
             else
               echo "skipping…"
             fi
       - run:
           name: 'Deploy - Web API - Cognito Create Court Users'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" \
+               --rm efcms /bin/sh -c "cd web-api && ./setup-court-users.sh ${ENV}"
             else
               echo "skipping…"
             fi
@@ -541,44 +651,132 @@ jobs:
           name: 'Deploy - Web API - Cognito Create IRS User'
           command: |
             if [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-irs-user.sh ${ENV}"
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" \
+               --rm efcms /bin/sh -c "cd web-api && ./setup-irs-user.sh ${ENV}"
             else
               echo "skipping…"
             fi
       - run:
-          name: 'Deploy - Web API - Run Migrations'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "DYNAMODB_ENDPOINT=dynamodb.us-east-1.amazonaws.com" --rm efcms /bin/sh -c "npm run build:assets && ./web-api/run-umzug.sh ${ENV}"
-          no_output_timeout: 30m
-      - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1"
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}"
             else
               echo "skipping…"
             fi
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-west-1"
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-west-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}"
             else
               echo "skipping…"
             fi
       - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
-            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
+             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+             --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
       - run:
           name: 'Deploy - Verify Private S3 Buckets'
           command: |
-            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-s3-buckets -- ${ENV}"
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             --rm efcms /bin/sh -c "npm run verify-private-s3-buckets -- ${ENV}"
       - run:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
-            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
+            docker run \
+             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
+
+  migrate:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t efcms -f Dockerfile .
+      - run:
+          name: Setup Migration Infrastructure
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
+               -e "ZONE_NAME=${ZONE_NAME}" \
+               --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
+            fi
+      - run:
+          name: Run Migration
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
+               -e "STREAM_ARN=${STREAM_ARN}" \
+               -e "ZONE_NAME=${ZONE_NAME}" \
+               --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
+            fi
+      - run:
+          name: Wait for SQS Queue to Empty
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "ENV=${ENV}" \
+               --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+            fi
 
   smoketests:
     docker:
@@ -601,21 +799,58 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
       - run:
           name: 'Pa11y Smoke Tests'
           command: npm run test:pa11y:smoketests
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
+
+  switch-colors:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild node-sass
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID >> $BASH_ENV"
+      - run:
+          name: 'Switch Colors'
+          command: npm run switch-colors
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run hourly below
+        - develop # run the related develop workflow below
         - prod # run with context workflow below
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
@@ -650,9 +885,15 @@ workflows:
       - deploy:
           requires:
             - build-client-coverage
-      - smoketests:
+      - migrate:
           requires:
             - deploy
+      - smoketests:
+          requires:
+            - migrate
+      - switch-colors:
+          requires:
+            - smoketests
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -696,20 +937,51 @@ workflows:
             branches:
               only:
                 - irs
+                - migration
                 - staging
                 - test
-                - migration
                 - master
                 - experimental1
                 - experimental2
+                - experimental3
                 - dawson
-      - smoketests:
+      - migrate:
           requires:
             - deploy
           filters:
             branches:
               only:
+                - irs
+                - migration
                 - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+      - smoketests:
+          requires:
+            - migrate
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - experimental1
+                - experimental2
+                - experimental3
+      - switch-colors:
+          requires:
+            - smoketests
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - master
+                - experimental1
+                - experimental2
+                - experimental3
+                - dawson
 
   build-and-deploy-with-context:
     jobs:

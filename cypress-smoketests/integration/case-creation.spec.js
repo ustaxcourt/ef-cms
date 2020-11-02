@@ -1,3 +1,4 @@
+const faker = require('faker');
 const {
   closeScannerSetupDialog,
   goToCreateCase,
@@ -29,11 +30,13 @@ const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 let token = null;
 
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
 describe('Petitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -57,7 +60,10 @@ describe('Petitioner', () => {
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
-      completeWizardStep3(filingTypes.INDIVIDUAL, 'Petitioner');
+      completeWizardStep3(
+        filingTypes.INDIVIDUAL,
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
+      );
       goToWizardStep4();
       completeWizardStep4();
       goToWizardStep5();
@@ -71,7 +77,7 @@ describe('Private practitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'privatePractitioner1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });
@@ -96,7 +102,7 @@ describe('Private practitioner', () => {
       goToWizardStep3();
       completeWizardStep3(
         filingTypes.PETITIONER_AND_SPOUSE,
-        'Private practitioner',
+        `${faker.name.firstName()} ${faker.name.lastName()}`,
       );
       goToWizardStep4();
       completeWizardStep4();
@@ -111,7 +117,7 @@ describe('Petitions clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
-      'Testing1234$',
+      DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
   });

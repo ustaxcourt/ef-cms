@@ -72,62 +72,6 @@ describe('trialSessionsHelper', () => {
     expect(result.showNoticeIssued).toEqual(false);
   });
 
-  it('should show the Number of Cases column for `open` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'open',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(true);
-  });
-
-  it('should NOT show the Number of Cases column for `new` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'new',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(false);
-  });
-
-  it('should NOT show the Number of Cases column for `closed` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'closed',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(false);
-  });
-
-  it('should NOT show the Number of Cases column for `all` sessions', () => {
-    const result = runCompute(trialSessionsHelper, {
-      state: {
-        currentViewMetadata: {
-          trialSessions: {
-            tab: 'all',
-          },
-        },
-      },
-    });
-
-    expect(result.showNumberOfCases).toEqual(false);
-  });
-
   it('should show the Session Status column for `all` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
@@ -212,7 +156,7 @@ describe('trialSessionsHelper', () => {
     expect(result.additionalColumnsShown).toEqual(0);
   });
 
-  it('should show 2 additional table columns for `open` sessions', () => {
+  it('should show 1 additional table column for `open` sessions', () => {
     const result = runCompute(trialSessionsHelper, {
       state: {
         currentViewMetadata: {
@@ -223,7 +167,7 @@ describe('trialSessionsHelper', () => {
       },
     });
 
-    expect(result.additionalColumnsShown).toEqual(2);
+    expect(result.additionalColumnsShown).toEqual(1);
   });
 
   it('should show 1 additional table column for `all` sessions', () => {
@@ -294,5 +238,151 @@ describe('trialSessionsHelper', () => {
     });
 
     expect(result.showUnassignedJudgeFilter).toBeFalsy();
+  });
+
+  describe('trialSessionJudges', () => {
+    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is Open', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'open',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge part 2',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).not.toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+
+    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is New', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'new',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge part 2',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).not.toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+
+    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is Closed', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'closed',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
+
+    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is All', async () => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          currentViewMetadata: {
+            trialSessions: {
+              tab: 'all',
+            },
+          },
+          judges: [
+            { name: 'I am not a legacy judge part 2', role: ROLES.judge },
+          ],
+          legacyAndCurrentJudges: [
+            { name: 'I am not a legacy judge', role: ROLES.judge },
+            { name: 'I am a legacy judge', role: ROLES.legacyJudge },
+          ],
+        },
+      });
+
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am not a legacy judge',
+            role: ROLES.judge,
+          }),
+        ]),
+      );
+      expect(result.trialSessionJudges).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'I am a legacy judge',
+            role: ROLES.legacyJudge,
+          }),
+        ]),
+      );
+    });
   });
 });

@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,12 +13,20 @@ export const SearchResults = connect(
   },
   function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
     return (
-      <>
+      <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">
               ({advancedSearchHelper.searchResultsCount}) Results
             </h1>
+            {advancedSearchHelper.showMaxResultsMessage && (
+              <WarningNotificationComponent
+                alertWarning={{
+                  message: `Your search has more than ${advancedSearchHelper.maxResults} results.  Refine your search for more accurate results.`,
+                }}
+                dismissable={false}
+              />
+            )}
 
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
@@ -95,7 +104,7 @@ export const SearchResults = connect(
             <p>Check your search terms and try again.</p>
           </div>
         )}
-      </>
+      </div>
     );
   },
 );

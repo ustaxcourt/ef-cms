@@ -10,12 +10,15 @@ import { state } from 'cerebral';
  * @returns {object} the alertSuccess object
  */
 export const getFileExternalDocumentAlertSuccessAction = ({
+  applicationContext,
   get,
   props,
   store,
 }) => {
+  const { NOTICE_EVENT_CODES } = applicationContext.getConstants();
   const documentToEdit = get(state.documentToEdit);
   const isCreatingOrder = get(state.isCreatingOrder);
+  const isCreatingNotice = NOTICE_EVENT_CODES.includes(props.eventCode);
 
   const alertSuccess = {
     message: 'Document filed and is accessible from the Docket Record.',
@@ -29,7 +32,15 @@ export const getFileExternalDocumentAlertSuccessAction = ({
   if (isCreatingOrder) {
     store.unset(state.isCreatingOrder);
     alertSuccess.message =
-      'Your document has been successfully created and attached to this message';
+      'Your document has been successfully created and attached to this message.';
+  }
+
+  if (isCreatingNotice) {
+    store.unset(state.isCreatingOrder);
+    const noticeDocketEntry = props.caseDetail.docketEntries.find(
+      entry => entry.docketEntryId === props.docketEntryId,
+    );
+    alertSuccess.message = `${noticeDocketEntry.documentTitle} saved.`;
   }
 
   if (documentToEdit) {

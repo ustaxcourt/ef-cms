@@ -9,7 +9,7 @@ describe('validateCaseDeadlineAction', () => {
   let successStub;
   let errorStub;
 
-  let mockCaseDeadline;
+  let mockCaseDeadline, mockCaseDetail;
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -18,6 +18,11 @@ describe('validateCaseDeadlineAction', () => {
     mockCaseDeadline = {
       deadlineDate: '2019-03-01T21:42:29.073Z',
       description: 'hello world',
+      docketNumber: '123-20',
+    };
+
+    mockCaseDetail = {
+      associatedJudge: 'Buch',
       docketNumber: '123-20',
     };
 
@@ -37,6 +42,7 @@ describe('validateCaseDeadlineAction', () => {
         presenter,
       },
       state: {
+        caseDetail: mockCaseDetail,
         form: mockCaseDeadline,
       },
     });
@@ -54,6 +60,7 @@ describe('validateCaseDeadlineAction', () => {
         presenter,
       },
       state: {
+        caseDetail: mockCaseDetail,
         form: mockCaseDeadline,
       },
     });

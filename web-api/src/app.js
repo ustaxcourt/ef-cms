@@ -125,14 +125,14 @@ const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
 const {
-  getAllCaseDeadlinesLambda,
-} = require('./caseDeadline/getAllCaseDeadlinesLambda');
-const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
+const {
+  getCaseDeadlinesLambda,
+} = require('./caseDeadline/getCaseDeadlinesLambda');
 const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
@@ -148,6 +148,9 @@ const {
 const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
+const {
+  getDocumentDownloadUrlLambda: v1GetDocumentDownloadUrlLambda,
+} = require('./v1/getDocumentDownloadUrlLambda');
 const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
@@ -232,6 +235,9 @@ const {
 const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
+const {
+  removePdfFromDocketEntryLambda,
+} = require('./documents/removePdfFromDocketEntryLambda');
 const {
   removeSignatureFromDocumentLambda,
 } = require('./documents/removeSignatureFromDocumentLambda');
@@ -344,7 +350,7 @@ const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
-const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
+const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
@@ -420,7 +426,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
-  app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
+  app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
 }
 /**
  * case-documents
@@ -455,6 +461,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:docketEntryId/remove-pdf',
+    lambdaWrapper(removePdfFromDocketEntryLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/sign',
@@ -874,7 +884,6 @@ app.get(
  * users
  */
 app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
-app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
 app.put(
   '/users/:userId/case/:docketNumber',
   lambdaWrapper(privatePractitionerCaseAssociationLambda),
@@ -910,6 +919,15 @@ app.get(
 app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
 app.get('/users', lambdaWrapper(getUserLambda));
 app.post('/users', lambdaWrapper(createUserLambda));
+
+/**
+ * v1 API
+ */
+app.get('/v1/cases/:docketNumber', lambdaWrapper(v1GetCaseLambda));
+app.get(
+  '/v1/cases/:docketNumber/entries/:key/document-download-url',
+  lambdaWrapper(v1GetDocumentDownloadUrlLambda),
+);
 
 /**
  * work-items

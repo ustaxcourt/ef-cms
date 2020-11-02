@@ -10,8 +10,16 @@
   {
     "eventCode": "OAJ",
     "documentType": "Order that case is assigned",
-    "documentTitle": "Order [Judge name] [Anything]",
+    "documentTitle": "Order that case is assigned to [Judge name] [Anything]",
     "scenario": "Type B",
+    "isOrder": true,
+    "requiresSignature": true
+  },
+  {
+    "eventCode": "SPOS",
+    "documentType": "Standing Pretrial Order",
+    "documentTitle": "Standing Pretrial Order",
+    "scenario": "Type A",
     "isOrder": true,
     "requiresSignature": true
   },
@@ -318,7 +326,7 @@
   {
     "eventCode": "MOP",
     "documentType": "Memorandum Opinion",
-    "documentTitle": "Memorandum Opinion [judge]",
+    "documentTitle": "Memorandum Opinion [judge] [Anything]",
     "scenario": "Type B",
     "isOpinion": true
   },
@@ -333,7 +341,7 @@
   {
     "eventCode": "SOP",
     "documentType": "Summary Opinion",
-    "documentTitle": "Summary Opinion [judge]",
+    "documentTitle": "Summary Opinion [judge] [Anything]",
     "scenario": "Type B",
     "isOpinion": true
   },
@@ -396,7 +404,7 @@
   {
     "eventCode": "TCOP",
     "documentType": "T.C. Opinion",
-    "documentTitle": "T.C. Opinion [judge] [anything]",
+    "documentTitle": "T.C. Opinion [judge] [Anything]",
     "scenario": "Type B",
     "isOpinion": true
   },

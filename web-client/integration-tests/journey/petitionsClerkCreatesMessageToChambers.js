@@ -14,7 +14,7 @@ export const petitionsClerkCreatesMessageToChambers = test => {
     });
   };
 
-  return it('Petitions clerk sends a message to armensChambers', async () => {
+  return it('Petitions clerk sends a message to colvinsChambers', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -23,12 +23,12 @@ export const petitionsClerkCreatesMessageToChambers = test => {
 
     await test.runSequence('updateSectionInCreateMessageModalSequence', {
       key: 'toSection',
-      value: JUDGES_CHAMBERS.ARMENS_CHAMBERS_SECTION.section,
+      value: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
     });
 
     await test.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
-      value: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5', //armensChambers
+      value: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5', //colvinsChambers
     });
 
     const messageDocument = getHelper().documents[0];

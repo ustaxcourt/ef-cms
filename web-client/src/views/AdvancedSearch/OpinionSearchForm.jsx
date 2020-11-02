@@ -9,7 +9,7 @@ import React from 'react';
 export const OpinionSearchForm = connect(
   {
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    judges: state.judges,
+    judges: state.legacyAndCurrentJudges,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
@@ -25,7 +25,10 @@ export const OpinionSearchForm = connect(
   }) {
     return (
       <>
-        <div className="header-with-blue-background grid-row">
+        <div
+          className="header-with-blue-background grid-row"
+          id="opinion-search-form"
+        >
           <h3>Search Opinions</h3>
         </div>
         <div className="blue-container opinion-search-container">
@@ -43,6 +46,7 @@ export const OpinionSearchForm = connect(
                 <div className="grid-row margin-top-10">
                   <div className="tablet:grid-col-12">
                     <Button
+                      aria-describedby="opinion-search-form"
                       className="margin-bottom-0"
                       id="advanced-search-button"
                       type="submit"
@@ -51,6 +55,7 @@ export const OpinionSearchForm = connect(
                     </Button>
                     <Button
                       link
+                      aria-describedby="opinion-search-form"
                       className="padding-0 ustc-button--mobile-inline"
                       onClick={e => {
                         e.preventDefault();

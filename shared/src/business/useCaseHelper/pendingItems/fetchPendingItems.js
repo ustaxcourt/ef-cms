@@ -1,7 +1,3 @@
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { omit, pick } = require('lodash');
-
 /**
  * fetchPendingItems
  *
@@ -11,69 +7,30 @@ const { omit, pick } = require('lodash');
  * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the pending items found
  */
-exports.fetchPendingItems = async ({
-  applicationContext,
-  docketNumber,
-  judge,
-}) => {
+exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
   const source = [
     'associatedJudge',
-    'docketEntries',
     'caseCaption',
     'docketNumber',
     'docketNumberSuffix',
     'status',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
   ];
 
-  let foundCases;
-
-  if (docketNumber) {
-    const caseResult = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-    const caseEntity = new Case(caseResult, { applicationContext });
-    foundCases = [pick(caseEntity.validate().toRawObject(), source)];
-  } else {
-    foundCases = await applicationContext
-      .getPersistenceGateway()
-      .fetchPendingItems({
-        applicationContext,
-        judge,
-        source,
-      });
-  }
-
-  const foundDocuments = [];
-
-  foundCases.forEach(foundCase => {
-    const foundCaseEntity = new Case(foundCase, {
+  const pendingItemResults = await applicationContext
+    .getPersistenceGateway()
+    .fetchPendingItems({
       applicationContext,
+      judge,
+      page,
+      source,
     });
-
-    foundCaseEntity.docketEntries.forEach(document => {
-      if (document.pending) {
-        foundDocuments.push({
-          ...omit(
-            new DocketEntry(
-              {
-                ...document,
-              },
-              { applicationContext },
-            ).toRawObject(),
-            'entityName',
-          ),
-          associatedJudge: foundCaseEntity.associatedJudge,
-          caseCaption: foundCaseEntity.caseCaption,
-          docketNumber: foundCaseEntity.docketNumber,
-          docketNumberSuffix: foundCaseEntity.docketNumberSuffix,
-          status: foundCaseEntity.status,
-        });
-      }
-    });
-  });
-
-  return foundDocuments;
+  const foundDocuments = pendingItemResults.results;
+  const documentsTotal = pendingItemResults.total;
+  return {
+    foundDocuments,
+    total: documentsTotal,
+  };
 };

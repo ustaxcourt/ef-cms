@@ -75,6 +75,105 @@ describe('bulkIndexRecords', () => {
       applicationContext,
       records: records,
     });
+
     expect(result.failedRecords).toEqual([newImageRecord]);
+  });
+
+  it('uses the routing parameter when the item is a DocketEntry', async () => {
+    applicationContext.getSearchClient.mockReturnValue({
+      bulk: jest.fn().mockReturnValue({
+        errors: false,
+        items: [{}],
+        took: 100,
+      }),
+    });
+
+    await bulkIndexRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            NewImage: {
+              entityName: { S: 'DocketEntry' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'docket-entry|8675309' },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
+      body: [
+        {
+          index: {
+            _id: 'case|123-45_docket-entry|8675309',
+            _index: 'efcms-docket-entry',
+            routing: 'case|123-45_case|123-45|mapping',
+          },
+        },
+        {
+          entityName: {
+            S: 'DocketEntry',
+          },
+          pk: {
+            S: 'case|123-45',
+          },
+          sk: {
+            S: 'docket-entry|8675309',
+          },
+        },
+      ],
+      refresh: false,
+    });
+  });
+
+  it('sets an altered _id if the item is a CaseDocketEntryMapping', async () => {
+    applicationContext.getSearchClient.mockReturnValue({
+      bulk: jest.fn().mockReturnValue({
+        errors: false,
+        items: [{}],
+        took: 100,
+      }),
+    });
+
+    await bulkIndexRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            NewImage: {
+              entityName: { S: 'CaseDocketEntryMapping' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'case|123-45' },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
+      body: [
+        {
+          index: {
+            _id: 'case|123-45_case|123-45|mapping',
+            _index: 'efcms-docket-entry',
+            routing: null,
+          },
+        },
+        {
+          entityName: {
+            S: 'CaseDocketEntryMapping',
+          },
+          pk: {
+            S: 'case|123-45',
+          },
+          sk: {
+            S: 'case|123-45',
+          },
+        },
+      ],
+      refresh: false,
+    });
   });
 });

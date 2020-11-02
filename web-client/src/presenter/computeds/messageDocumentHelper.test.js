@@ -487,7 +487,7 @@ describe('messageDocumentHelper', () => {
             docketEntries: [
               {
                 ...baseDocketEntry,
-                signedAt: '123',
+                signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
           },
@@ -512,7 +512,7 @@ describe('messageDocumentHelper', () => {
               {
                 ...baseDocketEntry,
                 eventCode: 'SDEC',
-                signedAt: '123',
+                signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
           },
@@ -1010,7 +1010,31 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('showSignStipulatedDecisionButton', () => {
-    it('should be true if the user is an internal user, the eventCode is PSDE, and the SDEC eventCode is not in the documents', () => {
+    it('should be true if the user is an internal user, the eventCode is PSDE, the PSDE is served, and the SDEC eventCode is not in the documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [
+              {
+                ...baseDocketEntry,
+                documentType: 'Proposed Stipulated Decision',
+                eventCode: 'PSDE',
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be false if the user is an internal user, the eventCode is PSDE, and the PSDE is not served', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1030,10 +1054,10 @@ describe('messageDocumentHelper', () => {
         },
       });
 
-      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+      expect(result.showSignStipulatedDecisionButton).toBeFalsy();
     });
 
-    it('should be true if the user is an internal user, the document code is PSDE, and an archived SDEC eventCode is in the documents', () => {
+    it('should be true if the user is an internal user, the document code is PSDE, the PSDE is served, and an archived SDEC eventCode is in the documents', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1044,6 +1068,7 @@ describe('messageDocumentHelper', () => {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
+                servedAt: '2019-08-25T05:00:00.000Z',
               },
               {
                 ...baseDocketEntry,
@@ -1063,7 +1088,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be false if the user is an internal user, the document code is PSDE, and the SDEC eventCode is in the documents (and not archived)', () => {
+    it('should be false if the user is an internal user, the document code is PSDE, the PSDE is served, and the SDEC eventCode is in the documents (and not archived)', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1074,6 +1099,7 @@ describe('messageDocumentHelper', () => {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
+                servedAt: '2019-08-25T05:00:00.000Z',
               },
               {
                 ...baseDocketEntry,
@@ -1092,7 +1118,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(false);
     });
 
-    it('should be false if the user is an external user, the eventCode is PSDE, and the SDEC event code is not in the documents', () => {
+    it('should be false if the user is an external user, the eventCode is PSDE, the PSDE is served, and the SDEC event code is not in the documents', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
       const result = runCompute(messageDocumentHelper, {
@@ -1105,6 +1131,7 @@ describe('messageDocumentHelper', () => {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
                 eventCode: 'PSDE',
+                servedAt: '2019-08-25T05:00:00.000Z',
               },
             ],
           },

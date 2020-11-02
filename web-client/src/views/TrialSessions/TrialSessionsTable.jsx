@@ -11,13 +11,11 @@ export const TrialSessionsTable = connect(
       state.formattedTrialSessions.filteredTrialSessions[props.filter],
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
     trialSessionsHelper: state.trialSessionsHelper,
-    users: state.users,
   },
   function TrialSessionsTable({
     formattedTrialSessions,
     trialSessionsHelper,
     trialSessionTypes,
-    users,
   }) {
     return (
       <React.Fragment>
@@ -29,7 +27,7 @@ export const TrialSessionsTable = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaLabel="session"
+                  aria-label="session"
                   bind="screenMetadata.trialSessionFilters.sessionType"
                   id="sessionFilter"
                   name="sessionType"
@@ -44,7 +42,7 @@ export const TrialSessionsTable = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaLabel="location"
+                  aria-label="location"
                   bind="screenMetadata.trialSessionFilters.trialLocation"
                   id="locationFilter"
                   name="trialLocation"
@@ -55,19 +53,23 @@ export const TrialSessionsTable = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  ariaLabel="judge"
+                  aria-label="judge"
                   bind="screenMetadata.trialSessionFilters.judge.userId"
                   id="judgeFilter"
                   name="judge"
                 >
                   <option value="">-Judge-</option>
-                  {users.map((judge, idx) => (
+                  {trialSessionsHelper.trialSessionJudges.map((judge, idx) => (
                     <option key={idx} value={judge.userId}>
                       {judge.name}
                     </option>
                   ))}
+
                   {trialSessionsHelper.showUnassignedJudgeFilter && (
-                    <option key={users.length} value="unassigned">
+                    <option
+                      key={trialSessionsHelper.trialSessionJudges.length}
+                      value="unassigned"
+                    >
                       Unassigned
                     </option>
                   )}
@@ -89,9 +91,6 @@ export const TrialSessionsTable = connect(
               <th>Location</th>
               <th>Type</th>
               <th>Judge</th>
-              {trialSessionsHelper.showNumberOfCases && (
-                <th aria-label="Number of cases">No. of cases</th>
-              )}
               {trialSessionsHelper.showNoticeIssued && <th>Notice issued</th>}
               {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
             </tr>
@@ -134,9 +133,6 @@ export const TrialSessionsTable = connect(
                     </td>
                     <td>{item.sessionType}</td>
                     <td>{item.judge && item.judge.name}</td>
-                    {trialSessionsHelper.showNumberOfCases && (
-                      <td>{item.maxCases}</td>
-                    )}
                     {trialSessionsHelper.showNoticeIssued && (
                       <td>{item.formattedNoticeIssuedDate}</td>
                     )}

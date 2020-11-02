@@ -75,8 +75,14 @@
               - "S"
               - "SL"
               - "W"
+          hasIrsPractitioner: 
+            type: "boolean"
           isSealed: 
             type: "boolean"
+          partyType: 
+            type: "any"
+            flags: 
+              presence: "forbidden"
           receivedAt: 
             type: "any"
             flags: 
@@ -428,6 +434,7 @@
                 - "Hearing Exhibits"
                 - "Hearing before"
                 - "Letter"
+                - "Limited Entry of Appearance"
                 - "Memorandum"
                 - "Memorandum Opinion"
                 - "Memorandum in Support"
@@ -440,6 +447,7 @@
                 - "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal"
                 - "Motion for Continuance"
                 - "Motion for Default and Dismissal"
+                - "Motion for Document Subpoena Hearing"
                 - "Motion for Entry of Decision"
                 - "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)"
                 - "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156"
@@ -519,7 +527,7 @@
                 - "Motion to Dismiss for Lack of Jurisdiction"
                 - "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]"
                 - "Motion to Dismiss for Lack of Prosecution"
-                - "Motion to Dismiss on Grounds of Mootness"
+                - "Motion to Dismiss on Ground of Mootness"
                 - "Motion to Disqualify Counsel"
                 - "Motion to Enforce Subpoena"
                 - "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260"
@@ -577,6 +585,7 @@
                 - "Notice of Change of Counsel for Non-Party"
                 - "Notice of Change of Telephone Number"
                 - "Notice of Clarification of Tax Matters Partner"
+                - "Notice of Completion"
                 - "Notice of Concession"
                 - "Notice of Consistent Agreement Pursuant to Rule 248(c)(1)"
                 - "Notice of Death of Counsel"
@@ -603,6 +612,7 @@
                 - "Notice of Termination Assessment"
                 - "Notice of Trial"
                 - "Notice of Unavailability"
+                - "Notice of Withdrawal as Counsel"
                 - "Objection"
                 - "Objection [anything]"
                 - "Opposition"
@@ -652,11 +662,12 @@
                 - "Prehearing Memorandum"
                 - "Pretrial Memorandum"
                 - "Proposed Stipulated Decision"
+                - "Proposed Trial Exhibits"
                 - "Ratification"
                 - "Ratification of Petition"
                 - "Record on Appeal"
                 - "Redacted"
-                - "Redacted Petition Filed"
+                - "Redacted Petition"
                 - "Reference List of Redacted Information"
                 - "Reply"
                 - "Report"
@@ -775,6 +786,7 @@
                 - "FTRL"
                 - "HE"
                 - "HEAR"
+                - "LEA"
                 - "LTR"
                 - "M000"
                 - "M001"
@@ -910,6 +922,7 @@
                 - "M134"
                 - "M135"
                 - "M136"
+                - "M137"
                 - "M218"
                 - "MEMO"
                 - "MINC"
@@ -936,12 +949,14 @@
                 - "NNOB"
                 - "NOA"
                 - "NOB"
+                - "NOC"
                 - "NODC"
                 - "NOEI"
                 - "NOEP"
                 - "NOI"
                 - "NOST"
                 - "NOT"
+                - "NOTW"
                 - "NOU"
                 - "NPB"
                 - "NPJR"
@@ -1000,6 +1015,7 @@
                 - "PHM"
                 - "PMT"
                 - "PSDE"
+                - "PTE"
                 - "PTFR"
                 - "PTRL"
                 - "RAT"
@@ -1045,6 +1061,7 @@
                 - "SPD"
                 - "SPML"
                 - "SPMT"
+                - "SPOS"
                 - "SPTN"
                 - "SPTO"
                 - "SRMB"
@@ -1215,8 +1232,42 @@
           name: "min"
           args: 
             limit: 1
+    hasIrsPractitioner: 
+      type: "boolean"
+      flags: 
+        presence: "required"
     isSealed: 
       type: "boolean"
+    partyType: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+        description: "Party type of the case petitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Conservator"
+        - "Corporation"
+        - "Custodian"
+        - "Donor"
+        - "Estate with an executor/personal representative/fiduciary/etc."
+        - "Estate without an executor/personal representative/fiduciary/etc."
+        - "Guardian"
+        - "Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)"
+        - "Next friend for a minor (without a guardian, conservator, or other like fiduciary)"
+        - "Partnership (as the Tax Matters Partner)"
+        - "Partnership (as a partnership representative under the BBA regime)"
+        - "Partnership (as a partner other than Tax Matters Partner)"
+        - "Petitioner"
+        - "Petitioner & deceased spouse"
+        - "Petitioner & spouse"
+        - "Surviving spouse"
+        - "Transferee"
+        - "Trust"
     receivedAt: 
       type: "date"
       flags: 

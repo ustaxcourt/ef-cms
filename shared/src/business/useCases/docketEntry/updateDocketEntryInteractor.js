@@ -151,10 +151,12 @@ exports.updateDocketEntryInteractor = async ({
       docketEntryEntity.setAsServed(servedParties.all);
       docketEntryEntity.setAsProcessingStatusAsCompleted();
 
+      caseEntity.updateDocketEntry(docketEntryEntity);
+
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
-        docketEntryEntity,
+        docketEntryId: docketEntryEntity.docketEntryId,
         servedParties,
       });
     } else {

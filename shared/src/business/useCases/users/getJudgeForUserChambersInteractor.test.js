@@ -51,8 +51,8 @@ describe('getJudgeForUserChambersInteractor', () => {
     applicationContext
       .getUseCases()
       .getUserInteractor.mockImplementation(() => {
-        const currentUser = applicationContext.getCurrentUser();
-        return allUsers.find(user => user.userId === currentUser.userId);
+        const mockCurrentUser = applicationContext.getCurrentUser();
+        return allUsers.find(user => user.userId === mockCurrentUser.userId);
       });
     applicationContext
       .getUseCases()

@@ -7,17 +7,23 @@ const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 exports.sendServedPartiesEmails = async ({
   applicationContext,
   caseEntity,
-  docketEntryEntity,
+  docketEntryId,
   servedParties,
 }) => {
-  const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
+  const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
+
+  const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
+
+  if (docketEntryEntity.index === undefined) {
+    throw new Error('Cannot serve a docket entry without an index.');
+  }
 
   const {
-    docketEntryId,
     documentTitle,
     documentType,
     eventCode,
     filedBy,
+    index: docketEntryNumber,
     servedAt,
   } = docketEntryEntity;
 
@@ -41,10 +47,11 @@ exports.sendServedPartiesEmails = async ({
         data: {
           caseDetail: {
             caseTitle: Case.getCaseTitle(caseCaption),
-            docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
+            docketNumber: docketNumber,
+            docketNumberWithSuffix: docketNumberWithSuffix,
           },
           currentDate,
-          docketEntryNumber: docketEntryEntity.index,
+          docketEntryNumber,
           documentDetail: {
             docketEntryId,
             documentTitle: documentTitle || documentType,
@@ -65,9 +72,7 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        docketNumber: `${caseEntity.docketNumber}${
-          caseEntity.docketNumberSuffix || ''
-        }`,
+        docketNumber: docketNumberWithSuffix,
         emailContent: '',
       },
       destinations,

@@ -4,11 +4,13 @@ const args = process.argv.slice(2);
 const CHUNK_SIZE = 25;
 
 if (args.length < 1) {
-  console.error('must provide an environment to delete: [dev, stg, prod]');
+  console.error(
+    'must provide a dynamodb table name to clear: [efcms-dev, efcms-dev-1]',
+  );
   process.exit(1);
 }
 
-const env = args[0];
+const dynamoDbTableName = args[0];
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
@@ -25,7 +27,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     await documentClient
       .scan({
         ExclusiveStartKey: lastKey,
-        TableName: `efcms-${env}`,
+        TableName: dynamoDbTableName,
       })
       .promise()
       .then(async results => {
@@ -40,7 +42,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
           await documentClient
             .batchWrite({
               RequestItems: {
-                [`efcms-${env}`]: c.map(item => ({
+                [dynamoDbTableName]: c.map(item => ({
                   DeleteRequest: {
                     Key: {
                       pk: item.pk,

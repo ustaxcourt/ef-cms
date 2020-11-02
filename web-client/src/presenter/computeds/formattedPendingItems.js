@@ -17,7 +17,7 @@ export const formatPendingItem = (item, { applicationContext }) => {
 export const formattedPendingItems = (get, applicationContext) => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
-  let items = get(state.pendingItems).map(item =>
+  let items = (get(state.pendingReports.pendingItems) || []).map(item =>
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);

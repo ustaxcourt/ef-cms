@@ -5,5 +5,6 @@ export const docketClerkConsolidatesCases = test => {
 
     expect(test.getState('caseDetail')).toHaveProperty('consolidatedCases');
     expect(test.getState('caseDetail.consolidatedCases').length).toEqual(2);
+    expect(test.getState('modal.showModal')).toBeUndefined();
   });
 };

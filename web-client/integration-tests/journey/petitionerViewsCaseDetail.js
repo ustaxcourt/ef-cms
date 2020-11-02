@@ -3,17 +3,14 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  INITIAL_DOCUMENT_TYPES,
-} = applicationContext.getConstants();
+const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
 export const petitionerViewsCaseDetail = (test, overrides = {}) => {
   return it('petitioner views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    const documentCount = overrides.documentCount || 3;
+    const documentCount = overrides.documentCount || 2;
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
@@ -35,12 +32,7 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
 
     //verify that event codes were added to initial documents/docket entries
     expect(caseDetailFormatted.formattedDocketEntries).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ eventCode: 'P' }),
-        expect.objectContaining({
-          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
-        }),
-      ]),
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'P' })]),
     );
 
     const rqtDocument = caseDetailFormatted.formattedDocketEntries.find(

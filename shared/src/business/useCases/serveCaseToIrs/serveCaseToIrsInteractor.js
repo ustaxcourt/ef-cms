@@ -61,22 +61,6 @@ exports.addDocketEntryForPaymentStatus = ({
   }
 };
 
-exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
-  const stinDocument = caseEntity.docketEntries.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
-  );
-
-  if (stinDocument) {
-    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
-      applicationContext,
-      key: stinDocument.docketEntryId,
-    });
-
-    return stinDocument.docketEntryId;
-  }
-};
-
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
@@ -130,6 +114,10 @@ exports.serveCaseToIrsInteractor = async ({
 
   caseEntity.markAsSentToIRS();
 
+  if (caseEntity.isPaper) {
+    addDocketEntries({ caseEntity });
+  }
+
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
@@ -137,7 +125,7 @@ exports.serveCaseToIrsInteractor = async ({
       document => document.documentType === initialDocumentType.documentType,
     );
 
-    if (initialDocketEntry) {
+    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
       initialDocketEntry.setAsServed([
         {
           name: 'IRS',
@@ -155,13 +143,13 @@ exports.serveCaseToIrsInteractor = async ({
           .sendIrsSuperuserPetitionEmail({
             applicationContext,
             caseEntity,
-            docketEntryEntity: initialDocketEntry,
+            docketEntryId: initialDocketEntry.docketEntryId,
           });
       } else {
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity: initialDocketEntry,
+          docketEntryId: initialDocketEntry.docketEntryId,
           servedParties: {
             //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
             electronic: [],
@@ -181,15 +169,6 @@ exports.serveCaseToIrsInteractor = async ({
     .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
-
-  //This functionality will probably change soon
-  //  deletedStinDocketEntryId = await exports.deleteStinIfAvailable({
-  //   applicationContext,
-  //   caseEntity,
-  // });
-  // caseEntity.docketEntries = caseEntity.docketEntries.filter(
-  //   item => item.docketEntryId !== deletedStinDocketEntryId,
-  // );
 
   const petitionDocument = caseEntity.docketEntries.find(
     document =>
@@ -308,8 +287,6 @@ exports.serveCaseToIrsInteractor = async ({
   let urlToReturn;
 
   if (caseEntityToUpdate.isPaper) {
-    addDocketEntries({ caseEntity: caseEntityToUpdate });
-
     ({
       url: urlToReturn,
     } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({

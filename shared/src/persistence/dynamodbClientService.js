@@ -40,11 +40,10 @@ const filterEmptyStrings = params => {
 };
 
 const getTableName = ({ applicationContext }) =>
-  `efcms-${
-    (applicationContext.environment || applicationContext.getEnvironment())
-      .stage
-  }`;
-
+  (applicationContext.environment &&
+    applicationContext.environment.dynamoDbTableName) ||
+  (applicationContext.getEnvironment() &&
+    applicationContext.getEnvironment().dynamoDbTableName);
 const getDeployTableName = ({ applicationContext }) =>
   `efcms-deploy-${
     (applicationContext.environment || applicationContext.getEnvironment())
@@ -151,9 +150,6 @@ exports.get = params => {
     .promise()
     .then(res => {
       return removeAWSGlobalFields(res.Item);
-    })
-    .catch(() => {
-      return undefined;
     });
 };
 
@@ -177,6 +173,41 @@ exports.query = params => {
       result.Items.forEach(removeAWSGlobalFields);
       return result.Items;
     });
+};
+
+/**
+ * GET for aws-sdk dynamodb client
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
+ */
+exports.queryFull = async params => {
+  let hasMoreResults = true;
+  let lastKey = null;
+  let allResults = [];
+  while (hasMoreResults) {
+    hasMoreResults = false;
+
+    const subsetResults = await params.applicationContext
+      .getDocumentClient()
+      .query({
+        TableName: getTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...params,
+        ExclusiveStartKey: lastKey,
+      })
+      .promise();
+
+    hasMoreResults = !!subsetResults.LastEvaluatedKey;
+    lastKey = subsetResults.LastEvaluatedKey;
+
+    subsetResults.Items.forEach(removeAWSGlobalFields);
+
+    allResults = [...allResults, ...subsetResults.Items];
+  }
+
+  return allResults;
 };
 
 /**

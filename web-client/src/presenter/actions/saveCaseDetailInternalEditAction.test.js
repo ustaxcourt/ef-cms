@@ -103,6 +103,7 @@ describe('saveCaseDetailInternalEditAction', () => {
 
     expect(uploadedDocument).toEqual({
       docketEntryId: mockUploadedKey,
+      documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentTitle,
       documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
     });
   });
@@ -191,6 +192,7 @@ describe('saveCaseDetailInternalEditAction', () => {
       expect.arrayContaining([
         {
           docketEntryId: mockUploadedKey,
+          documentTitle: 'Request for Place of Trial at [Place]',
           documentType: 'Request for Place of Trial',
         },
       ]),

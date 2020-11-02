@@ -23,6 +23,7 @@ import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateSe
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
+import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -64,6 +65,7 @@ import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { pendingReportListHelper } from './computeds/pendingReportListHelper';
 import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
@@ -118,6 +120,7 @@ const helpers = {
   contactEditHelper,
   contactsHelper,
   correspondenceViewerHelper,
+  createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
@@ -157,6 +160,7 @@ const helpers = {
   paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
+  pendingReportListHelper,
   petitionQcHelper,
   practitionerDetailHelper,
   practitionerSearchFormHelper,
@@ -188,6 +192,7 @@ const helpers = {
 
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
     // used by the delete draft document modal
@@ -196,11 +201,13 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
+  caseDeadlineReport: {},
   caseDetail: {},
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
   // TODO: replace with state.form
+  currentJudges: [],
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -248,6 +255,8 @@ export const baseState = {
   },
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  judges: [],
+  legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
@@ -265,6 +274,7 @@ export const baseState = {
     signatureApplied: false,
     signatureData: null,
   },
+  pendingReports: {},
   permissions: null,
   practitionerDetail: {},
   previewPdfFile: null,
@@ -290,7 +300,9 @@ export const baseState = {
   sessionMetadata: {
     docketRecordSort: [],
   },
+
   showValidation: false,
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

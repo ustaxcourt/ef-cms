@@ -213,5 +213,7 @@ module.exports = {
   addCaseToTrialSession,
   createCase,
   createTrialSession,
+  getClientId,
+  getUserPoolId,
   getUserToken,
 };
