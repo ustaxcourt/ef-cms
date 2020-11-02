@@ -276,7 +276,6 @@ exports.updatePetitionerInformationInteractor = async ({
       servedParties,
       user,
     });
-
     const privatePractitionersRepresentingSecondaryContact = caseEntity.privatePractitioners.filter(
       d => d.representingSecondary,
     );
@@ -300,7 +299,7 @@ exports.updatePetitionerInformationInteractor = async ({
       servedParties,
     });
 
-    if (primaryChangeDocs.changeOfAddressPdfWithCover) {
+    if (primaryChangeDocs && primaryChangeDocs.changeOfAddressPdfWithCover) {
       await copyToNewPdf({
         addressPages,
         applicationContext,
@@ -310,13 +309,16 @@ exports.updatePetitionerInformationInteractor = async ({
         ),
       });
     }
-    if (secondaryChangeDocs.changeOfAddressPdfWithCover) {
+    if (
+      secondaryChangeDocs &&
+      secondaryChangeDocs.changeOfAddressPdfWithCover
+    ) {
       await copyToNewPdf({
         addressPages,
         applicationContext,
         newPdfDoc: fullDocument,
         noticeDoc: await PDFDocument.load(
-          primaryChangeDocs.changeOfAddressPdfWithCover,
+          secondaryChangeDocs.changeOfAddressPdfWithCover,
         ),
       });
     }
