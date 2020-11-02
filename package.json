@@ -90,6 +90,7 @@
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "parcel-plugin-static-files-copy": "^2.5.0",
+    "parse-full-name": "^1.2.4",
     "pdf-lib": "^1.11.2",
     "pdfjs-dist": "2.3.200",
     "pixelmatch": "^5.2.1",
