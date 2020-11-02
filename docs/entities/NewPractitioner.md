@@ -643,6 +643,20 @@
       allow: 
         - "Attorney"
         - "Non-Attorney"
+    serviceIndicator: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Electronic"
+        - "None"
+        - "Paper"
     suffix: 
       type: "string"
       flags: 

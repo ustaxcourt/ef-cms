@@ -43,7 +43,7 @@ describe('Advanced search', () => {
       clickOnSearchTab('opinion');
       enterDocumentKeywordForOpinionSearch('opinion');
       enterStartDateForOpinionSearch('08/03/1995');
-      enterDocumentDocketNumber('105-20L');
+      enterDocumentDocketNumber('124-20L');
       searchForDocuments();
       expect(searchResultsTable()).to.exist;
     });
