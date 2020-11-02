@@ -32,7 +32,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
-        opinionType: 'T.C. Opinion',
+        opinionType: 'Summary Opinion',
         startDate: '2001-01-01',
       },
     });
@@ -42,9 +42,8 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     expect(test.getState('searchResults')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-          documentTitle:
-            'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+          docketEntryId: '659d001a-4d91-41f4-acd8-8417a1d2be49',
+          documentTitle: 'Summary Opinion Chief Judge Fieri',
         }),
       ]),
     );

@@ -26,7 +26,12 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "route53:ListHostedZones",
         "route53:ChangeResourceRecordSets",
         "route53:ListTagsForResource",
-        "route53:ListHostedZonesByName"
+        "route53:ListHostedZonesByName",
+        "route53:CreateHealthCheck",
+        "route53:DeleteHealthCheck",
+        "route53:GetHealthCheck",
+        "route53:ListHealthChecks",
+        "route53:UpdateHealthCheck"
       ],
       "Resource": "*"
     },

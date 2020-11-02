@@ -1,6 +1,5 @@
 const {
   entityName: irsPractitionerEntityName,
-  IrsPractitioner,
 } = require('../../entities/IrsPractitioner');
 const {
   entityName: practitionerEntityName,
@@ -8,7 +7,6 @@ const {
 } = require('../../entities/Practitioner');
 const {
   entityName: privatePractitionerEntityName,
-  PrivatePractitioner,
 } = require('../../entities/PrivatePractitioner');
 const {
   isAuthorized,
@@ -55,19 +53,11 @@ const updateUserContactInformationInteractor = async ({
   }
 
   let userEntity;
-  if (user.entityName === privatePractitionerEntityName) {
-    userEntity = new PrivatePractitioner({
-      ...user,
-      contact: { ...contactInfo },
-      isUpdatingInformation: true,
-    });
-  } else if (user.entityName === irsPractitionerEntityName) {
-    userEntity = new IrsPractitioner({
-      ...user,
-      contact: { ...contactInfo },
-      isUpdatingInformation: true,
-    });
-  } else if (user.entityName === practitionerEntityName) {
+  if (
+    user.entityName === privatePractitionerEntityName ||
+    user.entityName === irsPractitionerEntityName ||
+    user.entityName === practitionerEntityName
+  ) {
     userEntity = new Practitioner({
       ...user,
       contact: { ...contactInfo },
