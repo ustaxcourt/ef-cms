@@ -1,5 +1,10 @@
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
+const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
 /**
@@ -36,7 +41,29 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseSource, { applicationContext });
+  let caseEntity;
+  if (caseSource.sealedDate) {
+    if (user && user.userId) {
+      const isAuthorizedToViewSealedCase = isAuthorized(
+        user,
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        caseSource.userId,
+      );
+
+      if (isAuthorizedToViewSealedCase || isAssociated) {
+        caseEntity = new Case(caseSource, { applicationContext });
+      } else {
+        // unassociated user viewing sealed case
+        throw new UnauthorizedError('Unauthorized to view sealed case.');
+      }
+    } else {
+      //public user
+      throw new UnauthorizedError('Unauthorized to view sealed case.');
+    }
+  } else {
+    caseEntity = new Case(caseSource, { applicationContext });
+  }
+
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
