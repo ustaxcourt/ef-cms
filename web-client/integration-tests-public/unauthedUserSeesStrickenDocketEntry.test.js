@@ -19,6 +19,7 @@ import { setupTest } from './helpers';
 import { unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully } from './journey/unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
+import { unauthedUserSearchesForStrickenOrder } from './journey/unauthedUserSearchesForStrickenOrder';
 import { unauthedUserSeesStrickenDocketEntry } from './journey/unauthedUserSeesStrickenDocketEntry';
 
 const test = setupTest();
@@ -68,7 +69,7 @@ describe('Unauthed user views stricken docket entry for externally-filed documen
 describe('Docketclerk creates an order and strikes it', () => {
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
-    documentTitle: 'Order',
+    documentTitle: 'Order that is stricken',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
@@ -83,4 +84,9 @@ describe('Docketclerk creates an order and strikes it', () => {
 describe('Unauthed user views stricken docket entry for order', () => {
   unauthedUserSeesStrickenDocketEntry(test, 4);
   unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
+});
+
+describe('Unauthed user searches for stricken order', () => {
+  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserSearchesForStrickenOrder(test);
 });
