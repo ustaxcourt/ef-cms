@@ -1,3 +1,5 @@
+const { refreshElasticsearchIndex } = require('../helpers');
+
 export const respondentUpdatesAddress = test => {
   return it('respondent updates address', async () => {
     await test.runSequence('gotoUserContactEditSequence');
@@ -21,6 +23,8 @@ export const respondentUpdatesAddress = test => {
     });
 
     await test.runSequence('submitUpdateUserContactInformationSequence');
+
+    await refreshElasticsearchIndex();
 
     expect(test.getState('validationErrors')).toEqual({});
   });
