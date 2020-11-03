@@ -174,7 +174,7 @@ exports.generateChangeOfAddress = async ({
 
         caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
           docketEntryId: changeOfAddressDocketEntry.docketEntryId,
@@ -239,12 +239,10 @@ exports.generateChangeOfAddress = async ({
           });
 
         if (workItem) {
-          await applicationContext
-            .getPersistenceGateway()
-            .saveWorkItemForNonPaper({
-              applicationContext,
-              workItem: workItem.validate().toRawObject(),
-            });
+          applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+            applicationContext,
+            workItem: workItem.validate().toRawObject(),
+          });
         }
 
         caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
@@ -252,17 +250,14 @@ exports.generateChangeOfAddress = async ({
       }
 
       if (shouldUpdateCase || docketEntryAdded) {
-        const updatedCase = await applicationContext
-          .getPersistenceGateway()
-          .updateCase({
-            applicationContext,
-            caseToUpdate: caseEntity.validate().toRawObject(),
-          });
+        const validatedRawCase = caseEntity.validate().toRawObject();
 
-        const updatedCaseRaw = new Case(updatedCase, { applicationContext })
-          .validate()
-          .toRawObject();
-        updatedCases.push(updatedCaseRaw);
+        applicationContext.getPersistenceGateway().updateCase({
+          applicationContext,
+          caseToUpdate: validatedRawCase,
+        });
+
+        updatedCases.push(validatedRawCase);
       }
     } catch (error) {
       applicationContext.logger.error(error);
