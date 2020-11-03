@@ -502,6 +502,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
     logger: {
+      debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
     },
