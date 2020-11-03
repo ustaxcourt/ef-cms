@@ -10,6 +10,7 @@ import {
 } from '../integration-tests/helpers';
 import { petitionerFilesADocumentForCase } from '../integration-tests/journey/petitionerFilesADocumentForCase';
 import { setupTest } from './helpers';
+import { unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully } from './journey/unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { unauthedUserSeesStrickenDocketEntry } from './journey/unauthedUserSeesStrickenDocketEntry';
@@ -42,8 +43,9 @@ describe('Docketclerk QCs and Strikes a docket entry', () => {
   docketClerkStrikesDocketEntry(testClient, 3);
 });
 
-describe('Unauthed user sees stricken docket entry', () => {
+describe('Unauthed user views stricken docket entry', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesByDocketNumber(test, testClient);
   unauthedUserSeesStrickenDocketEntry(test, 3);
+  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
 });
