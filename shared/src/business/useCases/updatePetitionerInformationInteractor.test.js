@@ -142,6 +142,47 @@ describe('update petitioner contact information on a case', () => {
     ).toHaveBeenCalled();
   });
 
+  it('sets filedBy to undefined on notice of change docket entry', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        address1: '789 Division St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Secondary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+      privatePractitioners: [],
+    };
+
+    const result = await updatePetitionerInformationInteractor({
+      applicationContext,
+      contactPrimary: MOCK_CASE.contactPrimary,
+      contactSecondary: {
+        address1: '789 Division St APT 123', //changed address1
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Secondary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+
+    const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+      d => d.eventCode === 'NCA',
+    );
+
+    expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
+  });
+
   it('updates petitioner contact when secondary contact info changes and does not generate or serve a notice if the secondary contact was not previously present', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
@@ -352,7 +393,6 @@ describe('update petitioner contact information on a case', () => {
       expect(
         applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
       ).toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
         'for Test Petitioner',
@@ -400,7 +440,6 @@ describe('update petitioner contact information on a case', () => {
       expect(
         applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
       ).toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
         'for Test Secondary Petitioner',
@@ -501,7 +540,6 @@ describe('update petitioner contact information on a case', () => {
       expect(
         applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
       ).not.toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
         'for Test Secondary Petitioner',
@@ -551,7 +589,6 @@ describe('update petitioner contact information on a case', () => {
       expect(
         applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
       ).toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
         'for Test Petitioner',
