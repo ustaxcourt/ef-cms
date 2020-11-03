@@ -48,7 +48,11 @@ exports.advancedDocumentSearch = async ({
       },
     },
   ];
-  const mustNot = [];
+  const mustNot = [
+    {
+      term: { 'isStricken.BOOL': true },
+    },
+  ];
 
   if (keyword) {
     queryParams.push({
