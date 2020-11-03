@@ -22,7 +22,7 @@ describe('validatePdfInteractor', () => {
           putObjectTagging: () => {},
         }),
         logger: {
-          info: () => null,
+          debug: () => null,
         },
       },
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -44,7 +44,7 @@ describe('validatePdfInteractor', () => {
           putObjectTagging: () => {},
         }),
         logger: {
-          info: () => null,
+          debug: () => null,
         },
       },
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
