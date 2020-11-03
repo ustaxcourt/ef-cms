@@ -20,6 +20,6 @@ describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents Vi
 
   loginAs(test, 'docketclerk1@example.com');
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  docketClerkViewsCaseDetailDocumentView(test);
   docketClerkServesDocumentFromCaseDetailDocumentView(test);
+  docketClerkViewsCaseDetailDocumentView(test);
 });

@@ -152,7 +152,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [],
-          irsPractitioners: [{ userId: '789' }],
+          hasIrsPractitioner: true,
           isSealed: true,
         },
         currentPage: 'CaseDetail',
@@ -176,7 +176,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [],
-          irsPractitioners: [{ userId: '123' }],
+          hasIrsPractitioner: true,
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -197,7 +197,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], hasIrsPractitioner: false },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -490,7 +490,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
   });
 
-  it('should set showNewTabLink to true if user is an internal user ', () => {
+  it('should set showNewTabLink to true if user is an internal user', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',

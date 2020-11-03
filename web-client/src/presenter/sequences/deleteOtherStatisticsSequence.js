@@ -1,7 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { deleteOtherStatisticsAction } from '../actions/deleteOtherStatisticsAction';
-import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -18,7 +18,7 @@ export const deleteOtherStatisticsSequence = [
         setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
         clearModalAction,
-        navigateToCaseDetailCaseInformationAction,
+        navigateToCaseDetailCaseInformationActionFactory(),
       ],
     },
   ]),

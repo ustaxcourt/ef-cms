@@ -25,17 +25,6 @@ describe('fileDocumentHelper', () => {
     state.form = {};
   });
 
-  it('returns empty object when caseDetail is empty', () => {
-    let testState = {
-      caseDetail: {},
-    };
-
-    const result = runCompute(fileDocumentHelper, {
-      state: testState,
-    });
-    expect(result).toMatchObject({});
-  });
-
   it('returns correct values when documentType is undefined', () => {
     let testState = { ...state, form: { documentType: undefined } };
 
@@ -473,7 +462,7 @@ describe('fileDocumentHelper', () => {
     });
   });
 
-  it('shows the multi select form and map cases when there are many cases to file ', () => {
+  it('shows the multi select form and map cases when there are many cases to file', () => {
     state.form = {
       documentType: 'Motion for Leave to File',
       selectedCases: ['101-19', '102-19'],

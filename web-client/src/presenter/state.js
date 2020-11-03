@@ -23,6 +23,7 @@ import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateSe
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
+import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -118,6 +119,7 @@ const helpers = {
   contactEditHelper,
   contactsHelper,
   correspondenceViewerHelper,
+  createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
@@ -197,6 +199,7 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
+  caseDeadlineReport: {},
   caseDetail: {},
   closedCases: [],
   cognitoLoginUrl: null,

@@ -50,7 +50,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const showServiceStamp =
     selectedEventCode === 'O' && user.role !== USER_ROLES.petitionsClerk;
 
-  const formattedDocumentTitle = `${form.generatedDocumentTitle}${
+  const formattedDocumentTitle = `${form.generatedDocumentTitle || ''}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
   const showSaveAndServeButton = !UNSERVABLE_EVENT_CODES.includes(

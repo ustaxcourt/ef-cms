@@ -27,6 +27,11 @@ variable "es_instance_count" {
   default = "1"
 }
 
+variable "es_instance_type" {
+  type    = string
+  default = "t2.small.elasticsearch"
+}
+
 variable "honeybadger_key" {
   type    = string
   default = "default_key"
@@ -59,4 +64,13 @@ variable "green_elasticsearch_domain" {
 
 variable "destination_table" {
   type = string
+}
+
+variable "disable_emails" {
+  type    = bool
+  default = false
+}
+
+variable "es_volume_size" {
+  type = number
 }

@@ -58,14 +58,16 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
           record.isStricken ||
           !record.isCourtIssuedDocument ||
           record.isNotServedDocument ||
-          record.isTranscript,
+          record.isTranscript ||
+          record.isStipDecision,
         showLinkToDocument:
           record.processingStatus ===
             DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
           record.isCourtIssuedDocument &&
           !record.isNotServedDocument &&
           !record.isStricken &&
-          !record.isTranscript,
+          !record.isTranscript &&
+          !record.isStipDecision,
         showNotServed: record.isNotServedDocument,
         showServed: record.isStatusServed,
         signatory: record.signatory,

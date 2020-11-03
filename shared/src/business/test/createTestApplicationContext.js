@@ -70,6 +70,7 @@ const {
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
+  getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formattedTrialSessionDetails,
@@ -203,12 +204,18 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+    createEndOfDayISO: jest
+      .fn()
+      .mockImplementation(DateHandler.createEndOfDayISO),
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
     createISODateStringFromObject: jest
       .fn()
       .mockImplementation(DateHandler.createISODateStringFromObject),
+    createStartOfDayISO: jest
+      .fn()
+      .mockImplementation(DateHandler.createStartOfDayISO),
     dateStringsCompared: jest
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
@@ -248,6 +255,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getMonthDayYearObj: jest
+      .fn()
+      .mockImplementation(DateHandler.getMonthDayYearObj),
     getPetitionDocketEntryFromDocketEntries: jest
       .fn()
       .mockImplementation(getPetitionDocketEntryFromDocketEntries),
@@ -349,10 +360,10 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
-    getAllCaseDeadlines: jest.fn(),
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
+    getCaseDeadlinesByDateRange: jest.fn(),
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
@@ -463,6 +474,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
+    getLogger: jest.fn().mockReturnValue({
+      error: jest.fn(),
+    }),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),

@@ -53,6 +53,7 @@ export const FilingsAndProceedings = connect(
               )}
               {entry.descriptionDisplay}
             </Button>
+            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </NonMobile>
           <Mobile>
             <Button
@@ -68,6 +69,7 @@ export const FilingsAndProceedings = connect(
             >
               {entry.descriptionDisplay}
             </Button>
+            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </Mobile>
         </>
       );
@@ -84,39 +86,46 @@ export const FilingsAndProceedings = connect(
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
-            {entry.descriptionDisplay}
+            {entry.descriptionDisplay}{' '}
+            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </>
         )}
 
         {entry.showDocumentViewerLink && (
-          <Button
-            link
-            aria-label="View PDF"
-            className={classNames(
-              'text-left',
-              entry.isStricken && 'stricken-docket-record',
-              'view-pdf-link',
-            )}
-            onClick={() =>
-              changeTabAndSetViewerDocumentToDisplaySequence({
-                docketRecordTab: 'documentView',
-                viewerDocumentToDisplay: { docketEntryId: entry.docketEntryId },
-              })
-            }
-          >
-            {entry.isPaper && (
-              <span className="filing-type-icon-mobile">
-                <FontAwesomeIcon icon={['fas', 'file-alt']} />
-              </span>
-            )}
-            {entry.descriptionDisplay}
-          </Button>
+          <>
+            <Button
+              link
+              aria-label="View PDF"
+              className={classNames(
+                'text-left',
+                entry.isStricken && 'stricken-docket-record',
+                'view-pdf-link',
+              )}
+              onClick={() =>
+                changeTabAndSetViewerDocumentToDisplaySequence({
+                  docketRecordTab: 'documentView',
+                  viewerDocumentToDisplay: entry,
+                })
+              }
+            >
+              {entry.isPaper && (
+                <span className="filing-type-icon-mobile">
+                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                </span>
+              )}
+              {entry.descriptionDisplay}
+            </Button>
+            {!entry.addToCoversheet && entry.additionalInfoDisplay}
+          </>
         )}
 
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
           {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+          {entry.showDocumentDescriptionWithoutLink &&
+            !entry.addToCoversheet &&
+            entry.additionalInfoDisplay}
         </span>
 
         <span> {entry.signatory}</span>

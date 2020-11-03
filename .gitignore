@@ -27,8 +27,10 @@ proxy-request-times.json
 puppeteer_lambda_layer.tar.gz
 puppeteer_lambda_layer.zip
 reports/test-reporter.xml
+aws/lambdas/*.zip
 shared/coverage
 shared/pdf-tests/*.html
+web-api/bulk-import-log.txt
 web-api/runtimes/clamav/bin
 web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
 web-api/runtimes/clamav/clamav_lambda_layer.zip

@@ -68,6 +68,16 @@ describe('User entity', () => {
     expect(user.entityName).toEqual('User');
   });
 
+  it('Creates a valid floater user', () => {
+    const user = new User({
+      name: 'Saul Goodman',
+      role: ROLES.floater,
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+    });
+    expect(user.isValid()).toBeTruthy();
+    expect(user.entityName).toEqual('User');
+  });
+
   it('Creates a valid privatePractitioner user', () => {
     const user = new User({
       barNumber: 'SG101',
@@ -88,12 +98,34 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
+  it('Creates a valid active judge user', () => {
+    const user = new User({
+      judgeFullName: 'Saul Perfectly Goodman',
+      judgeTitle: 'Chief Judge',
+      name: 'Saul Goodman',
+      role: ROLES.judge,
+      userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+    });
+    expect(user.isValid()).toBeTruthy();
+  });
+
+  it('Creates a valid legacy judge user', () => {
+    const user = new User({
+      judgeTitle: 'Legacy Chief Judge',
+      name: 'Saul Goodman',
+      role: ROLES.legacyJudge,
+      userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+    });
+    expect(user.isValid()).toBeTruthy();
+  });
+
   it('Creates a user with default role of petitioner if not provided', () => {
     const user = new User({
       name: 'Saul Goodman',
       role: undefined,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
+
     expect(user.role).toBe(ROLES.petitioner);
   });
 
@@ -133,6 +165,9 @@ describe('User entity', () => {
     });
     it('should return true when the user role is trialclerk', () => {
       expect(User.isInternalUser(ROLES.trialClerk)).toEqual(true);
+    });
+    it('should return true when the user role is floater', () => {
+      expect(User.isInternalUser(ROLES.floater)).toEqual(true);
     });
   });
 });

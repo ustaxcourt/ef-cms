@@ -165,4 +165,45 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
       viewerDocumentToDisplay: { docketEntryId: '234' },
     });
   });
+
+  it("returns the first docket entry when state.docketEntryId is defined but doesn't correspond with any caseDetail.docketEntries", async () => {
+    const result = await runAction(
+      getDefaultDocketViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                index: 1,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+              },
+              {
+                index: 2,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
+              },
+              {
+                docketEntryId: '234',
+                index: 3,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          docketEntryId: '999999999',
+        },
+      },
+    );
+    expect(result.output).toMatchObject({
+      viewerDocumentToDisplay: { docketEntryId: '123' },
+    });
+  });
 });

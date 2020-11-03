@@ -64,6 +64,7 @@ import {
   deconstructDate,
   formatDateString,
   formatNow,
+  getMonthDayYearObj,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
@@ -84,6 +85,7 @@ import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
+import { createJudgeUserInteractor } from '../../shared/src/proxies/judges/createJudgeUserProxy';
 import { createMessageInteractor } from '../../shared/src/proxies/messages/createMessageProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
@@ -121,13 +123,12 @@ import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useC
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
-import { getAllCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getAllCaseDeadlinesProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
+import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
-import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
@@ -304,6 +305,7 @@ const allUseCases = {
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
+  createJudgeUserInteractor,
   createMessageInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
@@ -333,13 +335,12 @@ const allUseCases = {
   generatePrintablePendingReportInteractor,
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
-  getAllCaseDeadlinesInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
+  getCaseDeadlinesInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCasesByUserInteractor,
   getClosedCasesInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
@@ -470,6 +471,27 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
+const initHoneybadger = async () => {
+  if (process.env.USTC_ENV === 'prod') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+
+    if (apiKey) {
+      const Honeybadger = await import('honeybadger-js'); // browser version
+
+      const config = {
+        apiKey,
+        environment: 'client',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+
+const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
+  getConstants(),
+);
+
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
     return new Uint8Array(await new Response(blob).arrayBuffer());
@@ -493,12 +515,11 @@ const applicationContext = {
       'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
     );
   },
-  getConstants: () =>
-    (process.env.USTC_DEBUG ? i => i : deepFreeze)(getConstants()),
+  getConstants: () => appConstants,
   getCurrentUser,
   getCurrentUserPermissions: () => {
-    const user = getCurrentUser();
-    return getUserPermissions(user);
+    const currentUser = getCurrentUser();
+    return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
   getError: e => {
@@ -506,6 +527,24 @@ const applicationContext = {
   },
   getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
+  getLogger: () => ({
+    error: value => {
+      // eslint-disable-next-line no-console
+      console.error(value);
+    },
+    info: (key, value) => {
+      // eslint-disable-next-line no-console
+      console.info(key, JSON.stringify(value));
+    },
+    time: key => {
+      // eslint-disable-next-line no-console
+      console.time(key);
+    },
+    timeEnd: key => {
+      // eslint-disable-next-line no-console
+      console.timeEnd(key);
+    },
+  }),
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
@@ -580,6 +619,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
+      getMonthDayYearObj,
       getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
@@ -594,20 +634,31 @@ const applicationContext = {
       sortDocketEntries,
     };
   },
-  initHoneybadger: async () => {
-    if (process.env.USTC_ENV === 'prod') {
-      const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+  initHoneybadger,
+  notifyHoneybadger: async (message, context) => {
+    const honeybadger = await initHoneybadger();
 
-      if (apiKey) {
-        const Honeybadger = await import('honeybadger-js'); // browser version
+    const notifyAsync = messageForNotification => {
+      return new Promise(resolve => {
+        honeybadger.notify(messageForNotification, null, null, resolve);
+      });
+    };
 
-        const config = {
-          apiKey,
-          environment: 'client',
-        };
-        Honeybadger.configure(config);
-        return Honeybadger;
+    if (honeybadger) {
+      const { role, userId } = getCurrentUser() || {};
+
+      const errorContext = {
+        role,
+        userId,
+      };
+
+      if (context) {
+        Object.assign(errorContext, context);
       }
+
+      honeybadger.setContext(errorContext);
+
+      await notifyAsync(message);
     }
   },
   setCurrentUser,

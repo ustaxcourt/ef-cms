@@ -10,5 +10,9 @@ export const docketClerkEditsPetitionerInformation = test => {
     });
 
     await test.runSequence('updatePetitionerInformationFormSequence');
+
+    expect(
+      test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
+    ).toEqual('petitioner');
   });
 };

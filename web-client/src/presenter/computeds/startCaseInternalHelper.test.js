@@ -13,7 +13,7 @@ describe('case detail edit computed', () => {
 
   ({ PARTY_TYPES } = applicationContext.getConstants());
 
-  it('sets partyTypes from constants ', () => {
+  it('sets partyTypes from constants', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {},
     });

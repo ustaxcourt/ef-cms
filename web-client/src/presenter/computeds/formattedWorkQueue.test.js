@@ -4,6 +4,7 @@ import {
   formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
+  workQueueItemsAreEqual,
 } from './formattedWorkQueue';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -26,9 +27,10 @@ describe('formatted work queue computed', () => {
   } = applicationContext.getConstants();
 
   const petitionsClerkUser = {
+    name: 'Test PetitionsClerk',
     role: USER_ROLES.petitionsClerk,
     section: PETITIONS_SECTION,
-    userId: 'abc',
+    userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
   };
 
   const docketClerkUser = {
@@ -86,7 +88,7 @@ describe('formatted work queue computed', () => {
     });
   });
 
-  const workItem = {
+  const workItemMock = {
     assigneeId: 'abc',
     assigneeName: null,
     caseStatus: STATUS_TYPES.generalDocket,
@@ -106,7 +108,7 @@ describe('formatted work queue computed', () => {
     workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
   };
   const qcWorkItem = {
-    ...workItem,
+    ...workItemMock,
     section: DOCKET_SECTION,
   };
 
@@ -187,13 +189,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should not show a workItem in user messages outbox if it is completed', () => {
-    workItem.completedAt = '2019-06-17T15:27:55.801Z';
+    workItemMock.completedAt = '2019-06-17T15:27:55.801Z';
 
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
-        workQueue: [workItem],
+        workQueue: [workItemMock],
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
@@ -355,12 +357,6 @@ describe('formatted work queue computed', () => {
   });
 
   it('filters items based on in progress cases for a petitionsclerk', () => {
-    const petitionsClerkUser = {
-      name: 'Test PetitionsClerk',
-      role: USER_ROLES.petitionsClerk,
-      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
-    };
-
     const result = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -771,7 +767,40 @@ describe('formatted work queue computed', () => {
       );
     });
 
-    it('should return default edit link if document is in progress and user is petitionsClerk', () => {
+    it('should return default document view link when the document has been processed, is unservable, and the user is docketClerk', () => {
+      const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-02-28T21:14:39.488Z',
+          docketEntry: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Hearing Exhibits for A document from the west',
+            documentType: 'Hearing Exhibits',
+            eventCode: UNSERVABLE_EVENT_CODES[0],
+            isFileAttached: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+            scenario: 'Standard',
+          },
+          isInitializeCase: false,
+          section: DOCKET_SECTION,
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      });
+      expect(result).toEqual(documentViewLink);
+    });
+
+    it('should return default document view link if document is in progress and user is petitionsClerk', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -800,7 +829,7 @@ describe('formatted work queue computed', () => {
           queue: 'section',
         },
       });
-      expect(result).toEqual(baseWorkItemEditLink);
+      expect(result).toEqual(documentViewLink);
     });
 
     it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {
@@ -1089,24 +1118,15 @@ describe('formatted work queue computed', () => {
       expect(result.showUnassignedIcon).toBeFalsy();
     });
 
-    it('should return selected as true if workItemId is found in selectedWorkItems', () => {
+    it('should return selected as true if `isSelected` attribute passed in as true', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         workItemId: '123',
       };
 
-      const selectedWorkItems = [
-        {
-          workItemId: '234',
-        },
-        {
-          workItemId: '345',
-        },
-      ];
-
       let result = formatWorkItem({
         applicationContext,
-        selectedWorkItems,
+        isSelected: undefined,
         workItem,
       });
       expect(result.selected).toEqual(false);
@@ -1115,7 +1135,7 @@ describe('formatted work queue computed', () => {
 
       result = formatWorkItem({
         applicationContext,
-        selectedWorkItems,
+        isSelected: true,
         workItem,
       });
       expect(result.selected).toEqual(true);
@@ -1286,6 +1306,21 @@ describe('formatted work queue computed', () => {
       const result = formatDateIfToday(date, applicationContext);
 
       expect(result).toContain('01/01/19');
+    });
+  });
+
+  describe('workQueueItemsAreEqual', () => {
+    it('returns true if both objects "item" properties stringify to the same result', () => {
+      const first = { item: { has: 'a first name', my: 'bologna' } };
+      const second = { ...first };
+      expect(workQueueItemsAreEqual(first, second)).toBe(true);
+    });
+    it('returns false if "item" properties differ', () => {
+      const first = { item: { has: 'a first', my: 'bologna', name: 'oscar' } };
+      const second = {
+        item: { has: 'a second', my: 'bologna', name: 'mayer' },
+      };
+      expect(workQueueItemsAreEqual(first, second)).toBe(false);
     });
   });
 });

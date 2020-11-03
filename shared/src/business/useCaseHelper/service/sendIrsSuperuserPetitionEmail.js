@@ -6,26 +6,26 @@ const { Case } = require('../../entities/cases/Case');
 exports.sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
   caseEntity,
-  docketEntryEntity,
+  docketEntryId,
 }) => {
+  const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
+
+  if (docketEntryEntity.index === undefined) {
+    throw new Error('Cannot serve a docket entry without an index.');
+  }
+
   const {
     caseCaption,
     contactPrimary,
     contactSecondary,
     docketNumber,
-    docketNumberSuffix,
+    docketNumberWithSuffix,
     mailingDate,
     preferredTrialCity,
     privatePractitioners,
   } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
 
-  const {
-    docketEntryId,
-    documentType,
-    eventCode,
-    filingDate,
-    servedAt,
-  } = docketEntryEntity;
+  const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
     const representingFormatted = [];
@@ -50,7 +50,6 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     .getUtilities()
     .formatDateString(filingDate, 'MM/DD/YY');
 
-  const docketNumberWithSuffix = `${docketNumber}${docketNumberSuffix || ''}`;
   const formattedMailingDate =
     mailingDate || `Electronically Filed ${filingDateFormatted}`;
 
@@ -59,7 +58,8 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber: docketNumberWithSuffix,
+        docketNumber: docketNumber,
+        docketNumberWithSuffix: docketNumberWithSuffix,
         trialLocation: preferredTrialCity || 'No requested place of trial',
       },
       contactPrimary,

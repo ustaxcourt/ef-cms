@@ -1,6 +1,7 @@
 const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
@@ -101,6 +102,45 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).toBeCalled();
+  });
+
+  it('should create a STIN docket entry on the case with index 0', async () => {
+    const result = await createCaseInteractor({
+      applicationContext,
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '99 South Oak Lane',
+          address2: 'Culpa numquam saepe ',
+          address3: 'Eaque voluptates com',
+          city: 'Dignissimos voluptat',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner1@example.com',
+          name: 'Diana Prince',
+          phone: '+1 (215) 128-6587',
+          postalCode: '69580',
+          state: 'AR',
+        },
+        contactSecondary: {},
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        partyType: PARTY_TYPES.petitioner,
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: 1,
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 1,
+      },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+    });
+
+    const stinDocketEntry = result.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    );
+    expect(stinDocketEntry.index).toEqual(0);
   });
 
   it('should create a case successfully as a practitioner', async () => {

@@ -16,14 +16,26 @@ export const lambdaWrapper = lambda => {
       body: JSON.stringify(req.body),
     });
     res.status(response.statusCode);
+
+    res.set({
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control':
+        'max-age=0, private, no-cache, no-store, must-revalidate',
+      'Content-Type': 'application/json',
+      Pragma: 'no-cache',
+      Vary: 'Authorization',
+      'X-Content-Type-Options': 'nosniff',
+    });
+
     if (
       ['application/pdf', 'text/html'].includes(
         response.headers['Content-Type'],
       )
     ) {
+      res.set('Content-Type', response.headers['Content-Type']);
       res.send(response.body);
     } else if (response.headers['Content-Type'] === 'application/json') {
-      res.json(JSON.parse(response.body || 'null'));
+      res.send(JSON.parse(response.body || 'null'));
     } else if (response.headers.Location) {
       res.redirect(response.headers.Location);
     } else {

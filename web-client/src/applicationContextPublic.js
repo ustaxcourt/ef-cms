@@ -7,6 +7,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
+  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   US_STATES,
   US_STATES_OTHER,
@@ -36,6 +37,7 @@ import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPu
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
+import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -47,6 +49,23 @@ const ADVANCED_SEARCH_TABS = {
   OPINION: 'opinion',
   ORDER: 'order',
 };
+
+const allUseCases = {
+  casePublicSearchInteractor,
+  generatePublicDocketRecordPdfInteractor,
+  getCaseForPublicDocketSearchInteractor,
+  getCaseInteractor: getPublicCaseInteractor,
+  getDocumentDownloadUrlInteractor,
+  getHealthCheckInteractor,
+  getPublicJudgesInteractor,
+  getTodaysOpinionsInteractor,
+  opinionPublicSearchInteractor,
+  orderPublicSearchInteractor,
+  validateCaseAdvancedSearchInteractor,
+  validateOpinionAdvancedSearchInteractor,
+  validateOrderAdvancedSearchInteractor,
+};
+tryCatchDecorator(allUseCases);
 
 const applicationContextPublic = {
   getBaseUrl: () => {
@@ -64,6 +83,7 @@ const applicationContextPublic = {
       DOCUMENT_PROCESSING_STATUS_OPTIONS,
       INITIAL_DOCUMENT_TYPES,
       OBJECTIONS_OPTIONS_MAP,
+      STIPULATED_DECISION_EVENT_CODE,
       TRANSCRIPT_EVENT_CODE,
       US_STATES,
       US_STATES_OTHER,
@@ -72,21 +92,7 @@ const applicationContextPublic = {
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,
   getPublicSiteUrl,
-  getUseCases: () => ({
-    casePublicSearchInteractor,
-    generatePublicDocketRecordPdfInteractor,
-    getCaseForPublicDocketSearchInteractor,
-    getCaseInteractor: getPublicCaseInteractor,
-    getDocumentDownloadUrlInteractor,
-    getHealthCheckInteractor,
-    getPublicJudgesInteractor,
-    getTodaysOpinionsInteractor,
-    opinionPublicSearchInteractor,
-    orderPublicSearchInteractor,
-    validateCaseAdvancedSearchInteractor,
-    validateOpinionAdvancedSearchInteractor,
-    validateOrderAdvancedSearchInteractor,
-  }),
+  getUseCases: () => allUseCases,
   getUtilities: () => {
     return {
       compareCasesByDocketNumber,

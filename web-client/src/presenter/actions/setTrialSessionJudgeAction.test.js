@@ -1,20 +1,19 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setTrialSessionJudgeAction } from './setTrialSessionJudgeAction';
 
 describe('setTrialSessionJudgeAction', () => {
-  const mockGetTrialSessionDetails = jest.fn().mockReturnValue({
-    judge: {
-      name: 'Judge Dredd',
-    },
-  });
+  presenter.providers.applicationContext = applicationContext;
 
-  beforeAll(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        getTrialSessionDetailsInteractor: mockGetTrialSessionDetails,
-      }),
-    };
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor.mockReturnValue({
+        judge: {
+          name: 'Judge Dredd',
+        },
+      });
   });
 
   it('sets the judge for the associated trial session on state', async () => {
@@ -29,10 +28,35 @@ describe('setTrialSessionJudgeAction', () => {
       },
     });
 
-    expect(mockGetTrialSessionDetails).toHaveBeenCalled();
-
+    expect(
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor,
+    ).toHaveBeenCalled();
     expect(result.state.trialSessionJudge).toEqual({
       name: 'Judge Dredd',
+    });
+  });
+
+  it('sets the judge name as Unassigned if the trial session does not have a judge', async () => {
+    applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor.mockReturnValue({});
+
+    const result = await runAction(setTrialSessionJudgeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: {
+          trialSessionId: 'trial-session-id-123',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor,
+    ).toHaveBeenCalled();
+    expect(result.state.trialSessionJudge).toEqual({
+      name: 'Unassigned',
     });
   });
 
@@ -46,6 +70,8 @@ describe('setTrialSessionJudgeAction', () => {
       },
     });
 
-    expect(mockGetTrialSessionDetails).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getTrialSessionDetailsInteractor,
+    ).not.toHaveBeenCalled();
   });
 });
