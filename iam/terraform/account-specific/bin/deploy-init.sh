@@ -21,6 +21,7 @@ LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
+echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
 echo "checking for the dynamodb lock table..."
