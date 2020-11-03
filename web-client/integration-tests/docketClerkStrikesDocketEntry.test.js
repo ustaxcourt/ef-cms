@@ -11,11 +11,13 @@ import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
-import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from '../integration-tests-public/journey/privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully';
-import { privatePractitionerSeesStrickenDocketEntry } from '../integration-tests-public/journey/privatePractitionerSeesStrickenDocketEntry';
+import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from './journey/privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully';
+import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
+import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
 
 const test = setupTest();
 test.draftOrders = [];
+console.error = () => null;
 
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   beforeAll(() => {
@@ -42,7 +44,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkStrikesDocketEntry(test, 3);
 
   docketClerkCreatesAnOrder(test, {
-    documentTitle: 'Order',
+    documentTitle: 'Order that is stricken',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
@@ -57,4 +59,8 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   practitionerViewsCaseDetail(test, false);
   privatePractitionerSeesStrickenDocketEntry(test, 4);
   privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(test);
+  userSearchesForStrickenDocument(test);
+
+  loginAs(test, 'docketclerk@example.com');
+  userSearchesForStrickenDocument(test);
 });

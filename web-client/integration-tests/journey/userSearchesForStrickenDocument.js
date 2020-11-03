@@ -1,10 +1,10 @@
-import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 
-export const unauthedUserSearchesForStrickenOrder = test => {
-  return it('Unauthed user searches for a stricken order', async () => {
+export const userSearchesForStrickenDocument = test => {
+  return it('User searches for a stricken order', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoPublicSearchSequence');
+    await test.runSequence('gotoAdvancedSearchSequence');
 
     test.setState('advancedSearchForm', {
       orderSearch: {
@@ -12,7 +12,7 @@ export const unauthedUserSearchesForStrickenOrder = test => {
       },
     });
 
-    await test.runSequence('submitPublicOrderAdvancedSearchSequence');
+    await test.runSequence('submitOrderAdvancedSearchSequence');
 
     expect(test.getState('searchResults')).not.toEqual(
       expect.arrayContaining([
