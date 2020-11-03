@@ -202,7 +202,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'A lodged document is awaiting action by the judge to enact or refuse.',
     ),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
-  numberOfPages: joi.number().optional().allow(null),
+  numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
   ).optional(),
@@ -425,6 +425,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
 //   .optional();
 
 module.exports = {
+  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
   DOCKET_ENTRY_VALIDATION_RULES: joi
     .object()
     .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),

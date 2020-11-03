@@ -1,3 +1,5 @@
+const { parseFullName } = require('parse-full-name');
+
 const formatJudgeName = name => {
   if (!name) {
     return '';
@@ -7,10 +9,8 @@ const formatJudgeName = name => {
 };
 
 const getJudgeLastName = name => {
-  const nameWithoutJudgeTitle = formatJudgeName(name);
-  const nameArray = nameWithoutJudgeTitle.split(' ');
-
-  return nameArray[nameArray.length - 1];
+  const { last: lastName } = parseFullName(name);
+  return lastName;
 };
 
 module.exports = {
