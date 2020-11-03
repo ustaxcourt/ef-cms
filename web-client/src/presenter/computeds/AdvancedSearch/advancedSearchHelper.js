@@ -41,7 +41,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const searchResults = get(state.searchResults);
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
   const currentPage = get(state.advancedSearchForm.currentPage);
-  let result = {
+  const result = {
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
@@ -62,10 +62,13 @@ export const advancedSearchHelper = (get, applicationContext) => {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
 
-    result = {
-      ...result,
+    Object.assign(result, {
       ...paginatedResults,
-    };
+      maxResults: applicationContext.getConstants().MAX_SEARCH_RESULTS,
+      showMaxResultsMessage:
+        searchResults.length >=
+        applicationContext.getConstants().MAX_SEARCH_RESULTS,
+    });
   }
 
   return result;

@@ -261,7 +261,9 @@ describe('formattedPendingItems', () => {
   it('returns the cases and judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
-        pendingItems: mockPendingItems,
+        pendingReports: {
+          pendingItems: mockPendingItems,
+        },
       },
     });
     expect(result).toMatchObject({
@@ -295,28 +297,39 @@ describe('formattedPendingItems', () => {
     });
   });
 
-  it('formats judges and filters pending items by selected judge', () => {
+  it('formats pending items', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
-        pendingItems: mockPendingItems,
+        pendingReports: {
+          pendingItems: mockPendingItems,
+        },
         screenMetadata: { pendingItemsFilters: { judge: CHIEF_JUDGE } },
       },
     });
+
     expect(result).toMatchObject({
       items: [
         {
-          associatedJudge: CHIEF_JUDGE,
-          associatedJudgeFormatted: CHIEF_JUDGE,
-          caseStatus: STATUS_TYPES.new,
+          associatedJudge: 'Chief Judge',
+          associatedJudgeFormatted: 'Chief Judge',
+          caseStatus: 'New',
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
           receivedAt: '2018-01-20',
         },
         {
-          associatedJudge: CHIEF_JUDGE,
-          associatedJudgeFormatted: CHIEF_JUDGE,
-          caseStatus: STATUS_TYPES.new,
+          associatedJudge: 'Judge A',
+          associatedJudgeFormatted: 'A',
+          caseStatus: 'New',
+          formattedFiledDate: '01/20/18',
+          formattedName: 'Affidavit of Bob in Support of Petition',
+          receivedAt: '2018-01-20',
+        },
+        {
+          associatedJudge: 'Chief Judge',
+          associatedJudgeFormatted: 'Chief Judge',
+          caseStatus: 'New',
           formattedFiledDate: '01/10/19',
           formattedName: 'Administrative Record',
           receivedAt: '2019-01-10',

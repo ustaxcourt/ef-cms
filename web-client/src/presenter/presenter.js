@@ -156,6 +156,7 @@ import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/Do
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
 import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
+import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
@@ -279,6 +280,7 @@ import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSe
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
+import { setPendingReportSelectedJudgeSequence } from './sequences/pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
@@ -597,6 +599,7 @@ export const presenter = {
     loadDefaultDraftViewerDocumentToDisplaySequence,
     loadDefaultViewerCorrespondenceSequence,
     loadMoreCaseDeadlinesSequence,
+    loadMorePendingItemsSequence,
     loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
@@ -719,6 +722,7 @@ export const presenter = {
     setPDFSignatureDataSequence,
     setPageSequence,
     setPdfPreviewUrlSequence,
+    setPendingReportSelectedJudgeSequence,
     setSelectedBatchIndexSequence,
     setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,

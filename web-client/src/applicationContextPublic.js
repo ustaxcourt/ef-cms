@@ -5,6 +5,7 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
+  MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -67,30 +68,66 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
+const initHoneybadger = async () => {
+  if (process.env.USTC_ENV === 'prod') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+
+    if (apiKey) {
+      const Honeybadger = await import('honeybadger-js'); // browser version
+
+      const config = {
+        apiKey,
+        environment: 'client',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+const frozenConstants = deepFreeze({
+  ADVANCED_SEARCH_TABS,
+  CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
+  COUNTRY_TYPES: COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  INITIAL_DOCUMENT_TYPES,
+  MAX_SEARCH_RESULTS,
+  OBJECTIONS_OPTIONS_MAP,
+  STIPULATED_DECISION_EVENT_CODE,
+  TRANSCRIPT_EVENT_CODE,
+  US_STATES,
+  US_STATES_OTHER,
+  USER_ROLES: ROLES,
+});
+
 const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
-  getConstants: () =>
-    deepFreeze({
-      ADVANCED_SEARCH_TABS,
-      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
-      CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
-      COUNTRY_TYPES: COUNTRY_TYPES,
-      DOCKET_NUMBER_SUFFIXES,
-      DOCUMENT_PROCESSING_STATUS_OPTIONS,
-      INITIAL_DOCUMENT_TYPES,
-      OBJECTIONS_OPTIONS_MAP,
-      STIPULATED_DECISION_EVENT_CODE,
-      TRANSCRIPT_EVENT_CODE,
-      US_STATES,
-      US_STATES_OTHER,
-      USER_ROLES: ROLES,
-    }),
+  getConstants: () => frozenConstants,
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,
+  getLogger: () => ({
+    error: () => {
+      // eslint-disable-next-line no-console
+      // console.error(value);
+    },
+    info: (key, value) => {
+      // eslint-disable-next-line no-console
+      console.info(key, JSON.stringify(value));
+    },
+    time: key => {
+      // eslint-disable-next-line no-console
+      console.time(key);
+    },
+    timeEnd: key => {
+      // eslint-disable-next-line no-console
+      console.timeEnd(key);
+    },
+  }),
   getPublicSiteUrl,
   getUseCases: () => allUseCases,
   getUtilities: () => {
@@ -102,6 +139,30 @@ const applicationContextPublic = {
       getJudgeLastName,
       sortDocketEntries,
     };
+  },
+  initHoneybadger,
+  notifyHoneybadger: async (message, context) => {
+    const honeybadger = await initHoneybadger();
+
+    const notifyAsync = messageForNotification => {
+      return new Promise(resolve => {
+        honeybadger.notify(messageForNotification, null, null, resolve);
+      });
+    };
+
+    if (honeybadger) {
+      const errorContext = {
+        userId: 'public',
+      };
+
+      if (context) {
+        Object.assign(errorContext, context);
+      }
+
+      honeybadger.setContext(errorContext);
+
+      await notifyAsync(message);
+    }
   },
 };
 

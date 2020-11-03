@@ -21,7 +21,7 @@ describe('caseDeadlineReportHelper', () => {
       docketNumber: '103-19',
     },
     {
-      associatedJudge: 'Jury and Judge Rummy',
+      associatedJudge: 'Judge of Madea Rummy',
       deadlineDate: '2019-08-21T04:00:00.000Z',
       docketNumber: '101-19',
     },
