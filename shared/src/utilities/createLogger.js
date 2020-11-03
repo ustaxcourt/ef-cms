@@ -29,8 +29,9 @@ const nonProductionFormatters = [
   ),
 ];
 
-exports.createLogger = () =>
+exports.createLogger = defaultMeta =>
   createWinstonLogger({
+    defaultMeta,
     format: combine(
       redact(),
       ...(process.env.NODE_ENV === 'production'
