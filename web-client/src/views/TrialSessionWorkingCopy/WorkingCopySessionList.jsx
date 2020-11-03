@@ -103,9 +103,9 @@ export const WorkingCopySessionList = connect(
               </th>
             </tr>
           </thead>
-          {formattedCases.map((item, idx) => {
+          {formattedCases.map(item => {
             return (
-              <tbody className="hoverable" key={idx}>
+              <tbody className="hoverable" key={item.docketNumber}>
                 <tr className="vertical-align-middle-row">
                   <td>
                     <CaseLink formattedCase={item} />
@@ -122,13 +122,13 @@ export const WorkingCopySessionList = connect(
                   </td>
                   <td>{item.caseTitle}</td>
                   <td>
-                    {item.privatePractitioners.map((practitioner, idx) => (
-                      <div key={idx}>{practitioner.name}</div>
+                    {item.privatePractitioners.map(practitioner => (
+                      <div key={practitioner.userId}>{practitioner.name}</div>
                     ))}
                   </td>
                   <td>
-                    {item.irsPractitioners.map((respondent, idx) => (
-                      <div key={idx}>{respondent.name}</div>
+                    {item.irsPractitioners.map(respondent => (
+                      <div key={respondent.userId}>{respondent.name}</div>
                     ))}
                   </td>
                   <td className="minw-30">

@@ -44,7 +44,7 @@ describe('validateUpdateCaseModalAction', () => {
       },
       state: {
         modal: {
-          associatedJudge: 'Judge Armen',
+          associatedJudge: 'Judge Colvin',
           caseCaption: 'A case caption',
           caseStatus: CASE_STATUS_TYPES.submitted,
         },
@@ -62,7 +62,7 @@ describe('validateUpdateCaseModalAction', () => {
       },
       state: {
         modal: {
-          associatedJudge: 'Judge Armen',
+          associatedJudge: 'Judge Colvin',
           caseStatus: CASE_STATUS_TYPES.submitted,
         },
       },
@@ -79,7 +79,7 @@ describe('validateUpdateCaseModalAction', () => {
       },
       state: {
         modal: {
-          associatedJudge: 'Judge Armen',
+          associatedJudge: 'Judge Colvin',
           caseCaption: 'A case caption',
         },
       },

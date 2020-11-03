@@ -146,6 +146,17 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Limited Entry of Appearance",
+      "documentType": "Limited Entry of Appearance",
+      "category": "Appearance and Representation",
+      "eventCode": "LEA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
       "category": "Appearance and Representation",
@@ -325,7 +336,7 @@
       "ordinalField": "What Iteration Is this filing?"
     },
     {
-      "documentTitle": "Amended Certificate of Service of [Document Name]",
+      "documentTitle": "Amended Certificate of Service of [Document Name] [Date]",
       "documentType": "Amended Certificate of Service",
       "category": "Miscellaneous",
       "eventCode": "AMDC",
@@ -380,7 +391,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Certificate of Service [Document Name] [Date]",
+      "documentTitle": "Certificate of Service of [Document Name] [Date]",
       "documentType": "Certificate of Service",
       "category": "Miscellaneous",
       "eventCode": "CS",
@@ -1472,6 +1483,16 @@
       "ordinalField": ""
     },
     {
+    "documentTitle": "Motion for Document Subpoena Hearing",
+    "documentType": "Motion for Document Subpoena Hearing",
+    "category": "Motion",
+    "eventCode": "M137",
+    "scenario": "Standard",
+    "labelPreviousDocument": "",
+    "labelFreeText": "",
+    "ordinalField": ""
+  },
+    {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "documentType": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "category": "Motion",
@@ -2368,6 +2389,16 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Withdrawal as Counsel",
+      "documentType": "Notice of Withdrawal as Counsel",
+      "category": "Notice",
+      "eventCode": "NOTW",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
       "ordinalField": ""
     }
   ],

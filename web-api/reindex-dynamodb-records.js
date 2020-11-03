@@ -7,11 +7,6 @@ if (args.length < 1) {
   process.exit(1);
 }
 
-const sleep = time => {
-  return new Promise(resolve => {
-    setTimeout(resolve, time);
-  });
-};
 const tableName = args[0];
 const CHUNK_SIZE = 25;
 
@@ -53,8 +48,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
               },
             })
             .promise();
-
-          await sleep(1000);
         }
       });
   }

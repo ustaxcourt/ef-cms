@@ -39,6 +39,16 @@ exports.MOCK_DOCUMENTS = [
     index: 4,
     isFileAttached: true,
     processingStatus: 'pending',
+    servedAt: '2019-08-25T05:00:00.000Z',
+    servedParties: [
+      {
+        name: 'Bernard Lowe',
+      },
+      {
+        name: 'IRS',
+        role: 'irsSuperuser',
+      },
+    ],
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
   {
@@ -52,6 +62,16 @@ exports.MOCK_DOCUMENTS = [
     index: 5,
     isFileAttached: true,
     processingStatus: 'pending',
+    servedAt: '2019-08-25T05:00:00.000Z',
+    servedParties: [
+      {
+        name: 'Bernard Lowe',
+      },
+      {
+        name: 'IRS',
+        role: 'irsSuperuser',
+      },
+    ],
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
 ];

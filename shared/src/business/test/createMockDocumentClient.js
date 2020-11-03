@@ -113,6 +113,36 @@ const createMockDocumentClient = () => {
           }),
         };
       }),
+    queryFull: jest
+      .fn()
+      .mockImplementation(({ ExpressionAttributeValues, IndexName }) => {
+        const arr = [];
+        for (let key in mockDynamoUsers) {
+          if (IndexName === 'gsi1') {
+            const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
+            if (mockDynamoUsers[key].gsi1pk === gsi1pk) {
+              arr.push(mockDynamoUsers[key]);
+            }
+          } else {
+            const value = ExpressionAttributeValues[':pk'];
+            const prefix = ExpressionAttributeValues[':prefix'];
+            const [pk, sk] = key.split(' ');
+
+            if (prefix) {
+              if (pk === value && sk.indexOf(prefix) === 0) {
+                arr.push(mockDynamoUsers[key]);
+              }
+            } else if (pk.includes(value)) {
+              arr.push(mockDynamoUsers[key]);
+            }
+          }
+        }
+        return {
+          promise: async () => ({
+            Items: arr,
+          }),
+        };
+      }),
     update: jest
       .fn()
       .mockImplementation(

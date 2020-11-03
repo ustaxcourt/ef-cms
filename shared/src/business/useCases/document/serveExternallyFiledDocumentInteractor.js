@@ -25,11 +25,11 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -41,8 +41,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
       applicationContext,
       docketNumber,
     });
-
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -51,8 +50,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   const servedParties = aggregatePartiesForService(caseEntity);
   currentDocketEntry.setAsServed(servedParties.all);
   currentDocketEntry.setAsProcessingStatusAsCompleted();
-
-  caseEntity.updateDocketEntry(currentDocketEntry);
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -76,7 +73,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
   });
 
   let paperServicePdfUrl;
-
   if (servedParties.paper.length > 0) {
     const originalDoc = await PDFDocument.load(servedDocWithCover);
 
@@ -114,18 +110,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     paperServicePdfUrl = url;
   }
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryEntity: currentDocketEntry,
-    servedParties,
-  });
-
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
   const workItemToUpdate = currentDocketEntry.workItem;
 
   if (workItemToUpdate) {
@@ -155,6 +139,20 @@ exports.serveExternallyFiledDocumentInteractor = async ({
         workItem: workItemToUpdate.validate().toRawObject(),
       });
   }
+
+  caseEntity.updateDocketEntry(currentDocketEntry);
+
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: currentDocketEntry.docketEntryId,
+    servedParties,
+  });
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   return {
     paperServicePdfUrl,

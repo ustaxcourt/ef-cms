@@ -26,7 +26,12 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "route53:ListHostedZones",
         "route53:ChangeResourceRecordSets",
         "route53:ListTagsForResource",
-        "route53:ListHostedZonesByName"
+        "route53:ListHostedZonesByName",
+        "route53:CreateHealthCheck",
+        "route53:DeleteHealthCheck",
+        "route53:GetHealthCheck",
+        "route53:ListHealthChecks",
+        "route53:UpdateHealthCheck"
       ],
       "Resource": "*"
     },
@@ -70,6 +75,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:UpdateUserPool",
         "cognito-idp:DescribeUserPoolClient",
         "cognito-idp:AdminInitiateAuth",
+        "cognito-idp:AdminDisableUser",
         "cognito-idp:SignUp",
         "cognito-idp:ListUserPools",
         "cognito-idp:ListUserPoolClients",

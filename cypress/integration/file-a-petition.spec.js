@@ -1,4 +1,3 @@
-let rowCount;
 let createdDocketNumber;
 
 describe('File a petition', function () {
@@ -11,11 +10,7 @@ describe('File a petition', function () {
   });
 
   it('case list is visible', () => {
-    cy.get('table')
-      .find('tr')
-      .then($trs => {
-        rowCount = $trs.length;
-      });
+    cy.get('table').find('tr').should('exist');
     cy.get('#file-a-petition').click();
   });
 
@@ -208,9 +203,11 @@ describe('creation form', () => {
   });
 
   it('case list table reflects newly-added record', () => {
-    cy.get('table')
-      .find('tr')
-      .should('have.length', rowCount + 1);
+    // the first goToRoute is here so that if this fails, the second goToRoute will
+    // actually retry the API calls because it's not staying on the same page
+    cy.goToRoute('/file-a-petition/step-1');
+    cy.goToRoute('/');
+    cy.get('table').find('tr').should('contain.text', createdDocketNumber);
   });
 });
 

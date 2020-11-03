@@ -4,8 +4,10 @@ const {
 const { createCaseDeadline } = require('./createCaseDeadline');
 
 describe('createCaseDeadline', () => {
+  const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
+
   const mockCaseDeadline = {
-    caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    caseDeadlineId: CASE_DEADLINE_ID,
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '123-20',
@@ -21,9 +23,9 @@ describe('createCaseDeadline', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        pk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
-        sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
+        caseDeadlineId: CASE_DEADLINE_ID,
+        pk: `case-deadline|${CASE_DEADLINE_ID}`,
+        sk: `case-deadline|${CASE_DEADLINE_ID}`,
       },
     });
     expect(
@@ -31,15 +33,7 @@ describe('createCaseDeadline', () => {
     ).toMatchObject({
       Item: {
         pk: 'case|123-20',
-        sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[2][0],
-    ).toMatchObject({
-      Item: {
-        pk: 'case-deadline-catalog',
-        sk: 'case-deadline|6805d1ab-18d0-43ec-bafb-654e83405416',
+        sk: `case-deadline|${CASE_DEADLINE_ID}`,
       },
     });
   });

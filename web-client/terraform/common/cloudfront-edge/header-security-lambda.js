@@ -43,12 +43,12 @@ exports.handler = (event, context, callback) => {
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
-    "object-src 'none'",
+    `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
     `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} resource://pdf.js`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
     `img-src ${applicationUrl} ${subdomainsUrl} data:`,
     `font-src ${applicationUrl} ${subdomainsUrl}`,
-    `frame-src ${s3Url} ${subdomainsUrl} blob:`,
+    `frame-src ${s3Url} ${subdomainsUrl} blob: data:`,
     "frame-ancestors 'none'",
   ];
   headers['content-security-policy'] = [

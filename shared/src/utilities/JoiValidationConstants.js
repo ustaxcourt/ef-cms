@@ -2,6 +2,7 @@ const deepFreeze = require('deep-freeze');
 const joi = require('joi').extend(require('@hapi/joi-date'));
 
 const {
+  CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
 } = require('../business/entities/EntityConstants');
@@ -32,4 +33,5 @@ exports.JoiValidationConstants = deepFreeze({
   UUID: STRING.uuid({
     version: ['uuidv4'],
   }),
+  YEAR_MAX_CURRENT: joi.number().integer().min(1900).max(CURRENT_YEAR),
 });

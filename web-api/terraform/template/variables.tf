@@ -26,6 +26,10 @@ variable "es_instance_count" {
   type = string
 }
 
+variable "es_instance_type" {
+  type = string
+}
+
 variable "honeybadger_key" {
   type = string
 }
@@ -56,4 +60,13 @@ variable "green_elasticsearch_domain" {
 
 variable "destination_table" {
   type = string
+}
+
+variable "disable_emails" {
+  type    = bool
+  default = false
+}
+
+variable "es_volume_size" {
+  type = number
 }

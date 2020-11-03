@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * fetches the pending items
  *
@@ -8,16 +10,33 @@
  */
 export const fetchPendingItemsAction = async ({
   applicationContext,
+  get,
   props,
+  store,
 }) => {
-  const { judge } = props;
-
-  const pendingItems = await applicationContext
-    .getUseCases()
-    .fetchPendingItemsInteractor({
-      applicationContext,
-      judge,
+  if (props.judge) {
+    store.set(state.pendingReports, {
+      hasPendingItemsResults: false,
+      pendingItems: [],
+      pendingItemsPage: 0,
     });
+    store.set(state.pendingReports.selectedJudge, props.judge);
+  }
 
-  return { pendingItems };
+  const judge = get(state.pendingReports.selectedJudge);
+
+  if (!judge) return;
+
+  const page = get(state.pendingReports.pendingItemsPage);
+
+  const {
+    foundDocuments,
+    total,
+  } = await applicationContext.getUseCases().fetchPendingItemsInteractor({
+    applicationContext,
+    judge,
+    page,
+  });
+
+  return { pendingItems: foundDocuments, total };
 };

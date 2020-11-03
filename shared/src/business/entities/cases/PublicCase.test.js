@@ -1,5 +1,6 @@
 const {
   DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -17,6 +18,8 @@ describe('PublicCase', () => {
           docketEntries: [{}],
           docketNumber: '101-20',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          irsPractitioners: [{ name: 'Bob' }],
+          partyType: PARTY_TYPES.petitioner,
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         {},
@@ -48,7 +51,6 @@ describe('PublicCase', () => {
         caseCaption: expect.anything(),
         contactPrimary: expect.anything(),
         contactSecondary: expect.anything(),
-        createdAt: expect.anything(),
         receivedAt: expect.anything(),
       });
     });
@@ -64,6 +66,8 @@ describe('PublicCase', () => {
         docketEntries: [],
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
       {},
@@ -79,12 +83,13 @@ describe('PublicCase', () => {
         name: undefined,
         state: undefined,
       },
-      createdAt: 'testing',
       docketEntries: [],
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
+      hasIrsPractitioner: false,
       isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
       receivedAt: 'testing',
     });
   });
@@ -99,6 +104,8 @@ describe('PublicCase', () => {
         docketEntries: null,
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
       {},
@@ -108,12 +115,13 @@ describe('PublicCase', () => {
       caseCaption: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
-      createdAt: 'testing',
       docketEntries: [],
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
+      hasIrsPractitioner: false,
       isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
       receivedAt: 'testing',
     });
   });
@@ -138,6 +146,8 @@ describe('PublicCase', () => {
         ],
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
       {},
@@ -147,7 +157,6 @@ describe('PublicCase', () => {
       caseCaption: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
-      createdAt: 'testing',
       docketEntries: [
         {
           additionalInfo: undefined,
@@ -171,7 +180,9 @@ describe('PublicCase', () => {
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
       docketNumberWithSuffix: 'testingtesting',
+      hasIrsPractitioner: false,
       isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
       receivedAt: 'testing',
     });
   });

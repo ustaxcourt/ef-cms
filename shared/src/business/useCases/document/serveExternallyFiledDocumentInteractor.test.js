@@ -13,9 +13,7 @@ const {
 const {
   serveExternallyFiledDocumentInteractor,
 } = require('./serveExternallyFiledDocumentInteractor');
-
 jest.mock('../addCoversheetInteractor');
-
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 
 describe('serveExternallyFiledDocumentInteractor', () => {
@@ -262,5 +260,54 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         }),
       }),
     );
+  });
+
+  it('should update the case with the completed work item when the work item exists', async () => {
+    const mockDocketEntryWithWorkItemId =
+      '225d5474-b02b-4137-a78e-2043f7a0f805';
+    caseRecord.docketEntries = [
+      ...caseRecord.docketEntries,
+      {
+        docketEntryId: mockDocketEntryWithWorkItemId,
+        documentType: 'Administrative Record',
+        eventCode: 'ADMR',
+        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        workItem: {
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            documentType: 'Administrative Record',
+            entityName: 'DocketEntry',
+            eventCode: 'ADMR',
+            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          docketNumber: DOCKET_NUMBER,
+          isInitializeCase: true,
+          section: DOCKET_SECTION,
+          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+        },
+      },
+    ];
+
+    await serveExternallyFiledDocumentInteractor({
+      applicationContext,
+      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+      docketNumber: DOCKET_NUMBER,
+    });
+
+    const updatedWorkItem = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
+      ).workItem;
+    expect(updatedWorkItem.completedAt).toBeDefined();
   });
 });

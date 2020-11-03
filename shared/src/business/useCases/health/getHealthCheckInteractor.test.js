@@ -35,6 +35,7 @@ describe('getHealthCheckInteractor', () => {
         },
       },
     });
+
     expect(status).toEqual({
       clamAV: false,
       cognito: true,
@@ -122,6 +123,69 @@ describe('getHealthCheckInteractor', () => {
         westDocuments: false,
         westTempDocuments: false,
       },
+    });
+  });
+
+  describe('s3', () => {
+    const oldEnv = process.env;
+
+    afterAll(() => {
+      process.env = oldEnv;
+    });
+
+    it('should get the status of the buckets when the current color is green', async () => {
+      process.env.CURRENT_COLOR = 'pink';
+      process.env.EFCMS_DOMAIN = 'example';
+      const listObjectsMock = jest.fn().mockReturnValue(Promise.resolve(true));
+
+      await getHealthCheckInteractor({
+        applicationContext: {
+          environment: {
+            stage: 'dev',
+          },
+          getHttpClient: () => {
+            return {
+              CancelToken: {
+                source: () => ({
+                  cancel: () => null,
+                }),
+              },
+              get: () => Promise.resolve(true),
+            };
+          },
+          getPersistenceGateway() {
+            return {
+              getClientId: () => 'a',
+              getDeployTableStatus: () => 'ACTIVE',
+              getFirstSingleCaseRecord: () => true,
+              getSesStatus: () => true,
+              getTableStatus: () => 'ACTIVE',
+            };
+          },
+          getStorageClient: () => {
+            return {
+              listObjectsV2: listObjectsMock,
+            };
+          },
+        },
+      });
+
+      // app bucket
+      expect(listObjectsMock.mock.calls[0][0].Bucket).toBe(
+        `app-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
+      );
+      // app fail-over bucket
+      expect(listObjectsMock.mock.calls[1][0].Bucket).toBe(
+        `app-failover-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
+      );
+      // public bucket
+      expect(listObjectsMock.mock.calls[4][0].Bucket).toBe(
+        `${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
+      );
+      // public fail-over bucket
+      expect(listObjectsMock.mock.calls[5][0].Bucket).toBe(
+        `failover-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}`,
+      );
     });
   });
 });

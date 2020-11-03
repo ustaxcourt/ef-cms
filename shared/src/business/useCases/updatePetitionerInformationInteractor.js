@@ -40,7 +40,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
@@ -69,7 +69,7 @@ exports.updatePetitionerInformationInteractor = async ({
       city: contactSecondary.city,
       country: contactSecondary.country,
       countryType: contactSecondary.countryType,
-      inCareOf: contactPrimary.inCareOf,
+      inCareOf: contactSecondary.inCareOf,
       name: contactSecondary.name,
       phone: contactSecondary.phone,
       postalCode: contactSecondary.postalCode,
@@ -190,7 +190,7 @@ exports.updatePetitionerInformationInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      docketEntryEntity: changeOfAddressDocketEntry,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
       servedParties,
     });
 

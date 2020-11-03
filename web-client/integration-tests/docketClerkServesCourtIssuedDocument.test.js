@@ -70,6 +70,6 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsDraftOrder(test, 2);
   docketClerkSignsOrder(test, 2);
   docketClerkAddsDocketEntryFromOrder(test, 2);
-  docketClerkViewsCaseDetailDocumentView(test);
   docketClerkServesDocumentFromCaseDetailDocumentView(test);
+  docketClerkViewsCaseDetailDocumentView(test);
 });

@@ -10,7 +10,7 @@ data "null_data_source" "locals" {
     USER_POOL_ID                   = aws_cognito_user_pool.pool.id
     USER_POOL_IRS_ID               = aws_cognito_user_pool.irs_pool.id
     NODE_ENV                       = "production"
-    EMAIL_SOURCE                   = "noreply@mail.${var.dns_domain}"
+    EMAIL_SOURCE                   = "noreply@${var.dns_domain}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE = "document_served_${var.environment}"
     EMAIL_SERVED_PETITION_TEMPLATE = "petition_served_${var.environment}"
     EFCMS_DOMAIN                   = var.dns_domain
@@ -18,5 +18,6 @@ data "null_data_source" "locals" {
     CIRCLE_HONEYBADGER_API_KEY     = var.honeybadger_key
     IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
     COGNITO_SUFFIX                 = var.cognito_suffix
+    DISABLE_EMAILS                 = var.disable_emails
   }
 }

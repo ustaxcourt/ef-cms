@@ -47,6 +47,10 @@ describe('createUser', () => {
       promise: async () => Promise.resolve(),
     });
 
+    applicationContext.getCognito().adminDisableUser.mockReturnValue({
+      promise: async () => Promise.resolve(),
+    });
+
     applicationContext.getDocumentClient().put.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
@@ -105,7 +109,6 @@ describe('createUser', () => {
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
       MessageAction: 'SUPPRESS',
-      TemporaryPassword: expect.anything(),
       UserAttributes: [
         {
           Name: 'email_verified',
