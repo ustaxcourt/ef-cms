@@ -77,7 +77,7 @@ describe('pendingReportListHelper', () => {
     expect(showNoPendingItems).toBe(false);
   });
 
-  it('should set showSelectJudgeText to false when no judge selected', () => {
+  it('should set showSelectJudgeText to true when no judge selected', () => {
     const mockState = {
       pendingReports: {
         hasPendingItemsResults: true,
@@ -94,7 +94,7 @@ describe('pendingReportListHelper', () => {
     expect(showSelectJudgeText).toBe(true);
   });
 
-  it('should set showSelectJudgeText to true when a judge is selected', () => {
+  it('should set showSelectJudgeText to false when a judge is selected', () => {
     const mockState = {
       pendingReports: {
         hasPendingItemsResults: true,
