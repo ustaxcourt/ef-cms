@@ -59,4 +59,25 @@ describe('fetchPendingItemsInteractor', () => {
     expect(error).not.toBeNull();
     expect(error.message).toContain('Unauthorized');
   });
+
+  it('should throw an error if the judge is not defined', async () => {
+    applicationContext.getCurrentUser = () => {
+      return {
+        role: ROLES.petitionsClerk,
+        userId: 'petitionsclerk',
+      };
+    };
+
+    let error;
+    try {
+      await fetchPendingItemsInteractor({
+        applicationContext,
+        judge: undefined,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).not.toBeNull();
+    expect(error.message).toContain('judge is required');
+  });
 });

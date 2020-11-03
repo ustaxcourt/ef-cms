@@ -1,0 +1,5 @@
+{
+  "index.ignored_file_patterns" : [
+    "node_modules"
+  ]
+}

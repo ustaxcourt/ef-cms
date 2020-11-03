@@ -161,7 +161,6 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          createdAt: undefined,
           docketEntryId: '123',
           documentTitle: undefined,
           documentType: 'Order that case is assigned',
@@ -170,11 +169,11 @@ describe('PublicCase', () => {
           isMinuteEntry: false,
           isOnDocketRecord: true,
           isPaper: undefined,
+          isSealed: false,
           processingStatus: undefined,
           receivedAt: undefined,
           servedAt: undefined,
           servedParties: undefined,
-          status: undefined,
         },
       ],
       docketNumber: 'testing',
@@ -258,6 +257,16 @@ describe('PublicCase', () => {
         },
         [],
       );
+      expect(isPrivate).toEqual(true);
+    });
+
+    it('should return true for a court-issued document that is stricken', () => {
+      const isPrivate = isPrivateDocument({
+        docketEntryId: '123',
+        documentType: 'Order',
+        isOnDocketRecord: true,
+        isStricken: true,
+      });
       expect(isPrivate).toEqual(true);
     });
   });

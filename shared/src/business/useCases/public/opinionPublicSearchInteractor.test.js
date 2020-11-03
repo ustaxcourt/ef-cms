@@ -48,19 +48,17 @@ describe('opinionPublicSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue(mockOpinionSearchResult);
   });
 
-  it('should only search for opinion document types', async () => {
+  it('should only search for opinion document types, allowing opinions within sealed cases', async () => {
     await opinionPublicSearchInteractor({
       applicationContext,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
-    ).toMatchObject({
-      documentEventCodes: OPINION_EVENT_CODES,
-    });
+    const searchArgs = applicationContext.getPersistenceGateway()
+      .advancedDocumentSearch.mock.calls[0][0];
+    expect(searchArgs.documentEventCodes).toMatchObject(OPINION_EVENT_CODES);
+    expect(searchArgs.omitSealed).toBeUndefined();
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {

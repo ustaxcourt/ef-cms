@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
+import { docketClerkViewsQCItemForNCAForUnrepresentedPetitioner } from './journey/docketClerkViewsQCItemForNCAForUnrepresentedPetitioner';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
 import { petitionerEditsCasePrimaryContactAddressAndPhone } from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
@@ -42,6 +43,7 @@ describe('Modify Petitioner Contact Information', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
+    expect(caseDetail.privatePractitioners).toEqual([]);
     test.docketNumber = caseDetail.docketNumber;
   });
 
@@ -72,4 +74,5 @@ describe('Modify Petitioner Contact Information', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsNoticeOfChangeOfAddress(test);
+  docketClerkViewsQCItemForNCAForUnrepresentedPetitioner(test);
 });
