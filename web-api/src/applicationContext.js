@@ -1043,8 +1043,6 @@ const initHoneybadger = () => {
   }
 };
 
-const logger = createLogger();
-
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoClientCache[type]) {
@@ -1250,7 +1248,7 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-module.exports = appContextUser => {
+module.exports = (appContextUser, requestId) => {
   let user;
 
   if (appContextUser) {
@@ -1260,6 +1258,8 @@ module.exports = appContextUser => {
   const getCurrentUser = () => {
     return user;
   };
+
+  const logger = createLogger({ requestId });
 
   return {
     barNumberGenerator,

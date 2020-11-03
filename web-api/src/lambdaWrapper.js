@@ -5,6 +5,12 @@ export const lambdaWrapper = lambda => {
       path: req.path,
       pathParameters: req.params,
       queryStringParameters: req.query,
+      requestId: {
+        apiGateway: (((req.apiGateway || {}).event || {}).requestContext || {})
+          .requestId,
+        applicationLoadBalancer: req.headers['X-Amzn-Trace-Id'],
+        lambda: ((req.apiGateway || {}).context || {}).awsRequestId,
+      },
     };
 
     if (process.env.USTC_ENV === 'dev') {
