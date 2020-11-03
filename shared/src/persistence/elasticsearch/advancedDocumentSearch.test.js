@@ -41,6 +41,11 @@ describe('advancedDocumentSearch', () => {
     },
     {
       bool: {
+        must_not: [
+          {
+            term: { 'isStricken.BOOL': true },
+          },
+        ],
         should: [
           {
             match: {
@@ -67,6 +72,11 @@ describe('advancedDocumentSearch', () => {
     },
     {
       bool: {
+        must_not: [
+          {
+            term: { 'isStricken.BOOL': true },
+          },
+        ],
         should: [
           {
             match: {
@@ -97,13 +107,7 @@ describe('advancedDocumentSearch', () => {
   ) => {
     let query = {
       bool: {
-        must_not: [
-          {
-            term: {
-              'isStricken.BOOL': true,
-            },
-          },
-        ],
+        must_not: [],
       },
     };
 
@@ -234,7 +238,6 @@ describe('advancedDocumentSearch', () => {
       },
     ];
     expectation[4].has_parent.query.bool.must_not = [
-      { term: { 'isStricken.BOOL': true } },
       { term: { 'isSealed.BOOL': true } },
     ];
 
@@ -264,7 +267,6 @@ describe('advancedDocumentSearch', () => {
       },
     ];
     expectation[4].has_parent.query.bool.must_not = [
-      { term: { 'isStricken.BOOL': true } },
       { term: { 'isSealed.BOOL': true } },
     ];
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
