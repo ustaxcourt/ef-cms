@@ -29,6 +29,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('searchResults')).toEqual([]);
 
+    // search for an opinion on a sealed case
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
