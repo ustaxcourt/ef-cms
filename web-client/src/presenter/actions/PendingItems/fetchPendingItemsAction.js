@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.get the cerebral get function
  * @returns {object} contains the pending items
  */
 export const fetchPendingItemsAction = async ({ applicationContext, get }) => {
