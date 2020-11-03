@@ -10,13 +10,13 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { clone } = require('lodash');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -47,19 +47,17 @@ exports.generateChangeOfAddress = async ({
 
   const updatedCases = [];
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({
-      applicationContext,
-      docketNumbers: docketNumbers.map(({ docketNumber }) => ({
-        docketNumber,
-      })),
-    });
-
-  for (let userCase of cases) {
+  for (let { docketNumber } of docketNumbers) {
     try {
       let oldData;
       const newData = contactInfo;
+
+      const userCase = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
 
       const name = updatedName ? updatedName : user.name;
 
@@ -267,6 +265,7 @@ exports.generateChangeOfAddress = async ({
         updatedCases.push(updatedCaseRaw);
       }
     } catch (error) {
+      applicationContext.logger.error(error);
       applicationContext.notifyHoneybadger(error);
     }
 
