@@ -252,7 +252,7 @@ exports.generateChangeOfAddress = async ({
       if (shouldUpdateCase || docketEntryAdded) {
         const validatedRawCase = caseEntity.validate().toRawObject();
 
-        const updatedCase = applicationContext
+        const updatedCase = await applicationContext
           .getPersistenceGateway()
           .updateCase({
             applicationContext,
@@ -278,5 +278,5 @@ exports.generateChangeOfAddress = async ({
     });
   }
 
-  return Promise.all(updatedCases);
+  return updatedCases;
 };
