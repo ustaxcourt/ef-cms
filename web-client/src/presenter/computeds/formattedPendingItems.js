@@ -32,10 +32,6 @@ export const formattedPendingItems = (get, applicationContext) => {
       .compareISODateStrings(a.receivedAt, b.receivedAt),
   );
 
-  if (judgeFilter) {
-    items = items.filter(i => i.associatedJudgeFormatted === judgeFilter);
-  }
-
   let printUrl = '/reports/pending-report/printable';
 
   if (judgeFilter) {
