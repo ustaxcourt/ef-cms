@@ -1,6 +1,11 @@
+import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkChecksDocketEntryEditLink } from '../integration-tests/journey/docketClerkChecksDocketEntryEditLink';
+import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkNavigatesToEditDocketEntryMeta } from '../integration-tests/journey/docketClerkNavigatesToEditDocketEntryMeta';
+import { docketClerkNavigatesToEditDocketEntryMetaForCourtIssued } from '../integration-tests/journey/docketClerkNavigatesToEditDocketEntryMetaForCourtIssued';
 import { docketClerkQCsDocketEntry } from '../integration-tests/journey/docketClerkQCsDocketEntry';
+import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { docketClerkStrikesDocketEntry } from '../integration-tests/journey/docketClerkStrikesDocketEntry';
 import {
   fakeFile,
@@ -9,6 +14,7 @@ import {
   uploadPetition,
 } from '../integration-tests/helpers';
 import { petitionerFilesADocumentForCase } from '../integration-tests/journey/petitionerFilesADocumentForCase';
+import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
 import { unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully } from './journey/unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
@@ -19,7 +25,7 @@ const test = setupTest();
 const testClient = setupTestClient();
 testClient.draftOrders = [];
 
-describe('Petitioner creates a case and adds a document', () => {
+describe('Petitioner creates a case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -31,6 +37,15 @@ describe('Petitioner creates a case and adds a document', () => {
     test.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
+});
+
+describe('Petitions clerk serves case to IRS', () => {
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
+});
+
+describe('Petitioner files a document for the case', () => {
+  loginAs(testClient, 'petitioner@example.com');
   petitionerFilesADocumentForCase(testClient, fakeFile);
 });
 
@@ -43,9 +58,29 @@ describe('Docketclerk QCs and Strikes a docket entry', () => {
   docketClerkStrikesDocketEntry(testClient, 3);
 });
 
-describe('Unauthed user views stricken docket entry', () => {
+describe('Unauthed user views stricken docket entry for externally-filed document', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesByDocketNumber(test, testClient);
   unauthedUserSeesStrickenDocketEntry(test, 3);
+  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
+});
+
+describe('Docketclerk creates an order and strikes it', () => {
+  loginAs(testClient, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(testClient, {
+    documentTitle: 'Order',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+  docketClerkSignsOrder(testClient, 0);
+  docketClerkAddsDocketEntryFromOrder(testClient, 0);
+  docketClerkServesDocument(testClient, 0);
+  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(testClient, 4);
+  docketClerkStrikesDocketEntry(testClient, 4);
+});
+
+describe('Unauthed user views stricken docket entry for order', () => {
+  unauthedUserSeesStrickenDocketEntry(test, 4);
   unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
 });

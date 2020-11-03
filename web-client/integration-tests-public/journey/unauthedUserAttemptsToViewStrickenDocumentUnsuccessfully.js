@@ -1,5 +1,5 @@
 export const unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully = test => {
-  return it('View printable docket record for a sealed case', async () => {
+  return it('View stricken document unsuccessfully', async () => {
     await expect(
       test.runSequence('openCaseDocumentDownloadUrlSequence', {
         docketEntryId: test.docketEntryId,
