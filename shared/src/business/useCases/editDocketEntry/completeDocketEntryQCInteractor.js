@@ -176,7 +176,9 @@ exports.completeDocketEntryQCInteractor = async ({
 
   caseEntity.updateDocketEntry(updatedDocketEntry);
 
-  caseEntity.updateAutomaticBlocked({});
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   const workItemToUpdate = updatedDocketEntry.workItem;
 
@@ -344,7 +346,7 @@ exports.completeDocketEntryQCInteractor = async ({
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
-      docketEntryEntity: noticeUpdatedDocketEntry,
+      docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       servedParties,
     });
 

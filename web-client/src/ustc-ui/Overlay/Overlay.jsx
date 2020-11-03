@@ -106,12 +106,12 @@ function OverlayWithRef() {
   /**
    * forwardRef
    *
-   * @param {*} props props
+   * @param {*} componentProps props
    * @param {*} ref ref
    * @returns {*} the component
    */
-  function forwardRef(props, ref) {
-    return <OverlayUnRef {...props} forwardedRef={ref} />;
+  function forwardRef(componentProps, ref) {
+    return <OverlayUnRef {...componentProps} forwardedRef={ref} />;
   }
 
   const name = OverlayUnRef.displayName || OverlayUnRef.name;

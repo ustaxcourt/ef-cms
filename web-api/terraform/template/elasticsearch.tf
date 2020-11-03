@@ -7,13 +7,13 @@ resource "aws_elasticsearch_domain" "efcms-search" {
   elasticsearch_version = "7.4"
 
   cluster_config {
-    instance_type = "t2.small.elasticsearch"
+    instance_type  = var.es_instance_type
     instance_count = var.es_instance_count == "" ? "1" : var.es_instance_count
   }
 
-  ebs_options{
+  ebs_options {
     ebs_enabled = true
-    volume_size = 10
+    volume_size = var.es_volume_size
   }
 
   snapshot_options {

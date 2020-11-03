@@ -345,7 +345,7 @@ describe('ContactFactory', () => {
   });
 
   it('a valid petition returns true for isValid', () => {
-    const caseExternal = new CaseExternal(
+    caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
@@ -601,7 +601,7 @@ describe('ContactFactory', () => {
   });
 
   it('can validate invalid Custodian contact', () => {
-    let caseExternal = new CaseExternal(
+    caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
@@ -655,7 +655,7 @@ describe('ContactFactory', () => {
   });
 
   it('can validate invalid Donor contact', () => {
-    let caseExternal = new CaseExternal(
+    caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
@@ -710,7 +710,7 @@ describe('ContactFactory', () => {
   });
 
   it('can validate invalid Transferee contact', () => {
-    let caseExternal = new CaseExternal(
+    caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',

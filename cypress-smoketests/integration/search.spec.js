@@ -115,11 +115,11 @@ describe('Opinion Search', () => {
   it('should create an opinion to search for', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
     createOpinion();
-    addDocketEntryAndServeOpinion();
+    addDocketEntryAndServeOpinion(testData);
   });
 
   it('should be able to search for an opinion by keyword', () => {
     goToOpinionSearch();
-    searchOpinionByKeyword('smoke test');
+    searchOpinionByKeyword(testData.documentDescription);
   });
 });

@@ -158,10 +158,6 @@ describe('DocketEntryFactory', () => {
       });
     });
 
-    it('should not require Exhibits', () => {
-      expect(errors().exhibits).toEqual(undefined);
-    });
-
     it('should not require Attachments', () => {
       expect(errors().attachments).toEqual(undefined);
     });

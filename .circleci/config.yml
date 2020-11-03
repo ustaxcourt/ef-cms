@@ -251,7 +251,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -373,7 +373,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -437,7 +437,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium+
+    resource_class: large
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -517,8 +517,17 @@ jobs:
           name: Setup ES Instance Count
           command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup ES Instance Type
+          command: echo "export ES_INSTANCE_TYPE='$(./get-es-instance-type.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: Setup Disable Emails
+          command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: Setup ES Volume Size
+          command: echo "export ES_VOLUME_SIZE='$(./get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Terraform'
           command: |
@@ -534,9 +543,12 @@ jobs:
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" \
              -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" \
+             -e "ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}" \
              -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" \
              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
+             -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
+             -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
@@ -623,7 +635,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Cognito Create Court Users'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -792,12 +804,15 @@ jobs:
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
       - run:
           name: 'Pa11y Smoke Tests'
           command: npm run test:pa11y:smoketests
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
 
   switch-colors:
     docker:
@@ -826,6 +841,7 @@ jobs:
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID >> $BASH_ENV"
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
@@ -834,7 +850,7 @@ build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run hourly below
+        - develop # run the related develop workflow below
         - prod # run with context workflow below
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
@@ -921,9 +937,9 @@ workflows:
             branches:
               only:
                 - irs
+                - migration
                 - staging
                 - test
-                - migration
                 - master
                 - experimental1
                 - experimental2
@@ -935,7 +951,10 @@ workflows:
           filters:
             branches:
               only:
+                - irs
+                - migration
                 - staging
+                - test
                 - experimental1
                 - experimental2
                 - experimental3
@@ -945,6 +964,7 @@ workflows:
           filters:
             branches:
               only:
+                - irs
                 - staging
                 - experimental1
                 - experimental2
@@ -957,8 +977,6 @@ workflows:
               only:
                 - irs
                 - staging
-                - test
-                - migration
                 - master
                 - experimental1
                 - experimental2

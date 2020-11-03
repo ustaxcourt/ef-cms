@@ -78,6 +78,7 @@ export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
+export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_honeybadger_key=$CIRCLE_HONEYBADGER_API_KEY
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
@@ -86,6 +87,8 @@ export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_destination_table=$DESTINATION_TABLE
+export TF_VAR_disable_emails=$DISABLE_EMAILS
+export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan

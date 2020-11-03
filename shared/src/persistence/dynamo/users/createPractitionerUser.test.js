@@ -17,6 +17,22 @@ const privatePractitionerUser = {
   section: 'privatePractitioner',
 };
 
+const irsPractitionerUser = {
+  barNumber: 'pt1234',
+  email: 'test@example.com',
+  name: 'Test IRS Practitioner',
+  role: ROLES.irsPractitioner,
+  section: 'privatePractitioner',
+};
+
+const inactivePractitionerUser = {
+  barNumber: 'pt1234',
+  email: 'test@example.com',
+  name: 'Test Inactive Practitioner',
+  role: ROLES.inactivePractitioner,
+  section: 'privatePractitioner',
+};
+
 const privatePractitionerUserWithSection = {
   barNumber: 'pt1234',
   email: 'test@example.com',
@@ -157,6 +173,31 @@ describe('createPractitionerUser', () => {
     ).not.toBeCalled();
   });
 
+  it('should call cognito adminCreateUser for an IRS practitioner user with email address', async () => {
+    await createPractitionerUser({
+      applicationContext,
+      user: irsPractitionerUser,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+  it('should call cognito adminCreateUser for an inactive practitioner user with email address', async () => {
+    await createPractitionerUser({
+      applicationContext,
+      user: inactivePractitionerUser,
+    });
+
+    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).not.toBeCalled();
+  });
+
   it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
       promise: async () => Promise.resolve({}),
@@ -193,11 +234,11 @@ describe('createPractitionerUser', () => {
     ).toBeCalled();
   });
 
-  it('should throw an error when attempting to create a user that is not role private or IRS practitioner', async () => {
+  it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {
     await expect(
       createPractitionerUser({ applicationContext, user: otherUser }),
     ).rejects.toThrow(
-      'Practitioner users must have either private or IRS practitioner role',
+      `Role must be ${ROLES.privatePractitioner}, ${ROLES.irsPractitioner}, or ${ROLES.inactivePractitioner}`,
     );
   });
 

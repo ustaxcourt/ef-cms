@@ -1,3 +1,6 @@
+const {
+  MAX_SEARCH_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
@@ -54,8 +57,27 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (caseTitleOrPetitioner) {
-    queryParams.push({
+  const parentQueryParams = {
+    has_parent: {
+      inner_hits: {
+        _source: {
+          includes: sourceFields,
+        },
+        name: 'case-mappings',
+      },
+      parent_type: 'case',
+      query: { match_all: {} },
+    },
+  };
+
+  if (docketNumber) {
+    parentQueryParams.has_parent.query = {
+      match: {
+        'docketNumber.S': { operator: 'and', query: docketNumber },
+      },
+    };
+  } else if (caseTitleOrPetitioner) {
+    parentQueryParams.has_parent.query = {
       simple_query_string: {
         fields: [
           'caseCaption.S',
@@ -64,8 +86,10 @@ exports.advancedDocumentSearch = async ({
         ],
         query: caseTitleOrPetitioner,
       },
-    });
+    };
   }
+
+  queryParams.push(parentQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
@@ -74,7 +98,10 @@ exports.advancedDocumentSearch = async ({
       bool: {
         should: {
           match: {
-            [judgeField]: judgeName,
+            [judgeField]: {
+              operator: 'and',
+              query: judgeName,
+            },
           },
         },
       },
@@ -88,14 +115,6 @@ exports.advancedDocumentSearch = async ({
           operator: 'and',
           query: opinionType,
         },
-      },
-    });
-  }
-
-  if (docketNumber) {
-    queryParams.push({
-      match: {
-        'docketNumber.S': { operator: 'and', query: docketNumber },
       },
     });
   }
@@ -139,7 +158,7 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: 5000,
+      size: MAX_SEARCH_RESULTS,
     },
     index: 'efcms-docket-entry',
   };

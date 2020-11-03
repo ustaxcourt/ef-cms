@@ -91,17 +91,11 @@ Statistic.VALIDATION_RULES = joi.object().keys({
   statisticId: JoiValidationConstants.UUID.required().description(
     'Unique statistic ID only used by the system.',
   ),
-  year: joi
-    .number()
-    .integer()
-    .min(1900)
-    .max(new Date().getFullYear())
-    .when('yearOrPeriod', {
-      is: 'Year',
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .description('The year of the statistics period.'),
+  year: JoiValidationConstants.YEAR_MAX_CURRENT.when('yearOrPeriod', {
+    is: 'Year',
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }).description('The year of the statistics period.'),
   yearOrPeriod: JoiValidationConstants.STRING.required()
     .valid('Year', 'Period')
     .description('Whether the statistics are for a year or period.'),

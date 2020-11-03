@@ -1,12 +1,51 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
+);
+const requestAccessHelper = withAppContextDecorator(
+  requestAccessHelperComputed,
+);
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
+
 export const practitionerRequestsAccessToCase = (test, fakeFile) => {
   return it('Practitioner requests access to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: test.getState(),
+    });
+
+    expect(headerHelper.showRequestAccessToCaseButton).toBeTruthy();
+
     await test.runSequence('gotoRequestAccessSequence', {
       docketNumber: test.docketNumber,
     });
+
+    const requestHelper = runCompute(requestAccessHelper, {
+      state: test.getState(),
+    });
+
+    expect(requestHelper.showSecondaryParty).toBeTruthy();
+
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(caseDetailFormatted.contactSecondary.name).toEqual(
+      'Jimothy Schultz',
+    );
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 
@@ -21,15 +60,15 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Entry of Appearance',
+      value: 'Limited Entry of Appearance',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Entry of Appearance for [Petitioner Names]',
+      value: 'Limited Entry of Appearance for [Petitioner Names]',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
-      value: 'EA',
+      value: 'LEA',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'scenario',
@@ -110,7 +149,7 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
+      'Limited Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
     expect(test.getState('validationErrors')).toEqual({});
 

@@ -32,17 +32,17 @@ const init = async (csvFile, outputMap) => {
           let endpoint;
 
           if (process.env.ENV === 'local') {
-            endpoint = 'http://localhost:4000/judges';
+            endpoint = 'http://localhost:4000/users';
           } else {
             const services = await getServices();
             endpoint = `${
               services[`gateway_api_${process.env.DEPLOYING_COLOR}`]
-            }/judges`;
+            }/users`;
           }
 
           const result = await axios.post(
             endpoint,
-            { user: row },
+            { ...row, password: process.env.DEFAULT_ACCOUNT_PASS },
             {
               headers: {
                 Authorization: `Bearer ${token}`,

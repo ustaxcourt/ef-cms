@@ -5,6 +5,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
+  const maxResultsOverride = 3;
 
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
@@ -16,6 +17,7 @@ describe('advancedDocumentSearchHelper', () => {
         return {
           ...applicationContext.getConstants(),
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+          MAX_SEARCH_RESULTS: maxResultsOverride,
         };
       },
     },
@@ -38,6 +40,8 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
+      maxResults: maxResultsOverride,
+      showMaxResultsMessage: false,
       showSealedIcon: false,
     });
   });
@@ -59,6 +63,8 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Order',
       isPublic: true,
+      maxResults: maxResultsOverride,
+      showMaxResultsMessage: false,
       showSealedIcon: true,
     });
   });
@@ -136,8 +142,69 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
+      maxResults: maxResultsOverride,
       searchResultsCount: 1,
       showLoadMore: false,
+      showMaxResultsMessage: false,
+      showNoMatches: false,
+      showSearchResults: true,
+    });
+  });
+
+  it('returns showMaxResultsMessage true if maximum number of results has been reached', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
+        searchResults: [
+          {
+            docketNumber: '101-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+          {
+            docketNumber: '102-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+          {
+            docketNumber: '103-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+          {
+            docketNumber: '104-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+        ],
+      },
+    });
+
+    expect(result).toMatchObject({
+      maxResults: maxResultsOverride,
+      searchResultsCount: 4,
+      showLoadMore: false,
+      showMaxResultsMessage: true,
       showNoMatches: false,
       showSearchResults: true,
     });
@@ -175,7 +242,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentTitle: 'Order for Stuff',
             documentType: 'OAPF - Order for Amended Petition and Filing Fee',
             filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Cohen',
+            judge: 'Cohen',
           },
         ],
       },
@@ -203,7 +270,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedFiledDate: '03/01/19',
-        judge: 'Judge Cohen',
+        judge: 'Cohen',
       },
     ]);
   });
@@ -241,7 +308,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentType: 'Summary Opinion',
             eventCode: 'SOP',
             filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Cohen',
+            judge: 'Cohen',
           },
         ],
       },
@@ -270,7 +337,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedFiledDate: '03/01/19',
-        judge: 'Judge Cohen',
+        judge: 'Cohen',
       },
     ]);
   });

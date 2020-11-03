@@ -29,6 +29,7 @@ module "ef-cms_apis" {
   cognito_suffix             = var.cognito_suffix
   email_dmarc_policy         = var.email_dmarc_policy
   es_instance_count          = var.es_instance_count
+  es_instance_type           = var.es_instance_type
   honeybadger_key            = var.honeybadger_key
   irs_superuser_email        = var.irs_superuser_email
   deploying_color            = var.deploying_color
@@ -37,4 +38,6 @@ module "ef-cms_apis" {
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   green_elasticsearch_domain = var.green_elasticsearch_domain
   destination_table          = var.destination_table
+  disable_emails             = var.disable_emails
+  es_volume_size             = var.es_volume_size
 }

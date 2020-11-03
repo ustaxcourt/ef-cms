@@ -166,6 +166,16 @@ const deconstructDate = dateString => {
   return result;
 };
 
+const getMonthDayYearObj = momentRef => {
+  const momentObj = momentRef || prepareDateFromString();
+  const result = {
+    day: momentObj.format('D'),
+    month: momentObj.format('M'),
+    year: momentObj.format('YYYY'),
+  };
+  return result;
+};
+
 /**
  * @param {string} dateString the date string
  * @param {string} formats the format to check against
@@ -279,6 +289,7 @@ module.exports = {
   deconstructDate,
   formatDateString,
   formatNow,
+  getMonthDayYearObj,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,

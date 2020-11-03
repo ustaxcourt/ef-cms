@@ -4,10 +4,25 @@ const {
 const { deleteCaseDeadline } = require('./deleteCaseDeadline');
 
 describe('deleteCaseDeadline', () => {
-  it('deletes the case deadline', async () => {
+  const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
+
+  const mockCaseDeadline = {
+    caseDeadlineId: CASE_DEADLINE_ID,
+    deadlineDate: '2019-03-01T21:42:29.073Z',
+    description: 'hello world',
+    docketNumber: '123-20',
+  };
+
+  beforeEach(() => {
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => Promise.resolve({ Item: mockCaseDeadline }),
+    });
+  });
+
+  it('deletes the case deadline records', async () => {
     await deleteCaseDeadline({
       applicationContext,
-      caseDeadlineId: '123',
+      caseDeadlineId: CASE_DEADLINE_ID,
       docketNumber: '456-20',
     });
 
@@ -15,8 +30,8 @@ describe('deleteCaseDeadline', () => {
       applicationContext.getDocumentClient().delete.mock.calls[0][0],
     ).toMatchObject({
       Key: {
-        pk: 'case-deadline|123',
-        sk: 'case-deadline|123',
+        pk: `case-deadline|${CASE_DEADLINE_ID}`,
+        sk: `case-deadline|${CASE_DEADLINE_ID}`,
       },
     });
     expect(
@@ -24,16 +39,22 @@ describe('deleteCaseDeadline', () => {
     ).toMatchObject({
       Key: {
         pk: 'case|456-20',
-        sk: 'case-deadline|123',
+        sk: `case-deadline|${CASE_DEADLINE_ID}`,
       },
     });
-    expect(
-      applicationContext.getDocumentClient().delete.mock.calls[2][0],
-    ).toMatchObject({
-      Key: {
-        pk: 'case-deadline-catalog',
-        sk: 'case-deadline|123',
-      },
+  });
+
+  it('does not call delete function if original case deadline is not found', async () => {
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => Promise.resolve({}),
     });
+
+    await deleteCaseDeadline({
+      applicationContext,
+      caseDeadlineId: CASE_DEADLINE_ID,
+      docketNumber: '456-20',
+    });
+
+    expect(applicationContext.getDocumentClient().delete).not.toBeCalled();
   });
 });

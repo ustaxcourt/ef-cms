@@ -48,13 +48,7 @@ export const IndividualWorkQueueInProgress = connect(
                   </td>
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">
-                      <a
-                        className="case-link"
-                        href={item.editLink}
-                        onClick={e => {
-                          e.stopPropagation();
-                        }}
-                      >
+                      <a className="case-link" href={item.editLink}>
                         {item.docketEntry.documentTitle ||
                           item.docketEntry.documentType}
                       </a>

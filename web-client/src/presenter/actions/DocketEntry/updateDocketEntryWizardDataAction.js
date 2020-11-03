@@ -113,7 +113,6 @@ export const updateDocketEntryWizardDataAction = ({
       break;
     case 'previousDocument':
       if (supporting) {
-        store.unset(state.form.exhibits);
         store.unset(state.form.attachments);
         store.unset(state.form.certificateOfService);
         store.unset(state.form.certificateOfServiceDate);

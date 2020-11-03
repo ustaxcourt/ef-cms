@@ -103,9 +103,7 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
 
   const qcWorkItem = formattedEntry.workItem;
 
-  formattedEntry.qcWorkItemsCompleted = !!(
-    qcWorkItem && qcWorkItem.completedAt
-  );
+  formattedEntry.qcWorkItemsCompleted = !qcWorkItem || !!qcWorkItem.completedAt;
 
   formattedEntry.isUnservable =
     UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
@@ -132,10 +130,12 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.qcWorkItemsUntouched =
     qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
 
-  // Served parties code - R = Respondent, P = Petitioner, B = Both
-  formattedEntry.servedPartiesCode = getServedPartiesCode(
-    formattedEntry.servedParties,
-  );
+  if (formattedEntry.servedPartiesCode !== SERVED_PARTIES_CODES.PETITIONER) {
+    // Served parties code - R = Respondent, P = Petitioner, B = Both
+    formattedEntry.servedPartiesCode = getServedPartiesCode(
+      formattedEntry.servedParties,
+    );
+  }
 
   if (
     formattedEntry.isCourtIssuedDocument &&
@@ -167,7 +167,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   }
 
   if (formattedEntry.additionalInfo) {
-    formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+    if (formattedEntry.addToCoversheet) {
+      formattedEntry.descriptionDisplay += ` ${formattedEntry.additionalInfo}`;
+    } else {
+      formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
+    }
   }
 
   if (formattedEntry.lodged) {
@@ -186,7 +190,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
         ? `(C/S ${formattedDocketEntry.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${formattedDocketEntry.exhibits ? '(Exhibit(s))' : ''}`,
     `${formattedDocketEntry.attachments ? '(Attachment(s))' : ''}`,
     `${
       formattedDocketEntry.objections === OBJECTIONS_OPTIONS_MAP.YES
@@ -244,7 +247,7 @@ const formatCase = (applicationContext, caseDetail) => {
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending,
+      entry => entry.pending && entry.servedAt,
     );
   }
 
@@ -438,7 +441,7 @@ const byIndexSortFunction = (a, b) => {
   return a.index - b.index;
 };
 
-const getDocketRecordSortFunc = sortBy => {
+const getDocketRecordSortFunc = sortByString => {
   const byDate = (a, b) => {
     const compared = calendarDatesCompared(a.filingDate, b.filingDate);
     if (compared === 0) {
@@ -447,7 +450,7 @@ const getDocketRecordSortFunc = sortBy => {
     return compared;
   };
 
-  switch (sortBy) {
+  switch (sortByString) {
     case 'byIndex': // fall-through
     case 'byIndexDesc':
       return byIndexSortFunction;
@@ -469,9 +472,9 @@ const sortUndefined = (a, b) => {
   }
 };
 
-const sortDocketEntries = (docketEntries = [], sortBy = '') => {
-  const sortFunc = getDocketRecordSortFunc(sortBy);
-  const isReversed = sortBy.includes('Desc');
+const sortDocketEntries = (docketEntries = [], sortByString = '') => {
+  const sortFunc = getDocketRecordSortFunc(sortByString);
+  const isReversed = sortByString.includes('Desc');
   const result = docketEntries.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
