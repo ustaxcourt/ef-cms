@@ -77,13 +77,11 @@ describe('generateChangeOfAddress', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([
-        mockCaseWithPrivatePractitioner.docketNumber,
+        { docketNumber: mockCaseWithPrivatePractitioner.docketNumber },
       ]);
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([
-        mockCaseWithPrivatePractitioner,
-      ]);
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithPrivatePractitioner);
   });
 
   it('attempts to run a change of address when address1 changes for a private practitioner', async () => {
@@ -133,11 +131,11 @@ describe('generateChangeOfAddress', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([
-        mockCaseWithIrsPractitioner.docketNumber,
+        { docketNumber: mockCaseWithIrsPractitioner.docketNumber },
       ]);
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([mockCaseWithIrsPractitioner]);
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioner);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -334,13 +332,11 @@ describe('generateChangeOfAddress', () => {
       ]);
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([
-        {
-          ...mockCaseWithPrivatePractitioner,
-          docketNumber: undefined,
-        },
-        mockCaseWithPrivatePractitioner,
-      ]);
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCaseWithPrivatePractitioner,
+        docketNumber: undefined,
+      })
+      .mockReturnValueOnce(mockCaseWithPrivatePractitioner);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -401,7 +397,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([mockPaperServiceCase]);
+      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -469,7 +465,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([mockPaperServiceCase]);
+      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -537,7 +533,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([mockPaperServiceCase]);
+      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -605,7 +601,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([mockElectronicServiceCase]);
+      .getCaseByDocketNumber.mockReturnValue(mockElectronicServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
