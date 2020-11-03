@@ -148,9 +148,6 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
-  createElasticsearchReindexRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/createElasticsearchReindexRecord');
-const {
   createISODateString,
   formatDateString,
   formatNow,
@@ -222,9 +219,6 @@ const {
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
-const {
-  deleteElasticsearchReindexRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
 const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
@@ -468,9 +462,6 @@ const {
   getDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
 const {
-  getElasticsearchReindexRecords,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/getElasticsearchReindexRecords');
-const {
   getEligibleCasesForTrialCity,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
 const {
@@ -563,9 +554,6 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
-const {
-  getRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/getRecord');
 const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
@@ -662,9 +650,6 @@ const {
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
-const {
-  indexRecord,
-} = require('../../shared/src/persistence/elasticsearch/indexRecord');
 const {
   IrsPractitioner,
 } = require('../../shared/src/business/entities/IrsPractitioner');
@@ -1126,7 +1111,6 @@ const gatewayMethods = {
     createCaseCatalogRecord,
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
-    createElasticsearchReindexRecord,
     createMessage,
     createMigratedPetitionerUser,
     createPractitionerUser,
@@ -1175,7 +1159,6 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFromS3,
-  deleteElasticsearchReindexRecord,
   deleteRecord,
   deleteSectionOutboxRecord,
   deleteTrialSession,
@@ -1206,7 +1189,6 @@ const gatewayMethods = {
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
   getDownloadPolicyUrl,
-  getElasticsearchReindexRecords,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
@@ -1217,7 +1199,6 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
-  getRecord,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1236,7 +1217,6 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
-  indexRecord,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
