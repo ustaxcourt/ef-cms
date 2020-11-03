@@ -252,12 +252,14 @@ exports.generateChangeOfAddress = async ({
       if (shouldUpdateCase || docketEntryAdded) {
         const validatedRawCase = caseEntity.validate().toRawObject();
 
-        applicationContext.getPersistenceGateway().updateCase({
-          applicationContext,
-          caseToUpdate: validatedRawCase,
-        });
+        const updatedCase = applicationContext
+          .getPersistenceGateway()
+          .updateCase({
+            applicationContext,
+            caseToUpdate: validatedRawCase,
+          });
 
-        updatedCases.push(validatedRawCase);
+        updatedCases.push(updatedCase);
       }
     } catch (error) {
       applicationContext.logger.error(error);
@@ -276,5 +278,5 @@ exports.generateChangeOfAddress = async ({
     });
   }
 
-  return updatedCases;
+  return Promise.all(updatedCases);
 };
