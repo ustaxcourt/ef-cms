@@ -299,4 +299,28 @@ describe('updateSecondaryContactInteractor', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
   });
+
+  it('does not generate a change of address when case is sealed', async () => {
+    mockCase.isSealed = true;
+    mockCase.sealedDate = Date.now();
+    await updateSecondaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: 'nothing',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'secondary@example.com',
+        inCareOf: 'Andy Dwyer',
+        name: 'Secondary Party',
+        phone: '9876543210',
+        postalCode: '12345',
+        state: 'TN',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
 });

@@ -351,6 +351,68 @@ describe('update petitioner contact information on a case', () => {
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
 
+  it('should not generate a notice of change address if the case is sealed', async () => {
+    mockUser.role = ROLES.docketClerk;
+    mockCase = {
+      ...MOCK_CASE,
+      contactPrimary: {
+        address1: '456 Center St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      contactSecondary: {
+        address1: '789 Division St APT 123',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Secondary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      isSealed: true,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      sealedDate: Date.now(),
+    };
+
+    await updatePetitionerInformationInteractor({
+      applicationContext,
+      contactPrimary: {
+        address1: '456 Center St TEST',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      contactSecondary: {
+        address1: '789 Division St APT 123 TEST',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Secondary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
+
   describe('createWorkItemForChange', () => {
     it('should create a work item for the NCA when the primary contact is unrepresented', async () => {
       mockUser.role = ROLES.docketClerk;

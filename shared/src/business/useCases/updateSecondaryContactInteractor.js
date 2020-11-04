@@ -76,7 +76,7 @@ exports.updateSecondaryContactInteractor = async ({
       oldData: caseToUpdate.contactSecondary,
     });
 
-  if (changeOfAddressDocumentTypeToGenerate) {
+  if (!caseEntity.isSealed && changeOfAddressDocumentTypeToGenerate) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
