@@ -23,8 +23,6 @@ describe('virusScanPdfInteractor', () => {
         }),
         logger: {
           error: () => null,
-          time: () => null,
-          timeEnd: () => null,
         },
         runVirusScan: async () => true,
       },
@@ -48,8 +46,6 @@ describe('virusScanPdfInteractor', () => {
         }),
         logger: {
           error: () => null,
-          time: () => null,
-          timeEnd: () => null,
         },
         runVirusScan: async () => {
           throw new Error('');
@@ -81,8 +77,6 @@ describe('virusScanPdfInteractor', () => {
         }),
         logger: {
           error: () => null,
-          time: () => null,
-          timeEnd: () => null,
         },
         runVirusScan: async () => {
           const err = new Error('');
