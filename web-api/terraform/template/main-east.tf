@@ -195,10 +195,6 @@ data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
     aws_elasticsearch_domain.efcms-search,
     module.elasticsearch_alpha,
     module.elasticsearch_beta,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
   ]
   domain_name = var.green_elasticsearch_domain
 }
@@ -208,10 +204,6 @@ data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
     aws_elasticsearch_domain.efcms-search,
     module.elasticsearch_alpha,
     module.elasticsearch_beta,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
   ]
   domain_name = var.blue_elasticsearch_domain
 }
@@ -219,10 +211,6 @@ data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
 data "aws_dynamodb_table" "green_dynamo_table" {
   depends_on = [
     aws_dynamodb_table.efcms-east,
-    module.dynamo_table_1,
-    module.dynamo_table_2,
-    module.dynamo_table_3,
-    module.dynamo_table_4,
     module.dynamo_table_alpha,
     module.dynamo_table_beta,
   ]
@@ -232,10 +220,6 @@ data "aws_dynamodb_table" "green_dynamo_table" {
 data "aws_dynamodb_table" "blue_dynamo_table" {
   depends_on = [
     aws_dynamodb_table.efcms-east,
-    module.dynamo_table_1,
-    module.dynamo_table_2,
-    module.dynamo_table_3,
-    module.dynamo_table_4,
     module.dynamo_table_alpha,
     module.dynamo_table_beta,
   ]
