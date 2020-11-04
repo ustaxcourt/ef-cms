@@ -31,8 +31,6 @@ export const admissionsClerkEditsPractitionerInfo = test => {
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
 
-    await refreshElasticsearchIndex(3000);
-
     expect(test.getState('currentPage')).toEqual('PractitionerDetail');
     expect(test.getState('practitionerDetail.barNumber')).toEqual(
       test.barNumber,
@@ -47,6 +45,8 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
+
+    await refreshElasticsearchIndex(3500);
 
     const caseDetail = test.getState('caseDetail');
     const noticeDocument = caseDetail.docketEntries.find(
