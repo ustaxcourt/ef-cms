@@ -58,7 +58,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   ].filter(caseContact => caseContact && caseContact.isAddressSealed);
   caseContactsToBeSealed.forEach(caseContact => {
     const sealedContactAddress = formatSealedAddress(caseContact);
-    Object.keys(caseContact).map(key => delete caseContact[key]);
+    Object.keys(caseContact).forEach(key => delete caseContact[key]);
     Object.assign(caseContact, sealedContactAddress);
   });
   return formattedCase;
