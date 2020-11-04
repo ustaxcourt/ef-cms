@@ -47,8 +47,9 @@ exports.generateChangeOfAddress = async ({
 
   const updatedCases = [];
 
-  for (let { docketNumber } of docketNumbers) {
+  for (let caseInfo of docketNumbers) {
     try {
+      const { docketNumber } = caseInfo;
       let oldData;
       const newData = contactInfo;
 

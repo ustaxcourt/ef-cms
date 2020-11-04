@@ -1,8 +1,12 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
   test,
   createdDocketNumberIndex,
 ) => {
   return it('practitioner views case detail notice of change of address', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });

@@ -1,8 +1,12 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
   test,
   createdDocketNumberIndex,
 ) => {
   return it('respondent views case detail notice of change of address', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
