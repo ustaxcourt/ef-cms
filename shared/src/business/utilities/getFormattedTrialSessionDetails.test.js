@@ -160,11 +160,19 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formatCase identifies Lien/Levy and Passport as high priority', () => {
+  it('formatCase identifies Small Lien/Levy, Lien/Levy, and Passport as high priority', () => {
     expect(
       formatCase({ applicationContext, caseItem: { docketNumberSuffix: 'W' } })
         .isHighPriority,
     ).toBe(false);
+    expect(
+      formatCase({
+        applicationContext,
+        caseItem: {
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
+        },
+      }).isHighPriority,
+    ).toBe(true);
     expect(
       formatCase({
         applicationContext,
