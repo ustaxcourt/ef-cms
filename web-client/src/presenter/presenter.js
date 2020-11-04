@@ -222,7 +222,6 @@ import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseM
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
-import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
@@ -665,7 +664,6 @@ export const presenter = {
     openRemoveFromTrialSessionModalSequence,
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
-    openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     openStrikeDocketEntryModalSequence,
     openTrialSessionPlanningModalSequence,
