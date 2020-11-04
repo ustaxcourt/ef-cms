@@ -42,16 +42,18 @@ export const admissionsClerkEditsPractitionerInfo = test => {
       '123 Legal Way',
     );
 
+    await refreshElasticsearchIndex(2500);
+
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-
-    await refreshElasticsearchIndex(3500);
 
     const caseDetail = test.getState('caseDetail');
     const noticeDocument = caseDetail.docketEntries.find(
       document => document.documentType === 'Notice of Change of Address',
     );
+
+    console.log(''); // adding this causes the tests to pass....
 
     expect(noticeDocument).toBeTruthy();
     expect(noticeDocument.additionalInfo).toEqual('for Ben Leighton Matlock');
