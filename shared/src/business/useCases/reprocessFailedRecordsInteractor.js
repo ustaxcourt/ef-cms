@@ -6,7 +6,7 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @returns {object} the results of all the index calls for logging
  */
 exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
-  applicationContext.logger.info('Time', createISODateString());
+  applicationContext.logger.debug('Time', createISODateString());
 
   const recordsToProcess = await applicationContext
     .getPersistenceGateway()
@@ -61,11 +61,11 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
             recordSk: record.recordSk,
           });
       } catch (e) {
-        applicationContext.logger.info('Error', e);
+        applicationContext.logger.error(e);
         await applicationContext.notifyHoneybadger(e);
       }
     }
 
-    applicationContext.logger.info('Time', createISODateString());
+    applicationContext.logger.debug('Time', createISODateString());
   }
 };
