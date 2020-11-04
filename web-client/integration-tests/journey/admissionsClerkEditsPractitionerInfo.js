@@ -31,7 +31,7 @@ export const admissionsClerkEditsPractitionerInfo = test => {
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
 
-    await refreshElasticsearchIndex();
+    await refreshElasticsearchIndex(3000);
 
     expect(test.getState('currentPage')).toEqual('PractitionerDetail');
     expect(test.getState('practitionerDetail.barNumber')).toEqual(
