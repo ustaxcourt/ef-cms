@@ -157,7 +157,6 @@ exports.generateChangeOfAddress = async ({
           documentData.privatePractitioners = [
             {
               name,
-              partyPrivatePractitioner: true,
             },
           ];
         } else if (user.role === ROLES.irsPractitioner) {
@@ -167,8 +166,6 @@ exports.generateChangeOfAddress = async ({
         const changeOfAddressDocketEntry = new DocketEntry(documentData, {
           applicationContext,
         });
-
-        changeOfAddressDocketEntry.filedBy = undefined;
 
         const servedParties = aggregatePartiesForService(caseEntity);
         changeOfAddressDocketEntry.setAsServed(servedParties.all);
