@@ -8,7 +8,7 @@ export const lambdaWrapper = lambda => {
       requestId: {
         apiGateway: (((req.apiGateway || {}).event || {}).requestContext || {})
           .requestId,
-        applicationLoadBalancer: req.headers['X-Amzn-Trace-Id'],
+        applicationLoadBalancer: req.headers['x-amzn-trace-id'],
         lambda: ((req.apiGateway || {}).context || {}).awsRequestId,
       },
     };

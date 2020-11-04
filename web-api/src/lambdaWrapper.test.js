@@ -119,7 +119,7 @@ describe('lambdaWrapper', () => {
       };
 
       req.headers = {
-        'X-Amzn-Trace-Id': 'Root=1-5fa1efc9-164cfd9602fe2b523bf82292;Sampled=0',
+        'x-amzn-trace-id': 'Root=1-5fa1efc9-164cfd9602fe2b523bf82292;Sampled=0',
       };
 
       await lambdaWrapper(event => {
