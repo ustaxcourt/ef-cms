@@ -3,7 +3,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
-import { Text } from '../../ustc-ui/Text/Text';
+import { TextView } from '../../ustc-ui/Text/TextView';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -181,7 +181,7 @@ export const WorkingCopySessionList = connect(
                       <strong>Notes:</strong>
                     </td>
                     <td className="font-body-2xs" colSpan="4">
-                      <Text
+                      <TextView
                         bind={`trialSessionWorkingCopy.userNotes.${item.docketNumber}.notes`}
                       />
                     </td>

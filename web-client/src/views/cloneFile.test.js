@@ -15,11 +15,12 @@ describe('cloneFile', () => {
   <input type="file" />
 </body>`);
 
-    const { window } = dom;
-    const { File, FileReader } = window;
+    const {
+      window: { File: FileJS, FileReader: FileReaderJS },
+    } = dom;
 
-    global.File = File;
-    global.FileReader = FileReader;
+    global.File = FileJS;
+    global.FileReader = FileReaderJS;
     jest.clearAllMocks();
 
     jest.spyOn(global, 'FileReader').mockImplementation(() => ({

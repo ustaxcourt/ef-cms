@@ -2,7 +2,7 @@ import { AddEditUserCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditUser
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteUserCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteUserCaseNoteConfirmModal';
-import { Text } from '../../ustc-ui/Text/Text';
+import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -53,7 +53,7 @@ export const CaseNotes = connect(
                     )}
                     <h3 className="underlined">Case Notes</h3>
                     <div className="margin-top-1 margin-bottom-4">
-                      <Text bind="caseDetail.caseNote" />
+                      <TextView bind="caseDetail.caseNote" />
                     </div>
                     {caseDetail.caseNote && (
                       <div className="grid-row">
@@ -107,7 +107,7 @@ export const CaseNotes = connect(
                       )}
                       <h3 className="underlined">Judge’s Notes</h3>
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="caseDetail.judgesNote.notes" />
+                        <TextView bind="caseDetail.judgesNote.notes" />
                       </div>
                       {caseDetail.judgesNote && caseDetail.judgesNote.notes && (
                         <div className="grid-row">
