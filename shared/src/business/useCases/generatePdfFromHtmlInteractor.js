@@ -28,13 +28,13 @@ exports.generatePdfFromHtmlInteractor = async ({
     await page.setContent(contentHtml);
 
     const headerContent = overwriteHeader
-      ? `${headerHtml ? headerHtml : ''}`
+      ? `${headerHtml || ''}`
       : ` <div style="font-size: 8px; font-family: sans-serif; float: right;">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
             </div>
             <div style="float: left">
-              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
+              ${headerHtml || `Docket Number: ${docketNumber}`}
             </div>`;
 
     const headerTemplate = `
@@ -45,10 +45,10 @@ exports.generatePdfFromHtmlInteractor = async ({
     `;
 
     const footerTemplate = overwriteFooter
-      ? `${footerHtml ? footerHtml : ''}`
+      ? `${footerHtml || ''}`
       : `
           <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${footerHtml ? footerHtml : ''}
+            ${footerHtml || ''}
           </div>`;
 
     result = await page.pdf({

@@ -113,6 +113,7 @@ module.exports = {
     'no-prototype-builtins': 'off',
     'no-shadow': ['warn', { builtinGlobals: true }],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'no-unneeded-ternary': ['error', { defaultAssignment: false }],
     'no-var': 'error',
     'no-warning-comments': [
       'error',

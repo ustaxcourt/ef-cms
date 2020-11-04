@@ -21,7 +21,7 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
 
   store.set(
     state.modal.docketNumber,
-    `${docketNumber}${docketNumberSuffix ? docketNumberSuffix : ''}`,
+    `${docketNumber}${docketNumberSuffix || ''}`,
   );
   store.set(state.modal.caseTitle, caseTitle);
   store.set(state.modal.notes, caseNote);

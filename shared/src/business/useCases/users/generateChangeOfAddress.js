@@ -52,7 +52,7 @@ exports.generateChangeOfAddress = async ({
       let oldData;
       const newData = contactInfo;
 
-      const name = updatedName ? updatedName : user.name;
+      const name = updatedName || user.name;
 
       const userCase = await applicationContext
         .getPersistenceGateway()

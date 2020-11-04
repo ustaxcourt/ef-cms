@@ -45,11 +45,7 @@ export const ContactSecondary = connect(
         ) : (
           <h4>{contactsHelper.contactSecondary.header}</h4>
         )}
-        <div
-          className={
-            wrapperClassName ? wrapperClassName : 'blue-container contact-group'
-          }
-        >
+        <div className={wrapperClassName || 'blue-container contact-group'}>
           <FormGroup
             errorText={
               validationErrors.contactSecondary &&
