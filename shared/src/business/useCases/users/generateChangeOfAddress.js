@@ -99,7 +99,7 @@ exports.generateChangeOfAddress = async ({
       }
 
       const shouldGenerateNotice =
-        caseEntity.status !== CASE_STATUS_TYPES.closed;
+        caseEntity.status !== CASE_STATUS_TYPES.closed && !caseEntity.isSealed;
       const shouldUpdateCase =
         !closedMoreThan6Months ||
         caseEntity.status !== CASE_STATUS_TYPES.closed;

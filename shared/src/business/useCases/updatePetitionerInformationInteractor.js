@@ -256,7 +256,7 @@ exports.updatePetitionerInformationInteractor = async ({
   let primaryChangeDocs;
   let secondaryChangeDocs;
   let paperServicePdfUrl;
-  if (primaryChange) {
+  if (!caseEntity.isSealed && primaryChange) {
     primaryChangeDocs = await createDocketEntryForChange({
       applicationContext,
       caseEntity,
@@ -284,7 +284,7 @@ exports.updatePetitionerInformationInteractor = async ({
       });
     }
   }
-  if (secondaryChange) {
+  if (!caseEntity.isSealed && secondaryChange) {
     secondaryChangeDocs = await createDocketEntryForChange({
       applicationContext,
       caseEntity,
@@ -312,7 +312,11 @@ exports.updatePetitionerInformationInteractor = async ({
     }
   }
 
-  if ((primaryChange || secondaryChange) && servedParties.paper.length > 0) {
+  if (
+    !caseEntity.isSealed &&
+    (primaryChange || secondaryChange) &&
+    servedParties.paper.length > 0
+  ) {
     const fullDocument = await PDFDocument.create();
 
     const addressPages = await getAddressPages({

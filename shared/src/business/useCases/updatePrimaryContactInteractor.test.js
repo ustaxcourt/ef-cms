@@ -10,10 +10,14 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('update primary contact on a case', () => {
+  let mockCase;
+
   beforeEach(() => {
+    mockCase = MOCK_CASE;
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     applicationContext
       .getUseCases()
@@ -232,11 +236,9 @@ describe('update primary contact on a case', () => {
   });
 
   it('does not update the contact primary email or name', async () => {
-    const getUtilities = applicationContext.getUtilities();
-    applicationContext.getUtilities = () => ({
-      ...getUtilities,
-      getDocumentTypeForAddressChange: () => undefined, // returns undefined when there is no diff
-    });
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
     const caseDetail = await updatePrimaryContactInteractor({
       applicationContext,
@@ -259,5 +261,29 @@ describe('update primary contact on a case', () => {
     expect(caseDetail.contactPrimary.name).toBe('Test Petitioner');
     expect(caseDetail.contactPrimary.email).not.toBe('hello123@example.com');
     expect(caseDetail.contactPrimary.email).toBe('petitioner@example.com');
+  });
+
+  it('does not generate the change of address when case is sealed', async () => {
+    mockCase.isSealed = true;
+    mockCase.sealedDate = Date.now();
+
+    await updatePrimaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: 'nothing 1',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'hello123@example.com',
+        name: 'Secondary Party Name Changed',
+        phone: '9876543210',
+        postalCode: '12345',
+        state: 'TN',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
   });
 });
