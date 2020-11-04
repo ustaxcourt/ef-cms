@@ -48,7 +48,7 @@ module.exports = [
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
-    notes: 'checks a11y of advanced opinion search with results',
+    notes: 'checks a11y of advanced opinion search with results on sealed case',
     url: 'http://localhost:5678/',
   },
   'http://localhost:5678/todays-opinions',

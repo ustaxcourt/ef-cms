@@ -1,5 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
+import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
+import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
+import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
@@ -9,6 +13,7 @@ import { practitionerSearchesForNonexistentCase } from './journey/practitionerSe
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 import { practitionerViewsCaseDetailOfOwnedCase } from './journey/practitionerViewsCaseDetailOfOwnedCase';
 import { practitionerViewsCaseDetailOfPendingCase } from './journey/practitionerViewsCaseDetailOfPendingCase';
+import { practitionerViewsCaseDetailWithPublicOrder } from './journey/practitionerViewsCaseDetailWithPublicOrder';
 import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
 
@@ -75,9 +80,17 @@ describe('Practitioner requests access to case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
+  // create and serve an order that the privatePractitioner
+  // should be able to view even when they are not associated with the case
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkCreateOrder(test);
+  petitionsClerkSignsOrder(test);
+  petitionsClerkAddsDocketEntryFromOrder(test);
+  petitionsClerkServesOrder(test);
+
   loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForCase(test);
-  practitionerViewsCaseDetail(test, false);
+  practitionerViewsCaseDetailWithPublicOrder(test, false);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(test);
 });

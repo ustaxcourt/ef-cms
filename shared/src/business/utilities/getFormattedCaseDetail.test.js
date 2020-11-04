@@ -713,19 +713,28 @@ describe('formatDocketEntry', () => {
     expect(result.isStipDecision).toEqual(false);
   });
 
-  it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
+  it('should set the servedPartiesCode to `B` if servedParties is an array', () => {
     const results = formatDocketEntry(applicationContext, {
-      servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
+      servedPartiesCode: 'BANANAS',
     });
     expect(results).toMatchObject({
       servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
   });
 
-  it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
+  it('should set the servedPartiesCode to `P` if servedPartiesCode was already set to `P` on docket entry', () => {
     const results = formatDocketEntry(applicationContext, {
-      servedAt: '2019-03-27T21:53:00.297Z',
+      servedParties: ['someone', 'someone else'],
+      servedPartiesCode: 'P',
+    });
+    expect(results).toMatchObject({
+      servedPartiesCode: SERVED_PARTIES_CODES.PETITIONER,
+    });
+  });
+
+  it('should set the servedPartiesCode to `R` if servedParties is an array of length 1 with role irsSuperuser', () => {
+    const results = formatDocketEntry(applicationContext, {
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
