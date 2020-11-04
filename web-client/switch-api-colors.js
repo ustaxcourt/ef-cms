@@ -21,7 +21,7 @@ const run = async () => {
       region,
     });
 
-    const { items } = await apigateway.getRestApis({}).promise();
+    const { items } = await apigateway.getRestApis({ limit: 500 }).promise();
 
     const apiGatewayRecord = items.find(
       record => record.name === `gateway_api_${ENV}_${DEPLOYING_COLOR}`,
