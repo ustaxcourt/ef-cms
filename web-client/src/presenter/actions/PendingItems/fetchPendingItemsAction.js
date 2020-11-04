@@ -5,27 +5,11 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.get the cerebral get function
  * @returns {object} contains the pending items
  */
-export const fetchPendingItemsAction = async ({
-  applicationContext,
-  get,
-  props,
-  store,
-}) => {
-  if (props.judge) {
-    store.set(state.pendingReports, {
-      hasPendingItemsResults: false,
-      pendingItems: [],
-      pendingItemsPage: 0,
-    });
-    store.set(state.pendingReports.selectedJudge, props.judge);
-  }
-
+export const fetchPendingItemsAction = async ({ applicationContext, get }) => {
   const judge = get(state.pendingReports.selectedJudge);
-
-  if (!judge) return;
 
   const page = get(state.pendingReports.pendingItemsPage);
 
