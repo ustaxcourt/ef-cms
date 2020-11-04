@@ -15,7 +15,7 @@ export const respondentUpdatesAddress = test => {
       contact: { address1: expect.anything() },
     });
 
-    test.updatedRespondentAddress = `UPDATED ADDRESS ${Date.now()}`;
+    test.updatedRespondentAddress = 'UPDATED ADDRESS';
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
@@ -24,8 +24,7 @@ export const respondentUpdatesAddress = test => {
 
     await test.runSequence('submitUpdateUserContactInformationSequence');
 
-    await refreshElasticsearchIndex();
-
     expect(test.getState('validationErrors')).toEqual({});
+    await refreshElasticsearchIndex(5000);
   });
 };

@@ -1,4 +1,9 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -7,6 +12,10 @@ const test = setupTest();
 describe('Modify Practitioner Contact Information', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   let caseDetail;
@@ -26,6 +35,9 @@ describe('Modify Practitioner Contact Information', () => {
   }
 
   practitionerUpdatesAddress(test);
+  it('wait for le thing', async () => {
+    await refreshElasticsearchIndex(8000);
+  });
   for (let i = 0; i < 3; i++) {
     practitionerViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }

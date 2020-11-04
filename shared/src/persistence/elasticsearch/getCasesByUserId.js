@@ -44,8 +44,9 @@ exports.getCasesByUserId = async ({ applicationContext, userId }) => {
                         fields: [
                           'privatePractitioners.L.M.userId.S',
                           'irsPractitioners.L.M.userId.S',
-                          'otherPetitioners.L.M.userId.S',
                           'otherFilers.L.M.userId.S',
+                          'otherPetitioners.L.M.userId.S',
+                          'userId.S',
                         ],
                         query: userId,
                       },
@@ -72,8 +73,9 @@ exports.getCasesByUserId = async ({ applicationContext, userId }) => {
                         fields: [
                           'privatePractitioners.L.M.userId.S',
                           'irsPractitioners.L.M.userId.S',
-                          'otherPetitioners.L.M.userId.S',
                           'otherFilers.L.M.userId.S',
+                          'otherPetitioners.L.M.userId.S',
+                          'userId.S',
                         ],
                         query: userId,
                       },
