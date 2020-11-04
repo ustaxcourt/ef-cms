@@ -1,3 +1,6 @@
+const {
+  MAX_SEARCH_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
@@ -9,6 +12,7 @@ exports.advancedDocumentSearch = async ({
   judge,
   judgeType,
   keyword,
+  omitSealed,
   opinionType,
   startDate,
 }) => {
@@ -33,9 +37,14 @@ exports.advancedDocumentSearch = async ({
     judgeType,
   ];
 
-  const queryParams = [
+  const docketEntryQueryParams = [
     {
       bool: {
+        must_not: [
+          {
+            term: { 'isStricken.BOOL': true },
+          },
+        ],
         should: documentEventCodes.map(eventCode => ({
           match: {
             'eventCode.S': eventCode,
@@ -44,9 +53,10 @@ exports.advancedDocumentSearch = async ({
       },
     },
   ];
+  const caseMustNot = [];
 
   if (keyword) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       simple_query_string: {
         fields: ['documentContents.S', 'documentTitle.S'],
         query: keyword,
@@ -54,7 +64,12 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  const parentQueryParams = {
+  if (omitSealed) {
+    caseMustNot.push({
+      term: { 'isSealed.BOOL': true },
+    });
+  }
+  const caseQueryParams = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -63,18 +78,16 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { match_all: {} },
+      query: { bool: { must_not: caseMustNot } },
     },
   };
 
   if (docketNumber) {
-    parentQueryParams.has_parent.query = {
-      match: {
-        'docketNumber.S': { operator: 'and', query: docketNumber },
-      },
+    caseQueryParams.has_parent.query.bool.must = {
+      match: { 'docketNumber.S': { operator: 'and', query: docketNumber } },
     };
   } else if (caseTitleOrPetitioner) {
-    parentQueryParams.has_parent.query = {
+    caseQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
         fields: [
           'caseCaption.S',
@@ -86,12 +99,12 @@ exports.advancedDocumentSearch = async ({
     };
   }
 
-  queryParams.push(parentQueryParams);
+  docketEntryQueryParams.push(caseQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
-    queryParams.push({
+    docketEntryQueryParams.push({
       bool: {
         should: {
           match: {
@@ -106,7 +119,7 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (opinionType) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       match: {
         'documentType.S': {
           operator: 'and',
@@ -117,7 +130,7 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (startDate) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
@@ -128,7 +141,7 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (endDate && startDate) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
@@ -151,11 +164,11 @@ exports.advancedDocumentSearch = async ({
                 field: 'servedAt',
               },
             },
-            ...queryParams,
+            ...docketEntryQueryParams,
           ],
         },
       },
-      size: 5000,
+      size: MAX_SEARCH_RESULTS,
     },
     index: 'efcms-docket-entry',
   };

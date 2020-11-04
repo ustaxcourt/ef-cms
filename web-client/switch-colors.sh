@@ -16,8 +16,13 @@ if [[ "${MIGRATE_FLAG}" == "false" ]]; then
   aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --no-enabled
 fi
 
+# explicitly turn on deploying color stream, just in case
+UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${DEPLOYING_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
+aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1
+
 node ./web-client/switch-public-ui-colors.js
 node ./web-client/switch-ui-colors.js
+node ./web-client/switch-api-colors.js
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'$DEPLOYING_COLOR'"}}'
 

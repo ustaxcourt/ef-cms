@@ -29,6 +29,7 @@ export const unauthedUserSeesStrickenDocketEntry = (
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
+    test.docketEntryId = formattedDocketEntry.docketEntryId;
 
     expect(formattedDocketEntry.isStricken).toEqual(true);
     expect(formattedDocketEntry.showDocumentDescriptionWithoutLink).toEqual(

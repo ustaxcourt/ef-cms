@@ -36,6 +36,10 @@ resource "aws_dynamodb_table" "efcms-east" {
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = {
     Name        = "efcms-${var.environment}"
     Environment = var.environment
@@ -84,6 +88,10 @@ resource "aws_dynamodb_table" "efcms-west" {
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
+  lifecycle {
+    prevent_destroy = true
+  }
+  
   tags = {
     Name        = "efcms-${var.environment}"
     Environment = var.environment

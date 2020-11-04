@@ -29,11 +29,21 @@ exports.generatePrintablePendingReportInteractor = async ({
     judge = decodeURIComponent(judge);
   }
 
-  const pendingItems = await applicationContext
-    .getUseCaseHelpers()
-    .fetchPendingItems({ applicationContext, docketNumber, judge });
+  let pendingDocuments = [];
 
-  const formattedPendingItems = pendingItems.map(pendingItem => ({
+  if (docketNumber) {
+    pendingDocuments = await applicationContext
+      .getUseCaseHelpers()
+      .fetchPendingItemsByDocketNumber({ applicationContext, docketNumber });
+  } else {
+    pendingDocuments = (
+      await applicationContext
+        .getUseCaseHelpers()
+        .fetchPendingItems({ applicationContext, judge })
+    ).foundDocuments;
+  }
+
+  const formattedPendingItems = pendingDocuments.map(pendingItem => ({
     ...pendingItem,
     associatedJudgeFormatted: applicationContext
       .getUtilities()
