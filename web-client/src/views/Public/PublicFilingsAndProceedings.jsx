@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -31,11 +30,6 @@ export const PublicFilingsAndProceedings = connect(
               });
             }}
           >
-            {entry.isPaper && (
-              <span className="filing-type-icon-mobile">
-                <FontAwesomeIcon icon={['fas', 'file-alt']} />
-              </span>
-            )}
             {entry.descriptionDisplay}
           </Button>
         )}

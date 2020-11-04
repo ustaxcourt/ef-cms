@@ -11,9 +11,6 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
-const {
-  getDocumentQCInboxForSectionInteractor,
-} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -345,103 +342,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-
-    const workItems = await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
-      section: DOCKET_SECTION,
-    });
-
-    expect(workItems.length).toEqual(4);
-
-    expect(workItems).toMatchObject([
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          attachments: false,
-          certificateOfService: false,
-          docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-          docketNumber,
-          documentTitle:
-            'Motion for Leave to File Brief in Support of Petition',
-          documentType: 'Motion for Leave to File',
-          hasSupportingDocuments: true,
-          partyPrimary: true,
-          scenario: 'Nonstandard H',
-          supportingDocument: 'Brief in Support',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-      },
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
-          documentType: 'Brief in Support',
-          partyPrimary: true,
-          previousDocument: {
-            documentTitle: 'Amended Answer',
-            documentType: 'Amended',
-          },
-          scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-        updatedAt: '2019-03-01T22:54:06.000Z',
-      },
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Petition',
-          documentType: 'Brief in Support',
-          lodged: true,
-          partyPrimary: true,
-          previousDocument: { documentType: 'Petition' },
-          scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-        updatedAt: '2019-03-01T22:54:06.000Z',
-      },
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
-          documentType: 'Brief in Support',
-          lodged: true,
-          partyPrimary: true,
-          previousDocument: {
-            documentTitle: 'Amended Answer',
-            documentType: 'Amended',
-          },
-          scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-      },
-    ]);
   });
 
   it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {

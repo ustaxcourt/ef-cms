@@ -30,12 +30,14 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
+  // use integration test to verify nothing sealed is returned
   return await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
+      ...rawSearch,
       documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
-      ...rawSearch,
+      omitSealed: true,
     });
 };

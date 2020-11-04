@@ -46,11 +46,6 @@ export const FilingsAndProceedings = connect(
                 })
               }
             >
-              {entry.isPaper && (
-                <span className="filing-type-icon-mobile">
-                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                </span>
-              )}
               {entry.descriptionDisplay}
             </Button>
             {!entry.addToCoversheet && entry.additionalInfoDisplay}

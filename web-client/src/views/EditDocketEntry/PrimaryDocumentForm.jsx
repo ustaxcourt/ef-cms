@@ -265,10 +265,12 @@ export const PrimaryDocumentForm = connect(
 
           <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
-          <FilingPartiesForm
-            updateSequence={updateDocketEntryFormValueSequence}
-            validateSequence={validateDocketEntrySequence}
-          />
+          {addDocketEntryHelper.showFilingPartiesForm && (
+            <FilingPartiesForm
+              updateSequence={updateDocketEntryFormValueSequence}
+              validateSequence={validateDocketEntrySequence}
+            />
+          )}
 
           {addDocketEntryHelper.showObjection && (
             <FormGroup errorText={validationErrors.objections}>

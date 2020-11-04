@@ -439,13 +439,13 @@ const {
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
   getDocumentQCInboxForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
