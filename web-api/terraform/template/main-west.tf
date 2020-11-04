@@ -145,10 +145,6 @@ data "aws_elasticsearch_domain" "green_west_elasticsearch_domain" {
     aws_elasticsearch_domain.efcms-search,
     module.elasticsearch_alpha,
     module.elasticsearch_beta,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
   ]
   domain_name = var.green_elasticsearch_domain
 }
@@ -158,10 +154,6 @@ data "aws_elasticsearch_domain" "blue_west_elasticsearch_domain" {
     aws_elasticsearch_domain.efcms-search,
     module.elasticsearch_alpha,
     module.elasticsearch_beta,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
   ]
   domain_name = var.blue_elasticsearch_domain
 }
