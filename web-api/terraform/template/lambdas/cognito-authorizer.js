@@ -9,6 +9,8 @@ const generatePolicy = (principalId, effect, resource) => {
   const authResponse = {};
   authResponse.principalId = principalId;
   if (effect && resource) {
+    console.log('garbage logging for the sake of changes 3!');
+
     const policyDocument = {};
     policyDocument.Version = '2012-10-17';
     policyDocument.Statement = [];
@@ -59,8 +61,11 @@ exports.handler = (event, context, cb) => {
 
   let requestToken = null;
   if (event.queryStringParameters && event.queryStringParameters.token) {
+    console.log('garbage logging for the sake of changes 1!');
     requestToken = event.queryStringParameters.token;
   } else if (event.authorizationToken) {
+    console.log('garbage logging for the sake of changes 2!');
+
     requestToken = event.authorizationToken.substring(7);
   }
 
