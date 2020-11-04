@@ -33,6 +33,6 @@ export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
     expect(changeOfAddressDocument.additionalInfo).toBe(
       'for Test IRS Practitioner',
     );
-    expect(changeOfAddressDocument.filedBy).toBe('Resp.');
+    expect(changeOfAddressDocument.filedBy).toBeUndefined();
   });
 };
