@@ -11,12 +11,14 @@ export const PendingReportList = connect(
     formattedPendingItems: state.formattedPendingItems,
     loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
     pendingReportListHelper: state.pendingReportListHelper,
+    setPendingReportSelectedJudgeSequence:
+      sequences.setPendingReportSelectedJudgeSequence,
   },
   function PendingReportList({
-    fetchPendingItemsSequence,
     formattedPendingItems,
     loadMorePendingItemsSequence,
     pendingReportListHelper,
+    setPendingReportSelectedJudgeSequence,
   }) {
     return (
       <React.Fragment>
@@ -32,7 +34,7 @@ export const PendingReportList = connect(
                 id="judgeFilter"
                 name="judge"
                 onChange={judge =>
-                  fetchPendingItemsSequence({
+                  setPendingReportSelectedJudgeSequence({
                     judge,
                   })
                 }
@@ -92,9 +94,19 @@ export const PendingReportList = connect(
             </tbody>
           ))}
         </table>
-        {formattedPendingItems.items.length === 0 && (
+
+        {pendingReportListHelper.showLoading && (
+          <p>Loading pending reports...</p>
+        )}
+
+        {pendingReportListHelper.showNoPendingItems && (
           <p>There is nothing pending.</p>
         )}
+
+        {pendingReportListHelper.showSelectJudgeText && (
+          <p>Select a judge to view their pending items.</p>
+        )}
+
         {pendingReportListHelper.showLoadMore && (
           <Button
             secondary
