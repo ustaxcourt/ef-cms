@@ -1,4 +1,7 @@
-const { ROLES } = require('../../business/entities/EntityConstants');
+const {
+  MAX_SEARCH_RESULTS,
+  ROLES,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 const { uniqBy } = require('lodash');
 
@@ -65,7 +68,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
               must: [...commonQuery, ...exactMatchesQuery],
             },
           },
-          size: 5000,
+          size: MAX_SEARCH_RESULTS,
         },
         index: 'efcms-user',
       },
@@ -87,7 +90,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
               must: [...commonQuery, ...nonExactMatchesQuery],
             },
           },
-          size: 5000,
+          size: MAX_SEARCH_RESULTS,
         },
         index: 'efcms-user',
       },
