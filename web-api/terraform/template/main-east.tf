@@ -105,6 +105,19 @@ resource "null_resource" "streams_east_object" {
   }
 }
 
+resource "aws_acm_certificate" "api_gateway_cert_east" {
+  domain_name       = "*.${var.dns_domain}"
+  validation_method = "DNS"
+
+  tags = {
+    Name          = "wildcard.${var.dns_domain}"
+    ProductDomain = "EFCMS API"
+    Environment   = var.environment
+    Description   = "Certificate for wildcard.${var.dns_domain}"
+    ManagedBy     = "terraform"
+  }
+}
+
 data "aws_s3_bucket_object" "api_public_blue_east_object" {
   depends_on = [null_resource.api_public_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
@@ -179,46 +192,61 @@ data "aws_s3_bucket_object" "streams_green_east_object" {
 
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   depends_on = [
-    aws_elasticsearch_domain.efcms-search,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
   ]
   domain_name = var.green_elasticsearch_domain
 }
 
 data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
   depends_on = [
-    aws_elasticsearch_domain.efcms-search,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
   ]
   domain_name = var.blue_elasticsearch_domain
 }
 
 data "aws_dynamodb_table" "green_dynamo_table" {
   depends_on = [
-    aws_dynamodb_table.efcms-east,
-    module.dynamo_table_1,
-    module.dynamo_table_2,
-    module.dynamo_table_3,
-    module.dynamo_table_4
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
   ]
   name = var.green_table_name
 }
 
 data "aws_dynamodb_table" "blue_dynamo_table" {
   depends_on = [
-    aws_dynamodb_table.efcms-east,
-    module.dynamo_table_1,
-    module.dynamo_table_2,
-    module.dynamo_table_3,
-    module.dynamo_table_4
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
   ]
   name = var.blue_table_name
+}
+
+resource "aws_api_gateway_domain_name" "api_custom_main_east" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_east]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_east.arn
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_route53_record" "api_route53_main_east_regional_record" {
+  name           = aws_api_gateway_domain_name.api_custom_main_east.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "api_main_us_east_1"
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_custom_main_east.regional_zone_id
+    evaluate_target_health = false
+  }
+
+  latency_routing_policy {
+    region = "us-east-1"
+  }
 }
 
 module "api-east-green" {
@@ -296,3 +324,5 @@ module "api-east-blue" {
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
 }
+
+

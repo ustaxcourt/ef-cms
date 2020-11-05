@@ -1,7 +1,6 @@
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -26,7 +25,6 @@ export const updatePetitionerInformationFormSequence = [
     success: showProgressSequenceDecorator([
       updatePetitionerInformationAction,
       setPdfPreviewUrlAction,
-      setPaperServicePartiesAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       navigateToCaseDetailCaseInformationActionFactory('petitioner'),

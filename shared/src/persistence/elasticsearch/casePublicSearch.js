@@ -33,7 +33,7 @@ exports.casePublicSearch = async ({
     yearFiledMin,
   });
 
-  const source = [
+  const sourceFields = [
     'caseCaption',
     'contactPrimary',
     'contactSecondary',
@@ -52,10 +52,15 @@ exports.casePublicSearch = async ({
     applicationContext,
     searchParameters: {
       body: {
-        _source: source,
+        _source: sourceFields,
         query: {
           bool: {
             must: [...exactMatchesQuery, ...commonQuery],
+            must_not: {
+              exists: {
+                field: 'sealedDate',
+              },
+            },
           },
         },
         size: MAX_SEARCH_RESULTS,
@@ -69,10 +74,15 @@ exports.casePublicSearch = async ({
       applicationContext,
       searchParameters: {
         body: {
-          _source: source,
+          _source: sourceFields,
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],
+              must_not: {
+                exists: {
+                  field: 'sealedDate',
+                },
+              },
             },
           },
           size: MAX_SEARCH_RESULTS,

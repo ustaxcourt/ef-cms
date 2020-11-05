@@ -4,6 +4,7 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${caseItem.docketNumber}${
     caseItem.docketNumberSuffix || ''
   }`;
+
   caseItem.caseTitle = applicationContext.getCaseTitle(
     caseItem.caseCaption || '',
   );
@@ -12,7 +13,26 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
       .getUtilities()
       .formatDateString(caseItem.removedFromTrialDate, 'MMDDYY');
   }
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  const highPrioritySuffixes = [
+    DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
+    DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
+    DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
+  ];
+  caseItem.isHighPriority = highPrioritySuffixes.includes(
+    caseItem.docketNumberSuffix,
+  );
   return caseItem;
+};
+
+exports.compareTrialSessionEligibleCases = (a, b) => {
+  if (a.isHighPriority && !b.isHighPriority) {
+    return -1;
+  } else if (!a.isHighPriority && b.isHighPriority) {
+    return 1;
+  } else {
+    return exports.compareCasesByDocketNumber(a, b);
+  }
 };
 
 exports.compareCasesByDocketNumber = (a, b) => {
@@ -37,9 +57,9 @@ exports.formattedTrialSessionDetails = ({
 }) => {
   if (!trialSession) return undefined;
 
-  trialSession.formattedEligibleCases = (
-    trialSession.eligibleCases || []
-  ).map(caseItem => exports.formatCase({ applicationContext, caseItem }));
+  trialSession.formattedEligibleCases = (trialSession.eligibleCases || [])
+    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
+    .sort(exports.compareTrialSessionEligibleCases);
 
   trialSession.allCases = (trialSession.calendaredCases || [])
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))

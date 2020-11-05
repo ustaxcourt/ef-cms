@@ -1,4 +1,5 @@
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -19,6 +20,8 @@ export const petitionsClerkAddsDocketEntryForOrderAndSavesForLater = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoWorkQueueSequence');
     expect(test.getState('currentPage')).toEqual('WorkQueue');

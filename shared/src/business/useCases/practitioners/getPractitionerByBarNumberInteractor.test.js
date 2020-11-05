@@ -43,12 +43,14 @@ describe('getPractitionerByBarNumberInteractor', () => {
         employer: 'Private',
         firmName: 'GW Law Offices',
         firstName: 'Private',
+
         lastName: 'Practitioner',
         name: 'Private Practitioner',
         originalBarState: US_STATES.OK,
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         section: ROLES.privatePractitioner,
+
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
@@ -66,9 +68,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
       birthYear: '1983',
       email: undefined,
       employer: 'Private',
-      entityName: 'Practitioner', // we return all practitioner search results as a Practitioner user.
+      entityName: 'Practitioner',
+      // we return all practitioner search results as a Practitioner user.
       firmName: 'GW Law Offices',
       firstName: 'Private',
+      isUpdatingInformation: undefined,
       lastName: 'Practitioner',
       middleName: undefined,
       name: 'Private Practitioner',
@@ -76,6 +80,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: ROLES.privatePractitioner,
+      serviceIndicator: 'Electronic',
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -126,6 +131,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       entityName: 'Practitioner',
       firmName: 'GW Law Offices',
       firstName: 'IRS',
+      isUpdatingInformation: undefined,
       lastName: 'Practitioner',
       middleName: undefined,
       name: 'IRS Practitioner',
@@ -133,6 +139,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: 'irsPractitioner',
+      serviceIndicator: 'Electronic',
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
