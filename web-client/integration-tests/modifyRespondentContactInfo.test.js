@@ -33,8 +33,8 @@ describe('Modify Respondent Contact Information', () => {
 
   loginAs(test, 'irsPractitioner@example.com');
   respondentUpdatesAddress(test);
-  it('waits for ES index', async () => {
-    await refreshElasticsearchIndex(5000);
+  it('wait for ES index', async () => {
+    await refreshElasticsearchIndex(8000);
   });
   for (let i = 0; i < 3; i++) {
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
