@@ -236,6 +236,8 @@ exports.updatePetitionerInformationInteractor = async ({
     { applicationContext },
   );
 
+  const servedParties = aggregatePartiesForService(caseEntity);
+
   const partyWithPaperService =
     caseEntity.contactPrimary.serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
@@ -251,122 +253,124 @@ exports.updatePetitionerInformationInteractor = async ({
         ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
       ));
 
-  const servedParties = aggregatePartiesForService(caseEntity);
-
   let primaryChangeDocs;
   let secondaryChangeDocs;
   let paperServicePdfUrl;
-  if (!caseEntity.isSealed && primaryChange) {
-    primaryChangeDocs = await createDocketEntryForChange({
-      applicationContext,
-      caseEntity,
-      contactName: primaryEditableFields.name,
-      documentType: primaryChange,
-      newData: primaryEditableFields,
-      oldData: oldCase.contactPrimary,
-      servedParties,
-      user,
-    });
-
-    const privatePractitionersRepresentingPrimaryContact = caseEntity.privatePractitioners.filter(
-      d => d.representingPrimary,
-    );
-    if (
-      privatePractitionersRepresentingPrimaryContact.length === 0 ||
-      partyWithPaperService
-    ) {
-      await createWorkItemForChange({
-        applicationContext,
-        caseEntity,
-        changeOfAddressDocketEntry:
-          primaryChangeDocs.changeOfAddressDocketEntry,
-        user,
-      });
-    }
-  }
-  if (!caseEntity.isSealed && secondaryChange) {
-    secondaryChangeDocs = await createDocketEntryForChange({
-      applicationContext,
-      caseEntity,
-      contactName: secondaryEditableFields.name,
-      documentType: secondaryChange,
-      newData: secondaryEditableFields,
-      oldData: oldCase.contactSecondary || {},
-      servedParties,
-      user,
-    });
-    const privatePractitionersRepresentingSecondaryContact = caseEntity.privatePractitioners.filter(
-      d => d.representingSecondary,
-    );
-    if (
-      privatePractitionersRepresentingSecondaryContact.length === 0 ||
-      partyWithPaperService
-    ) {
-      await createWorkItemForChange({
-        applicationContext,
-        caseEntity,
-        changeOfAddressDocketEntry:
-          secondaryChangeDocs.changeOfAddressDocketEntry,
-        user,
-      });
-    }
-  }
 
   if (
-    !caseEntity.isSealed &&
-    (primaryChange || secondaryChange) &&
-    servedParties.paper.length > 0
+    (primaryChange && !caseEntity.contactPrimary?.isAddressSealed) ||
+    (secondaryChange && !caseEntity.contactSecondary?.isAddressSealed)
   ) {
-    const fullDocument = await PDFDocument.create();
-
-    const addressPages = await getAddressPages({
-      applicationContext,
-      caseEntity,
-      servedParties,
-    });
-
-    if (primaryChangeDocs && primaryChangeDocs.changeOfAddressPdfWithCover) {
-      await copyToNewPdf({
-        addressPages,
+    if (primaryChange) {
+      primaryChangeDocs = await createDocketEntryForChange({
         applicationContext,
-        newPdfDoc: fullDocument,
-        noticeDoc: await PDFDocument.load(
-          primaryChangeDocs.changeOfAddressPdfWithCover,
-        ),
+        caseEntity,
+        contactName: primaryEditableFields.name,
+        documentType: primaryChange,
+        newData: primaryEditableFields,
+        oldData: oldCase.contactPrimary,
+        servedParties,
+        user,
       });
+
+      const privatePractitionersRepresentingPrimaryContact = caseEntity.privatePractitioners.filter(
+        d => d.representingPrimary,
+      );
+      if (
+        privatePractitionersRepresentingPrimaryContact.length === 0 ||
+        partyWithPaperService
+      ) {
+        await createWorkItemForChange({
+          applicationContext,
+          caseEntity,
+          changeOfAddressDocketEntry:
+            primaryChangeDocs.changeOfAddressDocketEntry,
+          user,
+        });
+      }
     }
-    if (
-      secondaryChangeDocs &&
-      secondaryChangeDocs.changeOfAddressPdfWithCover
-    ) {
-      await copyToNewPdf({
-        addressPages,
+    if (secondaryChange) {
+      secondaryChangeDocs = await createDocketEntryForChange({
         applicationContext,
-        newPdfDoc: fullDocument,
-        noticeDoc: await PDFDocument.load(
-          secondaryChangeDocs.changeOfAddressPdfWithCover,
-        ),
+        caseEntity,
+        contactName: secondaryEditableFields.name,
+        documentType: secondaryChange,
+        newData: secondaryEditableFields,
+        oldData: oldCase.contactSecondary || {},
+        servedParties,
+        user,
       });
+      const privatePractitionersRepresentingSecondaryContact = caseEntity.privatePractitioners.filter(
+        d => d.representingSecondary,
+      );
+      if (
+        privatePractitionersRepresentingSecondaryContact.length === 0 ||
+        partyWithPaperService
+      ) {
+        await createWorkItemForChange({
+          applicationContext,
+          caseEntity,
+          changeOfAddressDocketEntry:
+            secondaryChangeDocs.changeOfAddressDocketEntry,
+          user,
+        });
+      }
     }
 
-    const paperServicePdfData = await fullDocument.save();
-    const paperServicePdfId = applicationContext.getUniqueId();
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: paperServicePdfData,
-      key: paperServicePdfId,
-      useTempBucket: true,
-    });
+    if ((primaryChange || secondaryChange) && servedParties.paper.length > 0) {
+      const fullDocument = await PDFDocument.create();
 
-    const {
-      url,
-    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      applicationContext,
-      key: paperServicePdfId,
-      useTempBucket: true,
-    });
+      const addressPages = await getAddressPages({
+        applicationContext,
+        caseEntity,
+        servedParties,
+      });
 
-    paperServicePdfUrl = url;
+      if (primaryChangeDocs && primaryChangeDocs.changeOfAddressPdfWithCover) {
+        await copyToNewPdf({
+          addressPages,
+          applicationContext,
+          newPdfDoc: fullDocument,
+          noticeDoc: await PDFDocument.load(
+            primaryChangeDocs.changeOfAddressPdfWithCover,
+          ),
+        });
+      }
+      if (
+        secondaryChangeDocs &&
+        secondaryChangeDocs.changeOfAddressPdfWithCover
+      ) {
+        await copyToNewPdf({
+          addressPages,
+          applicationContext,
+          newPdfDoc: fullDocument,
+          noticeDoc: await PDFDocument.load(
+            secondaryChangeDocs.changeOfAddressPdfWithCover,
+          ),
+        });
+      }
+
+      const paperServicePdfData = await fullDocument.save();
+      const paperServicePdfId = applicationContext.getUniqueId();
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        document: paperServicePdfData,
+        key: paperServicePdfId,
+        useTempBucket: true,
+      });
+
+      const {
+        url,
+      } = await applicationContext
+        .getPersistenceGateway()
+        .getDownloadPolicyUrl({
+          applicationContext,
+          key: paperServicePdfId,
+          useTempBucket: true,
+        });
+
+      paperServicePdfUrl = url;
+    }
   }
 
   const updatedCase = await applicationContext

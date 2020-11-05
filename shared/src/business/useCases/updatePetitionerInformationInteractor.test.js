@@ -108,6 +108,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
+        isAddressSealed: false,
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
@@ -351,7 +352,7 @@ describe('update petitioner contact information on a case', () => {
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
 
-  it('should not generate a notice of change address if the case is sealed', async () => {
+  it("should not generate a notice of change address when contactPrimary's information is sealed", async () => {
     mockUser.role = ROLES.docketClerk;
     mockCase = {
       ...MOCK_CASE,
@@ -360,25 +361,14 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
+        isAddressSealed: true,
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
       },
-      contactSecondary: {
-        address1: '789 Division St APT 123',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Secondary Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
-      isSealed: true,
-      partyType: PARTY_TYPES.petitionerSpouse,
-      sealedDate: Date.now(),
+      partyType: PARTY_TYPES.petitioner,
     };
 
     await updatePetitionerInformationInteractor({
@@ -388,16 +378,49 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
+        isAddressSealed: true,
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
       },
+      docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+      partyType: PARTY_TYPES.petitioner,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
+
+  it("should not generate a notice of change address when contactSecondary's information is sealed", async () => {
+    mockUser.role = ROLES.docketClerk;
+    mockCase = {
+      ...MOCK_CASE,
+      contactPrimary: MOCK_CASE.contactPrimary,
+      contactSecondary: {
+        address1: '789 Division St APT 123',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        isAddressSealed: true,
+        name: 'Test Secondary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    };
+
+    await updatePetitionerInformationInteractor({
+      applicationContext,
+      contactPrimary: MOCK_CASE.contactPrimary,
       contactSecondary: {
         address1: '789 Division St APT 123 TEST',
         city: 'Somewhere',
         countryType: COUNTRY_TYPES.DOMESTIC,
+        isAddressSealed: true,
         name: 'Test Secondary Petitioner',
         phone: '1234567',
         postalCode: '12345',
