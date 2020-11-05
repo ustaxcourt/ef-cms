@@ -11,14 +11,15 @@ export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    console.log(
+    const currentUser = test.getState('user');
+    const privatePractitioners = test.getState(
       'caseDetail.privatePractitioners',
-      test.getState('caseDetail.privatePractitioners'),
+    );
+    const privatePractitioner = privatePractitioners.find(
+      practitioner => practitioner.userId === currentUser.userId,
     );
 
-    expect(
-      test.getState('caseDetail.privatePractitioners.0.contact'),
-    ).toMatchObject({
+    expect(privatePractitioner.contact).toMatchObject({
       address1: test.updatedPractitionerAddress,
     });
 
