@@ -350,9 +350,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCatalogCases,
-} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
-const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
@@ -557,6 +554,9 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
+const {
+  getReadyForTrialCases,
+} = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
@@ -1172,7 +1172,6 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1202,6 +1201,7 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
+  getReadyForTrialCases,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
