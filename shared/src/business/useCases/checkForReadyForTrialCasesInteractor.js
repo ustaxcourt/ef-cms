@@ -13,9 +13,7 @@ exports.checkForReadyForTrialCasesInteractor = async ({
 
   const caseCatalog = await applicationContext
     .getPersistenceGateway()
-    .getAllCatalogCases({
-      applicationContext,
-    });
+    .getReadyForTrialCases({ applicationContext });
 
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
@@ -59,6 +57,7 @@ exports.checkForReadyForTrialCasesInteractor = async ({
       }
     }
   }
+
   await Promise.all(updatedCases);
 
   applicationContext.logger.info('Time', createISODateString());
