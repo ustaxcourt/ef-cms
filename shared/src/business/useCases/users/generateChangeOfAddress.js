@@ -172,7 +172,7 @@ exports.generateChangeOfAddress = async ({
 
         caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
-        applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
           docketEntryId: changeOfAddressDocketEntry.docketEntryId,
@@ -237,10 +237,12 @@ exports.generateChangeOfAddress = async ({
           });
 
         if (workItem) {
-          applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          });
+          await applicationContext
+            .getPersistenceGateway()
+            .saveWorkItemForNonPaper({
+              applicationContext,
+              workItem: workItem.validate().toRawObject(),
+            });
         }
 
         caseEntity.updateDocketEntry(changeOfAddressDocketEntry);

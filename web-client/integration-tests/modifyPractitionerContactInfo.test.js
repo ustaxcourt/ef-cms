@@ -31,6 +31,8 @@ describe('Modify Practitioner Contact Information', () => {
       );
       expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
+
+      await refreshElasticsearchIndex();
     });
   }
 
