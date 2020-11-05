@@ -26,8 +26,6 @@ const createSilentAppContext = user => {
   applicationContext.logger = {
     error: jest.fn(),
     info: jest.fn(),
-    time: () => jest.fn().mockReturnValue(null),
-    timeEnd: () => jest.fn().mockReturnValue(null),
   };
 
   return applicationContext;

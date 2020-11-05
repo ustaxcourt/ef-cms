@@ -9,7 +9,7 @@ const { createISODateString } = require('../utilities/DateHandler');
 exports.checkForReadyForTrialCasesInteractor = async ({
   applicationContext,
 }) => {
-  applicationContext.logger.info('Time', createISODateString());
+  applicationContext.logger.debug('Time', createISODateString());
 
   const caseCatalog = await applicationContext
     .getPersistenceGateway()
@@ -61,5 +61,5 @@ exports.checkForReadyForTrialCasesInteractor = async ({
   }
   await Promise.all(updatedCases);
 
-  applicationContext.logger.info('Time', createISODateString());
+  applicationContext.logger.debug('Time', createISODateString());
 };
