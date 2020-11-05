@@ -51,7 +51,7 @@ npm run build:assets
 
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules --no-minify
+# npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules --no-minify
 popd
 
 # exit on any failure
