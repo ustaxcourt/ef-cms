@@ -31,6 +31,8 @@ export const admissionsClerkEditsPractitionerInfo = test => {
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
 
+    await refreshElasticsearchIndex(5000);
+
     expect(test.getState('currentPage')).toEqual('PractitionerDetail');
     expect(test.getState('practitionerDetail.barNumber')).toEqual(
       test.barNumber,
@@ -42,8 +44,6 @@ export const admissionsClerkEditsPractitionerInfo = test => {
       '123 Legal Way',
     );
 
-    await refreshElasticsearchIndex(2500);
-
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -52,8 +52,6 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     const noticeDocument = caseDetail.docketEntries.find(
       document => document.documentType === 'Notice of Change of Address',
     );
-
-    console.log(''); // adding this causes the tests to pass....
 
     expect(noticeDocument).toBeTruthy();
     expect(noticeDocument.additionalInfo).toEqual('for Ben Leighton Matlock');
