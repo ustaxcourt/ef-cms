@@ -2,9 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  TrialSessionWorkingCopy,
-} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -22,7 +19,7 @@ exports.createTrialSessionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  const trialSessionEntity = new TrialSession(trialSession, {
+  const trialSessionToAdd = new TrialSession(trialSession, {
     applicationContext,
   });
 
@@ -30,50 +27,14 @@ exports.createTrialSessionInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (['Motion/Hearing', 'Special'].includes(trialSessionEntity.sessionType)) {
-    trialSessionEntity.setAsCalendared();
+  if (['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType)) {
+    trialSessionToAdd.setAsCalendared();
   }
 
-  const createdTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .createTrialSession({
+  return await applicationContext
+    .getUseCaseHelpers()
+    .createTrialSessionAndWorkingCopy({
       applicationContext,
-      trialSession: trialSessionEntity.validate().toRawObject(),
+      trialSessionToAdd,
     });
-
-  if (trialSessionEntity.judge && trialSessionEntity.judge.userId) {
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
-      trialSessionId: trialSessionEntity.trialSessionId,
-      userId: trialSessionEntity.judge.userId,
-    });
-
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
-        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-          .validate()
-          .toRawObject(),
-      });
-  }
-
-  if (trialSessionEntity.trialClerk && trialSessionEntity.trialClerk.userId) {
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
-      trialSessionId: trialSessionEntity.trialSessionId,
-      userId: trialSessionEntity.trialClerk.userId,
-    });
-
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
-        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-          .validate()
-          .toRawObject(),
-      });
-  }
-
-  return new TrialSession(createdTrialSession, { applicationContext })
-    .validate()
-    .toRawObject();
 };
