@@ -1,3 +1,5 @@
+const { refreshElasticsearchIndex } = require('../helpers');
+
 export const practitionerUpdatesAddress = test => {
   return it('practitioner updates address', async () => {
     await test.runSequence('gotoUserContactEditSequence');
@@ -25,6 +27,7 @@ export const practitionerUpdatesAddress = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('userContactUpdateCompleteSequence');
+    await refreshElasticsearchIndex(5000);
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Changes saved.',
     });
