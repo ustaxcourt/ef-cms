@@ -31,8 +31,8 @@ describe('getCasesByUserId', () => {
                     fields: [
                       'privatePractitioners.L.M.userId.S',
                       'irsPractitioners.L.M.userId.S',
-                      'otherPetitioners.L.M.userId.S',
                       'otherFilers.L.M.userId.S',
+                      'otherPetitioners.L.M.userId.S',
                       'userId.S',
                     ],
                     query: userId,
@@ -60,8 +60,8 @@ describe('getCasesByUserId', () => {
                     fields: [
                       'privatePractitioners.L.M.userId.S',
                       'irsPractitioners.L.M.userId.S',
-                      'otherPetitioners.L.M.userId.S',
                       'otherFilers.L.M.userId.S',
+                      'otherPetitioners.L.M.userId.S',
                       'userId.S',
                     ],
                     query: userId,
