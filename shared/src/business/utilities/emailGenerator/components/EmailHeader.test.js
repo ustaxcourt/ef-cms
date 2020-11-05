@@ -7,7 +7,7 @@ describe('EmailHeader', () => {
     let wrapper = shallow(<EmailHeader />);
 
     expect(wrapper.text()).toContain('United States Tax Court');
-    expect(wrapper.text()).toContain('Washington, DC 21207');
+    expect(wrapper.text()).toContain('Washington, DC 20217');
   });
 
   it('renders the date from props if present', () => {

@@ -147,6 +147,10 @@ exports.getDownloadPolicyUrlInteractor = async ({
           throw new UnauthorizedError(
             'Unauthorized to view document at this time.',
           );
+        } else if (docketEntryEntity.isStricken) {
+          throw new UnauthorizedError(
+            'Unauthorized to view document at this time.',
+          );
         }
       } else if (selectedIsStin) {
         throw new UnauthorizedError(

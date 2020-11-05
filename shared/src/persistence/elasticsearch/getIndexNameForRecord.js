@@ -31,6 +31,12 @@ const isRecordOfType = (record, type) => {
   }
 };
 
+/**
+ * getIndexNameForRecord
+ *
+ * @param {object} record the record object
+ * @returns {object} the index the record belongs to
+ */
 exports.getIndexNameForRecord = record => {
   let index = null;
 
@@ -46,6 +52,8 @@ exports.getIndexNameForRecord = record => {
     index = 'efcms-user-case';
   } else if (isRecordOfType(record, 'CaseDeadline')) {
     index = 'efcms-case-deadline';
+  } else if (isRecordOfType(record, 'WorkItem')) {
+    index = 'efcms-work-item';
   }
 
   return index;

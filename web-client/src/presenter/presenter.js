@@ -222,7 +222,6 @@ import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseM
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
-import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
@@ -280,6 +279,7 @@ import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSe
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
+import { setPendingReportSelectedJudgeSequence } from './sequences/pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
@@ -664,7 +664,6 @@ export const presenter = {
     openRemoveFromTrialSessionModalSequence,
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
-    openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     openStrikeDocketEntryModalSequence,
     openTrialSessionPlanningModalSequence,
@@ -721,6 +720,7 @@ export const presenter = {
     setPDFSignatureDataSequence,
     setPageSequence,
     setPdfPreviewUrlSequence,
+    setPendingReportSelectedJudgeSequence,
     setSelectedBatchIndexSequence,
     setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,

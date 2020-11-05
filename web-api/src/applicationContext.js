@@ -148,9 +148,6 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
-  createElasticsearchReindexRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/createElasticsearchReindexRecord');
-const {
   createISODateString,
   formatDateString,
   formatNow,
@@ -180,6 +177,9 @@ const {
 const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
+const {
+  createTrialSessionAndWorkingCopy,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy');
 const {
   createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
@@ -222,9 +222,6 @@ const {
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
-const {
-  deleteElasticsearchReindexRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
 const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
@@ -353,9 +350,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCatalogCases,
-} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
-const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
@@ -439,13 +433,13 @@ const {
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
   getDocumentQCInboxForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
@@ -467,9 +461,6 @@ const {
 const {
   getDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
-const {
-  getElasticsearchReindexRecords,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/getElasticsearchReindexRecords');
 const {
   getEligibleCasesForTrialCity,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
@@ -564,8 +555,8 @@ const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
 const {
-  getRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/getRecord');
+  getReadyForTrialCases,
+} = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
@@ -663,9 +654,6 @@ const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
-  indexRecord,
-} = require('../../shared/src/persistence/elasticsearch/indexRecord');
-const {
   IrsPractitioner,
 } = require('../../shared/src/business/entities/IrsPractitioner');
 const {
@@ -749,9 +737,6 @@ const {
 const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
-const {
-  reprocessFailedRecordsInteractor,
-} = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
 const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
@@ -1129,7 +1114,6 @@ const gatewayMethods = {
     createCaseCatalogRecord,
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
-    createElasticsearchReindexRecord,
     createMessage,
     createMigratedPetitionerUser,
     createPractitionerUser,
@@ -1178,7 +1162,6 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFromS3,
-  deleteElasticsearchReindexRecord,
   deleteRecord,
   deleteSectionOutboxRecord,
   deleteTrialSession,
@@ -1189,7 +1172,6 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1209,7 +1191,6 @@ const gatewayMethods = {
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
   getDownloadPolicyUrl,
-  getElasticsearchReindexRecords,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
@@ -1220,7 +1201,7 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
-  getRecord,
+  getReadyForTrialCases,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1239,7 +1220,6 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
-  indexRecord,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1482,6 +1462,7 @@ module.exports = appContextUser => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createTrialSessionAndWorkingCopy,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
@@ -1609,7 +1590,6 @@ module.exports = appContextUser => {
         removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
-        reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
