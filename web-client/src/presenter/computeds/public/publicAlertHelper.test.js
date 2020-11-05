@@ -57,4 +57,17 @@ describe('publicAlertHelper', () => {
       showTitleOnly: false,
     });
   });
+
+  it('responseCode', () => {
+    const result = runCompute(publicAlertHelper, {
+      state: {
+        alertError: {
+          responseCode: 504,
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      responseCode: 504,
+    });
+  });
 });

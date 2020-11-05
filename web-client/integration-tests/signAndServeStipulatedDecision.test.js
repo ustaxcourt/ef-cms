@@ -1,4 +1,5 @@
 import { adcsSignsProposedStipulatedDecisionFromMessage } from './journey/adcsSignsProposedStipulatedDecisionFromMessage';
+import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
 import { docketClerkCompletesDocketEntryQcAndSendsMessage } from './journey/docketClerkCompletesDocketEntryQcAndSendsMessage';
 import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './journey/docketClerkCreatesDocketEntryForSignedStipulatedDecision';
 import { loginAs, setupTest, uploadPetition } from './helpers';
@@ -30,6 +31,7 @@ describe('a user signs and serves a stipulated decision', () => {
   respondentUploadsProposedStipulatedDecision(test);
 
   loginAs(test, 'docketclerk@example.com');
+  docketClerkAssignWorkItemToSelf(test);
   docketClerkCompletesDocketEntryQcAndSendsMessage(test);
 
   loginAs(test, 'adc@example.com');

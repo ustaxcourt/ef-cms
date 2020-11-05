@@ -19,5 +19,6 @@ data "null_data_source" "locals" {
     IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
     COGNITO_SUFFIX                 = var.cognito_suffix
     DISABLE_EMAILS                 = var.disable_emails
+    LOG_LEVEL                      = var.log_level
   }
 }
