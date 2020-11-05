@@ -226,7 +226,7 @@ describe('update primary contact on a case', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
@@ -263,9 +263,20 @@ describe('update primary contact on a case', () => {
     expect(caseDetail.contactPrimary.email).toBe('petitioner@example.com');
   });
 
-  it('does not generate the change of address when case is sealed', async () => {
-    mockCase.isSealed = true;
-    mockCase.sealedDate = Date.now();
+  it('should update the contact on the case but not generate the change of address when contact primary address is sealed', async () => {
+    const mockCaseWithSealedAddress = {
+      ...mockCase,
+      contactPrimary: {
+        ...mockCase.contactPrimary,
+        isAddressSealed: true,
+      },
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(
+        () => mockCaseWithSealedAddress,
+      );
 
     await updatePrimaryContactInteractor({
       applicationContext,
@@ -283,7 +294,16 @@ describe('update primary contact on a case', () => {
     });
 
     expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).not.toHaveBeenCalled();
   });
 });
