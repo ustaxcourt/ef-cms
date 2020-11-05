@@ -74,7 +74,7 @@ exports.updatePrimaryContactInteractor = async ({
       oldData: caseToUpdate.contactPrimary,
     });
 
-  if (documentType) {
+  if (!caseEntity.contactPrimary.isAddressSealed && documentType) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
@@ -183,12 +183,12 @@ exports.updatePrimaryContactInteractor = async ({
       document: changeOfAddressPdfWithCover,
       key: newDocketEntryId,
     });
-
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
   }
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   return caseEntity.validate().toRawObject();
 };
