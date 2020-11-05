@@ -87,10 +87,10 @@ const {
 } = require('../utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
@@ -474,6 +474,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
+    getLogger: jest.fn().mockReturnValue({
+      error: jest.fn(),
+    }),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
@@ -499,10 +502,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
     logger: {
+      debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
-      time: () => jest.fn().mockReturnValue(null),
-      timeEnd: () => jest.fn().mockReturnValue(null),
     },
     notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),

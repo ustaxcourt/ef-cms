@@ -12,6 +12,7 @@ describe('advancedSearchHelper', () => {
     USER_ROLES,
   } = applicationContext.getConstants();
 
+  const maxSearchResultsOverride = 3;
   let pageSizeOverride = 5;
   let globalUser;
 
@@ -30,6 +31,7 @@ describe('advancedSearchHelper', () => {
         return {
           ...applicationContext.getConstants(),
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+          MAX_SEARCH_RESULTS: maxSearchResultsOverride,
         };
       },
     },
@@ -155,6 +157,7 @@ describe('advancedSearchHelper', () => {
       showNoMatches: false,
       showSearchResults: true,
     });
+    expect(result.showMaxResultsMessage).toBeFalsy();
   });
 
   it('formats search results for a case search', () => {
@@ -207,6 +210,64 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: US_STATES.TX,
       },
     ]);
+  });
+
+  it(`shows warning of maximum (${maxSearchResultsOverride}) search results if threshold is reached`, () => {
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'case',
+        searchResults: [
+          {
+            caseCaption: 'Test Petitioner, Petitioner',
+            contactPrimary: {
+              name: 'Daenerys Stormborn',
+              state: 'TN',
+            },
+            docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
+          },
+          {
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
+            contactPrimary: {
+              name: 'Daenerys Stormborn',
+              state: 'TX',
+            },
+            contactSecondary: { name: 'Another Person', state: 'TX' },
+            docketNumber: '102-18',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '102-18W',
+            receivedAt: '2019-05-01T05:00:00.000Z',
+          },
+          {
+            caseCaption: 'Test Petitioner, Petitioner',
+            contactPrimary: {
+              name: 'Daenerys Stormborn',
+              state: 'TN',
+            },
+            docketNumber: '103-19',
+            docketNumberWithSuffix: '103-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
+          },
+          {
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
+            contactPrimary: {
+              name: 'Daenerys Stormborn',
+              state: 'TX',
+            },
+            contactSecondary: { name: 'Another Person', state: 'TX' },
+            docketNumber: '104-18',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '104-18W',
+            receivedAt: '2019-05-01T05:00:00.000Z',
+          },
+        ],
+      },
+    });
+    expect(result.showMaxResultsMessage).toBe(true);
+    expect(result.maxResults).toBeDefined();
   });
 
   it('only returns formatted results that should be currently shown based on form.currentPage for a case search', () => {

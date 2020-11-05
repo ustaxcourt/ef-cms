@@ -84,6 +84,7 @@ const {
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
   CASE_STATUS_TYPES,
+  MAX_SEARCH_RESULTS,
   SESSION_STATUS_GROUPS,
 } = require('../../shared/src/business/entities/EntityConstants');
 const {
@@ -273,6 +274,9 @@ const {
   fetchPendingItems: fetchPendingItemsPersistence,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
+  fetchPendingItemsByDocketNumber,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -435,13 +439,13 @@ const {
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
   getDocumentQCInboxForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
@@ -986,6 +990,7 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
@@ -1243,7 +1248,7 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-module.exports = appContextUser => {
+module.exports = (appContextUser, requestId) => {
   let user;
 
   if (appContextUser) {
@@ -1253,6 +1258,8 @@ module.exports = appContextUser => {
   const getCurrentUser = () => {
     return user;
   };
+
+  const logger = createLogger({ requestId });
 
   return {
     barNumberGenerator,
@@ -1294,10 +1301,12 @@ module.exports = appContextUser => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => status !== CASE_STATUS_TYPES.closed,
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
+      PENDING_ITEMS_PAGE_SIZE: 100,
       SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
@@ -1327,8 +1336,20 @@ module.exports = appContextUser => {
     },
     getDynamoClient,
     getEmailClient: () => {
-      if (process.env.CI || process.env.DISABLE_EMAILS) {
+      if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
+          getSendStatistics: () => {
+            // mock this out so the health checks pass on smoketests
+            return {
+              promise: async () => ({
+                SendDataPoints: [
+                  {
+                    Rejects: 0,
+                  },
+                ],
+              }),
+            };
+          },
           sendBulkTemplatedEmail: params => {
             return {
               promise: () =>
@@ -1465,6 +1486,7 @@ module.exports = appContextUser => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
+        fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
@@ -1664,22 +1686,9 @@ module.exports = appContextUser => {
     initHoneybadger,
     isAuthorized,
     logger: {
-      error: value => {
-        // eslint-disable-next-line no-console
-        console.error(value);
-      },
-      info: (key, value) => {
-        // eslint-disable-next-line no-console
-        console.info(key, JSON.stringify(value));
-      },
-      time: key => {
-        // eslint-disable-next-line no-console
-        console.time(key);
-      },
-      timeEnd: key => {
-        // eslint-disable-next-line no-console
-        console.timeEnd(key);
-      },
+      debug: logger.debug.bind(logger),
+      error: logger.error.bind(logger),
+      info: logger.info.bind(logger),
     },
     notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();

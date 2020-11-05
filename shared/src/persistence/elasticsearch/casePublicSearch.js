@@ -1,9 +1,11 @@
 const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
+const {
+  MAX_SEARCH_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
-
 /**
  * casePublicSearch
  *
@@ -31,7 +33,7 @@ exports.casePublicSearch = async ({
     yearFiledMin,
   });
 
-  const source = [
+  const sourceFields = [
     'caseCaption',
     'contactPrimary',
     'contactSecondary',
@@ -50,13 +52,18 @@ exports.casePublicSearch = async ({
     applicationContext,
     searchParameters: {
       body: {
-        _source: source,
+        _source: sourceFields,
         query: {
           bool: {
             must: [...exactMatchesQuery, ...commonQuery],
+            must_not: {
+              exists: {
+                field: 'sealedDate',
+              },
+            },
           },
         },
-        size: 5000,
+        size: MAX_SEARCH_RESULTS,
       },
       index: 'efcms-case',
     },
@@ -67,12 +74,18 @@ exports.casePublicSearch = async ({
       applicationContext,
       searchParameters: {
         body: {
-          _source: source,
+          _source: sourceFields,
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],
+              must_not: {
+                exists: {
+                  field: 'sealedDate',
+                },
+              },
             },
           },
+          size: MAX_SEARCH_RESULTS,
         },
         index: 'efcms-case',
       },
