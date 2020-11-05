@@ -25,9 +25,9 @@ elif [[ $BRANCH == 'irs' ]] ; then
 elif [[ $BRANCH == 'staging' ]] ; then
   echo "t2.medium.elasticsearch"
 elif [[ $BRANCH == 'test' ]] ; then
-  echo "t2.medium.elasticsearch"
+  echo "m5.large.elasticsearch"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo "t2.small.elasticsearch"
+  echo "m5.large.elasticsearch"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "m5.large.elasticsearch"
 elif [[ $BRANCH == 'dawson' ]] ; then

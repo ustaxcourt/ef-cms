@@ -178,6 +178,9 @@ const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
+  createTrialSessionAndWorkingCopy,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy');
+const {
   createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
@@ -346,9 +349,6 @@ const {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
-const {
-  getAllCatalogCases,
-} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
@@ -554,6 +554,9 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
+const {
+  getReadyForTrialCases,
+} = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
@@ -1169,7 +1172,6 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1199,6 +1201,7 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
+  getReadyForTrialCases,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1459,6 +1462,7 @@ module.exports = appContextUser => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createTrialSessionAndWorkingCopy,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
