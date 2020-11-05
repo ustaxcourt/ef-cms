@@ -17,6 +17,7 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
   const highPrioritySuffixes = [
     DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
     DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
+    DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
   ];
   caseItem.isHighPriority = highPrioritySuffixes.includes(
     caseItem.docketNumberSuffix,
