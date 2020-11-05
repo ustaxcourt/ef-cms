@@ -9,11 +9,15 @@ export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    expect(
-      test.getState('caseDetail.irsPractitioners.0.contact'),
-    ).toMatchObject({
-      address1: test.updatedRespondentAddress,
-    });
+    expect(test.getState('caseDetail.irsPractitioners')).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          contact: expect.objectContaining({
+            address1: test.updatedRespondentAddress,
+          }),
+        }),
+      ]),
+    );
 
     const documents = test.getState('caseDetail.docketEntries');
 
