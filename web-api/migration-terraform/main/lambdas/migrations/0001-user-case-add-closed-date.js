@@ -30,8 +30,10 @@ const migrateItems = async (items, documentClient) => {
             return res.Item;
           });
 
-        if (caseRecord) {
+        if (caseRecord && caseRecord.docketNumber) {
           item.closedDate = caseRecord.closedDate;
+        } else {
+          throw new Error(`Case record ${item.docketNumber} was not found`);
         }
       }
 
