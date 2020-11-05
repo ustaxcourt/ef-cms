@@ -21,6 +21,7 @@ describe('migrateItems', () => {
 
   const mockCase = {
     closedDate: mockClosedDate,
+    docketNumber: '123-20',
     pk: 'case|123-20',
     sk: 'case|123-20',
   };
@@ -80,6 +81,22 @@ describe('migrateItems', () => {
         closedDate: mockClosedDate,
       },
     ]);
+  });
+
+  it('should throw an error if a case record is not found for the user-case', async () => {
+    const items = [{ ...mockUserCase }];
+
+    documentClient = {
+      get: () => ({
+        promise: async () => ({
+          Item: {},
+        }),
+      }),
+    };
+
+    await expect(migrateItems(items, documentClient)).rejects.toThrow(
+      `Case record ${mockUserCase.docketNumber} was not found`,
+    );
   });
 
   it('should not overwrite closedDate if one is already set on the UserCase', async () => {
