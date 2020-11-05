@@ -1,141 +1,100 @@
-// const {
-//   migrateTrialSessionInteractor,
-// } = require('./migrateTrialSessionInteractor');
-// const { applicationContext } = require('../test/createTestApplicationContext');
-// const { ROLES } = require('../entities/EntityConstants');
-// const { User } = require('../entities/User');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
+  createTrialSessionAndWorkingCopy,
+} = require('./createTrialSessionAndWorkingCopy');
+const { omit } = require('lodash');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
-// const DATE = '2018-11-21T20:49:28.192Z';
+const DATE = '2018-11-21T20:49:28.192Z';
 
-// let adminUser;
-// let createdTrialSessions;
-// let trialSessionMetadata;
+const trialSessionMetadata = {
+  isCalendared: false,
+  judge: { name: 'Buch', userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0' },
+  maxCases: 100,
+  sessionType: 'Hybrid',
+  startDate: DATE,
+  term: 'Fall',
+  termYear: '2018',
+  trialLocation: 'Chicago, Illinois',
+  trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
+};
+let trialSessionToAdd;
 
-// describe('migrateTrialSessionInteractor', () => {
-//   beforeEach(() => {
-//     window.Date.prototype.toISOString = jest.fn(() => DATE);
+describe('createTrialSessionAndWorkingCopy', () => {
+  beforeEach(() => {
+    trialSessionToAdd = new TrialSession(trialSessionMetadata, {
+      applicationContext,
+    });
 
-//     adminUser = new User({
-//       name: 'Joe Exotic',
-//       role: ROLES.admin,
-//       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-//     });
+    applicationContext
+      .getPersistenceGateway()
+      .createTrialSession.mockReturnValue(trialSessionMetadata);
+  });
 
-//     createdTrialSessions = [];
+  it('should create a trial session successfully', async () => {
+    const result = await createTrialSessionAndWorkingCopy({
+      applicationContext,
+      trialSessionToAdd,
+    });
+    expect(result).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSession,
+    ).toHaveBeenCalled();
+  });
 
-//     applicationContext.environment.stage = 'local';
+  it('should create a corresponding trial session working copy when it contains a judge with a valid userId', async () => {
+    await createTrialSessionAndWorkingCopy({
+      applicationContext,
+      trialSessionToAdd,
+    });
 
-//     applicationContext.getCurrentUser.mockImplementation(() => adminUser);
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
+  });
 
-//     applicationContext
-//       .getPersistenceGateway()
-//       .createTrialSession.mockImplementation(({ trialSessionToCreate }) => {
-//         createdTrialSessions.push(trialSessionToCreate);
-//       });
-//     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-//       ...adminUser,
-//       section: 'admin',
-//     });
+  it('should create a corresponding trial session working copy when it contains a trialClerk with a valid userId', async () => {
+    delete trialSessionMetadata.judge;
+    trialSessionMetadata.trialClerk = {
+      name: 'Test Clerk',
+      userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0',
+    };
+    await createTrialSessionAndWorkingCopy({
+      applicationContext,
+      trialSessionToAdd,
+    });
 
-//     applicationContext.getUseCases().getUserInteractor.mockReturnValue({
-//       name: 'john doe',
-//       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-//     });
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).toHaveBeenCalled();
+  });
 
-//     trialSessionMetadata = {
-//       isCalendared: false,
-//       maxCases: 100,
-//       sessionType: 'Hybrid',
-//       startDate: DATE,
-//       term: 'Fall',
-//       termYear: '2018',
-//       trialLocation: 'Chicago, Illinois',
-//       trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-//     };
-//   });
+  describe('validation', () => {
+    it('should fail to migrate a trial session when the trial session metadata is invalid', async () => {
+      await expect(
+        createTrialSessionAndWorkingCopy({
+          applicationContext,
+          trialSessionToAdd: new TrialSession(
+            {
+              trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
+            },
+            { applicationContext },
+          ),
+        }),
+      ).rejects.toThrow('The TrialSession entity was invalid');
+    });
 
-//   it('should get the current user from applicationContext', async () => {
-//     await migrateTrialSessionInteractor({
-//       applicationContext,
-//       trialSessionMetadata,
-//     });
-
-//     expect(applicationContext.getCurrentUser).toHaveBeenCalled();
-//   });
-
-//   it('throws an error if the user is not valid or authorized', async () => {
-//     applicationContext.getCurrentUser.mockReturnValue({});
-
-//     await expect(
-//       migrateTrialSessionInteractor({
-//         applicationContext,
-//         trialSessionMetadata,
-//       }),
-//     ).rejects.toThrow('Unauthorized');
-//   });
-
-//   it('should pull the current user record from persistence', async () => {
-//     await migrateTrialSessionInteractor({
-//       applicationContext,
-//       trialSessionMetadata,
-//     });
-
-//     expect(
-//       applicationContext.getPersistenceGateway().getUserById,
-//     ).toHaveBeenCalled();
-//   });
-
-//   it('should create a trial session successfully', async () => {
-//     expect(createdTrialSessions.length).toEqual(0);
-
-//     const result = await migrateTrialSessionInteractor({
-//       applicationContext,
-//       trialSessionMetadata,
-//     });
-
-//     expect(
-//       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-//     ).toHaveBeenCalled();
-//     expect(
-//       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-//     ).toHaveBeenCalled();
-//   });
-//   it('should create a corresponding trial session working copy', async () => {
-//     expect(createdTrialSessions.length).toEqual(0);
-
-//     const result = await migrateTrialSessionInteractor({
-//       applicationContext,
-//       trialSessionMetadata,
-//     });
-
-//     expect(result).toBeDefined();
-//     expect(
-//       applicationContext.getPersistenceGateway().createTrialSession,
-//     ).toHaveBeenCalled();
-//     expect(createdTrialSessions.length).toEqual(1);
-//   });
-//   describe('validation', () => {
-//     it('should fail to migrate a trial session when the trial session metadata is invalid', async () => {
-//       await expect(
-//         migrateTrialSessionInteractor({
-//           applicationContext,
-//           trialSessionMetadata: {
-//             trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-//           },
-//         }),
-//       ).rejects.toThrow('The TrialSession entity was invalid');
-//     });
-
-//     it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
-//       await expect(
-//         migrateTrialSessionInteractor({
-//           applicationContext,
-//           trialSessionMetadata: {
-//             ...trialSessionMetadata,
-//             trialSessionId: undefined,
-//           },
-//         }),
-//       ).rejects.toThrow('must include trialSessionId');
-//     });
-//   });
-// });
+    it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
+      await expect(
+        createTrialSessionAndWorkingCopy({
+          applicationContext,
+          trialSessionToAdd: omit(trialSessionToAdd, 'trialSessionId'),
+        }),
+      ).rejects.toThrow(
+        'The TrialSessionWorkingCopy entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}. {"trialSessionId":"<undefined>","userId":"d90e7b8c-c8a1-4b96-9b30-70bd47b63df0"}',
+      );
+    });
+  });
+});
