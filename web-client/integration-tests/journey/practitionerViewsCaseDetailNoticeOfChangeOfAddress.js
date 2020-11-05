@@ -11,6 +11,11 @@ export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
+    console.log(
+      'caseDetail.privatePractitioners',
+      test.getState('caseDetail.privatePractitioners'),
+    );
+
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact'),
     ).toMatchObject({

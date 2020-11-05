@@ -31,7 +31,7 @@ describe('Modify Respondent Contact Information', () => {
     petitionsClerkAddsRespondentsToCase(test);
   }
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(test, 'irsPractitioner1@example.com');
   respondentUpdatesAddress(test);
   it('wait for ES index', async () => {
     await refreshElasticsearchIndex(8000);
