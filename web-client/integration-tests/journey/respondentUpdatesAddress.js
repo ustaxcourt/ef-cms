@@ -15,7 +15,7 @@ export const respondentUpdatesAddress = test => {
       contact: { address1: expect.anything() },
     });
 
-    test.updatedRespondentAddress = 'UPDATED ADDRESS';
+    test.updatedRespondentAddress = `UPDATED ADDRESS ${Date.now()}`;
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.address1',

@@ -9,15 +9,15 @@ export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    expect(test.getState('caseDetail.irsPractitioners')).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          contact: expect.objectContaining({
-            address1: test.updatedRespondentAddress,
-          }),
-        }),
-      ]),
+    const currentUser = test.getState('user');
+    const irsPractitioners = test.getState('caseDetail.irsPractitioners');
+    const irsPractitioner = irsPractitioners.find(
+      practitioner => practitioner.userId === currentUser.userId,
     );
+
+    expect(irsPractitioner.contact).toMatchObject({
+      address1: test.updatedRespondentAddress,
+    });
 
     const documents = test.getState('caseDetail.docketEntries');
 

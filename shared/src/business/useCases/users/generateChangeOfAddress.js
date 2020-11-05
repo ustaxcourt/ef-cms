@@ -2,10 +2,6 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  calculateISODate,
-  createISODateString,
-} = require('../../utilities/DateHandler');
-const {
   CASE_STATUS_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -88,22 +84,9 @@ exports.generateChangeOfAddress = async ({
         ...rawCase,
       };
 
-      let closedMoreThan6Months;
-      if (caseEntity.status === CASE_STATUS_TYPES.closed) {
-        const maxClosedDate = calculateISODate({
-          dateString: caseEntity.closedDate,
-          howMuch: 6,
-          units: 'months',
-        });
-        const rightNow = createISODateString();
-        closedMoreThan6Months = maxClosedDate <= rightNow;
-      }
-
       const shouldGenerateNotice =
         caseEntity.status !== CASE_STATUS_TYPES.closed;
-      const shouldUpdateCase =
-        !closedMoreThan6Months ||
-        caseEntity.status !== CASE_STATUS_TYPES.closed;
+      const shouldUpdateCase = caseEntity.status !== CASE_STATUS_TYPES.closed;
       let docketEntryAdded = false;
 
       if (shouldGenerateNotice) {
@@ -263,7 +246,7 @@ exports.generateChangeOfAddress = async ({
       }
     } catch (error) {
       applicationContext.logger.error(error);
-      applicationContext.notifyHoneybadger(error);
+      await applicationContext.notifyHoneybadger(error);
     }
 
     completedCases++;
