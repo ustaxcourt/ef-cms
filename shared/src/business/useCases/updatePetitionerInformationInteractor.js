@@ -258,8 +258,8 @@ exports.updatePetitionerInformationInteractor = async ({
   let paperServicePdfUrl;
 
   if (
-    (primaryChange && !caseEntity.contactPrimary?.isAddressSealed) ||
-    (secondaryChange && !caseEntity.contactSecondary?.isAddressSealed)
+    (primaryChange && !caseEntity.contactPrimary.isAddressSealed) ||
+    (secondaryChange && !caseEntity.contactSecondary.isAddressSealed)
   ) {
     if (primaryChange) {
       primaryChangeDocs = await createDocketEntryForChange({
