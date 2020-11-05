@@ -70,3 +70,8 @@ variable "disable_emails" {
 variable "es_volume_size" {
   type = number
 }
+
+variable "log_level" {
+  type    = string
+  default = "info"
+}

@@ -31,6 +31,9 @@ export const assignSelectedWorkItemsAction = async ({
     ),
   );
 
+  // Give elasticsearch a chance to catch up
+  await new Promise(resolve => setTimeout(resolve, 3000));
+
   store.set(
     state.workQueue,
     sectionWorkQueue.map(workItem => {

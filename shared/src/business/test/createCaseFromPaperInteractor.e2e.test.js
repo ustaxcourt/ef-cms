@@ -8,12 +8,6 @@ const {
 const {
   createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
-const {
-  getDocumentQCInboxForSectionInteractor,
-} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
-const {
-  getDocumentQCInboxForUserInteractor,
-} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -123,49 +117,5 @@ describe('createCaseFromPaperInteractor integration test', () => {
       status: CASE_STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
-
-    const petitionsclerkInbox = await getDocumentQCInboxForUserInteractor({
-      applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
-    });
-
-    expect(petitionsclerkInbox).toMatchObject([
-      {
-        assigneeName: 'Alex Petitionsclerk',
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          createdAt: RECEIVED_DATE,
-          documentType: 'Petition',
-          eventCode: 'P',
-        },
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19',
-        isInitializeCase: true,
-        section: PETITIONS_SECTION,
-        sentBy: 'Alex Petitionsclerk',
-      },
-    ]);
-
-    const petitionsSectionInbox = await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
-      section: PETITIONS_SECTION,
-    });
-
-    expect(petitionsSectionInbox).toMatchObject([
-      {
-        assigneeName: 'Alex Petitionsclerk',
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          createdAt: RECEIVED_DATE,
-          documentType: 'Petition',
-          eventCode: 'P',
-        },
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19',
-        isInitializeCase: true,
-        section: PETITIONS_SECTION,
-        sentBy: 'Alex Petitionsclerk',
-      },
-    ]);
   });
 });
