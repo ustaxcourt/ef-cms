@@ -2,21 +2,17 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  calculateISODate,
-  createISODateString,
-} = require('../../utilities/DateHandler');
-const {
   CASE_STATUS_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { clone } = require('lodash');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -29,7 +25,7 @@ exports.generateChangeOfAddress = async ({
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getDocketNumbersByUser({
+    .getCasesByUserId({
       applicationContext,
       userId: user.userId,
     });
@@ -47,12 +43,11 @@ exports.generateChangeOfAddress = async ({
 
   const updatedCases = [];
 
-  for (let docketNumber of docketNumbers) {
+  for (let caseInfo of docketNumbers) {
     try {
+      const { docketNumber } = caseInfo;
       let oldData;
       const newData = contactInfo;
-
-      const name = updatedName ? updatedName : user.name;
 
       const userCase = await applicationContext
         .getPersistenceGateway()
@@ -60,6 +55,8 @@ exports.generateChangeOfAddress = async ({
           applicationContext,
           docketNumber,
         });
+
+      const name = updatedName ? updatedName : user.name;
 
       let caseEntity = new Case(userCase, { applicationContext });
       const privatePractitioner = caseEntity.privatePractitioners.find(
@@ -87,22 +84,9 @@ exports.generateChangeOfAddress = async ({
         ...rawCase,
       };
 
-      let closedMoreThan6Months;
-      if (caseEntity.status === CASE_STATUS_TYPES.closed) {
-        const maxClosedDate = calculateISODate({
-          dateString: caseEntity.closedDate,
-          howMuch: 6,
-          units: 'months',
-        });
-        const rightNow = createISODateString();
-        closedMoreThan6Months = maxClosedDate <= rightNow;
-      }
-
       const shouldGenerateNotice =
         caseEntity.status !== CASE_STATUS_TYPES.closed;
-      const shouldUpdateCase =
-        !closedMoreThan6Months ||
-        caseEntity.status !== CASE_STATUS_TYPES.closed;
+      const shouldUpdateCase = caseEntity.status !== CASE_STATUS_TYPES.closed;
       let docketEntryAdded = false;
 
       if (shouldGenerateNotice) {
@@ -249,20 +233,20 @@ exports.generateChangeOfAddress = async ({
       }
 
       if (shouldUpdateCase || docketEntryAdded) {
+        const validatedRawCase = caseEntity.validate().toRawObject();
+
         const updatedCase = await applicationContext
           .getPersistenceGateway()
           .updateCase({
             applicationContext,
-            caseToUpdate: caseEntity.validate().toRawObject(),
+            caseToUpdate: validatedRawCase,
           });
 
-        const updatedCaseRaw = new Case(updatedCase, { applicationContext })
-          .validate()
-          .toRawObject();
-        updatedCases.push(updatedCaseRaw);
+        updatedCases.push(updatedCase);
       }
     } catch (error) {
-      applicationContext.notifyHoneybadger(error);
+      applicationContext.logger.error(error);
+      await applicationContext.notifyHoneybadger(error);
     }
 
     completedCases++;
