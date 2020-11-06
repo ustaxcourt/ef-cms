@@ -259,6 +259,16 @@ describe('PublicCase', () => {
       );
       expect(isPrivate).toEqual(true);
     });
+
+    it('should return true for a court-issued document that is stricken', () => {
+      const isPrivate = isPrivateDocument({
+        docketEntryId: '123',
+        documentType: 'Order',
+        isOnDocketRecord: true,
+        isStricken: true,
+      });
+      expect(isPrivate).toEqual(true);
+    });
   });
 
   it('should compute docketNumberWithSuffix if it is not provided', () => {
