@@ -2,6 +2,8 @@ const { refreshElasticsearchIndex } = require('../helpers');
 
 export const admissionsClerkEditsPractitionerInfo = test => {
   return it('admissions clerk edits practitioner information', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('gotoEditPractitionerUserSequence', {
       barNumber: test.barNumber,
     });
