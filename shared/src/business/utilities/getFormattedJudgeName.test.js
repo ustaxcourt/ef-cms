@@ -20,4 +20,10 @@ describe('getJudgeLastName', () => {
 
     expect(result).toMatch('Rummy');
   });
+
+  it("should discard suffixes from name and only return the judge's last name", () => {
+    const result = getJudgeLastName('Chief Judge Abigail Van Buren Esq. Jr.');
+
+    expect(result).toMatch('Van Buren');
+  });
 });
