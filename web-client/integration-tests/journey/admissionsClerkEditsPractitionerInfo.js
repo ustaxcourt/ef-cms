@@ -1,3 +1,5 @@
+const { refreshElasticsearchIndex } = require('../helpers');
+
 export const admissionsClerkEditsPractitionerInfo = test => {
   return it('admissions clerk edits practitioner information', async () => {
     await test.runSequence('gotoEditPractitionerUserSequence', {
@@ -28,6 +30,8 @@ export const admissionsClerkEditsPractitionerInfo = test => {
     });
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
+
+    await refreshElasticsearchIndex(5000);
 
     expect(test.getState('currentPage')).toEqual('PractitionerDetail');
     expect(test.getState('practitionerDetail.barNumber')).toEqual(
