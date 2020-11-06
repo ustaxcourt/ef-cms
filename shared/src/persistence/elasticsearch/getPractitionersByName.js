@@ -21,10 +21,9 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
     bool: {
       minimum_should_match: 1,
       should: [
-        { match: { 'role.S': ROLES.privatePractitioner } },
+        { match: { 'role.S': ROLES.inactivePractitioner } },
         { match: { 'role.S': ROLES.irsPractitioner } },
         { match: { 'role.S': ROLES.privatePractitioner } },
-        { match: { 'role.S': ROLES.inactivePractitioner } },
       ],
     },
   };
@@ -41,8 +40,6 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
       must: [...isUserRecord, isPractitionerRole, matchName],
     },
   };
-
-  console.log(JSON.stringify(query, null, 2));
 
   const source = ['admissionsStatus', 'barNumber', 'contact', 'name'];
 
