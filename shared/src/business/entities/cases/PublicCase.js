@@ -119,9 +119,13 @@ const isPrivateDocument = function (document) {
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
+  const documentIsStricken = !!document.isStricken;
 
   const isPublicDocumentType =
-    (isOrder || isCourtIssuedDocument) && !isTranscript && !isStipDecision;
+    (isOrder || isCourtIssuedDocument) &&
+    !isTranscript &&
+    !isStipDecision &&
+    !documentIsStricken;
 
   return (
     (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType
