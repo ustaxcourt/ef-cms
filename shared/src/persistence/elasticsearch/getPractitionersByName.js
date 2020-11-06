@@ -60,9 +60,5 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
     })
   ).results;
 
-  foundUsers.sort((a, b) => {
-    return a.barNumber.localeCompare(b.barNumber);
-  });
-
   return foundUsers;
 };
