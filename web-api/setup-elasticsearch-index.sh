@@ -20,7 +20,7 @@ ENV=$1
 pushd ./web-api/terraform/main
   ../bin/deploy-init.sh "${1}"
   ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output elasticsearch_endpoint_alpha)"
-  ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_alpha)"
+  ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
 popd
 
 node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_ALPHA}
