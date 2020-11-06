@@ -42,7 +42,7 @@ const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  applicationContext.logger.info(
+  applicationContext.logger.debug(
     `going to index ${caseEntityRecords.length} caseEntityRecords`,
   );
 
@@ -105,7 +105,7 @@ const processCaseEntries = async ({
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.info(
+    applicationContext.logger.error(
       'the case or docket entry records that failed to index',
       failedRecords,
     );
@@ -129,7 +129,7 @@ const processDocketEntries = async ({
 }) => {
   if (!docketEntryRecords.length) return;
 
-  applicationContext.logger.info(
+  applicationContext.logger.debug(
     `going to index ${docketEntryRecords.length} docketEntryRecords`,
   );
 
@@ -150,9 +150,9 @@ const processDocketEntries = async ({
           const { documentContents } = JSON.parse(buffer.toString());
           fullDocketEntry.documentContents = documentContents;
         } catch (err) {
-          applicationContext.logger.error(err);
           applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
+            err,
           );
         }
       }
@@ -190,7 +190,7 @@ const processDocketEntries = async ({
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.info(
+    applicationContext.logger.error(
       'the docket entry records that failed to index',
       failedRecords,
     );
@@ -205,7 +205,7 @@ const processDocketEntries = async ({
 const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   if (!otherRecords.length) return;
 
-  applicationContext.logger.info(
+  applicationContext.logger.debug(
     `going to index ${otherRecords.length} otherRecords`,
   );
 
@@ -217,7 +217,7 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.info(
+    applicationContext.logger.error(
       'the records that failed to index',
       failedRecords,
     );
@@ -232,7 +232,7 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
 const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (!removeRecords.length) return;
 
-  applicationContext.logger.info(
+  applicationContext.logger.debug(
     `going to index ${removeRecords.length} removeRecords`,
   );
 
@@ -244,7 +244,7 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.info(
+    applicationContext.logger.error(
       'the records that failed to delete',
       failedRecords,
     );
@@ -311,8 +311,7 @@ exports.processStreamRecordsInteractor = async ({
       applicationContext,
       removeRecords,
     }).catch(err => {
-      applicationContext.logger.error(err);
-      applicationContext.logger.info("failed to processRemoveEntries',");
+      applicationContext.logger.error("failed to processRemoveEntries',", err);
       applicationContext.notifyHoneybadger(err, {
         message: 'failed to processRemoveEntries',
       });
@@ -325,8 +324,7 @@ exports.processStreamRecordsInteractor = async ({
         caseEntityRecords,
         utils,
       }).catch(err => {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info("failed to processCaseEntries',");
+        applicationContext.logger.error("failed to processCaseEntries',", err);
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processCaseEntries',
         });
@@ -337,16 +335,17 @@ exports.processStreamRecordsInteractor = async ({
         docketEntryRecords,
         utils,
       }).catch(err => {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info("failed to processDocketEntries',");
+        applicationContext.logger.error(
+          "failed to processDocketEntries',",
+          err,
+        );
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processDocketEntries',
         });
         throw err;
       }),
       processOtherEntries({ applicationContext, otherRecords }).catch(err => {
-        applicationContext.logger.error(err);
-        applicationContext.logger.info("failed to processOtherEntries',");
+        applicationContext.logger.error("failed to processOtherEntries',", err);
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processOtherEntries',
         });
@@ -354,7 +353,7 @@ exports.processStreamRecordsInteractor = async ({
       }),
     ]);
   } catch (err) {
-    applicationContext.logger.info(
+    applicationContext.logger.error(
       'processStreamRecordsInteractor failed to process the records',
       err,
     );

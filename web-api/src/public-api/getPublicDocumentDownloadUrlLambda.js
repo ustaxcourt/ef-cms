@@ -17,7 +17,7 @@ exports.getPublicDocumentDownloadUrlLambda = event =>
           applicationContext,
           ...event.pathParameters,
         });
-      applicationContext.logger.info('Results', results);
+      applicationContext.logger.debug('Results', results);
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
