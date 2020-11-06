@@ -15,7 +15,7 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
       applicationContext,
     });
   } catch (e) {
-    console.log('Elasticsearch health check failed. ', e);
+    applicationContext.logger.error('Elasticsearch health check failed. ', e);
     return false;
   }
 
@@ -29,7 +29,7 @@ const getDynamoStatus = async ({ applicationContext }) => {
       .getTableStatus({ applicationContext });
     return status === 'ACTIVE';
   } catch (e) {
-    console.log('Dynamo health check failed. ', e);
+    applicationContext.logger.error('Dynamo health check failed. ', e);
     return false;
   }
 };
@@ -41,7 +41,7 @@ const getDeployDynamoStatus = async ({ applicationContext }) => {
       .getDeployTableStatus({ applicationContext });
     return status === 'ACTIVE';
   } catch (e) {
-    console.log('Dynamo deploy health check failed. ', e);
+    applicationContext.logger.error('Dynamo deploy health check failed. ', e);
     return false;
   }
 };
@@ -68,7 +68,7 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
     );
     return true;
   } catch (e) {
-    console.log('Dynamsoft health check failed. ', e);
+    applicationContext.logger.error('Dynamsoft health check failed. ', e);
     return false;
   }
 };
@@ -85,7 +85,7 @@ const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
 
     return true;
   } catch (e) {
-    console.log('S3 health check failed. ', e);
+    applicationContext.logger.error('S3 health check failed. ', e);
     return false;
   }
 };
@@ -147,7 +147,7 @@ const getCognitoStatus = async ({ applicationContext }) => {
     );
     return true;
   } catch (e) {
-    console.log('Cognito health check failed. ', e);
+    applicationContext.logger.error('Cognito health check failed. ', e);
     return false;
   }
 };
@@ -158,7 +158,7 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
       .getPersistenceGateway()
       .getSesStatus({ applicationContext });
   } catch (e) {
-    console.log('Email service health check failed. ', e);
+    applicationContext.logger.error('Email service health check failed. ', e);
     return false;
   }
 };
