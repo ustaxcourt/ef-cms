@@ -148,9 +148,6 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
-  createElasticsearchReindexRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/createElasticsearchReindexRecord');
-const {
   createISODateString,
   formatDateString,
   formatNow,
@@ -222,9 +219,6 @@ const {
 const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
-const {
-  deleteElasticsearchReindexRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
 const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
@@ -439,13 +433,13 @@ const {
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
   getDocumentQCInboxForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
@@ -467,9 +461,6 @@ const {
 const {
   getDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
-const {
-  getElasticsearchReindexRecords,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/getElasticsearchReindexRecords');
 const {
   getEligibleCasesForTrialCity,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
@@ -563,9 +554,6 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
-const {
-  getRecord,
-} = require('../../shared/src/persistence/dynamo/elasticsearch/getRecord');
 const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
@@ -663,9 +651,6 @@ const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
-  indexRecord,
-} = require('../../shared/src/persistence/elasticsearch/indexRecord');
-const {
   IrsPractitioner,
 } = require('../../shared/src/business/entities/IrsPractitioner');
 const {
@@ -749,9 +734,6 @@ const {
 const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
-const {
-  reprocessFailedRecordsInteractor,
-} = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
 const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
@@ -990,6 +972,7 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
@@ -1129,7 +1112,6 @@ const gatewayMethods = {
     createCaseCatalogRecord,
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
-    createElasticsearchReindexRecord,
     createMessage,
     createMigratedPetitionerUser,
     createPractitionerUser,
@@ -1178,7 +1160,6 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFromS3,
-  deleteElasticsearchReindexRecord,
   deleteRecord,
   deleteSectionOutboxRecord,
   deleteTrialSession,
@@ -1209,7 +1190,6 @@ const gatewayMethods = {
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
   getDownloadPolicyUrl,
-  getElasticsearchReindexRecords,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
@@ -1220,7 +1200,6 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
-  getRecord,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1239,7 +1218,6 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
-  indexRecord,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1247,7 +1225,7 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-module.exports = appContextUser => {
+module.exports = (appContextUser, requestId) => {
   let user;
 
   if (appContextUser) {
@@ -1257,6 +1235,8 @@ module.exports = appContextUser => {
   const getCurrentUser = () => {
     return user;
   };
+
+  const logger = createLogger({ requestId });
 
   return {
     barNumberGenerator,
@@ -1609,7 +1589,6 @@ module.exports = appContextUser => {
         removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
-        reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
@@ -1683,22 +1662,9 @@ module.exports = appContextUser => {
     initHoneybadger,
     isAuthorized,
     logger: {
-      error: value => {
-        // eslint-disable-next-line no-console
-        console.error(value);
-      },
-      info: (key, value) => {
-        // eslint-disable-next-line no-console
-        console.info(key, JSON.stringify(value));
-      },
-      time: key => {
-        // eslint-disable-next-line no-console
-        console.time(key);
-      },
-      timeEnd: key => {
-        // eslint-disable-next-line no-console
-        console.timeEnd(key);
-      },
+      debug: logger.debug.bind(logger),
+      error: logger.error.bind(logger),
+      info: logger.info.bind(logger),
     },
     notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();

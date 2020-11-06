@@ -13,7 +13,7 @@ export const setIsPrimaryTabAction = ({ get, store }) => {
     state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
   );
 
-  Object.keys(caseDetailInternalTabs).map(tabName =>
+  Object.keys(caseDetailInternalTabs).forEach(tabName =>
     store.set(
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs[tabName],
       primaryTab === tabName,

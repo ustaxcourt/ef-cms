@@ -11,7 +11,12 @@ import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEnt
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  fakeFile,
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+} from './helpers';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
@@ -48,6 +53,11 @@ describe('Create Docket Entry From Scans', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
   docketClerkSavesDocketEntry(test);
+
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
+
   docketClerkViewsQCInProgress(test, true);
   docketClerkViewsSectionQCInProgress(test, true);
   docketClerkViewsEditDocketRecord(test);
@@ -67,6 +77,11 @@ describe('Create Docket Entry From Scans', () => {
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
   docketClerkSavesAndServesDocketEntry(test);
+
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
+
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsSectionQCInProgress(test, false);
 });

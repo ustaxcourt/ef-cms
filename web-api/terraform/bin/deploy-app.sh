@@ -11,6 +11,8 @@ ENVIRONMENT=$1
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
 [ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
+[ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
+[ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 
 
 echo "Running terraform with the following environment configs:"
@@ -23,6 +25,8 @@ echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
 echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
+echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
+echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"

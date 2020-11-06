@@ -59,6 +59,9 @@ module.exports = {
     'isSealed.BOOL': {
       type: 'boolean',
     },
+    'isStricken.BOOL': {
+      type: 'boolean',
+    },
     'judge.S': {
       type: 'text',
     },
