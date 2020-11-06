@@ -12,7 +12,7 @@ export const WebSocketErrorModal = connect({}, function WebSocketErrorModal() {
       headerIconClassName="text-secondary-dark"
       noCancel={true}
       preventCancelOnBlur={true}
-      title="An Unexpected Error Occured"
+      title="An Unexpected Error Occurred"
       onCancelSequence="clearModalSequence"
       onConfirmSequence="clearModalSequence"
     >
