@@ -105,6 +105,64 @@ describe('update primary contact on a case', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
+    expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
+  });
+
+  it('creates a work item if the primary contact is not represented by a privatePractitioner', async () => {
+    await updatePrimaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner',
+        name: 'Bill Burr',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).toBeCalled();
+  });
+
+  it('does not create a work item if the primary contact is represented by a privatePractitioner', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        privatePractitioners: [
+          {
+            barNumber: '1111',
+            name: 'Bob Practitioner',
+            representingPrimary: true,
+            role: ROLES.privatePractitioner,
+            userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
+          },
+        ],
+      });
+
+    await updatePrimaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner',
+        name: 'Bill Burr',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toBeCalled();
   });
 
   it('throws an error if the case was not found', async () => {

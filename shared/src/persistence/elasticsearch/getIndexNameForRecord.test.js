@@ -142,4 +142,14 @@ describe('getIndexNameForRecord', () => {
 
     expect(result).toEqual('efcms-case');
   });
+
+  it('returns efcms-work-item for WorkItem records', () => {
+    const record = {
+      entityName: 'WorkItem',
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-work-item');
+  });
 });

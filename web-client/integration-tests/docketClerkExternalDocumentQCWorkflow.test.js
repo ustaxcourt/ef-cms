@@ -11,6 +11,7 @@ import {
   getNotifications,
   getSectionInboxCount,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadExternalDecisionDocument,
   uploadPetition,
@@ -101,6 +102,7 @@ describe('Create a work item', () => {
   });
 
   it('verify the docketclerk has 3 messages in document qc my inbox', async () => {
+    await refreshElasticsearchIndex();
     const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
     decisionWorkItem = findWorkItemByDocketNumber(
       documentQCMyInbox,
@@ -117,6 +119,7 @@ describe('Create a work item', () => {
   });
 
   it('verify the docketclerk has the expected unread count', async () => {
+    await refreshElasticsearchIndex();
     const notifications = getNotifications(test);
     expect(notifications).toMatchObject({
       qcUnreadCount: notificationsBefore.qcUnreadCount + 3,
