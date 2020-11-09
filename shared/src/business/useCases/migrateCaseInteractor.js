@@ -1,3 +1,4 @@
+const AWS = require('aws-sdk');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -239,6 +240,30 @@ exports.migrateCaseInteractor = async ({
       caseToUpdate: caseValidatedRaw,
     });
   }
+
+  const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
+  let promises = [];
+
+  for (const docketEntry of caseToAdd.docketEntries) {
+    if (docketEntry.isFileAttached) {
+      const message = {
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: caseToAdd.docketNumber,
+      };
+
+      promises.push(
+        sqs
+          .sendMessage({
+            MessageBody: JSON.stringify(message),
+            QueueUrl:
+              'https://sqs.us-east-1.amazonaws.com/515554424717/migrate_legacy_documents_segments_queue_exp1',
+          })
+          .promise(),
+      );
+    }
+  }
+
+  await Promise.all(promises);
 
   return caseValidatedRaw;
 };
