@@ -192,7 +192,46 @@ describe('saveCaseDetailInternalEditAction', () => {
       expect.arrayContaining([
         {
           docketEntryId: mockUploadedKey,
-          documentTitle: 'Request for Place of Trial at [Place]',
+          documentTitle: `Request for Place of Trial at ${MOCK_CASE.preferredTrialCity}`,
+          documentType: 'Request for Place of Trial',
+        },
+      ]),
+    );
+  });
+  it('should compute the RQT documentTitle based on the preferredTrialCity when an RQT already exists on the case', async () => {
+    const mockRqtFile = {
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      documentType: 'Request for Place of Trial',
+      eventCode: 'RQT',
+      filedBy: 'Test Petitioner',
+      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+    };
+    const caseDetail = {
+      ...MOCK_CASE,
+      docketEntries: [],
+      preferredTrialCity: 'Atlantis',
+      requestForPlaceOfTrialFile: mockRqtFile,
+      requestForPlaceOfTrialFileSize: 2,
+    };
+
+    await runAction(saveCaseDetailInternalEditAction, {
+      modules: {
+        presenter,
+      },
+      props: { formWithComputedDates: caseDetail },
+    });
+
+    expect(
+      applicationContext.getUtilities().replaceBracketed,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
+        .calls[0][0].caseToUpdate.docketEntries,
+    ).toMatchObject(
+      expect.arrayContaining([
+        {
+          docketEntryId: mockUploadedKey,
+          documentTitle: 'Request for Place of Trial at Atlantis',
           documentType: 'Request for Place of Trial',
         },
       ]),
