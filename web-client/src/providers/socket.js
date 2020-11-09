@@ -42,6 +42,10 @@ export const socketProvider = ({ socketRouter }) => {
       } catch (e) {
         if (applicationContext) {
           applicationContext.notifyHoneybadger(e);
+          applicationContext.logger.error(
+            'Failed to establish WebSocket connection',
+            e,
+          );
         }
         console.error(e);
         reject();
