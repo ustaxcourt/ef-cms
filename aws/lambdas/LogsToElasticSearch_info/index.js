@@ -1,59 +1,54 @@
 const crypto = require('crypto');
 const https = require('https');
 const zlib = require('zlib');
+const { promisify } = require('util');
+const gunzip = promisify(zlib.gunzip);
 
 // Set this to true if you want to debug why data isn't making it to
 // your Elasticsearch cluster. This will enable logging of failed items
 // to CloudWatch Logs.
 const logFailedResponses = true;
 
-exports.handler = function (input, context) {
+exports.handler = async (input, context) => {
   // decode input from base64
   let zippedInput = new Buffer.from(input.awslogs.data, 'base64');
 
   // decompress the input
-  zlib.gunzip(zippedInput, function (error, buffer) {
-    if (error) {
-      context.fail(error);
-      return;
-    }
+  let buffer;
+  try {
+    buffer = await gunzip(zippedInput);
+  } catch (error) {
+    context.fail(error);
+    return;
+  }
 
-    // parse the input from JSON
-    const awslogsData = JSON.parse(buffer.toString('utf8'));
+  // parse the input from JSON
+  const awslogsData = JSON.parse(buffer.toString('utf8'));
 
-    // transform the input to Elasticsearch documents
-    const elasticsearchBulkData = transform(awslogsData);
+  // transform the input to Elasticsearch documents
+  const elasticsearchBulkData = transform(awslogsData);
 
-    // skip control messages
-    if (!elasticsearchBulkData) {
-      console.log('Received a control message');
-      context.succeed('Control message handled successfully');
-      return;
-    }
+  // skip control messages
+  if (!elasticsearchBulkData) {
+    console.log('Received a control message');
+    context.succeed('Control message handled successfully');
+    return;
+  }
 
-    // post documents to the Amazon Elasticsearch Service
-    post(elasticsearchBulkData, function (
-      error2,
-      success,
-      statusCode,
-      failedItems,
-    ) {
-      console.log(
-        'Response: ' +
-          JSON.stringify({
-            statusCode: statusCode,
-          }),
-      );
+  // post documents to the Amazon Elasticsearch Service
+  const { error, failedItems, statusCode, success } = post(
+    elasticsearchBulkData,
+  );
 
-      if (error2) {
-        logFailure(error2, failedItems);
-        context.fail(JSON.stringify(error2));
-      } else {
-        console.log('Success: ' + JSON.stringify(success));
-        context.succeed('Success');
-      }
-    });
-  });
+  console.log(`Response: ${JSON.stringify({ statusCode })}`);
+
+  if (error) {
+    logFailure(error, failedItems);
+    context.fail(JSON.stringify(error));
+  } else {
+    console.log(`Success: ${JSON.stringify(success)}`);
+    context.succeed('Success');
+  }
 };
 
 /**
@@ -176,50 +171,45 @@ function isNumeric(n) {
 /**
  * Sends a POST request to Elasticsearch.
  */
-function post(body, callback) {
-  let requestParams = buildRequest(process.env.es_endpoint, body);
+function post(body) {
+  const requestParams = buildRequest(process.env.es_endpoint, body);
 
-  let request = https
-    .request(requestParams, function (response) {
-      let responseBody = '';
-      response.on('data', function (chunk) {
-        responseBody += chunk;
-      });
+  const request = https.request(requestParams, response => {
+    let responseBody = '';
+    response.on('data', chunk => (responseBody += chunk));
 
-      response.on('end', function () {
-        let info = JSON.parse(responseBody);
-        let failedItems;
-        let success;
-        let error;
+    response.on('end', () => {
+      let info = JSON.parse(responseBody);
+      let failedItems;
+      let success;
+      let error;
 
-        if (response.statusCode >= 200 && response.statusCode < 299) {
-          failedItems = info.items.filter(function (x) {
-            return x.index.status >= 300;
-          });
+      if (response.statusCode >= 200 && response.statusCode < 299) {
+        failedItems = info.items.filter(function (x) {
+          return x.index.status >= 300;
+        });
 
-          success = {
-            attemptedItems: info.items.length,
-            failedItems: failedItems.length,
-            successfulItems: info.items.length - failedItems.length,
-          };
-        }
+        success = {
+          attemptedItems: info.items.length,
+          failedItems: failedItems.length,
+          successfulItems: info.items.length - failedItems.length,
+        };
+      }
 
-        if (response.statusCode !== 200 || info.errors === true) {
-          // prevents logging of failed entries, but allows logging
-          // of other errors such as access restrictions
-          delete info.items;
-          error = {
-            responseBody: info,
-            statusCode: response.statusCode,
-          };
-        }
+      if (response.statusCode !== 200 || info.errors === true) {
+        // prevents logging of failed entries, but allows logging
+        // of other errors such as access restrictions
+        delete info.items;
+        error = {
+          responseBody: info,
+          statusCode: response.statusCode,
+        };
+      }
 
-        callback(error, success, response.statusCode, failedItems);
-      });
-    })
-    .on('error', function (e) {
-      callback(e);
+      return { error, failedItems, statusCode: response.statusCode, success };
     });
+  });
+
   request.end(requestParams.body);
 }
 
