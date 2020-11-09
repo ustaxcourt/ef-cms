@@ -76,6 +76,7 @@ import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCou
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
+import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -213,6 +214,7 @@ export const AppComponent = connect(
         {showModal === 'FileCompressionErrorModal' && (
           <FileCompressionErrorModal />
         )}
+        {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
       </>
     );
   },
