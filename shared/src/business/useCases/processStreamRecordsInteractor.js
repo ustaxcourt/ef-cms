@@ -8,6 +8,13 @@ const partitionRecords = records => {
     record => record.eventName === 'REMOVE',
   );
 
+  // FIXME - Two inserts and two removes being formed when serving order document
+  console.log(
+    '&&&&&&',
+    JSON.stringify(removeRecords, null, 2),
+    JSON.stringify(insertModifyRecords, null, 2),
+  );
+
   const [docketEntryRecords, nonDocketEntryRecords] = partition(
     insertModifyRecords,
     record =>
