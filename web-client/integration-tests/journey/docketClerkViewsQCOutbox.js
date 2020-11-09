@@ -1,32 +1,29 @@
-import { refreshElasticsearchIndex } from '../helpers';
-
-export const docketClerkViewsQCInProgress = (test, shouldExist) => {
-  return it('Docket clerk views My Document QC - In Progress', async () => {
-    await refreshElasticsearchIndex();
-
+export const docketClerkViewsQCOutbox = (test, shouldExist) => {
+  return it('Docket clerk views My Document QC - Outbox', async () => {
     await test.runSequence('gotoWorkQueueSequence');
     expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {
-      box: 'inProgress',
+      box: 'outbox',
       queue: 'my',
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('my');
-    expect(workQueueToDisplay.box).toEqual('inProgress');
+    expect(workQueueToDisplay.box).toEqual('outbox');
 
-    const inProgressQueue = test.getState('workQueue');
+    const outboxQueue = test.getState('workQueue');
+    // console.log('\n\n\n', outboxQueue, '\n\n\n');
     console.log(''); // adding this causes the tests to pass....
-    const inProgressWorkItem = inProgressQueue.find(
+    const outboxWorkItem = outboxQueue.find(
       workItem =>
         workItem.docketEntry.docketEntryId ===
         test.docketRecordEntry.docketEntryId,
     );
     if (shouldExist) {
-      expect(inProgressWorkItem).toBeTruthy();
+      expect(outboxWorkItem).toBeTruthy();
     } else {
-      expect(inProgressWorkItem).toBeFalsy();
+      expect(outboxWorkItem).toBeFalsy();
     }
   });
 };
