@@ -22,14 +22,26 @@ exports.createTrialSessionAndWorkingCopy = async ({
       trialSession: trialSessionToAdd.validate().toRawObject(),
     });
 
-  const trialSessionWorkingCopyUserId =
-    (trialSessionToAdd.judge && trialSessionToAdd.judge.userId) ||
-    (trialSessionToAdd.trialClerk && trialSessionToAdd.trialClerk.userId);
-
-  if (trialSessionWorkingCopyUserId) {
+  if (trialSessionToAdd.judge && trialSessionToAdd.judge.userId) {
     const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
       trialSessionId: trialSessionToAdd.trialSessionId,
-      userId: trialSessionWorkingCopyUserId,
+      userId: trialSessionToAdd.judge.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .createTrialSessionWorkingCopy({
+        applicationContext,
+        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+          .validate()
+          .toRawObject(),
+      });
+  }
+
+  if (trialSessionToAdd.trialClerk && trialSessionToAdd.trialClerk.userId) {
+    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+      trialSessionId: trialSessionToAdd.trialSessionId,
+      userId: trialSessionToAdd.trialClerk.userId,
     });
 
     await applicationContext
