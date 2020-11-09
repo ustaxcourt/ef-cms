@@ -40,6 +40,43 @@ this is some more content`,
     );
   });
 
+  it('scrapes pdf and adds spaces between words', async () => {
+    applicationContext.getPdfJs().getDocument.mockReturnValue({
+      promise: {
+        getPage: jest.fn().mockResolvedValue({
+          getTextContent: jest.fn().mockResolvedValue({
+            items: [
+              {
+                str: 'the',
+                transform: [0, 0, 0, 0, 0, 'transform'],
+              },
+              {
+                str: 'quick',
+                transform: [0, 0, 0, 0, 0, 'transform'],
+              },
+              {
+                str: 'brown',
+                transform: [0, 0, 0, 0, 0, 'transform'],
+              },
+              {
+                str: 'fox',
+                transform: [0, 0, 0, 0, 0, 'transform'],
+              },
+            ],
+          }),
+        }),
+        numPages: 1,
+      },
+    });
+
+    const contents = await scrapePdfContents({
+      applicationContext,
+      pdfBuffer: [],
+    });
+
+    expect(contents.trim()).toEqual('the quick brown fox');
+  });
+
   it('scrapes the pdf that has no contents', async () => {
     applicationContext.getPdfJs().getDocument.mockReturnValue({
       promise: {
