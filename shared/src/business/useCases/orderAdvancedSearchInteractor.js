@@ -32,6 +32,11 @@ exports.orderAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  let omitSealed = false;
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE)) {
+    omitSealed = true;
+  }
+
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,
@@ -49,6 +54,7 @@ exports.orderAdvancedSearchInteractor = async ({
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
       judgeType: 'signedJudgeName',
+      omitSealed,
       ...rawSearch,
     });
 
