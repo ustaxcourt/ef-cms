@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -6,10 +5,16 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedTrialSessionDetails', () => {
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  let mockTrialSession;
+
+  const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
+  const PAST_DATE = '2000-11-25T15:00:00.000Z';
+
+  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
   const formattedTrialSessionDetails = withAppContextDecorator(
     formattedTrialSessionDetailsComputed,
+    applicationContext,
   );
 
   const TRIAL_SESSION = {
@@ -29,337 +34,207 @@ describe('formattedTrialSessionDetails', () => {
     trialLocation: 'Hartford, Connecticut',
   };
 
+  beforeEach(() => {
+    mockTrialSession = TRIAL_SESSION;
+
+    applicationContext
+      .getUtilities()
+      .formattedTrialSessionDetails.mockImplementation(() => mockTrialSession);
+  });
+
   it('returns undefined if state.trialSession is undefined', () => {
+    mockTrialSession = undefined;
+
     const result = runCompute(formattedTrialSessionDetails, {
       state: {},
     });
     expect(result).toBeUndefined();
   });
 
-  it('formats trial session when all fields have values', () => {
+  it('should NOT set canDelete and canEdit when the trial session does NOT have a start date', () => {
+    mockTrialSession = omit(mockTrialSession, 'startDate');
+
     const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-        },
-      },
+      state: {},
     });
-    expect(result).toMatchObject({
-      canDelete: false,
-      canEdit: false,
-      formattedCityStateZip: 'Hartford, CT 12345',
-      formattedCourtReporter: 'Test Court Reporter',
-      formattedIrsCalendarAdministrator: 'Test Calendar Admin',
-      formattedJudge: 'Test Judge',
-      formattedStartTime: '10:00 am',
-      formattedTerm: 'Fall 19',
-      formattedTrialClerk: 'Test Trial Clerk',
-      noLocationEntered: false,
-      showSwingSession: false,
+
+    expect(result.canEdit).toBeUndefined();
+    expect(result.canDelete).toBeUndefined();
+  });
+
+  describe('canDelete', () => {
+    it('should be false when the trial session start date is in the past and it is NOT calendared', () => {
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            ...TRIAL_SESSION,
+            isCalendared: false,
+            startDate: PAST_DATE,
+          },
+        },
+      });
+      expect(result).toMatchObject({
+        canDelete: false,
+      });
+    });
+
+    it('should be false when the trial session start date is in the past and it is calendared', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        isCalendared: true,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canDelete: false,
+      });
+    });
+
+    it('should be true when the trial session start date is in the future and it is NOT calendared', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        isCalendared: false,
+        startDate: FUTURE_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canDelete: true,
+      });
+    });
+
+    it('should be false when the trial session start date is in the future and it is calendared', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        isCalendared: true,
+        startDate: FUTURE_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canDelete: false,
+      });
     });
   });
 
-  it('trial session can not be edited or deleted when in the past', () => {
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          isCalendared: false,
-          startDate: '2000-11-25T15:00:00.000Z',
+  describe('canEdit', () => {
+    it('should be false when trial session start date is in the past and it is NOT closed', () => {
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            ...TRIAL_SESSION,
+            computedStatus: SESSION_STATUS_GROUPS.open,
+            startDate: PAST_DATE,
+          },
         },
-      },
+      });
+      expect(result).toMatchObject({
+        canEdit: false,
+      });
     });
-    expect(result).toMatchObject({
-      canDelete: false,
-      canEdit: false,
+
+    it('should be false when trial session start date is in the past and it is closed', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        computedStatus: SESSION_STATUS_GROUPS.closed,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canEdit: false,
+      });
+    });
+
+    it('should be true when trial session start date is in the future and it is NOT closed', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        computedStatus: SESSION_STATUS_GROUPS.open,
+        startDate: FUTURE_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canEdit: true,
+      });
+    });
+
+    it('should be false when trial session start date is in the future and it is closed', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        computedStatus: SESSION_STATUS_GROUPS.closed,
+        startDate: FUTURE_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result).toMatchObject({
+        canEdit: false,
+      });
     });
   });
 
-  it('trial session can be edited only in the future', () => {
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          isCalendared: false,
-          startDate: '2090-11-25T15:00:00.000Z',
+  describe('showOpenCases', () => {
+    it('should be true when the trial session is calendared and has open cases', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        computedStatus: SESSION_STATUS_GROUPS.open,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
         },
-      },
-    });
-    expect(result).toMatchObject({
-      canDelete: true,
-      canEdit: true,
+      });
+
+      expect(result.showOpenCases).toEqual(true);
     });
   });
 
-  it('trial session can not be deleted when calendared but it still can be edited if in the future', () => {
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          isCalendared: true,
-          startDate: '2090-11-25T15:00:00.000Z',
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      canDelete: false,
-      canEdit: true,
-    });
-  });
+  describe('showOnlyClosedCases', () => {
+    it('should be true when the trial session is calendared and has no open cases', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        computedStatus: SESSION_STATUS_GROUPS.closed,
+      };
 
-  it('trial session can not be deleted or edited when calendared and in the past', () => {
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          isCalendared: true,
-          startDate: '2000-11-25T15:00:00.000Z',
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
         },
-      },
-    });
-    expect(result).toMatchObject({
-      canDelete: false,
-      canEdit: false,
-    });
-  });
+      });
 
-  it('formats trial session when address fields are empty', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
-        },
-      },
+      expect(result.showOnlyClosedCases).toEqual(true);
     });
-    expect(result).toMatchObject({
-      formattedCityStateZip: '',
-      noLocationEntered: true,
-    });
-
-    result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...omit(TRIAL_SESSION, ['city']),
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      formattedCityStateZip: 'CT 12345',
-      noLocationEntered: false,
-    });
-
-    result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...omit(TRIAL_SESSION, ['state']),
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      formattedCityStateZip: 'Hartford, 12345',
-      noLocationEntered: false,
-    });
-
-    result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...omit(TRIAL_SESSION, ['state']),
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      formattedCityStateZip: 'Hartford, 12345',
-      noLocationEntered: false,
-    });
-
-    result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...omit(TRIAL_SESSION, ['postalCode']),
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      formattedCityStateZip: 'Hartford, CT',
-      noLocationEntered: false,
-    });
-  });
-
-  it('formats trial session when session assignments are empty', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...omit(TRIAL_SESSION, [
-            'courtReporter',
-            'irsCalendarAdministrator',
-            'judge',
-            'trialClerk',
-          ]),
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      formattedCourtReporter: 'Not assigned',
-      formattedIrsCalendarAdministrator: 'Not assigned',
-      formattedJudge: 'Not assigned',
-      formattedTrialClerk: 'Not assigned',
-    });
-  });
-
-  it('formats trial session start time', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          startTime: '14:00',
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      formattedStartTime: '2:00 pm',
-    });
-  });
-
-  it('displays swing session area if session is a swing session', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          swingSession: true,
-          swingSessionId: '1234',
-          swingSessionLocation: 'Honolulu, Hawaii',
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      showSwingSession: true,
-    });
-  });
-
-  it('formats docket numbers with suffixes and case caption names without postfix on eligible cases', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: [
-            MOCK_CASE,
-            {
-              ...MOCK_CASE,
-              caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-            },
-            {
-              ...MOCK_CASE,
-              caseCaption: undefined,
-              docketNumber: '103-19',
-            },
-          ],
-        },
-      },
-    });
-    expect(result.formattedEligibleCases.length).toEqual(3);
-    expect(result.formattedEligibleCases[0].docketNumberWithSuffix).toEqual(
-      '101-18',
-    );
-    expect(result.formattedEligibleCases[0].caseTitle).toEqual(
-      'Test Petitioner',
-    );
-    expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
-      '101-18W',
-    );
-    expect(result.formattedEligibleCases[1].caseTitle).toEqual(
-      'Daenerys Stormborn & Someone Else',
-    );
-    expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
-      '103-19',
-    );
-    expect(result.formattedEligibleCases[2].caseTitle).toEqual('');
-  });
-
-  it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          calendaredCases: [
-            MOCK_CASE,
-            {
-              ...MOCK_CASE,
-              caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              removedFromTrial: true,
-            },
-          ],
-          isCalendared: true,
-        },
-      },
-    });
-    expect(result.allCases.length).toEqual(2);
-    expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.allCases[0].caseTitle).toEqual('Test Petitioner');
-    expect(result.allCases[1].docketNumberWithSuffix).toEqual('101-18W');
-    expect(result.allCases[1].caseTitle).toEqual(
-      'Daenerys Stormborn & Someone Else',
-    );
-
-    expect(result.openCases.length).toEqual(1);
-    expect(result.inactiveCases.length).toEqual(1);
-    expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-18W');
-  });
-
-  it('sorts calendared cases by docket number', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          calendaredCases: [
-            MOCK_CASE,
-            { ...MOCK_CASE, docketNumber: '102-19' },
-            { ...MOCK_CASE, docketNumber: '5000-17' },
-            { ...MOCK_CASE, docketNumber: '500-17' },
-            { ...MOCK_CASE, docketNumber: '90-07' },
-          ],
-        },
-      },
-    });
-    expect(result.allCases).toMatchObject([
-      { docketNumber: '90-07' },
-      { docketNumber: '500-17' },
-      { docketNumber: '5000-17' },
-      { docketNumber: '101-18' },
-      { docketNumber: '102-19' },
-    ]);
-  });
-
-  it('should show open cases when the trial session is calendared and has open cases', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          caseOrder: [{ docketNumber: '123-45' }],
-          isCalendared: true,
-        },
-      },
-    });
-    expect(result.showOpenCases).toEqual(true);
-  });
-
-  it('should show only closed cases when the trial session is calendared and has no open cases', () => {
-    let result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...TRIAL_SESSION,
-          caseOrder: [
-            {
-              docketNumber: '123-45',
-              removedFromTrial: true,
-            },
-          ],
-          isCalendared: true,
-        },
-      },
-    });
-    expect(result.showOnlyClosedCases).toEqual(true);
   });
 });

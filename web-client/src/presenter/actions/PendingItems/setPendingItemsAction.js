@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the pendingItems to set
  */
 export const setPendingItemsAction = ({ get, props, store }) => {
-  const pendingItems = get(state.pendingReports.pendingItems);
+  const pendingItems = get(state.pendingReports.pendingItems) || [];
   store.set(state.pendingReports.pendingItems, [
     ...pendingItems,
     ...props.pendingItems,

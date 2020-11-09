@@ -1,8 +1,5 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { NonstandardForm } from './NonstandardForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
@@ -18,8 +15,6 @@ export const CompleteDocumentTypeSectionRemainder = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
-    openSelectDocumentWizardOverlaySequence:
-      sequences.openSelectDocumentWizardOverlaySequence,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -30,7 +25,6 @@ export const CompleteDocumentTypeSectionRemainder = connect(
   function CompleteDocumentTypeSectionRemainder({
     completeDocumentTypeSectionHelper,
     form,
-    openSelectDocumentWizardOverlaySequence,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
@@ -108,20 +102,6 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                   });
                 }}
               />
-              <Mobile>
-                <Button
-                  link
-                  className="margin-top-1"
-                  onClick={() =>
-                    openSelectDocumentWizardOverlaySequence({
-                      forSecondary: true,
-                    })
-                  }
-                >
-                  <FontAwesomeIcon icon="question-circle" size="sm" />
-                  Need help selecting a document?
-                </Button>
-              </Mobile>
             </FormGroup>
             {completeDocumentTypeSectionHelper.secondary
               .showNonstandardForm && (

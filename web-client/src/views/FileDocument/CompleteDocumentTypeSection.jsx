@@ -1,8 +1,5 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay/';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
@@ -18,8 +15,6 @@ export const CompleteDocumentTypeSection = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
-    openSelectDocumentWizardOverlaySequence:
-      sequences.openSelectDocumentWizardOverlaySequence,
     showModal: state.modal.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -31,7 +26,6 @@ export const CompleteDocumentTypeSection = connect(
   function CompleteDocumentTypeSection({
     completeDocumentTypeSectionHelper,
     form,
-    openSelectDocumentWizardOverlaySequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
@@ -84,16 +78,6 @@ export const CompleteDocumentTypeSection = connect(
               });
             }}
           />
-          <Mobile>
-            <Button
-              link
-              className="margin-top-1"
-              onClick={() => openSelectDocumentWizardOverlaySequence()}
-            >
-              <FontAwesomeIcon icon="question-circle" size="sm" />
-              Need help selecting a document?
-            </Button>
-          </Mobile>
         </FormGroup>
 
         <CompleteDocumentTypeSectionRemainder />

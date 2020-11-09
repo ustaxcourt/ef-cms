@@ -1,26 +1,25 @@
-import { applicationContextPublic } from '../../src/applicationContextPublic';
-import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/public/publicCaseDetailHelper';
+import { applicationContext } from '../../src/applicationContext';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const publicCaseDetailHelper = withAppContextDecorator(
-  publicCaseDetailHelperComputed,
-  applicationContextPublic,
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+  applicationContext,
 );
 
-export const unauthedUserSeesStrickenDocketEntry = (
+export const privatePractitionerSeesStrickenDocketEntry = (
   test,
   docketRecordIndex,
 ) => {
-  return it('View case detail', async () => {
-    await test.runSequence('gotoPublicCaseDetailSequence', {
+  return it('private practitioner sees stricken docket entry on case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
     expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
-      publicCaseDetailHelper,
+      formattedCaseDetail,
       {
         state: test.getState(),
       },
