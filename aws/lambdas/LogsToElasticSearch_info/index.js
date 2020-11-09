@@ -27,6 +27,7 @@ exports.handler = async (input, context) => {
 
   const inserts = payload.logEvents
     .map(convertLogEventToElasticSearchInsert.bind(null, payload))
+    .filter(event => !!event) // Remove rejected (non-JSON) log entries
     .join('\n');
 
   // post documents to the Amazon Elasticsearch Service
@@ -61,14 +62,19 @@ const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
     ('0' + timestamp.getUTCDate()).slice(-2), // day
   ].join('.');
 
-  let source = {};
-  source['logdata'] = extractData(logEvent.message, logEvent.extractedFields);
-  source['@id'] = logEvent.id;
-  source['@timestamp'] = new Date(1 * logEvent.timestamp).toISOString();
-  source['@message'] = logEvent.message;
-  source['@owner'] = payload.owner;
-  source['@log_group'] = payload.logGroup;
-  source['@log_stream'] = payload.logStream;
+  const parsedEntry = parse(logEvent.message);
+
+  if (!parsedEntry) {
+    return false;
+  }
+
+  const source = Object.assign(parsedEntry, {
+    '@logEntryId': logEvent.id,
+    '@logGroup': payload.logGroup,
+    '@logStream': payload.logStream,
+    '@owner': payload.owner,
+    '@timestamp': timestamp.toISOString(),
+  });
 
   // Dangling underscores required by Elasticsearch’s bulk insert format
   /* eslint-disable no-underscore-dangle */
@@ -81,77 +87,13 @@ const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
   return [JSON.stringify(action), JSON.stringify(source)].join('\n');
 };
 
-/**
- * Extract log data from an individual log message
- *
- * @returns {Object} the log message extracted to a data object
- */
-function extractData(message, extractedFields) {
-  if (extractedFields) {
-    let data = {};
-
-    for (let key in extractedFields) {
-      if (extractedFields.hasOwnProperty(key) && extractedFields[key]) {
-        let value = extractedFields[key];
-
-        if (isNumeric(value)) {
-          data[key] = 1 * value;
-          continue;
-        }
-
-        const jsonSubString = extractJson(value);
-        if (jsonSubString !== null) {
-          data['$' + key] = JSON.parse(jsonSubString);
-        }
-
-        data[key] = value;
-      }
-    }
-    return data;
-  }
-
-  const jsonSubString = extractJson(message);
-  if (jsonSubString !== null) {
-    return JSON.parse(jsonSubString);
-  }
-
-  return {};
-}
-
-/**
- * Return first JSON substring of a message, if it exists.
- *
- * @returns {string} JSON-encoded data
- */
-function extractJson(message) {
-  let jsonStart = message.indexOf('{');
-  if (jsonStart < 0) return null;
-  let jsonSubString = message.substring(jsonStart);
-  return isValidJson(jsonSubString) ? jsonSubString : null;
-}
-
-/**
- * Determines if a passed string is valid JSON
- *
- * @returns {boolean} if the string is JSON or not
- */
-function isValidJson(message) {
+const parse = message => {
   try {
-    JSON.parse(message);
-  } catch (e) {
+    return JSON.parse(message);
+  } catch (error) {
     return false;
   }
-  return true;
-}
-
-/**
- * Determines if a passed string is numeric (float or integer)
- *
- * @returns {boolean} if the string is numeric or not
- */
-function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
+};
 
 /**
  * Sends a POST request to Elasticsearch.
