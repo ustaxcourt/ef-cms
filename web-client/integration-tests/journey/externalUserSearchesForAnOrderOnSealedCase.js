@@ -15,8 +15,6 @@ export const externalUserSearchesForAnOrderOnSealedCase = test => {
 
     await test.runSequence('submitOrderAdvancedSearchSequence');
 
-    console.log(test.getState('searchResults'));
-
     expect(test.getState('searchResults')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
