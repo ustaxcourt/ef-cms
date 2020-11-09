@@ -1236,7 +1236,13 @@ module.exports = (appContextUser, requestId) => {
     return user;
   };
 
-  const logger = createLogger({ requestId });
+  const logger = createLogger({
+    environment: {
+      color: environment.currentColor,
+      stage: environment.stage,
+    },
+    requestId,
+  });
 
   return {
     barNumberGenerator,

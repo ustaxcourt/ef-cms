@@ -3,6 +3,7 @@ const json = require('logform/json');
 const printf = require('logform/printf');
 const timestamp = require('logform/timestamp');
 const {
+  config,
   createLogger: createWinstonLogger,
   format,
   transports,
@@ -39,5 +40,6 @@ exports.createLogger = defaultMeta =>
         : nonProductionFormatters),
     ),
     level: process.env.LOG_LEVEL || 'debug',
+    levels: config.syslog.levels,
     transports: [new transports.Console()],
   });
