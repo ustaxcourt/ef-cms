@@ -16,7 +16,7 @@ export const WebSocketErrorModal = connect({}, function WebSocketErrorModal() {
       onCancelSequence="clearModalSequence"
       onConfirmSequence="clearModalSequence"
     >
-      <p>Please try again. If the problem persists, please contact support.</p>
+      <p>Try again, or contact dawson.support@ustaxcourt.gov for assistance.</p>
     </ConfirmModal>
   );
 });
