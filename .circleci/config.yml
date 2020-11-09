@@ -925,7 +925,7 @@ workflows:
       #       - e2e-cypress-public
       - deploy:
           # requires:
-          # - build-client-coverage
+          #   - build-client-coverage
           filters:
             branches:
               only:
