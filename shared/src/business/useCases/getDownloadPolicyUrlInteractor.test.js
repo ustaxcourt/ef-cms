@@ -16,6 +16,23 @@ describe('getDownloadPolicyUrlInteractor', () => {
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
 
+    mockCase.docketEntries.push({
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3858',
+      docketNumber: '101-18',
+      documentTitle: 'Notice of Trial',
+      documentType: 'Notice of Trial',
+      eventCode: 'NTD',
+      filedBy: 'Test Petitioner',
+      index: 6,
+      isFileAttached: true,
+      isStricken: true,
+      processingStatus: 'pending',
+      servedAt: '2019-08-25T05:00:00.000Z',
+      servedParties: [],
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
@@ -593,7 +610,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
-    ).rejects.toThrow('Unauthorized to view case documents at this time');
+    ).rejects.toThrow('Unauthorized to view case documents at this time.');
   });
 
   it('should throw an error when the user is a docketClerk and is attempting to view the stin document', async () => {
@@ -611,7 +628,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
-    ).rejects.toThrow('Unauthorized to view case documents at this time');
+    ).rejects.toThrow('Unauthorized to view case documents at this time.');
   });
 
   it('should throw an error when the user is a petitioner and is attempting to view the stin document', async () => {
@@ -629,7 +646,28 @@ describe('getDownloadPolicyUrlInteractor', () => {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
-    ).rejects.toThrow('Unauthorized to view document at this time');
+    ).rejects.toThrow('Unauthorized to view document at this time.');
+  });
+
+  it('should throw an error when the user is a petitioner and is attempting to view a stricken document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3858',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time.');
   });
 
   it('should return the url when the user is a docketClerk and is attempting to view a correspondence document', async () => {
