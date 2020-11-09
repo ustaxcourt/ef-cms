@@ -12,3 +12,25 @@ In addition to expanding testing in Flexion’s environments, we are also includ
 * Minimize the number of bugs present in the production environment at launch
 * Identify and address bugs as fast and efficiently as possible
 * Enhance visibility of bug tracking and prioritization
+
+### Roles and Responsibilities
+
+#### Engineer
+* Writing and ensuring automated testing are executed successfully
+* Log and categorize all issues found during planned and unplanned testing in Flexion ZenHub
+* Log and categorize all issues found during planned and unplanned testing in Flexion ZenHub
+
+#### UX Designer
+* Writing test cases and scripts to be used by both Flexion and Tax Court for manual functional testing  
+* Performing manual functional testing for each GitHub issue and at regular identified intervals agreed upon by Flexion and the Tax Court
+* Log and categorize all issues found during planned and unplanned testing in Flexion ZenHub
+* Troubleshoot issues tracked in Flexion’s ZenHub as prioritized by Product Owner
+
+#### Product Owner
+* USTC employee who tests user stories in Flexion’s staging environment to ensure the story meets the acceptance criteria.
+* Log and categorize all issues found during planned and unplanned testing in Flexion ZenHub
+
+### Approach
+
+* [Court/18F Testing](./testing.md)
+* [Flexion Testing](./test-approach.md)
