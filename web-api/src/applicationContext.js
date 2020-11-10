@@ -1392,6 +1392,9 @@ module.exports = (appContextUser, requestId) => {
       }
       return new AWS.ApiGatewayManagementApi({
         endpoint,
+        httpOptions: {
+          timeout: 900000, // 15 minutes
+        },
       });
     },
     getNotificationGateway: () => ({
