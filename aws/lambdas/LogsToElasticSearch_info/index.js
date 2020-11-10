@@ -30,6 +30,11 @@ exports.handler = async (input, context) => {
     .filter(event => !!event) // Remove rejected (non-JSON) log entries
     .join('\n');
 
+  if (!inserts) {
+    console.log('No JSON messages found.');
+    return;
+  }
+
   // post documents to the Amazon Elasticsearch Service
   const { error, failedItems, statusCode, success } = await post(
     inserts + '\n',
@@ -62,37 +67,69 @@ const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
     ('0' + timestamp.getUTCDate()).slice(-2), // day
   ].join('.');
 
-  const parsedEntry = parse(logEvent.message);
+  const parsedEntry = tryParse(logEvent.message);
 
   if (!parsedEntry) {
     return false;
   }
 
-  const source = Object.assign(parsedEntry, {
-    '@logEntryId': logEvent.id,
-    '@logGroup': payload.logGroup,
-    '@logStream': payload.logStream,
-    '@owner': payload.owner,
-    '@timestamp': timestamp.toISOString(),
+  const { entry, metadata } = splitMetadata(parsedEntry);
+
+  const source = Object.assign(entry, {
+    logGroup: payload.logGroup,
+    logStream: payload.logStream,
+    metadata,
+    timestamp: timestamp.toISOString(),
   });
 
-  // Dangling underscores required by Elasticsearch’s bulk insert format
-  /* eslint-disable no-underscore-dangle */
-  let action = { index: {} };
-  action.index._index = indexName;
-  action.index._type = 'ef-cms-info';
-  action.index._id = logEvent.id;
-  /* eslint-enable no-underscore-dangle */
+  const action = {
+    index: {
+      _id: logEvent.id,
+      _index: indexName,
+    },
+  };
 
   return [JSON.stringify(action), JSON.stringify(source)].join('\n');
 };
 
-const parse = message => {
+/**
+ * Attempts to parse a string as JSON, catching errors.
+ *
+ * @returns {object} either the parsed object or null
+ */
+const tryParse = message => {
   try {
     return JSON.parse(message);
   } catch (error) {
-    return false;
+    return null;
   }
+};
+
+/**
+ * Splits log entry into known keys and unknown metadata. The known keys
+ * will be indexed, the unknown metadata will be present on the log entry
+ * but not indexed due to mapping considerations.
+ *
+ * metadata is ignored by Index Template within Elasticsearch. See
+ * index-template.md in this directory for more information.
+ *
+ * @returns {Object} entry split into known keys and ignored metadata
+ */
+const splitMetadata = entry => {
+  const indexedKeys = ['environment', 'level', 'message', 'requestId'];
+  const keys = Object.keys(entry);
+
+  return keys.reduce(
+    (obj, key) => {
+      if (indexedKeys.includes(key)) {
+        obj.entry[key] = entry[key];
+      } else {
+        obj.metadata[key] = entry[key];
+      }
+      return obj;
+    },
+    { entry: {}, metadata: {} },
+  );
 };
 
 /**
