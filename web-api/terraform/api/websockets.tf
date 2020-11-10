@@ -94,8 +94,9 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
 }
 
 resource "aws_apigatewayv2_stage" "stage" {
-  api_id = aws_apigatewayv2_api.websocket_api.id
-  name   = var.environment
+  api_id        = aws_apigatewayv2_api.websocket_api.id
+  name          = var.environment
+  deployment_id = aws_apigatewayv2_deployment.websocket_deploy.id
 }
 
 resource "aws_apigatewayv2_deployment" "websocket_deploy" {
