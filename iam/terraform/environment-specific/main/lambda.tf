@@ -115,7 +115,14 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "arn:aws:execute-api:us-west-1:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Effect": "Allow"
-        }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sqs:SendMessage"
+            ],
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:migrate_legacy_documents_*"
+        } 
     ]
 }
 EOF
