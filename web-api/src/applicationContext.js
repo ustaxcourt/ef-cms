@@ -994,6 +994,7 @@ const {
   EnvironmentCredentials,
   S3,
   SES,
+  SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -1420,6 +1421,9 @@ module.exports = (appContextUser, requestId) => {
       // eslint-disable-next-line security/detect-non-literal-require
       const pug = require('p' + 'ug');
       return pug;
+    },
+    getQueueService: () => {
+      return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
     },
     getSearchClient: () => {
       if (!searchClientCache) {

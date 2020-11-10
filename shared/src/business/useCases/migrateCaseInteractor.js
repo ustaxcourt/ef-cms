@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -241,7 +240,7 @@ exports.migrateCaseInteractor = async ({
     });
   }
 
-  const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
+  const sqs = applicationContext.getQueueService();
   let promises = [];
 
   for (const docketEntry of caseToAdd.docketEntries) {
@@ -255,8 +254,7 @@ exports.migrateCaseInteractor = async ({
         sqs
           .sendMessage({
             MessageBody: JSON.stringify(message),
-            QueueUrl:
-              'https://sqs.us-east-1.amazonaws.com/515554424717/migrate_legacy_documents_segments_queue_exp1',
+            QueueUrl: process.env.MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL,
           })
           .promise(),
       );
