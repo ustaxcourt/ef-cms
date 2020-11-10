@@ -951,20 +951,20 @@ workflows:
                 - experimental1
                 - experimental2
                 - experimental3
-      - smoketests:
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - experimental1
-                - experimental2
-                - experimental3
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           # - experimental1
+      #           - experimental2
+      #           - experimental3
       - switch-colors:
           requires:
-            - smoketests
+            - migrate
           filters:
             branches:
               only:

@@ -9,6 +9,8 @@ const generatePolicy = (principalId, effect, resource) => {
   const authResponse = {};
   authResponse.principalId = principalId;
   if (effect && resource) {
+    console.log('garbage logging for the sake of changes 3!');
+
     const policyDocument = {};
     policyDocument.Version = '2012-10-17';
     policyDocument.Statement = [];
@@ -19,6 +21,7 @@ const generatePolicy = (principalId, effect, resource) => {
     policyDocument.Statement[0] = statementOne;
     authResponse.policyDocument = policyDocument;
   }
+
   return authResponse;
 };
 
@@ -36,6 +39,7 @@ const verify = (methodArn, token, keys, kid, iss, cb) => {
   jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
     if (err) {
       console.log('Unauthorized user:', err.message);
+      console.log('Unauthorized 3!');
       cb('Unauthorized');
     } else {
       cb(
@@ -57,8 +61,11 @@ exports.handler = (event, context, cb) => {
 
   let requestToken = null;
   if (event.queryStringParameters && event.queryStringParameters.token) {
+    console.log('garbage logging for the sake of changes 1!');
     requestToken = event.queryStringParameters.token;
   } else if (event.authorizationToken) {
+    console.log('garbage logging for the sake of changes 2!');
+
     requestToken = event.authorizationToken.substring(7);
   }
 
@@ -77,12 +84,14 @@ exports.handler = (event, context, cb) => {
         })
         .catch(error => {
           console.log('Request error:', error);
+          console.log('Unauthorized 1!');
           // eslint-disable-next-line promise/no-callback-in-promise
           cb('Unauthorized');
         });
     }
   } else {
     console.log('No authorizationToken found in the header.');
+    console.log('Unauthorized 2!');
     cb('Unauthorized');
   }
 };
