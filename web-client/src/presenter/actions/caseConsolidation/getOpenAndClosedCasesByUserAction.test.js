@@ -56,9 +56,9 @@ describe('getOpenAndClosedCasesByUserAction', () => {
 
     expect(output).toMatchObject({
       closedCaseList: [
-        { createdAt: '2019-07-21T20:20:15.680Z', docketNumber: '000-00' },
         { createdAt: '2019-07-20T20:20:15.680Z', docketNumber: '123-45' },
         { createdAt: '2019-07-19T20:20:15.680Z', docketNumber: '678-90' },
+        { createdAt: '2019-07-21T20:20:15.680Z', docketNumber: '000-00' },
       ],
       openCaseList: [
         { createdAt: '2019-07-21T20:20:15.680Z', docketNumber: '000-00' },

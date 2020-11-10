@@ -475,12 +475,12 @@ const sortUndefined = (a, b) => {
 const sortDocketEntries = (docketEntries = [], sortByString = '') => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
   const isReversed = sortByString.includes('Desc');
-  const result = docketEntries.sort(sortFunc);
+  docketEntries.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
-    return result.reverse().sort(sortUndefined);
+    return docketEntries.reverse().sort(sortUndefined);
   }
-  return result.sort(sortUndefined);
+  return docketEntries.sort(sortUndefined);
 };
 
 const getFormattedCaseDetail = ({
