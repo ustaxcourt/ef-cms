@@ -18,7 +18,6 @@ In addition to expanding testing in Flexion’s environments, we are also includ
 #### Engineer
 * Writing and ensuring automated testing are executed successfully
 * Log and categorize all issues found during planned and unplanned testing in Flexion ZenHub
-* Log and categorize all issues found during planned and unplanned testing in Flexion ZenHub
 
 #### UX Designer
 * Writing test cases and scripts to be used by both Flexion and Tax Court for manual functional testing  
