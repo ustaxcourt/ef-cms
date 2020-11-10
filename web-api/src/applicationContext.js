@@ -1425,7 +1425,7 @@ module.exports = (appContextUser, requestId) => {
     getQueueService: () => {
       if (environment.stage === 'local') {
         return {
-          sendMessage: () => {},
+          sendMessage: () => ({ promise: () => {} }),
         };
       } else {
         return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
