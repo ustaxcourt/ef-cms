@@ -8,7 +8,7 @@ data "archive_file" "legacy_documents_migration_zip" {
 resource "aws_lambda_function" "legacy_documents_migration_lambda" {
   filename         = data.archive_file.legacy_documents_migration_zip.output_path
   function_name    = "legacy_documents_migration_lambda_${var.environment}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/legacy_documents_migration_role_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler          = "legacy-documents-migration.handler"
   source_code_hash = data.archive_file.legacy_documents_migration_zip.output_base64sha256
 
