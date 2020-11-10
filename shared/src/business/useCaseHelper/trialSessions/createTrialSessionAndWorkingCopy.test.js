@@ -41,7 +41,20 @@ describe('createTrialSessionAndWorkingCopy', () => {
     expect(result).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().createTrialSession,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should create no corresponding trial session working copy without a valid judge userId or trialClerk userId', async () => {
+    delete trialSessionToAdd.judge;
+    delete trialSessionToAdd.trialClerk;
+    await createTrialSessionAndWorkingCopy({
+      applicationContext,
+      trialSessionToAdd,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
+    ).not.toHaveBeenCalled();
   });
 
   it('should create a corresponding trial session working copy when it contains a judge with a valid userId', async () => {
@@ -52,12 +65,11 @@ describe('createTrialSessionAndWorkingCopy', () => {
 
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should create a corresponding trial session working copy when it contains a trialClerk with a valid userId', async () => {
-    delete trialSessionMetadata.judge;
-    trialSessionMetadata.trialClerk = {
+    trialSessionToAdd.trialClerk = {
       name: 'Test Clerk',
       userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0',
     };
@@ -65,10 +77,9 @@ describe('createTrialSessionAndWorkingCopy', () => {
       applicationContext,
       trialSessionToAdd,
     });
-
     expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledTimes(2);
   });
 
   describe('validation', () => {
