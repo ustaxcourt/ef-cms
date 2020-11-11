@@ -24,7 +24,6 @@ export const getOpenAndClosedCasesByUserAction = async ({
     });
 
   openCaseList = orderBy(openCaseList, 'createdAt', 'desc');
-  closedCaseList = orderBy(closedCaseList, 'createdAt', 'desc');
 
   return { closedCaseList, openCaseList };
 };

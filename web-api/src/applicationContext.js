@@ -178,6 +178,9 @@ const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
+  createTrialSessionAndWorkingCopy,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy');
+const {
   createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
@@ -347,9 +350,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCatalogCases,
-} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
-const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
@@ -394,6 +394,9 @@ const {
 const {
   getCasesByLeadDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
+const {
+  getCasesByUserId,
+} = require('../../shared/src/persistence/elasticsearch/getCasesByUserId');
 const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
@@ -554,6 +557,9 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
+const {
+  getReadyForTrialCases,
+} = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
@@ -1170,7 +1176,6 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1179,6 +1184,7 @@ const gatewayMethods = {
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
+  getCasesByUserId,
   getClientId,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
@@ -1200,6 +1206,7 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
+  getReadyForTrialCases,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1236,7 +1243,13 @@ module.exports = (appContextUser, requestId) => {
     return user;
   };
 
-  const logger = createLogger({ requestId });
+  const logger = createLogger({
+    environment: {
+      color: environment.currentColor,
+      stage: environment.stage,
+    },
+    requestId,
+  });
 
   return {
     barNumberGenerator,
@@ -1462,6 +1475,7 @@ module.exports = (appContextUser, requestId) => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createTrialSessionAndWorkingCopy,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
