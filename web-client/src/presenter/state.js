@@ -256,6 +256,7 @@ export const baseState = {
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judges: [],
+  lastWebsocketPing: null,
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
@@ -297,12 +298,11 @@ export const baseState = {
   sectionInboxCount: 0,
   sectionUsers: [],
   selectedWorkItems: [],
+
   sessionMetadata: {
     docketRecordSort: [],
   },
-
   showValidation: false,
-
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
