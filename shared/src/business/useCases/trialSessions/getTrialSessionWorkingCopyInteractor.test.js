@@ -107,11 +107,12 @@ describe('Get trial session working copy', () => {
       .getUseCases()
       .getJudgeForUserChambersInteractor.mockReturnValue(undefined);
 
-    const result = await getTrialSessionWorkingCopyInteractor({
-      applicationContext,
-      trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-    });
-    expect(result).toBeUndefined();
+    await expect(
+      getTrialSessionWorkingCopyInteractor({
+        applicationContext,
+        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+      }),
+    ).rejects.toThrow('Trial session working copy not found');
   });
 
   it('correctly returns data from persistence for a trial clerk user', async () => {
@@ -167,7 +168,22 @@ describe('Get trial session working copy', () => {
         });
     });
 
-    it('for current user who is a judge on this trial session', async () => {
+    it('for current user who is a judge on this trial session with no assigned trial clerk', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockReturnValueOnce({
+          judge: {
+            name: 'Jake',
+            userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+          },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialClerk: undefined,
+          trialLocation: 'Birmingham, Alabama',
+        });
       applicationContext.getCurrentUser.mockReturnValue({
         role: ROLES.judge,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',

@@ -36,7 +36,7 @@ export const socketProvider = ({ socketRouter }) => {
         socket.onopen = () => {
           // the socket needs to be open for a short period or it could miss the first message
           setTimeout(() => {
-            resolve();
+            resolve(socket);
           }, 300);
         };
       } catch (e) {
