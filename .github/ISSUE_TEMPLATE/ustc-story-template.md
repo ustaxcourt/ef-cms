@@ -26,17 +26,16 @@ assignees: ''
 
 ## Tasks
 
-## Definition of Done (Updated 8-3-20)
+## Definition of Done (Updated 10-26-20)
 
 **Product Owner**
- - [ ]  Acceptance criteria have been met
+ - [ ]  Acceptance criteria have been met and validated on the Flexion Prod env
 
 **UX**
  - [ ] Business test scenarios to meet all acceptance criteria have been written
  - [ ] Usability has been validated
  - [ ] Wiki has been updated (if applicable) 
  - [ ] Story has been tested on a mobile device (for external users only)
-
 
 **Engineering**
  - [ ] Automated test scripts have been written
@@ -55,4 +54,4 @@ assignees: ''
  - [ ] Rebuild entity documentation
  - [ ] Acceptance criteria for the story has been met
  - [ ] Deployed to the dev environment
- - [ ] Deployed to the stage environment
+ - [ ] Deployed to the prod environment
