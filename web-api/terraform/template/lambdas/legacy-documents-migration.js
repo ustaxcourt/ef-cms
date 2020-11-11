@@ -11,6 +11,9 @@ const {
 const {
   saveDocumentFromLambda,
 } = require('../../../../shared/src/persistence/s3/saveDocumentFromLambda');
+const {
+  scrapePdfContents,
+} = require('../../../../shared/src/business/utilities/scrapePdfContents');
 import {
   getUniqueId,
 } from '../../../../shared/src/sharedAppContext';
