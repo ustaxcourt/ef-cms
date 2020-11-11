@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
   parseLegacyDocumentsInteractor,
@@ -27,6 +28,14 @@ describe('parseLegacyDocumentsInteractor', () => {
       .scrapePdfContents.mockReturnValue(mockPdfTextContents);
   });
 
+  beforeEach(() => {
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: Buffer.from(getFakeFile()),
+      }),
+    });
+  });
+
   it('should retrieve the docketEntry document from s3 using the provided docketEntryId', async () => {
     await parseLegacyDocumentsInteractor({
       applicationContext,
@@ -40,6 +49,20 @@ describe('parseLegacyDocumentsInteractor', () => {
       Bucket: mockDocumentsBucketName,
       Key: mockDocketEntryId,
     });
+  });
+
+  it('should throw an error when unable to retrieve the docketEntry document from s3', async () => {
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => Promise.reject(),
+    });
+
+    await expect(
+      parseLegacyDocumentsInteractor({
+        applicationContext,
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockDocketNumber,
+      }),
+    ).rejects.toThrow('Docket entry document not found in S3.');
   });
 
   it('should retrieve the case from persistence using the provided docketNumber', async () => {
