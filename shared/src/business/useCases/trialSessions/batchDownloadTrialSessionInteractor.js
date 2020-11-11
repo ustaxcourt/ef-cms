@@ -241,7 +241,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
-    applicationContext.logger.info('Error', error);
+    applicationContext.logger.error(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {

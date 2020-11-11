@@ -19,15 +19,9 @@ ENV=$1
 
 pushd ./web-api/terraform/main
   ../bin/deploy-init.sh "${1}"
-  ELASTICSEARCH_ENDPOINT="$(terraform output elasticsearch_endpoint)"	
-  ELASTICSEARCH_ENDPOINT_1="$(terraform output elasticsearch_endpoint_1)"
-  ELASTICSEARCH_ENDPOINT_2="$(terraform output elasticsearch_endpoint_2)"
-  ELASTICSEARCH_ENDPOINT_3="$(terraform output elasticsearch_endpoint_3)"
-  ELASTICSEARCH_ENDPOINT_4="$(terraform output elasticsearch_endpoint_4)"
+  ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output elasticsearch_endpoint_alpha)"
+  ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
 popd
 
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT}	
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_1}
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_2}
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_3}
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_4}
+node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_ALPHA}
+node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_BETA}

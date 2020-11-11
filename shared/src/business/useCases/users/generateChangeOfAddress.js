@@ -2,18 +2,17 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  calculateISODate,
-  createISODateString,
-} = require('../../utilities/DateHandler');
+  CASE_STATUS_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const {
+  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { clone } = require('lodash');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -26,7 +25,7 @@ exports.generateChangeOfAddress = async ({
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getDocketNumbersByUser({
+    .getCasesByUserId({
       applicationContext,
       userId: user.userId,
     });
@@ -44,12 +43,11 @@ exports.generateChangeOfAddress = async ({
 
   const updatedCases = [];
 
-  for (let docketNumber of docketNumbers) {
+  for (let caseInfo of docketNumbers) {
     try {
+      const { docketNumber } = caseInfo;
       let oldData;
       const newData = contactInfo;
-
-      const name = updatedName ? updatedName : user.name;
 
       const userCase = await applicationContext
         .getPersistenceGateway()
@@ -57,6 +55,8 @@ exports.generateChangeOfAddress = async ({
           applicationContext,
           docketNumber,
         });
+
+      const name = updatedName ? updatedName : user.name;
 
       let caseEntity = new Case(userCase, { applicationContext });
       const privatePractitioner = caseEntity.privatePractitioners.find(
@@ -67,7 +67,6 @@ exports.generateChangeOfAddress = async ({
         privatePractitioner.contact = contactInfo;
         privatePractitioner.name = name;
       }
-
       const irsPractitioner = caseEntity.irsPractitioners.find(
         practitioner => practitioner.userId === user.userId,
       );
@@ -85,22 +84,9 @@ exports.generateChangeOfAddress = async ({
         ...rawCase,
       };
 
-      let closedMoreThan6Months;
-      if (caseEntity.status === CASE_STATUS_TYPES.closed) {
-        const maxClosedDate = calculateISODate({
-          dateString: caseEntity.closedDate,
-          howMuch: 6,
-          units: 'months',
-        });
-        const rightNow = createISODateString();
-        closedMoreThan6Months = maxClosedDate <= rightNow;
-      }
-
       const shouldGenerateNotice =
         caseEntity.status !== CASE_STATUS_TYPES.closed;
-      const shouldUpdateCase =
-        !closedMoreThan6Months ||
-        caseEntity.status !== CASE_STATUS_TYPES.closed;
+      const shouldUpdateCase = caseEntity.status !== CASE_STATUS_TYPES.closed;
       let docketEntryAdded = false;
 
       if (shouldGenerateNotice) {
@@ -154,7 +140,6 @@ exports.generateChangeOfAddress = async ({
           documentData.privatePractitioners = [
             {
               name,
-              partyPrivatePractitioner: true,
             },
           ];
         } else if (user.role === ROLES.irsPractitioner) {
@@ -173,32 +158,44 @@ exports.generateChangeOfAddress = async ({
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity,
-          docketEntryEntity: changeOfAddressDocketEntry,
+          docketEntryId: changeOfAddressDocketEntry.docketEntryId,
           servedParties,
         });
 
-        const workItem = new WorkItem(
-          {
-            assigneeId: null,
-            assigneeName: null,
-            associatedJudge: caseEntity.associatedJudge,
-            caseIsInProgress: caseEntity.inProgress,
-            caseStatus: caseEntity.status,
-            caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-            docketEntry: {
-              ...changeOfAddressDocketEntry.toRawObject(),
-              createdAt: changeOfAddressDocketEntry.createdAt,
-            },
-            docketNumber: caseEntity.docketNumber,
-            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-            section: DOCKET_SECTION,
-            sentBy: user.name,
-            sentByUserId: user.userId,
-          },
-          { applicationContext },
-        );
+        const paperServiceRequested =
+          userCase.contactPrimary.serviceIndicator ===
+            SERVICE_INDICATOR_TYPES.SI_PAPER ||
+          (userCase.contactSecondary &&
+            userCase.contactSecondary.serviceIndicator ===
+              SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+          user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 
-        changeOfAddressDocketEntry.setWorkItem(workItem);
+        let workItem = null;
+
+        if (paperServiceRequested) {
+          workItem = new WorkItem(
+            {
+              assigneeId: null,
+              assigneeName: null,
+              associatedJudge: caseEntity.associatedJudge,
+              caseIsInProgress: caseEntity.inProgress,
+              caseStatus: caseEntity.status,
+              caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+              docketEntry: {
+                ...changeOfAddressDocketEntry.toRawObject(),
+                createdAt: changeOfAddressDocketEntry.createdAt,
+              },
+              docketNumber: caseEntity.docketNumber,
+              docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+              section: DOCKET_SECTION,
+              sentBy: user.name,
+              sentByUserId: user.userId,
+            },
+            { applicationContext },
+          );
+
+          changeOfAddressDocketEntry.setWorkItem(workItem);
+        }
 
         const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
           applicationContext,
@@ -221,32 +218,35 @@ exports.generateChangeOfAddress = async ({
             applicationContext,
             docketEntryId: changeOfAddressDocketEntry.docketEntryId,
           });
-        await applicationContext
-          .getPersistenceGateway()
-          .saveWorkItemForNonPaper({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          });
+
+        if (workItem) {
+          await applicationContext
+            .getPersistenceGateway()
+            .saveWorkItemForNonPaper({
+              applicationContext,
+              workItem: workItem.validate().toRawObject(),
+            });
+        }
 
         caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
         docketEntryAdded = true;
       }
 
       if (shouldUpdateCase || docketEntryAdded) {
+        const validatedRawCase = caseEntity.validate().toRawObject();
+
         const updatedCase = await applicationContext
           .getPersistenceGateway()
           .updateCase({
             applicationContext,
-            caseToUpdate: caseEntity.validate().toRawObject(),
+            caseToUpdate: validatedRawCase,
           });
 
-        const updatedCaseRaw = new Case(updatedCase, { applicationContext })
-          .validate()
-          .toRawObject();
-        updatedCases.push(updatedCaseRaw);
+        updatedCases.push(updatedCase);
       }
     } catch (error) {
-      applicationContext.notifyHoneybadger(error);
+      applicationContext.logger.error(error);
+      await applicationContext.notifyHoneybadger(error);
     }
 
     completedCases++;

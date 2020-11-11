@@ -156,6 +156,7 @@ import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/Do
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
 import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
+import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
@@ -221,7 +222,6 @@ import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseM
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
-import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
@@ -279,6 +279,7 @@ import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSe
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
+import { setPendingReportSelectedJudgeSequence } from './sequences/pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
@@ -438,9 +439,9 @@ export const presenter = {
     // ORDER MATTERS! Based on inheritance, the first match will be used
     [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
     [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, setCurrentPageErrorSequence], // 403
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
     [NotFoundError, notFoundErrorSequence], //404
-    [UnidentifiedUserError, setCurrentPageErrorSequence], //401
+    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
@@ -597,6 +598,7 @@ export const presenter = {
     loadDefaultDraftViewerDocumentToDisplaySequence,
     loadDefaultViewerCorrespondenceSequence,
     loadMoreCaseDeadlinesSequence,
+    loadMorePendingItemsSequence,
     loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
@@ -662,7 +664,6 @@ export const presenter = {
     openRemoveFromTrialSessionModalSequence,
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
-    openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     openStrikeDocketEntryModalSequence,
     openTrialSessionPlanningModalSequence,
@@ -719,6 +720,7 @@ export const presenter = {
     setPDFSignatureDataSequence,
     setPageSequence,
     setPdfPreviewUrlSequence,
+    setPendingReportSelectedJudgeSequence,
     setSelectedBatchIndexSequence,
     setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,

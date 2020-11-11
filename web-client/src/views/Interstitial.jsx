@@ -1,14 +1,16 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const Interstitial = connect(
   {
     alertHelper: state.alertHelper,
+    gotoPublicSearchSequence: sequences.gotoPublicSearchSequence,
+    isPublic: state.isPublic,
   },
-  function Interstitial({ alertHelper }) {
+  function Interstitial({ alertHelper, gotoPublicSearchSequence, isPublic }) {
     return (
       <>
         {alertHelper.showErrorAlert && (
@@ -20,7 +22,7 @@ export const Interstitial = connect(
                     <h1 className="captioned" tabIndex="-1">
                       {alertHelper.responseCode &&
                         `Error  ${alertHelper.responseCode}`}
-                      {!alertHelper.responseCode && 'Unknown Error'}
+                      {!alertHelper.responseCode && 'Error'}
                     </h1>
                   </div>
                 </div>
@@ -33,9 +35,20 @@ export const Interstitial = connect(
                 Try again, or contact dawson.support@ustaxcourt.gov for
                 assistance.
               </p>
-              <Button onClick={() => history.back()}>
-                Go Back to Try Again
-              </Button>
+              {!isPublic && (
+                <Button onClick={() => history.back()}>
+                  Go Back to Try Again
+                </Button>
+              )}
+              {isPublic && (
+                <Button
+                  onClick={() => {
+                    gotoPublicSearchSequence();
+                  }}
+                >
+                  Go Back to Try Again
+                </Button>
+              )}
             </section>
           </>
         )}

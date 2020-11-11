@@ -11,6 +11,9 @@ ENVIRONMENT=$1
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
 [ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
+[ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
+[ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
+[ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 
 
 echo "Running terraform with the following environment configs:"
@@ -23,6 +26,9 @@ echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
 echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
+echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
+echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
+echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
@@ -47,7 +53,7 @@ npm run build:assets
 
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules --no-minify
+npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify
 popd
 
 # exit on any failure
@@ -87,6 +93,8 @@ export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_destination_table=$DESTINATION_TABLE
+export TF_VAR_disable_emails=$DISABLE_EMAILS
+export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan

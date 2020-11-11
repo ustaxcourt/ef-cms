@@ -1,6 +1,8 @@
-const { ROLES } = require('../../business/entities/EntityConstants');
+const {
+  MAX_SEARCH_RESULTS,
+  ROLES,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
-const { uniqBy } = require('lodash');
 
 /**
  * getPractitionersByName
@@ -11,92 +13,49 @@ const { uniqBy } = require('lodash');
  * @returns {*} the result
  */
 exports.getPractitionersByName = async ({ applicationContext, name }) => {
-  const commonQuery = [
-    {
-      bool: {
-        must: [{ match: { 'pk.S': 'user|' } }, { match: { 'sk.S': 'user|' } }],
-      },
-    },
-    {
-      bool: {
-        should: [
-          { match: { 'role.S': ROLES.irsPractitioner } },
-          { match: { 'role.S': ROLES.privatePractitioner } },
-          { match: { 'role.S': ROLES.inactivePractitioner } },
-        ],
-      },
-    },
+  const isUserRecord = [
+    { match: { 'pk.S': 'user|' } },
+    { match: { 'sk.S': 'user|' } },
   ];
-
-  const exactMatchesQuery = [];
-  const nonExactMatchesQuery = [];
-
-  const nameArray = name.toLowerCase().split(' ');
-  exactMatchesQuery.push({
+  const isPractitionerRole = {
     bool: {
-      minimum_should_match: nameArray.length,
-      should: nameArray.map(word => {
-        return {
-          term: {
-            'name.S': word,
-          },
-        };
-      }),
+      minimum_should_match: 1,
+      should: [
+        { match: { 'role.S': ROLES.inactivePractitioner } },
+        { match: { 'role.S': ROLES.irsPractitioner } },
+        { match: { 'role.S': ROLES.privatePractitioner } },
+      ],
     },
-  });
+  };
 
-  nonExactMatchesQuery.push({
-    query_string: {
+  const matchName = {
+    simple_query_string: {
       fields: ['name.S'],
-      query: `*${name}*`,
+      query: name,
     },
-  });
+  };
+
+  const query = {
+    bool: {
+      must: [...isUserRecord, isPractitionerRole, matchName],
+    },
+  };
 
   const source = ['admissionsStatus', 'barNumber', 'contact', 'name'];
 
-  let foundUsers = (
+  const foundUsers = (
     await search({
       applicationContext,
       searchParameters: {
         body: {
           _source: source,
-          query: {
-            bool: {
-              must: [...commonQuery, ...exactMatchesQuery],
-            },
-          },
-          size: 5000,
+          query,
+          size: MAX_SEARCH_RESULTS,
         },
         index: 'efcms-user',
       },
     })
   ).results;
 
-  foundUsers.sort((a, b) => {
-    return a.barNumber.localeCompare(b.barNumber);
-  });
-
-  const nonExactUsers = (
-    await search({
-      applicationContext,
-      searchParameters: {
-        body: {
-          _source: source,
-          query: {
-            bool: {
-              must: [...commonQuery, ...nonExactMatchesQuery],
-            },
-          },
-          size: 5000,
-        },
-        index: 'efcms-user',
-      },
-    })
-  ).results;
-
-  foundUsers = [...foundUsers, ...nonExactUsers];
-
-  const uniqueFoundUsers = uniqBy(foundUsers, 'barNumber');
-
-  return uniqueFoundUsers;
+  return foundUsers;
 };

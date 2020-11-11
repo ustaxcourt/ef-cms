@@ -38,4 +38,6 @@ module "ef-cms_apis" {
   blue_elasticsearch_domain  = var.blue_elasticsearch_domain
   green_elasticsearch_domain = var.green_elasticsearch_domain
   destination_table          = var.destination_table
+  disable_emails             = var.disable_emails
+  es_volume_size             = var.es_volume_size
 }

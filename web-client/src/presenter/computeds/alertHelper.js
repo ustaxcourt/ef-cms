@@ -5,8 +5,6 @@ export const alertHelper = (get, applicationContext) => {
   const alertError = get(state.alertError) || {};
   const userIsIdentified = applicationContext.getCurrentUser() || false;
 
-  console.log('alertError', alertError);
-
   return {
     messagesDeduped: uniq(alertError.messages),
     preventAutoScroll: false,

@@ -523,6 +523,12 @@ jobs:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup Disable Emails
+          command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: Setup ES Volume Size
+          command: echo "export ES_VOLUME_SIZE='$(./get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
@@ -541,6 +547,8 @@ jobs:
              -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" \
              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
+             -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
+             -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'
@@ -596,13 +604,6 @@ jobs:
              -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
              --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
       - run:
-          name: 'Deploy - Web API - Global Tables'
-          command: |
-            docker run \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
-      - run:
           name: 'Deploy - Web API - Cognito Customize'
           command: |
             docker run \
@@ -627,7 +628,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Cognito Create Court Users'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] ; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -796,6 +797,7 @@ jobs:
             echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
@@ -928,9 +930,9 @@ workflows:
             branches:
               only:
                 - irs
+                - migration
                 - staging
                 - test
-                - migration
                 - master
                 - experimental1
                 - experimental2
@@ -942,20 +944,24 @@ workflows:
           filters:
             branches:
               only:
+                - irs
+                - migration
                 - staging
+                - test
                 - experimental1
                 - experimental2
                 - experimental3
-      - smoketests:
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - staging
-                # - experimental1
-                - experimental2
-                - experimental3
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           # - experimental1
+      #           - experimental2
+      #           - experimental3
       - switch-colors:
           requires:
             - migrate
@@ -964,8 +970,6 @@ workflows:
               only:
                 - irs
                 - staging
-                - test
-                - migration
                 - master
                 - experimental1
                 - experimental2

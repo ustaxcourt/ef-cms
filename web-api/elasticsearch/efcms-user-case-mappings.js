@@ -3,6 +3,9 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'closedDate.S': {
+      type: 'date',
+    },
     'createdAt.S': {
       type: 'date',
     },

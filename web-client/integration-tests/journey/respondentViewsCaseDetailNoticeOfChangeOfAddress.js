@@ -1,15 +1,21 @@
+import { refreshElasticsearchIndex } from '../helpers';
 export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
   test,
   createdDocketNumberIndex,
 ) => {
   return it('respondent views case detail notice of change of address', async () => {
+    await refreshElasticsearchIndex(5000);
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    expect(
-      test.getState('caseDetail.irsPractitioners.0.contact'),
-    ).toMatchObject({
+    const currentUser = test.getState('user');
+    const irsPractitioners = test.getState('caseDetail.irsPractitioners');
+    const irsPractitioner = irsPractitioners.find(
+      practitioner => practitioner.userId === currentUser.userId,
+    );
+
+    expect(irsPractitioner.contact).toMatchObject({
       address1: test.updatedRespondentAddress,
     });
 
@@ -29,6 +35,6 @@ export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
     expect(changeOfAddressDocument.additionalInfo).toBe(
       'for Test IRS Practitioner',
     );
-    expect(changeOfAddressDocument.filedBy).toBe('Resp.');
+    expect(changeOfAddressDocument.filedBy).toBeUndefined();
   });
 };

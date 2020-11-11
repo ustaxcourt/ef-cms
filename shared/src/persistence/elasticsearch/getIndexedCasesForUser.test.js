@@ -67,4 +67,18 @@ describe('getIndexedCasesForUser', () => {
       },
     ]);
   });
+
+  it('should include sort in search call when statuses contains only closed', async () => {
+    const mockUserId = '123';
+
+    await getIndexedCasesForUser({
+      applicationContext,
+      statuses: [CASE_STATUS_TYPES.closed],
+      userId: mockUserId,
+    });
+
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.sort,
+    ).toEqual([{ 'closedDate.S': { order: 'desc' } }]);
+  });
 });

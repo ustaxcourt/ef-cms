@@ -3,6 +3,7 @@ const { aggregateCaseItems } = require('../helpers/aggregateCaseItems');
 
 /**
  * getFullCaseByDocketNumber
+ * gets the full case when contents are over 400 kb
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

@@ -6,9 +6,6 @@ const {
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
-const {
-  getDocumentQCInboxForSectionInteractor,
-} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -115,29 +112,5 @@ describe('createCase integration test', () => {
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-
-    const docketsSectionInbox = await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
-      section: PETITIONS_SECTION,
-    });
-
-    expect(docketsSectionInbox).toMatchObject([
-      {
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          documentType: 'Petition',
-          eventCode: 'P',
-          filedBy: 'Petr. Rick Petitioner',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber: '101-19',
-        docketNumberWithSuffix: '101-19S',
-        isInitializeCase: true,
-        section: PETITIONS_SECTION,
-        sentBy: 'Alex Petitionsclerk',
-        sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    ]);
   });
 });

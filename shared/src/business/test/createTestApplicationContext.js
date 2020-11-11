@@ -70,6 +70,7 @@ const {
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
+  getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
   formattedTrialSessionDetails,
@@ -86,10 +87,10 @@ const {
 } = require('../utilities/getWorkQueueFilters');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
@@ -139,8 +140,8 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
-const { indexRecord } = require('../../persistence/elasticsearch/indexRecord');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
@@ -254,6 +255,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearObj),
@@ -273,6 +275,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
+    replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
@@ -358,7 +361,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
     fetchPendingItems: jest.fn(),
-    getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByDateRange: jest.fn(),
@@ -381,7 +383,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
-    indexRecord: jest.fn().mockImplementation(indexRecord),
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
@@ -409,6 +410,14 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetEmailClient = {
     sendBulkTemplatedEmail: jest.fn(),
   };
+
+  const sendMessageMock = jest.fn().mockReturnValue({
+    promise: () => {},
+  });
+
+  const mockGetQueueService = () => ({
+    sendMessage: sendMessageMock,
+  });
 
   const mockDocumentClient = createMockDocumentClient();
 
@@ -472,6 +481,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
+    getLogger: jest.fn().mockReturnValue({
+      error: jest.fn(),
+    }),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
@@ -483,6 +495,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         return () => null;
       },
     })),
+    getQueueService: mockGetQueueService,
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
@@ -497,10 +510,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
     logger: {
+      debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
-      time: () => jest.fn().mockReturnValue(null),
-      timeEnd: () => jest.fn().mockReturnValue(null),
     },
     notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),

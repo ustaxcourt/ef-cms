@@ -74,7 +74,7 @@ exports.updatePrimaryContactInteractor = async ({
       oldData: caseToUpdate.contactPrimary,
     });
 
-  if (documentType) {
+  if (!caseEntity.contactPrimary.isAddressSealed && documentType) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
@@ -121,35 +121,39 @@ exports.updatePrimaryContactInteractor = async ({
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryEntity: changeOfAddressDocketEntry,
-      servedParties,
-    });
-
-    const workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
-        caseIsInProgress: caseEntity.inProgress,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-        docketEntry: {
-          ...changeOfAddressDocketEntry.toRawObject(),
-          createdAt: changeOfAddressDocketEntry.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      },
-      { applicationContext },
+    const privatePractitionersRepresentingPrimaryContact = caseEntity.privatePractitioners.filter(
+      d => d.representingPrimary,
     );
 
-    changeOfAddressDocketEntry.setWorkItem(workItem);
+    if (privatePractitionersRepresentingPrimaryContact.length === 0) {
+      const workItem = new WorkItem(
+        {
+          assigneeId: null,
+          assigneeName: null,
+          associatedJudge: caseEntity.associatedJudge,
+          caseIsInProgress: caseEntity.inProgress,
+          caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+          docketEntry: {
+            ...changeOfAddressDocketEntry.toRawObject(),
+            createdAt: changeOfAddressDocketEntry.createdAt,
+          },
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+          section: DOCKET_SECTION,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+        },
+        { applicationContext },
+      );
+
+      changeOfAddressDocketEntry.setWorkItem(workItem);
+
+      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
+    }
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
@@ -167,22 +171,24 @@ exports.updatePrimaryContactInteractor = async ({
 
     caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+      servedParties,
+    });
+
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
       key: newDocketEntryId,
     });
-
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
-
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
   }
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   return caseEntity.validate().toRawObject();
 };

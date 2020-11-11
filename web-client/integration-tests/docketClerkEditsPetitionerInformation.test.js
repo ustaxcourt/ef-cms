@@ -84,9 +84,6 @@ describe('docket clerk edits the petitioner information', () => {
     await test.runSequence('updatePetitionerInformationFormSequence');
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('modal.showModal')).toEqual(
-      'PaperServiceConfirmModal',
-    );
 
     expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
       '123 Some Street',
