@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * startWebSocketConnectionAction
  *
@@ -8,28 +6,11 @@ import { state } from 'cerebral';
  * @param {object} providers.socket the socket object
  * @returns {Promise<*>} the success or error path
  */
-export const startWebSocketConnectionAction = async ({
-  get,
-  path,
-  socket,
-  store,
-}) => {
-  let pingInterval = get(state.wsPingInterval);
-  clearInterval(pingInterval);
-
+export const startWebSocketConnectionAction = async ({ path, socket }) => {
   try {
-    const websocket = await socket.start();
-
-    pingInterval = setInterval(async () => {
-      await websocket.send('ping');
-    }, 30000); // todo: constant
-
-    store.set(state.wsPingInterval, pingInterval);
-
+    await socket.start();
     return path.success();
-  } catch (e) {
-    clearInterval(pingInterval);
-    console.log(e);
+  } catch {
     return path.error();
   }
 };
