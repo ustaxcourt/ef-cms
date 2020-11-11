@@ -22,8 +22,7 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
       DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
       S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
       MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL = aws_sqs_queue.migrate_legacy_documents_queue.id
-      AWS_REGION                         = "us-east-1"
-      MASTER_REGION                      =  "us-east-1"
+      MASTER_REGION                      = "us-east-1"
       MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
       DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
     }
